@@ -126,7 +126,7 @@ We very much welcome your project contribute code. In you before writing any cod
 
 ## 工具
 
-- Template visual build Studio: https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia@20Studio-0.1.8.dmg
+- [Template visual build Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia@20Studio-0.1.8.dmg)
 
 # LICENSE
 ```

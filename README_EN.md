@@ -1,6 +1,6 @@
 # Dynamic template engine
 
-Dynamic template engine is a lightweight cross-end solution of pure native dynamic card developed by Alibaba Youku technology team. In addition to render the client SDK, and at the same time provides the necessary IDE and Demo (template sample, and sweep code preview), support from the template set/edit, real machine debugging/preview all link technical support such as r&d, dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code development field.
+Dynamic template engine is a lightweight cross-end solution of pure native dynamic card developed by Alibaba Youku technology team. In addition to render the client SDK, and at the same time provides the necessary Template visual build Studio and Demo (template sample, and sweep code preview), support from the template set/edit, real machine debugging/preview all link technical support such as r&d, dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code development field.
 
 ## Goals
 
@@ -122,6 +122,11 @@ We very much welcome your project contribute code. In you before writing any cod
 - Unit test cases
 - Document or use cases
 - And so on
+
+
+## 工具
+
+- Template visual build Studio: https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia@20Studio-0.1.8.dmg
 
 # LICENSE
 ```

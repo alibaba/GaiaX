@@ -1,129 +1,128 @@
-# Dynamic template engine
+# 动态模板引擎
 
-Dynamic template engine is a lightweight cross-end solution of pure native dynamic card developed by Alibaba Youku technology team. In addition to render the client SDK, and at the same time provides the necessary IDE and Demo (template sample, and sweep code preview), support from the template set/edit, real machine debugging/preview all link technical support such as r&d, dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code development field.
+动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案。除了客户端渲染SDK之外，同时提供了配套的IDE和Demo（模板示例，以及扫码预览），支持从模板搭建/编辑、真机调试/预览等研发全链路技术支撑，动态模板引擎的目标是在保证原生体验与性能的同时，帮助客户端开发领域实现低代码。
 
-## Goals
+## 目标
 
-The following goals are the way forward for our project:
+以下这些目标是我们项目前进的方向：
 
-- High performance
-- Cross-end technology
-- Visual construction
-- Pure Native rendering
+- 高性能
+- 跨端技术
+- 可视化搭建
+- 纯Native渲染
 
-## Supported Platforms
+## 支持平台
 
 - Android
 - iOS
 
-## Usage
+## 使用方法
 
 ### Android
 
-#### Dependency
+#### 依赖
 ```
-// Dependency
+// 依赖
 dependencies {
-    implementation 'com.alibaba.gaiax:GaiaX:0.0.1'
+    implementation 'com.alibaba.gaiax:GaiaX:0.1.0'
 }
 ```
 
-#### Template File
+#### 模板文件
 ```
-// Path used to store template resources
+// 用于存放模板资源的路径
 /assets/${templateBiz}/${templateId}
 ```
 
-#### Methods
+#### 调用方式
 ```
-// SDK usages
+// SDK使用方式
 
-// Initialization - Initializes the SDK
+// 初始化          - 初始化SDK
 GXTemplateEngine.instance.init(activity)
 
-// Build template parameters - Template information
-// activity       - context
-// templateBiz    - template biz id
-// templateId     - template id
+// 构建模板参数     - 模板信息
+// activity       - 上下文
+// templateBiz    - 业务ID
+// templateId     - 模板ID
 val item = GXTemplateEngine.GXTemplateItem(activity, "templateBiz", "templateId")
 
-// Build template parameters - Viewport size (template draw size, similar to the concept of canvas in Android)
+// 构建模板参数     - 视口大小(模板绘制尺寸，类似于Android中画布的概念)
 val size = GXTemplateEngine.GXMeasureSize(100F.dpToPx(), null)
 
-// Build template parameters - Template data
+// 构建模板参数     - 模板数据
 val dataJson = AssetsUtils.parseAssets(activity, "template-data.json")
 val data = GXTemplateEngine.GXTemplateData(dataJson)
 
-// Create template View - Creates a native View based on template parameters
+// 创建模板视图     - 根据模板参数创建出一个原生View
 val view = GXTemplateEngine.instance.createView(item, size)
 
-// Bind the view data
+// 视图绑定数据
 GXTemplateEngine.instance.bindData(view, data)
 
-// Insert the template into the container for rendering
+// 将插入模板插入到容器中进行渲染
 findViewById<ViewGroup>(R.id.template_container).addView(view, 0)
 ```
 
 ### iOS
 
 #### CocoaPods
-Add a dependency to your Podfile
+在Podfile中添加依赖
 ```
-// Dependency
+// 依赖
 pod 'GaiaXiOS'
 ```
 
-#### Template File
-Add template files to App or FrameWork
+#### 模板文件
+在App或者FrameWork中添加模板文件
 ```
-// Path used to store template resources
+// 用于存放模板资源的路径
 xxx.bundle/templateId
 ```
 
-#### Methods
+#### 调用方式
 ```
-// SDK Usages
+// SDK使用方式
 
-// Introduced header files
+// 引入头文件
 #import <GaiaXiOS/GaiaXiOS.h>
 
-// Build template parameters - Template information
-// activity       - context
-// templateBiz    - template biz id
-// templateId     - template id
+// 构建模板参数     - 模板信息
+// templateBiz    - 业务ID
+// templateId     - 模板ID
 GXTemplateItem *item = [[GXTemplateItem alloc] init];
 item.templateId = templateId;
 item.bizId = templateBiz;
 
-// Build template parameters - Viewport size (template draw size, similar to the concept of canvas in Android)
+// 构建模板参数     - 视口大小(模板绘制尺寸)
 CGSize size = CGSizeMake(1080, NAN);
 
-// Build template parameters - Template data
+// 构建模板参数     - 模板数据
 GXTemplateData *data = [[GXTemplateData alloc] init];
 data.data = @{@"xxx": @"xxx"};
 
-// Create template View - Creates a native View based on template parameters
+// 创建模板视图     - 根据模板参数创建出一个原生View
 UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:size];
 
-// Bind the view data
+// 视图绑定数据
 [TheGXTemplateEngine bindData:data onView:view];
 
-// Insert the template into the container for rendering
+// 将插入模板插入到容器中进行渲染
 [self.view addSubview:view];
 ```
 
-## Contributing
+## 如何贡献代码
 
-We very much welcome your project contribute code. In you before writing any code, start by creating a issue or pull request in order for us to be able to discuss details of the proposal and the rationality of the scheme. You can in the following areas contribute code:
+我们非常欢迎您为项目贡献代码。在您编写代码之前，请先创建一个issue或者pull request以便我们能够讨论方案的细节与方案的合理性。您可以针对以下领域贡献代码：
 
-- Packet size
-- The run-time performance
-- Across-side consistency
-- Unit test cases
-- Document or use cases
-- And so on
+- 包大小
+- 运行时性能
+- 跨端一致性
+- 单元测试用例
+- 文档或者使用案例
+- 等等
 
-# LICENSE
+# 许可证
 ```
 Ali-GaiaX-Project is a template dynamic develop solutions developed by Alibaba and licensed under the Apache License (Version 2.0)
 This product contains various third-party components under other open source licenses. 

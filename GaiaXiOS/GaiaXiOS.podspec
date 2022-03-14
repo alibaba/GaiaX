@@ -14,6 +14,8 @@ Pod::Spec.new do |s|
   s.xcconfig      = { "ENABLE_BITCODE" => "NO" }
   s.requires_arc  = true
 
+  s.framework     = 'XCTest'
+
   s.vendored_libraries = 'GaiaXiOS/Core/StretchKit/Libraries/libstretch.a'
 
   s.dependency 'YYText'
@@ -21,6 +23,7 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage'
 
   s.dependency 'GaiaMotionCurve'
+
 
   s.pod_target_xcconfig = { 'VALID_ARCHS' => 'arm64 armv7 x86_64' }
 

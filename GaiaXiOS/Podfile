@@ -20,15 +20,15 @@ target 'GaiaXiOS' do
 end
 
 
-#target 'GaiaXiOSTests'  do
-#
-#    # YYText
-#    pod  'YYText'
-#    
-#    # SDWebImage
-#    pod  'SDWebImage'
-#
-#    # 曲线动画
-#    pod 'GaiaMotionCurve'
-#
-#end
+target 'GaiaXiOSTests'  do
+
+    # YYText
+    pod  'YYText'
+    
+    # SDWebImage
+    pod  'SDWebImage'
+
+    # 曲线动画
+    pod 'GaiaMotionCurve'
+
+end

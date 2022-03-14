@@ -114,7 +114,7 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 ## Contributing
 
-We very much welcome your project contribute code. In you before writing any code, start by creating a issue or pull request in order for us to be able to discuss details of the proposal and the rationality of the scheme. You can in the following areas contribute code:
+We very welcome your to contribute code for the project. In you before writing any code, start by creating a issue or pull request in order for us to be able to discuss details of the proposal and the rationality of the scheme. You can in the following areas contribute code:
 
 - Packet size
 - The run-time performance
@@ -124,7 +124,7 @@ We very much welcome your project contribute code. In you before writing any cod
 - And so on
 
 
-## 工具
+## Tool
 
 - [Template visual build Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
 

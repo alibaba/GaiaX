@@ -124,7 +124,7 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 ## 工具
 
-- [模板可视化搭建工具Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia@20Studio-0.1.8.dmg)
+- [模板可视化搭建工具Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
 
 # 许可证
 ```

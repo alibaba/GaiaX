@@ -2,9 +2,9 @@ Pod::Spec.new do |s|
 
   s.name          = "GaiaXiOS"
   s.version       = "0.1.0"
-  s.summary       = "GaiaXiOS"
-  s.description   = "GaiaXiOS"
   s.platform      = :ios, "9.0"
+  s.license      = { :type => 'Apache License, Version 2.0' }
+  s.summary       = "dynamic template engine is a lightweight cross-end solution of pure native dynamic card"
 
   s.homepage      = "https://github.com/alibaba/GaiaX"
 

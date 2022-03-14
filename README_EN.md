@@ -20,7 +20,7 @@ The following goals are the way forward for our project:
 
 ### Android
 
-#### Dependency
+#### Dependency  [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
 ```
 // Dependency
 dependencies {

@@ -15,8 +15,7 @@ target 'GaiaXiOS' do
     pod 'SDWebImage'
 
     # 曲线动画
-#    pod 'GaiaMotionCurve', :path => '../../GaiaMotionCurve/src/iOS'
-    pod 'GaiaMotionCurve', '0.1.0'
+    pod 'GaiaMotionCurve'
 
 end
 
@@ -30,8 +29,6 @@ target 'GaiaXiOSTests'  do
     pod  'SDWebImage'
 
     # 曲线动画
-#    pod 'GaiaMotionCurve', :path => '../../GaiaMotionCurve/src/iOS'
-    pod 'GaiaMotionCurve', '0.1.0'
+    pod 'GaiaMotionCurve'
 
 end
-

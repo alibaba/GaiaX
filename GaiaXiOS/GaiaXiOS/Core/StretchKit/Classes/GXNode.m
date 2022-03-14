@@ -40,10 +40,6 @@
     UILongPressGestureRecognizer *_longPress;
 }
 
-//节点类型
-@property(nonatomic, strong) NSString *type;
-@property(nonatomic, strong) NSString *subType;
-
 //节点id
 @property(nonatomic, strong) NSString *nodeId;
 //是否模板类型
@@ -224,20 +220,6 @@
 
 
 @implementation GXNode(Template)
-
-- (NSString *)type{
-    if (!_type) {
-        _type = [self.viewJson gx_stringForKey:@"type"];
-    }
-    return _type;
-}
-
-- (NSString *)subType{
-    if (!_subType) {
-        _subType = [self.viewJson gx_stringForKey:@"sub-type"];
-    }
-    return _subType;
-}
 
 @end
 

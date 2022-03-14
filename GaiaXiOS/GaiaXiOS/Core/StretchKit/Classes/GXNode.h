@@ -85,10 +85,6 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 
 @interface GXNode(Template)
 
-//节点类型
-@property(nonatomic, strong) NSString *type;
-@property(nonatomic, strong) NSString *subType;
-
 //节点id
 @property(nonatomic, strong) NSString *nodeId;
 //是否为模板类型（根模板/嵌套子模板）

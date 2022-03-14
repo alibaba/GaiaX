@@ -1,0 +1,10 @@
+{
+  "id": "template_text_property_line_height",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

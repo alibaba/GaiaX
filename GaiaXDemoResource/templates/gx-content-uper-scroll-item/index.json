@@ -1,0 +1,34 @@
+{
+  "id": "gx-content-uper-scroll-item",
+  "layers": [
+    {
+      "id": "cover-bg",
+      "type": "view",
+      "layers": [
+        {
+          "id": "cover-img",
+          "type": "image"
+        },
+        {
+          "id": "play-vv-view",
+          "type": "view",
+          "layers": [
+            {
+              "id": "play-vv-icon",
+              "type": "image"
+            },
+            {
+              "id": "play-vv-text",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ],
+  "type": "gaia-template"
+}

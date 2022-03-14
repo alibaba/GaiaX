@@ -1,0 +1,10 @@
+{
+  "id": "template_image_property_mode_scaleToFill",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    }
+  ]
+}

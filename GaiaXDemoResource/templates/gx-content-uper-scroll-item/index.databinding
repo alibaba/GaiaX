@@ -1,0 +1,18 @@
+{
+    "data": {
+        "cover-img": {
+            "value": "${data.img}"
+        },
+        "title": {
+            "value": "${data.title}"
+        }
+    },
+    "event":{
+     "gx-content-uper-scroll-item":{
+        "type":"tap",
+        "params": {
+            "value": "我是event"
+        }
+     }
+    }
+}

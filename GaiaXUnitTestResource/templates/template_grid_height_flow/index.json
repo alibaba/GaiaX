@@ -1,0 +1,15 @@
+{
+  "id": "template_grid_height_flow",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "view1",
+      "type": "view"
+    },
+    {
+      "id": "template_grid_height_flow_scroll_enable_true",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

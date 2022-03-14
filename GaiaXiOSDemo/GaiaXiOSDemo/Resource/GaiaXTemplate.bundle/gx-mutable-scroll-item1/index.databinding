@@ -1,0 +1,14 @@
+{
+  "data": {
+    "image": { "value": "${img}" },
+    "title": { "value": "${title}" },
+    "desc": { "value": "${subtitle}" },
+    "subscribe-text": {
+      "value": "按钮",
+      "extend": {
+        "border-color": "@{${data.subscribed} ? #9d9fa84c : #24a5ff4c}",
+        "color": "@{${data.subscribed} ? #9d9fa8 : #24a5ff}"
+      }
+    }
+  }
+}

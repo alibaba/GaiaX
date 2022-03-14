@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_scroll_edge_item_spacing": {
+            "value":"${nodes}"
+        }
+    }
+}

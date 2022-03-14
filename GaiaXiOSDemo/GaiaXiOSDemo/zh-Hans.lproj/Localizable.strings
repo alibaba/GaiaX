@@ -1,0 +1,23 @@
+/*
+  Localizable.strings
+  GaiaXiOSDemo
+
+  Created by 张敬成 on 2022/3/3.
+  
+*/
+
+"fastpreview"         = "快速预览";
+
+"normal_template"     = "普通模板";
+
+"nest_template"       = "嵌套模板";
+
+"container_template"  = "容器模板";
+
+"normal_data_binding" = "普通数据绑定";
+
+"custom_data_binding" = "自定义数据绑定";
+
+"event_log"           = "事件日志";
+
+"scan_toast"          = "请开启摄像头权限，重新进入该页面扫码";

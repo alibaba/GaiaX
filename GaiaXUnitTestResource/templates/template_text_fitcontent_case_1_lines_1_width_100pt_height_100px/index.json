@@ -1,0 +1,10 @@
+{
+  "id": "template_text_fitcontent_case_1_lines_1_width_100pt_height_100px",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

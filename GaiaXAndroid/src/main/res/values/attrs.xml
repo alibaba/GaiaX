@@ -1,0 +1,19 @@
+<resources>
+    <declare-styleable name="GXBoxShadowLayout">
+
+        <!-- box-shadow attributes-->
+        <attr name="box_shadowOffsetVertical" format="dimension" />
+        <attr name="box_shadowOffsetHorizontal" format="dimension" />
+        <attr name="box_shadowBlur" format="dimension" />
+        <attr name="box_shadowSpread" format="dimension" />
+        <attr name="box_shadowColor" format="color|reference" />
+        <attr name="box_shadowInset" format="boolean" />
+
+        <!-- extended attributes-->
+        <attr name="box_radius" format="dimension" />
+        <attr name="box_radiusTopLeft" format="dimension" />
+        <attr name="box_radiusTopRight" format="dimension" />
+        <attr name="box_radiusBottomLeft" format="dimension" />
+        <attr name="box_radiusBottomRight" format="dimension" />
+    </declare-styleable>
+</resources>

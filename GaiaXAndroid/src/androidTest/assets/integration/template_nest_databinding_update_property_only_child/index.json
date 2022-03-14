@@ -1,0 +1,28 @@
+{
+  "id": "template_nest_databinding_update_property_only_child",
+  "type": "gaia-template",
+  "package": {
+    "id": "template_nest_databinding_update_property_only_child",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu Nov 11 2021 17:45:48 GMT+0800 (China Standard Time)",
+    "dependencies": {
+      "simple_template": "0.0.0"
+    },
+    "constraint-size": {
+      "width": 375,
+      "height": 200,
+      "zoom": 1
+    }
+  },
+  "layers": [
+    {
+      "id": "template_nest_databinding_update_property_only_child_child_0",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "container2",
+      "type": "view"
+    }
+  ]
+}

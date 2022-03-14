@@ -1,0 +1,14 @@
+{
+  "event": {
+    "gx-recommend-item": {
+      "type": "tap",
+       "value": "${data.action}",
+    }
+  },
+  "data": {
+    "item-text": {
+      "value": "${data.title}",
+      "extend": { "fit-content": "true" }
+    }
+  }
+}

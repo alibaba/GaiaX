@@ -1,0 +1,47 @@
+{
+  "id": "template_merge_empty_nodes",
+  "type": "gaia-template",
+  "package": {
+    "id": "template_merge_empty_nodes",
+    "version": "0.0.1",
+    "modify-timestamp": "Fri Nov 12 2021 16:46:17 GMT+0800 (China Standard Time)",
+    "constraint-size": {
+      "width": 375,
+      "height": 100,
+      "zoom": 1
+    },
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "image1",
+      "type": "image"
+    },
+    {
+      "id": "container1",
+      "type": "view",
+      "layers": [
+        {
+          "id": "container2",
+          "type": "view",
+          "layers": [
+            {
+              "id": "container3",
+              "type": "view",
+              "layers": [
+                {
+                  "id": "text1",
+                  "type": "text"
+                },
+                {
+                  "id": "text2",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

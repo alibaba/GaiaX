@@ -1,0 +1,10 @@
+#template_scroll_modify_item {
+  width: 100%;
+  background-color: primaryBackground;
+}
+
+
+#template_scroll_modify_item_item {
+  width: 200px;
+  height: 200px;
+}

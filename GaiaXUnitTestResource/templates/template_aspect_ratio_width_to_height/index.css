@@ -1,0 +1,10 @@
+#template_aspect_ratio_width_to_height {
+  width: 100%;
+}
+
+#container1 {
+  width: 100px;
+  aspect-ratio: 1;
+  flex-direction: column;
+  background-color: #e4e4e4;
+}

@@ -1,0 +1,9 @@
+{
+  "data": {
+    "template_nest_parent_databinding_update_property_height_and_child_databinding_update_property_height_child_0": {
+        "extend": {
+            "height":"${height}"
+        }
+    },
+  }
+}

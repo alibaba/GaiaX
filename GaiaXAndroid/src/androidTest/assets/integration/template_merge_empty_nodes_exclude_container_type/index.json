@@ -1,0 +1,15 @@
+{
+  "id": "template_merge_empty_nodes",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image1",
+      "type": "image"
+    },
+    {
+      "id": "template_scroll_child_count",
+      "sub-type": "custom",
+      "type": "gaia-template"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+@startuml
+
+actor Business
+
+group 获取模板流程
+
+    Business -> GXEngine
+
+    GXEngine -> GXDataImpl: getTemplateInfo
+
+    GXDataImpl -> GXTemplateInfoSource: getTemplateInfo
+
+    GXTemplateInfoSource -> GXTemplateInfo: createTemplate
+
+    group 获取模板原始数据
+
+        GXTemplateInfo -> GXTemplatePathSource: getTemplatePath
+
+        group 从Assets数据源中查找明文模板信息
+
+            GXTemplatePathSource -> GXAssetsTemplatePathSource: getTemplatePath
+
+            GXTemplatePathSource <- GXAssetsTemplatePathSource: return GXTemplatePath
+
+        end
+
+        group 从Assets数据源中查找二进制模板信息
+
+            GXTemplatePathSource -> GXAssetsBinaryTemplatePathSource: getTemplatePath
+
+            GXTemplatePathSource <- GXAssetsBinaryTemplatePathSource: return GXTemplatePath
+        end
+
+        GXTemplateInfo <-- GXTemplatePathSource: return GXTemplatePath
+
+    end
+
+    group 根据原始数据创建实体类
+
+        GXTemplateInfo -> GXTemplatePathParserUtils: parseLayer
+        GXTemplateInfo <-- GXTemplatePathParserUtils: return JSONObject
+
+        GXTemplateInfo -> GXTemplatePathParserUtils: parseCSS
+        GXTemplateInfo <-- GXTemplatePathParserUtils: return JSONObject
+
+        GXTemplateInfo -> GXTemplatePathParserUtils: parseDataBinding
+        GXTemplateInfo <-- GXTemplatePathParserUtils: return JSONObject
+
+        GXTemplateInfo -> GXTemplatePathParserUtils: parseJS
+        GXTemplateInfo <-- GXTemplatePathParserUtils: return String
+
+        GXTemplateInfo -> GXTemplateInfo: createLayer
+
+        GXTemplateInfo -> GXTemplateInfo: createCss
+
+        GXTemplateInfo -> GXTemplateInfo: createData
+
+        GXTemplateInfo -> GXTemplateInfo: createEvent
+
+        GXTemplateInfo -> GXTemplateInfo: createConfig
+
+        GXTemplateInfo -> GXTemplateInfo: createAnimation
+
+    end
+
+    GXTemplateInfoSource <-- GXTemplateInfo: return GXTemplateInfo
+
+    GXDataImpl <-- GXTemplateInfoSource: return GXTemplateInfo
+
+    GXEngine <-- GXDataImpl: return GXTemplateInfo
+
+    Business <- GXEngine
+
+end
+
+
+@enduml

@@ -1,0 +1,16 @@
+{
+    "data":{
+        "gx-mutable-scroll":{
+            "value":"${nodes}",
+            "extend":{
+                "item-type":{
+                    "path":"${type}",
+                    "config":{
+                        "h":"gx-mutable-scroll-item1",
+                        "v":"gx-mutable-scroll-item2"
+                    }
+                }
+            }
+        }
+    }
+}

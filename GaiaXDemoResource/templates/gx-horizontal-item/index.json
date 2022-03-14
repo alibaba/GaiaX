@@ -1,0 +1,62 @@
+{
+  "type": "gaia-template",
+  "id": "gx-horizontal-item",
+  "layers": [
+    {
+      "type": "image",
+      "class": "cover-img",
+      "id": "cover-img"
+    },
+    {
+      "type": "view",
+      "id": "text-area",
+      "class": "text-area",
+      "layers": [
+        {
+          "type": "view",
+          "class": "title-area",
+          "id": "title-area",
+          "layers": [
+            {
+              "type": "text",
+              "class": "title",
+              "id": "title"
+            },
+            {
+              "type": "text",
+              "class": "year",
+              "id": "year"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "class": "top-text",
+          "id": "top-text"
+        },
+        {
+          "type": "text",
+          "class": "bottom-text",
+          "id": "bottom-text"
+        },
+        {
+          "type": "view",
+          "class": "reason-view",
+          "id": "reason-view",
+          "layers": [
+            {
+              "type": "image",
+              "class": "reason-icon",
+              "id": "reason-icon"
+            },
+            {
+              "type": "text",
+              "class": "reason",
+              "id": "reason"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

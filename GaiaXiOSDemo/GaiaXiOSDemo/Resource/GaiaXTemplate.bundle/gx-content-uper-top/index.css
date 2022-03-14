@@ -1,0 +1,130 @@
+
+#gx-content-uper-top  {
+  width:100%;
+  height:63px;
+  padding-left:18px;
+  padding-right:9px;
+}
+
+#header  {
+  height:36px;
+  width:36px;
+  margin-top:15px;
+  overflow:hidden;
+}
+
+#header-img  {
+  background-color:#f7f7f7;
+  background-size:cover;
+  border-color:#f5f5f5;
+  border-width:0.5px;
+  border-radius:18px;
+  overflow:hidden;
+  height:36px;
+  width:36px;
+}
+
+#v-icon  {
+  right:0px;
+  bottom:0px;
+  width:12px;
+  height:12px;
+  overflow:hidden;
+  position:absolute;
+}
+
+#text-area  {
+  justify-content:center;
+  flex-direction:column;
+  flex-grow:1.0;
+  height:36px;
+  margin-top:15px;
+  margin-left:9px;
+  margin-right:9px;
+  overflow:hidden;
+}
+
+#title  {
+  color:#333333;
+  line-height:20px;
+  overflow:hidden;
+  font-size:14px;
+  height:20px;
+  width:100%;
+}
+
+#sub-view {
+  overflow:hidden;
+  height:16px;
+  width:100%;
+}
+
+#sub-reason {
+  color:#ff6f3b;
+  line-height:16px;
+  overflow:hidden;
+  font-size:11px;
+  height:16px;
+  width:120px;
+}
+
+#sub-point  {
+  color:#999999;
+  line-height:16px;
+  overflow:hidden;
+  font-size:11px;
+  height:16px;
+  width:6px;
+}
+
+#sub-title  {
+  color:#999999;
+  line-height:16px;
+  overflow:hidden;
+  font-size:11px;
+  height:16px;
+  flex-grow:1;
+/*  width:100%;*/
+}
+
+#follow  {
+  overflow:hidden;
+  margin-top:15px;
+  height:30px;
+  width:60px;
+}
+
+#follow-bg {
+  position:absolute;
+  border-radius:15px;
+  border-width:1px;
+  width:60px;
+  height:30px;
+}
+
+#follow-text {
+  color:#24a5ff;
+  font-size:12px;
+  height:30px;
+  line-height:30px;
+  overflow:hidden;
+  text-align:center;
+  width:60px;
+}
+
+#more {
+  margin-top:15px;
+  margin-left:0px;
+  background-size:contain;
+  height:30px;
+  width:34px;
+  justify-content:center;
+  align-items:center;
+}
+
+
+#more-icon {
+  background-size:contain;
+  height:16px;
+  width:16px;
+}

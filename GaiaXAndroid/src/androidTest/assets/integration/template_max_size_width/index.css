@@ -1,0 +1,12 @@
+#template_max_size_width {
+  width: 100%;
+  background-color: primaryBackground;
+}
+#container1 {
+  height: 100px;
+  width: 200px;
+  max-width: 100px;
+  background-color: #e4e4e4;
+  flex-direction: column;
+  justify-content: space-between;
+}

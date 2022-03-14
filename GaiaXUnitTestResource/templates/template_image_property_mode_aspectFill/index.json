@@ -1,0 +1,10 @@
+{
+  "id": "template_image_property_mode_aspectFill",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    }
+  ]
+}

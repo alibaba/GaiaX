@@ -1,0 +1,20 @@
+{
+  "id": "gx-recommend-item",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "item-container",
+      "type": "view",
+      "layers": [
+        {
+          "id": "item-icon",
+          "type": "image"
+        },
+        {
+          "id": "item-text",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+#template_image_resize {
+  width: 100%;
+  background-color: primaryBackground;
+}
+#image {
+  width: 100%;
+  border-radius: 7px;
+  background-color: primaryFillColor;
+  aspect-ratio: 1.5;
+}

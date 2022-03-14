@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>title</key>
+		<string>Normal Template</string>
+		<key>class</key>
+		<string>NormalViewController</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Container Template</string>
+		<key>class</key>
+		<string>ContainerViewController</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Nest Template</string>
+		<key>class</key>
+		<string>NestViewController</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Data Binding</string>
+		<key>class</key>
+		<string>DataViewController</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Event Binding</string>
+		<key>class</key>
+		<string>EventViewController</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>Template List</string>
+		<key>class</key>
+		<string>ListViewController</string>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_grid_item_spacing_raw_spacing_edge_column_3": {
+            "value":"${nodes}"
+        }
+    }
+}

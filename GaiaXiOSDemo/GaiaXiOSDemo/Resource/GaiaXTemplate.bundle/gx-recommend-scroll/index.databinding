@@ -1,0 +1,7 @@
+{
+    "data":{
+        "gx-recommend-scroll":{
+            "value":"${nodes}"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+#template_nest_parent_databinding_update_property_height_and_child_databinding_update_property_height {
+  width: 100%;
+  flex-direction: column;
+}
+#container2 {
+  width: 100%;
+  height: 100px;
+  background-color: #e4e4e4;
+}

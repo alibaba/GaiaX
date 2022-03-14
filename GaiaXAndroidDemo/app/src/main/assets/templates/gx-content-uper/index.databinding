@@ -1,0 +1,12 @@
+{
+    "data": {
+        "gx-content-uper-top":{
+            "value": "${data}",
+        },
+    
+        "gx-content-uper-scroll":{
+            "value": "$$"
+        }
+    }
+
+}

@@ -1,0 +1,10 @@
+{
+  "id": "template_aspect_ratio_width_to_height",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view"
+    }
+  ]
+}

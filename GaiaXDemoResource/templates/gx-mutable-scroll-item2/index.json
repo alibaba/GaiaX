@@ -1,0 +1,15 @@
+{
+  "id": "gx-mutable-scroll-item2",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-mutable-scroll-item2",
+    "version": "0.0.1",
+    "modify-timestamp": "Fri Jan 14 2022 10:44:56 GMT+0800 (中国标准时间)",
+    "constraint-size": { "width": 100, "height": 150, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [
+    { "id": "image", "type": "image" },
+    { "id": "title", "type": "text" }
+  ]
+}

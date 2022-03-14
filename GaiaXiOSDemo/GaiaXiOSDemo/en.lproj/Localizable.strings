@@ -1,0 +1,16 @@
+
+"fastpreview"         = "Fast Preview";
+
+"normal_template"     = "Normal Template";
+
+"nest_template"       = "Nest Template";
+
+"container_template"  = "Container Template";
+
+"normal_data_binding" = "Normal Bind Data";
+
+"custom_data_binding" = "Custom Bind Data";
+
+"event_log"           = "Event Log";
+
+"scan_toast"          = "please open the camera permission and go to the page again";

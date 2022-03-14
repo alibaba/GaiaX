@@ -1,0 +1,8 @@
+rootProject.name = 'GaiaXAndroidDemo'
+
+include ':app'
+
+include ':GaiaXAndroid'
+project(':GaiaXAndroid').projectDir = file('../GaiaXAndroid')
+include ':GaiaXFastPreview'
+include ':GaiaXWebSocket'

@@ -1,0 +1,11 @@
+{
+  "id": "template_image_cut",
+  "type": "gaia-template",
+  "package": {
+    "id": "template_image_cut",
+    "version": "0.0.1",
+    "modify-timestamp": "Wed Dec 15 2021 16:29:01 GMT+0800 (中国标准时间)",
+    "dependencies": {}
+  },
+  "layers": [{ "id": "image", "type": "image" }]
+}

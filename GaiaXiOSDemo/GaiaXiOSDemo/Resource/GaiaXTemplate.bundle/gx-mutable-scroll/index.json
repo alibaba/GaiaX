@@ -1,0 +1,21 @@
+{
+  "id": "gx-mutable-scroll",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "row-spacing": 0,
+  "item-spacing": 9,
+  "direction": "horizontal",
+  "edge-insets": "{0,12,0,12}",
+  "layers": [
+    {
+      "id": "gx-mutable-scroll-item1",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "gx-mutable-scroll-item2",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

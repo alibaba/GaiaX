@@ -1,0 +1,32 @@
+#template_nest_databinding_update_property_only_child_child_0 {
+  width: 100%;
+  height: 100px;
+  background-color: #00FF00;
+}
+#image1 {
+  width: 100px;
+  height: 100px;
+  border-radius: 7px;
+  background-color: #00FF00;
+}
+#container1 {
+  height: 100px;
+  background-color: #e4e4e4;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#text1 {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #000000;
+  font-size: 15px;
+}
+#text2 {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #000000;
+  font-size: 15px;
+}

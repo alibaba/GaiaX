@@ -1,0 +1,16 @@
+{
+  "id": "gx-content-uper",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "gx-content-uper-top",
+      "sub-type": "custom",
+      "type": "gaia-template"
+    },
+    {
+      "id": "gx-content-uper-scroll",
+      "sub-type": "custom",
+      "type": "gaia-template"
+    }
+  ]
+}

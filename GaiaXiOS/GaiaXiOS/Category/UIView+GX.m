@@ -1,0 +1,263 @@
+//
+//  UIView+GX.m
+//  GaiaXiOS
+//
+//  Copyright (c) 2021, Alibaba Group Holding Limited.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+#import "UIView+GX.h"
+#import "GXNode.h"
+#import "GXEvent.h"
+#import <objc/runtime.h>
+#import "GXGradientHelper.h"
+#import "GXTemplateContext.h"
+#import "GXCornerRadiusHelper.h"
+
+//基础属性
+static const void *kGXNodeKey = &kGXNodeKey;
+static const void *kGXEventKey = &kGXEventKey;
+static const void *kGXTrackKey = &kGXTrackKey;
+static const void *kGXBizIdKey = &kGXBizIdKey;
+static const void *kGXNodeIdKey = &kGXNodeIdKey;
+static const void *kGXTemplateIdKey = &kGXTemplateIdKey;
+static const void *kGXTemplateVersionKey = &kGXTemplateVersionKey;
+//圆角
+static const void *kGXBorderLayerKey = &kGXBorderLayerKey;
+static const void *kGXCornerRadiusKey = &kGXCornerRadiusKey;
+//渐变Image
+static const void *kGXGradientImageKey = &kGXGradientImageKey;
+//渐变Layer
+static const void *kGXGradientLayerKey = &kGXGradientLayerKey;
+//渐变string
+static const void *kGXLinearGradientKey = &kGXLinearGradientKey;
+
+
+@implementation UIView (GX)
+
+//gxNode
+- (GXNode *)gxNode{
+    return objc_getAssociatedObject(self, kGXNodeKey);
+}
+
+- (void)setGxNode:(GXNode *)gxNode{
+    objc_setAssociatedObject(self, &kGXNodeKey, gxNode, OBJC_ASSOCIATION_RETAIN);
+}
+
+//gxEvent
+- (GXEvent *)gxEvent{
+    return objc_getAssociatedObject(self, kGXEventKey);
+}
+
+- (void)setGxEvent:(GXEvent *)gxEvent{
+    objc_setAssociatedObject(self, &kGXEventKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+}
+
+//gxTrack
+- (GXTrack *)gxTrack{
+    return objc_getAssociatedObject(self, kGXTrackKey);
+}
+
+- (void)setGxTrack:(GXTrack *)gxTrack{
+    objc_setAssociatedObject(self, &kGXTrackKey, gxTrack, OBJC_ASSOCIATION_RETAIN);
+}
+
+//bizId
+- (NSString *)gxBizId{
+    return objc_getAssociatedObject(self, &kGXBizIdKey);
+}
+
+- (void)setGxBizId:(NSString *)gxBizId{
+    objc_setAssociatedObject(self, &kGXBizIdKey, gxBizId, OBJC_ASSOCIATION_RETAIN);
+}
+
+//gxNodeId
+- (NSString *)gxNodeId{
+    return objc_getAssociatedObject(self, &kGXNodeIdKey);
+}
+
+- (void)setGxNodeId:(NSString *)gxNodeId{
+    objc_setAssociatedObject(self, &kGXNodeIdKey, gxNodeId, OBJC_ASSOCIATION_RETAIN);
+}
+
+//template_id
+- (NSString *)gxTemplateId{
+    return objc_getAssociatedObject(self, &kGXTemplateIdKey);
+}
+
+- (void)setGxTemplateId:(NSString *)gxTemplateId{
+    objc_setAssociatedObject(self, &kGXTemplateIdKey, gxTemplateId, OBJC_ASSOCIATION_RETAIN);
+}
+
+//template_version
+- (NSString *)gxTemplateVersion{
+    return objc_getAssociatedObject(self, &kGXTemplateVersionKey);
+}
+
+- (void)setGxTemplateVersion:(NSString *)gxTemplateVersion{
+    objc_setAssociatedObject(self, &kGXTemplateVersionKey, gxTemplateVersion, OBJC_ASSOCIATION_RETAIN);
+}
+
+
+#pragma mark - method
+
+- (UIView *)gx_rootView{
+    GXNode *node = [self.gxNode rootNode];
+    return node.associatedView;
+}
+
+- (void)gx_removeAllSubviews{
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
+- (UIImage *)gx_snapshotImage{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (UIViewController *)gx_viewController{
+    for (UIView *view = self; view; view = view.superview) {
+        UIResponder *nextResponder = [view nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)nextResponder;
+        }
+    }
+    return nil;
+}
+
+- (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius{
+    //设置阴影path
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
+    self.layer.shadowPath = path.CGPath;
+    //设置阴影属性
+    self.layer.shadowColor = color.CGColor;
+    self.layer.shadowRadius = radius;
+    self.layer.shadowOffset = offset;
+    self.layer.shadowOpacity = 1;
+}
+
+//处理手势
+- (void)gx_handleGesture:(UIGestureRecognizer *)gesture{
+    //基础信息
+    GXNode *node = self.gxNode;
+    GXEvent *event = self.gxEvent;
+    //事件分发
+    id <GXEventProtocal> eventListener = node.templateContext.templateData.eventListener;
+    if (eventListener && [eventListener respondsToSelector:@selector(gx_onGestureEvent:)]) {
+        [eventListener gx_onGestureEvent:event];
+    }
+    
+}
+
+
+@end
+
+
+@implementation UIView (GXGradient)
+
+//linearGradient
+- (NSString *)gxLinearGradient{
+    return objc_getAssociatedObject(self, &kGXLinearGradientKey);
+}
+
+- (void)setGxLinearGradient:(NSString *)gxLinearGradient{
+    objc_setAssociatedObject(self, &kGXLinearGradientKey, gxLinearGradient, OBJC_ASSOCIATION_RETAIN);
+}
+
+//gradientImage
+- (UIImage *)gxGradientImage{
+    return objc_getAssociatedObject(self, &kGXGradientImageKey);
+}
+
+- (void)setGxGradientImage:(UIImage *)gxGradientImage {
+    objc_setAssociatedObject(self, &kGXGradientImageKey, gxGradientImage, OBJC_ASSOCIATION_RETAIN);
+}
+
+//gradientLayer
+- (CAGradientLayer *)gxGradientLayer{
+    return objc_getAssociatedObject(self, &kGXGradientLayerKey);
+}
+
+- (void)setGxGradientLayer:(CAGradientLayer *)gxGradientLayer{
+    objc_setAssociatedObject(self, &kGXGradientLayerKey, gxGradientLayer, OBJC_ASSOCIATION_RETAIN);
+}
+
+//设置渐变背景色
+- (void)gx_setBackgroundGradient:(NSDictionary *)backgroundGradient{
+    //重置渐变背景色
+    [self gx_clearGradientBackground];
+    
+    //设置渐变layer
+    CGRect bounds = self.bounds;
+    CAGradientLayer *layer = [GXGradientHelper creatGradientLayerWithParams:backgroundGradient bounds:bounds];
+    if (layer) {
+        self.gxGradientLayer = layer;
+        [self.layer insertSublayer:layer atIndex:0];
+    }
+}
+
+//重置渐变背景色
+- (void)gx_clearGradientBackground{
+    if (self.gxGradientLayer) {
+        [self.gxGradientLayer removeFromSuperlayer];
+        self.gxGradientLayer = nil;
+    }
+}
+
+
+@end
+
+
+
+@implementation UIView (GXCornerRadius)
+
+//CornerRadii
+- (GXCornerRadius)gxCornerRadius{
+    NSValue *value = objc_getAssociatedObject(self, &kGXCornerRadiusKey);
+    GXCornerRadius radius = GXCornerRadiusMake(0, 0, 0, 0);
+    if (value) {
+        if (@available(iOS 11, *)) {
+            [value getValue:&radius size:sizeof(radius)];
+        } else {
+            [value getValue:&radius];
+        }
+    }
+    return radius;
+}
+
+- (void)setGxCornerRadius:(GXCornerRadius)gxCornerRadius{
+    NSValue *value = [NSValue value:&gxCornerRadius withObjCType:@encode(GXCornerRadius)];
+    objc_setAssociatedObject(self, &kGXCornerRadiusKey, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+//BorderLayer
+- (CAShapeLayer *)gxBorderLayer{
+    CAShapeLayer *layer = objc_getAssociatedObject(self, &kGXBorderLayerKey);
+    return layer;
+}
+
+- (void)setGxBorderLayer:(CAShapeLayer *)gxBorderLayer{
+    objc_setAssociatedObject(self, &kGXBorderLayerKey, gxBorderLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+//绘制圆角边框
+- (void)gx_setCornerRadius:(GXCornerRadius)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor{
+    //设置圆角layer
+    [GXCornerRadiusHelper setCornerRadius:radius borderWidth:borderWidth borderColor:borderColor targetView:self];
+}
+
+
+@end

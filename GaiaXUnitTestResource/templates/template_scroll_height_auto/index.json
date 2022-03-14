@@ -1,0 +1,15 @@
+{
+  "id": "template_scroll_height_auto",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "item-spacing": 9,
+  "direction": "horizontal",
+  "edge-insets": "{0,0,0,0}",
+  "layers": [
+    {
+      "id": "template_scroll_height_auto_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

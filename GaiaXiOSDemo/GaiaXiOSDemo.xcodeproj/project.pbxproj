@@ -1,0 +1,658 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		269C88802213603DA9119E06 /* libPods-GaiaXiOSDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */; };
+		8D0210DD278F1FF10032958A /* GaiaXPreviewTemplateSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */; };
+		8D1FD1B0279E833D00835648 /* GaiaXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1FD1AF279E833D00835648 /* GaiaXScanView.m */; };
+		8D2180DE2771AA98001401C8 /* NormalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180DD2771AA98001401C8 /* NormalViewController.m */; };
+		8D2180E12771AAA5001401C8 /* NestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E02771AAA5001401C8 /* NestViewController.m */; };
+		8D2180E42771AAB2001401C8 /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E32771AAB2001401C8 /* ContainerViewController.m */; };
+		8D2180E72771AAC3001401C8 /* DataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E62771AAC3001401C8 /* DataViewController.m */; };
+		8D2180EA2771AACD001401C8 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E92771AACD001401C8 /* EventViewController.m */; };
+		8D57F1D2277300DF00FF8CC3 /* multi-scroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */; };
+		8D57F1D4277312A300FF8CC3 /* subscribe-item.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D57F1D3277312A300FF8CC3 /* subscribe-item.json */; };
+		8D57F1D727733F0B00FF8CC3 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57F1D627733F0B00FF8CC3 /* ListViewController.m */; };
+		8D57F1DA2773412700FF8CC3 /* TemplateListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57F1D92773412700FF8CC3 /* TemplateListCell.m */; };
+		8D5D29AD276AD6A1005FD699 /* horizontal-item.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29A6276AD6A1005FD699 /* horizontal-item.json */; };
+		8D5D29AE276AD6A1005FD699 /* recommend.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29A9276AD6A1005FD699 /* recommend.json */; };
+		8D5D29AF276AD6A1005FD699 /* uper-top.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29AA276AD6A1005FD699 /* uper-top.json */; };
+		8D5D29B0276AD6A1005FD699 /* uper.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29AB276AD6A1005FD699 /* uper.json */; };
+		8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */; };
+		8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */; };
+		8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */; };
+		8D88D4CC27883587004F1614 /* GaiaXSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */; };
+		8DA5D7AD275F40DF000182C9 /* GaiaXEmptyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5D7AC275F40DF000182C9 /* GaiaXEmptyFile.swift */; };
+		8DA5D7B0275F411A000182C9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */; };
+		8DA5D7B2275F417F000182C9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA5D7B1275F417F000182C9 /* libz.tbd */; };
+		8DA5D7C6275F4440000182C9 /* GaiaXTemplate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8DA5D7C5275F4440000182C9 /* GaiaXTemplate.bundle */; };
+		8DB52180275A0DCF00EB8126 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB5217F275A0DCF00EB8126 /* AppDelegate.m */; };
+		8DB52183275A0DCF00EB8126 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB52182275A0DCF00EB8126 /* SceneDelegate.m */; };
+		8DB52186275A0DCF00EB8126 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB52185275A0DCF00EB8126 /* ViewController.m */; };
+		8DB52189275A0DCF00EB8126 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DB52187275A0DCF00EB8126 /* Main.storyboard */; };
+		8DB5218B275A0DD200EB8126 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DB5218A275A0DD200EB8126 /* Assets.xcassets */; };
+		8DB5218E275A0DD200EB8126 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DB5218C275A0DD200EB8126 /* LaunchScreen.storyboard */; };
+		8DB52191275A0DD200EB8126 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB52190275A0DD200EB8126 /* main.m */; };
+		8DC6060E2772D1F200BACC09 /* vertical-item.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DC6060D2772D1F200BACC09 /* vertical-item.json */; };
+		8DC8F0412770A804003F5073 /* GaiaXHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8F0402770A804003F5073 /* GaiaXHelper.m */; };
+		8DDC0A8327D06512008CB84C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8527D06512008CB84C /* Localizable.strings */; };
+		8DDC0A8927D06949008CB84C /* FunctionList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8B27D06949008CB84C /* FunctionList.plist */; };
+		8DE156BE278C566000E1AA68 /* GaiaXiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA5D7B3275F42EE000182C9 /* GaiaXiOS.framework */; };
+		8DE156C2278C5CD300E1AA68 /* GaiaXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8580D0337E7D6E56B21F09AC /* Pods-GaiaXiOSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		8D0210DB278F1FF10032958A /* GaiaXPreviewTemplateSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXPreviewTemplateSource.h; sourceTree = "<group>"; };
+		8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXPreviewTemplateSource.m; sourceTree = "<group>"; };
+		8D1FD1AE279E833D00835648 /* GaiaXScanView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXScanView.h; sourceTree = "<group>"; };
+		8D1FD1AF279E833D00835648 /* GaiaXScanView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanView.m; sourceTree = "<group>"; };
+		8D2180DC2771AA98001401C8 /* NormalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NormalViewController.h; sourceTree = "<group>"; };
+		8D2180DD2771AA98001401C8 /* NormalViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NormalViewController.m; sourceTree = "<group>"; };
+		8D2180DF2771AAA5001401C8 /* NestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NestViewController.h; sourceTree = "<group>"; };
+		8D2180E02771AAA5001401C8 /* NestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NestViewController.m; sourceTree = "<group>"; };
+		8D2180E22771AAB2001401C8 /* ContainerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContainerViewController.h; sourceTree = "<group>"; };
+		8D2180E32771AAB2001401C8 /* ContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContainerViewController.m; sourceTree = "<group>"; };
+		8D2180E52771AAC3001401C8 /* DataViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataViewController.h; sourceTree = "<group>"; };
+		8D2180E62771AAC3001401C8 /* DataViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataViewController.m; sourceTree = "<group>"; };
+		8D2180E82771AACD001401C8 /* EventViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
+		8D2180E92771AACD001401C8 /* EventViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "multi-scroll.json"; sourceTree = "<group>"; };
+		8D57F1D3277312A300FF8CC3 /* subscribe-item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "subscribe-item.json"; sourceTree = "<group>"; };
+		8D57F1D527733F0B00FF8CC3 /* ListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		8D57F1D627733F0B00FF8CC3 /* ListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		8D57F1D82773412700FF8CC3 /* TemplateListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TemplateListCell.h; sourceTree = "<group>"; };
+		8D57F1D92773412700FF8CC3 /* TemplateListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TemplateListCell.m; sourceTree = "<group>"; };
+		8D5D29A6276AD6A1005FD699 /* horizontal-item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "horizontal-item.json"; sourceTree = "<group>"; };
+		8D5D29A9276AD6A1005FD699 /* recommend.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend.json; sourceTree = "<group>"; };
+		8D5D29AA276AD6A1005FD699 /* uper-top.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "uper-top.json"; sourceTree = "<group>"; };
+		8D5D29AB276AD6A1005FD699 /* uper.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uper.json; sourceTree = "<group>"; };
+		8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSONRPCConstants.h; sourceTree = "<group>"; };
+		8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSONRPCConstants.m; sourceTree = "<group>"; };
+		8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketRequest.m; sourceTree = "<group>"; };
+		8D88D4C4278834AF004F1614 /* GaiaXSocketRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXSocketRequest.h; sourceTree = "<group>"; };
+		8D88D4C727883574004F1614 /* GaiaXPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXPreviewViewController.h; sourceTree = "<group>"; };
+		8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXPreviewViewController.m; sourceTree = "<group>"; };
+		8D88D4CA27883587004F1614 /* GaiaXSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXSocketClient.h; sourceTree = "<group>"; };
+		8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketClient.m; sourceTree = "<group>"; };
+		8DA5D7AB275F40DF000182C9 /* GaiaXiOSDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GaiaXiOSDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		8DA5D7AC275F40DF000182C9 /* GaiaXEmptyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaiaXEmptyFile.swift; sourceTree = "<group>"; };
+		8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		8DA5D7B1275F417F000182C9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		8DA5D7B3275F42EE000182C9 /* GaiaXiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GaiaXiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DA5D7C5275F4440000182C9 /* GaiaXTemplate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GaiaXTemplate.bundle; sourceTree = "<group>"; };
+		8DB5217B275A0DCF00EB8126 /* GaiaXiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaiaXiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DB5217E275A0DCF00EB8126 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		8DB5217F275A0DCF00EB8126 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		8DB52181275A0DCF00EB8126 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		8DB52182275A0DCF00EB8126 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		8DB52184275A0DCF00EB8126 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8DB52185275A0DCF00EB8126 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		8DB52188275A0DCF00EB8126 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8DB5218A275A0DD200EB8126 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8DB5218D275A0DD200EB8126 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8DB5218F275A0DD200EB8126 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DB52190275A0DD200EB8126 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8DC6060D2772D1F200BACC09 /* vertical-item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "vertical-item.json"; sourceTree = "<group>"; };
+		8DC8F03F2770A804003F5073 /* GaiaXHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXHelper.h; sourceTree = "<group>"; };
+		8DC8F0402770A804003F5073 /* GaiaXHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXHelper.m; sourceTree = "<group>"; };
+		8DDC0A7F27D06481008CB84C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		8DDC0A8027D06482008CB84C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		8DDC0A8427D06512008CB84C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8DDC0A8627D06515008CB84C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		8DDC0A8827D06882008CB84C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		8DDC0A8A27D06949008CB84C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/FunctionList.plist; sourceTree = "<group>"; };
+		8DDC0A8C27D0694E008CB84C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hans"; path = "zh-Hans.lproj/FunctionList.plist"; sourceTree = "<group>"; };
+		8DE156C0278C5CD300E1AA68 /* GaiaXScanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXScanViewController.h; sourceTree = "<group>"; };
+		8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanViewController.m; sourceTree = "<group>"; };
+		9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B80658C1C14A90166664E38A /* Pods-GaiaXiOSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DB52178275A0DCF00EB8126 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DA5D7B2275F417F000182C9 /* libz.tbd in Frameworks */,
+				8DA5D7B0275F411A000182C9 /* libsqlite3.tbd in Frameworks */,
+				269C88802213603DA9119E06 /* libPods-GaiaXiOSDemo.a in Frameworks */,
+				8DE156BE278C566000E1AA68 /* GaiaXiOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8D2180D82771AA5C001401C8 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+				8D2180DF2771AAA5001401C8 /* NestViewController.h */,
+				8D2180E02771AAA5001401C8 /* NestViewController.m */,
+				8D2180DC2771AA98001401C8 /* NormalViewController.h */,
+				8D2180DD2771AA98001401C8 /* NormalViewController.m */,
+				8D2180E22771AAB2001401C8 /* ContainerViewController.h */,
+				8D2180E32771AAB2001401C8 /* ContainerViewController.m */,
+				8D57F1D527733F0B00FF8CC3 /* ListViewController.h */,
+				8D57F1D627733F0B00FF8CC3 /* ListViewController.m */,
+				8D57F1D82773412700FF8CC3 /* TemplateListCell.h */,
+				8D57F1D92773412700FF8CC3 /* TemplateListCell.m */,
+			);
+			path = Render;
+			sourceTree = "<group>";
+		};
+		8D2180DB2771AA6E001401C8 /* Binding */ = {
+			isa = PBXGroup;
+			children = (
+				8D2180E52771AAC3001401C8 /* DataViewController.h */,
+				8D2180E62771AAC3001401C8 /* DataViewController.m */,
+				8D2180E82771AACD001401C8 /* EventViewController.h */,
+				8D2180E92771AACD001401C8 /* EventViewController.m */,
+			);
+			path = Binding;
+			sourceTree = "<group>";
+		};
+		8D57F1CD2772F84600FF8CC3 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				8DDC0A8B27D06949008CB84C /* FunctionList.plist */,
+				8D5D29AB276AD6A1005FD699 /* uper.json */,
+				8D5D29AA276AD6A1005FD699 /* uper-top.json */,
+				8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */,
+				8D5D29A9276AD6A1005FD699 /* recommend.json */,
+				8DC6060D2772D1F200BACC09 /* vertical-item.json */,
+				8D5D29A6276AD6A1005FD699 /* horizontal-item.json */,
+				8D57F1D3277312A300FF8CC3 /* subscribe-item.json */,
+				8DA5D7C5275F4440000182C9 /* GaiaXTemplate.bundle */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		8D88D4BD2788348F004F1614 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				8DE156CA278D20BD00E1AA68 /* Scan */,
+				8D88D4C727883574004F1614 /* GaiaXPreviewViewController.h */,
+				8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */,
+				8D0210DB278F1FF10032958A /* GaiaXPreviewTemplateSource.h */,
+				8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */,
+				8D88D4C627883511004F1614 /* SocketClient */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		8D88D4C627883511004F1614 /* SocketClient */ = {
+			isa = PBXGroup;
+			children = (
+				8D88D4CA27883587004F1614 /* GaiaXSocketClient.h */,
+				8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */,
+				8D88D4C4278834AF004F1614 /* GaiaXSocketRequest.h */,
+				8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */,
+				8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */,
+				8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */,
+			);
+			path = SocketClient;
+			sourceTree = "<group>";
+		};
+		8DB52172275A0DCF00EB8126 = {
+			isa = PBXGroup;
+			children = (
+				8DB5217D275A0DCF00EB8126 /* GaiaXiOSDemo */,
+				8DB5217C275A0DCF00EB8126 /* Products */,
+				E7EF62B3BAD2B05C5011EBA1 /* Pods */,
+				BADDA2347CA93853E7C3628B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8DB5217C275A0DCF00EB8126 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DB5217B275A0DCF00EB8126 /* GaiaXiOSDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8DB5217D275A0DCF00EB8126 /* GaiaXiOSDemo */ = {
+			isa = PBXGroup;
+			children = (
+				8DB5217E275A0DCF00EB8126 /* AppDelegate.h */,
+				8DB5217F275A0DCF00EB8126 /* AppDelegate.m */,
+				8DB52181275A0DCF00EB8126 /* SceneDelegate.h */,
+				8DB52182275A0DCF00EB8126 /* SceneDelegate.m */,
+				8DB52184275A0DCF00EB8126 /* ViewController.h */,
+				8DB52185275A0DCF00EB8126 /* ViewController.m */,
+				8DC8F03F2770A804003F5073 /* GaiaXHelper.h */,
+				8DC8F0402770A804003F5073 /* GaiaXHelper.m */,
+				8D88D4BD2788348F004F1614 /* Preview */,
+				8D2180DB2771AA6E001401C8 /* Binding */,
+				8D2180D82771AA5C001401C8 /* Render */,
+				8D57F1CD2772F84600FF8CC3 /* Resource */,
+				8DA5D7AC275F40DF000182C9 /* GaiaXEmptyFile.swift */,
+				8DB52187275A0DCF00EB8126 /* Main.storyboard */,
+				8DB5218A275A0DD200EB8126 /* Assets.xcassets */,
+				8DB5218C275A0DD200EB8126 /* LaunchScreen.storyboard */,
+				8DDC0A8527D06512008CB84C /* Localizable.strings */,
+				8DB5218F275A0DD200EB8126 /* Info.plist */,
+				8DB52190275A0DD200EB8126 /* main.m */,
+				8DA5D7AB275F40DF000182C9 /* GaiaXiOSDemo-Bridging-Header.h */,
+			);
+			path = GaiaXiOSDemo;
+			sourceTree = "<group>";
+		};
+		8DE156CA278D20BD00E1AA68 /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				8DE156C0278C5CD300E1AA68 /* GaiaXScanViewController.h */,
+				8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */,
+				8D1FD1AE279E833D00835648 /* GaiaXScanView.h */,
+				8D1FD1AF279E833D00835648 /* GaiaXScanView.m */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
+		BADDA2347CA93853E7C3628B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8DA5D7B3275F42EE000182C9 /* GaiaXiOS.framework */,
+				8DA5D7B1275F417F000182C9 /* libz.tbd */,
+				8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */,
+				9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E7EF62B3BAD2B05C5011EBA1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8580D0337E7D6E56B21F09AC /* Pods-GaiaXiOSDemo.debug.xcconfig */,
+				B80658C1C14A90166664E38A /* Pods-GaiaXiOSDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DB5217A275A0DCF00EB8126 /* GaiaXiOSDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8DB52194275A0DD200EB8126 /* Build configuration list for PBXNativeTarget "GaiaXiOSDemo" */;
+			buildPhases = (
+				B26DE67764C534DA904A83BC /* [CP] Check Pods Manifest.lock */,
+				8DB52177275A0DCF00EB8126 /* Sources */,
+				8DB52178275A0DCF00EB8126 /* Frameworks */,
+				8DB52179275A0DCF00EB8126 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GaiaXiOSDemo;
+			productName = GaiaXiOSDemo;
+			productReference = 8DB5217B275A0DCF00EB8126 /* GaiaXiOSDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8DB52173275A0DCF00EB8126 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					8DB5217A275A0DCF00EB8126 = {
+						CreatedOnToolsVersion = 13.1;
+						LastSwiftMigration = 1310;
+					};
+				};
+			};
+			buildConfigurationList = 8DB52176275A0DCF00EB8126 /* Build configuration list for PBXProject "GaiaXiOSDemo" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 8DB52172275A0DCF00EB8126;
+			productRefGroup = 8DB5217C275A0DCF00EB8126 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DB5217A275A0DCF00EB8126 /* GaiaXiOSDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DB52179275A0DCF00EB8126 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DB5218E275A0DD200EB8126 /* LaunchScreen.storyboard in Resources */,
+				8D5D29AE276AD6A1005FD699 /* recommend.json in Resources */,
+				8D5D29AF276AD6A1005FD699 /* uper-top.json in Resources */,
+				8DB5218B275A0DD200EB8126 /* Assets.xcassets in Resources */,
+				8DB52189275A0DCF00EB8126 /* Main.storyboard in Resources */,
+				8D57F1D4277312A300FF8CC3 /* subscribe-item.json in Resources */,
+				8D5D29B0276AD6A1005FD699 /* uper.json in Resources */,
+				8D5D29AD276AD6A1005FD699 /* horizontal-item.json in Resources */,
+				8D57F1D2277300DF00FF8CC3 /* multi-scroll.json in Resources */,
+				8DDC0A8327D06512008CB84C /* Localizable.strings in Resources */,
+				8DDC0A8927D06949008CB84C /* FunctionList.plist in Resources */,
+				8DA5D7C6275F4440000182C9 /* GaiaXTemplate.bundle in Resources */,
+				8DC6060E2772D1F200BACC09 /* vertical-item.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B26DE67764C534DA904A83BC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GaiaXiOSDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DB52177275A0DCF00EB8126 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */,
+				8D2180E12771AAA5001401C8 /* NestViewController.m in Sources */,
+				8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */,
+				8DB52186275A0DCF00EB8126 /* ViewController.m in Sources */,
+				8D57F1DA2773412700FF8CC3 /* TemplateListCell.m in Sources */,
+				8D57F1D727733F0B00FF8CC3 /* ListViewController.m in Sources */,
+				8D2180E42771AAB2001401C8 /* ContainerViewController.m in Sources */,
+				8DB52180275A0DCF00EB8126 /* AppDelegate.m in Sources */,
+				8D88D4CC27883587004F1614 /* GaiaXSocketClient.m in Sources */,
+				8D2180E72771AAC3001401C8 /* DataViewController.m in Sources */,
+				8DA5D7AD275F40DF000182C9 /* GaiaXEmptyFile.swift in Sources */,
+				8DB52191275A0DD200EB8126 /* main.m in Sources */,
+				8D0210DD278F1FF10032958A /* GaiaXPreviewTemplateSource.m in Sources */,
+				8DE156C2278C5CD300E1AA68 /* GaiaXScanViewController.m in Sources */,
+				8DC8F0412770A804003F5073 /* GaiaXHelper.m in Sources */,
+				8DB52183275A0DCF00EB8126 /* SceneDelegate.m in Sources */,
+				8D1FD1B0279E833D00835648 /* GaiaXScanView.m in Sources */,
+				8D2180DE2771AA98001401C8 /* NormalViewController.m in Sources */,
+				8D2180EA2771AACD001401C8 /* EventViewController.m in Sources */,
+				8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8DB52187275A0DCF00EB8126 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DB52188275A0DCF00EB8126 /* Base */,
+				8DDC0A7F27D06481008CB84C /* zh-Hans */,
+				8DDC0A8827D06882008CB84C /* en */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8DB5218C275A0DD200EB8126 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DB5218D275A0DD200EB8126 /* Base */,
+				8DDC0A8027D06482008CB84C /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8DDC0A8527D06512008CB84C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DDC0A8427D06512008CB84C /* en */,
+				8DDC0A8627D06515008CB84C /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		8DDC0A8B27D06949008CB84C /* FunctionList.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DDC0A8A27D06949008CB84C /* en */,
+				8DDC0A8C27D0694E008CB84C /* zh-Hans */,
+			);
+			name = FunctionList.plist;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8DB52192275A0DD200EB8126 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8DB52193275A0DD200EB8126 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8DB52195275A0DD200EB8126 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8580D0337E7D6E56B21F09AC /* Pods-GaiaXiOSDemo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8DB52196275A0DD200EB8126 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B80658C1C14A90166664E38A /* Pods-GaiaXiOSDemo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8DB52176275A0DCF00EB8126 /* Build configuration list for PBXProject "GaiaXiOSDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8DB52192275A0DD200EB8126 /* Debug */,
+				8DB52193275A0DD200EB8126 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8DB52194275A0DD200EB8126 /* Build configuration list for PBXNativeTarget "GaiaXiOSDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8DB52195275A0DD200EB8126 /* Debug */,
+				8DB52196275A0DD200EB8126 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8DB52173275A0DCF00EB8126 /* Project object */;
+}

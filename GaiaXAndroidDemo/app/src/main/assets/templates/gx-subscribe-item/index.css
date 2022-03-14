@@ -1,0 +1,80 @@
+#gx-subscribe-item {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  align-items: center;
+  height: 100%;
+}
+#cover-image {
+  width: 84pt;
+  height: 112pt;
+  border-radius: 7px;
+  background-size: cover;
+  background-color: #999999;
+}
+#text-area {
+  padding-right: 9px;
+  padding-bottom: 0px;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-left: 12px;
+  align-items: flex-start;
+  height: 112pt;
+}
+#title {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222222;
+  line-height: 18px;
+}
+#actors-text {
+  margin-top: 8px;
+  width: 100%;
+  height: 15px;
+  font-size: 11px;
+  color: #333333;
+  text-overflow: ellipsis;
+}
+#desc-text {
+  margin-top: 5px;
+  width: 100%;
+  height: 16px;
+  min-height: 16px;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  color: #333333;
+  lines: 1;
+}
+#subscribe-count {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 15px;
+  font-size: 11px;
+  color: #333333;
+  line-height: 15px;
+  margin-top: 5px;
+}
+#time-text {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 15px;
+  font-size: 11px;
+  color: #ff6f3bff;
+  margin-top: 5px;
+}
+#subscribe-text {
+  width: 60px;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  height: 30px;
+  border-radius: 15px;
+  text-align: center;
+  border-color: #24a5ff4c;
+  border-width: 1px;
+  border-style: solid;
+  color: #24a5ffff;
+}

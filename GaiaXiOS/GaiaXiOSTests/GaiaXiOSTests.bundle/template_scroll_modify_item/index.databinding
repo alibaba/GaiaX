@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_scroll_modify_item": {
+            "value":"${nodes}"
+        }
+    }
+}

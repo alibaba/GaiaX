@@ -1,0 +1,17 @@
+{
+  "id": "template_grid_height_100px_scroll_enable_true",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "item-spacing": 9,
+  "row-spacing": 9,
+  "edge-insets": "{0,0,0,0}",
+  "column": 2,
+  "scroll-enable": true,
+  "layers": [
+    {
+      "id": "template_grid_height_100px_scroll_enable_true_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

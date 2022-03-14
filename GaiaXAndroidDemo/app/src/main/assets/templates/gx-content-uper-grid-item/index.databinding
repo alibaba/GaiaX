@@ -1,0 +1,10 @@
+{
+    "data": {
+        "cover-img": {
+            "value": "${data.img}"
+        },
+        "title": {
+            "value": "${data.title}"
+        }
+    }
+}

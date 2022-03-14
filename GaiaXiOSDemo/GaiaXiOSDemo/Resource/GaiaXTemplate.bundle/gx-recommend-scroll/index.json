@@ -1,0 +1,18 @@
+{
+  "id": "gx-recommend-scroll",
+  "uid": "8401be25fbcbcad1f8b3810cc8d815d3",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "row-spacing": 0,
+  "item-spacing": 9,
+  "direction": "horizontal",
+  "edge-insets": "{0,18,0,18}",
+  "layers": [
+    {
+      "id": "gx-recommend-item",
+      "uid": "9b0bb500afacdd70a7bfe2401deeeaf1",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

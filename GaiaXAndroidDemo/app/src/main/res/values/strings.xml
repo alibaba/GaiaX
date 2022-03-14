@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">GaiaXDemo</string>
+    <string name="fastpreview">Fast Preview</string>
+    <string name="normal_template">Normal Template</string>
+    <string name="nest_template">Nest Template</string>
+    <string name="container_template">Container Template</string>
+    <string name="data">Data Binding</string>
+    <string name="event">Event Binding</string>
+</resources>

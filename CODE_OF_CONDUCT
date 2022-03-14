@@ -1,0 +1,1 @@
+https://github.com/github/docs/blob/main/CODE_OF_CONDUCT.md

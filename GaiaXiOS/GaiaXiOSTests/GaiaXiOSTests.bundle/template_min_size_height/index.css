@@ -1,0 +1,11 @@
+#template_min_size_height {
+  width: 100%;
+  background-color: primaryBackground;
+}
+#container1 {
+  width: 100px;
+  min-height: 100px;
+  background-color: #e4e4e4;
+  flex-direction: column;
+  justify-content: space-between;
+}

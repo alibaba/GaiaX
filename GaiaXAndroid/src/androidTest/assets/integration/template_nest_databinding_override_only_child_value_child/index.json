@@ -1,0 +1,24 @@
+{
+  "id": "template_nest_databinding_override_only_child_value_child",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image1",
+      "type": "image"
+    },
+    {
+      "id": "container1",
+      "type": "view",
+      "layers": [
+        {
+          "id": "text1",
+          "type": "text"
+        },
+        {
+          "id": "text2",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -128,7 +128,7 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 ## 文档
 
-- [SDK文档](www.yuque.com/biezhihua/gaiax)
+- [SDK文档](https://www.yuque.com/biezhihua/gaiax)
 
 # 许可证
 ```

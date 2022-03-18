@@ -128,6 +128,10 @@ We very welcome your to contribute code for the project. In you before writing a
 
 - [Template visual build Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
 
+## Document
+
+- [SDK Document](www.yuque.com/biezhihua/gaiax)
+
 # LICENSE
 ```
 Ali-GaiaX-Project is a template dynamic develop solutions developed by Alibaba and licensed under the Apache License (Version 2.0)

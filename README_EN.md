@@ -130,7 +130,7 @@ We very welcome your to contribute code for the project. In you before writing a
 
 ## Document
 
-- [SDK Document](www.yuque.com/biezhihua/gaiax)
+- [SDK Document](https://www.yuque.com/biezhihua/gaiax)
 
 # LICENSE
 ```

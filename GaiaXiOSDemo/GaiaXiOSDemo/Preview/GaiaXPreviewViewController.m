@@ -171,6 +171,7 @@
     
     //赋值模板信息
     _templateInfo = templateInfo;
+    _templateId = [templateInfo gx_stringForKey:@"templateId"];
     
     //移除原有视图
     [self.preview.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -196,7 +197,7 @@
     
     //入参item
     _templateItem = [[GXTemplateItem alloc] init];
-    _templateItem.templateId = [templateInfo gx_stringForKey:@"templateId"];
+    _templateItem.templateId = _templateId;
     
     //入参data
     _templateData = [[GXTemplateData alloc] init];

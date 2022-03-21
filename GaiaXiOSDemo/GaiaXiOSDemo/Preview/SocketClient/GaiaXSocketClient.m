@@ -74,7 +74,7 @@
 //发送心跳
 - (void)sendPing:(id)sender{
     NSData *heartData = [[NSData alloc] initWithBase64EncodedString:@"heart" options:NSUTF8StringEncoding];
-    [self.webScoket sendPing:heartData];
+    [self.webScoket sendPing:heartData error:nil];
 }
 
 //关闭长连接
@@ -226,6 +226,15 @@
 
 //关闭连接
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
+    //代理
+    GXWeakSelf(self)
+    GX_DISPATCH_MAIN_THREAD(^{
+        GXStrongSelf(self)
+        if (self.delegate && [self.delegate respondsToSelector:@selector(gaiaXSocketClientDidDisconnect:)]) {
+            [self.delegate gaiaXSocketClientDidDisconnect:self];
+        }
+    });
+    
     self.isConnect = NO;
     
     if (self.isActiveClose) {
@@ -248,15 +257,6 @@
         self.webScoket = nil;
         [self reConnectServer];
     }
-    
-    //代理
-    GXWeakSelf(self)
-    GX_DISPATCH_MAIN_THREAD(^{
-        GXStrongSelf(self)
-        if (self.delegate && [self.delegate respondsToSelector:@selector(gaiaXSocketClientDidDisconnect:)]) {
-            [self.delegate gaiaXSocketClientDidDisconnect:self];
-        }
-    });
 }
 
 

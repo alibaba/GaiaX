@@ -1,6 +1,6 @@
-ali_source 'alibaba-specs'
-ali_source 'alibaba-specs-mirror'
-#
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/Artsy/Specs.git'
+
 #ENV['POD_HEADER_FIX']='FALSE'
 #ENV['POD_AUTOADD_SEARCH_NAME_LIST']=''
 #disable_link_dynamic_framework!
@@ -10,19 +10,19 @@ target 'GaiaXiOSDemo' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
 
+  # 曲线动画
+  pod 'GaiaXiOS'
+  
+  # 曲线动画
+  pod 'GaiaMotionCurve'
+
   # SDWebImage
   pod  'SDWebImage'
   
   # YYText
   pod  'YYText'
   
-  # 曲线动画
-  pod "GaiaMotionCurve", :path => '../../GaiaMotionCurve/src/iOS'
-  
-  # json
-  pod  'JSONKit',         '2.1.2.2'
-
   # 网络
-  pod 'SocketRocket',      '0.5.1'
+  pod 'SocketRocket'
   
 end

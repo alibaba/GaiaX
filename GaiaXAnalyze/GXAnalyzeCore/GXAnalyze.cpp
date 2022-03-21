@@ -570,7 +570,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         t1.name = gxv->u.str;
                         t1.token = "string";
                     } else if (gxv->tag == GX_TAG_BOOL) {
-                        t1.name = to_string(gxv->u.int32);
+                        if(gxv->u.int32 == 1){
+                            t1.name = "true";
+                        }else{
+                            t1.name = "false";
+                        }
                         t1.token = "bool";
                     } else if (gxv->tag == GX_TAG_ARRAY) {
                         t1.name = to_string((long) (gxv->u.ptr));

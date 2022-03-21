@@ -98,7 +98,7 @@ static gx_force_inline GXValue GX_NewFloat64(float d) {
 static gx_force_inline GXValue GX_NewGXString(const char *str) {
     GXValue gxValue;
     gxValue.tag = GX_TAG_STRING;
-    int len = sizeof(str);
+    int len = strlen(str);
     gxValue.u.str = new char[len + 1];
     for (int i = 0; i < len; i++) {
         gxValue.u.str[i] = str[i];

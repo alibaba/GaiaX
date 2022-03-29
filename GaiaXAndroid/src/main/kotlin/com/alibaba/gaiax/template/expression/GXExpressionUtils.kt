@@ -16,10 +16,43 @@
 
 package com.alibaba.gaiax.template.expression
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.analyze.GXAnalyze
+
 /**
  * @suppress
  */
 object GXExpressionUtils {
+
+    private lateinit var analyze: GXAnalyze
+
+    fun initAnalyze() {
+        analyze = GXAnalyze()
+        analyze.initComputeExtend(object : GXAnalyze.IComputeExtend {
+
+            /**
+             * 用于处理取值逻辑
+             */
+            override fun computeValueExpression(valuePath: String, source: Any): Long {
+                return 0L
+            }
+
+            /**
+             * 用于处理函数逻辑
+             */
+            override fun computeFunctionExpression(functionName: String, params: LongArray): Long {
+                return 0L
+            }
+        })
+    }
+
+    class GXAnalyzeWrapper(val expression: String) : GXIExpression {
+
+        override fun value(templateData: JSON?): Any? {
+            return analyze.getResult(expression, templateData ?: JSONObject())
+        }
+    }
 
     fun create(expression: Any?): GXIExpression? {
         return GXExpression.create(expression)

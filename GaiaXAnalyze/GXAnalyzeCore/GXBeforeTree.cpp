@@ -4,19 +4,23 @@ using namespace std;
 static vector<vector<char> > G;              //文法G[S]产生式 ，~为空字
 static unordered_map<char, set<char> > ts;   //终结符(char)terminal symbol,及它的first集合(set<char>)
 static unordered_map<char, set<char> > nts;  //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
-static map<map<string, char>, string> table; // LR分析表
+static unordered_map<string, string> tableT;
 static bool isInit = false;
-static string tString[] = {"true", "false", "null", "value", "num", "string", "data", "id", ",", "(",
+static string tString[] = {"true", "false", "null", "value", "num", "string", "data", "id", ",",
+                           "(",
                            ")",
-                           "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==", "!=", "&&", "||",
+                           "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==", "!=", "&&",
+                           "||",
                            "?",
                            ":", "?:", "error", "#", "~"};
 static char tSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-', '+', '%',
                          '/',
                          '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y', 'e', '#', '~'};
-static string ntString[] = {"S", "Ten", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr", "Two", "Parms",
+static string ntString[] = {"S", "Ten", "Len", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr",
+                            "Two",
+                            "Parms",
                             "One"};
-static char ntSymbol[] = {'S', 'T', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
+static char ntSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
 static string grammar[] = {"S->T",
                            "T->TyN|L:N|N",
                            "L->N?N",
@@ -30,8 +34,8 @@ static string grammar[] = {"S->T",
                            "Y->(T)|i(P)|O|~",
                            "P->O,P|O",
                            "O->t|f|n|v|u|s|d"};
-static map<string, char> Vt;     //终结符集合
-static map<string, char> Vn;     //非终结符集合
+static unordered_map<string, char> Vt;     //终结符集合
+static unordered_map<string, char> Vn;     //非终结符集合
 static vector<string> productions;
 struct CLOSURE {                                  //闭包CLOSURE
     vector<vector<char> > project; //项目集
@@ -39,18 +43,6 @@ struct CLOSURE {                                  //闭包CLOSURE
     unordered_map<char, int> go;   // GO函数
 };
 static vector<CLOSURE> cloArray;
-
-string get_Table_By_Map(map<string, char> map) {
-    return table[map];
-}
-
-vector<char> get_G_Char_Array(int num) {
-    return G[num];
-}
-
-char get_G_Symbol(int num1, int num2) {
-    return G[num1][num2];
-}
 
 void read_G() {
     int sizeG = sizeof(grammar) / sizeof(grammar[0]);
@@ -94,7 +86,7 @@ void read_G() {
             }
         }
     }
-    if (G.empty()){
+    if (G.empty()) {
         exit(0);
     }
     value.clear();
@@ -223,10 +215,12 @@ void get_Closure() {
                                 if (k + t + 1 == cloArray[i].project[j].size() - 1) { //情况一
                                     for (auto it : cloArray[i].outlook[j])
                                         m.insert(it);
-                                } else if (ts.find(cloArray[i].project[j][k + t + 2]) != ts.end()) { //情况二
+                                } else if (ts.find(cloArray[i].project[j][k + t + 2]) !=
+                                           ts.end()) { //情况二
                                     m.insert(cloArray[i].project[j][k + 2 + t]);
                                 } else {
-                                    set<char> m1((nts.find(cloArray[i].project[j][k + 2 + t]))->second);
+                                    set<char> m1(
+                                            (nts.find(cloArray[i].project[j][k + 2 + t]))->second);
                                     for (auto it : m1) {
                                         if (it == '~') {
                                             emp = true;
@@ -293,7 +287,8 @@ void get_Closure() {
                         dif) {
                         cloArray[cloArray[i].go[new_closure_pro[k]]].project.push_back(
                                 new_closure_pro);
-                        cloArray[cloArray[i].go[new_closure_pro[k]]].outlook.push_back(new_closure_search);
+                        cloArray[cloArray[i].go[new_closure_pro[k]]].outlook.push_back(
+                                new_closure_search);
                         break;
                     }
                     if (dif) {
@@ -317,12 +312,11 @@ int get_Table() {
                 if (cloArray[i].project[j][k] == ' ') {
                     if (k == cloArray[i].project[j].size() - 1) {
                         if (cloArray[i].project[j][0] == 'M') {
-                            map<string, char> m;
-                            m[to_string(i)] = '#';
-                            if (table.find(m) != table.end() && table[m] != "acc") {
+                            string m = to_string(i) + '#';
+                            if (tableT.find(m) != tableT.end() && tableT[m] != "acc") {
                                 return 0;
                             } else
-                                table[m] = "acc";
+                                tableT[m] = "acc";
                         } else {
                             int id;
                             for (unsigned int x = 0; x < G.size(); x++) {
@@ -334,33 +328,30 @@ int get_Table() {
                                 }
                             }
                             for (auto it : cloArray[i].outlook[j]) {
-                                map<string, char> m;
-                                m[to_string(i)] = it;
-                                if (table.find(m) != table.end() &&
-                                    table[m] != (string) "r" + to_string(id)) {
+                                string m = to_string(i) + it;
+                                if (tableT.find(m) != tableT.end() &&
+                                    tableT[m] != (string) "r" + to_string(id)) {
                                     return 0;
                                 } else
-                                    table[m] = (string) "r" + to_string(id);
+                                    tableT[m] = (string) "r" + to_string(id);
                             }
                         }
                     } else {
                         char next = cloArray[i].project[j][k + 1];
                         if (ts.find(next) != ts.end()) {
-                            map<string, char> m;
-                            m[to_string(i)] = next;
-                            if (table.find(m) != table.end() &&
-                                table[m] != (string) "s" + to_string(cloArray[i].go[next])) {
+                            string m = to_string(i) + next;
+                            if (tableT.find(m) != tableT.end() &&
+                                tableT[m] != (string) "s" + to_string(cloArray[i].go[next])) {
                                 return 0;
                             } else
-                                table[m] = (string) "s" + to_string(cloArray[i].go[next]);
+                                tableT[m] = (string) "s" + to_string(cloArray[i].go[next]);
                         } else {
-                            map<string, char> m;
-                            m[to_string(i)] = next;
-                            if (table.find(m) != table.end() &&
-                                table[m] != to_string(cloArray[i].go[next])) {
+                            string m = to_string(i) + next;
+                            if (tableT.find(m) != tableT.end() &&
+                                tableT[m] != to_string(cloArray[i].go[next])) {
                                 return 0;
                             } else
-                                table[m] = to_string(cloArray[i].go[next]);
+                                tableT[m] = to_string(cloArray[i].go[next]);
                         }
                     }
                     break;
@@ -393,6 +384,18 @@ char change_Word(string s) {
     } else {
         return Vn[s];
     }
+}
+
+vector<char> get_G_Vector(int gid) {
+    return G[gid];
+}
+
+char get_G_Char(int gid, int num) {
+    return G[gid][num];
+}
+
+string get_Table_By_String(string param) {
+    return tableT[param];
 }
 
 void init() {

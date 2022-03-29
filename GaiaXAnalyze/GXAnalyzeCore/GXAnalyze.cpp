@@ -1,5 +1,5 @@
 #include "GXAnalyze.h"
-
+#include <time.h>
 
 GXAnalyze::GXAnalyze() {
     init();
@@ -311,11 +311,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name =
                         "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
                         right.token;
-            } else if (right.token == "num" || right.token == "string"){
+            } else if (right.token == "num" || right.token == "string") {
                 result.name =
                         "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
                         left.token;
-            }else{
+            } else {
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -332,11 +332,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name =
                         "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
                         right.token;
-            } else if (right.token == "num"){
+            } else if (right.token == "num") {
                 result.name =
                         "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
                         left.token;
-            }else{
+            } else {
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -353,11 +353,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name =
                         "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
                         right.token;
-            } else if (right.token == "num"){
+            } else if (right.token == "num") {
                 result.name =
                         "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
                         left.token;
-            }else{
+            } else {
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -379,11 +379,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name =
                         "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
                         right.token;
-            } else if (right.token == "num"){
+            } else if (right.token == "num") {
                 result.name =
                         "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
                         left.token;
-            }else{
+            } else {
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -394,7 +394,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             if (stof(right.name) == 0) {
                 result.token = "error";
                 result.name = "divide or mod by zero";
-            }else{
+            } else {
                 float temp = stoi(left.name) % stoi(right.name);
                 result.name = to_string(temp);
                 result.token = "num";
@@ -405,11 +405,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name =
                         "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
                         right.token;
-            } else if (right.token == "num"){
+            } else if (right.token == "num") {
                 result.name =
                         "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
                         left.token;
-            }else{
+            } else {
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -482,6 +482,7 @@ long GXAnalyze::getValue(string expression, void *source) {
     int inputLength = expression.length();
     input = new char[inputLength];
     vector<GXATSNode> array;
+    array.reserve(128);
     string result = "#";
     strcpy(input, expression.c_str());
     int p = 0;
@@ -508,22 +509,34 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
     string temp = "\0"; //需要分析的语句
     string sentence = s + temp;
     vector<string> statusStack; //状态栈
+    statusStack.reserve(128);
+    int statusSize = 0;
     vector<char> symbolStack;   //符号栈
+    symbolStack.reserve(128);
+    int symbolSize = 0;
     vector<GXATSNode> valueStack;
+    symbolStack.reserve(64);
+    int valueSize = 0;
     vector<GXValue> paramsStack;
+    paramsStack.reserve(64);
+    int paramsSize = 0;
     int valueStep = 0; //数值数
     bool isFunction = false;
     string valueType;
     symbolStack.push_back('#');
+    ++symbolSize;
     sentence = sentence.substr(1);
-    statusStack.push_back("0");
+    statusStack.emplace_back("0");
+    ++statusSize;
+    string new_status;                             //下一入栈的新状态
     while (true) {
-        string cur_status = statusStack[statusStack.size() - 1]; //当前状态
-        char cur_symbol = sentence[0];                 //当前“展望”字符
-        string new_status;                             //下一入栈的新状态
-        map<string, char> m;
-        m[cur_status] = cur_symbol;
-        new_status = get_Table_By_Map(m);
+        string cur_status;//当前状态
+        char cur_symbol;//当前“展望”字符
+        cur_status = statusStack[statusSize - 1];
+        cur_symbol = sentence[0];
+        string m = cur_status + cur_symbol;
+        //当前new_status,下一入栈的新状态
+        new_status = get_Table_By_String(m);
         if (new_status == "acc") {
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
@@ -547,8 +560,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         } else if (new_status[0] ==
                    's') {
             statusStack.push_back(new_status.substr(1));
+            ++statusSize;
             // 1
             symbolStack.push_back(cur_symbol); //读入一个字符
+            ++symbolSize;
             string temp = get_S_By_C(cur_symbol);
             if ((is_terminal_char(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
@@ -570,9 +585,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         t1.name = gxv->u.str;
                         t1.token = "string";
                     } else if (gxv->tag == GX_TAG_BOOL) {
-                        if(gxv->u.int32 == 1){
+                        if (gxv->u.int32 == 1) {
                             t1.name = "true";
-                        }else{
+                        } else {
                             t1.name = "false";
                         }
                         t1.token = "bool";
@@ -587,8 +602,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         t1.token = "null";
                     }
                     valueStack.push_back(t1);
+                    ++valueSize;
                 } else {
                     valueStack.push_back(array[valueStep]);
+                    ++valueSize;
                 }
             }
             valueStep = valueStep + 1;
@@ -597,162 +614,195 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                    'r') {
             new_status = new_status.substr(1);
             int gid = atoi(new_status.c_str());
-            int len = get_G_Char_Array(gid).size() - 1;
-            vector<string> action;
-            GXATSNode t1;
-            GXATSNode t2;
-            string op;
-            bool changedT1 = false;
-            bool changedT2 = false;
-            GXATSNode tempR;
-            GXATSNode tempR2;
-            bool isChangedOp = false;
-            char reduced_symbol = get_G_Symbol(gid, 0);
-            for (int i = 0; i < len; i++) {
-                action.push_back(get_S_By_C(symbolStack[symbolStack.size() - 1]));
-                statusStack.pop_back();
-                // 2
-                symbolStack.pop_back();
-            }
-            for (int i = 0; i < action.size(); i++) {
-                if ((is_terminal_char(action[i]) &&
-                     !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
-                        action[i] == "value" || action[i] == "num" || action[i] == "string" ||
-                        action[i] == "data" || action[i] == "id"))) ||
-                    (action[i] == "map" || action[i] == "array")) {
-                    //把id当成操作符，然后把（）括号里的数据，存放到jObjcetArray里，也许可以通过标识符号判断是否读取完参数列表，读完以后，直接通过类似于算法
-                    //string数组里，单数为token，双数为name，然后通过符号分割的字符串，最后返回
-                    if (!isChangedOp) {
-                        op = action[i];
-                        isChangedOp = true;
-                    }
-                } else {
-                    if (!changedT1) {
-                        changedT1 = true;
+            int len = get_G_Vector(gid).size() - 1;
+            if (len == 1) {
+                char reduced_symbol = get_G_Char(gid, 0);
+                string m = statusStack[statusSize - 2] + reduced_symbol;
+                new_status = get_Table_By_String(m);
+                statusStack[statusSize - 1] = (new_status);
+                symbolStack[symbolSize - 1] = (reduced_symbol);
+            } else {
+                vector<string> action;
+                GXATSNode t1;
+                GXATSNode t2;
+                string op;
+                bool changedT1 = false;
+                bool changedT2 = false;
+                GXATSNode tempR;
+                GXATSNode tempR2;
+                bool isChangedOp = false;
+                char reduced_symbol = get_G_Char(gid, 0);
+                for (int i = 0; i < len; i++) {
+                    action.push_back(get_S_By_C(symbolStack[symbolSize - 1]));
+                    statusStack.pop_back();
+                    --statusSize;
+                    symbolStack.pop_back();
+                    --symbolSize;
+                }
+                for (int i = 0; i < action.size(); i++) {
+                    if ((is_terminal_char(action[i]) &&
+                         !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
+                            action[i] == "value" || action[i] == "num" || action[i] == "string" ||
+                            action[i] == "data" || action[i] == "id"))) ||
+                        (action[i] == "map" || action[i] == "array")) {
+                        if (!isChangedOp) {
+                            op = action[i];
+                            isChangedOp = true;
+                        }
                     } else {
-                        changedT2 = true;
+                        if (!changedT1) {
+                            changedT1 = true;
+                        } else {
+                            changedT2 = true;
+                        }
                     }
                 }
-            }
-            if (len > 1) {
-                if (changedT2) {
-                    if (valueStack.size() < 2) {
-                        analyze->throwError("expression error");
-                        return 0L;
-                    }
-                    t2 = valueStack[valueStack.size() - 1];
-                    t1 = valueStack[valueStack.size() - 2];
-                    if (isFunction && op == "(") {
-                        tempR = t1;
-                        valueStack.pop_back();
-                    } else if (isFunction && op == ",") {
-                        tempR = t1;
-                        tempR2 = t2;
-                        valueStack.pop_back();
-                        valueStack.pop_back();
-                    } else if (isFunction && op == ")") {
-                        for (int i = valueStack.size() - 1; i >= 0; i--) {
-                            if (valueStack[i].token == "id") {
-                                long *params = new long[paramsStack.size()];
-                                int j = paramsStack.size() - 1;
-                                for (int i = 0; i < paramsStack.size(); i++) {
-                                    params[i] = (long) &paramsStack[j];
-                                    j--;
-                                }
-                                //在这里调用获取函数结果方法
-                                long funVal = analyze->getFunctionValue(valueStack[i].name, params,
-                                                                        paramsStack.size(), "");
-                                GXValue *fun = (GXValue *) funVal;
-                                //取出结果
-                                if (fun->tag == GX_TAG_FLOAT) {
-                                    tempR.name = to_string(fun->u.float64);
-                                    tempR.token = "num";
-                                } else if (fun->tag == GX_TAG_BOOL) {
-                                    if (fun->u.int32 == 1) {
-                                        tempR.name = "true";
-                                        tempR.token = "bool";
-                                    } else {
-                                        tempR.name = "false";
-                                        tempR.token = "bool";
-                                    }
-                                } else if (fun->tag == GX_TAG_STRING) {
-                                    tempR.name = fun->u.str;
-                                    tempR.token = "string";
-                                } else if (fun->tag == GX_TAG_MAP) {
-                                    tempR.name = to_string((long) fun->u.ptr);
-                                    tempR.token = "map";
-                                } else if (fun->tag == GX_TAG_ARRAY) {
-                                    tempR.name = to_string((long) fun->u.ptr);
-                                    tempR.token = "array";
-                                } else if (fun->tag == GX_TAG_NULL) {
-                                    tempR.name = "null";
-                                    tempR.token = "null";
-                                }
+                if (len > 1) {
+                    if (changedT2) {
+                        if (valueSize < 2) {
+                            analyze->throwError("expression error");
+                            return 0L;
+                        }
+                        t2 = valueStack[valueSize - 1];
+                        t1 = valueStack[valueSize - 2];
+                        if (isFunction) {
+                            if (op == "(") {
+                                tempR = t1;
                                 valueStack.pop_back();
-                                isFunction = false;
-                                break;
+                                --valueSize;
+                            } else if (op == ",") {
+                                tempR = t1;
+                                tempR2 = t2;
+                                valueStack.pop_back();
+                                valueStack.pop_back();
+                                valueSize = valueSize - 2;
+                            } else if (op == ")") {
+                                for (int i = valueSize - 1; i >= 0; i--) {
+                                    if (valueStack[i].token == "id") {
+                                        long *params = new long[paramsSize];
+                                        int j = paramsSize - 1;
+                                        for (int i = 0; i < paramsSize; i++) {
+                                            params[i] = (long) &paramsStack[j];
+                                            j--;
+                                        }
+                                        //在这里调用获取函数结果方法
+                                        long funVal = analyze->getFunctionValue(valueStack[i].name,
+                                                                                params,
+                                                                                paramsSize, "");
+                                        GXValue *fun = (GXValue *) funVal;
+                                        //取出结果
+                                        if (fun->tag == GX_TAG_FLOAT) {
+                                            tempR.name = to_string(fun->u.float64);
+                                            tempR.token = "num";
+                                        } else if (fun->tag == GX_TAG_BOOL) {
+                                            if (fun->u.int32 == 1) {
+                                                tempR.name = "true";
+                                                tempR.token = "bool";
+                                            } else {
+                                                tempR.name = "false";
+                                                tempR.token = "bool";
+                                            }
+                                        } else if (fun->tag == GX_TAG_STRING) {
+                                            tempR.name = fun->u.str;
+                                            tempR.token = "string";
+                                        } else if (fun->tag == GX_TAG_MAP) {
+                                            tempR.name = to_string((long) fun->u.ptr);
+                                            tempR.token = "map";
+                                        } else if (fun->tag == GX_TAG_ARRAY) {
+                                            tempR.name = to_string((long) fun->u.ptr);
+                                            tempR.token = "array";
+                                        } else if (fun->tag == GX_TAG_NULL) {
+                                            tempR.name = "null";
+                                            tempR.token = "null";
+                                        }
+                                        valueStack.pop_back();
+                                        --valueSize;
+                                        isFunction = false;
+                                        break;
+                                    } else {
+                                        //往vector<GXValue>逐个扔进去参数，然后通过id调用
+                                        if (valueStack[i].token == "num") {
+                                            paramsStack.push_back(
+                                                    GX_NewFloat64(
+                                                            atof(valueStack[i].name.c_str())));
+                                            ++paramsSize;
+                                        } else if (valueStack[i].token == "string") {
+                                            paramsStack.push_back(
+                                                    GX_NewGXString(valueStack[i].name.c_str()));
+                                            ++paramsSize;
+                                        } else if (valueStack[i].token == "bool") {
+                                            if (valueStack[i].name == "true") {
+                                                paramsStack.push_back(GX_NewBool(1));
+                                                ++paramsSize;
+                                            } else {
+                                                paramsStack.push_back(GX_NewBool(0));
+                                                ++paramsSize;
+                                            }
+                                        } else if (valueStack[i].token == "map") {
+                                            paramsStack.push_back(
+                                                    GX_NewMap(
+                                                            (void *) atol(
+                                                                    valueStack[i].name.c_str())));
+                                            ++paramsSize;
+                                        } else if (valueStack[i].token == "array") {
+                                            paramsStack.push_back(
+                                                    GX_NewArray(
+                                                            (void *) atol(
+                                                                    valueStack[i].name.c_str())));
+                                            ++paramsSize;
+                                        } else if (valueStack[i].token == "null") {
+                                            paramsStack.push_back(
+                                                    GX_NewNull(1));
+                                            ++paramsSize;
+                                        }
+                                        valueStack.pop_back();
+                                        --valueSize;
+                                    }
+                                }
                             } else {
-                                //往vector<GXValue>逐个扔进去参数，然后通过id调用
-                                if (valueStack[i].token == "num") {
-                                    paramsStack.push_back(
-                                            GX_NewFloat64(atof(valueStack[i].name.c_str())));
-                                } else if (valueStack[i].token == "string") {
-                                    paramsStack.push_back(
-                                            GX_NewGXString(valueStack[i].name.c_str()));
-                                } else if (valueStack[i].token == "bool") {
-                                    if (valueStack[i].name == "true") {
-                                        paramsStack.push_back(GX_NewBool(1));
-                                    } else {
-                                        paramsStack.push_back(GX_NewBool(0));
-                                    }
-                                } else if (valueStack[i].token == "map") {
-                                    paramsStack.push_back(
-                                            GX_NewMap((void *) atol(valueStack[i].name.c_str())));
-                                } else if (valueStack[i].token == "array") {
-                                    paramsStack.push_back(
-                                            GX_NewArray((void *) atol(valueStack[i].name.c_str())));
-                                } else if (valueStack[i].token == "null") {
-                                    paramsStack.push_back(
-                                            GX_NewNull(1));
-                                }
-                                valueStack.pop_back();
+                                analyze->throwError("expression error");
+                                return 0L;
+                            }
+                        } else {
+                            valueStack.pop_back();
+                            valueStack.pop_back();
+                            valueSize = valueSize - 2;
+                            tempR = doubleCalculate(t1, t2, op);
+                            if (tempR.token == "error") {
+                                analyze->throwError(tempR.name);
+                                return 0L;
                             }
                         }
                     } else {
+                        if (valueSize < 1) {
+                            analyze->throwError("expression error");
+                            return 0L;
+                        }
+                        t1 = valueStack[valueSize - 1];
                         valueStack.pop_back();
-                        valueStack.pop_back();
-                        tempR = doubleCalculate(t1, t2, op);
+                        --valueSize;
+                        tempR = singleCalculate(t1, op);
                         if (tempR.token == "error") {
                             analyze->throwError(tempR.name);
                             return 0L;
                         }
                     }
-                } else {
-                    if (valueStack.size() < 1) {
-                        analyze->throwError("expression error");
-                        return 0L;
-                    }
-                    t1 = valueStack[valueStack.size() - 1];
-                    valueStack.pop_back();
-                    tempR = singleCalculate(t1, op);
-                    if (tempR.token == "error") {
-                        analyze->throwError(tempR.name);
-                        return 0L;
+                    if (isFunction && op == ",") {
+                        valueStack.push_back(tempR);
+                        valueStack.push_back(tempR2);
+                        valueSize = valueSize + 2;
+                    } else {
+                        valueStack.push_back(tempR);
+                        ++valueSize;
                     }
                 }
-                if (isFunction && op == ",") {
-                    valueStack.push_back(tempR);
-                    valueStack.push_back(tempR2);
-                } else {
-                    valueStack.push_back(tempR);
-                }
+                string m = statusStack[statusSize - 1] + reduced_symbol;
+                new_status = get_Table_By_String(m);
+                statusStack.push_back(new_status);
+                ++statusSize;
+                symbolStack.push_back(reduced_symbol);
+                ++symbolSize;
             }
-            map<string, char> m;
-            m[statusStack[statusStack.size() - 1]] = reduced_symbol;
-            new_status = get_Table_By_Map(m);
-            statusStack.push_back(new_status);
-            // 3
-            symbolStack.push_back(reduced_symbol);
         } else {
             analyze->throwError("expression error");
             return 0L;

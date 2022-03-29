@@ -30,10 +30,10 @@ bool is_terminal_char(const string &s);
 
 char change_Word(string s);
 
-string get_Table_By_Map(map<string, char> map);
+string get_Table_By_String(string param);
 
-vector<char> get_G_Char_Array(int num);
+vector<char> get_G_Vector(int gid);
 
-char get_G_Symbol(int num1, int num2);
+char get_G_Char(int gid, int num);
 
 #endif /*include _BEFORETREE__H_*/

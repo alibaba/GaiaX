@@ -39,7 +39,7 @@ object GXExpressionUtils {
             /**
              * 用于处理取值逻辑
              */
-            override fun computeValueExpression(valuePath: String, source: Any): Long {
+            override fun computeValueExpression(valuePath: String, source: Any?): Long {
                 if (source is JSONObject) {
                     val value = source.getAnyExt(valuePath)
                     if (value is JSONArray) {

@@ -372,7 +372,7 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueArray(JNIEnv 
     GXValue *result;
     //必须持有引用，否则会释放掉指针
     jobject ref = env->NewWeakGlobalRef(value);
-    GXValue val = GX_NewMap(ref);
+    GXValue val = GX_NewArray(ref);
     result = (GXValue *) malloc(sizeof(val));
     memcpy(result, &val, sizeof(val));
     return (jlong) result;

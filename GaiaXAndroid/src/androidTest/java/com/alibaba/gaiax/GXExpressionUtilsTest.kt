@@ -28,44 +28,44 @@ import org.junit.Test
  */
 class GXExpressionUtilsTest {
 
-    @Before
-    fun before() {
-        GXExpressionUtils.initAnalyze()
-    }
-
-    @Test
-    fun size_string() {
-        val value = GXExpressionUtils.create("size('string')")?.value(null)
-        Assert.assertEquals(6.0F, value)
-    }
-
-    @Test
-    fun size_json_object() {
-        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
-            this["data"] = JSONObject().apply {
-                this["data1"] = "data1"
-                this["data2"] = "data1"
-                this["data3"] = "data1"
-                this["data4"] = "data1"
-                this["data5"] = "data1"
-                this["data6"] = "data1"
-            }
-        })
-        Assert.assertEquals(6.0F, value)
-    }
-
-    @Test
-    fun size_json_array() {
-        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
-            this["data"] = JSONArray().apply {
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-            }
-        })
-        Assert.assertEquals(6.0F, value)
-    }
+//    @Before
+//    fun before() {
+//        GXExpressionUtils.initAnalyze()
+//    }
+//
+//    @Test
+//    fun size_string() {
+//        val value = GXExpressionUtils.create("size('string')")?.value(null)
+//        Assert.assertEquals(6.0F, value)
+//    }
+//
+//    @Test
+//    fun size_json_object() {
+//        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
+//            this["data"] = JSONObject().apply {
+//                this["data1"] = "data1"
+//                this["data2"] = "data1"
+//                this["data3"] = "data1"
+//                this["data4"] = "data1"
+//                this["data5"] = "data1"
+//                this["data6"] = "data1"
+//            }
+//        })
+//        Assert.assertEquals(6.0F, value)
+//    }
+//
+//    @Test
+//    fun size_json_array() {
+//        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
+//            this["data"] = JSONArray().apply {
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//            }
+//        })
+//        Assert.assertEquals(6.0F, value)
+//    }
 }

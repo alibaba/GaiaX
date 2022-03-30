@@ -92,10 +92,11 @@ object GXExpressionUtils {
     }
 
     fun create(expression: Any?): GXIExpression? {
-        return if (expression is String) {
-            GXAnalyzeWrapper(expression)
-        } else {
-            null
-        }
+//        return if (expression is String) {
+//            GXAnalyzeWrapper(expression)
+//        } else {
+//            null
+//        }
+        return GXExpression.create(expression)
     }
 }

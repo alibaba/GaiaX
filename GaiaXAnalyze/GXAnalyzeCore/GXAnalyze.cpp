@@ -1,6 +1,388 @@
 #include "GXAnalyze.h"
 #include <time.h>
 
+using namespace std;
+static vector<vector<char> > G;              //文法G[S]产生式 ，~为空字
+static unordered_map<char, set<char> > ts;   //终结符(char)terminal symbol,及它的first集合(set<char>)
+static unordered_map<char, set<char> > nts;  //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
+static unordered_map<string, string> tableT;
+static bool isInit = false;
+static string tString[] = {"true", "false", "null", "value", "num", "string", "data", "id", ",",
+                           "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==", "!=",
+                           "&&", "||", "?", ":", "?:", "error", "#", "~"};
+static char tSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-', '+', '%',
+                         '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y', 'e', '#',
+                         '~'};
+static string ntString[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr", "Two",
+                            "P", "One"};
+static char ntSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
+static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
+                           "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
+                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O", "O->t|f|n|v|u|s|d"};
+static unordered_map<string, char> Vt;     //终结符集合
+static unordered_map<string, char> Vn;     //非终结符集合
+static vector<string> productions;
+struct CLOSURE {                                  //闭包CLOSURE
+    vector<vector<char> > project; //项目集
+    vector<set<char> > outlook;    //展望串
+    unordered_map<char, int> go;   // GO函数
+};
+static vector<CLOSURE> cloArray;
+
+void read_G() {
+    int sizeG = sizeof(grammar) / sizeof(grammar[0]);
+    for (int i = 0; i < sizeG; i++) {
+        productions.push_back(grammar[i]);
+    }
+    char symbol;
+    int i = 0;
+    vector<char> value;
+    char chX;
+    set<char> m;
+    nts['M'] = m;
+    for (int x = 0; x < productions.size(); x++) {
+        string temp = productions[x];
+        for (int y = 0; y < temp.length(); y++) {
+            symbol = temp[y];
+            if (symbol != ' ' || symbol != '\t') {
+                if (symbol == '|') {
+                    G.push_back(value);
+                    value.clear();
+                    i = 3;
+                    value.push_back(chX);
+                    continue;
+                }
+                i++;
+                if (i == 1) {
+                    chX = symbol;
+                    nts[symbol] = m;
+                } else if (i != 2 && i != 3 && symbol != '~')
+                    ts[symbol] = m;
+                if (i != 2 && i != 3)
+                    value.push_back(symbol);
+            }
+            if (y == temp.length() - 1) {
+                if (!value.empty()) {
+                    G.push_back(value);
+                }
+                value.clear();
+                i = 0;
+                continue;
+            }
+        }
+    }
+    if (G.empty()) {
+        exit(0);
+    }
+    value.clear();
+    value.push_back('M');
+    value.push_back(G[0][0]);
+    G.insert(G.begin(), value);
+
+    //去掉ts中的非终结符
+    for (unordered_map<char, set<char> >::iterator it = nts.begin(); it != nts.end(); it++) {
+        unordered_map<char, set<char> >::iterator iter;
+        iter = ts.find(it->first);
+        if (iter != ts.end())
+            ts.erase(iter);
+    }
+}
+
+bool is_terminal_char(const string &s) {
+    //在map中判断
+    if (Vt.count(s) > 0) {
+        return true;
+    }
+    if (s == "M") {
+        return true;
+    }
+    return false;
+}
+
+void get_First() { //得到First集合
+    for (auto &it : ts)
+        it.second.insert(it.first);
+
+    //求非终结符的First集合
+    int r = 0;
+    int change = 1;
+    while (change) {
+        if (r == 20)
+            break;
+        r++;
+        change = 0;
+        for (auto &it : nts) {
+            for (unsigned int i = 0; i < G.size(); i++) {
+                if (G[i][0] == it.first) {
+                    unsigned int size = it.second.size();
+                    unordered_map<char, set<char> >::iterator iter = ts.find(G[i][1]);
+                    if (ts.find(G[i][1]) != ts.end() ||
+                        G[i][1] == '~') {
+                        it.second.insert(G[i][1]);
+                        if (it.second.size() > size)
+                            change = 1;
+                    } else {
+                        unsigned int col = 1;
+                        while (1) {
+                            int flag = 0;
+                            unordered_map<char, set<char> >::iterator itt = nts.find(G[i][col]);
+                            for (auto &iter : itt->second) {
+                                if (iter == '~')
+                                    flag = 1;
+                                else
+                                    it.second.insert(iter);
+                            }
+                            if (flag) {
+                                col++;
+                                if (G[i].size() <= col) {
+                                    it.second.insert('~');
+                                    break;
+                                } else if (ts.find(G[i][col]) !=
+                                           ts.end()) {
+                                    it.second.insert(G[i][col]);
+                                    break;
+                                } else {
+                                }
+                            } else
+                                break;
+                        }
+                        if (it.second.size() > size)
+                            change = 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void get_Closure() {
+    int i = 0;
+    CLOSURE clo;
+    cloArray.push_back(clo);
+    while (1) {
+        if (i == cloArray.size())
+            break;
+        if (i == 0) {
+            vector<char> vec(G[0]);
+            vec.insert(vec.begin() + 1, ' ');
+            cloArray[i].project.push_back(vec);
+            set<char> m;
+            m.insert('#');
+            cloArray[i].outlook.push_back(m);
+        }
+        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
+                if (cloArray[i].project[j][k] == ' ') {
+                    if (k == cloArray[i].project[j].size() - 1)
+                        break;
+                    for (unsigned int x = 0;
+                         x < G.size(); x++) {
+                        if (G[x][0] ==
+                            cloArray[i].project[j][k + 1]) {
+                            vector<char> vec(G[x]);
+                            vec.insert(vec.begin() + 1, ' ');
+                            int exist = 0;
+                            for (unsigned int y = 0;
+                                 y < cloArray[i].project.size(); y++) {
+                                if (cloArray[i].project[y] == vec) {
+                                    exist = y;
+                                    break;
+                                }
+                            }
+                            if (exist == 0) {
+                                cloArray[i].project.push_back(vec);
+                            }
+                            set<char> m;
+                            bool emp = true;    //判空
+                            int t = 0;
+                            while (emp) {
+                                emp = false;
+                                if (k + t + 1 == cloArray[i].project[j].size() - 1) { //情况一
+                                    for (auto it : cloArray[i].outlook[j])
+                                        m.insert(it);
+                                } else if (ts.find(cloArray[i].project[j][k + t + 2]) !=
+                                           ts.end()) { //情况二
+                                    m.insert(cloArray[i].project[j][k + 2 + t]);
+                                } else {
+                                    set<char> m1(
+                                            (nts.find(cloArray[i].project[j][k + 2 + t]))->second);
+                                    for (auto it : m1) {
+                                        if (it == '~') {
+                                            emp = true;
+                                            t++;
+                                        } else {
+                                            m.insert(it);
+                                        }
+                                    }
+                                }
+                            }
+                            if (exist) {
+                                for (auto it : m) {
+                                    cloArray[i].outlook[exist].insert(it);
+                                }
+                            } else
+                                cloArray[i].outlook.push_back(m);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
+                if (cloArray[i].project[j][k] == ' ') {
+                    if (k == cloArray[i].project[j].size() - 1)
+                        break;
+                    vector<char> new_closure_pro(cloArray[i].project[j]);
+                    new_closure_pro[k] = new_closure_pro[k + 1];
+                    new_closure_pro[k + 1] = ' ';
+                    set<char> new_closure_search(cloArray[i].outlook[j]);
+                    bool dif = false;
+                    for (unsigned int x = 0; x < cloArray.size(); x++) {
+                        // dif = false;
+                        for (unsigned int y = 0; y <
+                                                 cloArray[x].project.size(); y++) {
+                            dif = false;
+                            if (new_closure_pro == cloArray[x].project[y]) {
+                                if (cloArray[x].outlook[0].size() != new_closure_search.size()) {
+                                    dif = true;
+                                    continue;
+                                }
+                                auto iter = cloArray[x].outlook[0].begin();
+                                for (auto it : new_closure_search) {
+                                    if (it != *iter) {
+                                        dif = true;
+                                        break;
+                                    }
+                                    iter++;
+                                }
+                                if (dif == false) {
+                                    cloArray[i].go[new_closure_pro[k]] = x;
+                                    break;
+                                }
+                            } else
+                                dif = true;
+                            if (dif == false)
+                                break;
+                        }
+                        if (dif == false)
+                            break;
+                    }
+                    if (cloArray[i].go.count(new_closure_pro[k]) != 0 &&
+                        dif) {
+                        cloArray[cloArray[i].go[new_closure_pro[k]]].project.push_back(
+                                new_closure_pro);
+                        cloArray[cloArray[i].go[new_closure_pro[k]]].outlook.push_back(
+                                new_closure_search);
+                        break;
+                    }
+                    if (dif) {
+                        CLOSURE new_closure;
+                        new_closure.project.push_back(new_closure_pro);
+                        new_closure.outlook.push_back(new_closure_search);
+                        cloArray.push_back(new_closure);
+                        cloArray[i].go[new_closure_pro[k]] = cloArray.size() - 1;
+                    }
+                }
+            }
+        }
+        i++;
+    }
+}
+
+int get_Table() {
+    for (unsigned int i = 0; i < cloArray.size(); i++) {
+        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
+                if (cloArray[i].project[j][k] == ' ') {
+                    if (k == cloArray[i].project[j].size() - 1) {
+                        if (cloArray[i].project[j][0] == 'M') {
+                            string m = to_string(i) + '#';
+                            if (tableT.find(m) != tableT.end() && tableT[m] != "acc") {
+                                return 0;
+                            } else
+                                tableT[m] = "acc";
+                        } else {
+                            int id;
+                            for (unsigned int x = 0; x < G.size(); x++) {
+                                vector<char> vec(cloArray[i].project[j]);
+                                vec.pop_back();
+                                if (G[x] == vec) {
+                                    id = x;
+                                    break;
+                                }
+                            }
+                            for (auto it : cloArray[i].outlook[j]) {
+                                string m = to_string(i) + it;
+                                if (tableT.find(m) != tableT.end() &&
+                                    tableT[m] != (string) "r" + to_string(id)) {
+                                    return 0;
+                                } else
+                                    tableT[m] = (string) "r" + to_string(id);
+                            }
+                        }
+                    } else {
+                        char next = cloArray[i].project[j][k + 1];
+                        if (ts.find(next) != ts.end()) {
+                            string m = to_string(i) + next;
+                            if (tableT.find(m) != tableT.end() &&
+                                tableT[m] != (string) "s" + to_string(cloArray[i].go[next])) {
+                                return 0;
+                            } else
+                                tableT[m] = (string) "s" + to_string(cloArray[i].go[next]);
+                        } else {
+                            string m = to_string(i) + next;
+                            if (tableT.find(m) != tableT.end() &&
+                                tableT[m] != to_string(cloArray[i].go[next])) {
+                                return 0;
+                            } else
+                                tableT[m] = to_string(cloArray[i].go[next]);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return 1;
+}
+
+//初始化终结符和非终结符
+void init_Terminal() {
+    int sizeC = sizeof(tString) / sizeof(tString[0]);
+    int sizeU = sizeof(ntString) / sizeof(ntString[0]);
+    set<char> m;
+    //终结符
+    for (int i = 0; i < sizeC; i++) {
+        Vt.insert(pair<string, char>(tString[i], tSymbol[i]));
+        ts[tSymbol[i]] = m;
+    }
+    for (int i = 0; i < sizeU; i++) {
+        Vn.insert(pair<string, char>(ntString[i], ntSymbol[i]));
+        nts[ntSymbol[i]] = m;
+    }
+}
+
+char change_Word(string s) {
+    if (is_terminal_char(s)) {
+        return Vt[s];
+    } else {
+        return Vn[s];
+    }
+}
+
+void init() {
+    if (isInit == false) {
+        isInit = true;
+        read_G();
+        get_First();
+        get_Closure();
+        init_Terminal();
+        get_Table();
+        init_All();
+    }
+}
+
 GXAnalyze::GXAnalyze() {
     init();
 }
@@ -508,25 +890,21 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     string temp = "\0"; //需要分析的语句
     string sentence = s + temp;
-    vector<string> statusStack; //状态栈
-    statusStack.reserve(128);
+    string *statusStack = new string[sentence.size() + 2];    //状态栈
     int statusSize = 0;
-    vector<char> symbolStack;   //符号栈
-    symbolStack.reserve(128);
+    char *symbolStack = new char[sentence.size() + 2];        //符号栈
     int symbolSize = 0;
-    vector<GXATSNode> valueStack;
-    symbolStack.reserve(64);
+    GXATSNode *valueStack = new GXATSNode[sentence.size() + 2];
     int valueSize = 0;
-    vector<GXValue> paramsStack;
-    paramsStack.reserve(64);
+    GXValue *paramsStack = new GXValue[sentence.size() + 2];
     int paramsSize = 0;
     int valueStep = 0; //数值数
     bool isFunction = false;
     string valueType;
-    symbolStack.push_back('#');
+    symbolStack[symbolSize] = '#';
     ++symbolSize;
     sentence = sentence.substr(1);
-    statusStack.emplace_back("0");
+    statusStack[statusSize] = "0";
     ++statusSize;
     string new_status;                             //下一入栈的新状态
     while (true) {
@@ -536,7 +914,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         cur_symbol = sentence[0];
         string m = cur_status + cur_symbol;
         //当前new_status,下一入栈的新状态
-        new_status = get_Table_By_String(m);
+        new_status = tableT[m];
         if (new_status == "acc") {
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
@@ -556,13 +934,17 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             } else if (valueStack[0].token == "null") {
                 pointer = GX_NewNull(1);
             }
+            delete[] statusStack;
+            delete[] symbolStack;
+            delete[] valueStack;
+            delete[] paramsStack;
             return (long) (&pointer);
         } else if (new_status[0] ==
                    's') {
-            statusStack.push_back(new_status.substr(1));
+            statusStack[statusSize] = new_status.substr(1);
             ++statusSize;
             // 1
-            symbolStack.push_back(cur_symbol); //读入一个字符
+            symbolStack[symbolSize] = cur_symbol; //读入一个字符
             ++symbolSize;
             string temp = get_S_By_C(cur_symbol);
             if ((is_terminal_char(temp) &&
@@ -601,10 +983,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         t1.name = "null";
                         t1.token = "null";
                     }
-                    valueStack.push_back(t1);
+                    valueStack[valueSize] = t1;
                     ++valueSize;
                 } else {
-                    valueStack.push_back(array[valueStep]);
+                    valueStack[valueSize] = array[valueStep];
                     ++valueSize;
                 }
             }
@@ -614,15 +996,15 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                    'r') {
             new_status = new_status.substr(1);
             int gid = atoi(new_status.c_str());
-            int len = get_G_Vector(gid).size() - 1;
+            int len = G[gid].size() - 1;
             if (len == 1) {
-                char reduced_symbol = get_G_Char(gid, 0);
+                char reduced_symbol = G[gid][0];
                 string m = statusStack[statusSize - 2] + reduced_symbol;
-                new_status = get_Table_By_String(m);
+                new_status = tableT[m];
                 statusStack[statusSize - 1] = (new_status);
                 symbolStack[symbolSize - 1] = (reduced_symbol);
             } else {
-                vector<string> action;
+                string *action = new string[len];
                 GXATSNode t1;
                 GXATSNode t2;
                 string op;
@@ -631,15 +1013,13 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 GXATSNode tempR;
                 GXATSNode tempR2;
                 bool isChangedOp = false;
-                char reduced_symbol = get_G_Char(gid, 0);
+                char reduced_symbol = G[gid][0];
                 for (int i = 0; i < len; i++) {
-                    action.push_back(get_S_By_C(symbolStack[symbolSize - 1]));
-                    statusStack.pop_back();
+                    action[i] = get_S_By_C(symbolStack[symbolSize - 1]);
                     --statusSize;
-                    symbolStack.pop_back();
                     --symbolSize;
                 }
-                for (int i = 0; i < action.size(); i++) {
+                for (int i = 0; i < len; i++) {
                     if ((is_terminal_char(action[i]) &&
                          !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
                             action[i] == "value" || action[i] == "num" || action[i] == "string" ||
@@ -657,9 +1037,14 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         }
                     }
                 }
+                delete[] action;
                 if (len > 1) {
                     if (changedT2) {
                         if (valueSize < 2) {
+                            delete[] statusStack;
+                            delete[] symbolStack;
+                            delete[] valueStack;
+                            delete[] paramsStack;
                             analyze->throwError("expression error");
                             return 0L;
                         }
@@ -668,13 +1053,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         if (isFunction) {
                             if (op == "(") {
                                 tempR = t1;
-                                valueStack.pop_back();
                                 --valueSize;
                             } else if (op == ",") {
                                 tempR = t1;
                                 tempR2 = t2;
-                                valueStack.pop_back();
-                                valueStack.pop_back();
                                 valueSize = valueSize - 2;
                             } else if (op == ")") {
                                 for (int i = valueSize - 1; i >= 0; i--) {
@@ -689,6 +1071,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         long funVal = analyze->getFunctionValue(valueStack[i].name,
                                                                                 params,
                                                                                 paramsSize, "");
+                                        delete[] params;
                                         GXValue *fun = (GXValue *) funVal;
                                         //取出结果
                                         if (fun->tag == GX_TAG_FLOAT) {
@@ -715,71 +1098,73 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                             tempR.name = "null";
                                             tempR.token = "null";
                                         }
-                                        valueStack.pop_back();
                                         --valueSize;
                                         isFunction = false;
                                         break;
                                     } else {
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用
                                         if (valueStack[i].token == "num") {
-                                            paramsStack.push_back(
+                                            paramsStack[paramsSize] =
                                                     GX_NewFloat64(
-                                                            atof(valueStack[i].name.c_str())));
+                                                            atof(valueStack[i].name.c_str()));
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "string") {
-                                            paramsStack.push_back(
-                                                    GX_NewGXString(valueStack[i].name.c_str()));
+                                            paramsStack[paramsSize] =
+                                                    GX_NewGXString(valueStack[i].name.c_str());
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "bool") {
                                             if (valueStack[i].name == "true") {
-                                                paramsStack.push_back(GX_NewBool(1));
+                                                paramsStack[paramsSize] = GX_NewBool(1);
                                                 ++paramsSize;
                                             } else {
-                                                paramsStack.push_back(GX_NewBool(0));
+                                                paramsStack[paramsSize] = GX_NewBool(0);
                                                 ++paramsSize;
                                             }
                                         } else if (valueStack[i].token == "map") {
-                                            paramsStack.push_back(
-                                                    GX_NewMap(
-                                                            (void *) atol(
-                                                                    valueStack[i].name.c_str())));
+                                            paramsStack[paramsSize] = GX_NewMap(
+                                                    (void *) atol(valueStack[i].name.c_str()));
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "array") {
-                                            paramsStack.push_back(
-                                                    GX_NewArray(
-                                                            (void *) atol(
-                                                                    valueStack[i].name.c_str())));
+                                            paramsStack[paramsSize] = GX_NewArray(
+                                                    (void *) atol(valueStack[i].name.c_str()));
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "null") {
-                                            paramsStack.push_back(
-                                                    GX_NewNull(1));
+                                            paramsStack[paramsSize] = GX_NewNull(1);
                                             ++paramsSize;
                                         }
-                                        valueStack.pop_back();
                                         --valueSize;
                                     }
                                 }
                             } else {
+                                delete[] statusStack;
+                                delete[] symbolStack;
+                                delete[] valueStack;
+                                delete[] paramsStack;
                                 analyze->throwError("expression error");
                                 return 0L;
                             }
                         } else {
-                            valueStack.pop_back();
-                            valueStack.pop_back();
                             valueSize = valueSize - 2;
                             tempR = doubleCalculate(t1, t2, op);
                             if (tempR.token == "error") {
+                                delete[] statusStack;
+                                delete[] symbolStack;
+                                delete[] valueStack;
+                                delete[] paramsStack;
                                 analyze->throwError(tempR.name);
                                 return 0L;
                             }
                         }
                     } else {
                         if (valueSize < 1) {
+                            delete[] statusStack;
+                            delete[] symbolStack;
+                            delete[] valueStack;
+                            delete[] paramsStack;
                             analyze->throwError("expression error");
                             return 0L;
                         }
                         t1 = valueStack[valueSize - 1];
-                        valueStack.pop_back();
                         --valueSize;
                         tempR = singleCalculate(t1, op);
                         if (tempR.token == "error") {
@@ -788,22 +1173,26 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         }
                     }
                     if (isFunction && op == ",") {
-                        valueStack.push_back(tempR);
-                        valueStack.push_back(tempR2);
+                        valueStack[valueSize] = tempR;
+                        valueStack[valueSize + 1] = tempR2;
                         valueSize = valueSize + 2;
                     } else {
-                        valueStack.push_back(tempR);
+                        valueStack[valueSize] = tempR;
                         ++valueSize;
                     }
                 }
                 string m = statusStack[statusSize - 1] + reduced_symbol;
-                new_status = get_Table_By_String(m);
-                statusStack.push_back(new_status);
+                new_status = tableT[m];
+                statusStack[statusSize] = new_status;
                 ++statusSize;
-                symbolStack.push_back(reduced_symbol);
+                symbolStack[symbolSize] = reduced_symbol;
                 ++symbolSize;
             }
         } else {
+            delete[] statusStack;
+            delete[] symbolStack;
+            delete[] valueStack;
+            delete[] paramsStack;
             analyze->throwError("expression error");
             return 0L;
         }

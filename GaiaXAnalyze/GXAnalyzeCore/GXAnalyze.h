@@ -6,7 +6,6 @@
 #include "GXATSNode.h"
 #include "GXWordAnalyze.h"
 #include <vector>
-#include "GXBeforeTree.h"
 #include "GXDataWarehouse.h"
 #include "GXValue.h"
 

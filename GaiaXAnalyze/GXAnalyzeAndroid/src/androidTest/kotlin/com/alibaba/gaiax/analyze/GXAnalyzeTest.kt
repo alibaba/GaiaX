@@ -31,6 +31,8 @@ class GXAnalyzeTest {
                     GXAnalyze.createValueArray(JSONArray())
                 } else if (valuePath == "data.map") {
                     GXAnalyze.createValueMap(JSONObject())
+                } else if (valuePath == "data.null") {
+                    GXAnalyze.createValueNull()
                 } else {
                     GXAnalyze.createValueFloat64(8F)
                 }
@@ -130,6 +132,7 @@ class GXAnalyzeTest {
         Assert.assertEquals(true, instance.getResult("0-2==-2", testData))
         Assert.assertEquals(true, instance.getResult("1/2 == 0.5", testData))
         Assert.assertEquals(null, instance.getResult("\$\$", null))
+        Assert.assertEquals(null, instance.getResult("\$data.null", null))
     }
 
     @Test

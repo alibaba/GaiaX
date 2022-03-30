@@ -42,6 +42,7 @@ class GXAnalyze {
         external fun createValueBool(value: Boolean): Long
         external fun createValueArray(value: Any?): Long
         external fun createValueMap(value: Any?): Long
+        external fun createValueNull(): Long
 
 
         val TYPE_FLOAT = 0

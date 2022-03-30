@@ -389,3 +389,12 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueMap(JNIEnv *e
     memcpy(result, &val, sizeof(val));
     return (jlong) result;
 }
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueNull(JNIEnv *env, jobject thiz) {
+    GXValue *result;
+    GXValue val = GX_NewNull(1);
+    result = (GXValue *) malloc(sizeof(val));
+    memcpy(result, &val, sizeof(val));
+    return (jlong) result;
+}

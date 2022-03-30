@@ -36,10 +36,7 @@ class GXAnalyzeTest {
                 functionName: String,
                 params: LongArray,
             ): Long {
-                //获取返回的参数列表结果
-                var res = GXAnalyze.createValueMap(testData)
-                val result = GXContext.wrapAsGXValue(res)
-                return res
+                return 0L
             }
         })
 

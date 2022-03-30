@@ -77,7 +77,7 @@ class GXAnimationBinding(
         val state = state?.value(templateData)
 
         // 符合条件触发动画
-        if (trigger && GXExpressionUtils.isCondition(state)) {
+        if (trigger && (state is Boolean && state == true)) {
             animation.doAnimation(context, child, templateData)
         }
         // 自动触发动画

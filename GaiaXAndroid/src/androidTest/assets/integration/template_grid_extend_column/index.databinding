@@ -1,9 +1,9 @@
 {
     "data": {
         "template_grid_extend_column": {
-            "value":"${nodes}",
+            "value":"$nodes",
             "extend": {
-                "column":3
+                "column":"3"
             }
         }
     }

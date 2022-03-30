@@ -94,67 +94,6 @@ class GXDataBinding(
 
     companion object {
 
-        fun createMergeDataBinding(first: GXDataBinding?, second: GXDataBinding?): GXDataBinding? {
-
-            var value: GXIExpression? = null
-            if (first?.value != null) {
-                value = first.value
-            }
-            if (second?.value != null) {
-                value = second.value
-            }
-
-            var placeholder: GXIExpression? = null
-            if (first?.placeholder != null) {
-                placeholder = first.placeholder
-            }
-            if (second?.placeholder != null) {
-                placeholder = second.placeholder
-            }
-
-            var accessibilityDesc: GXIExpression? = null
-            if (first?.accessibilityDesc != null) {
-                accessibilityDesc = first.accessibilityDesc
-            }
-            if (second?.accessibilityDesc != null) {
-                accessibilityDesc = second.accessibilityDesc
-            }
-
-            var accessibilityEnable: GXIExpression? = null
-            if (first?.accessibilityEnable != null) {
-                accessibilityEnable = first.accessibilityEnable
-            }
-            if (second?.accessibilityEnable != null) {
-                accessibilityEnable = second.accessibilityEnable
-            }
-
-            var extend: MutableMap<String, GXIExpression>? = null
-            if (first?.extend != null) {
-                if (extend == null) {
-                    extend = mutableMapOf()
-                }
-                extend.putAll(first.extend)
-            }
-            if (second?.extend != null) {
-                if (extend == null) {
-                    extend = mutableMapOf()
-                }
-                extend.putAll(second.extend)
-            }
-
-            return if (value != null || placeholder != null || accessibilityDesc != null || accessibilityEnable != null || extend != null) {
-                GXDataBinding(
-                    value = value,
-                    placeholder = placeholder,
-                    accessibilityDesc = accessibilityDesc,
-                    accessibilityEnable = accessibilityEnable,
-                    extend = extend,
-                )
-            } else {
-                null
-            }
-        }
-
         fun create(value: String? = null, placeholder: String? = null, accessibilityDesc: String? = null, accessibilityEnable: String? = null, extend: JSONObject? = null): GXDataBinding? {
             val extendExp: MutableMap<String, GXIExpression>? = if (extend != null && extend.isNotEmpty()) {
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()

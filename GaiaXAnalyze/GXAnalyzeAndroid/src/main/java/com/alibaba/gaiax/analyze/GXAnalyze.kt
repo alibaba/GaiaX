@@ -44,7 +44,6 @@ class GXAnalyze {
         external fun createValueMap(value: Any?): Long
         external fun createValueNull(): Long
 
-
         val TYPE_FLOAT = 0
         val TYPE_BOOLEAN = 1
         val TYPE_NULL = 2
@@ -78,7 +77,7 @@ class GXAnalyze {
 
     fun getResult(expression: String, data: Any?): Any? {
         val result = this.getResultNative(this, expression, data);
-        return GXAnalyze.wrapAsGXValue(result)?.getValue();
+        return wrapAsGXValue(result)?.getValue();
     }
 
     private external fun getResultNative(self: Any, expression: String, data: Any?): Long

@@ -18,6 +18,7 @@ package com.alibaba.gaiax
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.analyze.GXAnalyze
 import com.alibaba.gaiax.template.expression.GXExpressionUtils
 import org.junit.Assert
 import org.junit.Before
@@ -28,44 +29,50 @@ import org.junit.Test
  */
 class GXExpressionUtilsTest {
 
-//    @Before
-//    fun before() {
-//        GXExpressionUtils.initAnalyze()
-//    }
-//
-//    @Test
-//    fun size_string() {
-//        val value = GXExpressionUtils.create("size('string')")?.value(null)
-//        Assert.assertEquals(6.0F, value)
-//    }
-//
-//    @Test
-//    fun size_json_object() {
-//        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
-//            this["data"] = JSONObject().apply {
-//                this["data1"] = "data1"
-//                this["data2"] = "data1"
-//                this["data3"] = "data1"
-//                this["data4"] = "data1"
-//                this["data5"] = "data1"
-//                this["data6"] = "data1"
-//            }
-//        })
-//        Assert.assertEquals(6.0F, value)
-//    }
-//
-//    @Test
-//    fun size_json_array() {
-//        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
-//            this["data"] = JSONArray().apply {
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//            }
-//        })
-//        Assert.assertEquals(6.0F, value)
-//    }
+    @Before
+    fun before() {
+        GXExpressionUtils.initAnalyze()
+    }
+
+    @Test
+    fun size_string() {
+        val value = GXExpressionUtils.create("size('string')")?.value(null)
+        Assert.assertEquals(6.0F, value)
+    }
+
+    @Test
+    fun size_json_object() {
+        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["data1"] = "data1"
+                this["data2"] = "data1"
+                this["data3"] = "data1"
+                this["data4"] = "data1"
+                this["data5"] = "data1"
+                this["data6"] = "data1"
+            }
+        })
+        Assert.assertEquals(6.0F, value)
+    }
+
+    @Test
+    fun size_json_array() {
+        val value = GXExpressionUtils.create("size(\$data)")?.value(JSONObject().apply {
+            this["data"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        Assert.assertEquals(6.0F, value)
+    }
+
+    @Test
+    fun string_http() {
+        val value = GXExpressionUtils.create("'https://r1.ykimg.com/053400005DAE75E2859B5E44E509DD51'")?.value(null)
+        Assert.assertEquals("https://r1.ykimg.com/053400005DAE75E2859B5E44E509DD51", value)
+    }
 }

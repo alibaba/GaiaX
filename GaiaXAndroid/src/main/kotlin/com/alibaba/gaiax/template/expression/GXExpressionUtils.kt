@@ -40,20 +40,36 @@ object GXExpressionUtils {
              * 用于处理取值逻辑
              */
             override fun computeValueExpression(valuePath: String, source: Any?): Long {
+                if (valuePath == "$$") {
+                    if (source is JSONArray) {
+                        return GXAnalyze.createValueArray(source)
+                    } else if (source is JSONObject) {
+                        return GXAnalyze.createValueMap(source)
+                    }
+                }
                 if (source is JSONObject) {
-                    val value = source.getAnyExt(valuePath)
-                    if (value is JSONArray) {
-                        return GXAnalyze.createValueArray(value)
-                    } else if (value is JSONObject) {
-                        return GXAnalyze.createValueMap(value)
-                    } else if (value is Boolean) {
-                        return GXAnalyze.createValueBool(value)
-                    } else if (value is String) {
-                        return GXAnalyze.createValueString(value)
-                    } else if (value is Int) {
-                        return GXAnalyze.createValueFloat64(value.toFloat())
-                    } else if (value is Float) {
-                        return GXAnalyze.createValueFloat64(value)
+                    when (val value = source.getAnyExt(valuePath)) {
+                        is JSONArray -> {
+                            return GXAnalyze.createValueArray(value)
+                        }
+                        is JSONObject -> {
+                            return GXAnalyze.createValueMap(value)
+                        }
+                        is Boolean -> {
+                            return GXAnalyze.createValueBool(value)
+                        }
+                        is String -> {
+                            return GXAnalyze.createValueString(value)
+                        }
+                        is Int -> {
+                            return GXAnalyze.createValueFloat64(value.toFloat())
+                        }
+                        is Float -> {
+                            return GXAnalyze.createValueFloat64(value)
+                        }
+                        null -> {
+                            return GXAnalyze.createValueNull()
+                        }
                     }
                 }
                 return 0L
@@ -64,20 +80,24 @@ object GXExpressionUtils {
              */
             override fun computeFunctionExpression(functionName: String, params: LongArray): Long {
                 if (functionName == "size" && params.size == 1) {
-                    val value = GXAnalyze.wrapAsGXValue(params[0])
-                    if (value is GXString) {
-                        value.getString()?.let {
-                            return GXAnalyze.createValueFloat64(it.length.toFloat())
+                    when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
+                        is GXString -> {
+                            value.getString()?.let {
+                                return GXAnalyze.createValueFloat64(it.length.toFloat())
+                            }
                         }
-                    } else if (value is GXMap) {
-                        (value.getValue() as? JSONObject)?.let {
-                            return GXAnalyze.createValueFloat64(it.size.toFloat())
+                        is GXMap -> {
+                            (value.getValue() as? JSONObject)?.let {
+                                return GXAnalyze.createValueFloat64(it.size.toFloat())
+                            }
                         }
-                    } else if (value is GXArray) {
-                        (value.getValue() as? JSONArray)?.let {
-                            return GXAnalyze.createValueFloat64(it.size.toFloat())
+                        is GXArray -> {
+                            (value.getValue() as? JSONArray)?.let {
+                                return GXAnalyze.createValueFloat64(it.size.toFloat())
+                            }
                         }
                     }
+                } else if (functionName == "env") {
                 }
                 return 0L
             }
@@ -86,17 +106,43 @@ object GXExpressionUtils {
 
     class GXAnalyzeWrapper(val expression: String) : GXIExpression {
 
+        fun valuePath(): String? {
+            if (expression.startsWith("$")) {
+                return expression.substring(1, expression.length)
+            }
+            return null
+        }
+
         override fun value(templateData: JSON?): Any? {
-            return analyze.getResult(expression, templateData ?: JSONObject())
+            return analyze.getResult(expression, templateData)
+        }
+    }
+
+    class GXAnalyzeJsonWrapper(val expression: JSONObject) : GXIExpression {
+
+        override fun value(templateData: JSON?): Any? {
+            return value2(expression, templateData)
+        }
+
+        private fun value2(expression: JSONObject, templateData: JSON?): Any? {
+            val result = JSONObject()
+            expression.forEach {
+                val value = it.value
+                if (value is String) {
+                    result[it.key] = analyze.getResult(value, templateData)
+                } else if (value is JSONObject) {
+                    result[it.key] = value2(value, templateData)
+                }
+            }
+            return result
         }
     }
 
     fun create(expression: Any?): GXIExpression? {
-//        return if (expression is String) {
-//            GXAnalyzeWrapper(expression)
-//        } else {
-//            null
-//        }
-        return GXExpression.create(expression)
+        return when (expression) {
+            is String -> GXAnalyzeWrapper(expression)
+            is JSONObject -> GXAnalyzeJsonWrapper(expression)
+            else -> null
+        }
     }
 }

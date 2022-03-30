@@ -1465,7 +1465,6 @@ class GXTemplateEngineTest {
     @Test
     fun template_scroll_multi_type_item_two() {
 
-
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "integration", "template_scroll_multi_type_item_two")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {

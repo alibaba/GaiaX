@@ -87,7 +87,7 @@ public:
     jobject globalSelf = nullptr;    //thiz
     jfieldID jfieldId = nullptr;    //判断context是否为空
 
-    long getSourceValue(string valuePath, void* source) override {
+    long getSourceValue(string valuePath, void *source) override {
         jobject dataSource = static_cast<jobject>(source);
         return getSourceValueFromJava(valuePath, dataSource, globalSelf);
     }
@@ -99,9 +99,10 @@ public:
     }
 
     void throwError(string message) override {
-        jniThrowRuntimeException(getJNIEnv(),message.c_str());
+        jniThrowRuntimeException(getJNIEnv(), message.c_str());
     }
 };
+
 static jlongArray getLongArray(long *paramPointers, int size) {
     JNIEnv *env = getJNIEnv();
     jlong *params = new jlong[size];

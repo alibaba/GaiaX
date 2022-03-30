@@ -12,7 +12,6 @@ allprojects {
 }
 
 buildscript {
-    ext.kotlin_version = '1.5.31'
     repositories {
         google()
         mavenCentral()
@@ -22,7 +21,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 
@@ -30,13 +29,12 @@ buildscript {
 def platformVersion = 21
 
 android {
-    compileSdkVersion 31
+
+    compileSdk 31
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.1.9"
+        minSdk 21
+        targetSdk 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -89,7 +87,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10"
     implementation 'com.alibaba:fastjson:1.2.76'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.3'

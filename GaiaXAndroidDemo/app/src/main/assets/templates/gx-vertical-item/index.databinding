@@ -1,13 +1,13 @@
 {
     "data":{
         "cover-img":{
-            "value":"${img}",
+            "value":"$img",
         },
         "sub-title":{
-            "value":"${desc}"
+            "value":"$desc"
         },
         "title":{
-            "value":"${title}"
+            "value":"$title"
         }
     }
 }

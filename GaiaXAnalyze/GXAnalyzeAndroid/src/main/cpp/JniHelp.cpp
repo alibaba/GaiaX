@@ -206,7 +206,7 @@ extern "C" int jniThrowException(C_JNIEnv *env, const char *className, const cha
         if (exception.get() != nullptr) {
             std::string text;
             getExceptionSummary(env, exception.get(), text);
-            __android_log_print(ANDROID_LOG_ERROR, "[DSM][HELP]",
+            __android_log_print(ANDROID_LOG_ERROR, "[GaiaX]",
                                 "Discarding pending exception (%s) to throw %s", text.c_str(),
                                 className);
         }
@@ -214,14 +214,14 @@ extern "C" int jniThrowException(C_JNIEnv *env, const char *className, const cha
 
     scoped_local_ref<jclass> exceptionClass(env, findClass(env, className));
     if (exceptionClass.get() == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, "[DSM][HELP]", "Unable to find exception class %s",
+        __android_log_print(ANDROID_LOG_ERROR, "[GaiaX]", "Unable to find exception class %s",
                             className);
         /* ClassNotFoundException now pending */
         return -1;
     }
 
     if ((*env)->ThrowNew(e, exceptionClass.get(), msg) != JNI_OK) {
-        __android_log_print(ANDROID_LOG_ERROR, "[DSM][HELP]", "Failed throwing '%s' '%s'",
+        __android_log_print(ANDROID_LOG_ERROR, "[GaiaX]", "Failed throwing '%s' '%s'",
                             className, msg);
         /* an exception, most likely OOM, will now be pending */
         return -1;

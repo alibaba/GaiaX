@@ -1,12 +1,6 @@
 {
   "id": "template_view_property_overflow_visible",
   "type": "gaia-template",
-  "package": {
-    "id": "template_view_property_overflow_visible",
-    "version": "0.0.1",
-    "modify-timestamp": "Thu Nov 25 2021 14:50:33 GMT+0800 (China Standard Time)",
-    "dependencies": {}
-  },
   "layers": [
     {
       "id": "empty_view",

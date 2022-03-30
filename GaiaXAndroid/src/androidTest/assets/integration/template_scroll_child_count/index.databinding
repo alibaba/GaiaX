@@ -1,7 +1,7 @@
 {
     "data": {
         "template_scroll_child_count": {
-            "value":"${nodes}"
+            "value":"$nodes"
         }
     }
 }

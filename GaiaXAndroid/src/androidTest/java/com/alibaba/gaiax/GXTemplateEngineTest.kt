@@ -383,16 +383,16 @@ class GXTemplateEngineTest {
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 
-//    @Test(expected = IllegalArgumentException::class)
-//    fun template_text_fitcontent_case_2_lines_0_width_null_height_100px() {
-//        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "integration", "template_text_fitcontent_case_2_lines_0_width_null_height_100px")
-//
-//        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
-//
-//        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-//
-//        GXTemplateEngine.instance.bindData(rootView, templateData)
-//    }
+    @Test(expected = IllegalArgumentException::class)
+    fun template_text_fitcontent_case_2_lines_0_width_null_height_100px() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "integration", "template_text_fitcontent_case_2_lines_0_width_null_height_100px")
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+    }
 
     @Test
     fun template_text_fitcontent_case_2_lines_5_width_100pt_height_100px() {

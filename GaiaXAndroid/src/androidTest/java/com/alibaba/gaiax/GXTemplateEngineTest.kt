@@ -1937,19 +1937,19 @@ class GXTemplateEngineTest {
         Assert.assertEquals(100F.dpToPx() * 3 + 20F.dpToPx() * 2, rootView.height())
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2, rootView.child(0).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - GaiaXMockUtils.deviceGap(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
         Assert.assertEquals(0F, rootView.child(0).x)
         Assert.assertEquals(0F.dpToPx(), rootView.child(0).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2, rootView.child(1).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - GaiaXMockUtils.deviceGap(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2, rootView.child(1).x)
+        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GaiaXMockUtils.deviceGap(), rootView.child(1).x)
         Assert.assertEquals(0F.dpToPx(), rootView.child(1).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2, rootView.child(2).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - GaiaXMockUtils.deviceGap(), rootView.child(2).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
         Assert.assertEquals(0F, rootView.child(2).x)
         Assert.assertEquals(100F.dpToPx() + 20F.dpToPx(), rootView.child(2).y)
@@ -1979,19 +1979,19 @@ class GXTemplateEngineTest {
         Assert.assertEquals(100F.dpToPx() * 3 + 20F.dpToPx() * 2 + 30F.dpToPx() * 2, rootView.height())
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx() - GaiaXMockUtils.deviceGap(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
         Assert.assertEquals(30F.dpToPx(), rootView.child(0).x)
         Assert.assertEquals(30F.dpToPx(), rootView.child(0).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx() - GaiaXMockUtils.deviceGap(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2, rootView.child(1).x)
+        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GaiaXMockUtils.deviceGap(), rootView.child(1).x)
         Assert.assertEquals(30F.dpToPx(), rootView.child(1).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx(), rootView.child(2).width())
+        Assert.assertEquals(1080F.dpToPx() / 2 - 9F.dpToPx() / 2 - 30F.dpToPx() - GaiaXMockUtils.deviceGap(), rootView.child(2).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
         Assert.assertEquals(30F.dpToPx(), rootView.child(2).x)
         Assert.assertEquals(100F.dpToPx() + 20F.dpToPx() + 30F.dpToPx(), rootView.child(2).y)

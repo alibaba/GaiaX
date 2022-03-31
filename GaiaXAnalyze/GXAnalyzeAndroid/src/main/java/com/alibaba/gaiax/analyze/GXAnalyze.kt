@@ -2,6 +2,8 @@
 
 package com.alibaba.gaiax.analyze
 
+import com.alibaba.fastjson.JSONObject
+
 class GXAnalyze {
 
     // 计算逻辑的扩展
@@ -75,9 +77,51 @@ class GXAnalyze {
         }
     }
 
-    fun getResult(expression: String, data: Any?): Any? {
-        val result = this.getResultNative(this, expression, data);
-        return wrapAsGXValue(result)?.getValue();
+    fun getResult(expression: Any, data: Any?): Any? {
+        when (expression) {
+            is String -> {
+                val result = this.getResultNative(this, expression, data);
+                return wrapAsGXValue(result)?.getValue();
+            }
+            is Int -> {
+                return expression
+            }
+            is Float -> {
+                return expression
+            }
+            is Boolean -> {
+                return expression
+            }
+            is JSONObject -> {
+                return getJsonResult(expression, data)
+            }
+            else -> return null
+        }
+    }
+
+    private fun getJsonResult(expression: JSONObject, data: Any?): Any {
+        val result = JSONObject()
+        expression.forEach {
+            val value = it.value
+            when (value) {
+                is String -> {
+                    result[it.key] = getResult(value, data)
+                }
+                is Int -> {
+                    result[it.key] = value
+                }
+                is Float -> {
+                    result[it.key] = value
+                }
+                is Boolean -> {
+                    result[it.key] = value
+                }
+                is JSONObject -> {
+                    result[it.key] = getJsonResult(value, data)
+                }
+            }
+        }
+        return result
     }
 
     private external fun getResultNative(self: Any, expression: String, data: Any?): Long

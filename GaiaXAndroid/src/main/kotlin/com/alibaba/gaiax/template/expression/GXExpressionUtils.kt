@@ -104,10 +104,10 @@ object GXExpressionUtils {
         })
     }
 
-    class GXAnalyzeWrapper(val expression: String) : GXIExpression {
+    class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
 
         fun valuePath(): String? {
-            if (expression.startsWith("$")) {
+            if (expression is String && expression.startsWith("$")) {
                 return expression.substring(1, expression.length)
             }
             return null
@@ -118,31 +118,11 @@ object GXExpressionUtils {
         }
     }
 
-    class GXAnalyzeJsonWrapper(val expression: JSONObject) : GXIExpression {
-
-        override fun value(templateData: JSON?): Any? {
-            return value2(expression, templateData)
-        }
-
-        private fun value2(expression: JSONObject, templateData: JSON?): Any? {
-            val result = JSONObject()
-            expression.forEach {
-                val value = it.value
-                if (value is String) {
-                    result[it.key] = analyze.getResult(value, templateData)
-                } else if (value is JSONObject) {
-                    result[it.key] = value2(value, templateData)
-                }
-            }
-            return result
-        }
-    }
-
     fun create(expression: Any?): GXIExpression? {
-        return when (expression) {
-            is String -> GXAnalyzeWrapper(expression)
-            is JSONObject -> GXAnalyzeJsonWrapper(expression)
-            else -> null
+        return if (expression != null) {
+            GXAnalyzeWrapper(expression)
+        } else {
+            null
         }
     }
 }

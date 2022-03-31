@@ -18,7 +18,6 @@ package com.alibaba.gaiax
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.analyze.GXAnalyze
 import com.alibaba.gaiax.template.expression.GXExpressionUtils
 import org.junit.Assert
 import org.junit.Before

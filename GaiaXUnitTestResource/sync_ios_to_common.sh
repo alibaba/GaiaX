@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ROOT=`pwd`
+
+ROOT_DATA=$ROOT/data
+ROOT_TEMPLATES=$ROOT/templates
+
+cd ..
+
+GAIAX_ROOT=`pwd`
+
+echo $ROOT
+echo $ROOT_DATA
+echo $ROOT_TEMPLATES
+
+echo $GAIAX_ROOT
+
+GAIAX_IOS_TEMPLATES=$GAIAX_ROOT/GaiaXiOS/GaiaXiOSTests/GaiaXiOSTests.bundle
+
+echo $GAIAX_IOS_TEMPLATES
+
+rm -rf $ROOT_TEMPLATES
+mkdir $ROOT_TEMPLATES
+cp -r $GAIAX_IOS_TEMPLATES/* $ROOT_TEMPLATES

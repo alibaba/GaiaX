@@ -862,7 +862,7 @@ static GXValue pointer;
 long GXAnalyze::getValue(string expression, void *source) {
     char *input;
     int inputLength = expression.length();
-    input = new char[inputLength];
+    input = new char[inputLength+2];
     vector<GXATSNode> array;
     array.reserve(128);
     string result = "#";
@@ -916,6 +916,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         //当前new_status,下一入栈的新状态
         new_status = tableT[m];
         if (new_status == "acc") {
+            if(pointer.tag == GX_TAG_STRING){
+                delete []pointer.u.str;
+                pointer.u.str = nullptr;
+            }
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
                 pointer = GX_NewGXString(tem);

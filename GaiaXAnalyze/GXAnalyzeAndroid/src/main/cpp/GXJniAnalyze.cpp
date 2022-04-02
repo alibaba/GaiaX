@@ -111,6 +111,7 @@ static jlongArray getLongArray(long *paramPointers, int size) {
     }
     jlongArray res = env->NewLongArray(size);
     env->SetLongArrayRegion(res, 0, size, params);
+    delete[]params;
     return res;
 }
 
@@ -323,11 +324,6 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueString(JNIEnv *e
     GXValue *val = (GXValue *) value;
     const char *str = GX_ToCString(*val);
     jstring j_str = env->NewStringUTF(str);
-    //释放str内存空间
-    if (str) {
-        delete str;
-        str = nullptr;
-    }
     return j_str;
 }
 

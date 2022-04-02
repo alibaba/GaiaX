@@ -1,9 +1,9 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXBool(pointer: Long) : GXValue(pointer) {
+public final class GXBool() : GXValue() {
     private var value: Boolean? = null
 
-    constructor(pointer: Long, value: Boolean) : this(pointer) {
+    constructor(value: Boolean) : this() {
         this.value = value
     }
 

@@ -1,9 +1,9 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXFloat(pointer: Long) : GXValue(pointer) {
+public final class GXFloat() : GXValue() {
     private var value: Float? = null
 
-    constructor(pointer: Long, value: Float) : this(pointer) {
+    constructor(value: Float) : this() {
         this.value = value
     }
 

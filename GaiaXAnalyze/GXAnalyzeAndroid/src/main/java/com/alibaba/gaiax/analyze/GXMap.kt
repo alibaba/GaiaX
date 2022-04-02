@@ -1,9 +1,9 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXMap(pointer: Long) : GXValue(pointer) {
+public final class GXMap() : GXValue() {
     private var value: Any? = null
 
-    constructor(pointer: Long, value: Any?) : this(pointer) {
+    constructor(value: Any?) : this() {
         this.value = value
     }
 

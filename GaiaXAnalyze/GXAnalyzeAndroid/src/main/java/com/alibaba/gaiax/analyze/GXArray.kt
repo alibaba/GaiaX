@@ -1,9 +1,9 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXArray(pointer: Long) : GXValue(pointer) {
+public final class GXArray() : GXValue() {
     private var value: Any? = null
 
-    constructor(pointer: Long, value: Any?) : this(pointer) {
+    constructor(value: Any?) : this() {
         this.value = value
     }
 

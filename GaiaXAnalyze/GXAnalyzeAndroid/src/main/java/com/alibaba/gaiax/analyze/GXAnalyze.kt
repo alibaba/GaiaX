@@ -1,5 +1,3 @@
-@file:Suppress("FunctionName", "SpellCheckingInspection")
-
 package com.alibaba.gaiax.analyze
 
 import com.alibaba.fastjson.JSONObject
@@ -63,12 +61,12 @@ class GXAnalyze {
                 var gxValue: GXValue? = null
                 val type: Int = getValueTag(value)
                 when (type) {
-                    TYPE_NULL -> gxValue = GXNull(value)
-                    TYPE_STRING -> gxValue = GXString(value, getValueString(value))
-                    TYPE_ARRAY -> gxValue = GXArray(value, getValueArray(value))
-                    TYPE_MAP -> gxValue = GXMap(value, getValueMap(value))
-                    TYPE_BOOLEAN -> gxValue = GXBool(value, getValueBoolean(value))
-                    TYPE_FLOAT -> gxValue = GXFloat(value, getValueFloat(value))
+                    TYPE_NULL -> gxValue = GXNull()
+                    TYPE_STRING -> gxValue = GXString(getValueString(value))
+                    TYPE_ARRAY -> gxValue = GXArray(getValueArray(value))
+                    TYPE_MAP -> gxValue = GXMap(getValueMap(value))
+                    TYPE_BOOLEAN -> gxValue = GXBool(getValueBoolean(value))
+                    TYPE_FLOAT -> gxValue = GXFloat(getValueFloat(value))
                 }
                 return gxValue
             } catch (e: Exception) {
@@ -80,6 +78,9 @@ class GXAnalyze {
     fun getResult(expression: Any, data: Any?): Any? {
         when (expression) {
             is String -> {
+                if(expression.trim() == "\$\$"){
+                    return data
+                }
                 val result = this.getResultNative(this, expression, data);
                 return wrapAsGXValue(result)?.getValue();
             }

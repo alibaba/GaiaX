@@ -213,8 +213,11 @@
 
 //dealloc
 - (void)dealloc {
+    if (_rustptr != NULL) {
+        [_stretch freeNode:_rustptr];
+        _rustptr = NULL;
+    }
     GXLog(@"[GaiaX] 节点node释放 - %@", self);
-    [_stretch freeNode:_rustptr];
 }
 
 
@@ -275,20 +278,27 @@
 //更新layout属性到node节点上
 - (void)applyLayout:(GXLayout *)layout{
     if (layout) {
+        //支持高度0.5设置
+        CGFloat height = layout.height;
+        if (self.style.styleModel.size.height.dimen_value == 0.5 &&
+            self.style.styleModel.size.height.dimen_type == DIM_TYPE_POINTS) {
+            height = 0.5;
+        }
+        
         if (TheGXTemplateEngine.isNeedFlat) {
             //如果有父节点 || 父节点被拍平
             if (self.parent.isFlat) {
                 //父节点拍平
                 CGFloat x = layout.x + self.parent.frame.origin.x;
                 CGFloat y = layout.y + self.parent.frame.origin.y;
-                self.frame = CGRectMake(x, y, layout.width, layout.height);
+                self.frame = CGRectMake(x, y, layout.width, height);
             } else {
                 //父节点未拍平
-                self.frame = CGRectMake(layout.x, layout.y, layout.width, layout.height);
+                self.frame = CGRectMake(layout.x, layout.y, layout.width, height);
             }
         } else {
             //非拍平的情况
-            self.frame = CGRectMake(layout.x, layout.y, layout.width, layout.height);
+            self.frame = CGRectMake(layout.x, layout.y, layout.width, height);
         }
         
         //获取子node

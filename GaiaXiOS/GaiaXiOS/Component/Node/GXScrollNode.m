@@ -36,7 +36,7 @@
     CGFloat _containerHeight;
     //区分坑位的type & config
     NSDictionary *_config;
-    GXExpression *_expression;
+    NSString *_expression;
 }
 
 //数据源
@@ -125,13 +125,13 @@
 
 #pragma mark - 绑定数据
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     NSArray *dataArray = nil;
     NSDictionary *extend = nil;
     if ([GXUtils isValidDictionary:data]) {
         //获取为{"value":[]}类型 & extend
-        dataArray = [(NSDictionary *)data gx_arrayForKey:@"value"];
-        extend = [(NSDictionary *)data gx_dictionaryForKey:@"extend"];
+        dataArray = [data gx_arrayForKey:@"value"];
+        extend = [data gx_dictionaryForKey:@"extend"];
     }
     
     //赋值
@@ -246,11 +246,12 @@
     NSString *identifier = [self.identifiers gx_objectAtIndex:0];
     if (_expression && _config.count > 0) {
         GXTemplateData *data = [self.items gx_objectAtIndex:index];
-        id type = (NSString *)[_expression valueWithObject:data.data];
+        id type = (NSString *)[GXExpression valueWithExpression:_expression Source:data.data];
         //类型处理
         if ([GXUtils isValidString:type]) {//string类型
             NSString *key = (NSString *)type;
             identifier = [_config gx_stringForKey:key] ?: identifier;
+            identifier = [identifier stringByReplacingOccurrencesOfString:@"'" withString:@""];
             
         } else if ([type isKindOfClass:[NSNumber class]]){//number类型
             NSString *key = [type stringValue];
@@ -304,14 +305,14 @@
 
 #pragma mark - 计算高度
 
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     //数据
     NSArray *dataArray = nil;
     NSDictionary *extend = nil;
     if ([GXUtils isValidDictionary:data]) {
         //获取为{"value":[]}类型 & extend
-        dataArray = [(NSDictionary *)data gx_arrayForKey:@"value"];
-        extend = [(NSDictionary *)data gx_dictionaryForKey:@"extend"];
+        dataArray = [data gx_arrayForKey:@"value"];
+        extend = [data gx_dictionaryForKey:@"extend"];
     }
     
     //赋值items
@@ -498,10 +499,7 @@
         NSDictionary *itemType = [[dataDict gx_dictionaryForKey:@"extend"] gx_dictionaryForKey:@"item-type"];
         if (itemType) {
             //获取path
-            NSString *path = [itemType gx_stringForKey:@"path"];
-            if (path.length) {
-                _expression = [GXDataParser creatExpressionWithValue:path];
-            }
+            _expression = [itemType gx_stringForKey:@"path"];
             //获取config
             _config = [itemType gx_dictionaryForKey:@"config"];
         }

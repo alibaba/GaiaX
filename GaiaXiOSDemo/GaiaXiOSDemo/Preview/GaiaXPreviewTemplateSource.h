@@ -21,7 +21,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXITemplateSource>
+@interface GaiaXPreviewTemplateSource : NSObject <GXITemplatePreviewSource>
 
 @end
 

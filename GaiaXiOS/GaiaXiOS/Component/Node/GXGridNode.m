@@ -130,15 +130,15 @@
 
 #pragma mark - 绑定数据
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     //处理数据
     NSArray *dataArray = nil;
     NSDictionary *extend = nil;
     if ([GXUtils isValidDictionary:data]) {
         //获取为{"value":[]}类型
-        dataArray = [(NSDictionary *)data gx_arrayForKey:@"value"];
+        dataArray = [data gx_arrayForKey:@"value"];
         //处理extend
-        extend = [(NSDictionary *)data gx_dictionaryForKey:@"extend"];
+        extend = [data gx_dictionaryForKey:@"extend"];
     }
     
     //赋值
@@ -275,16 +275,16 @@
 
 #pragma mark - 计算高度
 
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     //处理数据
     NSArray *dataArray = nil;
     NSDictionary *extend = nil;
 
     if ([GXUtils isValidDictionary:data]) {
         //获取为{"value":[]}类型
-        dataArray = [(NSDictionary *)data gx_arrayForKey:@"value"];
+        dataArray = [data gx_arrayForKey:@"value"];
         //处理extend
-        extend = [(NSDictionary *)data gx_dictionaryForKey:@"extend"];
+        extend = [data gx_dictionaryForKey:@"extend"];
     }
     
     //赋值

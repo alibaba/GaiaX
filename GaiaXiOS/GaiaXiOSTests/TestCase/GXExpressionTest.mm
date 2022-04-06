@@ -77,66 +77,53 @@
 // test value expression
 - (void)testValueExp{
     
-    NSString *exp0 = @"常量内容";
-    GXExpression *expression0 = [GXExpression expressionWithString:exp0];
-    XCTAssertTrue([[expression0 valueWithObject:self.dictionary] isEqualToString:@"常量内容"]);
+    NSString *exp0 = @"'常量内容'";
+    NSString *expression0 = [GXExpression valueWithExpression:exp0 Source:self.dictionary];
+    XCTAssertTrue([expression0 isEqualToString:@"常量内容"]);
     
-    NSString *exp1 = @"${data.title}";
-    GXExpression *expression1 = [GXExpression expressionWithString:exp1];
-    XCTAssertTrue([[expression1 valueWithObject:self.dictionary] isEqualToString:@"组件标题"]);
+    NSString *exp1 = @"$data.title";
+    NSString *expression1 = [GXExpression valueWithExpression:exp1 Source:self.dictionary];
+    XCTAssertTrue([expression1 isEqualToString:@"组件标题"]);
 
-    NSString *exp2 = @"${nodes[0].data.title}";
-    GXExpression *expression2 = [GXExpression expressionWithString:exp2];
-    XCTAssertTrue([[expression2 valueWithObject:self.dictionary] isEqualToString:@"坑位标题"]);
+    NSString *exp2 = @"$nodes[0].data.title";
+    NSString *expression2 = [GXExpression valueWithExpression:exp2 Source:self.dictionary];
+    XCTAssertTrue([expression2 isEqualToString:@"坑位标题"]);
 
-    NSString *exp3 = @"${nodes[0].data.mark.data.text}";
-    GXExpression *expression3 = [GXExpression expressionWithString:exp3];
-    XCTAssertTrue([[expression3 valueWithObject:self.dictionary] isEqualToString:@"标签内容"]);
+    NSString *exp3 = @"$nodes[0].data.mark.data.text";
+    NSString *expression3 = [GXExpression valueWithExpression:exp3 Source:self.dictionary];
+    XCTAssertTrue([expression3 isEqualToString:@"标签内容"]);
     
 }
 
 // test condition expression
 - (void)testConditionExp{
-    
-    NSString *exp0 = @"@{${nodes[0].data.favor.isFavor} ? '关注' : '未关注'}";
-    GXExpression *expression0 = [GXExpression expressionWithString:exp0];
-    XCTAssertTrue([[expression0 valueWithObject:self.dictionary] isEqualToString:@"关注"]);
-    
-    NSString *exp1 = @"@{${nodes[0].data.title} ?: '默认标题'}";
-    GXExpression *expression1 = [GXExpression expressionWithString:exp1];
-    XCTAssertTrue([[expression1 valueWithObject:self.dictionary] isEqualToString:@"坑位标题"]);
-    
-}
 
-// test eval expression
-- (void)testEvalExp{
-    NSString *exp0 = @"@{eval(${data.}) ? '关注' : '未关注'}";
-    GXExpression *expression0 = [GXExpression expressionWithString:exp0];
-    XCTAssertTrue([[expression0 valueWithObject:self.dictionary] isEqualToString:@"关注"]);
-    
-    NSString *exp1 = @"@{${nodes[0].data.title} ?: '默认标题'}";
-    GXExpression *expression1 = [GXExpression expressionWithString:exp1];
-    XCTAssertTrue([[expression1 valueWithObject:self.dictionary] isEqualToString:@"坑位标题"]);
+    NSString *exp0 = @"$nodes[0].data.favor.isFavor ? '关注' : '未关注'";
+    NSString *expression0 = [GXExpression valueWithExpression:exp0 Source:self.dictionary];
+    XCTAssertTrue([expression0 isEqualToString:@"关注"]);
+
+    NSString *exp1 = @"$nodes[0].data.title ?: '默认标题'";
+    NSString *expression1 = [GXExpression valueWithExpression:exp1 Source:self.dictionary];
+    XCTAssertTrue([expression1 isEqualToString:@"坑位标题"]);
+
 }
 
 // test size expression
 - (void)testSizeExp{
-    NSString *exp0 = @"@{eval(size($(data)) == 2) ? true : false}";
-    GXExpression *expression0 = [GXExpression expressionWithString:exp0];
-    XCTAssertTrue([expression0 valueWithObject:self.dictionary]);
-    
-    NSString *exp1 = @"@{eval(size($(nodes)) == 1) ? true : false}";
-    GXExpression *expression1 = [GXExpression expressionWithString:exp1];
-    XCTAssertTrue([expression1 valueWithObject:self.dictionary]);
+    NSString *exp0 = @"size($data) == 2 ? true : false";
+    id expression0 = [GXExpression valueWithExpression:exp0 Source:self.dictionary];
+    XCTAssertTrue([expression0 boolValue]);
+
+    NSString *exp1 = @"size($nodes) == 1 ? true : false";
+    id expression1 = [GXExpression valueWithExpression:exp1 Source:self.dictionary];
+    XCTAssertTrue([expression1 boolValue]);
 }
 
 // test plus expression
 - (void)testPlusExp{
-    
-    NSString *exp0 = @"${data.title} + 123";
-    GXExpression *expression0 = [GXExpression expressionWithString:exp0];
-    XCTAssertTrue([[expression0 valueWithObject:self.dictionary] isEqualToString:@"组件标题123"]);
-
+    NSString *exp0 = @"$data.title + '123'";
+    NSString *expression0 = [GXExpression valueWithExpression:exp0 Source:self.dictionary];
+    XCTAssertTrue([expression0 isEqualToString:@"组件标题123"]);
 }
 
 - (void)testPerformanceExample {

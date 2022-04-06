@@ -39,8 +39,9 @@ typedef NS_ENUM(NSUInteger, GXNodeType) {
 @property (nonatomic, readonly) Class <GXImageViewProtocal> imageViewClass;
 //Class impl supported by business capabilities
 @property (nonatomic, strong) Class <GXBizServiceProtocol> bizServiceImpl;
-//previewed data source
-@property (nonatomic, strong) id <GXITemplateSource> previewSource;
+//preview data source
+@property (nonatomic, strong) id <GXITemplatePreviewSource> previewSource;
+
 
 /// singleton
 + (instancetype)defaultCenter;
@@ -64,15 +65,15 @@ typedef NS_ENUM(NSUInteger, GXNodeType) {
 @end
 
 
-@interface GXRegisterCenter (Preview)
+@interface GXRegisterCenter (Source)
 
 /// Registering a preview data source
 /// @param source data source
-- (void)registerPreviewTemplateSource:(id <GXITemplateSource>)source;
+- (void)registerPreviewTemplateSource:(id <GXITemplatePreviewSource>)source;
 
 /// Remove a preview data source
 /// @param source data source
-- (void)unregisterPreviewTemplateSource:(id <GXITemplateSource>)source;
+- (void)unregisterPreviewTemplateSource:(id <GXITemplatePreviewSource>)source;
 
 @end
 

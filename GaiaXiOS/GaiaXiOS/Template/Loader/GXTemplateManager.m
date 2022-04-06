@@ -94,8 +94,11 @@
     
     //预览优先
     id previewSource = TheGXRegisterCenter.previewSource;
-    if (previewSource && [previewSource respondsToSelector:@selector(getTemplateWithTemplateId:)]) {
-        templateDict = [previewSource getTemplateWithTemplateId:templateId];
+    if (previewSource && [previewSource respondsToSelector:@selector(getPreviewTemplateWithTemplateId:)]) {
+        templateDict = [previewSource getPreviewTemplateWithTemplateId:templateId];
+        if (templateDict) {
+            return templateDict;
+        }
     }
 
     // ① 若templateId 与 templateVersion均不为空，则优先返回对应的服务端模板

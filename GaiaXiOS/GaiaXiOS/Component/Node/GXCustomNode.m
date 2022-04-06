@@ -76,28 +76,27 @@
 
 #pragma mark - 绑定数据
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     //赋值
     if ([GXUtils isDictionary:data]) {
-        NSDictionary *dataDict = (NSDictionary *)data;
         //处理绑定数据
         UIView *view = self.associatedView;
         SEL selector = NSSelectorFromString(@"gx_bindData:");
         if ([view respondsToSelector:selector]) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
-            [view performSelector:selector withObject:dataDict];
+            [view performSelector:selector withObject:data];
 #pragma GCC diagnostic pop
         }
         
         //处理extend
-        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend) {
             [self handleExtend:extend isCalculate:NO];
         }
         
         //无障碍
-        [self setupAccessibilityInfo:dataDict];
+        [self setupAccessibilityInfo:data];
     }
     
 }
@@ -131,12 +130,11 @@
 #pragma mark - 计算
 
 //计算布局
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     //赋值
     if ([GXUtils isDictionary:data]) {
         //处理extend
-        NSDictionary *dataDict = (NSDictionary *)data;
-        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend) {
             [self handleExtend:extend isCalculate:YES];
         }

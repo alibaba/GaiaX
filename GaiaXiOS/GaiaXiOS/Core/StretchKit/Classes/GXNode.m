@@ -57,8 +57,10 @@
 
 @property (nonatomic, strong) id data;
 @property (nonatomic, strong) id event;
-@property (nonatomic, strong) id virtualData; //嵌套模板中的数据
 @property (nonatomic, strong) NSDictionary *animation;
+
+@property (nonatomic, strong) id virtualData; //嵌套模板中的数据
+@property (nonatomic, strong) NSDictionary *virtualExtend;
 
 //是否需要拍平 - 针对view
 @property (nonatomic, assign) BOOL isFlat;
@@ -312,20 +314,20 @@
     switch (type) {
         case GXBindTypeData:{
             //绑定数据
-            if (self.data) {
-                NSInteger index = self.rootNode.index;
-                id resultData = [GXDataParser parseData:self.data withSource:data index:index];
+            if (self.data || self.virtualExtend) {
+                NSMutableDictionary *resultData = [GXDataParser parseData:self.data withSource:data];
+                resultData = [self mergeExtendWithResult:resultData];
                 [self bindData:resultData];
             }
             //绑定事件
             if (self.event) {
-                id resultEvent = [GXDataParser parseData:self.event withSource:data];
+                NSDictionary *resultEvent = [GXDataParser parseData:self.event withSource:data];
                 [self bindEvent:resultEvent];
                 [self bindTrack:resultEvent];
             }
             //绑定动画
             if (self.animation) {
-                id resultAnimation = [GXDataParser parseData:self.animation withSource:data];
+                NSDictionary *resultAnimation = [GXDataParser parseData:self.animation withSource:data];
                 [self bindAnimation:resultAnimation];
             }
             
@@ -334,7 +336,8 @@
         case GXBindTypeCalculate:{
             //数据绑定
             if (self.data) {
-                id resultData = [GXDataParser parseData:self.data withSource:data];
+                NSMutableDictionary *resultData = [GXDataParser parseData:self.data withSource:data];
+                resultData = [self mergeExtendWithResult:resultData];
                 [self calculateWithData:resultData];
             }
         
@@ -346,6 +349,80 @@
     }
     
 }
+
+#pragma mark - 合并Extend
+
+- (NSMutableDictionary *)mergeExtendWithResult:(NSMutableDictionary *)resultData {
+    NSMutableDictionary *dataDict = nil;
+    NSDictionary *extendDict = self.virtualExtend;
+    if (extendDict) {
+        if (!resultData){
+            //为空的话直接赋值
+            dataDict = [NSMutableDictionary dictionary];
+            [dataDict gx_setObject:extendDict forKey:@"extend"];
+            
+        } else if (resultData && [GXUtils isMutableDictionary:resultData]){
+            //赋值
+            dataDict = resultData;
+            //获取extend
+            NSMutableDictionary *tmpExtend = [resultData gx_mutableDictionaryForKey:@"extend"];
+            if (tmpExtend) {
+                [tmpExtend addEntriesFromDictionary:extendDict];
+            } else {
+                tmpExtend = (NSMutableDictionary *)extendDict;
+            }
+            
+            //设置extend
+            [dataDict gx_setObject:tmpExtend forKey:@"extend"];
+        }
+    } else {
+        dataDict = resultData;
+    }
+    
+    return dataDict;
+}
+
+
++ (void)handleExtend:(NSDictionary *)resultData withNode:(GXNode *)node{
+    //①获取外部extend，合并外部和内部的extend
+    NSDictionary *extendDict = [resultData gx_dictionaryForKey:@"extend"];
+    if (extendDict) {
+        //获取节点的databinding
+        NSDictionary *tmpData = node.data;
+        if (!tmpData){
+            //为空的话直接赋值
+            NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
+            [dataDict gx_setObject:extendDict forKey:@"extend"];
+            node.data = dataDict;
+            
+        } else if (tmpData && [tmpData isKindOfClass:[NSDictionary class]]){
+            //获取data数据
+            NSMutableDictionary *dataDict = nil;
+            if ([GXUtils isMutableDictionary:tmpData]) {
+                dataDict = (NSMutableDictionary *)tmpData;
+            } else {
+                dataDict = [NSMutableDictionary dictionaryWithDictionary:tmpData];
+            }
+            
+            //获取extend
+            NSMutableDictionary *tmpExtend = [dataDict gx_mutableDictionaryForKey:@"extend"];
+            if (tmpExtend) {
+                [tmpExtend addEntriesFromDictionary:extendDict];
+            } else {
+                tmpExtend = [NSMutableDictionary dictionaryWithDictionary:extendDict];
+            }
+            
+            //设置extend
+            [dataDict gx_setObject:tmpExtend forKey:@"extend"];
+            
+            //重新赋值
+            node.data = dataDict;
+        }
+        
+    }
+    
+}
+
 
 
 #pragma mark - 绑定（数据，事件，动画）
@@ -367,12 +444,12 @@
 }
 
 //数据绑定
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     
 }
 
 //动画绑定
-- (void)bindAnimation:(id)animation{
+- (void)bindAnimation:(NSDictionary *)animation{
     
 }
 
@@ -456,7 +533,7 @@
 #pragma mark - 计算相关
 
 //通过属性计算
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     
 }
 

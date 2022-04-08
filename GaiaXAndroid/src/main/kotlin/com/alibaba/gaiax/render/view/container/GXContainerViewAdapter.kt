@@ -28,6 +28,8 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.getStringExt
+import com.alibaba.gaiax.utils.getStringExtCanNull
 
 /**
  * @suppress
@@ -118,8 +120,8 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
                 val dataBinding = gxNode.templateNode.dataBinding
                 dataBinding?.reset()
                 dataBinding?.getExtendData(itemData)?.let { typeData ->
-                    val path = typeData.getString("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                    val templateId = typeData.getString("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
+                    val path = typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
+                    val templateId = typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
                     if (templateId != null) {
                         return items.firstOrNull { it.first.templateId == templateId }?.first
                     }

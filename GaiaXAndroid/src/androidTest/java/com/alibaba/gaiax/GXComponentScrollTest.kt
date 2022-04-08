@@ -1,5 +1,7 @@
 package com.alibaba.gaiax
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -978,117 +980,107 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
-//
-//    @Test
-//    fun template_scroll_edge() {
-//
-//        val container = FrameLayout(context)
-//
-//        val params = GaiaX.Params.Builder()
-//            .templateBiz("scroll")
-//            .templateId("template_scroll_edge")
-//            .context(GaiaXMockUtils.context)
-//            .container(container)
-//            .data(JSONObject().apply {
-//                this["nodes"] = JSONArray().apply {
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                }
-//            })
-//            .width(MOCK_SCREEN_WIDTH)
-//            .mode(LoadType.SYNC_NORMAL)
-//            .build()
-//
-//        GaiaX.instance.bindView(params)
-//
-//        val rootView = container.child(0)
-//
-//        rootView.executeRecyclerView()
-//
-//        Assert.assertEquals(5, rootView.childCount())
-//        Assert.assertEquals(1080F.dpToPx(), rootView.width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.height())
-//
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
-//        Assert.assertEquals(9F.dpToPx(), rootView.child(0).x)
-//        Assert.assertEquals(9F.dpToPx(), rootView.child(0).y)
-//
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-//        Assert.assertEquals(9F.dpToPx() + 100F.dpToPx(), rootView.child(1).x)
-//        Assert.assertEquals(9F.dpToPx(), rootView.child(1).y)
-//    }
-//
-//    @Test
-//    fun template_scroll_background_color() {
-//        val container = FrameLayout(context)
-//
-//        val params = GaiaX.Params.Builder()
-//            .templateBiz("scroll")
-//            .templateId("template_scroll_background_color")
-//            .context(GaiaXMockUtils.context)
-//            .container(container)
-//            .data(JSONObject())
-//            .width(MOCK_SCREEN_WIDTH)
-//            .mode(LoadType.SYNC_NORMAL)
-//            .build()
-//
-//        GaiaX.instance.bindView(params)
-//
-//        val rootView = container.child(0)
-//
-//        Assert.assertEquals(null, (rootView.background as? GradientDrawable)?.colors?.get(0))
-//    }
-//
-//    @Test
-//    fun template_scroll_border() {
-//        val container = FrameLayout(context)
-//
-//        val params = GaiaX.Params.Builder()
-//            .templateBiz("scroll")
-//            .templateId("template_scroll_border")
-//            .context(GaiaXMockUtils.context)
-//            .container(container)
-//            .data(JSONObject())
-//            .width(GaiaXBaseTest.MOCK_SCREEN_WIDTH)
-//            .mode(LoadType.SYNC_NORMAL)
-//            .build()
-//
-//        GaiaX.instance.bindView(params)
-//
-//        val rootView = container.child(0)
-//
-//        Assert.assertEquals(1080F.dpToPx(), rootView.width())
-//        Assert.assertEquals(200F.dpToPx(), rootView.height())
-//
-//        Assert.assertEquals(1, rootView.childCount())
-//
-//        Assert.assertEquals(GradientDrawable.RECTANGLE, (rootView.child(0).foreground as? GradientDrawable)?.shape)
-//        Assert.assertEquals(0F.dpToPx(), (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
-//    }
-//
-//    @Test
-//    fun template_scroll_radius() {
-//        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_radius")
-//        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
-//            this["nodes"] = JSONArray().apply {
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//                this.add(JSONObject())
-//            }
-//        })
-//        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
-//        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-//        GXTemplateEngine.instance.bindData(rootView, templateData)
-//        rootView.executeRecyclerView()
-//
-//        Assert.assertEquals(false, (rootView.child(0).clipToOutline))
-//    }
 
+    @Test
+    fun template_scroll_edge() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_edge")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(5, rootView.childCount())
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(9F.dpToPx(), rootView.child(0).x)
+        Assert.assertEquals(9F.dpToPx(), rootView.child(0).y)
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(9F.dpToPx() + 100F.dpToPx(), rootView.child(1).x)
+        Assert.assertEquals(9F.dpToPx(), rootView.child(1).y)
+    }
+
+    @Test
+    fun template_scroll_background_color() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_background_color")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView.background as? GradientDrawable)?.colors?.get(0))
+    }
+
+    @Test
+    fun template_scroll_border() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_border")
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
+        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
+    }
+
+    @Test
+    fun template_scroll_radius() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_radius")
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(false, (rootView.child(0).clipToOutline))
+    }
 }

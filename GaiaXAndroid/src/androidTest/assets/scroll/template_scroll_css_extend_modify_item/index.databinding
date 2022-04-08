@@ -5,8 +5,8 @@
         },
         "template_scroll_css_extend_modify_item_item":{
             "extend":{
-                "width":"300px",
-                "height":"300px",
+                "width":"'300px'",
+                "height":"'300px'",
             }
         }
     }

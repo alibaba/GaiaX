@@ -888,7 +888,6 @@ class GXComponentScrollTest : GXBaseTest() {
                 this.add(JSONObject())
                 this.add(JSONObject())
             }
-            this["isHasMore"] = true
         })
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -898,42 +897,25 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(200F.dpToPx(), rootView.height())
     }
 
-//
-//    @Test
-//    fun template_scroll_css_extend_modify_item() {
-//        val container = FrameLayout(context)
-//
-//        val params = GaiaX.Params.Builder()
-//            .templateBiz("scroll")
-//            .templateId("template_scroll_css_extend_modify_item")
-//            .context(GaiaXMockUtils.context)
-//            .container(container)
-//            .data(JSONObject().apply {
-//                this["nodes"] = JSONArray().apply {
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                }
-//            })
-//            .width(MOCK_SCREEN_WIDTH)
-//            .mode(LoadType.SYNC_NORMAL)
-//            .build()
-//
-//        GaiaX.instance.bindView(params)
-//
-//        val rootView = container.child(0)
-//
-//        Assert.assertEquals(1080F.dpToPx(), rootView.width())
-//        // TODO: Assert.assertEquals(300F.dpToPx(), rootView.height())
-//        /**
-//         * TODO:
-//         * 优酷版本，无法在扩展属性中修改坑位的宽高
-//         * 开源版本，可以再属性中修改坑位的宽度
-//         */
-//        Assert.assertEquals(100F.dpToPx(), rootView.height())
-//    }
+    @Test
+    fun template_scroll_css_extend_modify_item() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_css_extend_modify_item")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(300F.dpToPx(), rootView.height())
+    }
 //
 //    @Test
 //    fun template_scroll_multi_type_item_two() {

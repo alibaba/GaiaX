@@ -18,9 +18,18 @@ package com.alibaba.gaiax
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsoluteLayout
 import android.widget.TextView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+
+fun View.x(): Float {
+    return (this.layoutParams as? AbsoluteLayout.LayoutParams)?.x?.toFloat() ?: 0F
+}
+
+fun View.y(): Float {
+    return (this.layoutParams as? AbsoluteLayout.LayoutParams)?.y?.toFloat() ?: 0F
+}
 
 fun View.width(): Float {
     return this.layoutParams.width.toFloat()

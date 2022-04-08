@@ -948,43 +948,36 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
 
-//    @Test
-//    fun template_scroll_multi_type_item_one() {
-//
-//        val container = FrameLayout(context)
-//
-//        val params = GaiaX.Params.Builder()
-//            .templateBiz("scroll")
-//            .templateId("template_scroll_multi_type_item_one")
-//            .context(GaiaXMockUtils.context)
-//            .container(container)
-//            .data(JSONObject().apply {
-//                this["nodes"] = JSONArray().apply {
-//                    this.add(JSONObject())
-//                    this.add(JSONObject())
-//                }
-//            })
-//            .width(MOCK_SCREEN_WIDTH)
-//            .mode(LoadType.SYNC_NORMAL)
-//            .build()
-//
-//        GaiaX.instance.bindView(params)
-//
-//        val rootView = container.child(0)
-//
-//        rootView.executeRecyclerView()
-//
-//        Assert.assertEquals(1080F.dpToPx(), rootView.width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.height())
-//
-//        Assert.assertEquals(2, rootView.childCount())
-//
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
-//
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-//        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-//    }
+    @Test
+    fun template_scroll_multi_type_item_one() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_multi_type_item_one")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(2, rootView.childCount())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+    }
 //
 //    @Test
 //    fun template_scroll_edge() {

@@ -1,0 +1,4 @@
+#template_grid_width_flex_grow_horizontal {
+    flex-grow: 1;
+    background-color: primaryBackground;
+}

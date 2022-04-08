@@ -1,0 +1,14 @@
+{
+  "id": "template_grid_edge_insets",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "edge-insets": "{9,9,9,9}",
+  "column": 2,
+  "layers": [
+    {
+      "id": "template_grid_edge_insets_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+#template_grid_scrollable_height_100_percent {
+  width: 100%;
+  height: 100%;
+  background-color: primaryBackground;
+}

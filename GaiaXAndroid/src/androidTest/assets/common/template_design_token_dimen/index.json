@@ -1,0 +1,5 @@
+{
+  "id": "template_design_token_dimen",
+  "type": "gaia-template",
+  "layers": [{ "id": "target", "type": "view" }]
+}

@@ -17,14 +17,14 @@
 package com.alibaba.gaiax.data.assets
 
 import android.content.Context
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.data.GXITemplateSource
 import com.alibaba.gaiax.template.GXTemplate
 
 /**
  * @suppress
  */
-class GXAssetsTemplate(val context: Context) : GXITemplateSource {
+class GXAssetsTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
@@ -71,7 +71,7 @@ class GXAssetsTemplate(val context: Context) : GXITemplateSource {
         }
     }
 
-    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
+    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
 
     private fun addToCache(template: GXTemplate) {
         var bizTemplates = templateCache[template.biz]

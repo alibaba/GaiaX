@@ -18,7 +18,6 @@ package com.alibaba.gaiax.context
 
 import android.content.Context
 import android.view.View
-import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
@@ -34,21 +33,6 @@ class GXTemplateContext(val context: Context) {
     var lifeStatus: Int = LIFE_ON_NONE
 
     var visibleStatus: Int = LIFE_ON_NONE
-
-    /**
-     * Data listener
-     */
-    var dataListener: GXTemplateEngine.GXIDataListener? = null
-
-    /**
-     * Track listener
-     */
-    var trackListener: GXTemplateEngine.GXITrackListener? = null
-
-    /**
-     * Event listener
-     */
-    var eventListener: GXTemplateEngine.GXIEventListener? = null
 
     /**
      * Is dirty
@@ -80,10 +64,7 @@ class GXTemplateContext(val context: Context) {
      */
     var rootNode: GXNode? = null
 
-    /**
-     * Hold render data
-     */
-    var data: JSONObject? = null
+    var templateData: GXTemplateEngine.GXTemplateData? = null
 
     /**
      * Container-indexed position
@@ -95,24 +76,14 @@ class GXTemplateContext(val context: Context) {
      */
     var visualTemplateNode: GXTemplateNode? = null
 
-    fun updateContext(templateData: GXTemplateEngine.GXTemplateData) {
-        this.data = templateData.data
-        this.dataListener = templateData.dataListener
-        this.eventListener = templateData.eventListener
-        this.trackListener = templateData.trackListener
-    }
-
     override fun toString(): String {
         return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
     }
 
     fun release() {
-        dataListener = null
-        trackListener = null
-        eventListener = null
+        templateData = null
         rootView?.clear()
         rootView = null
-        data = null
         visualTemplateNode = null
         rootNode?.release()
         rootNode = null

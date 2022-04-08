@@ -1,0 +1,10 @@
+{
+    "data": {
+        "template_scroll_holding_offset": {
+            "value":"$nodes",
+            "extend": {
+                "holding-offset": true
+              }
+        }
+    }
+}

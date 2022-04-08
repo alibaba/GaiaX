@@ -18,9 +18,9 @@ package com.alibaba.gaiax.render.view.container
 
 import android.content.Context
 import android.graphics.Canvas
+import android.support.annotation.Keep
+import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import androidx.annotation.Keep
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext

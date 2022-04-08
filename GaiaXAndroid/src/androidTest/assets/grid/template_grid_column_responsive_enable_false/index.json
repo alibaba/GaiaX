@@ -1,0 +1,17 @@
+{
+  "id": "template_grid_column_responsive_enable_false",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "line-spacing": 0,
+  "interitem-spacing": 0,
+  "edge-insets": "{0,0,0,0}",
+  "column": 2,
+  "responsive-enable": false,
+  "layers": [
+    {
+      "id": "template_grid_column_responsive_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

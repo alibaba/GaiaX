@@ -1,0 +1,10 @@
+{
+  "id": "template_text_height_aspect_ratio",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

@@ -44,7 +44,7 @@ data class GXFlexBox(
     val size: Size<Dimension>? = null,
     val minSize: Size<Dimension>? = null,
     val maxSize: Size<Dimension>? = null,
-    val aspectRatio: Float? = null,
+    val aspectRatio: Float? = null
 ) {
     companion object {
 

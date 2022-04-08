@@ -18,10 +18,9 @@ package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.data.GXITemplateSource
 import com.alibaba.gaiax.render.view.GXViewKey
-import com.alibaba.gaiax.template.expression.GXExpressionUtils
-import com.alibaba.gaiax.template.expression.GXIExpression
+import com.alibaba.gaiax.template.factory.GXDataBindingFactory
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXCssFileParserUtils
 import com.alibaba.gaiax.utils.safeParseToJson
 
@@ -36,7 +35,7 @@ data class GXTemplateInfo(
     val event: MutableMap<String, GXEventBinding>? = null,
     val animation: MutableMap<String, GXAnimationBinding>? = null,
     val config: MutableMap<String, GXIExpression>? = null,
-    val js: String? = null,
+    val js: String? = null
 ) {
 
     var children: MutableList<GXTemplateInfo>? = null
@@ -102,10 +101,11 @@ data class GXTemplateInfo(
 
     companion object {
 
-        fun createTemplate(source: GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            val templatePath = source.getTemplate(templateItem) ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
-            val template = createTemplate(templatePath)
-            return template.apply { initChildren(source, this, templateItem) }
+        fun createTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
+            val template = GXTemplateEngine.instance.data.templateSource.getTemplate(templateItem)
+            val templatePath = template ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
+            val templateInfo = createTemplate(templatePath)
+            return templateInfo.apply { initChildren(this, templateItem) }
         }
 
         private fun createTemplate(template: GXTemplate): GXTemplateInfo {
@@ -191,13 +191,7 @@ data class GXTemplateInfo(
                     val entryId = entry.key
                     val entryValue = entry.value
                     if (entryId != null && entryValue != null && entryValue is JSONObject) {
-                        val valueBinding = GXDataBinding.create(
-                            entryValue.getString(GXTemplateKey.GAIAX_VALUE),
-                            entryValue.getString(GXTemplateKey.GAIAX_PLACEHOLDER),
-                            entryValue.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC),
-                            entryValue.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE),
-                            entryValue.getJSONObject(GXTemplateKey.GAIAX_EXTEND)
-                        )
+                        val valueBinding = GXDataBindingFactory.create(entryValue)
                         if (valueBinding != null) {
                             data[entryId] = valueBinding
                         }
@@ -217,7 +211,7 @@ data class GXTemplateInfo(
                     val expression = entry.value
                     if (id != null && expression != null) {
                         if (id.isNotEmpty()) {
-                            GXExpressionUtils.create(expression)?.let {
+                            GXExpressionFactory.create(expression)?.let {
                                 value[id] = GXEventBinding(it)
                             }
                         }
@@ -257,7 +251,7 @@ data class GXTemplateInfo(
                     val id = entry.key
                     val expression = entry.value
                     if (id != null && expression != null && id.isNotEmpty()) {
-                        GXExpressionUtils.create(expression)?.let { value[id] = it }
+                        GXExpressionFactory.create(expression)?.let { value[id] = it }
                     }
                 }
                 value
@@ -276,9 +270,9 @@ data class GXTemplateInfo(
             }
         }
 
-        private fun initChildren(source: GXITemplateSource, templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem) {
+        private fun initChildren(templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem) {
             forChildrenTemplate(templateInfo.layer) {
-                val childTemplate = createTemplate(source, GXTemplateEngine.GXTemplateItem(templateItem.context, templateItem.bizId, it.id).apply {
+                val childTemplate = createTemplate(GXTemplateEngine.GXTemplateItem(templateItem.context, templateItem.bizId, it.id).apply {
                     this.isLocal = templateItem.isLocal
                     this.templateVersion = templateItem.templateVersion
                 })

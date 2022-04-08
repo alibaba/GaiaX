@@ -258,6 +258,12 @@ object GXTemplateKey {
     /**
      * 规定页面内容包含框的尺寸和方向。
      */
+    const val FLEXBOX_SIZE = "size"
+
+    const val FLEXBOX_MIN_SIZE = "min-size"
+
+    const val FLEXBOX_MAX_SIZE = "max-size"
+
     const val FLEXBOX_SIZE_WIDTH = "width"
 
     const val FLEXBOX_SIZE_HEIGHT = "height"
@@ -288,6 +294,12 @@ object GXTemplateKey {
     const val GAIAX_ANIMATION = "animation"
 
     const val GAIAX_LAYER_EDGE_INSETS = "edge-insets"
+
+    @Deprecated("Compatible")
+    const val GAIAX_LAYER_LINE_SPACING = "line-spacing"
+
+    @Deprecated("Compatible")
+    const val GAIAX_LAYER_INTERITEM_SPACING= "interitem-spacing"
 
     const val GAIAX_LAYER_ITEM_SPACING = "item-spacing"
 
@@ -354,6 +366,15 @@ object GXTemplateKey {
     const val GAIAX_GESTURE_TYPE_TAP = "tap"
     const val GAIAX_GESTURE_TYPE_JS_TAP = "click"
     const val GAIAX_GESTURE_TYPE_LONGPRESS = "longpress"
+
+    const val GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH = "view-port-width"
+    const val GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT = "grid-compute-container-height"
+    const val GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT = "scroll-compute-container-height"
+
+    const val GAIAX_DATABINDING_HOLDING_OFFSET = "holding-offset"
+    const val GAIAX_DATABINDING_ITEM_TYPE = "item-type"
+    const val GAIAX_DATABINDING_ITEM_TYPE_PATH = "path"
+    const val GAIAX_DATABINDING_ITEM_TYPE_CONFIG = "config"
 
 
 }

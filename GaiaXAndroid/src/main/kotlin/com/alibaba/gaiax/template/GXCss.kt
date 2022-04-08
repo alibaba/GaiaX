@@ -23,7 +23,7 @@ import com.alibaba.fastjson.JSONObject
  */
 data class GXCss(
     val style: GXStyle,
-    val flexBox: GXFlexBox,
+    val flexBox: GXFlexBox
 ) {
 
 

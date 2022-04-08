@@ -1,0 +1,5 @@
+{
+  "id": "template_text_text_process",
+  "type": "gaia-template",
+  "layers": [{ "id": "text", "type": "text" }]
+}

@@ -1,0 +1,5 @@
+#template_scroll_width_flex_direction_horizontal_flex_grow_scroll {
+  background-color: primaryBackground;
+  height: 100%;
+  flex-grow: 1;
+}

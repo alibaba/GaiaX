@@ -17,24 +17,25 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Color
+import com.alibaba.gaiax.GXRegisterCenter
 
 /**
  * The color wrapper class, all colors should be converted to GColor using the createColor method
  * @suppress
  */
-class GXColor(val value: Int) {
+class GXColor(val name: String, val value: Int) {
 
     companion object {
         private const val UNDEFINE_COLOR = Color.TRANSPARENT
 
-        private val UNDEFINE = GXColor(UNDEFINE_COLOR)
+        private val UNDEFINE = GXColor("Undefine", UNDEFINE_COLOR)
 
         fun undefine(): GXColor {
             return UNDEFINE
         }
 
         fun create(color: String): GXColor? {
-            parseColor(color)?.let { return GXColor(it) }
+            parseColor(color)?.let { return GXColor(color, it) }
             return null
         }
 
@@ -45,6 +46,14 @@ class GXColor(val value: Int) {
             parseRGBAColor(color)?.let { return it }
             parseRGBColor(color)?.let { return it }
             parseSimpleColor(color)?.let { return it }
+            parseExtendColor(color)?.let { GXRegisterCenter.instance.colorProcessing?.convertProcessing(it)?.let { return it } }
+            return null
+        }
+
+        private fun parseExtendColor(color: String): String? {
+            if (color.isNotBlank()) {
+                return color
+            }
             return null
         }
 

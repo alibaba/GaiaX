@@ -1,0 +1,5 @@
+#template_grid_shadow_grid {
+  width: 100px;
+  height: 100px;
+  box-shadow: 0px 0px 5px 5px #ff0000;
+}

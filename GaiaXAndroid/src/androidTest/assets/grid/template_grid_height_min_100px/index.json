@@ -1,0 +1,9 @@
+{
+  "id": "template_grid_height_min_100px",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "edge-insets": "{0,0,0,0}",
+  "column": 3,
+  "layers": [
+  ]
+}

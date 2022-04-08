@@ -17,7 +17,9 @@
 package com.alibaba.gaiax.data
 
 import android.content.Context
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.template.GXTemplate
 import com.alibaba.gaiax.template.GXTemplateInfo
 
 /**
@@ -25,35 +27,57 @@ import com.alibaba.gaiax.template.GXTemplateInfo
  */
 class GXDataImpl(val context: Context) {
 
-    private var assetsBizMapRelation: MutableMap<String, String>? = null
-
-    fun unregisterAssetsBizMapRelation(templateBiz: String) {
-        assetsBizMapRelation?.remove(templateBiz)
-    }
-
-    fun registerAssetsBizMapRelation(templateBiz: String, mapRelation: String) {
-        if (assetsBizMapRelation == null) {
-            assetsBizMapRelation = mutableMapOf()
-        }
-        assetsBizMapRelation?.put(templateBiz, mapRelation)
-    }
-
     fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-        assetsBizMapRelation?.get(templateItem.bizId)?.let {
-            templateItem.bundle = it
-        }
-        return templateInfoSource.getTemplateInfo(templateSource, templateItem)
+        GXRegisterCenter.instance.bizMapProcessing?.convertProcessing(templateItem)
+        return templateInfoSource.getTemplateInfo(templateItem)
     }
 
-    internal val templateInfoSource: GXTemplateInfoSource by lazy {
+    val templateInfoSource: GXTemplateInfoSource by lazy {
         val dataCache = GXTemplateInfoSource(context)
-        dataCache.init()
         dataCache
     }
 
-    internal val templateSource: GXTemplateSource by lazy {
+    val templateSource: GXTemplateSource by lazy {
         val dataSource = GXTemplateSource(context)
-        dataSource.init()
         dataSource
     }
+
+    /**
+     * @suppress
+     */
+    class GXTemplateSource(val context: Context) : GXRegisterCenter.GXITemplateSource {
+
+        private val sources = mutableListOf<GXRegisterCenter.GXITemplateSource>()
+
+        override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
+            sources.forEach { it ->
+                it.getTemplate(templateItem)?.let { return it }
+            }
+            throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
+        }
+
+        fun addPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
+            sources.add(0, source)
+        }
+    }
+
+    /**
+     * @suppress
+     */
+    class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
+
+        private val sources = mutableListOf<GXRegisterCenter.GXITemplateInfoSource>()
+
+        override fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
+            sources.forEach {
+                it.getTemplateInfo(templateItem)?.let { return it }
+            }
+            throw IllegalStateException("Template exist but reference is null")
+        }
+
+        fun addPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
+            sources.add(0, source)
+        }
+    }
+
 }

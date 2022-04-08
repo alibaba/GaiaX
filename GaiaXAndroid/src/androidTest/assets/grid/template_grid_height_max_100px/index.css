@@ -1,0 +1,5 @@
+#template_grid_height_max_100px {
+  width: 100%;
+  max-height:100px;
+  background-color: primaryBackground;
+}

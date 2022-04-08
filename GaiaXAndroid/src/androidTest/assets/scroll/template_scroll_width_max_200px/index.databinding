@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_scroll_width_max_200px": {
+            "value":"$nodes"
+        }
+    }
+}

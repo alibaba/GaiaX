@@ -18,8 +18,7 @@ package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.template.expression.GXExpressionUtils
-import com.alibaba.gaiax.template.expression.GXIExpression
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 /**
  * @suppress
@@ -29,7 +28,7 @@ class GXDataBinding(
     val accessibilityDesc: GXIExpression? = null,
     val accessibilityEnable: GXIExpression? = null,
     val placeholder: GXIExpression? = null,
-    val extend: MutableMap<String, GXIExpression>? = null,
+    val extend: MutableMap<String, GXIExpression>? = null
 ) {
 
     fun reset() {
@@ -39,6 +38,10 @@ class GXDataBinding(
     }
 
     private var extendDataCache: JSONObject? = null
+
+    fun getCacheExtendData(): JSONObject? {
+        return extendDataCache
+    }
 
     fun getExtendData(templateData: JSON?): JSONObject? {
         if (extendDataCache == null) {
@@ -83,12 +86,20 @@ class GXDataBinding(
         return dataCache
     }
 
+    fun getCacheData(): JSONObject? {
+        return dataCache
+    }
+
     private var valueCache: JSON? = null
 
     fun getValueData(templateData: JSONObject): JSON? {
         if (valueCache == null) {
             valueCache = value?.value(templateData) as? JSON
         }
+        return valueCache
+    }
+
+    fun getCacheValueData(): JSON? {
         return valueCache
     }
 
@@ -99,7 +110,7 @@ class GXDataBinding(
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()
                 for (entry in extend) {
                     if (entry.key != null && entry.value != null) {
-                        GXExpressionUtils.create(entry.value)?.let {
+                        GXExpressionFactory.create(entry.value)?.let {
                             result[entry.key] = it
                         }
                     }
@@ -108,10 +119,10 @@ class GXDataBinding(
             } else {
                 null
             }
-            val valueExp = GXExpressionUtils.create(value)
-            val placeholderExp = GXExpressionUtils.create(placeholder)
-            val accessibilityDescExp = GXExpressionUtils.create(accessibilityDesc)
-            val accessibilityEnableExp = GXExpressionUtils.create(accessibilityEnable)
+            val valueExp = GXExpressionFactory.create(value)
+            val placeholderExp = GXExpressionFactory.create(placeholder)
+            val accessibilityDescExp = GXExpressionFactory.create(accessibilityDesc)
+            val accessibilityEnableExp = GXExpressionFactory.create(accessibilityEnable)
             return if (valueExp != null || placeholderExp != null || accessibilityDescExp != null || accessibilityEnableExp != null || extendExp != null) {
                 GXDataBinding(
                     value = valueExp,

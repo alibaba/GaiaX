@@ -1,0 +1,11 @@
+{
+  "id": "template_scroll_radius",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_scroll_radius_scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

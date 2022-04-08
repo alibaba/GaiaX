@@ -21,24 +21,24 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
+import android.support.annotation.Keep
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.Keep
-import androidx.core.content.res.ResourcesCompat
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXMode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
-import com.bumptech.glide.Glide
 
 /**
  * @suppress
  */
 @Keep
-open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
+open class GXImageView : AppCompatImageView,
     GXIViewBindData {
 
     constructor(context: Context) : super(context)
@@ -107,7 +107,7 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
             bindRes(resUri)
         }
         // Net
-        Glide.with(context).load(uri).into(this)
+        // Glide.with(context).load(uri).into(this)
     }
 
     private fun bindRes(resUri: String) {

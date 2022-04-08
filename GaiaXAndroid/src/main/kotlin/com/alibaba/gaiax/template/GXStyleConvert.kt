@@ -27,6 +27,7 @@ import android.view.Gravity
 import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 
 /**
  * Convert resources in CssJson to values in styles in Android
@@ -148,11 +149,25 @@ class GXStyleConvert {
         return css.getString(GXTemplateKey.STYLE_FONT_FAMILY)?.let { return fontFamily(it) }
     }
 
-    fun fontFamily(fontFamily: String): Typeface? = try {
-        Typeface.createFromAsset(assets, "$fontFamily.ttf")
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
+    fun fontFamily(fontFamily: String): Typeface? {
+        try {
+            // extend
+            GXRegisterCenter
+                .instance
+                .prePositionPropertyProcessing
+                ?.convertProcessing(
+                    GXRegisterCenter.GXIPrePositionPropertyProcessing.GXParams(GXTemplateKey.STYLE_FONT_FAMILY, fontFamily))
+                ?.let {
+                    val newFontFamily = it as String
+                    return Typeface.createFromAsset(assets, "$newFontFamily.ttf")
+                }
+
+            // src
+            return Typeface.createFromAsset(assets, "$fontFamily.ttf")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     fun font(css: JSONObject): GXSize? = css.getString(GXTemplateKey.STYLE_FONT_SIZE)?.let { it -> return GXSize.create(it) }

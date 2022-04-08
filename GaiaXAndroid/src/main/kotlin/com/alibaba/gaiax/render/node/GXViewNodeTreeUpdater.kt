@@ -16,9 +16,9 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -43,7 +43,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
     fun build() {
         val rootNode = context.rootNode ?: throw IllegalArgumentException("RootNode is null")
-        val templateData = context.data ?: throw IllegalArgumentException("Data is null")
+        val templateData = context.templateData?.data ?: throw IllegalArgumentException("Data is null")
 
         // 更新节点
         updateNodeTree(context, rootNode, templateData)
@@ -209,7 +209,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         when (eventType) {
             GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
                 node.viewRef?.get()?.setOnClickListener {
-                    context.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
+                    context.templateData?.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
                         this.gestureType = eventType
                         this.view = node.viewRef?.get()
                         this.eventParams = eventData
@@ -221,7 +221,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             }
             GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
                 node.viewRef?.get()?.setOnLongClickListener {
-                    context.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
+                    context.templateData?.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
                         this.gestureType = eventType
                         this.view = node.viewRef?.get()
                         this.eventParams = eventData
@@ -244,7 +244,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             return
         }
         val trackData = eventBinding.event.value(templateData) as? JSONObject ?: return
-        context.trackListener?.onTrackEvent(GXTemplateEngine.GXTrack().apply {
+        context.templateData?.trackListener?.onTrackEvent(GXTemplateEngine.GXTrack().apply {
             this.view = view
             this.trackParams = trackData
             this.nodeId = templateNode.layer.id
@@ -278,7 +278,8 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindScrollAndGrid(context: GXTemplateContext, view: View, node: GXNode, dataBinding: GXDataBinding, templateData: JSONObject) {
 
         // 容器数据源
-        val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: JSONArray()
+        val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: throw IllegalArgumentException("Scroll or Grid must be have a array data source")
+        val extendData = dataBinding.getCacheExtendData()
 
         val container = view as GXContainer
 
@@ -290,7 +291,26 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             container.adapter = adapter
         }
 
+        // scroll item to position
+        context.templateData?.scrollPosition?.let { scrollPosition ->
+            if (scrollPosition <= 0) {
+                val holdingOffset = extendData?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
+                if (holdingOffset) {
+                    // no process
+                } else {
+                    // when again bind data, should be scroll to position 0
+                    container.layoutManager?.scrollToPosition(0)
+                }
+            }
+            // if (scrollPosition > 0)
+            else {
+                container.layoutManager?.scrollToPosition(scrollPosition)
+            }
+        }
+
+        // forbid item animator
         container.itemAnimator = null
+
         adapter.setContainerData(containerTemplateData)
     }
 
@@ -334,7 +354,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
 
         // 处理数据逻辑
-        if (context.dataListener != null) {
+        if (context.templateData?.dataListener != null) {
             val gxTextData = GXTemplateEngine.GXTextData().apply {
                 this.text = valueData.toString()
                 this.view = view as View
@@ -344,7 +364,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 this.nodeData = nodeData
                 this.index = context.indexPosition
             }
-            val result = context.dataListener?.onTextProcess(gxTextData)
+            val result = context.templateData?.dataListener?.onTextProcess(gxTextData)
             if (result != null) {
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
@@ -364,7 +384,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
         val nodeData = binding.getData(rawJson)
 
-        if (context.dataListener != null) {
+        if (context.templateData?.dataListener != null) {
 
             val gxTextData = GXTemplateEngine.GXTextData().apply {
                 this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
@@ -376,7 +396,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 this.index = context.indexPosition
             }
 
-            context.dataListener?.onTextProcess(gxTextData)?.let { result ->
+            context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
                 data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
@@ -417,16 +437,16 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindContainerViewCss(context: GXTemplateContext, view: View, node: GXNode) {
         if (node.isContainerType()) {
             if (node.isGridType()) {
-                bindGridContainerCSS(view, node)
+                bindGridContainerCSS(context, view, node)
             } else if (node.isScrollType()) {
                 bindScrollContainerCSS(context, view, node)
             }
         }
     }
 
-    private fun bindGridContainerCSS(view: View, node: GXNode) {
+    private fun bindGridContainerCSS(context: GXTemplateContext, view: View, node: GXNode) {
         node.templateNode.finalGridConfig?.let {
-            view.setGridContainerDirection(it, node.stretchNode.finalLayout)
+            view.setGridContainerDirection(context, it, node.stretchNode.finalLayout)
             view.setGridContainerItemSpacingAndRowSpacing(it.edgeInsets, it.itemSpacing, it.rowSpacing)
         }
     }
@@ -455,12 +475,12 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 view.setScrollContainerPadding(edgeInsets)
             }
 
-            if (context.eventListener != null && view is RecyclerView) {
+            if (context.templateData?.eventListener != null && view is RecyclerView) {
                 view.clearOnScrollListeners()
                 view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        context.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
+                        context.templateData?.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
                             this.view = recyclerView
                             this.dx = dx
                             this.dy = dy
@@ -468,7 +488,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                     }
 
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        context.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
+                        context.templateData?.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
                             this.view = recyclerView
                             this.state = newState
                         })

@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_grid_width_max_100px": {
+            "value":"$nodes"
+        }
+    }
+}

@@ -16,8 +16,6 @@
 
 package com.alibaba.gaiax.template
 
-import com.alibaba.gaiax.template.expression.GXIExpression
-
 /**
  * @suppress
  */

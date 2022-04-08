@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_scroll_vertical_height_auto": {
+            "value":"$nodes"
+        }
+    }
+}

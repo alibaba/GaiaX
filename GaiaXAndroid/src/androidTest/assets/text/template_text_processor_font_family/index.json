@@ -1,0 +1,10 @@
+{
+  "id": "template_text_processor_font_family",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

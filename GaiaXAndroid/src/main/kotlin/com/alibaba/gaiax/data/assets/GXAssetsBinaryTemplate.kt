@@ -17,25 +17,21 @@
 package com.alibaba.gaiax.data.assets
 
 import android.content.Context
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.data.GXITemplateSource
 import com.alibaba.gaiax.template.GXTemplate
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
  * @suppress
  */
-class GXAssetsBinaryTemplate(val context: Context) : GXITemplateSource {
+class GXAssetsBinaryTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
-        try {
-            val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
-            return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
-        } catch (e: Exception) {
-        }
-        return null
+        val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
+        return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
     }
 
     override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
@@ -65,7 +61,7 @@ class GXAssetsBinaryTemplate(val context: Context) : GXITemplateSource {
         return GXTemplate(templateId, templateBiz, -1, layer, css, dataBind, js)
     }
 
-    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
+    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
 
     private fun addToCache(template: GXTemplate) {
         var bizTemplates = templateCache[template.biz]

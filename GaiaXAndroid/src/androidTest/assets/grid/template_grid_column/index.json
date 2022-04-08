@@ -1,0 +1,16 @@
+{
+  "id": "template_grid_column",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "row-spacing": 9,
+  "item-spacing": 9,
+  "edge-insets": "{0,0,0,0}",
+  "column": 3,
+  "layers": [
+    {
+      "id": "template_grid_column_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

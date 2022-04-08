@@ -18,8 +18,9 @@ package com.alibaba.gaiax
 
 import android.view.View
 import android.view.ViewGroup
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import android.widget.TextView
 import com.alibaba.gaiax.render.view.container.GXContainer
+import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
 fun View.width(): Float {
     return this.layoutParams.width.toFloat()
@@ -27,6 +28,10 @@ fun View.width(): Float {
 
 fun View.height(): Float {
     return this.layoutParams.height.toFloat()
+}
+
+fun View.lineHeight(): Float {
+    return (this as TextView).lineHeight.toFloat()
 }
 
 fun View.child(index: Int): View {
@@ -55,4 +60,10 @@ fun View.executeRecyclerView() {
         this.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.AT_MOST)
         this.layout(0, 0, 1080F.dpToPx().toInt(), 1080F.dpToPx().toInt())
     }
+}
+
+fun Any.getFieldInt(name: String): Int {
+    val declaredField = this.javaClass.getDeclaredField(name)
+    declaredField.isAccessible = true
+    return declaredField.getInt(this)
 }

@@ -1,0 +1,8 @@
+{
+  "id": "template_grid_width_100_percent",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "column": 2,
+  "layers": [
+  ]
+}

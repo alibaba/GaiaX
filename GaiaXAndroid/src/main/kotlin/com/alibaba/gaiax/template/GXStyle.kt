@@ -48,7 +48,7 @@ data class GXStyle(
     val fontTextDecoration: Int? = null,
     val mode: GXMode? = null,
     val boxShadow: GXBoxShadow? = null,
-    val fitContent: Boolean? = null,
+    val fitContent: Boolean? = null
 ) {
 
     fun isEmptyStyle(): Boolean {
@@ -125,7 +125,7 @@ data class GXStyle(
                 fontTextDecoration = heightPriorityStyle.fontTextDecoration ?: lowPriorityStyle.fontTextDecoration,
                 borderRadius = heightPriorityStyle.borderRadius ?: lowPriorityStyle.borderRadius,
                 boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
-                fitContent = heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent,
+                fitContent = heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
             )
         }
     }

@@ -19,12 +19,13 @@ package com.alibaba.gaiax
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
+import android.support.test.InstrumentationRegistry
+import android.support.test.runner.AndroidJUnit4
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -41,33 +42,29 @@ import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import kotlin.math.roundToInt
 
 
 /**
  * 双端共同的测试用例
  */
-class GXTemplateEngineTest {
-
-    companion object {
-        var MOCK_SCREEN_WIDTH = 1080F.dpToPx()
-    }
-
-    private val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
-
-    @Before
-    fun before() {
-        GXTemplateEngine.instance.init(GXMockUtils.context)
-    }
+@RunWith(AndroidJUnit4::class)
+class GXTemplateEngineTest : GXBaseTest() {
 
     @Test
     fun template_register_map_relation() {
 
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "mockBiz", "template_register_map_relation")
 
-        GXRegisterCenter.instance.registerBizMapRelation("mockBiz", "integration")
+        GXRegisterCenter.instance.registerBizMapRelationProcessing(object : GXRegisterCenter.GXIBizMapProcessing {
+            override fun convertProcessing(templateItem: GXTemplateEngine.GXTemplateItem) {
+                if (templateItem.bizId == "mockBiz") {
+                    templateItem.bundle = "integration"
+                }
+            }
+        })
 
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
 
@@ -1030,7 +1027,7 @@ class GXTemplateEngineTest {
 
         Assert.assertEquals(null, context?.rootNode)
         Assert.assertEquals(null, context?.rootView)
-        Assert.assertEquals(null, context?.data)
+        Assert.assertEquals(null, context?.templateData)
         Assert.assertEquals(null, context?.visualTemplateNode)
     }
 

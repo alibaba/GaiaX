@@ -1,0 +1,7 @@
+#template_grid_border_grid {
+    width: 100px;
+    height: 100px;
+    border-color: #979797;
+    border-width: 1px;
+    border-style: solid;
+}

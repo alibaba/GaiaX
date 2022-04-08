@@ -1,0 +1,14 @@
+{
+  "id": "template_grid_column_item_width_average",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "edge-insets": "{0,0,0,0}",
+  "column": 3,
+  "layers": [
+    {
+      "id": "template_grid_column_item_width_average_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

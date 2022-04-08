@@ -56,7 +56,7 @@ object GXTemplateUtils {
                 start = if (heightPriority.start !is GXSize.Undefined && heightPriority.start !is GXSize.Auto) heightPriority.start else lowPriority.start,
                 end = if (heightPriority.end !is GXSize.Undefined && heightPriority.end !is GXSize.Auto) heightPriority.end else lowPriority.end,
                 top = if (heightPriority.top !is GXSize.Undefined && heightPriority.top !is GXSize.Auto) heightPriority.top else lowPriority.top,
-                bottom = if (heightPriority.bottom !is GXSize.Undefined && heightPriority.bottom !is GXSize.Auto) heightPriority.bottom else lowPriority.bottom,
+                bottom = if (heightPriority.bottom !is GXSize.Undefined && heightPriority.bottom !is GXSize.Auto) heightPriority.bottom else lowPriority.bottom
             )
         } else if (heightPriority == null) {
             lowPriority
@@ -73,7 +73,7 @@ object GXTemplateUtils {
                 start = if (heightPriority.start !is Dimension.Undefined && heightPriority.start !is Dimension.Auto) heightPriority.start else lowPriority.start,
                 end = if (heightPriority.end !is Dimension.Undefined && heightPriority.end !is Dimension.Auto) heightPriority.end else lowPriority.end,
                 top = if (heightPriority.top !is Dimension.Undefined && heightPriority.top !is Dimension.Auto) heightPriority.top else lowPriority.top,
-                bottom = if (heightPriority.bottom !is Dimension.Undefined && heightPriority.bottom !is Dimension.Auto) heightPriority.bottom else lowPriority.bottom,
+                bottom = if (heightPriority.bottom !is Dimension.Undefined && heightPriority.bottom !is Dimension.Auto) heightPriority.bottom else lowPriority.bottom
             )
         } else if (heightPriority == null) {
             lowPriority
@@ -88,7 +88,7 @@ object GXTemplateUtils {
         return if (lowPriority != null && heightPriority != null) {
             Size(
                 width = if (heightPriority.width !is Dimension.Undefined && heightPriority.width !is Dimension.Auto) heightPriority.width else lowPriority.width,
-                height = if (heightPriority.height !is Dimension.Undefined && heightPriority.height !is Dimension.Auto) heightPriority.height else lowPriority.height,
+                height = if (heightPriority.height !is Dimension.Undefined && heightPriority.height !is Dimension.Auto) heightPriority.height else lowPriority.height
             )
         } else if (heightPriority == null) {
             lowPriority

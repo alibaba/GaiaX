@@ -46,7 +46,7 @@ data class GXTemplateNode(
     /**
      * 节点的虚拟嵌套父节点信息
      */
-    val visualTemplateNode: GXTemplateNode? = null,
+    val visualTemplateNode: GXTemplateNode? = null
 ) {
 
     fun reset() {

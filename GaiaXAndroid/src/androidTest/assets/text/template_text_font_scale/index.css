@@ -1,0 +1,12 @@
+#template_text_font_scale {
+  width: 100%;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+#text {
+  width: gaiax_dimen;
+  height: gaiax_dimen;
+  font-size:gaiax_font;
+  color:#00ff00;
+}

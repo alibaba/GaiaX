@@ -1,0 +1,11 @@
+{
+  "id": "template_grid_border",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_grid_border_grid",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

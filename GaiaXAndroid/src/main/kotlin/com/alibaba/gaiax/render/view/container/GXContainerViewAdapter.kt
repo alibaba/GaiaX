@@ -16,9 +16,10 @@
 
 package com.alibaba.gaiax.render.view.container
 
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
@@ -26,13 +27,17 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.utils.getStringExt
-import com.alibaba.gaiax.utils.getStringExtCanNull
+import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
  * @suppress
  */
-class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+    var childItemViewPort: Size<Float?>? = null
+    var childVisualNestTemplateNode: GXTemplateNode? = null
+}
 
 /**
  * @suppress
@@ -46,7 +51,17 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
         val childView = GXTemplateEngine.instance.createView(childTemplateItem, GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height), childVisualNestTemplateNode)
-        return GXViewHolder(childView)
+
+//        val childContainer = GXViewFactory.createView<View>(parent.context, GXViewKey.VIEW_TYPE_VIEW)
+//        val containerWidthLP = childItemViewPort.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+//        val containerHeightLP = childItemViewPort.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+//        childContainer.layoutParams = FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
+
+        return GXViewHolder(childView).apply {
+            this.childTemplateItem = childTemplateItem
+            this.childVisualNestTemplateNode = childVisualNestTemplateNode
+            this.childItemViewPort = childItemViewPort
+        }
     }
 
     private fun getVisualNestTemplateNode(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateNode? {
@@ -59,8 +74,14 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
-        val itemData = containerData.getJSONObject(holder.bindingAdapterPosition) ?: JSONObject()
+        val itemData = containerData.getJSONObject(holder.adapterPosition) ?: JSONObject()
         val templateData = GXTemplateEngine.GXTemplateData(itemData)
+
+//        val childTemplateItem = holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+//        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
+//        val childItemViewPort = holder.childItemViewPort ?: throw IllegalArgumentException("childItemViewPort is null")
+//         (holder.itemView as ViewGroup).addView(childView)
+
         GXTemplateEngine.instance.bindData(holder.itemView, templateData)
     }
 
@@ -97,8 +118,8 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
                 val dataBinding = gxNode.templateNode.dataBinding
                 dataBinding?.reset()
                 dataBinding?.getExtendData(itemData)?.let { typeData ->
-                    val path = typeData.getStringExt("item-type.path")
-                    val templateId = typeData.getStringExtCanNull("item-type.config.${path}")
+                    val path = typeData.getString("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
+                    val templateId = typeData.getString("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
                     if (templateId != null) {
                         return items.firstOrNull { it.first.templateId == templateId }?.first
                     }

@@ -1,6 +1,7 @@
 package app.visly.stretch
 
-import androidx.annotation.Keep
+import android.support.annotation.Keep
+
 
 /**
  * @suppress

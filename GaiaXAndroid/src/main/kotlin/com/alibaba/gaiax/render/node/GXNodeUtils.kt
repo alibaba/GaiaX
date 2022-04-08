@@ -21,8 +21,10 @@ import app.visly.stretch.Layout
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.template.GXTemplateKey
 import kotlin.math.ceil
 
 /**
@@ -94,9 +96,15 @@ object GXNodeUtils {
     }
 
     private fun computeScrollItemViewPortWidth(context: GXTemplateContext, node: GXNode): Float? {
+        val finalScrollConfig = node.templateNode.finalScrollConfig ?: return null
+
+        GXRegisterCenter.instance.scrollProcessing?.convertProcessing(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, context, finalScrollConfig)?.let {
+            return it as Float
+        }
+
         // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
-        val left: Float = node.templateNode.finalScrollConfig?.edgeInsets?.left?.toFloat() ?: 0F
-        val right = node.templateNode.finalScrollConfig?.edgeInsets?.right?.toFloat() ?: 0F
+        val left: Float = finalScrollConfig.edgeInsets.left.toFloat()
+        val right = finalScrollConfig.edgeInsets.right.toFloat()
         context.size.width?.let {
             return it - left - right
         }
@@ -109,9 +117,9 @@ object GXNodeUtils {
         return if (containerWidth != null) {
             when {
                 gridConfig?.isVertical == true -> {
-                    val totalItemSpacing = gridConfig.itemSpacing * (gridConfig.column - 1)
+                    val totalItemSpacing = gridConfig.itemSpacing * (gridConfig.column(context) - 1)
                     val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
-                    (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column
+                    (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column(context)
                 }
                 gridConfig?.isHorizontal == true -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
@@ -160,7 +168,7 @@ object GXNodeUtils {
         val templateData = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
         val context = GXTemplateContext.createContext(templateItem, measureSize, templateData, templateNode)
         val rootNode = GXTemplateEngine.instance.render.createNode(context)
-        context.updateContext(itemTemplateData)
+        context.templateData = itemTemplateData
         GXTemplateEngine.instance.render.bindNodeData(context)
         return rootNode
     }
@@ -192,7 +200,7 @@ object GXNodeUtils {
                     if (gxGridConfig.isVertical) {
 
                         // 获取行数
-                        val lines = ceil((containerTemplateData.size * 1.0F / gxGridConfig.column).toDouble()).toInt()
+                        val lines = ceil((containerTemplateData.size * 1.0F / gxGridConfig.column(context)).toDouble()).toInt()
 
                         var containerHeight = itemSize.height
 

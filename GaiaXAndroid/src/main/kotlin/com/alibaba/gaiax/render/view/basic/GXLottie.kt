@@ -17,8 +17,8 @@
 package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
+import android.support.annotation.Keep
 import android.util.AttributeSet
-import androidx.annotation.Keep
 import com.airbnb.lottie.LottieAnimationView
 
 /**

@@ -1,0 +1,5 @@
+{
+  "id": "template_text_property_text_align_right",
+  "type": "gaia-template",
+  "layers": [{ "id": "text", "type": "text" }]
+}

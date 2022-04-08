@@ -17,13 +17,16 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.context.GXTemplateContext
 
 /**
  * @suppress
  */
 data class GXGridConfig(
+    val data: JSONObject,
     val column: Int = 1,
     val direction: Int = LinearLayoutManager.VERTICAL,
     /**
@@ -38,9 +41,15 @@ data class GXGridConfig(
     /**
      * scrollable
      */
-    val scrollEnable: Boolean = false,
+    val scrollEnable: Boolean = false
 ) {
 
+    fun column(context: GXTemplateContext): Int {
+        GXRegisterCenter.instance.gridProcessing?.convertProcessing(GXTemplateKey.GAIAX_LAYER_COLUMN, context, this)?.let {
+            return it as Int
+        }
+        return column
+    }
 
     val isVertical
         get():Boolean {
@@ -54,8 +63,9 @@ data class GXGridConfig(
 
     companion object {
 
-        fun create(direction: String?, edgeInsets: String?, itemSpacing: String?, rowSpacing: String?, column: Int, scrollable: Boolean): GXGridConfig {
+        fun create(data: JSONObject, direction: String?, edgeInsets: String?, itemSpacing: String?, rowSpacing: String?, column: Int, scrollable: Boolean): GXGridConfig {
             return GXGridConfig(
+                data,
                 column,
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
@@ -65,20 +75,28 @@ data class GXGridConfig(
             )
         }
 
-        fun create(srcConfig: GXGridConfig, extendCache: JSONObject): GXGridConfig? {
-            val gridColumn = extendCache.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN)
-            val scrollEnable = extendCache.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE)
-            val edgeInsets = extendCache.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
-            val itemSpacing = extendCache.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
-            val rowSpacing = extendCache.getString(GXTemplateKey.GAIAX_LAYER_ROW_SPACING)
+        fun create(srcConfig: GXGridConfig, data: JSONObject): GXGridConfig? {
+            val gridColumn = data.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN)
+            val scrollEnable = data.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE)
+            val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
+
+            var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
+            if (itemSpacing == null) {
+                itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
+            }
+            var rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ROW_SPACING)
+            if (rowSpacing == null) {
+                rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_INTERITEM_SPACING)
+            }
 
             return GXGridConfig(
+                srcConfig.data,
                 gridColumn ?: srcConfig.column,
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,
                 if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets) ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
-                scrollEnable ?: srcConfig.scrollEnable,
+                scrollEnable ?: srcConfig.scrollEnable
             )
         }
     }

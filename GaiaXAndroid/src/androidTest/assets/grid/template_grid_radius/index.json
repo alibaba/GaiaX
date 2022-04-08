@@ -1,0 +1,11 @@
+{
+  "id": "template_grid_radius",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_grid_radius_grid",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

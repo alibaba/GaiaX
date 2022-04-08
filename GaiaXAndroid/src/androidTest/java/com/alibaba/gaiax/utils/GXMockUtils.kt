@@ -18,13 +18,9 @@ package com.alibaba.gaiax.utils
 
 import android.content.Context
 import android.os.Build
-import androidx.test.platform.app.InstrumentationRegistry
-import app.visly.stretch.Size
+import android.support.test.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.view.GXViewKey
-import com.alibaba.gaiax.template.GXCss
-import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
@@ -128,29 +124,5 @@ object GXMockUtils {
             this[GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS] = "com.alibaba.view.CustomView"
         })
     }
-
-    fun createDataBindingWithExtend(extend: JSONObject = JSONObject()): GXDataBinding {
-        return GXDataBinding.create(
-            value = "\${data.title}",
-            placeholder = "res:placeholder",
-            accessibilityDesc = "\${data.desc}",
-            accessibilityEnable = "\${data.descEnable}",
-            extend = extend
-        )!!
-    }
-
-    fun createCss(data: JSONObject): GXCss {
-        return GXCss.create(data)
-    }
-
-    fun computeSelf(stretchNode: GXStretchNode, size: Size<Float?>) {
-        stretchNode.node?.computeLayout(size)?.let { layout ->
-            stretchNode.node?.id?.let { layout.id = it }
-            stretchNode.node?.idPath?.let { layout.idPath = it }
-            stretchNode.layout = layout
-            stretchNode.finalLayout = layout
-        }
-    }
-
 }
 

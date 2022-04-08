@@ -1,0 +1,5 @@
+#template_grid_aspect_ratio {
+    width: 100px;
+    aspect-ratio: 1;
+    background-color: primaryBackground;
+}

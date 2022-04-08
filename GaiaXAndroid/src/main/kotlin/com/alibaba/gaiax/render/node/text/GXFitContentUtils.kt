@@ -180,7 +180,7 @@ object GXFitContentUtils {
     }
 
     private fun getTextData(context: GXTemplateContext, id: String, view: View, css: GXCss, dataBinding: GXDataBinding, templateData: JSONObject): Any? {
-        if (context.dataListener != null) {
+        if (context.templateData?.dataListener != null) {
             val nodeData = dataBinding.getData(templateData)
             val gxTextData = GXTemplateEngine.GXTextData().apply {
                 this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
@@ -191,7 +191,7 @@ object GXFitContentUtils {
                 this.nodeData = nodeData
                 this.index = context.indexPosition
             }
-            context.dataListener?.onTextProcess(gxTextData)?.let { result ->
+            context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 return result
             }
         }

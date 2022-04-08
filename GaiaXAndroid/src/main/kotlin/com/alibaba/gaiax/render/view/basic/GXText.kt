@@ -19,23 +19,23 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
+import android.support.annotation.Keep
+import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
-import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.render.view.*
 import kotlin.math.roundToInt
 
 /**
  * @suppress
  */
 @Keep
-open class GXText : androidx.appcompat.widget.AppCompatTextView, GXIViewBindData {
+open class GXText : AppCompatTextView, GXIViewBindData {
 
     constructor(context: Context) : super(context)
 

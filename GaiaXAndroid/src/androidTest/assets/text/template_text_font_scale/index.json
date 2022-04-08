@@ -1,0 +1,10 @@
+{
+  "id": "template_text_font_scale",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "template_scroll_border",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_scroll_border_scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

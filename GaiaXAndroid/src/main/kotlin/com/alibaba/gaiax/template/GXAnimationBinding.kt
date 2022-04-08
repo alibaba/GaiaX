@@ -39,8 +39,7 @@ import com.alibaba.gaiax.R
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
-import com.alibaba.gaiax.template.expression.GXExpressionUtils
-import com.alibaba.gaiax.template.expression.GXIExpression
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.utils.getBooleanExt
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.setValueExt
@@ -65,7 +64,7 @@ class GXAnimationBinding(
     // 动画是否正在被触发，与trigger配合使用，需要业务方传值
     val state: GXIExpression? = null,
     // 动画数据
-    val animation: GXIAnimation,
+    val animation: GXIAnimation
 ) {
 
     fun executeAnimation(context: GXTemplateContext, child: GXNode, templateData: JSONObject) {
@@ -98,7 +97,7 @@ class GXAnimationBinding(
             val type = GXAnimationType.create(data.getString(KEY_TYPE))
             if (type != null) {
                 val trigger = data.getBooleanValue(KEY_TRIGGER)
-                val state = if (data.containsKey(KEY_STATE)) GXExpressionUtils.create(data.getString(KEY_STATE)) else null
+                val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(data.getString(KEY_STATE)) else null
                 when (type) {
                     GXAnimationType.LOTTIE -> {
                         val lottieAnimator = GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
@@ -168,10 +167,10 @@ class GXAnimationBinding(
                 if (localUri != null || remoteUri != null) {
                     val animator = GXLottieAnimation()
                     if (localUri != null) {
-                        animator.localUriExp = GXExpressionUtils.create(localUri)
+                        animator.localUriExp = GXExpressionFactory.create(localUri)
                     }
                     if (remoteUri != null) {
-                        animator.remoteUriExp = GXExpressionUtils.create(remoteUri)
+                        animator.remoteUriExp = GXExpressionFactory.create(remoteUri)
                     }
                     if (data.containsKey(KEY_LOOP) && data.getBoolean(KEY_LOOP)) {
                         animator.loopCount = Int.MAX_VALUE
@@ -279,12 +278,10 @@ class GXAnimationBinding(
                         lottieView.removeAllLottieOnCompositionLoadedListener()
                         lottieView.progress = 1F
                         val stateExp = animator.stateExp
-                        if (stateExp is GXExpressionUtils.GXAnalyzeWrapper) {
-                            stateExp.valuePath()?.let {
-                                templateData.setValueExt(it, false)
-                            }
+                        GXExpressionFactory.valuePath(stateExp?.expression())?.let {
+                            templateData.setValueExt(it, false)
                         }
-                        context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                        context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                             this.state = "END"
                             this.nodeId = gxNode.id
                             this.view = lottieView
@@ -292,7 +289,7 @@ class GXAnimationBinding(
                     }
 
                     override fun onAnimationStart(animation: Animator?) {
-                        context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                        context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                             this.state = "START"
                             this.nodeId = gxNode.id
                             this.view = lottieView
@@ -360,12 +357,10 @@ class GXAnimationBinding(
 
                                     lottieView.progress = 1F
                                     val stateExp = animator.stateExp
-                                    if (stateExp is GXExpressionUtils.GXAnalyzeWrapper) {
-                                        stateExp.valuePath()?.let {
-                                            rawJson.setValueExt(it, false)
-                                        }
+                                    GXExpressionFactory.valuePath(stateExp?.expression())?.let {
+                                        rawJson.setValueExt(it, false)
                                     }
-                                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                                         this.state = "END"
                                         this.nodeId = gxNode.id
                                         this.view = lottieView
@@ -374,7 +369,7 @@ class GXAnimationBinding(
 
                                 override fun onAnimationStart(animation: Animator?) {
                                     gxNode.isAnimating = true
-                                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                                         this.state = "START"
                                         this.nodeId = gxNode.id
                                         this.view = lottieView
@@ -499,7 +494,7 @@ class GXAnimationBinding(
             child.propAnimatorSet?.removeAllListeners()
             child.propAnimatorSet?.addListener(object : DefaultAnimatorListener() {
                 override fun onAnimationStart(animation: Animator?) {
-                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                         this.state = "START"
                         this.nodeId = child.id
                         this.view = targetView
@@ -512,7 +507,7 @@ class GXAnimationBinding(
 
                 override fun onAnimationEnd(animation: Animator?) {
                     child.isAnimating = false
-                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
+                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                         this.state = "END"
                         this.nodeId = child.id
                         this.view = targetView

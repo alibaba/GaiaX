@@ -1,0 +1,10 @@
+{
+  "id": "template_text_background_color",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

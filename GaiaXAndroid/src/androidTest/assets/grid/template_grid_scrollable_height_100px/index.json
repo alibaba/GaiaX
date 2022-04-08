@@ -1,0 +1,14 @@
+{
+  "id": "template_grid_scrollable_height_100px",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "column": 2,
+  "scroll-enable": true,
+  "layers": [
+    {
+      "id": "template_grid_scrollable_height_100px_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "template_scroll_edge",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "direction": "horizontal",
+  "edge-insets": "{9,9,9,9}",
+  "layers": [
+    {
+      "id": "template_scroll_edge_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

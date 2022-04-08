@@ -21,13 +21,16 @@ import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl
+import com.alibaba.gaiax.data.assets.GXAssetsBinaryTemplate
+import com.alibaba.gaiax.data.assets.GXAssetsTemplate
+import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.GXRenderImpl
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXCss
+import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.template.expression.GXExpressionUtils
 
 /**
  * GaiaX engine class.
@@ -307,8 +310,13 @@ class GXTemplateEngine {
         /**
          * Template data, used to bind data to the view
          */
-        val data: JSONObject,
+        val data: JSONObject
     ) {
+
+        /**
+         * @suppress
+         */
+        var scrollPosition: Int = -1
 
         /**
          * Data listener
@@ -342,14 +350,14 @@ class GXTemplateEngine {
         /**
          * Template id
          */
-        val templateId: String,
+        val templateId: String
     ) {
 
         /**
-         * Used to relocate template value paths (for internal use)
+         * Used to relocate template value paths
          * @suppress
          */
-        internal var bundle: String = ""
+        var bundle: String = ""
 
         /**
          * Template version, not currently in use
@@ -406,7 +414,7 @@ class GXTemplateEngine {
      */
     fun bindData(view: View, templateData: GXTemplateData) {
         val templateContext = GXTemplateContext.getContext(view) ?: throw IllegalArgumentException("Not found templateContext from targetView")
-        templateContext.updateContext(templateData)
+        templateContext.templateData = templateData
         render.bindViewData(templateContext)
     }
 
@@ -454,8 +462,24 @@ class GXTemplateEngine {
      */
     fun init(context: Context): GXTemplateEngine {
         this.context = context.applicationContext
-        GXExpressionUtils.initAnalyze()
+        GXStyleConvert.instance.init(context.assets)
+        initDefaultTemplateInfoSource()
+        initDefaultTemplateSource()
         return this
+    }
+
+    private fun initDefaultTemplateInfoSource() {
+        GXRegisterCenter.instance
+            // priority 0
+            .registerTemplateInfoSource(GXTemplateInfoSource(this.context))
+    }
+
+    private fun initDefaultTemplateSource() {
+        GXRegisterCenter.instance
+            // priority 0
+            .registerTemplateSource(GXAssetsBinaryTemplate(this.context))
+            // priority 1
+            .registerTemplateSource(GXAssetsTemplate(this.context))
     }
 
     companion object {

@@ -19,6 +19,7 @@ package com.alibaba.gaiax.template
 import android.content.res.Resources
 import android.util.TypedValue
 import app.visly.stretch.Dimension
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.utils.GXScreenUtils
 import kotlin.math.roundToInt
@@ -33,11 +34,16 @@ sealed class GXSize {
         fun create(targetSize: String): GXSize {
             val value = targetSize.trim()
             return when {
-                value.endsWith(GXTemplateKey.GAIAX_PX) -> PX(convertPx(value))
-                value.endsWith(GXTemplateKey.GAIAX_PT) -> PT(convertPT(value))
-                value.endsWith(GXTemplateKey.GAIAX_PE) -> PE(convertPE(value))
+                value.endsWith(GXTemplateKey.GAIAX_PX) -> PX(value, convertPx(value))
+                value.endsWith(GXTemplateKey.GAIAX_PT) -> PT(value, convertPT(value))
+                value.endsWith(GXTemplateKey.GAIAX_PE) -> PE(value, convertPE(value))
                 value == GXTemplateKey.GAIAX_AUTO -> Auto
-                value.isNotBlank() -> PX(convertPx(value))
+                value.isNotBlank() -> {
+                    GXRegisterCenter.instance.sizeProcessing?.createProcessing(value)?.let {
+                        return PX(value, it)
+                    }
+                    return Undefined
+                }
                 else -> Undefined
             }
         }
@@ -54,7 +60,10 @@ sealed class GXSize {
 
         fun Float.ptToPx(): Float {
             val ratio = GXScreenUtils.getScreenWidthDP(GXTemplateEngine.instance.context) / 375F
-            return this.dpToPx().roundToInt().toFloat() * ratio
+            GXRegisterCenter.instance.sizeProcessing?.convertProcessing(ratio)?.let { newRatio ->
+                return this.dpToPx().roundToInt().toFloat() * Math.min(1.3F, Math.max(newRatio, 1F))
+            }
+            return this.dpToPx().roundToInt().toFloat() * Math.min(1.3F, Math.max(ratio, 1F))
         }
 
         private fun String.replacePxToEmpty(): String {
@@ -69,6 +78,15 @@ sealed class GXSize {
             return this.substring(0, length - GXTemplateKey.GAIAX_PE.length)
         }
     }
+
+    val name: String
+        get() = when (this) {
+            is PX -> targetName
+            is PE -> targetName
+            is PT -> targetName
+            is Auto -> "Auto"
+            is Undefined -> "Undefined"
+        }
 
     val valueDimension: Dimension
         get() = when (this) {
@@ -95,11 +113,11 @@ sealed class GXSize {
             else -> 0F
         }
 
-    data class PX(val targetValue: Float) : GXSize()
+    data class PX(val targetName: String, val targetValue: Float) : GXSize()
 
-    data class PE(val targetValue: Float) : GXSize()
+    data class PE(val targetName: String, val targetValue: Float) : GXSize()
 
-    data class PT(val targetValue: Float) : GXSize()
+    data class PT(val targetName: String, val targetValue: Float) : GXSize()
 
     object Auto : GXSize()
 

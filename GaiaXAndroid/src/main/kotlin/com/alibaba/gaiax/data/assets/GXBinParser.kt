@@ -29,7 +29,7 @@ object GXBinParser {
         var layer: String = "",
         var databinding: String = "",
         var css: String = "",
-        var js: String = "",
+        var js: String = ""
     )
 
     fun parser(bytes: ByteArray): JSONObject {

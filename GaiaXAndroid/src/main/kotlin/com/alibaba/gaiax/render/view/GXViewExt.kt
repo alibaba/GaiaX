@@ -20,25 +20,23 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
+import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.basic.GXIconFont
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
-import com.alibaba.gaiax.template.GXGridConfig
-import com.alibaba.gaiax.template.GXLinearColor
-import com.alibaba.gaiax.template.GXSize
-import com.alibaba.gaiax.template.GXStyle
-import kotlin.math.ceil
+import com.alibaba.gaiax.template.*
 
 /**
  * @suppress
@@ -142,7 +140,21 @@ fun GXText.setFontTextDecoration(textDecoration: Int?) {
  */
 fun GXText.setFontTextLineHeight(style: GXStyle) {
     if (style.fontLineHeight != null) {
-        this.setTextLineHeight(style.fontLineHeight.valueFloat)
+        val lineHeight = style.fontLineHeight.valueFloat
+
+        GXRegisterCenter
+            .instance
+            .postPositionPropertyProcessing
+            ?.convertProcessing(
+                GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight).apply {
+                    this.cssStyle = style
+                })
+            ?.let {
+                this.setTextLineHeight(it as Float)
+                return
+            }
+
+        this.setTextLineHeight(lineHeight)
     }
 }
 
@@ -283,9 +295,9 @@ fun View.setDisplay(visibility: Int?) {
 /**
  * @suppress
  */
-fun View.setGridContainerDirection(config: GXGridConfig, layout: Layout?) {
+fun View.setGridContainerDirection(context: GXTemplateContext, config: GXGridConfig, layout: Layout?) {
     val direction: Int = config.direction
-    val column: Int = config.column
+    val column: Int = config.column(context)
     val scrollEnable: Boolean = config.scrollEnable
     if (this is RecyclerView) {
         val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
@@ -345,7 +357,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                 outRect: Rect,
                 view: View,
                 parent: RecyclerView,
-                state: RecyclerView.State,
+                state: RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
 
@@ -499,7 +511,7 @@ fun View.setVerticalScrollContainerLineSpacing(lineSpacing: Int) {
                 outRect: Rect,
                 view: View,
                 parent: RecyclerView,
-                state: RecyclerView.State,
+                state: RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
@@ -527,7 +539,7 @@ fun View.setHorizontalScrollContainerLineSpacing(lineSpacing: Int) {
                 outRect: Rect,
                 view: View,
                 parent: RecyclerView,
-                state: RecyclerView.State,
+                state: RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
@@ -555,7 +567,7 @@ fun View.setHorizontalScrollContainerLineSpacing(left: Int, right: Int, lineSpac
                 outRect: Rect,
                 view: View,
                 parent: RecyclerView,
-                state: RecyclerView.State,
+                state: RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {

@@ -63,7 +63,7 @@ data class GXLayer constructor(
     /**
      * 子节点
      */
-    val layers: MutableList<GXLayer> = mutableListOf(),
+    val layers: MutableList<GXLayer> = mutableListOf()
 ) {
 
     companion object {
@@ -84,10 +84,16 @@ data class GXLayer constructor(
         }
 
         private fun initLayer(id: String, css: String?, type: String, subType: String?, viewClass: String?, data: JSONObject): GXLayer {
-            val direction = data[GXTemplateKey.GAIAX_LAYER_DIRECTION]?.toString()
-            val edgeInsets = data[GXTemplateKey.GAIAX_LAYER_EDGE_INSETS]?.toString()
-            val itemSpacing = data[GXTemplateKey.GAIAX_LAYER_ITEM_SPACING]?.toString()
-            val rawSpacing = data[GXTemplateKey.GAIAX_LAYER_ROW_SPACING]?.toString()
+            val direction = data.getString(GXTemplateKey.GAIAX_LAYER_DIRECTION)
+            val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
+            var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
+            if (itemSpacing == null) {
+                itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
+            }
+            var rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ROW_SPACING)
+            if (rowSpacing == null) {
+                rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_INTERITEM_SPACING)
+            }
             val column = data.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN) ?: 1
             val scrollable = data.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE) ?: false
             return when {
@@ -97,7 +103,7 @@ data class GXLayer constructor(
                     type = type,
                     subType = subType,
                     customNodeClass = viewClass,
-                    scrollConfig = GXScrollConfig.create(direction, edgeInsets, itemSpacing), gridConfig = null
+                    scrollConfig = GXScrollConfig.create(data, direction, edgeInsets, itemSpacing), gridConfig = null
                 )
                 isGridType(type, subType) -> GXLayer(
                     id = id,
@@ -106,7 +112,7 @@ data class GXLayer constructor(
                     subType = subType,
                     customNodeClass = viewClass,
                     scrollConfig = null,
-                    gridConfig = GXGridConfig.create(direction, edgeInsets, itemSpacing, rawSpacing, column, scrollable)
+                    gridConfig = GXGridConfig.create(data, direction, edgeInsets, itemSpacing, rowSpacing, column, scrollable)
                 )
                 else -> GXLayer(
                     id = id,

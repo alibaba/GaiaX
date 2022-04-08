@@ -1,0 +1,6 @@
+{
+  "id": "template_scroll_width_flex_direction_horizontal_flex_grow_scroll",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "direction": "horizontal"
+}

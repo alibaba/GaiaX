@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_grid_row_spacing": {
+            "value":"$nodes"
+        }
+    }
+}

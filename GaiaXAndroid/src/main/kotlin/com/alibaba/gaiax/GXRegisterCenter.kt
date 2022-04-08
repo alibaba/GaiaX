@@ -1,99 +1,167 @@
 package com.alibaba.gaiax
 
-import android.util.Size
-import com.alibaba.gaiax.data.GXITemplateInfoSource
-import com.alibaba.gaiax.template.GXTemplate
-import com.alibaba.gaiax.template.GXTemplateInfo
+import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.template.*
 
 /**
  * GaiaX register center. For extended functionality.
  *
  * Basic usage:
  * ```
- * // Register outside datasource.
- * GXRegisterCenter.instance.registerTemplateSource(object : GXRegisterCenter.GXITemplateSource {
- *      private val cache = mutableMapOf<String, GXTemplate>()
- *
- *      override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
- *          return cache[templateItem.templateId]
- *      }
- * })
  * ```
  */
 class GXRegisterCenter {
 
     /**
-     * Business service interface
-     *
-     * Unused
-     * @suppress
+     * Template data info source interface
      */
-    interface GXBizServiceInterface {
+    interface GXITemplateInfoSource {
 
         /**
-         * Responsive screen size
+         * Get template info data
          */
-        fun screenSize(): Size? = null
-
-        /**
-         * Gets the width of the reactive view
-         */
-        fun valueForRule(rule: String, containerWidth: Float, gap: Float, margin: Float): Float? = null
+        fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo?
     }
 
     /**
      * Template data source interface
      */
-    interface GXITemplateSource : GXITemplateInfoSource, com.alibaba.gaiax.data.GXITemplateSource {
-
-        /**
-         * Get template resolution information
-         */
-        override fun getTemplateInfo(templateSource: com.alibaba.gaiax.data.GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
-            return super.getTemplateInfo(templateSource, templateItem)
-        }
+    interface GXITemplateSource {
 
         /**
          * Get template raw data
          */
-        override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+        fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+    }
+
+    interface GXIExpressionProcessing {
+        fun createProcessing(value: Any): GXIExpression
+    }
+
+    interface GXIDataBindingProcessing {
+        fun createProcessing(value: JSONObject): GXDataBinding?
+    }
+
+    interface GXIColorProcessing {
+        fun convertProcessing(value: String): Int?
+    }
+
+    interface GXISizeProcessing {
+        fun createProcessing(value: String): Float?
+        fun convertProcessing(value: Float): Float?
+    }
+
+    interface GXIPostPositionPropertyProcessing {
+
+        data class GXParams(val propertyName: String, val value: Any) {
+            var gridConfig: GXGridConfig? = null
+            var flexBox: GXFlexBox? = null
+            var cssStyle: GXStyle? = null
+        }
+
+        fun convertProcessing(params: GXParams): Any?
+    }
+
+    interface GXIPrePositionPropertyProcessing {
+
+        data class GXParams(val propertyName: String, val value: Any) {
+        }
+
+        fun convertProcessing(params: GXParams): Any?
+    }
+
+    interface GXIBizMapProcessing {
+        fun convertProcessing(templateItem: GXTemplateEngine.GXTemplateItem)
+    }
+
+    interface GXIGridProcessing {
+        fun convertProcessing(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any?
+    }
+
+    interface GXIScrollProcessing {
+        fun convertProcessing(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
+    }
+
+    internal var bizMapProcessing: GXIBizMapProcessing? = null
+
+    fun registerBizMapRelationProcessing(bizMapProcessing: GXIBizMapProcessing): GXRegisterCenter {
+        this.bizMapProcessing = bizMapProcessing
+        return this
     }
 
     /**
-     * Registering a Service Template
-     *
-     * @param bizId template service id
-     * @param directory Resource path，eg: assets/test
+     * @param source
+     * @param priority [0,99]
      */
-    fun registerBizMapRelation(bizId: String, directory: String) {
-        GXTemplateEngine.instance.data.registerAssetsBizMapRelation(bizId, directory)
+    fun registerTemplateSource(source: GXITemplateSource, priority: Int = 0): GXRegisterCenter {
+        GXTemplateEngine.instance.data.templateSource.addPriority(source, priority)
+        return this
     }
 
     /**
-     * Unregister the service template
-     *
-     * @param bizId template service id
+     * @param source
+     * @param priority [0,99]
      */
-    fun unregisterBizMapRelation(bizId: String) {
-        GXTemplateEngine.instance.data.unregisterAssetsBizMapRelation(bizId)
+    fun registerTemplateInfoSource(source: GXITemplateInfoSource, priority: Int = 0): GXRegisterCenter {
+        GXTemplateEngine.instance.data.templateInfoSource.addPriority(source, priority)
+        return this
     }
 
-    /**
-     * Register external data sources (higher priority after registration)
-     *
-     * @param source External data source implementation
-     */
-    fun registerTemplateSource(source: GXITemplateSource) {
-        GXTemplateEngine.instance.data.templateInfoSource.sources.add(0, source)
-        GXTemplateEngine.instance.data.templateSource.sources.add(0, source)
+    internal var databindingProcessing: GXIDataBindingProcessing? = null
+
+    fun registerDataBindingProcessing(databindingProcessing: GXIDataBindingProcessing): GXRegisterCenter {
+        this.databindingProcessing = databindingProcessing
+        return this
     }
 
-    /**
-     * Unregister the external data sources
-     */
-    fun unregisterTemplateSource(source: GXITemplateSource) {
-        GXTemplateEngine.instance.data.templateInfoSource.sources.remove(source)
-        GXTemplateEngine.instance.data.templateSource.sources.remove(source)
+    internal var expressionProcessing: GXIExpressionProcessing? = null
+
+    fun registerExpressionProcessing(expressionProcessing: GXIExpressionProcessing): GXRegisterCenter {
+        this.expressionProcessing = expressionProcessing
+        return this
+    }
+
+    internal var colorProcessing: GXIColorProcessing? = null
+
+    fun registerColorProcessing(colorProcessing: GXIColorProcessing): GXRegisterCenter {
+        this.colorProcessing = colorProcessing
+        return this
+    }
+
+    internal var sizeProcessing: GXISizeProcessing? = null
+
+    fun registerSizeProcessing(sizeProcessing: GXISizeProcessing): GXRegisterCenter {
+        this.sizeProcessing = sizeProcessing
+        return this
+    }
+
+    internal var postPositionPropertyProcessing: GXIPostPositionPropertyProcessing? = null
+
+    fun registerPostPositionPropertyProcessing(postPositionPropertyProcessing: GXIPostPositionPropertyProcessing): GXRegisterCenter {
+        this.postPositionPropertyProcessing = postPositionPropertyProcessing
+        return this
+    }
+
+    internal var prePositionPropertyProcessing: GXIPrePositionPropertyProcessing? = null
+
+    fun registerPrePositionPropertyProcessing(prePositionPropertyProcessing: GXIPrePositionPropertyProcessing): GXRegisterCenter {
+        this.prePositionPropertyProcessing = prePositionPropertyProcessing
+        return this
+    }
+
+    internal var gridProcessing: GXIGridProcessing? = null
+
+    fun registerGridProcessing(gridProcessing: GXIGridProcessing): GXRegisterCenter {
+        this.gridProcessing = gridProcessing
+        return this
+    }
+
+    internal var scrollProcessing: GXIScrollProcessing? = null
+
+    fun registerScrollProcessing(scrollProcessing: GXIScrollProcessing): GXRegisterCenter {
+        this.scrollProcessing = scrollProcessing
+        return this
     }
 
     companion object {

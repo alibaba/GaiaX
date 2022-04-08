@@ -10,7 +10,7 @@ data class Layout(
     val height: Float,
     val children: MutableList<Layout>,
     var id: String = "",
-    var idPath: String = "",
+    var idPath: String = ""
 ) {
 
     companion object {

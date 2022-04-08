@@ -16,7 +16,7 @@
 
 package com.alibaba.gaiax.template
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.support.test.runner.AndroidJUnit4
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXSize.Companion.ptToPx
 import org.junit.Assert

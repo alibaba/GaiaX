@@ -1,0 +1,15 @@
+#template_grid_scrollable_height_flow_root {
+  width: 100%;
+  height: 100%;
+  background-color: primaryBackground;
+  flex-direction: column;
+}
+#view1 {
+  width: 100%;
+  height: 100px;
+  background-color: #e4e4e4;
+}
+#template_grid_scrollable_height_flow {
+  flex-grow: 1;
+  width: 100%;
+}

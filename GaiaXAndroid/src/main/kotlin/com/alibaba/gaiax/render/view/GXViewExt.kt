@@ -204,7 +204,7 @@ fun GXText.setTextAlign(gravity: Int) {
  */
 fun GXText.setFontLines(fontLiens: Int?) {
     if (fontLiens == null || fontLiens == 1) {
-        this.isSingleLine = true
+        this.setSingleLine(true)
     } else if (fontLiens == 0) {
         this.maxLines = Int.MAX_VALUE
     } else {

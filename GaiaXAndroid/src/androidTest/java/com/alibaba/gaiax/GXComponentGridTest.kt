@@ -290,7 +290,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.height())
     }
 
-
     /**
      * DIFF:
      * 优酷版本，在不可滑动的状态下，高度为坑位高度之和
@@ -321,7 +320,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx() * 3, rootView.height())
     }
-
 
     @Test
     fun template_grid_width_100px() {
@@ -448,7 +446,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(0F.dpToPx(), rootView.width())
     }
 
-
     @Test
     fun template_grid_edge_insets() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_edge_insets")
@@ -478,7 +475,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(9F.dpToPx(), rootView.child(0).x)
         Assert.assertEquals(9F.dpToPx(), rootView.child(0).y)
     }
-
 
     @Test
     fun template_grid_item_spacing() {
@@ -585,7 +581,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.width())
         Assert.assertEquals(0F.dpToPx(), rootView.height())
     }
-
 
     @Test
     fun template_grid_item_spacing_row_spacing() {

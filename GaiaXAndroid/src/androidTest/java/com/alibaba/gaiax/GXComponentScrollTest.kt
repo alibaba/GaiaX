@@ -50,7 +50,6 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
     }
 
-
     @Test
     fun template_scroll_horizontal() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_horizontal")
@@ -500,7 +499,6 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(200F.dpToPx(), rootView.child(0).height())
     }
 
-
     @Test
     fun template_scroll_item_spacing() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_item_spacing")
@@ -553,7 +551,6 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(200F.dpToPx(), rootView.child(0).height())
     }
-
 
     @Test
     fun template_scroll_width_100px() {

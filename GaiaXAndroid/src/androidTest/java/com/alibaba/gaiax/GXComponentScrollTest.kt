@@ -768,7 +768,7 @@ class GXComponentScrollTest : GXBaseTest() {
                 this.add(JSONObject())
             }
         }).apply {
-            this.scrollPosition = 3
+            this.scrollIndex = 3
         }
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -792,7 +792,7 @@ class GXComponentScrollTest : GXBaseTest() {
                 this.add(JSONObject())
             }
         }).apply {
-            this.scrollPosition = 3
+            this.scrollIndex = 3
         }
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -809,7 +809,7 @@ class GXComponentScrollTest : GXBaseTest() {
                 this.add(JSONObject())
             }
         }).apply {
-            this.scrollPosition = 0
+            this.scrollIndex = 0
         })
 
         Assert.assertEquals(3, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))

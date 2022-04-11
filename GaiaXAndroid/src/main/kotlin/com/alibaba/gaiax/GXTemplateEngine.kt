@@ -316,7 +316,7 @@ class GXTemplateEngine {
         /**
          * @suppress
          */
-        var scrollPosition: Int = -1
+        var scrollIndex: Int = -1
 
         /**
          * Data listener
@@ -477,9 +477,9 @@ class GXTemplateEngine {
     private fun initDefaultTemplateSource() {
         GXRegisterCenter.instance
             // priority 0
-            .registerTemplateSource(GXAssetsBinaryTemplate(this.context))
+            .registerTemplateSource(GXAssetsBinaryTemplate(this.context), 0)
             // priority 1
-            .registerTemplateSource(GXAssetsTemplate(this.context))
+            .registerTemplateSource(GXAssetsTemplate(this.context), 1)
     }
 
     companion object {

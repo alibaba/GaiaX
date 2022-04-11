@@ -66,17 +66,16 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
 
-        private val sources = mutableListOf<GXRegisterCenter.GXITemplateInfoSource>()
+        private var source: GXRegisterCenter.GXITemplateInfoSource? = null
+        // private val sources = mutableListOf<GXRegisterCenter.GXITemplateInfoSource>()
 
         override fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            sources.forEach {
-                it.getTemplateInfo(templateItem)?.let { return it }
-            }
+            source?.getTemplateInfo(templateItem)?.let { return it }
             throw IllegalStateException("Template exist but reference is null")
         }
 
         fun addPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
-            sources.add(0, source)
+            this.source = source
         }
     }
 

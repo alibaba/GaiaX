@@ -292,7 +292,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
 
         // scroll item to position
-        context.templateData?.scrollPosition?.let { scrollPosition ->
+        context.templateData?.scrollIndex?.let { scrollPosition ->
             if (scrollPosition <= 0) {
                 val holdingOffset = extendData?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
                 if (holdingOffset) {

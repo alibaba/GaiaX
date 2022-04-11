@@ -131,7 +131,16 @@ class GXStyleConvert {
     }
 
     fun fontTextOverflow(css: JSONObject): TextUtils.TruncateAt? = when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW)) {
-        "clip" -> null
+        "clip" -> {
+            GXRegisterCenter
+                .instance
+                .prePositionPropertyProcessing
+                ?.convertProcessing(GXRegisterCenter.GXIPrePositionPropertyProcessing.GXParams(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW, "clip"))
+                ?.let {
+                    return it as TextUtils.TruncateAt
+                }
+            null
+        }
         "ellipsis" -> TextUtils.TruncateAt.END
         else -> TextUtils.TruncateAt.END
     }

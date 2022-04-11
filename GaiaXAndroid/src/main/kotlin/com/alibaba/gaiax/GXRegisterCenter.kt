@@ -65,8 +65,7 @@ class GXRegisterCenter {
 
     interface GXIPrePositionPropertyProcessing {
 
-        data class GXParams(val propertyName: String, val value: Any) {
-        }
+        data class GXParams(val propertyName: String, val value: Any)
 
         fun convertProcessing(params: GXParams): Any?
     }

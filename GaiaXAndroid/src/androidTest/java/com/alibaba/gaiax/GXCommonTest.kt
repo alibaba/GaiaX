@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXCommonTest : GXBaseTest() {
 
+
     @Test
     fun template_design_token_color() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "common", "template_design_token_color")
@@ -43,4 +44,5 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(100F, rootView.height())
     }
+
 }

@@ -28,7 +28,7 @@ import com.alibaba.gaiax.render.view.container.GXScrollView
  */
 object GXViewFactory {
 
-    private val viewSupport: MutableMap<String, Class<*>> = mutableMapOf()
+    internal val viewSupport: MutableMap<String, Class<*>> = mutableMapOf()
 
     init {
         viewSupport[GXViewKey.VIEW_TYPE_GAIA_TEMPLATE] = GXView::class.java

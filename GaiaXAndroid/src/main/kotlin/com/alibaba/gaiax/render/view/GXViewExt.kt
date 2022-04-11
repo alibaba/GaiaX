@@ -30,10 +30,7 @@ import android.view.ViewGroup
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.basic.GXIconFont
-import com.alibaba.gaiax.render.view.basic.GXImageView
-import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.basic.GXView
+import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.*
@@ -63,7 +60,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
         if (borderColor != null && borderWidth != null && borderRadius != null) {
             this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
         }
-    } else if (this is GXImageView) {
+    } else if (this is GXIImageView) {
         if (borderRadius != null) {
             this.setRoundCornerRadius(borderRadius)
         }

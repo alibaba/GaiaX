@@ -2,6 +2,8 @@ package com.alibaba.gaiax
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.GXViewFactory
+import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.*
 
 /**
@@ -160,6 +162,11 @@ class GXRegisterCenter {
 
     fun registerScrollProcessing(scrollProcessing: GXIScrollProcessing): GXRegisterCenter {
         this.scrollProcessing = scrollProcessing
+        return this
+    }
+
+    fun registerViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
+        GXViewFactory.viewSupport[viewType] = clazz
         return this
     }
 

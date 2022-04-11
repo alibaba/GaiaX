@@ -1,0 +1,10 @@
+{
+  "id": "template_image_view_support",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    }
+  ]
+}

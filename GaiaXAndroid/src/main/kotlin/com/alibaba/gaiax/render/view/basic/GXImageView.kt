@@ -28,7 +28,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXMode
@@ -38,8 +37,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
  * @suppress
  */
 @Keep
-open class GXImageView : AppCompatImageView,
-    GXIViewBindData {
+open class GXImageView : AppCompatImageView, GXIImageView {
 
     constructor(context: Context) : super(context)
 
@@ -48,9 +46,15 @@ open class GXImageView : AppCompatImageView,
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     companion object {
-        private const val NET_HTTP_PREFIX = "http:"
-        private const val NET_HTTPS_PREFIX = "https:"
-        private const val LOCAL_PREFIX = "local:"
+        fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
+
+        fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
+
+        fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
+
+        const val NET_HTTP_PREFIX = "http:"
+        const val NET_HTTPS_PREFIX = "https:"
+        const val LOCAL_PREFIX = "local:"
     }
 
     override fun onBindData(data: JSONObject) {
@@ -65,21 +69,13 @@ open class GXImageView : AppCompatImageView,
 
     private var mode: GXMode? = null
 
-    fun setImageStyle(gxCss: GXCss) {
-        if (gxCss.style.mode != null) {
-            this.mode = gxCss.style.mode
-            val scaleType = gxCss.style.mode.getScaleType()
-            this.scaleType = scaleType
-        } else {
-            this.scaleType = ScaleType.FIT_XY
-        }
+    override fun setImageStyle(gxCss: GXCss) = if (gxCss.style.mode != null) {
+        this.mode = gxCss.style.mode
+        val scaleType = gxCss.style.mode.getScaleType()
+        this.scaleType = scaleType
+    } else {
+        this.scaleType = ScaleType.FIT_XY
     }
-
-    private fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
-
-    private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
-
-    private fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
 
     private fun bindUri(data: JSONObject) {
         val uri = data.getString("value")?.trim() ?: ""
@@ -183,7 +179,7 @@ open class GXImageView : AppCompatImageView,
         }
     }
 
-    fun setRoundCornerRadius(radius: FloatArray) {
+    override fun setRoundCornerRadius(radius: FloatArray) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
@@ -197,7 +193,7 @@ open class GXImageView : AppCompatImageView,
         delegate?.setRoundCornerRadius(topLeft, topRight, bottomLeft, bottomRight)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
+    override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }

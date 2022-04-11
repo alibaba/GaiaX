@@ -27,7 +27,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
 import com.alibaba.gaiax.render.view.*
-import com.alibaba.gaiax.render.view.basic.GXImageView
+import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
@@ -182,7 +182,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
         if (view is GXText && (node.isTextType() || node.isRichTextType() || node.isIconFontType())) {
             view.setTextStyle(gxCss)
-        } else if (view is GXImageView && node.isImageType()) {
+        } else if (view is GXIImageView && node.isImageType()) {
             view.setImageStyle(gxCss)
         } else if (node.isContainerType()) {
             bindContainerViewCss(context, view, node)

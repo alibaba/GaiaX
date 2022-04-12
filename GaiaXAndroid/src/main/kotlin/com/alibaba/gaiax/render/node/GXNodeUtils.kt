@@ -140,8 +140,8 @@ object GXNodeUtils {
             // 如果是Scroll容器，那么需要计算所有数据的高度，作为Item的高度
             // TODO: 待处理
             gxNode.isScrollType() -> {
-                val itemTemplatePair = gxNode.childTemplateItems?.first() ?: return null
-                val itemData = containerTemplateData.first() as? JSONObject ?: return null
+                val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
+                val itemData = containerTemplateData.firstOrNull() as? JSONObject ?: return null
                 val itemTemplateItem = itemTemplatePair.first
                 val itemTemplateNode = itemTemplatePair.second
                 val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
@@ -150,8 +150,8 @@ object GXNodeUtils {
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
-                val itemTemplatePair = gxNode.childTemplateItems?.first() ?: return null
-                val itemData = containerTemplateData.first() as? JSONObject ?: return null
+                val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
+                val itemData = containerTemplateData.firstOrNull() as? JSONObject ?: return null
                 val itemTemplateItem = itemTemplatePair.first
                 val itemTemplateNode = itemTemplatePair.second
                 val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)

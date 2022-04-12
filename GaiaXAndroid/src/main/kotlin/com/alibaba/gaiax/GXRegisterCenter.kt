@@ -85,6 +85,7 @@ class GXRegisterCenter {
 
     interface GXIProcessCompatible {
         fun isCompatibleContainerDataPassSequence() = false
+        fun isCompatibleContainerNecessaryDataSource() = false
     }
 
     internal var processBizMap: GXIProcessBizMap? = null

@@ -297,7 +297,15 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindScrollAndGrid(context: GXTemplateContext, view: View, node: GXNode, dataBinding: GXDataBinding, templateData: JSONObject) {
 
         // 容器数据源
-        val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: throw IllegalArgumentException("Scroll or Grid must be have a array data source")
+        var containerTemplateData = dataBinding.getValueData(templateData) as? JSONArray
+        if (containerTemplateData == null) {
+            if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerNecessaryDataSource() == true) {
+                containerTemplateData = JSONArray()
+            } else {
+                throw IllegalArgumentException("Scroll or Grid must be have a array data source")
+            }
+        }
+
         val extendData = dataBinding.getCacheExtendData()
 
         val container = view as GXContainer

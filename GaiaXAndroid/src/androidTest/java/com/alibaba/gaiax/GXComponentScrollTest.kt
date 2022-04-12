@@ -600,11 +600,6 @@ class GXComponentScrollTest : GXBaseTest() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_min_100px")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
             }
         })
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)

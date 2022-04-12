@@ -73,7 +73,7 @@ findViewById<ViewGroup>(R.id.template_container).addView(view, 0)
 pod 'GaiaXiOS'
 ```
 
-#### 修改工程配置项
+#### 注意事项
 ```
 // 修改工程配置项
 工程的Target -> Buildi Setting -> Other Link Flags 添加/修改配置项为： -weak_framework "XCTest"

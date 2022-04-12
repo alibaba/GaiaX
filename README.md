@@ -73,17 +73,17 @@ findViewById<ViewGroup>(R.id.template_container).addView(view, 0)
 pod 'GaiaXiOS'
 ```
 
+#### 修改工程配置项
+```
+// 修改工程配置项
+在自建的项目的Target -> Buildi Setting -> Other Link Flags 添加/修改配置项为： -weak_framework "XCTest"
+```
+
 #### 模板文件
 在App或者FrameWork中添加模板文件
 ```
 // 用于存放模板资源的路径
 xxx.bundle/templateId
-```
-
-#### 修改工程配置项
-```
-// 修改工程配置项
-在自建的项目的Target -> Buildi Setting -> Other Link Flags 添加/修改配置项为： -weak_framework "XCTest"
 ```
 
 #### 调用方式

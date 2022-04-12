@@ -58,8 +58,8 @@ class GXTemplateEngineTest : GXBaseTest() {
 
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "mockBiz", "template_register_map_relation")
 
-        GXRegisterCenter.instance.registerBizMapRelationProcessing(object : GXRegisterCenter.GXIBizMapProcessing {
-            override fun convertProcessing(templateItem: GXTemplateEngine.GXTemplateItem) {
+        GXRegisterCenter.instance.registerProcessBizMapRelation(object : GXRegisterCenter.GXIProcessBizMap {
+            override fun convert(templateItem: GXTemplateEngine.GXTemplateItem) {
                 if (templateItem.bizId == "mockBiz") {
                     templateItem.bundle = "integration"
                 }

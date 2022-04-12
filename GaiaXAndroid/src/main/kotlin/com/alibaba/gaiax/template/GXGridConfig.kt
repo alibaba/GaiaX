@@ -45,7 +45,7 @@ data class GXGridConfig(
 ) {
 
     fun column(context: GXTemplateContext): Int {
-        GXRegisterCenter.instance.gridProcessing?.convertProcessing(GXTemplateKey.GAIAX_LAYER_COLUMN, context, this)?.let {
+        GXRegisterCenter.instance.processGrid?.convert(GXTemplateKey.GAIAX_LAYER_COLUMN, context, this)?.let {
             return it as Int
         }
         return column

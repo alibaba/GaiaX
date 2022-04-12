@@ -98,7 +98,7 @@ object GXNodeUtils {
     private fun computeScrollItemViewPortWidth(context: GXTemplateContext, node: GXNode): Float? {
         val finalScrollConfig = node.templateNode.finalScrollConfig ?: return null
 
-        GXRegisterCenter.instance.scrollProcessing?.convertProcessing(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, context, finalScrollConfig)?.let {
+        GXRegisterCenter.instance.processScroll?.convert(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, context, finalScrollConfig)?.let {
             return it as Float
         }
 

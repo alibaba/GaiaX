@@ -39,7 +39,7 @@ sealed class GXSize {
                 value.endsWith(GXTemplateKey.GAIAX_PE) -> PE(value, convertPE(value))
                 value == GXTemplateKey.GAIAX_AUTO -> Auto
                 value.isNotBlank() -> {
-                    GXRegisterCenter.instance.sizeProcessing?.createProcessing(value)?.let {
+                    GXRegisterCenter.instance.processSize?.create(value)?.let {
                         return PX(value, it)
                     }
                     return Undefined
@@ -60,7 +60,7 @@ sealed class GXSize {
 
         fun Float.ptToPx(): Float {
             val ratio = GXScreenUtils.getScreenWidthDP(GXTemplateEngine.instance.context) / 375F
-            GXRegisterCenter.instance.sizeProcessing?.convertProcessing(ratio)?.let { newRatio ->
+            GXRegisterCenter.instance.processSize?.convert(ratio)?.let { newRatio ->
                 return this.dpToPx().roundToInt().toFloat() * Math.min(1.3F, Math.max(newRatio, 1F))
             }
             return this.dpToPx().roundToInt().toFloat() * Math.min(1.3F, Math.max(ratio, 1F))

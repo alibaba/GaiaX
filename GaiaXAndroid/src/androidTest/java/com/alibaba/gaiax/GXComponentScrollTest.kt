@@ -185,9 +185,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerPostPositionPropertyProcessing(object : GXRegisterCenter.GXIPostPositionPropertyProcessing {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
 
-            override fun convertProcessing(params: GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -260,9 +260,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerPostPositionPropertyProcessing(object : GXRegisterCenter.GXIPostPositionPropertyProcessing {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
 
-            override fun convertProcessing(params: GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -336,9 +336,9 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_youku_version() {
 
-        GXRegisterCenter.instance.registerPostPositionPropertyProcessing(object : GXRegisterCenter.GXIPostPositionPropertyProcessing {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
 
-            override fun convertProcessing(params: GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -442,9 +442,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_youku_version() {
-        GXRegisterCenter.instance.registerPostPositionPropertyProcessing(object : GXRegisterCenter.GXIPostPositionPropertyProcessing {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
 
-            override fun convertProcessing(params: GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true

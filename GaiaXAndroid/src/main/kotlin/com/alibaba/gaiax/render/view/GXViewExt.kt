@@ -141,9 +141,9 @@ fun GXText.setFontTextLineHeight(style: GXStyle) {
 
         GXRegisterCenter
             .instance
-            .postPositionPropertyProcessing
-            ?.convertProcessing(
-                GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight).apply {
+            .processPostPositionProperty
+            ?.convert(
+                GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight).apply {
                     this.cssStyle = style
                 })
             ?.let {

@@ -3,7 +3,6 @@ package com.alibaba.gaiax
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXViewFactory
-import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.*
 
 /**
@@ -37,24 +36,24 @@ class GXRegisterCenter {
         fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
     }
 
-    interface GXIExpressionProcessing {
-        fun createProcessing(value: Any): GXIExpression
+    interface GXIProcessExpression {
+        fun create(value: Any): GXIExpression
     }
 
-    interface GXIDataBindingProcessing {
-        fun createProcessing(value: JSONObject): GXDataBinding?
+    interface GXIProcessDataBinding {
+        fun create(value: JSONObject): GXDataBinding?
     }
 
-    interface GXIColorProcessing {
-        fun convertProcessing(value: String): Int?
+    interface GXIProcessColor {
+        fun convert(value: String): Int?
     }
 
-    interface GXISizeProcessing {
-        fun createProcessing(value: String): Float?
-        fun convertProcessing(value: Float): Float?
+    interface GXIProcessSize {
+        fun create(value: String): Float?
+        fun convert(value: Float): Float?
     }
 
-    interface GXIPostPositionPropertyProcessing {
+    interface GXIProcessPostPositionProperty {
 
         data class GXParams(val propertyName: String, val value: Any) {
             var gridConfig: GXGridConfig? = null
@@ -62,32 +61,32 @@ class GXRegisterCenter {
             var cssStyle: GXStyle? = null
         }
 
-        fun convertProcessing(params: GXParams): Any?
+        fun convert(params: GXParams): Any?
     }
 
-    interface GXIPrePositionPropertyProcessing {
+    interface GXIProcessPrePositionProperty {
 
         data class GXParams(val propertyName: String, val value: Any)
 
-        fun convertProcessing(params: GXParams): Any?
+        fun convert(params: GXParams): Any?
     }
 
-    interface GXIBizMapProcessing {
-        fun convertProcessing(templateItem: GXTemplateEngine.GXTemplateItem)
+    interface GXIProcessBizMap {
+        fun convert(templateItem: GXTemplateEngine.GXTemplateItem)
     }
 
-    interface GXIGridProcessing {
-        fun convertProcessing(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any?
+    interface GXIProcessGrid {
+        fun convert(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any?
     }
 
-    interface GXIScrollProcessing {
-        fun convertProcessing(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
+    interface GXIProcessScroll {
+        fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
 
-    internal var bizMapProcessing: GXIBizMapProcessing? = null
+    internal var processBizMap: GXIProcessBizMap? = null
 
-    fun registerBizMapRelationProcessing(bizMapProcessing: GXIBizMapProcessing): GXRegisterCenter {
-        this.bizMapProcessing = bizMapProcessing
+    fun registerProcessBizMapRelation(processBizMap: GXIProcessBizMap): GXRegisterCenter {
+        this.processBizMap = processBizMap
         return this
     }
 
@@ -109,59 +108,59 @@ class GXRegisterCenter {
         return this
     }
 
-    internal var databindingProcessing: GXIDataBindingProcessing? = null
+    internal var databindingProcessDataBinding: GXIProcessDataBinding? = null
 
-    fun registerDataBindingProcessing(databindingProcessing: GXIDataBindingProcessing): GXRegisterCenter {
-        this.databindingProcessing = databindingProcessing
+    fun registerProcessDataBinding(databindingProcessDataBinding: GXIProcessDataBinding): GXRegisterCenter {
+        this.databindingProcessDataBinding = databindingProcessDataBinding
         return this
     }
 
-    internal var expressionProcessing: GXIExpressionProcessing? = null
+    internal var processExpression: GXIProcessExpression? = null
 
-    fun registerExpressionProcessing(expressionProcessing: GXIExpressionProcessing): GXRegisterCenter {
-        this.expressionProcessing = expressionProcessing
+    fun registerProcessExpression(processExpression: GXIProcessExpression): GXRegisterCenter {
+        this.processExpression = processExpression
         return this
     }
 
-    internal var colorProcessing: GXIColorProcessing? = null
+    internal var processColor: GXIProcessColor? = null
 
-    fun registerColorProcessing(colorProcessing: GXIColorProcessing): GXRegisterCenter {
-        this.colorProcessing = colorProcessing
+    fun registerProcessColor(processColor: GXIProcessColor): GXRegisterCenter {
+        this.processColor = processColor
         return this
     }
 
-    internal var sizeProcessing: GXISizeProcessing? = null
+    internal var processSize: GXIProcessSize? = null
 
-    fun registerSizeProcessing(sizeProcessing: GXISizeProcessing): GXRegisterCenter {
-        this.sizeProcessing = sizeProcessing
+    fun registerProcessSize(processSize: GXIProcessSize): GXRegisterCenter {
+        this.processSize = processSize
         return this
     }
 
-    internal var postPositionPropertyProcessing: GXIPostPositionPropertyProcessing? = null
+    internal var processPostPositionProperty: GXIProcessPostPositionProperty? = null
 
-    fun registerPostPositionPropertyProcessing(postPositionPropertyProcessing: GXIPostPositionPropertyProcessing): GXRegisterCenter {
-        this.postPositionPropertyProcessing = postPositionPropertyProcessing
+    fun registerProcessPostPositionProperty(processPostPositionProperty: GXIProcessPostPositionProperty): GXRegisterCenter {
+        this.processPostPositionProperty = processPostPositionProperty
         return this
     }
 
-    internal var prePositionPropertyProcessing: GXIPrePositionPropertyProcessing? = null
+    internal var processPrePositionProperty: GXIProcessPrePositionProperty? = null
 
-    fun registerPrePositionPropertyProcessing(prePositionPropertyProcessing: GXIPrePositionPropertyProcessing): GXRegisterCenter {
-        this.prePositionPropertyProcessing = prePositionPropertyProcessing
+    fun registerProcessPrePositionProperty(processPrePositionProperty: GXIProcessPrePositionProperty): GXRegisterCenter {
+        this.processPrePositionProperty = processPrePositionProperty
         return this
     }
 
-    internal var gridProcessing: GXIGridProcessing? = null
+    internal var processGrid: GXIProcessGrid? = null
 
-    fun registerGridProcessing(gridProcessing: GXIGridProcessing): GXRegisterCenter {
-        this.gridProcessing = gridProcessing
+    fun registerProcessGrid(processGrid: GXIProcessGrid): GXRegisterCenter {
+        this.processGrid = processGrid
         return this
     }
 
-    internal var scrollProcessing: GXIScrollProcessing? = null
+    internal var processScroll: GXIProcessScroll? = null
 
-    fun registerScrollProcessing(scrollProcessing: GXIScrollProcessing): GXRegisterCenter {
-        this.scrollProcessing = scrollProcessing
+    fun registerProcessScroll(processScroll: GXIProcessScroll): GXRegisterCenter {
+        this.processScroll = processScroll
         return this
     }
 

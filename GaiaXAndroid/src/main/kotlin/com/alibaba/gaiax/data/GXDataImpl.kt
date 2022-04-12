@@ -28,7 +28,7 @@ import com.alibaba.gaiax.template.GXTemplateInfo
 class GXDataImpl(val context: Context) {
 
     fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-        GXRegisterCenter.instance.bizMapProcessing?.convertProcessing(templateItem)
+        GXRegisterCenter.instance.processBizMap?.convert(templateItem)
         return templateInfoSource.getTemplateInfo(templateItem)
     }
 

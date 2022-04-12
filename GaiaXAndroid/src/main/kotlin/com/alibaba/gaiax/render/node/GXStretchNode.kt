@@ -79,8 +79,8 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
-                .postPositionPropertyProcessing
-                ?.convertProcessing(GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
+                .processPostPositionProperty
+                ?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
                     this.gridConfig = finalGridConfig
                     this.flexBox = finalFlexBox
                 })
@@ -102,8 +102,8 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
-                .postPositionPropertyProcessing
-                ?.convertProcessing(GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
+                .processPostPositionProperty
+                ?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
                     this.gridConfig = finalGridConfig
                     this.flexBox = finalFlexBox
                 })
@@ -267,7 +267,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         flexBox.size?.let {
             GXTemplateUtils.updateSize(it, style.size)
-            GXRegisterCenter.instance.postPositionPropertyProcessing?.convertProcessing(GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.FLEXBOX_SIZE, style.size).apply {
+            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_SIZE, style.size).apply {
                 this.cssStyle = finalCssStyle
             })
             isDirty = true
@@ -275,7 +275,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         flexBox.minSize?.let {
             GXTemplateUtils.updateSize(it, style.minSize)
-            GXRegisterCenter.instance.postPositionPropertyProcessing?.convertProcessing(GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.FLEXBOX_MIN_SIZE, style.minSize).apply {
+            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MIN_SIZE, style.minSize).apply {
                 this.cssStyle = finalCssStyle
             })
             isDirty = true
@@ -283,7 +283,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         flexBox.maxSize?.let {
             GXTemplateUtils.updateSize(it, style.maxSize)
-            GXRegisterCenter.instance.postPositionPropertyProcessing?.convertProcessing(GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams(GXTemplateKey.FLEXBOX_MAX_SIZE, style.maxSize).apply {
+            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MAX_SIZE, style.maxSize).apply {
                 this.cssStyle = finalCssStyle
             })
             isDirty = true

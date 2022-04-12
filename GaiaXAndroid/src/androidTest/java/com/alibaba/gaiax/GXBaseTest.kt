@@ -42,19 +42,19 @@ open class GXBaseTest {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
         GXRegisterCenter.instance
-            .registerExpressionProcessing(GXExpressionProcessing())
-            .registerDataBindingProcessing(GXDataBindingProcessing())
-            .registerColorProcessing(GXColorProcessor())
-            .registerSizeProcessing(GXSizeProcessing())
-            .registerPostPositionPropertyProcessing(GXPostPositionPropertyProcessing())
-            .registerPrePositionPropertyProcessing(GXPrePositionPropertyProcessing())
-            .registerGridProcessing(GXGridProcessing())
-            .registerScrollProcessing(GXScrollProcessing())
+            .registerProcessExpression(GXProcessExpression())
+            .registerProcessDataBinding(GXProcessDataBinding())
+            .registerProcessColor(GXProcessorColor())
+            .registerProcessSize(GXProcessSize())
+            .registerProcessPostPositionProperty(GXProcessPostPositionProperty())
+            .registerProcessPrePositionProperty(GXProcessPrePositionProperty())
+            .registerProcessGrid(GXProcessGrid())
+            .registerProcessScroll(GXProcessScroll())
 
     }
 
-    class GXScrollProcessing : GXRegisterCenter.GXIScrollProcessing {
-        override fun convertProcessing(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
+    class GXProcessScroll : GXRegisterCenter.GXIProcessScroll {
+        override fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
             Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $context, scrollConfig = $scrollConfig")
             if (propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH) {
                 val responsiveRule = scrollConfig.data.getString("responsive-rule") ?: return null
@@ -72,8 +72,8 @@ open class GXBaseTest {
 
     }
 
-    class GXGridProcessing : GXRegisterCenter.GXIGridProcessing {
-        override fun convertProcessing(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any? {
+    class GXProcessGrid : GXRegisterCenter.GXIProcessGrid {
+        override fun convert(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any? {
             Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $context, gridConfig = $gridConfig")
             if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue("responsive-enable")) {
                 if (gridConfig.column == 2) {
@@ -85,17 +85,17 @@ open class GXBaseTest {
 
     }
 
-    class GXDataBindingProcessing : GXRegisterCenter.GXIDataBindingProcessing {
+    class GXProcessDataBinding : GXRegisterCenter.GXIProcessDataBinding {
 
-        override fun createProcessing(value: JSONObject): GXDataBinding? {
+        override fun create(value: JSONObject): GXDataBinding? {
             Log.d(TAG, "createProcessing() called with: data = $value")
             return null
         }
     }
 
-    class GXPostPositionPropertyProcessing : GXRegisterCenter.GXIPostPositionPropertyProcessing {
+    class GXProcessPostPositionProperty : GXRegisterCenter.GXIProcessPostPositionProperty {
 
-        override fun convertProcessing(params: GXRegisterCenter.GXIPostPositionPropertyProcessing.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
             Log.d(TAG, "convertProcessing() called with: params = $params")
             if (params.propertyName == GXTemplateKey.FLEXBOX_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MIN_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MAX_SIZE) {
                 @Suppress("UNCHECKED_CAST")
@@ -119,9 +119,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXPrePositionPropertyProcessing : GXRegisterCenter.GXIPrePositionPropertyProcessing {
+    class GXProcessPrePositionProperty : GXRegisterCenter.GXIProcessPrePositionProperty {
 
-        override fun convertProcessing(params: GXRegisterCenter.GXIPrePositionPropertyProcessing.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIProcessPrePositionProperty.GXParams): Any? {
             if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
                 return "fontfamily3"
             }
@@ -129,8 +129,8 @@ open class GXBaseTest {
         }
     }
 
-    class GXSizeProcessing : GXRegisterCenter.GXISizeProcessing {
-        override fun createProcessing(value: String): Float? {
+    class GXProcessSize : GXRegisterCenter.GXIProcessSize {
+        override fun create(value: String): Float? {
             Log.d(TAG, "createProcessing() called with: size = $value")
             if ("gaiax_font" == value) {
                 return 20F
@@ -141,16 +141,16 @@ open class GXBaseTest {
             return null
         }
 
-        override fun convertProcessing(value: Float): Float? {
+        override fun convert(value: Float): Float? {
             Log.d(TAG, "convertProcessing() called with: value = $value")
             return responsiveLayoutScale
         }
 
     }
 
-    class GXColorProcessor : GXRegisterCenter.GXIColorProcessing {
+    class GXProcessorColor : GXRegisterCenter.GXIProcessColor {
 
-        override fun convertProcessing(color: String): Int? {
+        override fun convert(color: String): Int? {
             Log.d(TAG, "convertProcessing() called with: color = $color")
             if (color == "gaiax_color") {
                 return Color.RED
@@ -159,9 +159,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXExpressionProcessing : GXRegisterCenter.GXIExpressionProcessing {
+    class GXProcessExpression : GXRegisterCenter.GXIProcessExpression {
 
-        override fun createProcessing(value: Any): GXIExpression {
+        override fun create(value: Any): GXIExpression {
             Log.d(TAG, "createProcessing() called with: expression = $value")
             return GXAnalyzeWrapper(value)
         }

@@ -8,7 +8,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
 object GXDataBindingFactory {
 
     fun create(data: JSONObject): GXDataBinding? {
-        GXRegisterCenter.instance.databindingProcessing?.createProcessing(data)?.let {
+        GXRegisterCenter.instance.databindingProcessDataBinding?.create(data)?.let {
             return it
         }
         return GXDataBinding.create(

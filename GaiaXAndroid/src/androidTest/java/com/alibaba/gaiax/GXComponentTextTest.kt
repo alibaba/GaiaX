@@ -500,8 +500,8 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_property_text_overflow_clip_youku_version() {
-        GXRegisterCenter.instance.registerPrePositionPropertyProcessing(object : GXRegisterCenter.GXIPrePositionPropertyProcessing {
-            override fun convertProcessing(params: GXRegisterCenter.GXIPrePositionPropertyProcessing.GXParams): Any? {
+        GXRegisterCenter.instance.registerProcessPrePositionProperty(object : GXRegisterCenter.GXIProcessPrePositionProperty {
+            override fun convert(params: GXRegisterCenter.GXIProcessPrePositionProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW && params.value == "clip") {
                     return TextUtils.TruncateAt.END
                 }

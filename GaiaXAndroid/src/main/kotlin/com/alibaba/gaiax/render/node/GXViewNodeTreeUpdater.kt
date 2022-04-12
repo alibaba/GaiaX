@@ -375,13 +375,14 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 处理数据逻辑
         if (context.templateData?.dataListener != null) {
             val gxTextData = GXTemplateEngine.GXTextData().apply {
-                this.text = valueData.toString()
+                this.text = valueData as? CharSequence
                 this.view = view as View
                 this.nodeId = layer.id
                 this.templateItem = context.templateItem
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
+                this.extendData = binding.getExtendData(templateData)
             }
             val result = context.templateData?.dataListener?.onTextProcess(gxTextData)
             if (result != null) {
@@ -399,9 +400,9 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindText(context: GXTemplateContext, view: GXIViewBindData, css: GXCss?, layer: GXLayer, binding: GXDataBinding, rawJson: JSONObject) {
+    private fun bindText(context: GXTemplateContext, view: GXIViewBindData, css: GXCss?, layer: GXLayer, binding: GXDataBinding, templateData: JSONObject) {
 
-        val nodeData = binding.getData(rawJson)
+        val nodeData = binding.getData(templateData)
 
         if (context.templateData?.dataListener != null) {
 
@@ -413,6 +414,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
+                this.extendData = binding.getExtendData(templateData)
             }
 
             context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->

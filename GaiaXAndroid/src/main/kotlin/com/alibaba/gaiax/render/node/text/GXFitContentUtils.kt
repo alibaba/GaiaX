@@ -179,9 +179,9 @@ object GXFitContentUtils {
         return null
     }
 
-    private fun getTextData(context: GXTemplateContext, id: String, view: View, css: GXCss, dataBinding: GXDataBinding, templateData: JSONObject): Any? {
+    private fun getTextData(context: GXTemplateContext, id: String, view: View, css: GXCss, binding: GXDataBinding, templateData: JSONObject): Any? {
         if (context.templateData?.dataListener != null) {
-            val nodeData = dataBinding.getData(templateData)
+            val nodeData = binding.getData(templateData)
             val gxTextData = GXTemplateEngine.GXTextData().apply {
                 this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
                 this.view = view
@@ -190,6 +190,7 @@ object GXFitContentUtils {
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
+                this.extendData = binding.getExtendData(templateData)
             }
             context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 return result

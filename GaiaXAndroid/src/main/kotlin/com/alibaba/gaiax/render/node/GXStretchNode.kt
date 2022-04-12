@@ -267,25 +267,31 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         flexBox.size?.let {
             GXTemplateUtils.updateSize(it, style.size)
-            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_SIZE, style.size).apply {
-                this.cssStyle = finalCssStyle
-            })
+            GXRegisterCenter.instance
+                .processPostPositionProperty
+                ?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_SIZE, style.size).apply {
+                    this.cssStyle = finalCssStyle
+                })
             isDirty = true
         }
 
         flexBox.minSize?.let {
             GXTemplateUtils.updateSize(it, style.minSize)
-            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MIN_SIZE, style.minSize).apply {
-                this.cssStyle = finalCssStyle
-            })
+            GXRegisterCenter.instance
+                .processPostPositionProperty
+                ?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MIN_SIZE, style.minSize).apply {
+                    this.cssStyle = finalCssStyle
+                })
             isDirty = true
         }
 
         flexBox.maxSize?.let {
             GXTemplateUtils.updateSize(it, style.maxSize)
-            GXRegisterCenter.instance.processPostPositionProperty?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MAX_SIZE, style.maxSize).apply {
-                this.cssStyle = finalCssStyle
-            })
+            GXRegisterCenter.instance
+                .processPostPositionProperty
+                ?.convert(GXRegisterCenter.GXIProcessPostPositionProperty.GXParams(GXTemplateKey.FLEXBOX_MAX_SIZE, style.maxSize).apply {
+                    this.cssStyle = finalCssStyle
+                })
             isDirty = true
         }
 

@@ -179,6 +179,8 @@ class GXTemplateEngine {
          * Node data
          */
         var nodeData: JSONObject? = null
+
+        var extendData: JSONObject? = null
     }
 
     /**

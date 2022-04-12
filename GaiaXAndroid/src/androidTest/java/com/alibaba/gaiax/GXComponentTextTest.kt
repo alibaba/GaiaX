@@ -488,7 +488,6 @@ class GXComponentTextTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(1, rootView.childCount())
         Assert.assertEquals(null, rootView.child<GXText>(0).ellipsize)
     }
 
@@ -904,7 +903,7 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
-    fun template_scroll_radius() {
+    fun template_text_radius() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_radius")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))

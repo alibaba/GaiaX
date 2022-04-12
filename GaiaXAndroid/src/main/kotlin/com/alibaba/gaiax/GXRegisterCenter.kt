@@ -175,8 +175,9 @@ class GXRegisterCenter {
 
     internal var processCompatible: GXIProcessCompatible? = null
 
-    fun registerProcessCompatible(processCompatible: GXIProcessCompatible) {
+    fun registerProcessCompatible(processCompatible: GXIProcessCompatible): GXRegisterCenter {
         this.processCompatible = processCompatible
+        return this
     }
 
     companion object {

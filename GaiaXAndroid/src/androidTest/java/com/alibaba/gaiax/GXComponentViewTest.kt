@@ -62,11 +62,8 @@ class GXComponentViewTest : GXBaseTest() {
     @Test
     fun template_aspect_ratio_height_to_width() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_aspect_ratio_height_to_width")
-
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
-
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())

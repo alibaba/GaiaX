@@ -80,6 +80,12 @@ pod 'GaiaXiOS'
 xxx.bundle/templateId
 ```
 
+#### 修改工程配置项
+```
+// 修改工程配置项
+在自建的项目的Target -> Buildi Setting -> Other Link Flags 添加/修改配置项为： -weak_framework "XCTest"
+```
+
 #### 调用方式
 ```
 // SDK使用方式

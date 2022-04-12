@@ -1,0 +1,11 @@
+{
+  "id": "template_datapass_nest_scroll_self_nodes",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_datapass_nest_scroll_self_nodes_scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

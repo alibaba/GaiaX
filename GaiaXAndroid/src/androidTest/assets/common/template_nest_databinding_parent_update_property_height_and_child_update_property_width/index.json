@@ -1,0 +1,15 @@
+{
+  "id": "template_nest_databinding_parent_update_property_height_and_child_update_property_width",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_nest_databinding_parent_update_property_height_and_child_update_property_width_child_0",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "container2",
+      "type": "view"
+    }
+  ]
+}

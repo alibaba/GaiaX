@@ -1,0 +1,15 @@
+{
+  "id": "template_nest_databinding_override_width_height",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_nest_databinding_override_width_height_child",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "container2",
+      "type": "view"
+    }
+  ]
+}

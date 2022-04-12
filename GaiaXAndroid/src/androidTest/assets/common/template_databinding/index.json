@@ -1,0 +1,5 @@
+{
+  "id": "template_databinding",
+  "type": "gaia-template",
+  "layers": [{ "id": "text", "type": "text" }]
+}

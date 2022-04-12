@@ -1,0 +1,11 @@
+{
+  "id": "template_normal_nest_container",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_normal_nest_container_scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

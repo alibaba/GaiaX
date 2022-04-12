@@ -1,0 +1,10 @@
+{
+  "data": {
+    "template_nest_databinding_override_only_child_child": {
+        "extend": {
+            "width":"'300px'",
+            "height":"'200px'"
+        }
+    },
+  }
+}

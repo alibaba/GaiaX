@@ -1,0 +1,15 @@
+{
+  "id": "template_normal_nest_normal",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_normal_nest_normal_child",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "container2",
+      "type": "view"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "template_merge_empty_nodes",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image1",
+      "type": "image"
+    },
+    {
+      "id": "container1",
+      "type": "view",
+      "layers": [
+        {
+          "id": "container2",
+          "type": "view",
+          "layers": [
+            {
+              "id": "container3",
+              "type": "view",
+              "layers": [
+                {
+                  "id": "text1",
+                  "type": "text"
+                },
+                {
+                  "id": "text2",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -550,12 +550,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(1, rootView.childCount())
-
-        Assert.assertEquals(View.VISIBLE, rootView.child(0).visibility)
-
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(View.INVISIBLE, rootView.child(0).visibility)
     }
 
     @Test
@@ -928,7 +923,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.FIT_CENTER, rootView.child<GXImageView>(0).scaleType)
+            Assert.assertEquals(ImageView.ScaleType.FIT_CENTER, rootView.child<ImageView>(0).scaleType)
         }
     }
 
@@ -945,7 +940,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.CENTER_CROP, rootView.child<GXImageView>(0).scaleType)
+            Assert.assertEquals(ImageView.ScaleType.CENTER_CROP, rootView.child<ImageView>(0).scaleType)
         }
     }
 
@@ -962,7 +957,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.MATRIX, rootView.child<GXImageView>(0).scaleType)
+            Assert.assertEquals(ImageView.ScaleType.MATRIX, rootView.child<ImageView>(0).scaleType)
         }
     }
 
@@ -980,7 +975,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.MATRIX, rootView.child<GXImageView>(0).scaleType)
+            Assert.assertEquals(ImageView.ScaleType.MATRIX, rootView.child<ImageView>(0).scaleType)
         }
     }
 
@@ -2265,7 +2260,7 @@ class GXTemplateEngineTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
 
-    @Test(expected = NoSuchElementException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun template_nest_scroll_nodes_self() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "integration", "template_nest_scroll_nodes_self")
 

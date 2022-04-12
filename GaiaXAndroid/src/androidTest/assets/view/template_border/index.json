@@ -1,0 +1,5 @@
+{
+  "id": "template_border",
+  "type": "gaia-template",
+  "layers": [{ "id": "container1", "type": "view" }]
+}

@@ -6,6 +6,7 @@ import android.support.v7.widget.AppCompatImageView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXIImageView
+import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
@@ -29,5 +30,7 @@ class GXComponentImageTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(true, rootView.child(0) is MockImageView)
+
+        GXRegisterCenter.instance.registerViewSupport(GXViewKey.VIEW_TYPE_IMAGE, GXImageView::class.java)
     }
 }

@@ -437,9 +437,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     }
 
     private fun bindCommonViewCss(view: View, node: GXNode) {
+        view.setDisplay(node.templateNode.css.style.display)
+
         if (!node.isCustomViewType()) {
 
-            view.setHidden(node.templateNode.css.style.hidden)
+            view.setHidden(node.templateNode.css.style.display, node.templateNode.css.style.hidden)
 
             view.setOpacity(node.templateNode.css.style.opacity)
 
@@ -449,8 +451,6 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
             view.setRoundCornerRadiusAndRoundCornerBorder(node.templateNode.css.style)
         }
-
-        view.setDisplay(node.templateNode.css.style.display)
     }
 
     private fun bindContainerViewCss(context: GXTemplateContext, view: View, node: GXNode) {

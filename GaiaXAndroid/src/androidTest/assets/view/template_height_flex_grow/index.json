@@ -1,0 +1,10 @@
+{
+  "id": "template_height_flex_grow",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view"
+    }
+  ]
+}

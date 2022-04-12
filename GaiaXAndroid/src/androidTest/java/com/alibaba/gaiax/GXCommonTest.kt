@@ -109,6 +109,7 @@ class GXCommonTest : GXBaseTest() {
                 return true
             }
         })
+
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "common", "template_datapass_nest_scroll_nodes_self")
         val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
@@ -131,6 +132,12 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+
+        GXRegisterCenter.instance.registerProcessCompatible(object : GXRegisterCenter.GXIProcessCompatible {
+            override fun isCompatibleContainerDataPassSequence(): Boolean {
+                return false
+            }
+        })
     }
 
     @Test(expected = IllegalArgumentException::class)

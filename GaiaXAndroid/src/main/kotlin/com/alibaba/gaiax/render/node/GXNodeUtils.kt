@@ -98,9 +98,10 @@ object GXNodeUtils {
     private fun computeScrollItemViewPortWidth(context: GXTemplateContext, node: GXNode): Float? {
         val finalScrollConfig = node.templateNode.finalScrollConfig ?: return null
 
-        GXRegisterCenter.instance.processScroll?.convert(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, context, finalScrollConfig)?.let {
-            return it as Float
-        }
+        GXRegisterCenter.instance
+            .processScroll?.convert(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, context, finalScrollConfig)?.let {
+                return it as Float
+            }
 
         // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
         val left: Float = finalScrollConfig.edgeInsets.left.toFloat()

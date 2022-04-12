@@ -23,6 +23,7 @@ import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
@@ -94,7 +95,25 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 此处，双端已协商一致
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
-        val childTemplateData = (visualDataBinding?.getValueData(templateData) as? JSONObject) ?: JSONObject()
+        var valueData = visualDataBinding?.getValueData(templateData)
+        if (valueData is JSONArray) {
+
+            if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerDataPassSequence() == true) {
+                // 是否兼容处理先$nodes取数组，再去$$的情况
+
+                val tmp = visualDataBinding?.value
+                visualDataBinding?.value = dataBinding?.value
+                dataBinding?.value = tmp
+
+                dataBinding?.reset()
+                visualDataBinding?.reset()
+
+                valueData = visualDataBinding?.getValueData(templateData)
+            } else {
+                throw IllegalArgumentException("update nest container need a JSONObject, but the result is a JSONArray")
+            }
+        }
+        val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
         node.templateNode.initFinal(visualTemplateData = templateData, nodeTemplateData = childTemplateData)

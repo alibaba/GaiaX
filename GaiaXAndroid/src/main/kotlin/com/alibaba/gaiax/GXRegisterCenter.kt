@@ -83,6 +83,10 @@ class GXRegisterCenter {
         fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
 
+    interface GXIProcessCompatible {
+        fun isCompatibleContainerDataPassSequence() = false
+    }
+
     internal var processBizMap: GXIProcessBizMap? = null
 
     fun registerProcessBizMapRelation(processBizMap: GXIProcessBizMap): GXRegisterCenter {
@@ -167,6 +171,12 @@ class GXRegisterCenter {
     fun registerViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
         GXViewFactory.viewSupport[viewType] = clazz
         return this
+    }
+
+    internal var processCompatible: GXIProcessCompatible? = null
+
+    fun registerProcessCompatible(processCompatible: GXIProcessCompatible) {
+        this.processCompatible = processCompatible
     }
 
     companion object {

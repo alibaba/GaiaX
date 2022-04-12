@@ -24,7 +24,7 @@ import com.alibaba.gaiax.template.factory.GXExpressionFactory
  * @suppress
  */
 class GXDataBinding(
-    val value: GXIExpression? = null,
+    var value: GXIExpression? = null,
     val accessibilityDesc: GXIExpression? = null,
     val accessibilityEnable: GXIExpression? = null,
     val placeholder: GXIExpression? = null,

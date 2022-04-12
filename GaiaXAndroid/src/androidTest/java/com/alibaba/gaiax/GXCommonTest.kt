@@ -3,7 +3,6 @@ package com.alibaba.gaiax
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.test.runner.AndroidJUnit4
-import android.widget.FrameLayout
 import android.widget.TextView
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -104,6 +103,37 @@ class GXCommonTest : GXBaseTest() {
     }
 
     @Test
+    fun template_datapass_nest_scroll_nodes_self_youku_version() {
+        GXRegisterCenter.instance.registerProcessCompatible(object : GXRegisterCenter.GXIProcessCompatible {
+            override fun isCompatibleContainerDataPassSequence(): Boolean {
+                return true
+            }
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "common", "template_datapass_nest_scroll_nodes_self")
+        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        }))
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        rootView.child(0).executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+    }
+
+    @Test(expected = IllegalArgumentException::class)
     fun template_datapass_nest_scroll_nodes_self() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "common", "template_datapass_nest_scroll_nodes_self")
         val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))

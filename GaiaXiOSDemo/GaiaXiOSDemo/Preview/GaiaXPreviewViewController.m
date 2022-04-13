@@ -41,7 +41,6 @@
 
 @property (nonatomic, strong) UIView *preview;
 @property (nonatomic, strong) UIButton *statusBtn;
-@property (nonatomic, assign) BOOL isPopAlertView;
 
 @property (nonatomic, strong) NSDictionary *templateInfo;
 @property (nonatomic, strong) NSMutableDictionary *dependenciesTemplateInfo;
@@ -130,9 +129,6 @@
 
 //socket初始化
 - (void)gaiaXSocketClientDidInitialize:(GaiaXSocketClient *)client {
-    //更新状态
-    [_statusBtn setTitle:@"已连接" forState:UIControlStateNormal];
-    [_statusBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
     //发起请求
     GaiaXSocketRequest *request = [GaiaXSocketRequest requestWithRequestId:@(666) Method:@"template/getTemplateData" parameters:@{@"id":_templateId}];
     [_client sendRequestToServer:request];
@@ -140,6 +136,10 @@
 
 //socket链接成功
 - (void)gaiaXSocketClientDidConnect:(GaiaXSocketClient *)client {
+    //更新状态
+    [_statusBtn setTitle:@"已连接" forState:UIControlStateNormal];
+    [_statusBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+
     // 向服务器发送初始化消息
     if (_requestId == 0) {
         _requestId++;
@@ -153,15 +153,6 @@
     //更新状态
     [_statusBtn setTitle:@"连接失败" forState:UIControlStateNormal];
     [_statusBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    
-    // 弹Toust 限制只弹一次
-    if (_isPopAlertView == NO) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"连接失败" message:@"请重启GaiaX Studio！" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
-        [alertController addAction:action];
-        [self presentViewController:alertController animated:YES completion:nil];
-        _isPopAlertView = YES;
-    }
 }
 
 //获取到模板信息

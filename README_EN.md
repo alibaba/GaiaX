@@ -24,7 +24,7 @@ The following goals are the way forward for our project:
 ```
 // Dependency
 dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.0'
+    implementation 'com.github.alibaba:GaiaX:0.1.2'
 }
 ```
 
@@ -86,6 +86,9 @@ xxx.bundle/templateId
 
 // Introduced header files
 #import <GaiaXiOS/GaiaXiOS.h>
+
+//register template service
+[TheGXRegisterCenter registerTemplateServiceWithBizId:templateId templateBundle:@"xxx.bundle"];
 
 // Build template parameters - Template information
 // activity       - context

@@ -73,12 +73,6 @@ Add a dependency to your Podfile
 pod 'GaiaXiOS'
 ```
 
-#### Notice
-```
-// Modifying Project Build Setting
-Target -> Buildi Setting -> Other Link Flags Add/Change： -weak_framework "XCTest"
-```
-
 #### Template File
 Add template files to App or FrameWork
 ```

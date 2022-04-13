@@ -10,13 +10,12 @@ Pod::Spec.new do |s|
   s.author        = { "jingcheng.zjc" => "jingcheng.zjc@alibaba-inc.com" }
   s.source        = { :git => "https://github.com/alibaba/GaiaX.git", :tag => "#{s.version}" }
   
-  s.source_files  = 'GaiaXiOS/GaiaXiOS/**/*.{h,m,mm,c}'
+  s.source_files  = 'GaiaXiOS/**/*.{h,m,mm,c}'
   s.xcconfig      = { "ENABLE_BITCODE" => "NO" }
   s.requires_arc  = true
 
-  s.framework     = 'XCTest'
-
-  s.vendored_libraries = 'GaiaXiOS/GaiaXiOS/Core/StretchKit/Libraries/libstretch.a'
+  s.weak_frameworks = 'XCTest'
+  s.vendored_libraries = 'GaiaXiOS/**/*.{a}'
 
   s.dependency 'YYText'
 

@@ -71,6 +71,7 @@
 		8D5D29A9276AD6A1005FD699 /* recommend.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend.json; sourceTree = "<group>"; };
 		8D5D29AA276AD6A1005FD699 /* uper-top.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "uper-top.json"; sourceTree = "<group>"; };
 		8D5D29AB276AD6A1005FD699 /* uper.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uper.json; sourceTree = "<group>"; };
+		8D678A4628066EC40036A7D0 /* GaiaXiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GaiaXiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSONRPCConstants.h; sourceTree = "<group>"; };
 		8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSONRPCConstants.m; sourceTree = "<group>"; };
 		8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketRequest.m; sourceTree = "<group>"; };
@@ -256,6 +257,7 @@
 		BADDA2347CA93853E7C3628B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8D678A4628066EC40036A7D0 /* GaiaXiOS.framework */,
 				8DA5D7B3275F42EE000182C9 /* GaiaXiOS.framework */,
 				8DA5D7B1275F417F000182C9 /* libz.tbd */,
 				8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */,

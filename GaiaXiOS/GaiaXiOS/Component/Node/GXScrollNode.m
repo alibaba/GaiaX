@@ -288,6 +288,15 @@
         NSString *identifier = [self identifierWithIndex:i];
         GXTemplateData *data = [self.items gx_objectAtIndex:i];
         GXTemplateItem *templateItem = [self templateItemWithIdentifier:identifier];
+        if (self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+            NSString *widthStr = [templateItem.rootStyleInfo gx_stringForKey:@"width"];
+            if (widthStr.length > 0) {
+                StretchStyleDimension width = [GXStyleHelper convertAutoValue:widthStr];
+                if (width.dimen_type == DIM_TYPE_POINTS) {
+                    itemMeasurSize.width = width.dimen_value;
+                }
+            }
+        }
         //计算itemSize
         itemSize = [TheGXTemplateEngine sizeWithTemplateItem:templateItem measureSize:itemMeasurSize data:data];
         //获取高度
@@ -382,7 +391,7 @@
     
     //数据绑定
     GXTemplateData *data = [self.items objectAtIndex:index];
-    [TheGXTemplateEngine bindData:data onView:rootView];
+    [TheGXTemplateEngine bindData:data  onView:rootView];
     
     return cell;
 }

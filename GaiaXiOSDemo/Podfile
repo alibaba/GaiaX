@@ -11,8 +11,9 @@ target 'GaiaXiOSDemo' do
   # use_frameworks!
 
   # 曲线动画
-  pod 'GaiaXiOS'
-  
+#  pod 'GaiaXiOS'
+  pod  'GaiaXiOS',       :path=>'../GaiaXiOS'
+
   # 曲线动画
   pod 'GaiaMotionCurve'
 

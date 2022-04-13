@@ -87,6 +87,9 @@ xxx.bundle/templateId
 // Introduced header files
 #import <GaiaXiOS/GaiaXiOS.h>
 
+//register template service
+[TheGXRegisterCenter registerTemplateServiceWithBizId:templateId templateBundle:@"xxx.bundle"];
+
 // Build template parameters - Template information
 // activity       - context
 // templateBiz    - template biz id

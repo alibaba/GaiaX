@@ -564,6 +564,10 @@ class GXAnimationBinding(
                                     GXPropAnimation.create(it.getJSONObject(KEY_PROP_ANIMATOR))?.apply {
                                         set.animations.add(this)
                                     }
+                                } else {
+                                    GXPropAnimation.create(it)?.apply {
+                                        set.animations.add(this)
+                                    }
                                 }
                             }
                         }
@@ -753,11 +757,11 @@ class GXAnimationBinding(
             }
 
             private fun setScaleX(targetView: View, value: Float) {
-                targetView.scaleX = value.dpToPx()
+                targetView.scaleX = value
             }
 
             private fun setScaleY(targetView: View, value: Float) {
-                targetView.scaleY = value.dpToPx()
+                targetView.scaleY = value
             }
 
             private fun setRotation(targetView: View, value: Float) {

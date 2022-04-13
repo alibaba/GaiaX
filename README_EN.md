@@ -24,7 +24,7 @@ The following goals are the way forward for our project:
 ```
 // Dependency
 dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.0'
+    implementation 'com.github.alibaba:GaiaX:0.1.2'
 }
 ```
 

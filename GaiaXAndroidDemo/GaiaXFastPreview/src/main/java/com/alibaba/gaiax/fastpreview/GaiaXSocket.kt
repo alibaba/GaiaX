@@ -251,30 +251,32 @@ class GaiaXSocket : SocketListener {
             result["index.mock"] = JSONObject.parseObject(indexMock)
             result["index.databinding"] = indexDatabinding
         } else {
-            val convertDataBinding = convertDataBinding(layerJson, indexData)
-            result["index.mock"] = JSONObject()
+            val convertDataBinding = if (layerJson.containsKey("sub-type")) {
+                val id = layerJson.getString("id")
+                val result1 = JSONObject()
+                val targetData = JSONObject()
+                targetData[id] = JSONObject().apply {
+                    this["value"] = "\${nodes}"
+                }
+                result1["data"] = targetData
+                result1.toJSONString()
+            } else {
+                val result1 = JSONObject()
+                result1["data"] = indexData
+                result1.toJSONString()
+            }
+            result["index.mock"] = JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                }
+            }
             result["index.databinding"] = convertDataBinding
         }
         return result
-    }
-
-    private fun convertDataBinding(layerJson: JSONObject, data: String): String {
-        return if (layerJson.containsKey("sub-type")) {
-            val id = layerJson.getString("id")
-            val result = JSONObject()
-            val targetData = JSONObject()
-            val array = JSONArray()
-            for (i in 0..4) {
-                array.add(JSONObject())
-            }
-            targetData[id] = array
-            result["data"] = targetData
-            result.toJSONString()
-        } else {
-            val result = JSONObject()
-            result["data"] = data
-            result.toJSONString()
-        }
     }
 
     companion object {

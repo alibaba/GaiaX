@@ -24,7 +24,7 @@
 ```
 // 依赖
 dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.0'
+    implementation 'com.github.alibaba:GaiaX:0.1.1'
 }
 ```
 

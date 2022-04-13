@@ -20,13 +20,9 @@
 
 ### Android
 
-#### 依赖 [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
-```
-// 依赖
-dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.1'
-}
-```
+#### 依赖 
+
+[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
 
 #### 模板文件
 ```

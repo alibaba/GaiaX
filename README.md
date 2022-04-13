@@ -87,6 +87,9 @@ xxx.bundle/templateId
 // 引入头文件
 #import <GaiaXiOS/GaiaXiOS.h>
 
+//注册模板服务
+[TheGXRegisterCenter registerTemplateServiceWithBizId:templateId templateBundle:@"xxx.bundle"];
+
 // 构建模板参数     - 模板信息
 // templateBiz    - 业务ID
 // templateId     - 模板ID

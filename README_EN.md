@@ -20,13 +20,9 @@ The following goals are the way forward for our project:
 
 ### Android
 
-#### Dependency  [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
-```
-// Dependency
-dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.2'
-}
-```
+#### Dependency  
+
+[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
 
 #### Template File
 ```

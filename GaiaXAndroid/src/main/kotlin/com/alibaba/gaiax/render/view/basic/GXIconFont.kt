@@ -26,7 +26,7 @@ import android.widget.TextView
  * @suppress
  */
 @Keep
-class GXIconFont : GXText {
+open class GXIconFont : GXText {
 
     constructor(context: Context) : super(context)
 

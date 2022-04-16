@@ -18,12 +18,11 @@ package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 /**
  * @suppress
  */
-class GXDataBinding(
+open class GXDataBinding(
     var value: GXIExpression? = null,
     val accessibilityDesc: GXIExpression? = null,
     val accessibilityEnable: GXIExpression? = null,
@@ -31,34 +30,18 @@ class GXDataBinding(
     val extend: MutableMap<String, GXIExpression>? = null
 ) {
 
-    fun reset() {
-        extendDataCache = null
-        valueCache = null
-        dataCache = null
+    var gxDataCache: JSONObject? = null
+    var gxDataValueCache: JSON? = null
+    var gxExtendCache: JSONObject? = null
+
+    /**
+     * reset all cache
+     */
+    open fun reset() {
+        gxExtendCache = null
+        gxDataValueCache = null
+        gxDataCache = null
     }
-
-    private var extendDataCache: JSONObject? = null
-
-    fun getCacheExtendData(): JSONObject? {
-        return extendDataCache
-    }
-
-    fun getExtendData(templateData: JSON?): JSONObject? {
-        if (extendDataCache == null) {
-            val result = JSONObject()
-            if (extend != null) {
-                for (entry in extend) {
-                    // 此处不能优化
-                    // 需要处理null值逻辑
-                    result[entry.key] = entry.value.value(templateData)
-                }
-            }
-            extendDataCache = result
-        }
-        return extendDataCache
-    }
-
-    private var dataCache: JSONObject? = null
 
     /**
      * 获取数据绑定的计算结果，其数据结构如下：
@@ -69,71 +52,71 @@ class GXDataBinding(
     "accessibilityEnable":"accessibilityEnable"
     }
      */
-    fun getData(templateData: JSONObject): JSONObject? {
-        if (dataCache == null) {
-            val result = JSONObject()
-            // 此处不能优化
-            // 需要处理null值逻辑
-            result[GXTemplateKey.GAIAX_VALUE] = value?.value(templateData)
+    open fun getData(templateData: JSONObject): JSONObject? {
+        if (gxDataCache == null) {
+
+            var result: JSONObject? = null
+
+            // 渲染字段
+            value?.value(templateData)?.let {
+                result = result ?: JSONObject()
+                result?.put(GXTemplateKey.GAIAX_VALUE, it)
+            }
+
             // 图片占位图字段
-            placeholder?.value(templateData)?.let { result[GXTemplateKey.GAIAX_PLACEHOLDER] = it }
+            placeholder?.value(templateData)?.let {
+                result = result ?: JSONObject()
+                result?.put(GXTemplateKey.GAIAX_PLACEHOLDER, it)
+            }
+
             // View的无障碍描述
-            accessibilityDesc?.value(templateData)?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = it }
+            accessibilityDesc?.value(templateData)?.let {
+                result = result ?: JSONObject()
+                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
+            }
+
             // View的无障碍状态
-            accessibilityEnable?.value(templateData)?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = it }
-            dataCache = result
+            accessibilityEnable?.value(templateData)?.let {
+                result = result ?: JSONObject()
+                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC, it)
+            }
+
+            gxDataCache = result
         }
-        return dataCache
+        return gxDataCache
     }
 
-    fun getCacheData(): JSONObject? {
-        return dataCache
+    open fun getDataCache(): JSONObject? {
+        return gxDataCache
     }
 
-    private var valueCache: JSON? = null
-
-    fun getValueData(templateData: JSONObject): JSON? {
-        if (valueCache == null) {
-            valueCache = value?.value(templateData) as? JSON
-        }
-        return valueCache
-    }
-
-    fun getCacheValueData(): JSON? {
-        return valueCache
-    }
-
-    companion object {
-
-        fun create(value: String? = null, placeholder: String? = null, accessibilityDesc: String? = null, accessibilityEnable: String? = null, extend: JSONObject? = null): GXDataBinding? {
-            val extendExp: MutableMap<String, GXIExpression>? = if (extend != null && extend.isNotEmpty()) {
-                val result: MutableMap<String, GXIExpression> = mutableMapOf()
+    open fun getExtend(templateData: JSON?): JSONObject? {
+        if (gxExtendCache == null) {
+            val result = JSONObject()
+            if (extend != null) {
                 for (entry in extend) {
-                    if (entry.key != null && entry.value != null) {
-                        GXExpressionFactory.create(entry.value)?.let {
-                            result[entry.key] = it
-                        }
-                    }
+                    // 此处不能优化
+                    // 需要处理null值逻辑
+                    result[entry.key] = entry.value.value(templateData)
                 }
-                result
-            } else {
-                null
             }
-            val valueExp = GXExpressionFactory.create(value)
-            val placeholderExp = GXExpressionFactory.create(placeholder)
-            val accessibilityDescExp = GXExpressionFactory.create(accessibilityDesc)
-            val accessibilityEnableExp = GXExpressionFactory.create(accessibilityEnable)
-            return if (valueExp != null || placeholderExp != null || accessibilityDescExp != null || accessibilityEnableExp != null || extendExp != null) {
-                GXDataBinding(
-                    value = valueExp,
-                    placeholder = placeholderExp,
-                    accessibilityDesc = accessibilityDescExp,
-                    accessibilityEnable = accessibilityEnableExp,
-                    extend = extendExp
-                )
-            } else {
-                null
-            }
+            gxExtendCache = result
         }
+        return gxExtendCache
+    }
+
+    open fun getExtendCache(): JSONObject? {
+        return gxExtendCache
+    }
+
+    open fun getDataValue(templateData: JSONObject): JSON? {
+        if (gxDataValueCache == null) {
+            gxDataValueCache = getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE) as? JSON
+        }
+        return gxDataValueCache
+    }
+
+    open fun getDataValueCache(): JSON? {
+        return gxDataValueCache
     }
 }

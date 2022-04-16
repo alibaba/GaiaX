@@ -119,7 +119,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
                 val itemData = containerData.getJSONObject(position)
                 val dataBinding = gxNode.templateNode.dataBinding
                 dataBinding?.reset()
-                dataBinding?.getExtendData(itemData)?.let { typeData ->
+                dataBinding?.getExtend(itemData)?.let { typeData ->
                     val path = typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
                     val templateId = typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
                     if (templateId != null) {

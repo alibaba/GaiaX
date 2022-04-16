@@ -95,7 +95,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 此处，双端已协商一致
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
-        var valueData = visualDataBinding?.getValueData(templateData)
+        var valueData = visualDataBinding?.getDataValue(templateData)
         if (valueData is JSONArray) {
 
             if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerDataPassSequence() == true) {
@@ -108,7 +108,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 dataBinding?.reset()
                 visualDataBinding?.reset()
 
-                valueData = visualDataBinding?.getValueData(templateData)
+                valueData = visualDataBinding?.getDataValue(templateData)
             } else {
                 throw IllegalArgumentException("update nest container need a JSONObject, but the result is a JSONArray")
             }
@@ -129,7 +129,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 此处，双端已协商一致
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
-        val childTemplateData = (visualDataBinding?.getValueData(templateData) as? JSONObject) ?: JSONObject()
+        val childTemplateData = (visualDataBinding?.getDataValue(templateData) as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
         node.templateNode.initFinal(visualTemplateData = templateData, nodeTemplateData = childTemplateData)
@@ -297,7 +297,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindScrollAndGrid(context: GXTemplateContext, view: View, node: GXNode, dataBinding: GXDataBinding, templateData: JSONObject) {
 
         // 容器数据源
-        var containerTemplateData = dataBinding.getValueData(templateData) as? JSONArray
+        var containerTemplateData = dataBinding.getDataValue(templateData) as? JSONArray
         if (containerTemplateData == null) {
             if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerNecessaryDataSource() == true) {
                 containerTemplateData = JSONArray()
@@ -306,7 +306,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             }
         }
 
-        val extendData = dataBinding.getCacheExtendData()
+        val extendData = dataBinding.getExtendCache()
 
         val container = view as GXContainer
 
@@ -390,7 +390,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
-                this.extendData = binding.getExtendData(templateData)
+                this.extendData = binding.getExtend(templateData)
             }
             val result = context.templateData?.dataListener?.onTextProcess(gxTextData)
             if (result != null) {
@@ -422,7 +422,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
-                this.extendData = binding.getExtendData(templateData)
+                this.extendData = binding.getExtend(templateData)
             }
 
             context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->

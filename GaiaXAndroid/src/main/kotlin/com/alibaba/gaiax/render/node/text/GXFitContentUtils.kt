@@ -190,7 +190,7 @@ object GXFitContentUtils {
                 this.nodeCss = css
                 this.nodeData = nodeData
                 this.index = context.indexPosition
-                this.extendData = binding.getExtendData(templateData)
+                this.extendData = binding.getExtend(templateData)
             }
             context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 return result

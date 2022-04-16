@@ -70,7 +70,7 @@ data class GXTemplateNode(
     fun initFinal(visualTemplateData: JSONObject?, nodeTemplateData: JSONObject?) {
 
         // 初始化自己的FinalStyle
-        val extendCssData = dataBinding?.getExtendData(nodeTemplateData)
+        val extendCssData = dataBinding?.getExtend(nodeTemplateData)
 
         // 创建FinalStyle
         val selfFinalCss: GXCss = if (extendCssData != null) {

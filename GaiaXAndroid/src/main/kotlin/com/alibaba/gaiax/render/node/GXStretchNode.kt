@@ -48,7 +48,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         val containerDataBinding = gxNode.templateNode.dataBinding
         //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
-        val containerTemplateData = (containerDataBinding?.getValueData(templateData) as? JSONArray) ?: JSONArray()
+        val containerTemplateData = (containerDataBinding?.getDataValue(templateData) as? JSONArray) ?: JSONArray()
 
         val style = this.node.getStyle()
 

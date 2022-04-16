@@ -92,11 +92,10 @@ open class GXDataBinding(
 
     open fun getExtend(templateData: JSON?): JSONObject? {
         if (gxExtendCache == null) {
-            val result = JSONObject()
+            var result: JSONObject? = null
             if (extend != null) {
                 for (entry in extend) {
-                    // 此处不能优化
-                    // 需要处理null值逻辑
+                    result = result ?: JSONObject()
                     result[entry.key] = entry.value.value(templateData)
                 }
             }

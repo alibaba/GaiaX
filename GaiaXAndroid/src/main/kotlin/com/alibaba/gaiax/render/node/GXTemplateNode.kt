@@ -92,6 +92,15 @@ data class GXTemplateNode(
             // 合并原有CSS和扩展属性的CSS
             GXCss.create(css, extendCss)
         } else {
+
+            layer.gridConfig?.let {
+                finalGridConfig = it
+            }
+
+            layer.scrollConfig?.let {
+                finalScrollConfig = it
+            }
+            
             css
         }
 

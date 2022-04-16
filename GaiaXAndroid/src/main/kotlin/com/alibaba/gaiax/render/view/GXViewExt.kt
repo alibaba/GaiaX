@@ -258,8 +258,12 @@ fun GXText.setFontFamilyAndFontWeight(style: GXStyle) {
 
     // check
     if (this is GXIconFont) {
-        if (style.fontFamily == null) {
-            throw IllegalArgumentException("GXIconFont view must have font family property")
+        if (GXRegisterCenter.instance.processCompatible?.isPreventIconFontTypefaceThrowException() == true) {
+            this.typeface = GXStyleConvert.instance.fontFamily(GXTemplateKey.GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME)
+        } else {
+            if (style.fontFamily == null) {
+                throw IllegalArgumentException("GXIconFont view must have font family property")
+            }
         }
     }
 }

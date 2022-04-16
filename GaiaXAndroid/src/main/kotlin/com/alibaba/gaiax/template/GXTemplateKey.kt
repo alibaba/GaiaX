@@ -299,7 +299,7 @@ object GXTemplateKey {
     const val GAIAX_LAYER_LINE_SPACING = "line-spacing"
 
     @Deprecated("Compatible")
-    const val GAIAX_LAYER_INTERITEM_SPACING= "interitem-spacing"
+    const val GAIAX_LAYER_INTERITEM_SPACING = "interitem-spacing"
 
     const val GAIAX_LAYER_ITEM_SPACING = "item-spacing"
 
@@ -370,6 +370,8 @@ object GXTemplateKey {
     const val GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH = "view-port-width"
     const val GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT = "grid-compute-container-height"
     const val GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT = "scroll-compute-container-height"
+
+    const val GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME = "iconfont"
 
     const val GAIAX_DATABINDING_HOLDING_OFFSET = "holding-offset"
     const val GAIAX_DATABINDING_ITEM_TYPE = "item-type"

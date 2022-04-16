@@ -2,6 +2,7 @@ package com.alibaba.gaiax
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.template.*
 
@@ -83,9 +84,26 @@ class GXRegisterCenter {
         fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
 
+    interface GXIProcessEvent {
+        fun strategy(context: GXTemplateContext, node: GXNode, templateData: JSONObject)
+    }
+
     interface GXIProcessCompatible {
+
+        /**
+         * 是否兼容容器数据的传递顺序
+         */
         fun isCompatibleContainerDataPassSequence() = false
-        fun isCompatibleContainerNecessaryDataSource() = false
+
+        /**
+         * 是否兼容容器数据源抛异常的行为
+         */
+        fun isPreventContainerDataSourceThrowException() = false
+
+        /**
+         * 是否兼容IconFont的字体抛异常行为
+         */
+        fun isPreventIconFontTypefaceThrowException() = false
     }
 
     internal var processBizMap: GXIProcessBizMap? = null
@@ -178,6 +196,13 @@ class GXRegisterCenter {
 
     fun registerProcessCompatible(processCompatible: GXIProcessCompatible): GXRegisterCenter {
         this.processCompatible = processCompatible
+        return this
+    }
+
+    internal var processEvent: GXIProcessEvent? = null
+
+    fun registerProcessEvent(processEvent: GXIProcessEvent): GXRegisterCenter {
+        this.processEvent = processEvent
         return this
     }
 

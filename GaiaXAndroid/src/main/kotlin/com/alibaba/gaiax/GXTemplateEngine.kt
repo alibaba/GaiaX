@@ -25,6 +25,7 @@ import com.alibaba.gaiax.data.assets.GXAssetsBinaryTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.GXRenderImpl
+import com.alibaba.gaiax.render.node.GXProcessEvent
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -465,23 +466,16 @@ class GXTemplateEngine {
     fun init(context: Context): GXTemplateEngine {
         this.context = context.applicationContext
         GXStyleConvert.instance.init(context.assets)
-        initDefaultTemplateInfoSource()
-        initDefaultTemplateSource()
-        return this
-    }
-
-    private fun initDefaultTemplateInfoSource() {
         GXRegisterCenter.instance
             // priority 0
             .registerTemplateInfoSource(GXTemplateInfoSource(this.context))
-    }
-
-    private fun initDefaultTemplateSource() {
-        GXRegisterCenter.instance
             // priority 0
             .registerTemplateSource(GXAssetsBinaryTemplate(this.context), 0)
             // priority 1
             .registerTemplateSource(GXAssetsTemplate(this.context), 1)
+            //
+            .registerProcessEvent(GXProcessEvent())
+        return this
     }
 
     companion object {

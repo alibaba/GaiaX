@@ -213,45 +213,12 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         if (templateData !is JSONObject) {
             return
         }
-        val templateNode = node.templateNode
-        val eventBinding = templateNode.eventBinding ?: return
-        val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
-        val invisible = templateNode.finalCss?.style?.isInvisible() ?: false
+        val invisible = node.templateNode.finalCss?.style?.isInvisible() ?: false
         if (invisible) {
             return
         }
-        val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
-            eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE) ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
-        } else {
-            GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
-        }
-        when (eventType) {
-            GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
-                node.viewRef?.get()?.setOnClickListener {
-                    context.templateData?.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
-                        this.gestureType = eventType
-                        this.view = node.viewRef?.get()
-                        this.eventParams = eventData
-                        this.nodeId = templateNode.layer.id
-                        this.templateItem = context.templateItem
-                        this.index = -1
-                    })
-                }
-            }
-            GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
-                node.viewRef?.get()?.setOnLongClickListener {
-                    context.templateData?.eventListener?.onGestureEvent(GXTemplateEngine.GXGesture().apply {
-                        this.gestureType = eventType
-                        this.view = node.viewRef?.get()
-                        this.eventParams = eventData
-                        this.nodeId = templateNode.layer.id
-                        this.templateItem = context.templateItem
-                        this.index = -1
-                    })
-                    true
-                }
-            }
-        }
+
+        GXRegisterCenter.instance.processEvent?.strategy(context, node, templateData)
     }
 
     private fun nodeViewTrack(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
@@ -299,7 +266,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 容器数据源
         var containerTemplateData = dataBinding.getDataValue(templateData) as? JSONArray
         if (containerTemplateData == null) {
-            if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerNecessaryDataSource() == true) {
+            if (GXRegisterCenter.instance.processCompatible?.isPreventContainerDataSourceThrowException() == true) {
                 containerTemplateData = JSONArray()
             } else {
                 throw IllegalArgumentException("Scroll or Grid must be have a array data source")

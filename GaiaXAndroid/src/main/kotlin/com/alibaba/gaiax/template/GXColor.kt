@@ -47,7 +47,7 @@ class GXColor(val name: String, val value: Int) {
                     color = list[0]
                 }
             }
-            parseHexPositionColor(color)?.let { return it }
+            // parseHexPositionColor(color)?.let { return it }
             parseHexColor(color)?.let { return it }
             parseRGBAColor(color)?.let { return it }
             parseRGBColor(color)?.let { return it }

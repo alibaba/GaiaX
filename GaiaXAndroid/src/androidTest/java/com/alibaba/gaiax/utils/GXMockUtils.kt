@@ -119,8 +119,7 @@ object GXMockUtils {
     fun createCustomType(): GXLayer {
         return GXLayer.create(JSONObject().apply {
             this[GXTemplateKey.GAIAX_LAYER_ID] = "layerId" + layerIdCount++
-            this[GXTemplateKey.GAIAX_LAYER_TYPE] = GXViewKey.VIEW_TYPE_GAIA_TEMPLATE
-            this[GXTemplateKey.GAIAX_LAYER_SUB_TYPE] = GXViewKey.VIEW_TYPE_CUSTOM
+            this[GXTemplateKey.GAIAX_LAYER_TYPE] = GXViewKey.VIEW_TYPE_CUSTOM
             this[GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS] = "com.alibaba.view.CustomView"
         })
     }

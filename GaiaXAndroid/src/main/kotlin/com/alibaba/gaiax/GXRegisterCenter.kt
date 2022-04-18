@@ -2,7 +2,7 @@ package com.alibaba.gaiax
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.template.*
 
@@ -35,6 +35,11 @@ class GXRegisterCenter {
          * Get template raw data
          */
         fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+    }
+
+
+    interface GXIProcessNodeEvent {
+        fun create(): GXINodeEvent
     }
 
     interface GXIProcessExpression {
@@ -84,9 +89,6 @@ class GXRegisterCenter {
         fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
 
-    interface GXIProcessEvent {
-        fun strategy(context: GXTemplateContext, node: GXNode, templateData: JSONObject)
-    }
 
     interface GXIProcessCompatible {
 
@@ -199,11 +201,24 @@ class GXRegisterCenter {
         return this
     }
 
-    internal var processEvent: GXIProcessEvent? = null
+    internal var processNodeEvent: GXIProcessNodeEvent? = null
 
-    fun registerProcessEvent(processEvent: GXIProcessEvent): GXRegisterCenter {
-        this.processEvent = processEvent
+    fun registerProcessNodeEvent(processNodeEvent: GXIProcessNodeEvent): GXRegisterCenter {
+        this.processNodeEvent = processNodeEvent
         return this
+    }
+
+    fun reset() {
+        processNodeEvent = null
+        processCompatible = null
+        processScroll = null
+        processGrid = null
+        processBizMap = null
+        processColor = null
+        processExpression = null
+        processPostPositionProperty = null
+        processPrePositionProperty = null
+        processSize = null
     }
 
     companion object {

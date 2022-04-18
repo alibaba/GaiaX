@@ -41,3 +41,27 @@ private fun GXNode.findViewById(viewData: GXNode, id: String): View? {
     }
     return null
 }
+
+
+/**
+ * @suppress
+ */
+fun GXNode.getGXNodeById(id: String): GXNode? {
+    return findNodeById(this, id)
+}
+
+/**
+ * @suppress
+ */
+private fun GXNode.findNodeById(gxNode: GXNode, id: String): GXNode? {
+    if (gxNode.templateNode.layer.id == id) {
+        return gxNode
+    }
+    gxNode.children?.forEach {
+        val view = findNodeById(it, id)
+        if (view != null) {
+            return view
+        }
+    }
+    return null
+}

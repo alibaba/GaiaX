@@ -218,7 +218,20 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             return
         }
 
-        GXRegisterCenter.instance.processEvent?.strategy(context, node, templateData)
+        // 存在事件
+        if (node.templateNode.eventBinding != null) {
+
+            // 创建事件处理器
+            node.event = node.event ?: GXRegisterCenter.instance.processNodeEvent?.create() ?: GXNodeEvent()
+
+            val gxNodeEvent = node.event
+            if (gxNodeEvent is GXINodeEvent) {
+                // 添加事件
+                gxNodeEvent.addDataBindingEvent(context, node, templateData)
+            } else {
+                throw IllegalArgumentException("Not support the event $gxNodeEvent")
+            }
+        }
     }
 
     private fun nodeViewTrack(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {

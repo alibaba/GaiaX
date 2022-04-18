@@ -83,6 +83,11 @@ class GXNode {
     var children: MutableList<GXNode>? = null
 
     /**
+     * 事件处理器
+     */
+    var event: GXINodeEvent? = null
+
+    /**
      * 容器嵌套子模板
      */
     var childTemplateItems: MutableList<Pair<GXTemplateEngine.GXTemplateItem, GXTemplateNode>>? = null

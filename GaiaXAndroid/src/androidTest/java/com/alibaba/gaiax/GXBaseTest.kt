@@ -14,11 +14,13 @@ import com.alibaba.gaiax.analyze.GXArray
 import com.alibaba.gaiax.analyze.GXMap
 import com.alibaba.gaiax.analyze.GXString
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.alibaba.gaiax.utils.getAnyExt
+import org.junit.After
 import org.junit.Before
 
 
@@ -51,6 +53,11 @@ open class GXBaseTest {
             .registerProcessGrid(GXProcessGrid())
             .registerProcessScroll(GXProcessScroll())
 
+    }
+
+    @After
+    fun after() {
+        GXRegisterCenter.instance.reset()
     }
 
     class GXProcessScroll : GXRegisterCenter.GXIProcessScroll {

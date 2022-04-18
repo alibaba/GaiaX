@@ -25,8 +25,9 @@ import com.alibaba.gaiax.data.assets.GXAssetsBinaryTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.GXRenderImpl
-import com.alibaba.gaiax.render.node.GXProcessEvent
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.node.getGXNodeById
 import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXCss
@@ -89,7 +90,7 @@ class GXTemplateEngine {
     /**
      * Event parameters
      */
-    class GXGesture {
+    open class GXGesture {
 
         /**
          * Event types：tap, longpress
@@ -445,7 +446,7 @@ class GXTemplateEngine {
      * Getting the template context
      * @suppress
      */
-    internal fun getGXTemplateContext(targetView: View): GXTemplateContext? {
+    fun getGXTemplateContext(targetView: View): GXTemplateContext? {
         return GXTemplateContext.getContext(targetView)
     }
 
@@ -453,9 +454,16 @@ class GXTemplateEngine {
      * Get template View
      * @suppress
      */
-    internal fun getGXViewById(targetView: View, id: String): View? {
+    fun getGXViewById(targetView: View, id: String): View? {
         GXTemplateContext.getContext(targetView)?.let { context ->
             return context.rootNode?.getGXViewById(id)
+        }
+        return null
+    }
+
+    fun getGXNodeById(targetView: View, id: String): GXNode? {
+        GXTemplateContext.getContext(targetView)?.let { context ->
+            return context.rootNode?.getGXNodeById(id)
         }
         return null
     }
@@ -473,8 +481,6 @@ class GXTemplateEngine {
             .registerTemplateSource(GXAssetsBinaryTemplate(this.context), 0)
             // priority 1
             .registerTemplateSource(GXAssetsTemplate(this.context), 1)
-            //
-            .registerProcessEvent(GXProcessEvent())
         return this
     }
 

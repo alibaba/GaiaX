@@ -1,11 +1,5 @@
 {
   "id": "template_event_tap_listener",
   "type": "gaia-template",
-  "package": {
-    "id": "template_event_tap_listener",
-    "version": "0.0.1",
-    "modify-timestamp": "Fri Dec 03 2021 14:44:21 GMT+0800 (China Standard Time)",
-    "dependencies": {}
-  },
   "layers": [{ "id": "target", "type": "view" }]
 }

@@ -40,7 +40,13 @@ class GXColor(val name: String, val value: Int) {
         }
 
         fun parseColor(targetColor: String): Int? {
-            val color = targetColor.trim()
+            var color = targetColor.trim()
+            if (color.contains("%")) {
+                val list = color.split(" ")
+                if (list.size == 2) {
+                    color = list[0]
+                }
+            }
             parseHexPositionColor(color)?.let { return it }
             parseHexColor(color)?.let { return it }
             parseRGBAColor(color)?.let { return it }

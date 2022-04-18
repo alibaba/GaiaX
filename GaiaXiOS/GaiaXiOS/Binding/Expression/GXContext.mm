@@ -49,6 +49,10 @@
             const char *cString = GX_ToCString(value);
             NSString *stringValue = [NSString stringWithUTF8String:cString];
             result = [GXStr getResultByValue:stringValue];
+            if(value.tag == GX_TAG_STRING && value.u.str !=NULL){
+                delete[]value.u.str;
+                value.u.str = NULL;
+            }
         }
             break;
         case GX_TAG_ARRAY:{

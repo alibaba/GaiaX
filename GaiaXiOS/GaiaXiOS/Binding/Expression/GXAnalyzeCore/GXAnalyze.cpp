@@ -857,12 +857,11 @@ string GXAnalyze::grammarScanner(vector<GXATSNode> array) {
     return temp;
 }
 
-static GXValue pointer;
 
 long GXAnalyze::getValue(string expression, void *source) {
     char *input;
     int inputLength = expression.length();
-    input = new char[inputLength+2];
+    input = new char[inputLength + 2];
     vector<GXATSNode> array;
     array.reserve(128);
     string result = "#";
@@ -887,6 +886,7 @@ long GXAnalyze::getValue(string expression, void *source) {
 }
 
 long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source) {
+    static GXValue pointer;
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     string temp = "\0"; //需要分析的语句
     string sentence = s + temp;
@@ -916,10 +916,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         //当前new_status,下一入栈的新状态
         new_status = tableT[m];
         if (new_status == "acc") {
-            if(pointer.tag == GX_TAG_STRING){
-                delete []pointer.u.str;
-                pointer.u.str = nullptr;
-            }
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
                 pointer = GX_NewGXString(tem);
@@ -989,6 +985,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     }
                     valueStack[valueSize] = t1;
                     ++valueSize;
+                    if (gxv->tag == GX_TAG_STRING && gxv->u.str != NULL) {
+                        delete[] gxv->u.str;
+                        gxv->u.str = NULL;
+                    }
+                    free(gxv);
                 } else {
                     valueStack[valueSize] = array[valueStep];
                     ++valueSize;
@@ -1104,6 +1105,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         }
                                         --valueSize;
                                         isFunction = false;
+                                        if (fun->tag == GX_TAG_STRING && fun->u.str != NULL) {
+                                            delete[] fun->u.str;
+                                            fun->u.str = NULL;
+                                        }
+                                        free(fun);
                                         break;
                                     } else {
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用

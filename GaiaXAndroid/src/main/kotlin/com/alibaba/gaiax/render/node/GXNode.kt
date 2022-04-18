@@ -18,6 +18,7 @@ package com.alibaba.gaiax.render.node
 
 import android.animation.AnimatorSet
 import android.view.View
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXLayer
 import java.lang.ref.SoftReference
@@ -160,5 +161,11 @@ class GXNode {
 
     override fun toString(): String {
         return "GXNode(id='$id', idPath='$idPath', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
+    }
+
+    fun initEventByRegisterCenter() {
+        if (event == null) {
+            event = GXRegisterCenter.instance.processNodeEvent?.create()
+        }
     }
 }

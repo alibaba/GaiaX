@@ -20,13 +20,9 @@
 
 ### Android
 
-#### 依赖 [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
-```
-// 依赖
-dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.1'
-}
-```
+#### 依赖 
+
+[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
 
 #### 模板文件
 ```
@@ -86,6 +82,9 @@ xxx.bundle/templateId
 
 // 引入头文件
 #import <GaiaXiOS/GaiaXiOS.h>
+
+//注册模板服务
+[TheGXRegisterCenter registerTemplateServiceWithBizId:templateId templateBundle:@"xxx.bundle"];
 
 // 构建模板参数     - 模板信息
 // templateBiz    - 业务ID

@@ -177,7 +177,7 @@ data class GXLayer constructor(
      * 自定义组件类型
      */
     fun isCustomType(): Boolean {
-        return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass != null
+        return type == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass != null
     }
 
     /**

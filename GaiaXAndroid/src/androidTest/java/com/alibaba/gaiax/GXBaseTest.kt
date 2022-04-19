@@ -47,8 +47,8 @@ open class GXBaseTest {
             .registerProcessDataBinding(GXProcessDataBinding())
             .registerProcessColor(GXProcessorColor())
             .registerProcessSize(GXProcessSize())
-            .registerProcessPostPositionProperty(GXProcessDynamicProperty())
-            .registerProcessPrePositionProperty(GXProcessStaticProperty())
+            .registerProcessDynamicProperty(GXProcessDynamicProperty())
+            .registerProcessStaticProperty(GXProcessStaticProperty())
             .registerProcessGrid(GXProcessGrid())
             .registerProcessScroll(GXProcessScroll())
 

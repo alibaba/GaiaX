@@ -1,9 +1,11 @@
 package com.alibaba.gaiax
 
+import android.view.ViewGroup
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
+import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.*
@@ -37,6 +39,18 @@ class GXRegisterCenter {
          * Get template raw data
          */
         fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+    }
+
+    interface GXIProcessContainerItemBind {
+        fun bindViewHolder(
+            tag: Any?,
+            childItemContainer: ViewGroup,
+            childMeasureSize: GXTemplateEngine.GXMeasureSize,
+            childTemplateItem: GXTemplateEngine.GXTemplateItem,
+            childItemPosition: Int,
+            childVisualNestTemplateNode: GXTemplateNode,
+            childItemData: JSONObject
+        ): Any?
     }
 
     interface GXIProcessContainerDataUpdate {
@@ -173,14 +187,14 @@ class GXRegisterCenter {
 
     internal var processDynamicProperty: GXIProcessDynamicProperty? = null
 
-    fun registerProcessPostPositionProperty(processDynamicProperty: GXIProcessDynamicProperty): GXRegisterCenter {
+    fun registerProcessDynamicProperty(processDynamicProperty: GXIProcessDynamicProperty): GXRegisterCenter {
         this.processDynamicProperty = processDynamicProperty
         return this
     }
 
     internal var processStaticProperty: GXIProcessStaticProperty? = null
 
-    fun registerProcessPrePositionProperty(processStaticProperty: GXIProcessStaticProperty): GXRegisterCenter {
+    fun registerProcessStaticProperty(processStaticProperty: GXIProcessStaticProperty): GXRegisterCenter {
         this.processStaticProperty = processStaticProperty
         return this
     }
@@ -222,6 +236,13 @@ class GXRegisterCenter {
 
     fun registerProcessContainerDataUpdate(processContainerDataUpdate: GXIProcessContainerDataUpdate): GXRegisterCenter {
         this.processContainerDataUpdate = processContainerDataUpdate
+        return this
+    }
+
+    internal var processContainerItemBind: GXIProcessContainerItemBind? = null
+
+    fun registerProcessContainerItemBind(processContainerItemBind: GXIProcessContainerItemBind): GXRegisterCenter {
+        this.processContainerItemBind = processContainerItemBind
         return this
     }
 

@@ -223,7 +223,7 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_height_100px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT) {

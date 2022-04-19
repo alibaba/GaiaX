@@ -39,6 +39,7 @@ import com.alibaba.gaiax.utils.getStringExtCanNull
  */
 class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    var childTag: Any? = null
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
     var childMeasureSize: GXTemplateEngine.GXMeasureSize? = null
     var childVisualNestTemplateNode: GXTemplateNode? = null
@@ -89,22 +90,35 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         val childTemplateItem = holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
         val childVisualNestTemplateNode = holder.childVisualNestTemplateNode ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
         val childMeasureSize = holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
-
         val childItemContainer = holder.itemView as ViewGroup
+        val childItemPosition = holder.adapterPosition
+        val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
 
-        // 获取坑位View
-        val childView = if (childItemContainer.childCount != 0) {
-            childItemContainer.getChildAt(0)
+        val processContainerItemBind = GXRegisterCenter.instance.processContainerItemBind
+        if (processContainerItemBind != null) {
+            holder.childTag = processContainerItemBind.bindViewHolder(
+                gxTemplateContext.templateData?.tag,
+                childItemContainer,
+                childMeasureSize,
+                childTemplateItem,
+                childItemPosition,
+                childVisualNestTemplateNode,
+                childItemData)
         } else {
-            GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
-                childItemContainer.addView(this)
-            }
-        }
 
-        // 为坑位View绑定数据
-        val childItemData = containerData.getJSONObject(holder.adapterPosition) ?: JSONObject()
-        val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
-        GXTemplateEngine.instance.bindData(childView, childTemplateData)
+            // 获取坑位View
+            val childView = if (childItemContainer.childCount != 0) {
+                childItemContainer.getChildAt(0)
+            } else {
+                GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
+                    childItemContainer.addView(this)
+                }
+            }
+
+            // 为坑位View绑定数据
+            val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+            GXTemplateEngine.instance.bindData(childView, childTemplateData)
+        }
     }
 
     /**

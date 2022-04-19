@@ -6,9 +6,11 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -23,6 +25,59 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentScrollTest : GXBaseTest() {
+    @Test
+    fun template_container_item_bind() {
+
+        GXRegisterCenter.instance.registerProcessContainerItemBind(object : GXRegisterCenter.GXIProcessContainerItemBind {
+
+            override fun bindViewHolder(
+                tag: Any?,
+                childItemContainer: ViewGroup,
+                childMeasureSize: GXTemplateEngine.GXMeasureSize,
+                childTemplateItem: GXTemplateEngine.GXTemplateItem,
+                childItemPosition: Int,
+                childVisualNestTemplateNode: GXTemplateNode,
+                childItemData: JSONObject
+            ): Any? {
+                // 获取坑位View
+                val childView = if (childItemContainer.childCount != 0) {
+                    childItemContainer.getChildAt(0)
+                } else {
+                    GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
+                        childItemContainer.addView(this)
+                    }
+                }
+
+                // 为坑位View绑定数据
+                val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+                GXTemplateEngine.instance.bindData(childView, childTemplateData)
+                return null
+            }
+
+        })
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_child_count")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(5, rootView.childCount())
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+    }
 
     @Test
     fun template_data_update() {
@@ -256,7 +311,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -331,7 +386,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -407,7 +462,7 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -513,7 +568,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -791,8 +846,8 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
     }
 
     @Test

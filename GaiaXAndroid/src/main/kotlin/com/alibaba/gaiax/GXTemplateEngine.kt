@@ -317,6 +317,8 @@ class GXTemplateEngine {
         val data: JSONObject
     ) {
 
+        var tag: Any? = null
+
         /**
          * @suppress
          */

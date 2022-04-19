@@ -107,7 +107,7 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerItemSizeByItemTemplate(
+    fun computeContainerItemSize(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,

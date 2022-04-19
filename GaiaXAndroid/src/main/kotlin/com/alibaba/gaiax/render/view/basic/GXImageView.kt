@@ -46,20 +46,34 @@ open class GXImageView : AppCompatImageView, GXIImageView {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     companion object {
-        fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
-
-        fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
-
-        fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
-
         const val NET_HTTP_PREFIX = "http:"
         const val NET_HTTPS_PREFIX = "https:"
         const val LOCAL_PREFIX = "local:"
     }
 
+    private fun getDrawableByResId(imageView: ImageView, resId: Int): Drawable? {
+        val theme: Resources.Theme = imageView.context.theme
+        return ResourcesCompat.getDrawable(imageView.resources, resId, theme)
+    }
+
+    private fun getResIdByUri(imageView: ImageView, uri: String): Int {
+        try {
+            return imageView.resources.getIdentifier(uri, "drawable", imageView.context.packageName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return 0
+    }
+
+    private fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
+
+    private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
+
+    private fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
+
     override fun onBindData(data: JSONObject) {
         bindUri(data)
-        bindDesc(this, data)
+        bindDesc(data)
     }
 
     override fun setFrame(l: Int, t: Int, r: Int, b: Int): Boolean {
@@ -77,11 +91,13 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         this.scaleType = ScaleType.FIT_XY
     }
 
-    private fun bindUri(data: JSONObject) {
-        val uri = data.getString("value")?.trim() ?: ""
+    open fun bindUri(data: JSONObject) {
+        val uri = data.getString(GXTemplateKey.GAIAX_VALUE)?.trim() ?: ""
         when {
             isNetUri(uri) -> {
-                bindImageUri(data, uri)
+                // 占位图仅对网络图生效
+                val placeholder = data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)
+                bindNetUri(data, uri, placeholder)
             }
             isLocalUri(uri) -> {
                 val finalUri = getLocalUri(uri)
@@ -93,52 +109,43 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         }
     }
 
-    private fun bindDefault() {
+    open fun bindDefault() {
         setImageDrawable(null)
     }
 
-    private fun bindImageUri(data: JSONObject, uri: String) {
-        // 占位图仅对网络图生效
-        data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)?.let { resUri ->
-            bindRes(resUri)
-        }
-        // Net
-        // Glide.with(context).load(uri).into(this)
+    open fun bindNetUri(data: JSONObject, uri: String, placeholder: String?) {
+        // throw IllegalArgumentException("GXImageView bindNetUri not implement")
     }
 
-    private fun bindRes(resUri: String) {
+    open fun bindRes(resUri: String) {
         try {
-            val res: Int = this.resources.getIdentifier(resUri, "drawable", this.context.packageName)
-            // 2020 1117
-            // 增加主题，用于处理暗黑模式下，资源获取不正确的问题
-            val theme: Resources.Theme = this.context.theme
-            val drawable = ResourcesCompat.getDrawable(this.resources, res, theme)
+            val res: Int = getResIdByUri(this, resUri)
+            val drawable = getDrawableByResId(this, res)
             this.setImageDrawable(drawable)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun bindDesc(view: View, data: JSONObject) {
-
+    open fun bindDesc(data: JSONObject) {
         // 原有无障碍逻辑
         val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
         if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
-            view.contentDescription = accessibilityDesc
-            view.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
+            this.contentDescription = accessibilityDesc
+            this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         } else {
-            view.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+            this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         }
 
         // 新增Enable逻辑
         data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
             if (enable) {
-                view.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
                 if (accessibilityDesc == null || accessibilityDesc.isEmpty()) {
-                    view.contentDescription = "图片"
+                    this.contentDescription = "图片"
                 }
             } else {
-                view.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
         }
     }

@@ -76,21 +76,6 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         bindDesc(data)
     }
 
-    override fun setFrame(l: Int, t: Int, r: Int, b: Int): Boolean {
-        updateMatrix(this, drawable)
-        return super.setFrame(l, t, r, b)
-    }
-
-    private var mode: GXMode? = null
-
-    override fun setImageStyle(gxCss: GXCss) = if (gxCss.style.mode != null) {
-        this.mode = gxCss.style.mode
-        val scaleType = gxCss.style.mode.getScaleType()
-        this.scaleType = scaleType
-    } else {
-        this.scaleType = ScaleType.FIT_XY
-    }
-
     open fun bindUri(data: JSONObject) {
         val uri = data.getString(GXTemplateKey.GAIAX_VALUE)?.trim() ?: ""
         when {
@@ -150,6 +135,8 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         }
     }
 
+    private var delegate: GXRoundBorderDelegate? = null
+
     private fun updateMatrix(imageView: ImageView, drawable: Drawable?) {
         if (drawable != null && imageView.scaleType == ScaleType.MATRIX) {
             val viewWidth: Int = imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
@@ -163,7 +150,20 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         }
     }
 
-    private var delegate: GXRoundBorderDelegate? = null
+    override fun setFrame(l: Int, t: Int, r: Int, b: Int): Boolean {
+        updateMatrix(this, drawable)
+        return super.setFrame(l, t, r, b)
+    }
+
+    private var mode: GXMode? = null
+
+    override fun setImageStyle(gxCss: GXCss) = if (gxCss.style.mode != null) {
+        this.mode = gxCss.style.mode
+        val scaleType = gxCss.style.mode.getScaleType()
+        this.scaleType = scaleType
+    } else {
+        this.scaleType = ScaleType.FIT_XY
+    }
 
     override fun draw(canvas: Canvas?) {
         val measureWidth = measuredWidth.toFloat()

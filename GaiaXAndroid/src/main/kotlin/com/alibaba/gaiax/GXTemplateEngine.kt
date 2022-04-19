@@ -423,26 +423,6 @@ class GXTemplateEngine {
     }
 
     /**
-     * View appears
-     * @suppress
-     */
-    fun onAppear(targetView: View) {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            render.onVisible(context)
-        }
-    }
-
-    /**
-     * View disappear
-     * @suppress
-     */
-    fun onDisappear(targetView: View) {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            render.onInvisible(context)
-        }
-    }
-
-    /**
      * Getting the template context
      * @suppress
      */

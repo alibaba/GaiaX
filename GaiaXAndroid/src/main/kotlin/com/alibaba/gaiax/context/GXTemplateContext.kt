@@ -30,10 +30,6 @@ import java.lang.ref.SoftReference
  */
 class GXTemplateContext(val context: Context) {
 
-    var lifeStatus: Int = LIFE_ON_NONE
-
-    var visibleStatus: Int = LIFE_ON_NONE
-
     /**
      * Is dirty
      */
@@ -64,6 +60,7 @@ class GXTemplateContext(val context: Context) {
      */
     var rootNode: GXNode? = null
 
+
     var templateData: GXTemplateEngine.GXTemplateData? = null
 
     /**
@@ -90,14 +87,6 @@ class GXTemplateContext(val context: Context) {
     }
 
     companion object {
-
-        const val LIFE_ON_NONE = 0
-        const val LIFE_ON_CREATE = 1
-        const val LIFE_ON_READY = 2
-        const val LIFE_ON_REUSE = 3
-        const val LIFE_ON_VISIBLE = 4
-        const val LIFE_ON_INVISIBLE = 5
-        const val LIFE_ON_DESTROY = 6
 
         fun createContext(templateItem: GXTemplateEngine.GXTemplateItem, size: GXTemplateEngine.GXMeasureSize, templateInfo: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null): GXTemplateContext {
             val context = GXTemplateContext(templateItem.context)

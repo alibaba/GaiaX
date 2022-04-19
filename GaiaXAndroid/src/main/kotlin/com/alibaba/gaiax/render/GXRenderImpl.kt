@@ -59,8 +59,6 @@ class GXRenderImpl {
         }
         templateContext.rootView = SoftReference(rootView)
 
-        onCreate(templateContext)
-
         return templateContext.rootView?.get() ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
     }
 
@@ -75,42 +73,5 @@ class GXRenderImpl {
 
         // Update view layout
         GXViewTreeUpdater(templateContext, rootNode).build()
-
-        onReadyOrReuse(templateContext)
-    }
-
-    internal fun onDestroy(templateContext: GXTemplateContext) {
-        templateContext.lifeStatus = GXTemplateContext.LIFE_ON_DESTROY
-        templateContext.release()
-        templateContext.visibleStatus = GXTemplateContext.LIFE_ON_NONE
-        templateContext.lifeStatus = GXTemplateContext.LIFE_ON_NONE
-    }
-
-    fun onVisible(templateContext: GXTemplateContext) {
-        templateContext.visibleStatus = GXTemplateContext.LIFE_ON_VISIBLE
-    }
-
-    fun onInvisible(templateContext: GXTemplateContext) {
-        templateContext.visibleStatus = GXTemplateContext.LIFE_ON_INVISIBLE
-    }
-
-    private fun onCreate(templateContext: GXTemplateContext) {
-        templateContext.lifeStatus = GXTemplateContext.LIFE_ON_CREATE
-    }
-
-    private fun onReadyOrReuse(templateContext: GXTemplateContext) {
-        if (templateContext.lifeStatus == GXTemplateContext.LIFE_ON_READY) {
-            onReuse(templateContext)
-        } else {
-            onReady(templateContext)
-        }
-    }
-
-    private fun onReady(templateContext: GXTemplateContext) {
-        templateContext.lifeStatus = GXTemplateContext.LIFE_ON_READY
-    }
-
-    private fun onReuse(templateContext: GXTemplateContext) {
-        templateContext.lifeStatus = GXTemplateContext.LIFE_ON_REUSE
     }
 }

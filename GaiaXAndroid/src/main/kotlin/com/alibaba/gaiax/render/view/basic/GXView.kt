@@ -45,7 +45,7 @@ open class GXView : AbsoluteLayout,
     protected fun finalize() {
         if (gxTemplateContext?.rootView?.get() == this) {
             if (gxTemplateContext?.rootNode?.isRoot == true) {
-                GXTemplateEngine.instance.render.onDestroy(gxTemplateContext!!)
+                gxTemplateContext?.release()
                 gxTemplateContext = null
             }
         }

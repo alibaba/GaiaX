@@ -44,7 +44,7 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView {
     private fun finalize() {
         if (gxTemplateContext?.rootView?.get() == this) {
             if (gxTemplateContext?.rootNode?.isRoot == true) {
-                GXTemplateEngine.instance.render.onDestroy(gxTemplateContext!!)
+                gxTemplateContext?.release()
                 gxTemplateContext = null
             }
         }

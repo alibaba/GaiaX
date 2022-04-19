@@ -1253,43 +1253,6 @@ class GXTemplateEngineTest : GXBaseTest() {
     }
 
     @Test
-    fun template_lifecycle() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "integration", "template_normal")
-
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
-
-        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-
-        val templateContext = GXTemplateEngine.instance.getGXTemplateContext(rootView)
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_CREATE, templateContext?.lifeStatus)
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_NONE, templateContext?.visibleStatus)
-
-        GXTemplateEngine.instance.bindData(rootView, templateData)
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_READY, templateContext?.lifeStatus)
-
-        GXTemplateEngine.instance.bindData(rootView, templateData)
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_REUSE, templateContext?.lifeStatus)
-
-        GXTemplateEngine.instance.onAppear(rootView)
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_VISIBLE, templateContext?.visibleStatus)
-
-        GXTemplateEngine.instance.onDisappear(rootView)
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_INVISIBLE, templateContext?.visibleStatus)
-
-        // manual call finalized
-        (rootView as? GXIRootView)?.manualRelease()
-
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_NONE, templateContext?.lifeStatus)
-        Assert.assertEquals(GXTemplateContext.LIFE_ON_NONE, templateContext?.visibleStatus)
-
-    }
-
-    @Test
     fun template_animation_lottie_local() {
 
     }

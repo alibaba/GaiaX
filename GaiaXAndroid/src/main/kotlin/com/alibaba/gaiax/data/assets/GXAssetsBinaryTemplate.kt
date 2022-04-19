@@ -34,20 +34,20 @@ class GXAssetsBinaryTemplate(val context: Context) : GXRegisterCenter.GXITemplat
         return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
     }
 
-    override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
+    override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
 
         // 1. Determine if the end product of Assets.gaiax exists, and if so, use it directly, and return
-        val memoryTemplate = getFromCache(templateItem.bizId, templateItem.templateId)
+        val memoryTemplate = getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         if (memoryTemplate != null) {
             return memoryTemplate
         }
 
         // 2. Check whether the compressed package exists in Assets. If the package exists, decompress it to the local PC and read data into the memory
-        val templateContents = getTemplateContents(templateItem)
+        val templateContents = getTemplateContents(gxTemplateItem)
         if (templateContents != null) {
-            val templatePath = createTemplatePath(templateContents, templateItem.bizId, templateItem.templateId)
+            val templatePath = createTemplatePath(templateContents, gxTemplateItem.bizId, gxTemplateItem.templateId)
             addToCache(templatePath)
-            return getFromCache(templateItem.bizId, templateItem.templateId)
+            return getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         }
         return null
     }

@@ -85,7 +85,7 @@ class GXComponentScrollTest : GXBaseTest() {
         var isExecuteContainerDataUpdate = false
         GXRegisterCenter.instance.registerProcessContainerDataUpdate(object : GXRegisterCenter.GXIProcessContainerDataUpdate {
 
-            override fun update(gxTemplateContext: GXTemplateContext, adapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray) {
+            override fun update(gxTemplateContext: GXTemplateContext, gxContainerViewAdapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray) {
                 isExecuteContainerDataUpdate = true
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize(): Int {
@@ -105,7 +105,7 @@ class GXComponentScrollTest : GXBaseTest() {
                     }
 
                 }, true)
-                diffResult.dispatchUpdatesTo(adapter)
+                diffResult.dispatchUpdatesTo(gxContainerViewAdapter)
             }
 
         })

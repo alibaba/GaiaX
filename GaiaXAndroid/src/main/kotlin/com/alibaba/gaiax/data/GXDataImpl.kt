@@ -49,11 +49,11 @@ class GXDataImpl(val context: Context) {
 
         private val sources = mutableListOf<GXRegisterCenter.GXITemplateSource>()
 
-        override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
+        override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
             sources.forEach { it ->
-                it.getTemplate(templateItem)?.let { return it }
+                it.getTemplate(gxTemplateItem)?.let { return it }
             }
-            throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
+            throw IllegalArgumentException("Not found target template path, templateItem = $gxTemplateItem")
         }
 
         fun addPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
@@ -69,8 +69,8 @@ class GXDataImpl(val context: Context) {
         private var source: GXRegisterCenter.GXITemplateInfoSource? = null
         // private val sources = mutableListOf<GXRegisterCenter.GXITemplateInfoSource>()
 
-        override fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            source?.getTemplateInfo(templateItem)?.let { return it }
+        override fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
+            source?.getTemplateInfo(gxTemplateItem)?.let { return it }
             throw IllegalStateException("Template exist but reference is null")
         }
 

@@ -6,6 +6,8 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -21,6 +23,17 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_column_responsive() {
+        GXRegisterCenter.instance.registerProcessGrid(object : GXRegisterCenter.GXIProcessGrid {
+            override fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig): Any? {
+                if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue("responsive-enable")) {
+                    if (gridConfig.column == 2) {
+                        return 3
+                    }
+                }
+                return null
+            }
+
+        })
 
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column_responsive")
 

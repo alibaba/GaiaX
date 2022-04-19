@@ -15,18 +15,18 @@ class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateI
 
     private fun exist(templateBiz: String, templateId: String) = dataCache[templateBiz]?.get(templateId) != null
 
-    override fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
-        return if (exist(templateItem.bizId, templateItem.templateId)) {
-            dataCache[templateItem.bizId]?.get(templateItem.templateId) ?: throw IllegalStateException("Template exist but reference is null")
+    override fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
+        return if (exist(gxTemplateItem.bizId, gxTemplateItem.templateId)) {
+            dataCache[gxTemplateItem.bizId]?.get(gxTemplateItem.templateId) ?: throw IllegalStateException("Template exist but reference is null")
         } else {
-            val template = GXTemplateInfo.createTemplate(templateItem)
+            val template = GXTemplateInfo.createTemplate(gxTemplateItem)
             return template.apply {
-                var bizList = dataCache[templateItem.bizId]
+                var bizList = dataCache[gxTemplateItem.bizId]
                 if (bizList == null) {
                     bizList = ConcurrentHashMap()
-                    dataCache[templateItem.bizId] = bizList
+                    dataCache[gxTemplateItem.bizId] = bizList
                 }
-                bizList[templateItem.templateId] = this
+                bizList[gxTemplateItem.templateId] = this
                 collectionNestTemplate(bizList, this)
             }
         }

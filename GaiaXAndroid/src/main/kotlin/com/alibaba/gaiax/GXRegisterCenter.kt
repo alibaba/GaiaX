@@ -27,7 +27,7 @@ class GXRegisterCenter {
         /**
          * Get template info data
          */
-        fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo?
+        fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo?
     }
 
     /**
@@ -38,7 +38,7 @@ class GXRegisterCenter {
         /**
          * Get template raw data
          */
-        fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+        fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
     }
 
     interface GXIProcessContainerItemBind {
@@ -54,7 +54,7 @@ class GXRegisterCenter {
     }
 
     interface GXIProcessContainerDataUpdate {
-        fun update(gxTemplateContext: GXTemplateContext, adapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray)
+        fun update(gxTemplateContext: GXTemplateContext, gxContainerViewAdapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray)
     }
 
     interface GXIProcessNodeEvent {
@@ -103,15 +103,15 @@ class GXRegisterCenter {
     }
 
     interface GXIProcessBizMap {
-        fun convert(templateItem: GXTemplateEngine.GXTemplateItem)
+        fun convert(item: GXTemplateEngine.GXTemplateItem)
     }
 
     interface GXIProcessGrid {
-        fun convert(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any?
+        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig): Any?
     }
 
     interface GXIProcessScroll {
-        fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
+        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
 
     interface GXIProcessCompatible {

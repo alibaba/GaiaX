@@ -60,27 +60,28 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerHeightByItemTemplate(context: GXTemplateContext, gxNode: GXNode, containerData: JSONArray): Size<Dimension?>? {
+    fun computeContainerHeightByItemTemplate(gxTemplateContext: GXTemplateContext, gxNode: GXNode, containerData: JSONArray): Size<Dimension?>? {
         if (gxNode.childTemplateItems?.isEmpty() == true) {
             return null
         }
 
         // 1. 获取坑位的ViewPort信息
-        val itemViewPort: Size<Float?> = computeItemViewPort(context, gxNode)
+        val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
         // 2. 计算坑位实际宽高结果
         val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
-        val itemSize: Layout? = computeItemSize(gxNode, itemViewPort, itemTemplateItem, itemVisualTemplateNode, containerData)
+        val itemSize: Layout? = computeItemSize(gxTemplateContext, gxNode, itemViewPort, itemTemplateItem, itemVisualTemplateNode, containerData)
 
         // 如果是Scroll容器，那么需要计算所有数据的高度，作为Item的高度
         // TODO: 待处理
         // 3. 计算容器期望的宽高结果
-        return computeContainerSize(context, gxNode, itemSize, containerData)
+        return computeContainerSize(gxTemplateContext, gxNode, itemSize, containerData)
     }
 
     private fun computeItemSize(
+        gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         itemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
@@ -92,14 +93,14 @@ object GXNodeUtils {
                 val itemData = containerData.firstOrNull() as? JSONObject ?: return null
                 val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData = GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(gxItemTemplateItem, itemMeasureSize, itemTemplateData, gxItemVisualTemplateNode)?.stretchNode?.finalLayout
+                return computeItemSizeByCreateAndBindNode(gxTemplateContext, gxItemTemplateItem, itemMeasureSize, itemTemplateData, gxItemVisualTemplateNode)?.stretchNode?.finalLayout
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
                 val itemData = containerData.firstOrNull() as? JSONObject ?: return null
                 val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData = GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(gxItemTemplateItem, itemMeasureSize, itemTemplateData, gxItemVisualTemplateNode)?.stretchNode?.finalLayout
+                return computeItemSizeByCreateAndBindNode(gxTemplateContext, gxItemTemplateItem, itemMeasureSize, itemTemplateData, gxItemVisualTemplateNode)?.stretchNode?.finalLayout
             }
             else -> {
                 return null
@@ -118,7 +119,7 @@ object GXNodeUtils {
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
         // 2. 计算坑位实际宽高结果
-        return computeItemSize(gxNode, itemViewPort, gxItemTemplateItem, gxItemVisualTemplateNode, containerData)
+        return computeItemSize(gxTemplateContext, gxNode, itemViewPort, gxItemTemplateItem, gxItemVisualTemplateNode, containerData)
     }
 
     fun computeItemViewPort(context: GXTemplateContext, gxNode: GXNode): Size<Float?> {
@@ -182,6 +183,7 @@ object GXNodeUtils {
     }
 
     private fun computeItemSizeByCreateAndBindNode(
+        gxTemplateContext: GXTemplateContext,
         templateItem: GXTemplateEngine.GXTemplateItem,
         measureSize: GXTemplateEngine.GXMeasureSize,
         templateData: GXTemplateEngine.GXTemplateData,

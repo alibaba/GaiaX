@@ -28,19 +28,19 @@ class GXAssetsTemplate(val context: Context) : GXRegisterCenter.GXITemplateSourc
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
-    override fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
+    override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
         // 1. 判断Assets.gaiax最终产物是否存在，如果存在直接使用，并返回
-        val memoryTemplate = getFromCache(templateItem.bizId, templateItem.templateId)
+        val memoryTemplate = getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         if (memoryTemplate != null) {
             return memoryTemplate
         }
 
         // 2.
-        val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
-        val indexPath = "${bundlePath}/${templateItem.templateId}/index.json"
-        val cssPath = "${bundlePath}/${templateItem.templateId}/index.css"
-        val databindingPath = "${bundlePath}/${templateItem.templateId}/index.databinding"
-        val jsPath = "${bundlePath}/${templateItem.templateId}/index.js"
+        val bundlePath = if (gxTemplateItem.bundle.isNotEmpty()) gxTemplateItem.bundle else gxTemplateItem.bizId
+        val indexPath = "${bundlePath}/${gxTemplateItem.templateId}/index.json"
+        val cssPath = "${bundlePath}/${gxTemplateItem.templateId}/index.css"
+        val databindingPath = "${bundlePath}/${gxTemplateItem.templateId}/index.databinding"
+        val jsPath = "${bundlePath}/${gxTemplateItem.templateId}/index.js"
 
         val index = readFileFromAssets(indexPath)
         val css = readFileFromAssets(cssPath)
@@ -48,8 +48,8 @@ class GXAssetsTemplate(val context: Context) : GXRegisterCenter.GXITemplateSourc
         val js = readFileFromAssets(jsPath)
         if (index != null) {
             val templatePathAssets = GXTemplate(
-                templateItem.templateId,
-                templateItem.bizId,
+                gxTemplateItem.templateId,
+                gxTemplateItem.bizId,
                 -1,
                 index,
                 css ?: "",

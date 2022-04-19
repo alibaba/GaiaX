@@ -49,7 +49,6 @@ open class GXBaseTest {
             .registerProcessSize(GXProcessSize())
             .registerProcessDynamicProperty(GXProcessDynamicProperty())
             .registerProcessStaticProperty(GXProcessStaticProperty())
-            .registerProcessGrid(GXProcessGrid())
             .registerProcessScroll(GXProcessScroll())
 
     }
@@ -60,17 +59,17 @@ open class GXBaseTest {
     }
 
     class GXProcessScroll : GXRegisterCenter.GXIProcessScroll {
-        override fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
-            Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $context, scrollConfig = $scrollConfig")
+        override fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
+            Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $gxTemplateContext, scrollConfig = $scrollConfig")
             if (propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH) {
                 val responsiveRule = scrollConfig.data.getString("responsive-rule") ?: return null
                 val leftMargin = scrollConfig.edgeInsets.left
                 val rightMargin = scrollConfig.edgeInsets.right
                 val lineSpacing = scrollConfig.itemSpacing
                 if (responsiveRule == "response_layout_rule_5") {
-                    return (GXScreenUtils.getScreenWidthPx(context.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 2.5F
+                    return (GXScreenUtils.getScreenWidthPx(gxTemplateContext.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 2.5F
                 } else if (responsiveRule == "response_layout_rule_2") {
-                    return (GXScreenUtils.getScreenWidthPx(context.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 3
+                    return (GXScreenUtils.getScreenWidthPx(gxTemplateContext.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 3
                 }
             }
             return null
@@ -78,18 +77,7 @@ open class GXBaseTest {
 
     }
 
-    class GXProcessGrid : GXRegisterCenter.GXIProcessGrid {
-        override fun convert(propertyName: String, context: GXTemplateContext, gridConfig: GXGridConfig): Any? {
-            Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $context, gridConfig = $gridConfig")
-            if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue("responsive-enable")) {
-                if (gridConfig.column == 2) {
-                    return 3
-                }
-            }
-            return null
-        }
 
-    }
 
     class GXProcessDataBinding : GXRegisterCenter.GXIProcessDataBinding {
 

@@ -110,9 +110,9 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
             val childView = if (childItemContainer.childCount != 0) {
                 childItemContainer.getChildAt(0)
             } else {
-                GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
-                    childItemContainer.addView(this)
-                }
+                val childView = GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode)
+                childItemContainer.addView(childView)
+                childView
             }
 
             // 为坑位View绑定数据

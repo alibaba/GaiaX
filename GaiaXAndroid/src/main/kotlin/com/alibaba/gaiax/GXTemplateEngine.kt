@@ -433,8 +433,8 @@ class GXTemplateEngine {
      * Getting the template context
      * @suppress
      */
-    fun getGXTemplateContext(targetView: View): GXTemplateContext? {
-        return GXTemplateContext.getContext(targetView)
+    fun getGXTemplateContext(targetView: View?): GXTemplateContext? {
+        return targetView?.let { GXTemplateContext.getContext(it) }
     }
 
     /**

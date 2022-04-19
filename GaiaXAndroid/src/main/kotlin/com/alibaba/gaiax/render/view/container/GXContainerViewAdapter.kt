@@ -59,6 +59,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
         val childMeasureSize = GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
         val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(childTemplateItem, childMeasureSize, childVisualNestTemplateNode)
+        // TODO: 此处可以优化
         val childContainerSize = GXNodeUtils.computeContainerItemSizeByItemTemplate(childTemplateContext, gxNode, childTemplateItem, childVisualNestTemplateNode, containerData)
 
         // 构建坑位的容器

@@ -14,7 +14,6 @@ import com.alibaba.gaiax.analyze.GXArray
 import com.alibaba.gaiax.analyze.GXMap
 import com.alibaba.gaiax.analyze.GXString
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -48,8 +47,8 @@ open class GXBaseTest {
             .registerProcessDataBinding(GXProcessDataBinding())
             .registerProcessColor(GXProcessorColor())
             .registerProcessSize(GXProcessSize())
-            .registerProcessPostPositionProperty(GXProcessPostPositionProperty())
-            .registerProcessPrePositionProperty(GXProcessPrePositionProperty())
+            .registerProcessPostPositionProperty(GXProcessDynamicProperty())
+            .registerProcessPrePositionProperty(GXProcessStaticProperty())
             .registerProcessGrid(GXProcessGrid())
             .registerProcessScroll(GXProcessScroll())
 
@@ -100,9 +99,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessPostPositionProperty : GXRegisterCenter.GXIProcessPostPositionProperty {
+    class GXProcessDynamicProperty : GXRegisterCenter.GXIProcessDynamicProperty {
 
-        override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
             Log.d(TAG, "convertProcessing() called with: params = $params")
             if (params.propertyName == GXTemplateKey.FLEXBOX_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MIN_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MAX_SIZE) {
                 @Suppress("UNCHECKED_CAST")
@@ -126,9 +125,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessPrePositionProperty : GXRegisterCenter.GXIProcessPrePositionProperty {
+    class GXProcessStaticProperty : GXRegisterCenter.GXIProcessStaticProperty {
 
-        override fun convert(params: GXRegisterCenter.GXIProcessPrePositionProperty.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIProcessStaticProperty.GXParams): Any? {
             if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
                 return "fontfamily3"
             }

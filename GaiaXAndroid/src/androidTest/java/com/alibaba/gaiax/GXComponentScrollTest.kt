@@ -3,10 +3,13 @@ package com.alibaba.gaiax
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.test.runner.AndroidJUnit4
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -20,6 +23,74 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentScrollTest : GXBaseTest() {
+
+    @Test
+    fun template_data_update() {
+
+        var isExecuteContainerDataUpdate = false
+        GXRegisterCenter.instance.registerProcessContainerDataUpdate(object : GXRegisterCenter.GXIProcessContainerDataUpdate {
+
+            override fun update(gxTemplateContext: GXTemplateContext, adapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray) {
+                isExecuteContainerDataUpdate = true
+                val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                    override fun getOldListSize(): Int {
+                        return old.size
+                    }
+
+                    override fun getNewListSize(): Int {
+                        return new.size
+                    }
+
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                        return old.getJSONObject(oldItemPosition).getIntValue("id") == old.getJSONObject(newItemPosition).getIntValue("id")
+                    }
+
+                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                        return old.getJSONObject(oldItemPosition).getIntValue("title") == old.getJSONObject(newItemPosition).getIntValue("title")
+                    }
+
+                }, true)
+                diffResult.dispatchUpdatesTo(adapter)
+            }
+
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_horizontal")
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["id"] = 1
+                    this["title"] = "标题1"
+                })
+                this.add(JSONObject().apply {
+                    this["id"] = 2
+                    this["title"] = "标题2"
+                })
+                this.add(JSONObject().apply {
+                    this["id"] = 3
+                    this["title"] = "标题3"
+                })
+                this.add(JSONObject().apply {
+                    this["id"] = 4
+                    this["title"] = "标题4"
+                })
+                this.add(JSONObject().apply {
+                    this["id"] = 5
+                    this["title"] = "标题5"
+                })
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(true, isExecuteContainerDataUpdate)
+    }
 
     @Test
     fun template_scroll_responsive_rule() {
@@ -185,9 +256,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -260,9 +331,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -336,9 +407,9 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -442,9 +513,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_youku_version() {
-        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessPostPositionProperty {
+        GXRegisterCenter.instance.registerProcessPostPositionProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessPostPositionProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true

@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
@@ -140,11 +141,20 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     fun setContainerData(data: JSONArray) {
         viewTypeMap.clear()
         positionMap.clear()
-        containerData = data
-        // TODO The efficiency is not high here, so it needs the same data comparison scheme on both ends.
-        // TODO After discussion with @Shenmeng, there is no similar scheme on iOS terminal temporarily,
-        // TODO but one can be implemented. Set this change to low priority
-        notifyDataSetChanged()
+
+        val updater = GXRegisterCenter.instance.processContainerDataUpdate
+        if (updater != null) {
+            val oldData = containerData
+            val newData = data
+            containerData = data
+            updater.update(gxTemplateContext, this, oldData, newData)
+        } else {
+            containerData = data
+            // TODO The efficiency is not high here, so it needs the same data comparison scheme on both ends.
+            // TODO After discussion with @Shenmeng, there is no similar scheme on iOS terminal temporarily,
+            // TODO but one can be implemented. Set this change to low priority
+            notifyDataSetChanged()
+        }
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {

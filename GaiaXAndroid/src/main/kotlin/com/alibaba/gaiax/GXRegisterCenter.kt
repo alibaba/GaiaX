@@ -1,9 +1,11 @@
 package com.alibaba.gaiax
 
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.view.GXViewFactory
+import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.*
 
 /**
@@ -37,6 +39,9 @@ class GXRegisterCenter {
         fun getTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
     }
 
+    interface GXIProcessContainerDataUpdate {
+        fun update(gxTemplateContext: GXTemplateContext, adapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray)
+    }
 
     interface GXIProcessNodeEvent {
         fun create(): GXINodeEvent
@@ -59,7 +64,10 @@ class GXRegisterCenter {
         fun convert(value: Float): Float?
     }
 
-    interface GXIProcessPostPositionProperty {
+    /**
+     * Dynamic property have context, but static property haven't context.
+     */
+    interface GXIProcessDynamicProperty {
 
         data class GXParams(val propertyName: String, val value: Any) {
             var gridConfig: GXGridConfig? = null
@@ -70,7 +78,10 @@ class GXRegisterCenter {
         fun convert(params: GXParams): Any?
     }
 
-    interface GXIProcessPrePositionProperty {
+    /**
+     * Dynamic property have context, but static property haven't context.
+     */
+    interface GXIProcessStaticProperty {
 
         data class GXParams(val propertyName: String, val value: Any)
 
@@ -88,7 +99,6 @@ class GXRegisterCenter {
     interface GXIProcessScroll {
         fun convert(propertyName: String, context: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
     }
-
 
     interface GXIProcessCompatible {
 
@@ -133,10 +143,10 @@ class GXRegisterCenter {
         return this
     }
 
-    internal var databindingProcessDataBinding: GXIProcessDataBinding? = null
+    internal var processDataBinding: GXIProcessDataBinding? = null
 
     fun registerProcessDataBinding(databindingProcessDataBinding: GXIProcessDataBinding): GXRegisterCenter {
-        this.databindingProcessDataBinding = databindingProcessDataBinding
+        this.processDataBinding = databindingProcessDataBinding
         return this
     }
 
@@ -161,17 +171,17 @@ class GXRegisterCenter {
         return this
     }
 
-    internal var processPostPositionProperty: GXIProcessPostPositionProperty? = null
+    internal var processDynamicProperty: GXIProcessDynamicProperty? = null
 
-    fun registerProcessPostPositionProperty(processPostPositionProperty: GXIProcessPostPositionProperty): GXRegisterCenter {
-        this.processPostPositionProperty = processPostPositionProperty
+    fun registerProcessPostPositionProperty(processDynamicProperty: GXIProcessDynamicProperty): GXRegisterCenter {
+        this.processDynamicProperty = processDynamicProperty
         return this
     }
 
-    internal var processPrePositionProperty: GXIProcessPrePositionProperty? = null
+    internal var processStaticProperty: GXIProcessStaticProperty? = null
 
-    fun registerProcessPrePositionProperty(processPrePositionProperty: GXIProcessPrePositionProperty): GXRegisterCenter {
-        this.processPrePositionProperty = processPrePositionProperty
+    fun registerProcessPrePositionProperty(processStaticProperty: GXIProcessStaticProperty): GXRegisterCenter {
+        this.processStaticProperty = processStaticProperty
         return this
     }
 
@@ -208,6 +218,13 @@ class GXRegisterCenter {
         return this
     }
 
+    internal var processContainerDataUpdate: GXIProcessContainerDataUpdate? = null
+
+    fun registerProcessContainerDataUpdate(processContainerDataUpdate: GXIProcessContainerDataUpdate): GXRegisterCenter {
+        this.processContainerDataUpdate = processContainerDataUpdate
+        return this
+    }
+
     fun reset() {
         processNodeEvent = null
         processCompatible = null
@@ -216,8 +233,8 @@ class GXRegisterCenter {
         processBizMap = null
         processColor = null
         processExpression = null
-        processPostPositionProperty = null
-        processPrePositionProperty = null
+        processDynamicProperty = null
+        processStaticProperty = null
         processSize = null
     }
 

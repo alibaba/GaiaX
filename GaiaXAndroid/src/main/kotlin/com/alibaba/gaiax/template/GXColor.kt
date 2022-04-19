@@ -105,7 +105,7 @@ class GXColor(val name: String, val value: Int) {
             return null
         }
 
-        private fun hexColorRGBAToARGB(rgba: String): String? {
+        fun hexColorRGBAToARGB(rgba: String): String? {
             if (rgba.startsWith("#")) {
                 return if (rgba.length == 9) {
                     val alpha = rgba.substring(7, rgba.length)
@@ -118,7 +118,7 @@ class GXColor(val name: String, val value: Int) {
             return null
         }
 
-        private fun hexColorARGBToRGBA(argb: String): String? {
+        fun hexColorARGBToRGBA(argb: String): String? {
             if (argb.startsWith("#")) {
                 return if (argb.length == 9) {
                     val alpha = argb.substring(1, 3)

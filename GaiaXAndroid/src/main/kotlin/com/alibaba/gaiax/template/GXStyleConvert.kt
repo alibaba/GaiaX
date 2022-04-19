@@ -134,8 +134,8 @@ class GXStyleConvert {
         "clip" -> {
             GXRegisterCenter
                 .instance
-                .processPrePositionProperty
-                ?.convert(GXRegisterCenter.GXIProcessPrePositionProperty.GXParams(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW, "clip"))
+                .processStaticProperty
+                ?.convert(GXRegisterCenter.GXIProcessStaticProperty.GXParams(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW, "clip"))
                 ?.let {
                     return it as TextUtils.TruncateAt
                 }
@@ -163,9 +163,9 @@ class GXStyleConvert {
             // extend
             GXRegisterCenter
                 .instance
-                .processPrePositionProperty
+                .processStaticProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessPrePositionProperty.GXParams(GXTemplateKey.STYLE_FONT_FAMILY, fontFamily))
+                    GXRegisterCenter.GXIProcessStaticProperty.GXParams(GXTemplateKey.STYLE_FONT_FAMILY, fontFamily))
                 ?.let {
                     val newFontFamily = it as String
                     return Typeface.createFromAsset(assets, "$newFontFamily.ttf")

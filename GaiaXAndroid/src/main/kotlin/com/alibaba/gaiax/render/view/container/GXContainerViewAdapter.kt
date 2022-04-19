@@ -16,10 +16,11 @@
 
 package com.alibaba.gaiax.render.view.container
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import app.visly.stretch.Size
+import android.widget.FrameLayout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
@@ -28,6 +29,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
@@ -38,7 +40,7 @@ import com.alibaba.gaiax.utils.getStringExtCanNull
 class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
-    var childItemViewPort: Size<Float?>? = null
+    var childMeasureSize: GXTemplateEngine.GXMeasureSize? = null
     var childVisualNestTemplateNode: GXTemplateNode? = null
 }
 
@@ -50,20 +52,26 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     private var containerData: JSONArray = JSONArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
+
+        // 准备构建坑位容器的参数
         val childTemplateItem = viewTypeMap[viewType] ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-        val childView = GXTemplateEngine.instance.createView(childTemplateItem, GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height), childVisualNestTemplateNode)
+        val childMeasureSize = GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
+        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(childTemplateItem, childMeasureSize, childVisualNestTemplateNode)
+        val childContainerSize = GXNodeUtils.computeContainerItemSizeByItemTemplate(childTemplateContext, gxNode, childTemplateItem, childVisualNestTemplateNode, containerData)
 
-//        val childContainer = GXViewFactory.createView<View>(parent.context, GXViewKey.VIEW_TYPE_VIEW)
-//        val containerWidthLP = childItemViewPort.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-//        val containerHeightLP = childItemViewPort.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-//        childContainer.layoutParams = FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
+        // 构建坑位的容器
+        val childItemContainer = GXItemContainer(parent.context)
+        val containerWidthLP = childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        val containerHeightLP = childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        childItemContainer.layoutParams = FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
 
-        return GXViewHolder(childView).apply {
+        // 返回ViewHolder
+        return GXViewHolder(childItemContainer).apply {
             this.childTemplateItem = childTemplateItem
             this.childVisualNestTemplateNode = childVisualNestTemplateNode
-            this.childItemViewPort = childItemViewPort
+            this.childMeasureSize = childMeasureSize
         }
     }
 
@@ -77,15 +85,25 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
-        val itemData = containerData.getJSONObject(holder.adapterPosition) ?: JSONObject()
-        val templateData = GXTemplateEngine.GXTemplateData(itemData)
+        val childTemplateItem = holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
+        val childMeasureSize = holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
 
-//        val childTemplateItem = holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
-//        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
-//        val childItemViewPort = holder.childItemViewPort ?: throw IllegalArgumentException("childItemViewPort is null")
-//         (holder.itemView as ViewGroup).addView(childView)
+        val childItemContainer = holder.itemView as ViewGroup
 
-        GXTemplateEngine.instance.bindData(holder.itemView, templateData)
+        // 获取坑位View
+        val childView = if (childItemContainer.childCount != 0) {
+            childItemContainer.getChildAt(0)
+        } else {
+            GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
+                childItemContainer.addView(this)
+            }
+        }
+
+        // 为坑位View绑定数据
+        val childItemData = containerData.getJSONObject(holder.adapterPosition) ?: JSONObject()
+        val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+        GXTemplateEngine.instance.bindData(childView, childTemplateData)
     }
 
     /**
@@ -138,21 +156,18 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         return containerData.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setContainerData(data: JSONArray) {
         viewTypeMap.clear()
         positionMap.clear()
-
-        val updater = GXRegisterCenter.instance.processContainerDataUpdate
-        if (updater != null) {
+        val containerDataUpdate = GXRegisterCenter.instance.processContainerDataUpdate
+        if (containerDataUpdate != null) {
             val oldData = containerData
             val newData = data
             containerData = data
-            updater.update(gxTemplateContext, this, oldData, newData)
+            containerDataUpdate.update(gxTemplateContext, this, oldData, newData)
         } else {
             containerData = data
-            // TODO The efficiency is not high here, so it needs the same data comparison scheme on both ends.
-            // TODO After discussion with @Shenmeng, there is no similar scheme on iOS terminal temporarily,
-            // TODO but one can be implemented. Set this change to low priority
             notifyDataSetChanged()
         }
     }

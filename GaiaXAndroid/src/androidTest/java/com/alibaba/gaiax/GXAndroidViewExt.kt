@@ -45,7 +45,7 @@ fun View.lineHeight(): Float {
 
 fun View.child(index: Int): View {
     if (this is ViewGroup) {
-        return this.getChildAt(index)
+        return getChildAt(index)
     }
     throw IllegalArgumentException("Not ViewGroup")
 }

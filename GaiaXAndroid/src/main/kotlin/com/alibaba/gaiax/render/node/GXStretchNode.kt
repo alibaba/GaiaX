@@ -44,7 +44,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         }
     }
 
-    fun updateContainerStyle(context: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
+    fun updateContainerStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
 
         val containerDataBinding = gxNode.templateNode.dataBinding
         //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
@@ -89,7 +89,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
                 }
 
             if (isComputeContainerHeight) {
-                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(context, gxNode, containerTemplateData)
+                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(gxTemplateContext, gxNode, containerTemplateData)
                 containerSize?.height?.let {
                     finalFlexBox.size?.height = it
                     isDirty = true
@@ -113,7 +113,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
             // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
             if (isComputeContainerHeight) {
-                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(context, gxNode, containerTemplateData)
+                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(gxTemplateContext, gxNode, containerTemplateData)
                 containerSize?.height?.let {
                     finalFlexBox.size?.height = it
                     isDirty = true
@@ -125,7 +125,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             isDirty = it
         }
 
-        updateStyleByCssStyle(context, finalCssStyle, style, gxTemplateNode, this, templateData)?.let {
+        updateStyleByCssStyle(gxTemplateContext, finalCssStyle, style, gxTemplateNode, this, templateData)?.let {
             isDirty = it
         }
 

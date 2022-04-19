@@ -60,7 +60,16 @@ data class GXTemplateInfo(
     }
 
     fun checkJS(): Boolean {
-        return js?.isNotEmpty() == true
+        val result = js?.isNotEmpty()
+        if (result == true) {
+            return true
+        }
+        children?.forEach {
+            if (it.checkJS()) {
+                return true
+            }
+        }
+        return false
     }
 
     fun isTemplate() = layer.type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE

@@ -391,7 +391,12 @@ class GXTemplateEngine {
         GXRenderImpl()
     }
 
-    internal fun createView(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): View {
+    fun createTemplateContext(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): GXTemplateContext {
+        val templateInfo = data.getTemplateInfo(templateItem)
+        return GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
+    }
+
+    fun createView(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): View {
         val templateInfo = data.getTemplateInfo(templateItem)
         val context = GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
         return render.createView(context)

@@ -24,7 +24,7 @@ import com.alibaba.gaiax.template.GXTemplate
 /**
  * @suppress
  */
-class GXAssetsTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
+open class GXAssetsTemplate(open val context: Context) : GXRegisterCenter.GXITemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
@@ -36,7 +36,7 @@ class GXAssetsTemplate(val context: Context) : GXRegisterCenter.GXITemplateSourc
         }
 
         // 2.
-        val bundlePath = if (gxTemplateItem.bundle.isNotEmpty()) gxTemplateItem.bundle else gxTemplateItem.bizId
+        val bundlePath = gxTemplateItem.bundle.ifEmpty { gxTemplateItem.bizId }
         val indexPath = "${bundlePath}/${gxTemplateItem.templateId}/index.json"
         val cssPath = "${bundlePath}/${gxTemplateItem.templateId}/index.css"
         val databindingPath = "${bundlePath}/${gxTemplateItem.templateId}/index.databinding"

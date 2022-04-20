@@ -42,7 +42,7 @@ class GXRegisterCenter {
          *
          * @see GXTemplate
          */
-        fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
+        fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate?
     }
 
     interface GXIProcessContainerItemBind {
@@ -148,7 +148,7 @@ class GXRegisterCenter {
      * @param priority [0,99]
      */
     fun registerTemplateSource(source: GXITemplateSource, priority: Int = 0): GXRegisterCenter {
-        GXTemplateEngine.instance.data.templateSource.addPriority(source, priority)
+        GXTemplateEngine.instance.data.templateSource.registerByPriority(source, priority)
         return this
     }
 
@@ -157,7 +157,7 @@ class GXRegisterCenter {
      * @param priority [0,99]
      */
     fun registerTemplateInfoSource(source: GXITemplateInfoSource, priority: Int = 0): GXRegisterCenter {
-        GXTemplateEngine.instance.data.templateInfoSource.addPriority(source, priority)
+        GXTemplateEngine.instance.data.templateInfoSource.registerByPriority(source, priority)
         return this
     }
 
@@ -260,6 +260,8 @@ class GXRegisterCenter {
         processExpression = null
         processDynamicProperty = null
         processStaticProperty = null
+        processContainerDataUpdate = null
+        processContainerItemBind = null
         processSize = null
     }
 

@@ -356,6 +356,7 @@ object GXTemplateKey {
     const val GAIAX_INDEX_CSS = "index.css"
     const val GAIAX_INDEX_JSON = "index.json"
     const val GAIAX_INDEX_JS = "index.js"
+    const val GAIAX_INDEX_MOCK = "index.mock"
 
     const val GAIAX_TEMPLATE_ID = "templateId"
     const val GAIAX_TEMPLATE_VERSION = "templateVersion"

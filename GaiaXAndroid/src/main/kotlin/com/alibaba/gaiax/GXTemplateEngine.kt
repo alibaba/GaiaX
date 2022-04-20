@@ -21,7 +21,7 @@ import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl
-import com.alibaba.gaiax.data.assets.GXAssetsBinaryTemplate
+import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.GXRenderImpl
@@ -465,7 +465,7 @@ class GXTemplateEngine {
             // priority 0
             .registerTemplateInfoSource(GXTemplateInfoSource(this.context), 0)
             // priority 0
-            .registerTemplateSource(GXAssetsBinaryTemplate(this.context), 0)
+            .registerTemplateSource(GXAssetsBinaryWithoutSuffixTemplate(this.context), 0)
             // priority 1
             .registerTemplateSource(GXAssetsTemplate(this.context), 1)
         return this

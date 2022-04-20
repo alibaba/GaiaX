@@ -48,21 +48,54 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateSource(val context: Context) : GXRegisterCenter.GXITemplateSource {
 
-        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateSource) {}
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateSource) {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
 
-        private val dataSource: PriorityQueue<Value> by lazy {
-            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+                other as Value
+
+                if (priority != other.priority) return false
+
+                return true
+            }
+
+            override fun hashCode(): Int {
+                return priority
+            }
         }
 
+        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
+
         override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
-            dataSource.forEach { it ->
+            dataSourceSorted.forEach { it ->
                 it.source.getTemplate(gxTemplateItem)?.let { return it }
             }
             throw IllegalArgumentException("Not found target template path, templateItem = $gxTemplateItem")
         }
 
-        fun addPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
-            dataSource.add(Value(priority, source))
+        fun registerByPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
+            var needRemove: Value? = null
+            this.dataSource.forEach {
+                if (it.priority == priority) {
+                    needRemove = it
+                }
+            }
+            this.dataSource.remove(needRemove)
+            this.dataSource.add(Value(priority, source))
+
+            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            dataSource.addAll(this.dataSource)
+            dataSourceSorted.clear()
+            while (dataSource.isNotEmpty()) {
+                dataSourceSorted.add(dataSource.poll())
+            }
+        }
+
+        fun reset() {
+            dataSource.clear()
+            dataSourceSorted.clear()
         }
     }
 
@@ -71,22 +104,56 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
 
-        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateInfoSource) {}
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateInfoSource) {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
 
-        private val dataSource: PriorityQueue<Value> by lazy {
-            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+                other as Value
+
+                if (priority != other.priority) return false
+
+                return true
+            }
+
+            override fun hashCode(): Int {
+                return priority
+            }
         }
 
+        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+
+        private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
+
         override fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            dataSource.forEach {
+            dataSourceSorted.forEach {
                 it.source.getTemplateInfo(gxTemplateItem)?.let { return it }
             }
             throw IllegalStateException("Template exist but reference is null")
         }
 
-        fun addPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
-            dataSource.add(Value(priority, source))
+        fun registerByPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
+            var needRemove: Value? = null
+            this.dataSource.forEach {
+                if (it.priority == priority) {
+                    needRemove = it
+                }
+            }
+            this.dataSource.remove(needRemove)
+            this.dataSource.add(Value(priority, source))
+
+            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            dataSource.addAll(this.dataSource)
+
+            dataSourceSorted.clear()
+            while (dataSource.isNotEmpty()) {
+                dataSourceSorted.add(dataSource.poll())
+            }
+        }
+
+        fun reset() {
+            dataSource.clear()
+            dataSourceSorted.clear()
         }
     }
-
 }

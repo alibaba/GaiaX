@@ -110,6 +110,18 @@ data class GXTemplateInfo(
 
     companion object {
 
+        fun parseCss(value: String): JSONObject {
+            return GXCssFileParserUtils.instance.parseToJson(value)
+        }
+
+        fun parseLayer(value: String): JSONObject {
+            return value.safeParseToJson()
+        }
+
+        fun parseDataBinding(value: String): JSONObject {
+            return value.safeParseToJson()
+        }
+
         fun createTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
             val template = GXTemplateEngine.instance.data.templateSource.getTemplate(templateItem)
             val templatePath = template ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")

@@ -23,20 +23,21 @@ import com.alibaba.gaiax.template.GXTemplate
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
+ * The template file don't have suffix - .gaiax
  * @suppress
  */
-class GXAssetsBinaryTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
+class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
-        val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
+        val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
         return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
     }
 
     override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
 
-        // 1. Determine if the end product of Assets.gaiax exists, and if so, use it directly, and return
+        // 1. Determine if the end product of Assets exists, and if so, use it directly, and return
         val memoryTemplate = getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         if (memoryTemplate != null) {
             return memoryTemplate

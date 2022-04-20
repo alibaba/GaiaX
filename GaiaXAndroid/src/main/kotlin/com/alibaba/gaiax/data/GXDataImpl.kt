@@ -21,6 +21,7 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXTemplate
 import com.alibaba.gaiax.template.GXTemplateInfo
+import java.util.*
 
 /**
  * @suppress
@@ -47,17 +48,21 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateSource(val context: Context) : GXRegisterCenter.GXITemplateSource {
 
-        private val sources = mutableListOf<GXRegisterCenter.GXITemplateSource>()
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateSource) {}
+
+        private val dataSource: PriorityQueue<Value> by lazy {
+            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        }
 
         override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
-            sources.forEach { it ->
-                it.getTemplate(gxTemplateItem)?.let { return it }
+            dataSource.forEach { it ->
+                it.source.getTemplate(gxTemplateItem)?.let { return it }
             }
             throw IllegalArgumentException("Not found target template path, templateItem = $gxTemplateItem")
         }
 
         fun addPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
-            sources.add(0, source)
+            dataSource.add(Value(priority, source))
         }
     }
 
@@ -66,16 +71,21 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
 
-        private var source: GXRegisterCenter.GXITemplateInfoSource? = null
-        // private val sources = mutableListOf<GXRegisterCenter.GXITemplateInfoSource>()
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateInfoSource) {}
+
+        private val dataSource: PriorityQueue<Value> by lazy {
+            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        }
 
         override fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            source?.getTemplateInfo(gxTemplateItem)?.let { return it }
+            dataSource.forEach {
+                it.source.getTemplateInfo(gxTemplateItem)?.let { return it }
+            }
             throw IllegalStateException("Template exist but reference is null")
         }
 
         fun addPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
-            this.source = source
+            dataSource.add(Value(priority, source))
         }
     }
 

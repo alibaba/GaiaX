@@ -20,23 +20,27 @@ import com.alibaba.gaiax.template.*
 class GXRegisterCenter {
 
     /**
-     * Template data info source interface
+     * GXTemplateInfo data source interface
      */
     interface GXITemplateInfoSource {
 
         /**
-         * Get template info data
+         * To get GXTemplateData from data source
+         * @see GXTemplateEngine.GXTemplateItem
+         * @see GXTemplateInfo
          */
         fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo?
     }
 
     /**
-     * Template data source interface
+     * GXTemplate data source interface
      */
     interface GXITemplateSource {
 
         /**
-         * Get template raw data
+         * To get GXTemplate from data source
+         *
+         * @see GXTemplate
          */
         fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? = null
     }

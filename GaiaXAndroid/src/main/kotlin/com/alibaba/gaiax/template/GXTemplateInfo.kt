@@ -50,6 +50,15 @@ data class GXTemplateInfo(
 
     lateinit var rawConfigJson: JSONObject
 
+    fun getConfig(data: JSONObject?): JSONObject {
+        val result = JSONObject()
+        val rawJson = data ?: JSONObject()
+        this.config?.forEach {
+            result[it.key] = it.value.value(rawJson) ?: ""
+        }
+        return result
+    }
+
     fun getChildTemplate(id: String): GXTemplateInfo? {
         children?.forEach {
             if (it.layer.id == id) {
@@ -167,7 +176,7 @@ data class GXTemplateInfo(
             val event = createEvent(eventJson)
             val config = createConfig(configJson)
             val animation = createAnimation(animationJson)
-            val js = if (jsSrc.isNotEmpty()) jsSrc else null
+            val js = jsSrc.ifEmpty { null }
 
             return GXTemplateInfo(layer, css, data, event, animation, config, js).apply {
                 this.template = template

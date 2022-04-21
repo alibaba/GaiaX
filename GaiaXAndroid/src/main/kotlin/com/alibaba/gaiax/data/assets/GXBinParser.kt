@@ -18,6 +18,7 @@ package com.alibaba.gaiax.data.assets
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXTemplateKey
+import java.io.File
 import java.nio.charset.Charset
 
 /**
@@ -31,6 +32,17 @@ object GXBinParser {
         var css: String = "",
         var js: String = ""
     )
+
+    fun parser(binFile: File): JSONObject {
+        val result = JSONObject()
+        parserToBin(binFile)?.let { binData ->
+            result[GXTemplateKey.GAIAX_LAYER] = binData.layer
+            result[GXTemplateKey.GAIAX_DATABINDING] = binData.databinding
+            result[GXTemplateKey.GAIAX_CSS] = binData.css
+            result[GXTemplateKey.GAIAX_JS] = binData.js
+        }
+        return result
+    }
 
     fun parser(bytes: ByteArray): JSONObject {
         val result = JSONObject()
@@ -96,6 +108,60 @@ object GXBinParser {
                 GXTemplateKey.GAIAX_INDEX_DATABINDING -> binData.databinding = content
                 GXTemplateKey.GAIAX_INDEX_CSS -> binData.css = content
                 GXTemplateKey.GAIAX_INDEX_JS -> binData.js = content
+            }
+        }
+        return binData
+    }
+
+    fun parserToBin(targetFile: File): GXBinaryData? {
+        val binData = GXBinaryData()
+        targetFile.inputStream().use { input ->
+            val fileLength = targetFile.length().toInt()
+
+            val headContent = ByteArray(FILE_HEAD_NUM_BYTE)
+            val headReadSize = input.read(headContent, 0, FILE_HEAD_NUM_BYTE)
+            if (headReadSize <= 0) {
+                return null
+            }
+
+            var remaining = fileLength - FILE_HEAD_NUM_BYTE
+            var offset = FILE_HEAD_NUM_BYTE
+            while (remaining > 0) {
+
+                val nameLengthBA = ByteArray(FILE_NUM_BYTE)
+                val nameLengthResult = input.read(nameLengthBA, 0, FILE_NUM_BYTE)
+                val nameLength = convertFourUnSignInt(nameLengthBA)
+
+                offset += nameLengthResult
+                remaining -= nameLengthResult
+
+                val nameContent = ByteArray(nameLength)
+                val nameReadSize = input.read(nameContent, 0, nameLength)
+                val name = String(nameContent, Charset.forName("UTF-8"))
+
+                offset += nameReadSize
+                remaining -= nameReadSize
+
+                val contentLengthBA = ByteArray(FILE_NUM_BYTE)
+                val contentLengthResult = input.read(contentLengthBA, 0, FILE_NUM_BYTE)
+                val contentLength = convertFourUnSignInt(contentLengthBA)
+
+                offset += contentLengthResult
+                remaining -= contentLengthResult
+
+                val contentContent = ByteArray(contentLength)
+                val contentReadSize = input.read(contentContent, 0, contentLength)
+                val content = String(contentContent, Charset.forName("UTF-8"))
+
+                offset += contentReadSize
+                remaining -= contentReadSize
+
+                when (name) {
+                    GXTemplateKey.GAIAX_INDEX_JSON -> binData.layer = content
+                    GXTemplateKey.GAIAX_INDEX_DATABINDING -> binData.databinding = content
+                    GXTemplateKey.GAIAX_INDEX_CSS -> binData.css = content
+                    GXTemplateKey.GAIAX_INDEX_JS -> binData.js = content
+                }
             }
         }
         return binData

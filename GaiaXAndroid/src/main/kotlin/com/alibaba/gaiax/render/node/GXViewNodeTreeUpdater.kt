@@ -298,6 +298,8 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             container.adapter = adapter
         }
 
+        adapter.setContainerBinding(node.templateNode.dataBinding)
+
         // scroll item to position
         context.templateData?.scrollIndex?.let { scrollPosition ->
             if (scrollPosition <= 0) {

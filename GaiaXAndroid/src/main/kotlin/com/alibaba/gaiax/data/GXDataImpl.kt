@@ -77,17 +77,18 @@ class GXDataImpl(val context: Context) {
 
         fun registerByPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
             var needRemove: Value? = null
+            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            dataSourceSorted.clear()
             this.dataSource.forEach {
-                if (it.priority == priority) {
+                if (it.priority != priority) {
+                    dataSource.add(it)
+                }else{
                     needRemove = it
                 }
             }
             this.dataSource.remove(needRemove)
             this.dataSource.add(Value(priority, source))
-
-            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
-            dataSource.addAll(this.dataSource)
-            dataSourceSorted.clear()
+            dataSource.add(Value(priority,source))
             while (dataSource.isNotEmpty()) {
                 dataSourceSorted.add(dataSource.poll())
             }
@@ -134,18 +135,18 @@ class GXDataImpl(val context: Context) {
 
         fun registerByPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
             var needRemove: Value? = null
+            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            dataSourceSorted.clear()
             this.dataSource.forEach {
-                if (it.priority == priority) {
+                if (it.priority != priority) {
+                    dataSource.add(it)
+                }else{
                     needRemove = it
                 }
             }
             this.dataSource.remove(needRemove)
             this.dataSource.add(Value(priority, source))
-
-            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
-            dataSource.addAll(this.dataSource)
-
-            dataSourceSorted.clear()
+            dataSource.add(Value(priority,source))
             while (dataSource.isNotEmpty()) {
                 dataSourceSorted.add(dataSource.poll())
             }

@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.template
 
 import android.content.res.Resources
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import app.visly.stretch.Dimension
 import com.alibaba.gaiax.GXRegisterCenter

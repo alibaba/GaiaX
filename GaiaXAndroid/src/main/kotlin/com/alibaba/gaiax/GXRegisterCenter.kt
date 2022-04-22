@@ -134,6 +134,8 @@ class GXRegisterCenter {
          * 是否兼容IconFont的字体抛异常行为
          */
         fun isPreventIconFontTypefaceThrowException() = false
+
+        fun isPreventAccessibilityThrowException() = false
     }
 
     internal var processBizMap: GXIProcessBizMap? = null

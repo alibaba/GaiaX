@@ -113,7 +113,7 @@ object GXBinParser {
         return binData
     }
 
-    fun parserToBin(targetFile: File): GXBinaryData? {
+    private fun parserToBin(targetFile: File): GXBinaryData? {
         val binData = GXBinaryData()
         targetFile.inputStream().use { input ->
             val fileLength = targetFile.length().toInt()

@@ -28,6 +28,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXMode
@@ -113,24 +114,31 @@ open class GXImageView : AppCompatImageView, GXIImageView {
     }
 
     open fun bindDesc(data: JSONObject) {
-        // 原有无障碍逻辑
-        val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-        if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
-            this.contentDescription = accessibilityDesc
-            this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        } else {
-            this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-        }
-
-        // 新增Enable逻辑
-        data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-            if (enable) {
-                this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                if (accessibilityDesc == null || accessibilityDesc.isEmpty()) {
-                    this.contentDescription = "图片"
-                }
+        try {
+            // 原有无障碍逻辑
+            val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
+                this.contentDescription = accessibilityDesc
+                this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
-                this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
+
+            // 新增Enable逻辑
+            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+                if (enable) {
+                    this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                    if (accessibilityDesc == null || accessibilityDesc.isEmpty()) {
+                        this.contentDescription = "图片"
+                    }
+                } else {
+                    this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+                throw e
             }
         }
     }

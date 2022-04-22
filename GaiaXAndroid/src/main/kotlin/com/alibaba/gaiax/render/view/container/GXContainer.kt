@@ -55,10 +55,6 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView {
 
     private var gxTemplateContext: GXTemplateContext? = null
 
-    override fun manualRelease() {
-        this.finalize()
-    }
-
     override fun setTemplateContext(gxContext: GXTemplateContext) {
         this.gxTemplateContext = gxContext
     }

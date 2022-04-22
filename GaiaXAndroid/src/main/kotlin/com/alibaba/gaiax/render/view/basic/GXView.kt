@@ -22,7 +22,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.AbsoluteLayout
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -42,19 +42,6 @@ open class GXView : AbsoluteLayout,
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    protected fun finalize() {
-        if (gxTemplateContext?.rootView?.get() == this) {
-            if (gxTemplateContext?.rootNode?.isRoot == true) {
-                gxTemplateContext?.release()
-                gxTemplateContext = null
-            }
-        }
-    }
-
-    override fun manualRelease() {
-        this.finalize()
-    }
-
     private var gxTemplateContext: GXTemplateContext? = null
 
     override fun setTemplateContext(gxContext: GXTemplateContext) {
@@ -66,21 +53,28 @@ open class GXView : AbsoluteLayout,
     }
 
     override fun onBindData(data: JSONObject) {
-        // 原有无障碍逻辑
-        val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-        if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
-            contentDescription = accessibilityDesc
-            importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        } else {
-            importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-        }
-
-        // 新增无障碍Enable逻辑
-        data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-            importantForAccessibility = if (enable) {
-                View.IMPORTANT_FOR_ACCESSIBILITY_YES
+        try {
+            // 原有无障碍逻辑
+            val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
+                contentDescription = accessibilityDesc
+                importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
-                View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
+
+            // 新增无障碍Enable逻辑
+            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+                importantForAccessibility = if (enable) {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                } else {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+                throw e
             }
         }
     }

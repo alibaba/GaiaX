@@ -1016,7 +1016,7 @@ class GXTemplateEngineTest : GXBaseTest() {
 
         // manual call finalized
         val context = (rootView as? GXIRootView)?.getTemplateContext()
-        (rootView as? GXIRootView)?.manualRelease()
+        context?.release()
 
         Assert.assertEquals(true, GXTemplateContext.getContext(rootView) == null)
 

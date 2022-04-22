@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -54,26 +55,33 @@ open class GXText : AppCompatTextView, GXIViewBindData {
     }
 
     private fun bindDesc(textView: TextView, content: CharSequence, data: JSONObject) {
-        // 原有无障碍逻辑
-        val desc = data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] as? String
-        if (desc != null && desc.isNotBlank()) {
-            textView.contentDescription = desc
-            textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-        } else {
-            textView.contentDescription = null
-            if (content.isNotEmpty()) {
+        try {
+            // 原有无障碍逻辑
+            val desc = data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] as? String
+            if (desc != null && desc.isNotBlank()) {
+                textView.contentDescription = desc
                 textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
-                textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                textView.contentDescription = null
+                if (content.isNotEmpty()) {
+                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                } else {
+                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                }
             }
-        }
 
-        // 新增Enable逻辑
-        data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-            if (enable) {
-                textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            } else {
-                textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            // 新增Enable逻辑
+            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+                if (enable) {
+                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                } else {
+                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+                throw e
             }
         }
     }

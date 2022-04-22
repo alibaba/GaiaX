@@ -70,7 +70,7 @@ class GXRegisterCenter {
     }
 
     interface GXIProcessDataBinding {
-        fun create(value: JSONObject): GXDataBinding?
+        fun create(value: Any): GXDataBinding?
     }
 
     interface GXIProcessColor {

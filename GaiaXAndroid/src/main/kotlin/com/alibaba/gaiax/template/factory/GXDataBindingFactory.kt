@@ -8,15 +8,17 @@ import com.alibaba.gaiax.template.GXTemplateKey
 
 object GXDataBindingFactory {
 
-    fun create(data: JSONObject): GXDataBinding? {
+    fun create(data: Any): GXDataBinding? {
         GXRegisterCenter.instance.processDataBinding?.create(data)?.let {
             return it
         }
         return createDefaultDataBinding(data)
     }
 
-    private fun createDefaultDataBinding(data: JSONObject): GXDataBinding? {
-
+    private fun createDefaultDataBinding(data: Any): GXDataBinding? {
+        if (data !is JSONObject) {
+            return null
+        }
         val value = data.getString(GXTemplateKey.GAIAX_VALUE)
         val placeholder = data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)
         val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)

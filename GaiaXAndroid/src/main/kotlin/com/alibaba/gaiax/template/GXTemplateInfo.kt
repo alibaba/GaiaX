@@ -220,7 +220,7 @@ data class GXTemplateInfo(
                 for (entry in dataJson) {
                     val entryId = entry.key
                     val entryValue = entry.value
-                    if (entryId != null && entryValue != null && entryValue is JSONObject) {
+                    if (entryId != null && entryValue != null) {
                         val valueBinding = GXDataBindingFactory.create(entryValue)
                         if (valueBinding != null) {
                             data[entryId] = valueBinding

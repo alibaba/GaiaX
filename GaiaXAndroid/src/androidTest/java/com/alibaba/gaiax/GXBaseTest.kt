@@ -14,8 +14,11 @@ import com.alibaba.gaiax.analyze.GXArray
 import com.alibaba.gaiax.analyze.GXMap
 import com.alibaba.gaiax.analyze.GXString
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXDataBinding
+import com.alibaba.gaiax.template.GXIExpression
+import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.alibaba.gaiax.utils.getAnyExt
@@ -77,11 +80,9 @@ open class GXBaseTest {
 
     }
 
-
-
     class GXProcessDataBinding : GXRegisterCenter.GXIProcessDataBinding {
 
-        override fun create(value: JSONObject): GXDataBinding? {
+        override fun create(value: Any): GXDataBinding? {
             Log.d(TAG, "createProcessing() called with: data = $value")
             return null
         }

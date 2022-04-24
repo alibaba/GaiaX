@@ -30,9 +30,6 @@ buildscript {
     }
 }
 
-group = 'com.github.alibaba'
-version = '0.0.0'
-
 android {
     compileSdk 31
 
@@ -107,9 +104,17 @@ afterEvaluate {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.github.alibaba'
+                if (project.hasProperty("version")) {
+                    version = project.getProperty("version")
+                } else {
+                    version = '0.0.0'
+                }
+                if (project.hasProperty("group")) {
+                    groupId = project.getProperty("group")
+                } else {
+                    groupId = 'com.github.alibaba'
+                }
                 artifactId = 'GaiaX'
-                version = '0.0.0'
             }
         }
     }

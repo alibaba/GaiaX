@@ -9,6 +9,7 @@ install:
    - ls -ll
    - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
    - echo "Publish GaiaX Analyze"
+   - cd ..
    - echo `pwd`
    - ls -ll
    - cd ./GaiaXAnalyze/GXAnalyzeAndroid

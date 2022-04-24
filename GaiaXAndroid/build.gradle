@@ -6,6 +6,9 @@ apply plugin: 'maven-publish'
 allprojects {
     repositories {
         google()
+        maven {
+            url "https://jitpack.io"
+        }
         mavenCentral()
     }
 }
@@ -14,6 +17,9 @@ buildscript {
 
     repositories {
         google()
+        maven {
+            url "https://jitpack.io"
+        }
         mavenCentral()
     }
 

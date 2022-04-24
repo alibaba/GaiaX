@@ -5,20 +5,20 @@ apply plugin: 'maven-publish'
 allprojects {
     repositories {
         google()
-        mavenCentral()
         maven {
             url "https://jitpack.io"
         }
+        mavenCentral()
     }
 }
 
 buildscript {
     repositories {
         google()
-        mavenCentral()
         maven {
             url "https://jitpack.io"
         }
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.4"

@@ -111,14 +111,14 @@
 @implementation GXRegisterCenter (Preview)
 
 //注册预览的数据源
-- (void)registerPreviewTemplateSource:(id <GXITemplateSource>)source{
-    if (source && [source conformsToProtocol:@protocol(GXITemplateSource)]) {
+- (void)registerPreviewTemplateSource:(id <GXITemplatePreviewSource>)source{
+    if (source && [source conformsToProtocol:@protocol(GXITemplatePreviewSource)]) {
         _previewSource = source;
     }
 }
 
 //移除预览的数据源
-- (void)unregisterPreviewTemplateSource:(id <GXITemplateSource>)source{
+- (void)unregisterPreviewTemplateSource:(id <GXITemplatePreviewSource>)source{
     if (source == _previewSource) {
         _previewSource = nil;
     }

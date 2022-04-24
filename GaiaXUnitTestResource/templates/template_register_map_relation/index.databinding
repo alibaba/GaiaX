@@ -1,7 +1,7 @@
 {
   "data": {
-    "image1": { "value": "${image}" },
-    "text1": { "value": "${title}" },
-    "text2": { "value": "${subtitle}" }
+    "image1": { "value": "$image" },
+    "text1": { "value": "$title" },
+    "text2": { "value": "$subtitle" }
   }
 }

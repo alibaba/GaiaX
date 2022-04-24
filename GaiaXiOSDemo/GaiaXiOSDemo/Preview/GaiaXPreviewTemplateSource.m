@@ -20,33 +20,33 @@
 
 @interface GaiaXPreviewTemplateSource ()
 
-@property (nonatomic, strong) NSMutableDictionary *dict;
+@property (nonatomic, strong) NSMutableDictionary *previewSource;
 
 @end
 
 @implementation GaiaXPreviewTemplateSource
 
-- (NSMutableDictionary *)dict{
-    if (!_dict) {
-        _dict = [NSMutableDictionary dictionary];
+- (NSMutableDictionary *)previewSource{
+    if (!_previewSource) {
+        _previewSource = [NSMutableDictionary dictionary];
     }
-    return _dict;
+    return _previewSource;
 }
 
 
 #pragma mark - GXITemplateSource
 
-- (void)addTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId{
-    [self.dict gx_setObject:aTemplate forKey:templateId];
+- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId{
+    [self.previewSource gx_setObject:aTemplate forKey:templateId];
 }
 
-- (NSDictionary *)getTemplateWithTemplateId:(NSString *)templateId{
-    NSDictionary *resultDict = [self.dict gx_dictionaryForKey:templateId];
+- (NSDictionary *)getPreviewTemplateWithTemplateId:(NSString *)templateId{
+    NSDictionary *resultDict = [self.previewSource gx_dictionaryForKey:templateId];
     return resultDict;
 }
 
-- (void)clearAllTemplates{
-    [self.dict removeAllObjects];
+- (void)clearPreviewTemplates{
+    [self.previewSource removeAllObjects];
 }
 
 @end

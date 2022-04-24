@@ -39,11 +39,11 @@ import com.alibaba.gaiax.R
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
-import com.alibaba.gaiax.template.expression.GXExpression
 import com.alibaba.gaiax.template.expression.GXExpressionUtils
 import com.alibaba.gaiax.template.expression.GXIExpression
 import com.alibaba.gaiax.utils.getBooleanExt
 import com.alibaba.gaiax.utils.getStringExt
+import com.alibaba.gaiax.utils.setValueExt
 
 /**
  * @suppress
@@ -77,7 +77,7 @@ class GXAnimationBinding(
         val state = state?.value(templateData)
 
         // 符合条件触发动画
-        if (trigger && GXExpressionUtils.isCondition(state)) {
+        if (trigger && (state is Boolean && state == true)) {
             animation.doAnimation(context, child, templateData)
         }
         // 自动触发动画
@@ -279,8 +279,10 @@ class GXAnimationBinding(
                         lottieView.removeAllLottieOnCompositionLoadedListener()
                         lottieView.progress = 1F
                         val stateExp = animator.stateExp
-                        if (stateExp is GXExpression.GXValue) {
-                            stateExp.setData(templateData, false)
+                        if (stateExp is GXExpressionUtils.GXAnalyzeWrapper) {
+                            stateExp.valuePath()?.let {
+                                templateData.setValueExt(it, false)
+                            }
                         }
                         context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                             this.state = "END"
@@ -345,7 +347,7 @@ class GXAnimationBinding(
                         downloadTask.removeListener(this)
                         gxNode.isAnimating = composition != null
 
-                        composition?.let {
+                        composition?.let { it ->
                             lottieView.setComposition(it)
                             lottieView.repeatCount = animator.loopCount
                             lottieView.addAnimatorListener(object : DefaultAnimatorListener() {
@@ -357,9 +359,11 @@ class GXAnimationBinding(
                                     lottieView.removeAllLottieOnCompositionLoadedListener()
 
                                     lottieView.progress = 1F
-                                    val stateObj = animator.stateExp
-                                    if (stateObj is GXExpression.GXValue) {
-                                        stateObj.setData(rawJson, false)
+                                    val stateExp = animator.stateExp
+                                    if (stateExp is GXExpressionUtils.GXAnalyzeWrapper) {
+                                        stateExp.valuePath()?.let {
+                                            rawJson.setValueExt(it, false)
+                                        }
                                     }
                                     context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
                                         this.state = "END"

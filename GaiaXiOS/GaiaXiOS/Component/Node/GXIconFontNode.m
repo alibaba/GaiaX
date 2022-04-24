@@ -71,9 +71,12 @@ NSString * const GX_ICON_FONT_NAME = @"iconfont";
     label.alpha = self.opacity;
     label.font = self.font;
     
+    //设置圆角
+    [self setupCornerRadius:label];
+    
     //背景颜色
     [self setupNormalBackground:label];
-    
+        
     //文字颜色
     if (self.linearGradient) {
         [self setupTextGradientColor:label];
@@ -85,22 +88,21 @@ NSString * const GX_ICON_FONT_NAME = @"iconfont";
 
 #pragma mark - 绑定数据
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     NSString *text = nil;
     // 读取属性赋值
     if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *dict = (NSDictionary *)data;
         //获取text
-        text = [dict gx_stringForKey:@"value"];
+        text = [data gx_stringForKey:@"value"];
         
         //处理扩展属性 & 计算
-        NSDictionary *extend = [dict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend.count) {
             [self handleExtend:extend isCalculate:NO];
         }
         
         //设置无障碍
-        [self setupAccessibilityInfo:dict];
+        [self setupAccessibilityInfo:data];
         
     } else {
         text = nil;
@@ -226,11 +228,10 @@ NSString * const GX_ICON_FONT_NAME = @"iconfont";
 
 #pragma mark - 计算
 
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     //用于计算 & 避免走到父类计算
     if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *dataDict = (NSDictionary *)data;
-        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend.count) {
             [self handleExtend:extend isCalculate:YES];
         }

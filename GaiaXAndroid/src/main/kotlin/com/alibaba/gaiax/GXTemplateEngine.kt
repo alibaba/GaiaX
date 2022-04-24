@@ -27,6 +27,7 @@ import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.expression.GXExpressionUtils
 
 /**
  * GaiaX engine class.
@@ -453,6 +454,7 @@ class GXTemplateEngine {
      */
     fun init(context: Context): GXTemplateEngine {
         this.context = context.applicationContext
+        GXExpressionUtils.initAnalyze()
         return this
     }
 

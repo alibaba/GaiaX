@@ -1,7 +1,7 @@
 {
     "data": {
         "gx-content-uper-grid":{
-            "value":"${nodes}"
+            "value":"$nodes"
         }
     },
     "event": {}

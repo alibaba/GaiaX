@@ -12,18 +12,36 @@ NS_ASSUME_NONNULL_BEGIN
 /*
  * 模板数据源
  */
-@protocol GXITemplateSource <NSObject>
+@protocol GXITemplatePreviewSource <NSObject>
 
 @required
 //add template
-- (void)addTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
+- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
 
 //get template
-- (NSDictionary *)getTemplateWithTemplateId:(NSString *)templateId;
+- (NSDictionary *)getPreviewTemplateWithTemplateId:(NSString *)templateId;
 
 //remoview all templates
-- (void)clearAllTemplates;
+- (void)clearPreviewTemplates;
 
 @end
+
+
+@protocol GXITemplatePushSource <NSObject>
+
+@required
+//add template
+- (void)addPushTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
+
+//get template
+- (NSDictionary *)getPushTemplateWithTemplateId:(NSString *)templateId;
+
+//remoview all templates
+- (void)clearPushTemplates;
+
+@end
+
+
+
 
 NS_ASSUME_NONNULL_END

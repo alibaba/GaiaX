@@ -17,17 +17,24 @@
 package com.alibaba.gaiax.utils
 
 import android.content.Context
+import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.node.GXStretchNode
+import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.render.view.GXViewKey
 
 object GXMockUtils {
+    fun deviceGap(): Float {
+        if (Build.BRAND == "Xiaomi" && Build.MODEL == "Mi 10") {
+            return 0.5F
+        }
+        return 0F
+    }
 
     var layerIdCount: Int = 0
 

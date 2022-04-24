@@ -88,19 +88,18 @@
 
 #pragma mark - 数据绑定
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     //取值
     NSString *text = nil;
     NSDictionary *extend = nil;
     // 读取属性赋值
     if ([GXUtils isDictionary:data]) {
-        NSDictionary *dict = (NSDictionary *)data;
         //获取text
-        text = [dict gx_stringForKey:@"value"];
+        text = [data gx_stringForKey:@"value"];
         //获取扩展属性
-        extend = [dict gx_dictionaryForKey:@"extend"];
+        extend = [data gx_dictionaryForKey:@"extend"];
         //设置无障碍
-        [self setupAccessibilityInfo:dict];
+        [self setupAccessibilityInfo:data];
     } else {
         //重置为nil
         text = nil;
@@ -348,17 +347,16 @@
 
 #pragma mark - 计算Size
 
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     NSString *text = nil;
     NSDictionary *extend = nil;
     
     // 读取属性赋值
     if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *dict = (NSDictionary *)data;
         //读取text
-        text = [dict gx_stringForKey:@"value"];
+        text = [data gx_stringForKey:@"value"];
         //读取扩展属性
-        extend = [dict gx_dictionaryForKey:@"extend"];
+        extend = [data gx_dictionaryForKey:@"extend"];
         //处理扩展属性
         if (extend.count) {
             [self handleExtend:extend isCalculate:YES];

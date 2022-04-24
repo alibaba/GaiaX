@@ -1,28 +1,28 @@
 {
     "data":{
         "cover-image":{
-            "value":"${data.img}"
+            "value":"$data.img"
         },
         "title":{
-          "value": "${data.title}"
+          "value": "$data.title"
         },
         "actors-text":{
-          "value": "${data.actor}"
+          "value": "$data.actor"
         },
         "desc-text":{
-            "value":"${data.desc}"
+            "value":"$data.desc"
         },
         "subscribe-count":{
-            "value":"${data.count}"
+            "value":"$data.count"
         },
         "time-text":{
-            "value":"${data.time}"
+            "value":"$data.time"
         },
         "subscribe-text":{
-            "value":"按钮",
+            "value":"'按钮'",
             "extend":{
-                "border-color":"@{${data.subscribed} ? #9d9fa84c : #24a5ff4c}",
-                "color":"@{${data.subscribed} ? #9d9fa8 : #24a5ff}"
+                "border-color":"$data.subscribed ? '#9d9fa84c' : '#24a5ff4c'",
+                "color":"$data.subscribed ? '#9d9fa8' : '#24a5ff'"
             }
         }
     }

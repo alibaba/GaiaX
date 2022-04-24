@@ -25,25 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 通过节点的databinding获取真实数据
 /// @param data 业务数据
-/// @param sourceDict 模板id
-+(id)parseData:(id)data withSource:(NSDictionary *)sourceDict;
-
-/// 通过节点的databinding获取真实数据
-/// @param data 业务数据
-/// @param sourceDict 模板id
-/// @param index 坑位的index
-+(id)parseData:(id)data withSource:(NSDictionary *)sourceDict index:(NSInteger)index;
+/// @param sourceDict 数据源
++(NSMutableDictionary *)parseData:(NSDictionary *)data withSource:(NSDictionary *)sourceDict;
 
 @end
-
-
-@interface GXDataParser (Expression)
-
-/// 获取表达式
-/// @param key 表达式string
-+ (GXExpression *)creatExpressionWithValue:(NSString *)key;
-
-@end
-
 
 NS_ASSUME_NONNULL_END

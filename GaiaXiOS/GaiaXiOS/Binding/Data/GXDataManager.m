@@ -65,19 +65,17 @@
                     id virtualData = tmpNode.virtualData;
                     NSDictionary *resultData = [GXDataParser parseData:virtualData withSource:data];
                     //绑定数据
+                    tmpNode.virtualExtend = nil;
                     NSDictionary *valueDict = nil;
                     if (resultData && [resultData isKindOfClass:[NSDictionary class]] ) {
-                        //①获取外部extend，合并外部和内部的extend
-                        [self handleExtend:resultData withNode:tmpNode];
+                        //①获取外部extend
+                        tmpNode.virtualExtend = [resultData gx_dictionaryForKey:@"extend"];
+
                         //②获取外部数据源，进行绑定操作
-                        if ([virtualData isKindOfClass:[NSDictionary class]] && [(NSDictionary *)virtualData objectForKey:@"value"]) {
-                            valueDict = [resultData gx_dictionaryForKey:@"value"];
-                        } else {
-                            valueDict = resultData;
-                        }
+                        valueDict = [resultData gx_dictionaryForKey:@"value"];
                     }
                     
-                    //绑定数据到子模板
+                    //③绑定数据到子模板
                     [self gx_bindData:valueDict onNode:tmpNode];
                     
                 } else {
@@ -142,18 +140,14 @@
                     id virtualData = tmpNode.virtualData;
                     NSDictionary *resultData = [GXDataParser parseData:virtualData withSource:data];
                     
+                    tmpNode.virtualExtend = nil;
                     NSDictionary *valueDict = nil;
                     if (resultData && [resultData isKindOfClass:[NSDictionary class]]) {
-                        //①获取外部extend，合并外部和内部的extend
-                        [self handleExtend:resultData withNode:tmpNode];
+                        //①获取外部extend
+                        node.virtualExtend = [resultData gx_dictionaryForKey:@"extend"];
                         
                         //②获取外部数据源，进行绑定操作
-                        if ([virtualData isKindOfClass:[NSDictionary class]] && [(NSDictionary *)virtualData objectForKey:@"value"]) {
-                            valueDict = [resultData gx_dictionaryForKey:@"value"];
-                        } else {
-                            valueDict = resultData;
-                        }
-                        
+                        valueDict = [resultData gx_dictionaryForKey:@"value"];
                     }
                     
                     //③根据数据计算
@@ -172,49 +166,5 @@
     }
     
 }
-
-
-#pragma mark - 合并Extend
-
-+ (void)handleExtend:(NSDictionary *)resultData withNode:(GXNode *)node{
-    //①获取外部extend，合并外部和内部的extend
-    NSDictionary *extendDict = [resultData gx_dictionaryForKey:@"extend"];
-    if (extendDict) {
-        //获取节点的databinding
-        NSDictionary *tmpData = node.data;
-        if (!tmpData){
-            //为空的话直接赋值
-            NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-            [dataDict gx_setObject:extendDict forKey:@"extend"];
-            node.data = dataDict;
-            
-        } else if (tmpData && [tmpData isKindOfClass:[NSDictionary class]]){
-            //获取data数据
-            NSMutableDictionary *dataDict = nil;
-            if ([GXUtils isMutableDictionary:tmpData]) {
-                dataDict = (NSMutableDictionary *)tmpData;
-            } else {
-                dataDict = [NSMutableDictionary dictionaryWithDictionary:tmpData];
-            }
-            
-            //获取extend
-            NSMutableDictionary *tmpExtend = [dataDict gx_mutableDictionaryForKey:@"extend"];
-            if (tmpExtend) {
-                [tmpExtend addEntriesFromDictionary:extendDict];
-            } else {
-                tmpExtend = [NSMutableDictionary dictionaryWithDictionary:extendDict];
-            }
-            
-            //设置extend
-            [dataDict gx_setObject:tmpExtend forKey:@"extend"];
-            
-            //重新赋值
-            node.data = dataDict;
-        }
-        
-    }
-    
-}
-
 
 @end

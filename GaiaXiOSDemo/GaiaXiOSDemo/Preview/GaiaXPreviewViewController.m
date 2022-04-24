@@ -117,10 +117,11 @@
     [super viewDidDisappear:animated];
     //关闭socket链接
     [_client webSocketClose];
-    //清除相关依赖模板
-    _dependenciesTemplateInfo = nil;
     //清除预览数据源
     [TheGXRegisterCenter unregisterPreviewTemplateSource:_previewTemplateSource];
+    //清除相关依赖模板
+    _dependenciesTemplateInfo = nil;
+    _previewTemplateSource = nil;
 }
 
 
@@ -239,10 +240,10 @@
 
 //断开连接
 - (void)gaiaXSocketClientDidDisconnect:(GaiaXSocketClient *)client {
-    //清理缓存模板信息
+    //清理缓存模板信息 & 预览模板
+    [_previewTemplateSource clearPreviewTemplates];
     _dependenciesTemplateInfo = nil;
-    //清除预览模板
-    [_previewTemplateSource clearAllTemplates];
+    _previewTemplateSource = nil;
 }
 
 #pragma mark - 嵌套模板
@@ -338,10 +339,9 @@
         }
         
         //添加到预览缓存池
-        [_previewTemplateSource addTemplate:result forTemplateId:templateId];
+        [_previewTemplateSource addPreviewTemplate:result forTemplateId:templateId];
     }
     
 }
-
 
 @end

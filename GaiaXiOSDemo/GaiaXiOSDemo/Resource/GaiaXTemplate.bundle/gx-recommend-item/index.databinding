@@ -1,13 +1,13 @@
 {
   "event": {
     "gx-recommend-item": {
-      "type": "tap",
-       "value": "${data.action}",
+      "type": "'tap'",
+       "value": "$data.action",
     }
   },
   "data": {
     "item-text": {
-      "value": "${data.title}",
+      "value": "$data.title",
       "extend": { "fit-content": "true" }
     }
   }

@@ -64,7 +64,7 @@ extern StretchStyleRect GXMakeRect(StretchStyleDimension left,
 //更新rust内容
 - (void)updateRustPtr{
     //先释放原有指针
-    if (_rustptr) {
+    if ([self isValidPtr:_rustptr]) {
         _prevRustptr = _rustptr;
     }
     
@@ -95,18 +95,28 @@ extern StretchStyleRect GXMakeRect(StretchStyleDimension left,
     
 }
 
+- (BOOL)isValidPtr:(void *)ptr{
+    return ptr != NULL;
+}
 
 //释放上次的rust指针
 - (void)freePrevRustptr{
-    if (_prevRustptr) {
+    if ([self isValidPtr:_prevRustptr]) {
         stretch_style_free(_prevRustptr);
+        _prevRustptr = NULL;
     }
 }
 
 - (void)dealloc {
     //样式释放
-    if (_rustptr) {
+    if ([self isValidPtr:_rustptr]) {
         stretch_style_free(_rustptr);
+        _rustptr = NULL;
+    }
+    //临时样式释放
+    if ([self isValidPtr:_prevRustptr]) {
+        stretch_style_free(_prevRustptr);
+        _prevRustptr = NULL;
     }
     GXLog(@"[GaiaX] 样式style释放 - %@", self);
 }

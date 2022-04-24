@@ -1,7 +1,7 @@
 {
   "data": {
     "text": {
-      "value": "${text}",
+      "value": "$text",
       "extend": { "fit-content": "true" }
     }
   }

@@ -7,6 +7,7 @@ install:
    - cd ./GaiaXAndroid 
    - echo `pwd`
    - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
    - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
    - echo "Publish GaiaX Analyze"
    - cd ..
@@ -15,4 +16,5 @@ install:
    - cd ./GaiaXAnalyze/GXAnalyzeAndroid
    - echo `pwd`
    - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
    - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal

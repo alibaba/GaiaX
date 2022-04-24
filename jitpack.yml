@@ -1,0 +1,11 @@
+jdk:
+  - openjdk11
+install:
+   - echo "Running a custom install command"
+   - echo `pwd`
+   - ls -ll
+   - cd ./GaiaXAndroid 
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
+   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal

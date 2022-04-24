@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'maven-publish'
 
 allprojects {
     repositories {
@@ -89,4 +90,18 @@ dokkaHtml {
     outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
 
     moduleName.set("GaiaX")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.alibaba'
+                artifactId = 'GaiaX'
+                version = '0.0.0'
+            }
+        }
+    }
 }

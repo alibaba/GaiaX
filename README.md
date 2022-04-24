@@ -29,7 +29,7 @@ implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
 
 AndroidX版本:
 ```
-implementation 'com.github.alibaba:GaiaX:0.1.2'
+implementation 'com.github.alibaba:GaiaX:0.1.4'
 ```
 
 #### 模板文件

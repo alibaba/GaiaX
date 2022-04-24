@@ -1,6 +1,15 @@
 jdk:
   - openjdk11
 install:
+   - echo "Publish GaiaX"
+   - echo `pwd`
+   - ls -ll
+   - cd ./GaiaXAndroid 
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
+   - echo "Publish GaiaX Analyze"
+   - cd ..
    - echo `pwd`
    - ls -ll
    - cd ./GaiaXAnalyze/GXAnalyzeAndroid

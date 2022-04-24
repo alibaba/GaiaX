@@ -22,7 +22,15 @@
 
 #### 依赖 
 
-[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
+Android-Support版本:
+```
+implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
+```
+
+AndroidX版本:
+```
+implementation 'com.github.alibaba:GaiaX:0.1.2'
+```
 
 #### 模板文件
 ```

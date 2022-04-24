@@ -1,20 +1,9 @@
 jdk:
   - openjdk11
 install:
-   - echo "Publish GaiaX"
-   - echo `pwd`
-   - ls -ll
-   - cd ./GaiaXAndroid 
-   - echo `pwd`
-   - ls -ll
-   - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
-   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaX Analyze"
-   - cd ..
    - echo `pwd`
    - ls -ll
    - cd ./GaiaXAnalyze/GXAnalyzeAndroid
    - echo `pwd`
    - ls -ll
    - echo "GROUP=${GROUP} ARTIFACT=${ARTIFACT} VERSION=${VERSION}"
-   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal

@@ -30,6 +30,9 @@ buildscript {
     }
 }
 
+group = 'com.github.alibaba'
+version = '0.0.0'
+
 android {
     compileSdk 31
 

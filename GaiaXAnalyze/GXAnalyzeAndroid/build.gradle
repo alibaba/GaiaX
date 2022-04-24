@@ -26,6 +26,8 @@ buildscript {
     }
 }
 
+group = 'com.github.alibaba'
+version = '0.0.0'
 
 def platformVersion = 21
 

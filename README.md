@@ -22,6 +22,36 @@
 
 #### 依赖 
 
+增加jitpack源:
+```
+// 方式1:在setting.gradle中增加
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
+
+// 方式2:在根build.gradle中增加
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+}
+```
+
+
 Android-Support版本:
 ```
 implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'

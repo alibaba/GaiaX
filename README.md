@@ -44,11 +44,11 @@ dependencyResolutionManagement {
 
 // 方式2:在根build.gradle中增加
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
 }
+
 ```
 
 

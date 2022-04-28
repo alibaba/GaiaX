@@ -86,7 +86,7 @@ object GXMeasureViewPool {
         view.setTextFontFamily(cacheTypeFace)
         view.setFontSize(cacheTextSize)
         view.setLineSpacing(cacheLineSpacingExtra, cacheLineSpacingMultiplier)
-        view.isSingleLine = false
+        view.setSingleLine(false)
         view.maxLines = Integer.MAX_VALUE
         view.setPadding(0, 0, 0, 0)
     }

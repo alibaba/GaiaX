@@ -93,18 +93,17 @@
 
 #pragma mark - 绑定数据
 
-- (void)bindData:(id)data{
+- (void)bindData:(NSDictionary *)data{
     //赋值
     if ([GXUtils isDictionary:data]) {
         //处理extend
-        NSDictionary *dataDict = (NSDictionary *)data;
-        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend) {
             [self handleExtend:extend isCalculate:NO];
         }
         
         //处理无障碍
-        [self setupAccessibilityInfo:dataDict];
+        [self setupAccessibilityInfo:data];
     }
 }
 
@@ -135,11 +134,10 @@
 
 #pragma mark - 计算高度
 
-- (void)calculateWithData:(id)data{
+- (void)calculateWithData:(NSDictionary *)data{
     //赋值
     if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *dataDict = (NSDictionary *)data;
-        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
         if (extend) {
             [self handleExtend:extend isCalculate:YES];
         }
@@ -173,7 +171,7 @@
 
 #pragma mark - 绑定动画
 
-- (void)bindAnimation:(id)data{
+- (void)bindAnimation:(NSDictionary *)data{
     //获取动画数据 & 动画view
     NSDictionary *animationDict = (NSDictionary *)data;
     //动画处理
@@ -237,14 +235,9 @@
         return;
     }
     
-    BOOL isLocal = NO; //网络=NO
-    NSString *lottieUrl = animationModel.lottieAnimator.url;
-    if (!lottieUrl.length) {
-        isLocal = YES;
-        lottieUrl = animationModel.lottieAnimator.value;
-    }
-    
     BOOL loop = animationModel.lottieAnimator.loop;
+    BOOL isLocal = animationModel.lottieAnimator.isLocal;
+    NSString *lottieUrl = animationModel.lottieAnimator.value;
     
     //正在播放就直接return
     if (_animationView &&

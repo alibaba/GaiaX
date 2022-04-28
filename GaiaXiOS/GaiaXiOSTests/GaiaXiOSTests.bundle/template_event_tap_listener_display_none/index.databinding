@@ -1,1 +1,1 @@
-{ "event": { "target": { "type": "tap", "value": "${action}" } } }
+{ "event": { "target": { "type": "'tap'", "value": "$action" } } }

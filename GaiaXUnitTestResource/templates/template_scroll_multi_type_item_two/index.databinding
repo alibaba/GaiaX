@@ -1,13 +1,13 @@
 {
     "data":{
         "template_scroll_multi_type_item_two":{
-            "value":"${nodes}",
+            "value":"$nodes",
             "extend":{
                 "item-type":{
-                    "path":"@{ eval(${type} == 0) ? type0 : type1 }",
+                    "path":"($type == 0) ? 'type0' : 'type1'",
                     "config":{
-                        "type0":"template_scroll_multi_type_item_0",
-                        "type1":"template_scroll_multi_type_item_1"
+                        "type0":"'template_scroll_multi_type_item_0'",
+                        "type1":"'template_scroll_multi_type_item_1'"
                     }
                 }
             }

@@ -2,7 +2,7 @@
   "data": {
     "template_nest_databinding_override_both_value_child": {
         "extend": {
-            "width":"${width}"
+            "width":"$width"
         }
     },
   }

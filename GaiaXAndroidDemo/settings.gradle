@@ -4,3 +4,5 @@ include ':app'
 
 include ':GaiaXFastPreview'
 include ':GaiaXWebSocket'
+include ':GXAnalyzeAndroid'
+project(':GXAnalyzeAndroid').projectDir = file('../GaiaXAnalyze/GXAnalyzeAndroid')

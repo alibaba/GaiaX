@@ -3,8 +3,8 @@
     "template_nest_databinding_override_both_child": {
         "value": "$$",
         "extend": {
-            "width":"300px",
-            "height":"200px"
+            "width":"'300px'",
+            "height":"'200px'"
         }
     },
   }

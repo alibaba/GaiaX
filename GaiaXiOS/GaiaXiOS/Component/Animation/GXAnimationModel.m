@@ -18,6 +18,7 @@
 
 #import "GXAnimationModel.h"
 #import "NSDictionary+GX.h"
+#import "GXCommonDef.h"
 #import "NSArray+GX.h"
 #import "UIColor+GX.h"
 
@@ -33,7 +34,7 @@
 @implementation GXAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [super setupAnimationInfo:info frame:frame];
+    [self setupAnimationInfo:info frame:frame];
     
     //基础属性设置
     self.animationInfo = info;
@@ -67,21 +68,26 @@
 @implementation GXLottieAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [super setupAnimationInfo:info frame:frame];
-
-    //属性配置
+    [self setupAnimationInfo:info frame:frame];
+    
+    //获取loop
     self.loop = [info gx_boolForKey:@"loop"];
-    //获取url
-    self.url = [info gx_stringForKey:@"url"];
+
     //获取value
-    NSString *value = [info gx_stringForKey:@"value"];
-    if (value.length) {
-        NSString *bundle = [info gx_stringForKey:@"bundle"];
-        if (bundle.length) {
-            value = [NSString stringWithFormat:@"%@/%@", bundle,value];
+    self.value = [info gx_stringForKey:@"url"];
+    if (self.value == nil) {
+        NSString *value = [info gx_stringForKey:@"value"];
+        if (value.length) {
+            if (![value hasPrefix:kGXComDef_Prefix_Http] && ![value hasPrefix:kGXComDef_Prefix_Https]) {
+                self.isLocal = YES;
+                NSString *bundle = [info gx_stringForKey:@"bundle"];
+                if (bundle.length) {
+                    value = [NSString stringWithFormat:@"%@/%@", bundle,value];
+                }
+            }
+            self.value = value;
         }
     }
-    self.value = value;
 }
 
 @end
@@ -91,7 +97,7 @@
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
     [super setupAnimationInfo:info frame:frame];
-
+    
     //顺序
     self.ordering = [info gx_stringForKey:@"ordering"];
     //animators
@@ -130,8 +136,8 @@
 @implementation GXPropAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [super setupAnimationInfo:info frame:frame];
-
+    [self setupAnimationInfo:info frame:frame];
+    
     self.delay = [info gx_integerForKey:@"delay"] / 1000.f;
     self.loopCount = [info gx_integerForKey:@"loopCount"];
     self.duration = [info gx_integerForKey:@"duration"] / 1000.f;

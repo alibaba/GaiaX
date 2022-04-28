@@ -1,7 +1,7 @@
 {
     "data": {
         "template_scroll_height_percent_100": {
-            "value":"${nodes}"
+            "value":"$nodes"
         }
     }
 }

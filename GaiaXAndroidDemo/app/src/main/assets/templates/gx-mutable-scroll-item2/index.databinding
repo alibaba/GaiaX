@@ -1,1 +1,1 @@
-{ "data": { "image": { "value": "${img}" }, "title": { "value": "${title}" } } }
+{ "data": { "image": { "value": "$img" }, "title": { "value": "$title" } } }

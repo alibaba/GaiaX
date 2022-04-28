@@ -3,7 +3,7 @@
     "template_nest_parent_databinding_update_property_height_and_child_databinding_update_property_width_child_0": {
         "value": "$$",
         "extend": {
-            "height":"${height}"
+            "height":"$height"
         }
     },
   }

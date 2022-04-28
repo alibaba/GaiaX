@@ -20,12 +20,46 @@
 
 ### Android
 
-#### 依赖 [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
+#### 依赖 
+
+增加jitpack源:
 ```
-// 依赖
-dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.1'
+// 方式1:在setting.gradle中增加
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
 }
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
+
+// 方式2:在根build.gradle中增加
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+```
+
+
+Android-Support版本:
+```
+implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
+```
+
+AndroidX版本:
+```
+implementation 'com.github.alibaba:GaiaX:0.1.4'
 ```
 
 #### 模板文件
@@ -87,6 +121,9 @@ xxx.bundle/templateId
 // 引入头文件
 #import <GaiaXiOS/GaiaXiOS.h>
 
+//注册模板服务
+[TheGXRegisterCenter registerTemplateServiceWithBizId:bizId templateBundle:@"xxx.bundle"];
+
 // 构建模板参数     - 模板信息
 // templateBiz    - 业务ID
 // templateId     - 模板ID
@@ -129,6 +166,12 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 ## 文档
 
 - [SDK文档](https://www.yuque.com/biezhihua/gaiax)
+
+## 支持者
+
+[![Forkers repo roster for @alibaba/GaiaX](https://reporoster.com/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/network/members)
+
+[![Stargazers repo roster for @alibaba/GaiaX](https://reporoster.com/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
 
 # 许可证
 ```

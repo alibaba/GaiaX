@@ -9,10 +9,12 @@ Pod::Spec.new do |s|
 
   s.author        = { "jingcheng.zjc" => "jingcheng.zjc@alibaba-inc.com" }
   s.source        = { :git => "https://github.com/alibaba/GaiaX.git", :tag => "#{s.version}" }
-  
-  s.source_files  = 'GaiaXiOS/**/*.{h,m,mm,c}'
+
+  s.source_files  = 'GaiaXiOS/**/*.{h,m,mm,c,cpp,hpp}'
   s.xcconfig      = { "ENABLE_BITCODE" => "NO" }
   s.requires_arc  = true
+
+  s.library = 'c++'
 
   s.weak_frameworks = 'XCTest'
   s.vendored_libraries = 'GaiaXiOS/**/*.{a}'

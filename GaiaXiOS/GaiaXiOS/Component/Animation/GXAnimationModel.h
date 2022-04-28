@@ -60,9 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //是否循环
 @property (nonatomic, assign) BOOL loop;
-//远程动画url
-@property (nonatomic, copy) NSString *url;
-//本地bundle和文件名拼接后的value
+//是否为本地lottie
+@property (nonatomic, assign) BOOL isLocal;
+//动画url或者本地bundle和文件名拼接后的value
 @property (nonatomic, copy) NSString *value;
 
 @end

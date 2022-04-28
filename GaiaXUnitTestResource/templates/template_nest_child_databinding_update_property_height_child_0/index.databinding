@@ -2,8 +2,8 @@
   "data": {
     "template_nest_child_databinding_update_property_height_child_0": {
         "extend": {
-            "width":"300px",
-            "height":"${height}"
+            "width":"'300px'",
+            "height":"$height"
         }
     },
   }

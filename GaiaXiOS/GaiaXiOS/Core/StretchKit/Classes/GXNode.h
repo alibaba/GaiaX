@@ -108,8 +108,12 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 //databinding中的内容
 @property (nonatomic, strong) id data;
 @property (nonatomic, strong) id event;
-@property (nonatomic, strong) id virtualData; //嵌套模板中的数据
 @property (nonatomic, strong) NSDictionary *animation;
+
+//嵌套模板中的数据
+@property (nonatomic, strong) id virtualData;
+@property (nonatomic, strong, nullable) NSDictionary *virtualExtend;
+
 
 //是否需要拍平（仅对view有效）
 @property (nonatomic, assign) BOOL isFlat;
@@ -137,14 +141,14 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 //是否需要绑定数据
 - (BOOL)shouldBind;
 //数据绑定
-- (void)bindData:(id)data;
+- (void)bindData:(NSDictionary *)data;
 //动画绑定
-- (void)bindAnimation:(id)animation;
+- (void)bindAnimation:(NSDictionary *)animation;
 //处理扩展
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate;
 
 //通过属性计算
-- (void)calculateWithData:(id)data;
+- (void)calculateWithData:(NSDictionary *)data;
 - (void)updateTextNodes:(NSPointerArray *)textNodes;
 
 //读取json中的属性

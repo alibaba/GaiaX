@@ -25,28 +25,16 @@
 #import "NSArray+GX.h"
 #import "GXUtils.h"
 
+
 @implementation GXDataParser
 
 //解析数据
-+(id)parseData:(id)data withSource:(NSDictionary *)sourceDict{
-    return [self parseData:data withSource:sourceDict index:-1];
-}
-
-//通过databinding和source的数据获取真实的数据
-+(id)parseData:(id)data withSource:(NSDictionary *)sourceDict index:(NSInteger)index{
-    
++(NSMutableDictionary *)parseData:(NSDictionary *)data withSource:(NSDictionary *)sourceDict{
     if ([data isKindOfClass:[NSDictionary class]]) {
         //如果为dictionary类型
-        NSDictionary *dbDict = (NSDictionary *)data;
-        NSMutableDictionary *resultDict = [self gx_handleDB:dbDict withData:sourceDict index:index];
+        NSDictionary *dbDict = data;
+        NSMutableDictionary *resultDict = [self gx_handleDB:dbDict withData:sourceDict];
         return resultDict;
-        
-    } else if ([data isKindOfClass:[NSString class]]) {
-        //如果为string类型
-        NSString *dbStr = (NSString *)data;
-        id resultData = [self gx_handleExp:dbStr withData:sourceDict index:index];
-        return resultData;
-        
     } else {
         GXLog(@"[GaiaX] 数据转化异常：数据格式不支持 - %@",data);
     }
@@ -55,7 +43,7 @@
 }
 
 //如果databinding为字典类型
-+ (NSMutableDictionary *)gx_handleDB:(NSDictionary *)dbDict withData:(NSDictionary *)dataDict index:(NSInteger)index{
++ (NSMutableDictionary *)gx_handleDB:(NSDictionary *)dbDict withData:(NSDictionary *)dataDict{
     //生成数据
     NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
     //遍历数据
@@ -64,7 +52,7 @@
         if ([obj isKindOfClass:[NSString class]]) {
             //如果object为字符串类型
             NSString *valueStr = (NSString *)obj;
-            id result = [self gx_handleExp:valueStr withData:dataDict index:index];
+            id result = [self gx_handleExp:valueStr withData:dataDict];
             [resultDict gx_setObject:result forKey:key];
             
         } else if ([obj isKindOfClass:[NSNumber class]]){
@@ -75,7 +63,7 @@
         } else if ([obj isKindOfClass:[NSDictionary class]]){
             //如果object为字典类型
             NSDictionary *valueDict = (NSDictionary *)obj;
-            NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict index:index];
+            NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict];
             [resultDict gx_setObject:result forKey:key];
             
         } else if ([obj isKindOfClass:[NSArray class]]) {
@@ -88,13 +76,13 @@
                     id value = [valueArray gx_objectAtIndex:i];
                     if ([value isKindOfClass:[NSString class]]) {
                         //字符串类型
-                        id result = [self gx_handleExp:value withData:dataDict index:index];
+                        id result = [self gx_handleExp:value withData:dataDict];
                         [resultArray gx_addObject:result];
                         
                     } else if ([value isKindOfClass:[NSDictionary class]]){
                         //字典类型
                         NSDictionary *valueDict = (NSDictionary *)value;
-                        NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict index:index];
+                        NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict];
                         [resultArray gx_addObject:result];
                         
                     }
@@ -113,49 +101,9 @@
 
 
 //如果databinding为string，处理表达式
-+ (id)gx_handleExp:(NSString *)result withData:(NSDictionary *)dataDict index:(NSInteger)index{
-    //如果object为字符串类型
-    if ([result isEqualToString:@"$$"]) {
-        //表达式
-        return dataDict;
-        
-    } else if ([result hasPrefix:@"${"] ||
-               [result hasPrefix:@"@{"] ||
-               [result hasPrefix:@"eval("] ||
-               [result rangeOfString:@" + "].location != NSNotFound) {
-        //表达式
-        GXExpression *expression = [self creatExpressionWithValue:result];
-        expression.currentIndex = index;
-        //取值
-        id value = [expression valueWithObject:dataDict];
-        return value;
-        
-    } else {
-        //固定值
-        return result;
-    }
-    
-}
-
-
-@end
-
-
-
-@implementation GXDataParser (Expression)
-
-//从缓存读取表达式，为空则创建
-+ (GXExpression *)creatExpressionWithValue:(NSString *)key{
-    GXCache *cahche = [GXCacheCenter defaulCenter].expressionCahche;
-    GXExpression *expression = [cahche objectForKey:key];
-    //缓存为空创建表达式
-    if (expression == nil) {
-        expression = [GXExpression expressionWithString:key];
-        [cahche setObject:expression forKey:key];
-    }
-    expression.currentIndex = -1;
-    //返回表达式
-    return expression;
++ (id)gx_handleExp:(NSString *)exp withData:(NSDictionary *)dataDict{
+    id value = [GXExpression valueWithExpression:exp Source:dataDict];
+    return value;
 }
 
 @end

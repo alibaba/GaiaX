@@ -54,11 +54,12 @@ android {
 
 dependencies {
 
+    implementation 'com.github.alibaba:GaiaX:release~0.1.5-SNAPSHOT'
+
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.alibaba:fastjson:1.2.54'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.github.alibaba:GaiaX:0.1.4'
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
 
     implementation project(path: ':GaiaXWebSocket')

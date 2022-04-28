@@ -167,6 +167,15 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 - [SDK文档](https://www.yuque.com/biezhihua/gaiax)
 
+## 联系我们
+
+钉钉：
+<img src="https://user-images.githubusercontent.com/6761107/165739677-13c68f86-fa43-466f-939c-cc54d6827908.png" width="200" height="200" />
+
+微信：
+<img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
+
+
 ## 支持者
 
 [![Forkers repo roster for @alibaba/GaiaX](https://reporoster.com/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/network/members)

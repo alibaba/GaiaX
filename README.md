@@ -167,6 +167,12 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 - [SDK文档](https://www.yuque.com/biezhihua/gaiax)
 
+## 支持者
+
+[![Forkers repo roster for @alibaba/GaiaX](https://reporoster.com/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/network/members)
+
+[![Stargazers repo roster for @alibaba/GaiaX](https://reporoster.com/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
+
 # 许可证
 ```
 Ali-GaiaX-Project is a template dynamic develop solutions developed by Alibaba and licensed under the Apache License (Version 2.0)

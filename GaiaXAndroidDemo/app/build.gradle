@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 allprojects {
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 }
@@ -12,6 +13,7 @@ buildscript {
 
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 
@@ -59,6 +61,8 @@ dependencies {
 
     implementation project(path: ':GaiaXFastPreview')
 
+    implementation 'com.github.alibaba:GaiaX:release~0.1.5-SNAPSHOT'
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -67,9 +71,9 @@ dependencies {
 
     implementation 'com.alibaba:fastjson:1.2.76'
     implementation 'com.airbnb.android:lottie:4.1.0'
-    implementation project(path: ':GaiaXAndroid')
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
-    implementation 'com.google.android.material:material:1.5.0'
+
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation 'com.google.android.material:material:1.4.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -1012,13 +1012,9 @@ class GXTemplateEngineTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(true, GXTemplateContext.getContext(rootView) != null)
-
         // manual call finalized
         val context = (rootView as? GXIRootView)?.getTemplateContext()
         context?.release()
-
-        Assert.assertEquals(true, GXTemplateContext.getContext(rootView) == null)
 
         Assert.assertEquals(null, context?.rootNode)
         Assert.assertEquals(null, context?.rootView)

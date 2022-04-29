@@ -64,7 +64,7 @@ object GXFitContentUtils {
      *
      */
     fun fitContent(templateContext: GXTemplateContext, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, templateData: JSONObject): Size<Dimension>? {
-        if (!currentNode.isTextType() && currentNode.isRichTextType()) {
+        if (!currentNode.isTextType() && !currentNode.isRichTextType()) {
             return null
         }
 

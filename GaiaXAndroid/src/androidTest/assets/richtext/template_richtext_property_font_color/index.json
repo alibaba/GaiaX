@@ -1,0 +1,10 @@
+{
+  "id": "template_richtext_property_font_color",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "richtext"
+    }
+  ]
+}

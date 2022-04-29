@@ -298,8 +298,6 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             container.adapter = adapter
         }
 
-        adapter.setContainerBinding(node.templateNode.dataBinding)
-
         // scroll item to position
         context.templateData?.scrollIndex?.let { scrollPosition ->
             if (scrollPosition <= 0) {
@@ -321,6 +319,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         container.itemAnimator = null
 
         adapter.setContainerData(containerTemplateData)
+        adapter.initFooter(node.templateNode.dataBinding)
     }
 
     private fun bindIconFont(view: GXIViewBindData, binding: GXDataBinding, templateData: JSONObject) {

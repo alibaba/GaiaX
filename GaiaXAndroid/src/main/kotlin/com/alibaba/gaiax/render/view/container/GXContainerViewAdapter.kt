@@ -49,11 +49,7 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 /**
  * @suppress
  */
-class GXContainerViewAdapter(
-    val gxTemplateContext: GXTemplateContext,
-    val gxNode: GXNode,
-    val container: GXContainer
-) : RecyclerView.Adapter<GXViewHolder>() {
+class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode, val container: GXContainer) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var containerData: JSONArray = JSONArray()
 
@@ -64,34 +60,19 @@ class GXContainerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
 
         // 准备构建坑位容器的参数
-        val childTemplateItem = viewTypeMap[viewType]
-            ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
+        val childTemplateItem = viewTypeMap[viewType] ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-        val childMeasureSize =
-            GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
-        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
-            childTemplateItem,
-            childMeasureSize,
-            childVisualNestTemplateNode
-        )
+        val childMeasureSize = GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
+        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(childTemplateItem, childMeasureSize, childVisualNestTemplateNode)
         // TODO: 此处可能有耗时问题，可以进行优化
-        val childContainerSize = GXNodeUtils.computeContainerItemSize(
-            childTemplateContext,
-            gxNode,
-            childTemplateItem,
-            childVisualNestTemplateNode,
-            containerData
-        )
+        val childContainerSize = GXNodeUtils.computeContainerItemSize(childTemplateContext, gxNode, childTemplateItem, childVisualNestTemplateNode, containerData)
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
-        val containerWidthLP =
-            childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-        val containerHeightLP =
-            childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-        childItemContainer.layoutParams =
-            FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
+        val containerWidthLP = childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        val containerHeightLP = childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        childItemContainer.layoutParams = FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
 
         // 返回ViewHolder
         return GXViewHolder(childItemContainer).apply {
@@ -114,7 +95,6 @@ class GXContainerViewAdapter(
         val childTemplateItem =
             holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
         val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
-            ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
         val childMeasureSize =
             holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
         val childItemContainer = holder.itemView as ViewGroup
@@ -130,19 +110,14 @@ class GXContainerViewAdapter(
                 childTemplateItem,
                 childItemPosition,
                 childVisualNestTemplateNode,
-                childItemData
-            )
+                childItemData)
         } else {
 
             // 获取坑位View
             val childView = if (childItemContainer.childCount != 0) {
                 childItemContainer.getChildAt(0)
             } else {
-                val childView = GXTemplateEngine.instance.createView(
-                    childTemplateItem,
-                    childMeasureSize,
-                    childVisualNestTemplateNode
-                )
+                val childView = GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode)
                 childItemContainer.addView(childView)
                 childView
             }
@@ -171,16 +146,6 @@ class GXContainerViewAdapter(
             val viewType: Int = mItemFooterTypeId.hashCode()
             viewTypeMap[viewType] = itemFooterTypeId
             positionMap[position] = itemFooterTypeId
-            gxNode.childTemplateItems?.add(
-                Pair(
-                    itemFooterTypeId,
-                    GXTemplateNode.createNode(
-                        gxTemplateContext.templateInfo.layer.layers[0].id,
-                        gxTemplateContext.templateInfo,
-                        null
-                    )
-                )
-            )
             containerData.add(JSONObject())
             return viewType
         }
@@ -195,21 +160,6 @@ class GXContainerViewAdapter(
         return super.getItemViewType(position)
     }
 
-    fun setContainerBinding(binding: GXDataBinding?) {
-        mContainerBinding = binding
-        mContainerBinding?.getExtend(gxTemplateContext.templateData?.data ?: JSONObject())
-            ?.let { typeData ->
-                typeData.getJSONObject("item-footer-type")?.let {
-                    mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
-                        gxTemplateContext.context,
-                        gxTemplateContext.templateItem.bizId,
-                        it.getString("id")
-                    )
-                    mItemFooterTypeHasMore = it.getBoolean("hasMore") ?: false
-                }
-            }
-    }
-
     /**
      * Gets the template ID of the current pit
      */
@@ -220,10 +170,8 @@ class GXContainerViewAdapter(
                 val dataBinding = gxNode.templateNode.dataBinding
                 dataBinding?.reset()
                 dataBinding?.getExtend(itemData)?.let { typeData ->
-                    val path =
-                        typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                    val templateId =
-                        typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
+                    val path = typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
+                    val templateId = typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
                     if (templateId != null) {
                         return items.firstOrNull { it.first.templateId == templateId }?.first
                     }
@@ -261,6 +209,21 @@ class GXContainerViewAdapter(
             containerData = data
             notifyDataSetChanged()
         }
+    }
+
+    fun initFooter(binding: GXDataBinding?) {
+        mContainerBinding = binding
+        mContainerBinding?.getExtend(gxTemplateContext.templateData?.data ?: JSONObject())
+            ?.let { typeData ->
+                typeData.getJSONObject("item-footer-type")?.let {
+                    mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
+                        gxTemplateContext.context,
+                        gxTemplateContext.templateItem.bizId,
+                        it.getString("id")
+                    )
+                    mItemFooterTypeHasMore = it.getBoolean("hasMore") ?: false
+                }
+            }
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {

@@ -96,7 +96,7 @@ object GXFitContentUtils {
             // 单行状态下，需要定高求宽
 
             // 在某些机型上使用maxLine=1时，会导致中英混合、中英数字混合等一些文字无法显示
-            textView.isSingleLine = true
+            textView.setSingleLine(true)
 
             // 计算宽高
             textView.measure(0, 0)

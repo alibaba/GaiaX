@@ -1,0 +1,33 @@
+#template_text_flex_grow_and_modify_padding_child {
+  width: 100%;
+  align-items: flex-start;
+}
+#newc-header {
+  width: 44px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  height: 44px;
+  background-color:#00ff00;
+}
+#newc-content {
+  flex-direction: column;
+  flex-grow: 1;
+  background-color:#00ff00;
+}
+#newc-row2 {
+  width: 100%;
+  margin-top: 2px;
+  background-color:#00ff00;
+}
+#newc-title {
+  text-overflow: ellipsis;
+  font-size: 15px;
+  background-color:#00ff00;
+  line-height: 22px;
+  color: primaryInfo;
+  fit-content: true;
+  flex-grow: 1;
+  lines: 3;
+}

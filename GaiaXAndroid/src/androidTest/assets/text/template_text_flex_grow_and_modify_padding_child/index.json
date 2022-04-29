@@ -1,0 +1,23 @@
+{
+  "id": "template_text_flex_grow_and_modify_padding_child",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "newc-header",
+      "type": "view",
+      "layers": [
+      ]
+    },
+    {
+      "id": "newc-content",
+      "type": "view",
+      "layers": [
+        {
+          "id": "newc-row2",
+          "type": "view",
+          "layers": [{ "id": "newc-title", "type": "richtext" }]
+        }
+      ]
+    }
+  ]
+}

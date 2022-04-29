@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
@@ -16,6 +17,7 @@ import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.nio.charset.Charset
 
 
 @RunWith(AndroidJUnit4::class)

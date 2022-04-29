@@ -1,0 +1,14 @@
+#template_text_fitcontent_height_24px_padding_left_padding_right {
+  width: 100%;
+  height: 100px;
+  background-color: primaryBackground;
+  justify-content: center;
+  align-items: center;
+}
+#text {
+  height: 24px;
+  fit-content:true;
+  padding-left:10px;
+  padding-right:10px;
+  font-size:13px;
+}

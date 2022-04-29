@@ -1,0 +1,21 @@
+{
+  "data": {
+    "template_text_flex_grow_and_modify_padding_child": {
+      "extend": {
+        "padding-left": "'14px'",
+        "padding-right": "'14px'"
+      }
+    },
+    "newc-header": {
+      "extend": {
+        "width": "'36px'"
+      }
+    },
+    "newc-title": {
+      "value": "$nodes[0].data.title",
+      "extend": {
+        "fit-content": "true"
+      }
+    }
+  }
+}

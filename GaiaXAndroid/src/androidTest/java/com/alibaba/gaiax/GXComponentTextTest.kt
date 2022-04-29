@@ -17,6 +17,7 @@ import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.nio.charset.Charset
 import kotlin.math.roundToInt
 import android.graphics.drawable.GradientDrawable as GradientDrawable1
 
@@ -25,6 +26,19 @@ import android.graphics.drawable.GradientDrawable as GradientDrawable1
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentTextTest : GXBaseTest() {
+
+    @Test
+    fun template_text_flex_grow_and_modify_padding() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_flex_grow_and_modify_padding")
+        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(1080F, null))
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject.parseObject(context.assets.open("text/template_text_flex_grow_and_modify_padding.json").reader(
+            Charset.forName("utf-8")).readText()))
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(1080F, rootView.width())
+        Assert.assertEquals(99F, rootView.child(0).width())
+        Assert.assertEquals(1080F-99F-39F-39F, rootView.child(1).width())
+    }
 
     @Test
     fun template_text_responsive_scale() {
@@ -665,6 +679,25 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(Gravity.RIGHT, (rootView.child(0) as TextView).gravity.and(Gravity.RIGHT))
     }
+
+    @Test
+    fun template_text_fitcontent_height_24px_padding_left_padding_right() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_height_24px_padding_left_padding_right")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        val padding = 10F.dpToPx().roundToInt()
+        textView.setPadding(padding,0, padding,0)
+        textView.setFontSize(13F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
+        Assert.assertEquals(24F.dpToPx(), rootView.child(0).height())
+    }
+
 
     @Test
     fun template_text_fitcontent_case_1_lines_1_width_100_percent_height_100px() {

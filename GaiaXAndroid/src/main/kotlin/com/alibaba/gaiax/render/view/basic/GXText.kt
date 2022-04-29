@@ -36,13 +36,17 @@ import kotlin.math.roundToInt
  * @suppress
  */
 @Keep
-open class GXText : AppCompatTextView, GXIViewBindData {
+open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun onBindData(data: JSONObject) {
         val content = getContent(data)
@@ -127,7 +131,7 @@ open class GXText : AppCompatTextView, GXIViewBindData {
         setFontTextDecoration(style.fontTextDecoration)
     }
 
-    fun setRoundCornerRadius(radiusArray: FloatArray) {
+    override fun setRoundCornerRadius(radiusArray: FloatArray) {
         if (radiusArray[0] == radiusArray[2] && radiusArray[2] == radiusArray[4] && radiusArray[4] == radiusArray[6]) {
             val radius = radiusArray[0]
             this.clipToOutline = radius > 0
@@ -145,7 +149,7 @@ open class GXText : AppCompatTextView, GXIViewBindData {
         }
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
+    override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.cornerRadii = radius

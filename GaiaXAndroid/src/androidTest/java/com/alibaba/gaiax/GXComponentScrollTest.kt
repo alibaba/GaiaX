@@ -1199,6 +1199,6 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(false, (rootView.child(0).clipToOutline))
+        Assert.assertEquals(true, (rootView.child(0).clipToOutline))
     }
 }

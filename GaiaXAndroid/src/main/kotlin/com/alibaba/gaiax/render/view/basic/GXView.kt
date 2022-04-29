@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
+import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -34,13 +35,18 @@ import com.alibaba.gaiax.template.GXTemplateKey
  */
 open class GXView : AbsoluteLayout,
     GXIViewBindData,
-    GXIRootView {
+    GXIRootView,
+    GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     private var gxTemplateContext: GXTemplateContext? = null
 
@@ -102,31 +108,50 @@ open class GXView : AbsoluteLayout,
         }
     }
 
-    fun setRoundCornerRadius(radius: FloatArray) {
+    override fun setRoundCornerRadius(radius: FloatArray) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
         delegate?.setRoundCornerRadius(radius)
     }
 
-    fun setRoundCornerRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerRadius(
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
         delegate?.setRoundCornerRadius(topLeft, topRight, bottomLeft, bottomRight)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
+    override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
         delegate?.setRoundCornerBorder(borderColor, borderWidth, radius)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerBorder(
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
-        delegate?.setRoundCornerBorder(borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight)
+        delegate?.setRoundCornerBorder(
+            borderColor,
+            borderWidth,
+            topLeft,
+            topRight,
+            bottomLeft,
+            bottomRight
+        )
     }
 }

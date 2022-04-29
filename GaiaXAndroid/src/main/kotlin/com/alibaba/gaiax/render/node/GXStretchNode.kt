@@ -303,6 +303,8 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.size)
 
+                // 此处template_text_fitcontent_width_flex_grow和template_text_flex_grow_and_modify_padding有冲突
+
                 // 如果父模板已经改变，此处就不能够重置flexGrow，否则stretch在计算的时候会使用更新过得宽度和高度
                 // 虽然此处能解决template_text_flex_grow_and_modify_padding的问题，但是仍然无法覆盖所有情况
                 // 例如: 文字自适应计算出的宽度是1000，高度是200，当走这种情况时，如果宽度变成了900，那么可能存在高度200不够用的情况，即文字可能会被截断。
@@ -311,11 +313,10 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
                     stretchStyle.size.width = Dimension.Auto
                 }
 
-                // 经过单测，这种情况可以被忽略
                 // 如果父模板未改变，使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，否则在Stretch计算的时候会使用FlexGrow计算出的宽度
-                // if (stretchStyle.flexGrow != 0F) {
-                //    stretchStyle.flexGrow = 0F
-                //}
+                if (stretchStyle.flexGrow != 0F) {
+                    stretchStyle.flexGrow = 0F
+                }
                 return true
             }
         }

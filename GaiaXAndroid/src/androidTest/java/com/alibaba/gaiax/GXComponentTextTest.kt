@@ -28,6 +28,27 @@ import android.graphics.drawable.GradientDrawable as GradientDrawable1
 class GXComponentTextTest : GXBaseTest() {
 
     @Test
+    fun template_text_fitcontent_width_flex_grow() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_width_flex_grow")
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        val size = GXTemplateEngine.GXMeasureSize(1080F, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(20F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+    }
+
+    @Test
     fun template_text_flex_grow_and_modify_padding() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_flex_grow_and_modify_padding")
         val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(1080F, null))

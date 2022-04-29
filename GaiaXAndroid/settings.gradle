@@ -1,4 +1,1 @@
 rootProject.name = 'GaiaXAndroid'
-
-include ':GXAnalyzeAndroid'
-project(':GXAnalyzeAndroid').projectDir = file('../GaiaXAnalyze/GXAnalyzeAndroid')

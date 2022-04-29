@@ -17,9 +17,11 @@
 package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
-import android.graphics.Canvas
+import android.graphics.Outline
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewOutlineProvider
 import android.widget.AbsoluteLayout
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
@@ -27,8 +29,8 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXTemplateKey
+import kotlin.math.roundToInt
 
 /**
  * @suppress
@@ -85,73 +87,36 @@ open class GXView : AbsoluteLayout,
         }
     }
 
-    private var delegate: GXRoundBorderDelegate? = null
-
-    override fun draw(canvas: Canvas?) {
-        val measureWidth = measuredWidth.toFloat()
-        val measureHeight = measuredHeight.toFloat()
-        if (delegate?.isNeedRound(canvas, measureWidth, measureHeight) == true) {
-            delegate?.draw(canvas, measureWidth, measureHeight) {
-                super.draw(canvas)
-            }
-        } else {
-            super.draw(canvas)
-        }
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        val measureWidth = measuredWidth.toFloat()
-        val measureHeight = measuredHeight.toFloat()
-        if (delegate?.isNeedRound(canvas, measureWidth, measureHeight) == true) {
-            delegate?.onDraw(canvas, measureWidth, measureHeight)
-        }
-    }
-
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (delegate == null) {
-            delegate = GXRoundBorderDelegate()
+        if (radius.size == 8) {
+            val tl = radius[0]
+            val tr = radius[2]
+            val bl = radius[4]
+            val br = radius[6]
+            if (tl == tr && tr == bl && bl == br) {
+                this.clipToOutline = true
+                this.outlineProvider = object : ViewOutlineProvider() {
+                    override fun getOutline(view: View, outline: Outline) {
+                        if (alpha >= 0.0f) {
+                            outline.alpha = alpha
+                        }
+                        outline.setRoundRect(0, 0, view.width, view.height, tl)
+                    }
+                }
+            } else {
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = radius
+                background = shape
+            }
         }
-        delegate?.setRoundCornerRadius(radius)
-    }
-
-    fun setRoundCornerRadius(
-        topLeft: Float,
-        topRight: Float,
-        bottomLeft: Float,
-        bottomRight: Float
-    ) {
-        if (delegate == null) {
-            delegate = GXRoundBorderDelegate()
-        }
-        delegate?.setRoundCornerRadius(topLeft, topRight, bottomLeft, bottomRight)
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        if (delegate == null) {
-            delegate = GXRoundBorderDelegate()
-        }
-        delegate?.setRoundCornerBorder(borderColor, borderWidth, radius)
-    }
-
-    fun setRoundCornerBorder(
-        borderColor: Int,
-        borderWidth: Float,
-        topLeft: Float,
-        topRight: Float,
-        bottomLeft: Float,
-        bottomRight: Float
-    ) {
-        if (delegate == null) {
-            delegate = GXRoundBorderDelegate()
-        }
-        delegate?.setRoundCornerBorder(
-            borderColor,
-            borderWidth,
-            topLeft,
-            topRight,
-            bottomLeft,
-            bottomRight
-        )
+        val shape = GradientDrawable()
+        shape.shape = GradientDrawable.RECTANGLE
+        shape.cornerRadii = radius
+        shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
+        background = shape
     }
 }

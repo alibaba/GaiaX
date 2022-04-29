@@ -343,6 +343,6 @@ class GXComponentViewTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(false, (rootView.child(0).clipToOutline))
+        Assert.assertEquals(true, (rootView.child(0).clipToOutline))
     }
 }

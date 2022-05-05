@@ -319,7 +319,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         container.itemAnimator = null
 
         adapter.setContainerData(containerTemplateData)
-        adapter.initFooter(node.templateNode.dataBinding)
+        adapter.initFooter(node)
     }
 
     private fun bindIconFont(view: GXIViewBindData, binding: GXDataBinding, templateData: JSONObject) {

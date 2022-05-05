@@ -32,6 +32,7 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
@@ -211,11 +212,11 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         }
     }
 
-    fun initFooter(binding: GXDataBinding?) {
-        mContainerBinding = binding
+    fun initFooter(node: GXNode) {
+        mContainerBinding = node.templateNode.dataBinding
         mContainerBinding?.getExtend(gxTemplateContext.templateData?.data ?: JSONObject())
             ?.let { typeData ->
-                typeData.getJSONObject("item-footer-type")?.let {
+                typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
                     mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
                         gxTemplateContext.context,
                         gxTemplateContext.templateItem.bizId,

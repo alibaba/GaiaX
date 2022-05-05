@@ -1,0 +1,10 @@
+{
+  "id": "template_text_fitcontent_lines_null_width_null_height_20px_lead_to_error_update_flexbox_size_minsize_maxsize",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

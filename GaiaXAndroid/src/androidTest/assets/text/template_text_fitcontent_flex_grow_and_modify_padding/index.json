@@ -1,0 +1,17 @@
+{
+  "id": "template_text_fitcontent_flex_grow_and_modify_padding",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "whole-container-wrapper",
+      "type": "view",
+      "layers": [
+        {
+          "id": "template_text_fitcontent_flex_grow_and_modify_padding_child",
+          "type": "gaia-template",
+          "sub-type": "custom"
+        }
+      ]
+    }
+  ]
+}

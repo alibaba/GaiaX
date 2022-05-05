@@ -1,0 +1,10 @@
+{
+  "id": "template_text_fitcontent_height_fixed_padding_left_padding_right",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

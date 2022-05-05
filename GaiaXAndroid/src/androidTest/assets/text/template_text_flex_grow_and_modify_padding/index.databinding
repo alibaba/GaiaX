@@ -1,8 +1,0 @@
-{
-  "data": {
-    "whole-container-wrapper": {
-      "extend": { "width": "'100%'" }
-    },
-    "template_text_flex_grow_and_modify_padding": { "value": "$$" }
-  }
-}

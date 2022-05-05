@@ -125,7 +125,9 @@ object GXFitContentUtils {
                 textHeight = measuredHeight
             }
 
-            val textLeftAndRightPadding =(nodeFlexBox.padding?.start?.value?:0F) + (nodeFlexBox.padding?.end?.value?:0F)
+            // 修复template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
+            val textLeftAndRightPadding =
+                (nodeFlexBox.padding?.start?.value ?: 0F) + (nodeFlexBox.padding?.end?.value ?: 0F)
 
             result = when {
                 // 没有设置宽度

@@ -125,10 +125,6 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             isDirty = it
         }
 
-        updateStyleByCssStyle(gxTemplateContext, finalCssStyle, style, gxTemplateNode, this, templateData)?.let {
-            isDirty = it
-        }
-
         if (isDirty) {
             style.free()
             style.init()
@@ -300,10 +296,10 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
     private fun updateStyleByCssStyle(templateContext: GXTemplateContext, finalCssStyle: GXStyle, stretchStyle: Style, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, data: JSONObject): Boolean? {
         if (finalCssStyle.fitContent == true) {
-            GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let {
+            GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上
-                GXTemplateUtils.updateSize(it, stretchStyle.size)
+                GXTemplateUtils.updateSize(src, stretchStyle.size)
 
                 // 此处template_text_fitcontent_width_flex_grow和template_text_flex_grow_and_modify_padding有冲突
 

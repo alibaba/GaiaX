@@ -867,7 +867,7 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
-    fun template_text_fitcontent_flex_grow_and_modify_padding() {
+    fun template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_flex_grow_and_modify_padding")
         val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(1080F, null))
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject.parseObject(context.assets.open("text/template_text_fitcontent_flex_grow_and_modify_padding.json").reader(Charset.forName("utf-8")).readText()))

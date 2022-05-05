@@ -41,12 +41,12 @@ object GXTemplateUtils {
         }
     }
 
-    fun updateSize(it: Size<Dimension>, targetDimension: Size<Dimension>) {
-        if (it.width !is Dimension.Undefined) {
-            targetDimension.width = it.width
+    fun updateSize(src: Size<Dimension>, target: Size<Dimension>) {
+        if (src.width !is Dimension.Undefined) {
+            target.width = src.width
         }
-        if (it.height !is Dimension.Undefined) {
-            targetDimension.height = it.height
+        if (src.height !is Dimension.Undefined) {
+            target.height = src.height
         }
     }
 

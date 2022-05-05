@@ -45,13 +45,14 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     fun build() {
         val rootNode = context.rootNode ?: throw IllegalArgumentException("RootNode is null")
         val templateData = context.templateData?.data ?: throw IllegalArgumentException("Data is null")
+        val size = Size(context.size.width, context.size.height)
 
         // 更新节点
         updateNodeTree(context, rootNode, templateData)
 
         // 计算节点信息
         if (context.isDirty) {
-            GXNodeUtils.computeNodeTreeByBindData(rootNode, Size(context.size.width, context.size.height))
+            GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
         }
     }
 

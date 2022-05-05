@@ -38,7 +38,6 @@ import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXLinearColor
 import com.alibaba.gaiax.template.GXSize
 import com.alibaba.gaiax.template.GXStyle
-import kotlin.math.ceil
 
 /**
  * @suppress
@@ -112,7 +111,10 @@ fun View.setOverflow(overflow: Boolean?) {
  */
 fun View.setBackgroundColorAndBackgroundImage(style: GXStyle?) {
     if (style?.backgroundColor != null) {
-        val drawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(style.backgroundColor.value, style.backgroundColor.value))
+        val drawable = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            intArrayOf(style.backgroundColor.value, style.backgroundColor.value)
+        )
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
         this.background = drawable
@@ -288,7 +290,9 @@ fun View.setGridContainerDirection(config: GXGridConfig, layout: Layout?) {
     val column: Int = config.column
     val scrollEnable: Boolean = config.scrollEnable
     if (this is RecyclerView) {
-        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
+        val needForceRefresh =
+            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
+                ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
             val target = object : GridLayoutManager(this.context, column, direction, false) {
@@ -313,7 +317,9 @@ fun View.setGridContainerDirection(config: GXGridConfig, layout: Layout?) {
  */
 fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
     if (this is RecyclerView) {
-        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
+        val needForceRefresh =
+            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
+                ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
             val target = LinearLayoutManager(this.context, direction, false)
@@ -334,7 +340,11 @@ fun View.setScrollContainerPadding(padding: Rect) {
 /**
  * @suppress
  */
-fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: Int, rowSpacing: Int) {
+fun View.setGridContainerItemSpacingAndRowSpacing(
+    padding: Rect,
+    itemSpacing: Int,
+    rowSpacing: Int
+) {
     if (this is RecyclerView) {
         if (this.itemDecorationCount > 0) {
             return
@@ -364,18 +374,44 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                     if (heightDiff > 0) {
                         val value = (heightDiff / 2.0F).toInt()
                         val finalPadding = Rect(padding.left, value, padding.right, value)
-                        setSingleGridOffset(itemSpacing.toFloat(), finalPadding, orientation, spanCount, outRect, childPosition, itemCount)
+                        setSingleGridOffset(
+                            itemSpacing.toFloat(),
+                            finalPadding,
+                            orientation,
+                            spanCount,
+                            outRect,
+                            childPosition,
+                            itemCount
+                        )
                     }
                 } else {
-                    setGridOffset(itemSpacing.toFloat(), rowSpacing.toFloat(), padding, orientation, spanCount, outRect, childPosition, itemCount)
+                    setGridOffset(
+                        itemSpacing.toFloat(),
+                        rowSpacing.toFloat(),
+                        padding,
+                        orientation,
+                        spanCount,
+                        outRect,
+                        childPosition,
+                        itemCount
+                    )
                 }
             }
 
-            private fun setSingleGridOffset(itemSpacing: Float, padding: Rect, orientation: Int, spanCount: Int, outRect: Rect, childPosition: Int, itemCount: Int) {
+            private fun setSingleGridOffset(
+                itemSpacing: Float,
+                padding: Rect,
+                orientation: Int,
+                spanCount: Int,
+                outRect: Rect,
+                childPosition: Int,
+                itemCount: Int
+            ) {
                 val left: Float
                 val right: Float
 
-                val totalSpace: Float = itemSpacing * (spanCount - 1) + (padding.left.toFloat() + padding.right.toFloat()) // 总共的padding值
+                val totalSpace: Float =
+                    itemSpacing * (spanCount - 1) + (padding.left.toFloat() + padding.right.toFloat()) // 总共的padding值
                 val eachSpace = totalSpace / spanCount // 分配给每个item的padding值
                 val column = childPosition % spanCount // 列数
 
@@ -386,7 +422,8 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                     left = column * eachSpace / (spanCount - 1)
                     right = eachSpace - left
                 } else {
-                    left = column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
+                    left =
+                        column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
                     right = eachSpace - left
                 }
 
@@ -396,7 +433,16 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                 outRect.bottom = bottom.toInt()
             }
 
-            private fun setGridOffset(itemSpacing: Float, rowSpacing: Float, padding: Rect, orientation: Int, spanCount: Int, outRect: Rect, childPosition: Int, itemCount: Int) {
+            private fun setGridOffset(
+                itemSpacing: Float,
+                rowSpacing: Float,
+                padding: Rect,
+                orientation: Int,
+                spanCount: Int,
+                outRect: Rect,
+                childPosition: Int,
+                itemCount: Int
+            ) {
                 var left: Float
                 var right: Float
                 var top: Float
@@ -406,7 +452,8 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
 
                     // 横向的总空间
                     // 总共的padding值
-                    val totalSpace: Float = itemSpacing * (spanCount - 1) + (padding.left.toFloat() + padding.right.toFloat())
+                    val totalSpace: Float =
+                        itemSpacing * (spanCount - 1) + (padding.left.toFloat() + padding.right.toFloat())
 
                     // 分配给每个item的padding值
                     val eachSpace = totalSpace / spanCount
@@ -442,11 +489,13 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                                 bottom = padding.bottom.toFloat()
                             }
                         }
-                        left = column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
+                        left =
+                            column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
                         right = eachSpace - left
                     }
                 } else {
-                    val totalSpace: Float = itemSpacing * (spanCount - 1) + (padding.top + padding.bottom) // 总共的padding值
+                    val totalSpace: Float =
+                        itemSpacing * (spanCount - 1) + (padding.top + padding.bottom) // 总共的padding值
                     val eachSpace = totalSpace / spanCount // 分配给每个item的padding值
                     val column = childPosition % spanCount // 列数
                     val row = childPosition / spanCount // 行数
@@ -472,7 +521,8 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                                 right = padding.right.toFloat()
                             }
                         }
-                        top = column * (eachSpace - padding.top - padding.bottom) / (spanCount - 1) + (padding.top + padding.bottom) / 2
+                        top =
+                            column * (eachSpace - padding.top - padding.bottom) / (spanCount - 1) + (padding.top + padding.bottom) / 2
                         bottom = eachSpace - top
                     }
                 }

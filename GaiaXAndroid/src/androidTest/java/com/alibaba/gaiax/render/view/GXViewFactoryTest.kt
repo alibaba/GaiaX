@@ -29,16 +29,55 @@ class GXViewFactoryTest {
     @Test
     fun create() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_GAIA_TEMPLATE) is GXView)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_VIEW) is GXView)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_TEXT) is GXText)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_LOTTIE) is GXLottie)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_CONTAINER_GRID) is GXGridView)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_CONTAINER_SCROLL) is GXScrollView)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_ICON_FONT) is GXIconFont)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_IMAGE) is GXImageView)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_RICH_TEXT) is GXText)
-        Assert.assertEquals(true, GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_SHADOW_LAYOUT) is GXShadowLayout)
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_GAIA_TEMPLATE) is GXView
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_VIEW) is GXView
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_TEXT) is GXText
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_LOTTIE) is GXLottie
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(
+                context,
+                GXViewKey.VIEW_TYPE_CONTAINER_GRID
+            ) is GXGridView
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(
+                context,
+                GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
+            ) is GXScrollView
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_ICON_FONT) is GXIconFont
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_IMAGE) is GXImageView
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_RICH_TEXT) is GXText
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(
+                context,
+                GXViewKey.VIEW_TYPE_SHADOW_LAYOUT
+            ) is GXShadowLayout
+        )
     }
 
 }

@@ -18,8 +18,8 @@ package com.alibaba.gaiax
 
 import android.view.View
 import android.view.ViewGroup
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.render.view.container.GXContainer
+import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
 fun View.width(): Float {
     return this.layoutParams.width.toFloat()

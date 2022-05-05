@@ -38,7 +38,8 @@ class GXRegisterCenter {
         /**
          * Gets the width of the reactive view
          */
-        fun valueForRule(rule: String, containerWidth: Float, gap: Float, margin: Float): Float? = null
+        fun valueForRule(rule: String, containerWidth: Float, gap: Float, margin: Float): Float? =
+            null
     }
 
     /**
@@ -49,7 +50,10 @@ class GXRegisterCenter {
         /**
          * Get template resolution information
          */
-        override fun getTemplateInfo(templateSource: com.alibaba.gaiax.data.GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
+        override fun getTemplateInfo(
+            templateSource: com.alibaba.gaiax.data.GXITemplateSource,
+            templateItem: GXTemplateEngine.GXTemplateItem
+        ): GXTemplateInfo? {
             return super.getTemplateInfo(templateSource, templateItem)
         }
 

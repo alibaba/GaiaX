@@ -35,11 +35,16 @@ class GXTemplateInfoCacheSource(val context: Context) : GXITemplateInfoSource {
 
     private val dataCache = ConcurrentHashMap<String, ConcurrentHashMap<String, GXTemplateInfo>>()
 
-    private fun exist(templateBiz: String, templateId: String) = dataCache[templateBiz]?.get(templateId) != null
+    private fun exist(templateBiz: String, templateId: String) =
+        dataCache[templateBiz]?.get(templateId) != null
 
-    override fun getTemplateInfo(templateSource: GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
+    override fun getTemplateInfo(
+        templateSource: GXITemplateSource,
+        templateItem: GXTemplateEngine.GXTemplateItem
+    ): GXTemplateInfo? {
         return if (exist(templateItem.bizId, templateItem.templateId)) {
-            dataCache[templateItem.bizId]?.get(templateItem.templateId) ?: throw IllegalStateException("Template exist but reference is null")
+            dataCache[templateItem.bizId]?.get(templateItem.templateId)
+                ?: throw IllegalStateException("Template exist but reference is null")
         } else {
             val template = GXTemplateInfo.createTemplate(templateSource, templateItem)
             return template.apply {
@@ -54,7 +59,10 @@ class GXTemplateInfoCacheSource(val context: Context) : GXITemplateInfoSource {
         }
     }
 
-    private fun collectionNestTemplate(bizList: ConcurrentHashMap<String, GXTemplateInfo>, info: GXTemplateInfo) {
+    private fun collectionNestTemplate(
+        bizList: ConcurrentHashMap<String, GXTemplateInfo>,
+        info: GXTemplateInfo
+    ) {
         info.children?.forEach {
             bizList[it.layer.id] = it
             if (it.children?.isNotEmpty() == true) {

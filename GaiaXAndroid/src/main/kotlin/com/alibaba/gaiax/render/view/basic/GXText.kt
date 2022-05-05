@@ -25,10 +25,9 @@ import android.view.ViewOutlineProvider
 import android.widget.TextView
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.render.view.*
 import kotlin.math.roundToInt
 
 /**
@@ -41,7 +40,11 @@ open class GXText : androidx.appcompat.widget.AppCompatTextView, GXIViewBindData
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun onBindData(data: JSONObject) {
         val content = getContent(data)

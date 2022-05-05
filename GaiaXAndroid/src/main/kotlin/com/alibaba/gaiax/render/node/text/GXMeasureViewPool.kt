@@ -66,7 +66,10 @@ object GXMeasureViewPool {
 
     private fun createTv(context: Context): GXText {
         val txt = GXViewFactory.createView<GXText>(context, GXViewKey.VIEW_TYPE_TEXT)
-        txt.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        txt.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         return txt
     }
 

@@ -128,7 +128,12 @@ class GXTemplateContext(val context: Context) {
         const val LIFE_ON_INVISIBLE = 5
         const val LIFE_ON_DESTROY = 6
 
-        fun createContext(templateItem: GXTemplateEngine.GXTemplateItem, size: GXTemplateEngine.GXMeasureSize, templateInfo: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null): GXTemplateContext {
+        fun createContext(
+            templateItem: GXTemplateEngine.GXTemplateItem,
+            size: GXTemplateEngine.GXMeasureSize,
+            templateInfo: GXTemplateInfo,
+            visualTemplateNode: GXTemplateNode? = null
+        ): GXTemplateContext {
             val context = GXTemplateContext(templateItem.context)
             context.size = size
             context.templateItem = templateItem

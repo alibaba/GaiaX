@@ -42,11 +42,17 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         }
     }
 
-    fun updateContainerStyle(context: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
+    fun updateContainerStyle(
+        context: GXTemplateContext,
+        gxTemplateNode: GXTemplateNode,
+        gxNode: GXNode,
+        templateData: JSONObject
+    ): Boolean {
 
         val containerDataBinding = gxNode.templateNode.dataBinding
         //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
-        val containerTemplateData = (containerDataBinding?.getValueData(templateData) as? JSONArray) ?: JSONArray()
+        val containerTemplateData =
+            (containerDataBinding?.getValueData(templateData) as? JSONArray) ?: JSONArray()
 
         val style = this.node.getStyle()
 
@@ -64,13 +70,21 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
         if (gxNode.isScrollType() && finalScrollConfig?.isHorizontal == true && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)) {
-            val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(context, gxNode, containerTemplateData)
+            val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(
+                context,
+                gxNode,
+                containerTemplateData
+            )
             containerSize?.height?.let {
                 finalFlexBox?.size?.height = it
                 isDirty = true
             }
         } else if (gxNode.isGridType() && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)) {
-            val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(context, gxNode, containerTemplateData)
+            val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(
+                context,
+                gxNode,
+                containerTemplateData
+            )
             containerSize?.height?.let {
                 finalFlexBox?.size?.height = it
                 isDirty = true
@@ -84,7 +98,14 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         }
 
         if (finalCssStyle != null) {
-            updateStyleByCssStyle(context, finalCssStyle, style, gxTemplateNode, this, templateData)?.let {
+            updateStyleByCssStyle(
+                context,
+                finalCssStyle,
+                style,
+                gxTemplateNode,
+                this,
+                templateData
+            )?.let {
                 isDirty = it
             }
         }
@@ -100,7 +121,11 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return result
     }
 
-    fun updateNormalStyle(context: GXTemplateContext, node: GXTemplateNode, templateData: JSONObject): Boolean {
+    fun updateNormalStyle(
+        context: GXTemplateContext,
+        node: GXTemplateNode,
+        templateData: JSONObject
+    ): Boolean {
 
         val style = this.node.getStyle()
 
@@ -239,16 +264,24 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return isDirty
     }
 
-    private fun updateStyleByCssStyle(templateContext: GXTemplateContext, finalCssStyle: GXStyle, stretchStyle: Style, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, data: JSONObject): Boolean? {
+    private fun updateStyleByCssStyle(
+        templateContext: GXTemplateContext,
+        finalCssStyle: GXStyle,
+        stretchStyle: Style,
+        currentNode: GXTemplateNode,
+        currentStretchNode: GXStretchNode,
+        data: JSONObject
+    ): Boolean? {
         if (finalCssStyle.fitContent == true) {
-            GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let {
-                GXTemplateUtils.updateSize(it, stretchStyle.size)
-                // 使用FlexGrow结合FitContent计算出来的宽度，在赋值的是偶，需要将flexGrow重置成0，否则在Stretch计算的时候会使用FlexGrow计算出的宽度
-                if (stretchStyle.flexGrow != 0F) {
-                    stretchStyle.flexGrow = 0F
+            GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)
+                ?.let {
+                    GXTemplateUtils.updateSize(it, stretchStyle.size)
+                    // 使用FlexGrow结合FitContent计算出来的宽度，在赋值的是偶，需要将flexGrow重置成0，否则在Stretch计算的时候会使用FlexGrow计算出的宽度
+                    if (stretchStyle.flexGrow != 0F) {
+                        stretchStyle.flexGrow = 0F
+                    }
+                    return true
                 }
-                return true
-            }
         }
         return null
     }

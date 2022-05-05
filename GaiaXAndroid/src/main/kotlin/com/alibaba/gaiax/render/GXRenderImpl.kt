@@ -61,11 +61,13 @@ class GXRenderImpl {
 
         onCreate(templateContext)
 
-        return templateContext.rootView?.get() ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
+        return templateContext.rootView?.get()
+            ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
     }
 
     fun bindViewData(templateContext: GXTemplateContext) {
-        val rootNode = templateContext.rootNode ?: throw IllegalArgumentException("RootNode is null")
+        val rootNode =
+            templateContext.rootNode ?: throw IllegalArgumentException("RootNode is null")
 
         // Resetting the Template Status
         templateContext.isDirty = false

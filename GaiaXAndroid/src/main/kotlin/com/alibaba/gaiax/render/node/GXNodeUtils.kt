@@ -58,7 +58,11 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerHeightByItemTemplate(context: GXTemplateContext, gxNode: GXNode, templateData: JSONArray): Size<Dimension?>? {
+    fun computeContainerHeightByItemTemplate(
+        context: GXTemplateContext,
+        gxNode: GXNode,
+        templateData: JSONArray
+    ): Size<Dimension?>? {
         if (gxNode.childTemplateItems?.isEmpty() == true) {
             return null
         }
@@ -126,7 +130,12 @@ object GXNodeUtils {
         }
     }
 
-    private fun computeItemSize(context: GXTemplateContext, gxNode: GXNode, itemViewPort: Size<Float?>, containerTemplateData: JSONArray): Layout? {
+    private fun computeItemSize(
+        context: GXTemplateContext,
+        gxNode: GXNode,
+        itemViewPort: Size<Float?>,
+        containerTemplateData: JSONArray
+    ): Layout? {
         when {
             // 如果是Scroll容器，那么需要计算所有数据的高度，作为Item的高度
             // TODO: 待处理
@@ -135,9 +144,16 @@ object GXNodeUtils {
                 val itemData = containerTemplateData.first() as? JSONObject ?: return null
                 val itemTemplateItem = itemTemplatePair.first
                 val itemTemplateNode = itemTemplatePair.second
-                val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData = GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(itemTemplateItem, itemTemplateNode, itemMeasureSize, itemTemplateData)?.stretchNode?.finalLayout
+                val itemMeasureSize =
+                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
+                val itemTemplateData: GXTemplateEngine.GXTemplateData =
+                    GXTemplateEngine.GXTemplateData(itemData)
+                return computeItemSizeByCreateAndBindNode(
+                    itemTemplateItem,
+                    itemTemplateNode,
+                    itemMeasureSize,
+                    itemTemplateData
+                )?.stretchNode?.finalLayout
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -145,9 +161,16 @@ object GXNodeUtils {
                 val itemData = containerTemplateData.first() as? JSONObject ?: return null
                 val itemTemplateItem = itemTemplatePair.first
                 val itemTemplateNode = itemTemplatePair.second
-                val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData = GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(itemTemplateItem, itemTemplateNode, itemMeasureSize, itemTemplateData)?.stretchNode?.finalLayout
+                val itemMeasureSize =
+                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
+                val itemTemplateData: GXTemplateEngine.GXTemplateData =
+                    GXTemplateEngine.GXTemplateData(itemData)
+                return computeItemSizeByCreateAndBindNode(
+                    itemTemplateItem,
+                    itemTemplateNode,
+                    itemMeasureSize,
+                    itemTemplateData
+                )?.stretchNode?.finalLayout
             }
             else -> {
                 return null
@@ -155,10 +178,16 @@ object GXNodeUtils {
         }
     }
 
-    private fun computeItemSizeByCreateAndBindNode(templateItem: GXTemplateEngine.GXTemplateItem, templateNode: GXTemplateNode, measureSize: GXTemplateEngine.GXMeasureSize, itemTemplateData: GXTemplateEngine.GXTemplateData): GXNode? {
+    private fun computeItemSizeByCreateAndBindNode(
+        templateItem: GXTemplateEngine.GXTemplateItem,
+        templateNode: GXTemplateNode,
+        measureSize: GXTemplateEngine.GXMeasureSize,
+        itemTemplateData: GXTemplateEngine.GXTemplateData
+    ): GXNode? {
         // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
         val templateData = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
-        val context = GXTemplateContext.createContext(templateItem, measureSize, templateData, templateNode)
+        val context =
+            GXTemplateContext.createContext(templateItem, measureSize, templateData, templateNode)
         val rootNode = GXTemplateEngine.instance.render.createNode(context)
         context.updateContext(itemTemplateData)
         GXTemplateEngine.instance.render.bindNodeData(context)
@@ -166,7 +195,12 @@ object GXNodeUtils {
     }
 
 
-    private fun computeContainerSize(context: GXTemplateContext, gxNode: GXNode, itemSize: Layout?, containerTemplateData: JSONArray): Size<Dimension?>? {
+    private fun computeContainerSize(
+        context: GXTemplateContext,
+        gxNode: GXNode,
+        itemSize: Layout?,
+        containerTemplateData: JSONArray
+    ): Size<Dimension?>? {
         if (itemSize != null) {
             // 容器的尺寸计算需要氛围Scroll和Grid
             if (gxNode.isScrollType()) {
@@ -192,7 +226,8 @@ object GXNodeUtils {
                     if (gxGridConfig.isVertical) {
 
                         // 获取行数
-                        val lines = ceil((containerTemplateData.size * 1.0F / gxGridConfig.column).toDouble()).toInt()
+                        val lines =
+                            ceil((containerTemplateData.size * 1.0F / gxGridConfig.column).toDouble()).toInt()
 
                         var containerHeight = itemSize.height
 

@@ -98,17 +98,21 @@ class GXAnimationBinding(
             val type = GXAnimationType.create(data.getString(KEY_TYPE))
             if (type != null) {
                 val trigger = data.getBooleanValue(KEY_TRIGGER)
-                val state = if (data.containsKey(KEY_STATE)) GXExpressionUtils.create(data.getString(KEY_STATE)) else null
+                val state = if (data.containsKey(KEY_STATE)) GXExpressionUtils.create(
+                    data.getString(KEY_STATE)
+                ) else null
                 when (type) {
                     GXAnimationType.LOTTIE -> {
-                        val lottieAnimator = GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
+                        val lottieAnimator =
+                            GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
                         if (lottieAnimator != null) {
                             return GXAnimationBinding(type, trigger, state, lottieAnimator)
                         }
                         return null
                     }
                     GXAnimationType.PROP -> {
-                        val animatorSet = GXPropAnimationSet.create(data.getJSONObject(KEY_PROP_ANIMATOR_SET))
+                        val animatorSet =
+                            GXPropAnimationSet.create(data.getJSONObject(KEY_PROP_ANIMATOR_SET))
                         if (animatorSet != null) {
                             return GXAnimationBinding(type, trigger, state, animatorSet)
                         }
@@ -196,13 +200,29 @@ class GXAnimationBinding(
 
         var loopCount: Int = 0
 
-        override fun doAnimation(context: GXTemplateContext, gxNode: GXNode, templateData: JSONObject) {
+        override fun doAnimation(
+            context: GXTemplateContext,
+            gxNode: GXNode,
+            templateData: JSONObject
+        ) {
             val lottieContainer = (gxNode.viewRef?.get() as? ViewGroup) ?: return
             this.remoteUri = this.remoteUriExp?.value(templateData) as? String
             this.localUri = this.localUriExp?.value(templateData) as? String
             when {
-                this.remoteUri != null -> GXRemoteLottie(context, lottieContainer, this, gxNode, templateData).play()
-                this.localUri != null -> GXLocalLottie(context, lottieContainer, this, gxNode, templateData).play()
+                this.remoteUri != null -> GXRemoteLottie(
+                    context,
+                    lottieContainer,
+                    this,
+                    gxNode,
+                    templateData
+                ).play()
+                this.localUri != null -> GXLocalLottie(
+                    context,
+                    lottieContainer,
+                    this,
+                    gxNode,
+                    templateData
+                ).play()
             }
         }
 
@@ -220,7 +240,13 @@ class GXAnimationBinding(
             }
         }
 
-        class GXLocalLottie(val context: GXTemplateContext, private val lottieContainer: ViewGroup, val animator: GXLottieAnimation, val gxNode: GXNode, val templateData: JSONObject) {
+        class GXLocalLottie(
+            val context: GXTemplateContext,
+            private val lottieContainer: ViewGroup,
+            val animator: GXLottieAnimation,
+            val gxNode: GXNode,
+            val templateData: JSONObject
+        ) {
 
             private fun appendJson(value: String?): String? {
                 if (value != null && !value.endsWith(".json")) {
@@ -230,8 +256,14 @@ class GXAnimationBinding(
             }
 
             private fun createLottieView(context: Context): LottieAnimationView {
-                val lottieView: LottieAnimationView = LayoutInflater.from(context).inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
-                lottieView.layoutParams = AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, AbsoluteLayout.LayoutParams.MATCH_PARENT, 0, 0)
+                val lottieView: LottieAnimationView = LayoutInflater.from(context)
+                    .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
+                lottieView.layoutParams = AbsoluteLayout.LayoutParams(
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    0,
+                    0
+                )
                 return lottieView
             }
 
@@ -284,19 +316,21 @@ class GXAnimationBinding(
                                 templateData.setValueExt(it, false)
                             }
                         }
-                        context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                            this.state = "END"
-                            this.nodeId = gxNode.id
-                            this.view = lottieView
-                        })
+                        context.eventListener?.onAnimationEvent(
+                            GXTemplateEngine.GXAnimation().apply {
+                                this.state = "END"
+                                this.nodeId = gxNode.id
+                                this.view = lottieView
+                            })
                     }
 
                     override fun onAnimationStart(animation: Animator?) {
-                        context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                            this.state = "START"
-                            this.nodeId = gxNode.id
-                            this.view = lottieView
-                        })
+                        context.eventListener?.onAnimationEvent(
+                            GXTemplateEngine.GXAnimation().apply {
+                                this.state = "START"
+                                this.nodeId = gxNode.id
+                                this.view = lottieView
+                            })
                     }
 
                 })
@@ -310,11 +344,23 @@ class GXAnimationBinding(
             }
         }
 
-        class GXRemoteLottie(val context: GXTemplateContext, private val lottieContainer: ViewGroup, val animator: GXLottieAnimation, val gxNode: GXNode, val rawJson: JSON) {
+        class GXRemoteLottie(
+            val context: GXTemplateContext,
+            private val lottieContainer: ViewGroup,
+            val animator: GXLottieAnimation,
+            val gxNode: GXNode,
+            val rawJson: JSON
+        ) {
 
             private fun createLottieView(context: Context): LottieAnimationView {
-                val lottieView: LottieAnimationView = LayoutInflater.from(context).inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
-                lottieView.layoutParams = AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, AbsoluteLayout.LayoutParams.MATCH_PARENT, 0, 0)
+                val lottieView: LottieAnimationView = LayoutInflater.from(context)
+                    .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
+                lottieView.layoutParams = AbsoluteLayout.LayoutParams(
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    0,
+                    0
+                )
                 return lottieView
             }
 
@@ -365,20 +411,22 @@ class GXAnimationBinding(
                                             rawJson.setValueExt(it, false)
                                         }
                                     }
-                                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                                        this.state = "END"
-                                        this.nodeId = gxNode.id
-                                        this.view = lottieView
-                                    })
+                                    context.eventListener?.onAnimationEvent(
+                                        GXTemplateEngine.GXAnimation().apply {
+                                            this.state = "END"
+                                            this.nodeId = gxNode.id
+                                            this.view = lottieView
+                                        })
                                 }
 
                                 override fun onAnimationStart(animation: Animator?) {
                                     gxNode.isAnimating = true
-                                    context.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                                        this.state = "START"
-                                        this.nodeId = gxNode.id
-                                        this.view = lottieView
-                                    })
+                                    context.eventListener?.onAnimationEvent(
+                                        GXTemplateEngine.GXAnimation().apply {
+                                            this.state = "START"
+                                            this.nodeId = gxNode.id
+                                            this.view = lottieView
+                                        })
                                 }
                             })
                             lottieView.playAnimation()
@@ -395,12 +443,16 @@ class GXAnimationBinding(
         }
     }
 
-    class GXPropAnimation(val name: GXPropAnimationSet.GXPropName, val value: GXPropAnimationSet.GXPropValue) : GXIPropAnimation {
+    class GXPropAnimation(
+        val name: GXPropAnimationSet.GXPropName,
+        val value: GXPropAnimationSet.GXPropValue
+    ) : GXIPropAnimation {
 
         override fun createAnimator(targetView: View): Animator {
             val valueAnimator = ValueAnimator()
             valueAnimator.repeatCount = loopCount
-            valueAnimator.repeatMode = if (loopMode == GXPropAnimationSet.GXPropLoopMode.RESET) ValueAnimator.RESTART else ValueAnimator.REVERSE
+            valueAnimator.repeatMode =
+                if (loopMode == GXPropAnimationSet.GXPropLoopMode.RESET) ValueAnimator.RESTART else ValueAnimator.REVERSE
             valueAnimator.duration = duration.toLong()
             valueAnimator.interpolator = interpolator.value()
             if (value is GXPropAnimationSet.GXPropValue.GXPropValueFloat) {
@@ -424,7 +476,8 @@ class GXAnimationBinding(
         }
 
         var duration: Int = 300
-        var interpolator: GXPropAnimationSet.GXPropInterpolator = GXPropAnimationSet.GXPropInterpolator.STANDARD
+        var interpolator: GXPropAnimationSet.GXPropInterpolator =
+            GXPropAnimationSet.GXPropInterpolator.STANDARD
         var loopCount: Int = 0
         var loopMode: GXPropAnimationSet.GXPropLoopMode = GXPropAnimationSet.GXPropLoopMode.RESET
         var delay: Long = 0
@@ -462,7 +515,8 @@ class GXAnimationBinding(
                         animator.loopCount = Int.MAX_VALUE
                     } else if (data.containsKey(KEY_LOOP_COUNT)) {
                         if (animator.loopMode == GXPropAnimationSet.GXPropLoopMode.REVERSE) {
-                            animator.loopCount = Math.max(1, data.getIntValue(KEY_LOOP_COUNT) * 2 - 1)
+                            animator.loopCount =
+                                Math.max(1, data.getIntValue(KEY_LOOP_COUNT) * 2 - 1)
                         } else {
                             animator.loopCount = Math.max(0, data.getIntValue(KEY_LOOP_COUNT) - 1)
                         }
@@ -482,7 +536,11 @@ class GXAnimationBinding(
 
     class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
 
-        override fun doAnimation(context: GXTemplateContext, gxNode: GXNode, templateData: JSONObject) {
+        override fun doAnimation(
+            context: GXTemplateContext,
+            gxNode: GXNode,
+            templateData: JSONObject
+        ) {
             gxNode.viewRef?.get()?.let { targetView ->
                 playAnimation(context, gxNode, targetView)
             }
@@ -565,9 +623,10 @@ class GXAnimationBinding(
                                         set.animations.add(this)
                                     }
                                 } else if (it.containsKey(KEY_PROP_ANIMATOR)) {
-                                    GXPropAnimation.create(it.getJSONObject(KEY_PROP_ANIMATOR))?.apply {
-                                        set.animations.add(this)
-                                    }
+                                    GXPropAnimation.create(it.getJSONObject(KEY_PROP_ANIMATOR))
+                                        ?.apply {
+                                            set.animations.add(this)
+                                        }
                                 } else {
                                     GXPropAnimation.create(it)?.apply {
                                         set.animations.add(this)
@@ -808,7 +867,8 @@ class GXAnimationBinding(
                 internal const val KEY_ORDERING = "ordering"
                 private const val KEY_SEQUENTIALLY = "SEQUENTIALLY"
 
-                fun create(value: String) = if (value.equals(KEY_SEQUENTIALLY, true)) SEQUENTIALLY else TOGETHER
+                fun create(value: String) =
+                    if (value.equals(KEY_SEQUENTIALLY, true)) SEQUENTIALLY else TOGETHER
             }
         }
     }

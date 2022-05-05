@@ -59,17 +59,39 @@ data class GXFlexBox(
                 alignItems = heightPriorityStyle.alignItems ?: lowPriorityStyle.alignItems,
                 alignSelf = heightPriorityStyle.alignSelf ?: lowPriorityStyle.alignSelf,
                 alignContent = heightPriorityStyle.alignContent ?: lowPriorityStyle.alignContent,
-                justifyContent = heightPriorityStyle.justifyContent ?: lowPriorityStyle.justifyContent,
-                position = GXTemplateUtils.createRectDimensionByPriority(heightPriorityStyle.position, lowPriorityStyle.position),
-                margin = GXTemplateUtils.createRectDimensionByPriority(heightPriorityStyle.margin, lowPriorityStyle.margin),
-                padding = GXTemplateUtils.createRectDimensionByPriority(heightPriorityStyle.padding, lowPriorityStyle.padding),
-                border = GXTemplateUtils.createRectDimensionByPriority(heightPriorityStyle.border, lowPriorityStyle.border),
+                justifyContent = heightPriorityStyle.justifyContent
+                    ?: lowPriorityStyle.justifyContent,
+                position = GXTemplateUtils.createRectDimensionByPriority(
+                    heightPriorityStyle.position,
+                    lowPriorityStyle.position
+                ),
+                margin = GXTemplateUtils.createRectDimensionByPriority(
+                    heightPriorityStyle.margin,
+                    lowPriorityStyle.margin
+                ),
+                padding = GXTemplateUtils.createRectDimensionByPriority(
+                    heightPriorityStyle.padding,
+                    lowPriorityStyle.padding
+                ),
+                border = GXTemplateUtils.createRectDimensionByPriority(
+                    heightPriorityStyle.border,
+                    lowPriorityStyle.border
+                ),
                 flexGrow = heightPriorityStyle.flexGrow ?: lowPriorityStyle.flexGrow,
                 flexShrink = heightPriorityStyle.flexShrink ?: lowPriorityStyle.flexShrink,
                 flexBasis = heightPriorityStyle.flexBasis ?: lowPriorityStyle.flexBasis,
-                size = GXTemplateUtils.createSizeDimensionByPriority(heightPriorityStyle.size, lowPriorityStyle.size),
-                minSize = GXTemplateUtils.createSizeDimensionByPriority(heightPriorityStyle.minSize, lowPriorityStyle.minSize),
-                maxSize = GXTemplateUtils.createSizeDimensionByPriority(heightPriorityStyle.maxSize, lowPriorityStyle.maxSize),
+                size = GXTemplateUtils.createSizeDimensionByPriority(
+                    heightPriorityStyle.size,
+                    lowPriorityStyle.size
+                ),
+                minSize = GXTemplateUtils.createSizeDimensionByPriority(
+                    heightPriorityStyle.minSize,
+                    lowPriorityStyle.minSize
+                ),
+                maxSize = GXTemplateUtils.createSizeDimensionByPriority(
+                    heightPriorityStyle.maxSize,
+                    lowPriorityStyle.maxSize
+                ),
                 aspectRatio = heightPriorityStyle.aspectRatio ?: lowPriorityStyle.aspectRatio
 
             )

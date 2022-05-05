@@ -77,8 +77,12 @@ object GXScreenUtils {
 
             // Multi Window 获取
             if (Build.VERSION.SDK_INT >= 24 && context.isInMultiWindowMode) {
-                screenWidth = Math.round((context.resources.configuration.screenWidthDp.toFloat() * context.resources.displayMetrics.density).toDouble() + 0.5).toFloat()
-                screenHeight = Math.round((context.resources.configuration.screenHeightDp.toFloat() * context.resources.displayMetrics.density).toDouble() + 0.5).toFloat()
+                screenWidth =
+                    Math.round((context.resources.configuration.screenWidthDp.toFloat() * context.resources.displayMetrics.density).toDouble() + 0.5)
+                        .toFloat()
+                screenHeight =
+                    Math.round((context.resources.configuration.screenHeightDp.toFloat() * context.resources.displayMetrics.density).toDouble() + 0.5)
+                        .toFloat()
                 if (screenWidth != 0F && screenHeight != 0F) {
                     return
                 }
@@ -91,7 +95,8 @@ object GXScreenUtils {
         } else {
             // Application Window 获取
             val applicationContext = GXTemplateEngine.instance.context
-            val windowManager = applicationContext.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+            val windowManager =
+                applicationContext.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
             if (windowManager != null) {
                 windowManager.defaultDisplay?.getMetrics(dm)
                 screenWidth = dm.widthPixels.toFloat()

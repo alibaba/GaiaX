@@ -44,7 +44,12 @@ class GXMode(val modeType: String, val mode: String) {
         }
     }
 
-    fun getMatrix(viewWidth: Int, viewHeight: Int, drawableWidth: Int, drawableHeight: Int): Matrix? {
+    fun getMatrix(
+        viewWidth: Int,
+        viewHeight: Int,
+        drawableWidth: Int,
+        drawableHeight: Int
+    ): Matrix? {
         return when (modeType) {
             MODE_TYPE_SCALE -> {
                 getScaleMatrix(drawableWidth, drawableHeight, viewWidth, viewHeight)
@@ -58,7 +63,12 @@ class GXMode(val modeType: String, val mode: String) {
         }
     }
 
-    private fun getCropMatrix(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getCropMatrix(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         return when (mode) {
             // 需要区分是否缩放
             "left" -> {
@@ -77,7 +87,12 @@ class GXMode(val modeType: String, val mode: String) {
         }
     }
 
-    private fun getCropMatrixBottom(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getCropMatrixBottom(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -96,7 +111,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getCropMatrixTop(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getCropMatrixTop(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -115,7 +135,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getCropMatrixRight(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getCropMatrixRight(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -134,7 +159,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getCropLeftMatrix(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getCropLeftMatrix(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -153,7 +183,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getScaleMatrix(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix? {
+    private fun getScaleMatrix(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix? {
         return when (mode) {
             // 需要区分是否缩放
             "left" -> {
@@ -172,7 +207,12 @@ class GXMode(val modeType: String, val mode: String) {
         }
     }
 
-    private fun getScaleMatrixBottom(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix {
+    private fun getScaleMatrixBottom(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -181,7 +221,10 @@ class GXMode(val modeType: String, val mode: String) {
         // 图片的宽高比大于视图的宽高比
         // 说明以宽度为基准，同比缩放之后，图片高度小于视图的高度
         if (drawableWidth.toFloat() * viewHeight.toFloat() >= drawableHeight.toFloat() * viewWidth.toFloat()) {
-            scale = Math.min(viewWidth.toFloat() / drawableWidth.toFloat(), viewHeight.toFloat() / drawableHeight.toFloat())
+            scale = Math.min(
+                viewWidth.toFloat() / drawableWidth.toFloat(),
+                viewHeight.toFloat() / drawableHeight.toFloat()
+            )
             dx = 0F
             dy = (viewHeight - drawableHeight * scale)
         }
@@ -197,7 +240,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getScaleMatrixTop(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix {
+    private fun getScaleMatrixTop(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -206,7 +254,10 @@ class GXMode(val modeType: String, val mode: String) {
         // 图片的宽高比大于视图的宽高比
         // 说明以宽度为基准，同比缩放之后，图片高度小于视图的高度
         if (drawableWidth.toFloat() * viewHeight.toFloat() >= drawableHeight.toFloat() * viewWidth.toFloat()) {
-            scale = Math.min(viewWidth.toFloat() / drawableWidth.toFloat(), viewHeight.toFloat() / drawableHeight.toFloat())
+            scale = Math.min(
+                viewWidth.toFloat() / drawableWidth.toFloat(),
+                viewHeight.toFloat() / drawableHeight.toFloat()
+            )
             dx = 0F
             dy = 0F
         }
@@ -222,7 +273,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getScaleMatrixRight(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix {
+    private fun getScaleMatrixRight(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -232,7 +288,10 @@ class GXMode(val modeType: String, val mode: String) {
         // 说明以宽度为基准，同比缩放之后，图片高度小于视图的高度
         // 说明以高度为基准，同比缩放之后，图片宽度大于视图的宽度
         if (drawableWidth.toFloat() * viewHeight.toFloat() >= drawableHeight.toFloat() * viewWidth.toFloat()) {
-            scale = Math.min(viewWidth.toFloat() / drawableWidth.toFloat(), viewHeight.toFloat() / drawableHeight.toFloat())
+            scale = Math.min(
+                viewWidth.toFloat() / drawableWidth.toFloat(),
+                viewHeight.toFloat() / drawableHeight.toFloat()
+            )
             dx = (viewWidth - drawableWidth * scale)
             dy = (viewHeight - drawableHeight * scale) * 0.5f
         }
@@ -248,7 +307,12 @@ class GXMode(val modeType: String, val mode: String) {
         return matrix
     }
 
-    private fun getScaleMatrixLeft(drawableWidth: Int, drawableHeight: Int, viewWidth: Int, viewHeight: Int): Matrix {
+    private fun getScaleMatrixLeft(
+        drawableWidth: Int,
+        drawableHeight: Int,
+        viewWidth: Int,
+        viewHeight: Int
+    ): Matrix {
         val matrix = Matrix()
         val scale: Float
         var dx = 0f
@@ -258,7 +322,10 @@ class GXMode(val modeType: String, val mode: String) {
         // 说明以宽度为基准，同比缩放之后，图片高度小于视图的高度
         // 说明以高度为基准，同比缩放之后，图片宽度大于视图的宽度
         if (drawableWidth.toFloat() * viewHeight.toFloat() >= drawableHeight.toFloat() * viewWidth.toFloat()) {
-            scale = Math.min(viewWidth.toFloat() / drawableWidth.toFloat(), viewHeight.toFloat() / drawableHeight.toFloat())
+            scale = Math.min(
+                viewWidth.toFloat() / drawableWidth.toFloat(),
+                viewHeight.toFloat() / drawableHeight.toFloat()
+            )
             dx = 0F
             dy = (viewHeight - drawableHeight * scale) * 0.5f
         }

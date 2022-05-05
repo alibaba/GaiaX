@@ -19,7 +19,12 @@ package com.alibaba.gaiax.template
 /**
  * @suppress
  */
-class GXRoundedCorner(var topLeft: GXSize?, var topRight: GXSize?, var bottomLeft: GXSize?, var bottomRight: GXSize?) {
+class GXRoundedCorner(
+    var topLeft: GXSize?,
+    var topRight: GXSize?,
+    var bottomLeft: GXSize?,
+    var bottomRight: GXSize?
+) {
 
     private fun toFloatArray(): FloatArray {
         // top-left, top-right, bottom-right, bottom-left

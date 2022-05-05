@@ -34,7 +34,10 @@ class GXTemplateInfoSource(val context: Context) : GXITemplateInfoSource {
         sources.add(GXTemplateInfoCacheSource(context))
     }
 
-    override fun getTemplateInfo(templateSource: GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
+    override fun getTemplateInfo(
+        templateSource: GXITemplateSource,
+        templateItem: GXTemplateEngine.GXTemplateItem
+    ): GXTemplateInfo {
         sources.forEach {
             it.getTemplateInfo(templateSource, templateItem)?.let { return it }
         }

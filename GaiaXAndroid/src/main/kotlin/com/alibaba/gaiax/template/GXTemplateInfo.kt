@@ -102,8 +102,12 @@ data class GXTemplateInfo(
 
     companion object {
 
-        fun createTemplate(source: GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-            val templatePath = source.getTemplate(templateItem) ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
+        fun createTemplate(
+            source: GXITemplateSource,
+            templateItem: GXTemplateEngine.GXTemplateItem
+        ): GXTemplateInfo {
+            val templatePath = source.getTemplate(templateItem)
+                ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
             val template = createTemplate(templatePath)
             return template.apply { initChildren(source, this, templateItem) }
         }
@@ -129,16 +133,20 @@ data class GXTemplateInfo(
             // val jsSrc = GXTemplatePathParserUtils.parseJS(context, templatePath)
 
             // Data expression
-            val dataExpJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_DATA) ?: JSONObject()
+            val dataExpJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_DATA) ?: JSONObject()
 
             // Data expression
-            val eventJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_EVENT) ?: JSONObject()
+            val eventJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_EVENT) ?: JSONObject()
 
             // The configuration data
-            val configJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_CONFIG) ?: JSONObject()
+            val configJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_CONFIG) ?: JSONObject()
 
             // Animation data
-            val animationJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
+            val animationJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
 
             val layer = GXLayer.create(layerJson)
             val css = createCss(layer, cssJson)
@@ -162,7 +170,11 @@ data class GXTemplateInfo(
             return createCss(value, srcCssJson, layer)
         }
 
-        private fun createCss(value: MutableMap<String, GXCss>, srcCssJson: JSONObject, layer: GXLayer): MutableMap<String, GXCss> {
+        private fun createCss(
+            value: MutableMap<String, GXCss>,
+            srcCssJson: JSONObject,
+            layer: GXLayer
+        ): MutableMap<String, GXCss> {
             val layerId = layer.id
             val cssId = layer.css
             val cssByCssId = srcCssJson.getJSONObject(cssId) ?: JSONObject()
@@ -276,12 +288,19 @@ data class GXTemplateInfo(
             }
         }
 
-        private fun initChildren(source: GXITemplateSource, templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem) {
+        private fun initChildren(
+            source: GXITemplateSource,
+            templateInfo: GXTemplateInfo,
+            templateItem: GXTemplateEngine.GXTemplateItem
+        ) {
             forChildrenTemplate(templateInfo.layer) {
-                val childTemplate = createTemplate(source, GXTemplateEngine.GXTemplateItem(templateItem.context, templateItem.bizId, it.id).apply {
-                    this.isLocal = templateItem.isLocal
-                    this.templateVersion = templateItem.templateVersion
-                })
+                val childTemplate = createTemplate(
+                    source,
+                    GXTemplateEngine.GXTemplateItem(templateItem.context, templateItem.bizId, it.id)
+                        .apply {
+                            this.isLocal = templateItem.isLocal
+                            this.templateVersion = templateItem.templateVersion
+                        })
                 if (templateInfo.children == null) {
                     templateInfo.children = mutableListOf()
                 }

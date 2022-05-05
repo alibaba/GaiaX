@@ -24,7 +24,10 @@ import com.alibaba.gaiax.template.GXTemplateInfo
  */
 interface GXITemplateInfoSource {
 
-    fun getTemplateInfo(templateSource: GXITemplateSource, templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
+    fun getTemplateInfo(
+        templateSource: GXITemplateSource,
+        templateItem: GXTemplateEngine.GXTemplateItem
+    ): GXTemplateInfo? {
         return GXTemplateInfo.createTemplate(templateSource, templateItem)
     }
 }

@@ -170,10 +170,30 @@ data class Style(
     var alignSelf: AlignSelf = AlignSelf.Auto,
     var alignContent: AlignContent = AlignContent.FlexStart,
     var justifyContent: JustifyContent = JustifyContent.FlexStart,
-    var position: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined),
-    var margin: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined),
-    var padding: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined),
-    var border: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined),
+    var position: Rect<Dimension> = Rect(
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined
+    ),
+    var margin: Rect<Dimension> = Rect(
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined
+    ),
+    var padding: Rect<Dimension> = Rect(
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined
+    ),
+    var border: Rect<Dimension> = Rect(
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined,
+        Dimension.Undefined
+    ),
     var flexGrow: Float = 0f,
     var flexShrink: Float = 1f,
     var flexBasis: Dimension = Dimension.Auto,
@@ -367,10 +387,14 @@ data class Style(
         var alignSelf: AlignSelf = AlignSelf.Auto
         var alignContent: AlignContent = AlignContent.FlexStart
         var justifyContent: JustifyContent = JustifyContent.FlexStart
-        var position: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var margin: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var padding: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var border: Rect<Dimension> = Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
+        var position: Rect<Dimension> =
+            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
+        var margin: Rect<Dimension> =
+            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
+        var padding: Rect<Dimension> =
+            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
+        var border: Rect<Dimension> =
+            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
         var flexGrow: Float = 0f
         var flexShrink: Float = 0f
         var flexBasis: Dimension = Dimension.Auto

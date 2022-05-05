@@ -1,5 +1,10 @@
 {
   "id": "template_shadow",
   "type": "gaia-template",
-  "layers": [{ "id": "target", "type": "view" }]
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
 }

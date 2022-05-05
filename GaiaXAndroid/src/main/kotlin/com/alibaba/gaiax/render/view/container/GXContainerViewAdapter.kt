@@ -37,15 +37,24 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 /**
  * @suppress
  */
-class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode, val container: GXContainer) : RecyclerView.Adapter<GXViewHolder>() {
+class GXContainerViewAdapter(
+    val gxTemplateContext: GXTemplateContext,
+    val gxNode: GXNode,
+    val container: GXContainer
+) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var containerData: JSONArray = JSONArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
-        val childTemplateItem = viewTypeMap[viewType] ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
+        val childTemplateItem = viewTypeMap[viewType]
+            ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-        val childView = GXTemplateEngine.instance.createView(childTemplateItem, GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height), childVisualNestTemplateNode)
+        val childView = GXTemplateEngine.instance.createView(
+            childTemplateItem,
+            GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height),
+            childVisualNestTemplateNode
+        )
         return GXViewHolder(childView)
     }
 

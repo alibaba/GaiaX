@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.render.node
 
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 
 /**
@@ -52,6 +53,7 @@ data class GXTemplateNode(
     fun reset() {
         dataBinding?.reset()
         visualTemplateNode?.reset()
+        finalExtendCss = null
         finalCss = null
         finalGridConfig = null
         finalScrollConfig = null
@@ -63,19 +65,21 @@ data class GXTemplateNode(
 
     var finalCss: GXCss? = null
 
+    var finalExtendCss: GXCss? = null
+
     /**
      * @param visualTemplateData 当前节点的虚拟父节点使用的数据源
      * @param nodeTemplateData 当前节点使用的数据源
      */
-    fun initFinal(visualTemplateData: JSONObject?, nodeTemplateData: JSONObject?) {
+    fun initFinal(gxTemplateContext: GXTemplateContext, visualTemplateData: JSONObject?, nodeTemplateData: JSONObject?) {
 
-        // 初始化自己的FinalStyle
+        // 初始化扩展数据
         val extendCssData = dataBinding?.getExtend(nodeTemplateData)
 
         // 创建FinalStyle
         val selfFinalCss: GXCss = if (extendCssData != null) {
             // 创建Css
-            val extendCss = GXCss.create(extendCssData)
+            finalExtendCss = GXCss.create(extendCssData)
 
             // 更新除了CSS外的其他节点信息
 
@@ -90,7 +94,7 @@ data class GXTemplateNode(
             }
 
             // 合并原有CSS和扩展属性的CSS
-            GXCss.create(css, extendCss)
+            GXCss.create(css, finalExtendCss)
         } else {
 
             layer.gridConfig?.let {
@@ -105,10 +109,15 @@ data class GXTemplateNode(
         }
 
         // 初始化虚拟节点的FinalStyle
-        visualTemplateNode?.initFinal(null, visualTemplateData)
+        visualTemplateNode?.initFinal(gxTemplateContext,null, visualTemplateData)
 
         // 合并Self和Visual
         this.finalCss = GXCss.create(selfFinalCss, visualTemplateNode?.finalCss)
+
+        // 记录扩展属性中是否存在会导致布局变化的属性
+        if (finalExtendCss?.flexBox?.isEmpty() == false) {
+            gxTemplateContext.isLayoutWillChangedByExtend = true
+        }
     }
 
     fun getNodeType() = layer.getNodeType()

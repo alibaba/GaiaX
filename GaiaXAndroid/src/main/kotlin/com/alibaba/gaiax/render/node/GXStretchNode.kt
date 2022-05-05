@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.text.GXFitContentPending
 import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.template.GXFlexBox
 import com.alibaba.gaiax.template.GXStyle
@@ -44,7 +45,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         }
     }
 
-    fun updateContainerStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
+    fun updateContainerLayout(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
 
         val containerDataBinding = gxNode.templateNode.dataBinding
         //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
@@ -121,7 +122,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             }
         }
 
-        updateStyleByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
             isDirty = it
         }
 
@@ -136,7 +137,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return result
     }
 
-    fun updateNormalStyle(context: GXTemplateContext, node: GXTemplateNode, templateData: JSONObject): Boolean {
+    fun updateNormalLayout(context: GXTemplateContext, node: GXTemplateNode, templateData: JSONObject): Boolean {
 
         val style = this.node.getStyle()
 
@@ -155,11 +156,11 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             throw IllegalArgumentException("final css style is null, please check!")
         }
 
-        updateStyleByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
             isDirty = it
         }
 
-        updateStyleByCssStyle(context, finalCssStyle, style, node, this, templateData)?.let {
+        updateLayoutByCssStyle(context, finalCssStyle, style, node, this, templateData)?.let {
             isDirty = it
         }
 
@@ -174,7 +175,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return result
     }
 
-    private fun updateStyleByFlexBox(finalCssStyle: GXStyle, flexBox: GXFlexBox, style: Style): Boolean? {
+    private fun updateLayoutByFlexBox(finalCssStyle: GXStyle, flexBox: GXFlexBox, style: Style): Boolean? {
         var isDirty: Boolean? = null
         flexBox.display?.let {
             style.display = it
@@ -294,34 +295,52 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return isDirty
     }
 
-    private fun updateStyleByCssStyle(templateContext: GXTemplateContext, finalCssStyle: GXStyle, stretchStyle: Style, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, data: JSONObject): Boolean? {
+    private fun updateLayoutByCssStyle(templateContext: GXTemplateContext, finalCssStyle: GXStyle, stretchStyle: Style, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, data: JSONObject): Boolean? {
+
         if (finalCssStyle.fitContent == true) {
-            GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let { src ->
+
+            // 如果存在通过扩展属性修改布局属性的情况存在，那么fitContent逻辑需要延迟处理
+            if (templateContext.isLayoutWillChangedByExtend) {
+                if (templateContext.fitContentPending == null) {
+                    templateContext.fitContentPending = mutableMapOf()
+                }
+                templateContext.fitContentPending?.put(this, GXFitContentPending(templateContext, stretchStyle, currentNode, currentStretchNode, data))
+                return false
+            }
+
+            // 处理fitContent逻辑
+            return updateLayoutByFitContent(
+                templateContext,
+                currentNode,
+                currentStretchNode,
+                data,
+                stretchStyle
+            )
+        }
+        return null
+    }
+
+    fun updateLayoutByFitContent(
+        templateContext: GXTemplateContext,
+        currentNode: GXTemplateNode,
+        currentStretchNode: GXStretchNode,
+        data: JSONObject,
+        stretchStyle: Style
+    ): Boolean {
+        GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上
                 GXTemplateUtils.updateSize(src, stretchStyle.size)
 
-                // 此处template_text_fitcontent_width_flex_grow和template_text_flex_grow_and_modify_padding有冲突
-
-                // 如果父模板已经改变，此处就不能够重置flexGrow，否则stretch在计算的时候会使用更新过得宽度和高度
-                // 虽然此处能解决template_text_flex_grow_and_modify_padding的问题，但是仍然无法覆盖所有情况
-                // 例如: 文字自适应计算出的宽度是1000，高度是200，当走这种情况时，如果宽度变成了900，那么可能存在高度200不够用的情况，即文字可能会被截断。
-                // 暂不处理这种情况
-//                if (stretchStyle.flexGrow != 0F) {
-//                    stretchStyle.size.width = Dimension.Auto
-//                    return true
-//                }
-
                 // template_text_fitcontent_width_flex_grow
-                // 如果父模板未改变，使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，否则在Stretch计算的时候会使用FlexGrow计算出的宽度
+                // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，否则在Stretch计算的时候会使用FlexGrow计算出的宽度
                 if (stretchStyle.flexGrow != 0F) {
                     stretchStyle.flexGrow = 0F
                 }
 
                 return true
             }
-        }
-        return null
+        return false
     }
 
     override fun toString(): String {

@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
@@ -36,6 +37,7 @@ import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.utils.GXTemplateUtils
 
 /**
  * @suppress
@@ -47,47 +49,76 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val templateData = context.templateData?.data ?: throw IllegalArgumentException("Data is null")
         val size = Size(context.size.width, context.size.height)
 
-        // 更新节点
-        updateNodeTree(context, rootNode, templateData)
+        // 更新布局
+        updateNodeTreeLayout(context, rootNode, templateData)
 
-        // 计算节点信息
+        // 计算布局
         if (context.isDirty) {
             GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
         }
+
+        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+        if (context.fitContentPending?.isNotEmpty()==true) {
+            context.fitContentPending?.forEach {
+                it.key.updateLayoutByFitContent(it.value.templateContext, it.value.currentNode,it.value.currentStretchNode, it.value.data, it.value.stretchStyle )
+            }
+            context.fitContentPending?.clear()
+            GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
+        }
+
+        // 更新样式
+        updateNodeTreeStyle(context, rootNode, templateData)
     }
 
-    private fun updateNodeTree(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNodeTreeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         node.stretchNode.reset()
         node.templateNode.reset()
 
         if (node.isNestRoot) {
-            updateNestNode(context, node, templateData)
+            updateNestNodeLayout(context, node, templateData)
         } else if (node.isContainerType()) {
-            updateContainerNode(context, node, templateData)
+            updateContainerNodeLayout(context, node, templateData)
         } else {
-            updateNormalNode(context, node, templateData)
+            updateNormalNodeLayout(context, node, templateData)
         }
     }
 
-    private fun updateNestNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         // 容器节点
         if (node.templateNode.isContainerType()) {
-            updateNestContainerNode(context, node, templateData)
+            updateNestContainerNodeLayout(context, node, templateData)
         }
         // 嵌套的子节点
         else {
-            updateNestNormalNode(context, node, templateData)
+            updateNestNormalNodeLayout(context, node, templateData)
         }
     }
 
-    private fun updateContainerNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateContainerNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(visualTemplateData = null, nodeTemplateData = templateData)
+        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = null, nodeTemplateData = templateData)
 
-        updateNode(context, node, templateData)
+        updateNodeLayout(gxTemplateContext, node, templateData)
     }
 
-    private fun updateNestContainerNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNormalNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        node.stretchNode.initFinal()
+        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = null, nodeTemplateData = templateData)
+
+        updateNodeLayout(gxTemplateContext, node, templateData)
+
+        node.children?.forEach { childNode ->
+            // 使用原有数据为数据源
+            updateNodeTreeLayout(gxTemplateContext, childNode, templateData)
+        }
+    }
+
+    private fun updateNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        // 更新节点布局
+        nodeNodeLayout(context, node, templateData)
+    }
+
+    private fun updateNestContainerNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
         val dataBinding = node.templateNode.dataBinding
 
@@ -117,12 +148,12 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(visualTemplateData = templateData, nodeTemplateData = childTemplateData)
+        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = templateData, nodeTemplateData = childTemplateData)
 
-        updateNode(context, node, childTemplateData)
+        updateNodeLayout(gxTemplateContext, node, childTemplateData)
     }
 
-    private fun updateNestNormalNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNormalNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
 
         // 虚拟节点所在的模板，需要传递数据给下一层子模板
@@ -133,32 +164,75 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val childTemplateData = (visualDataBinding?.getDataValue(templateData) as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(visualTemplateData = templateData, nodeTemplateData = childTemplateData)
+        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = templateData, nodeTemplateData = childTemplateData)
 
-        updateNode(context, node, childTemplateData)
+        updateNodeLayout(gxTemplateContext, node, childTemplateData)
 
         node.children?.forEach { childNode ->
             // 使用虚拟节点取值后的数据作为数据源
-            updateNodeTree(context, childNode, childTemplateData)
+            updateNodeTreeLayout(gxTemplateContext, childNode, childTemplateData)
         }
     }
 
-    private fun updateNormalNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
-        node.stretchNode.initFinal()
-        node.templateNode.initFinal(visualTemplateData = null, nodeTemplateData = templateData)
+    private fun updateNodeTreeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        if (node.isNestRoot) {
+            updateNestNodeStyle(context, node, templateData)
+        } else if (node.isContainerType()) {
+            updateContainerNodeStyle(context, node, templateData)
+        } else {
+            updateNormalNodeStyle(context, node, templateData)
+        }
+    }
 
-        updateNode(context, node, templateData)
+    private fun updateNestNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        // 容器节点
+        if (node.templateNode.isContainerType()) {
+            updateNestContainerNodeStyle(context, node, templateData)
+        }
+        // 嵌套的子节点
+        else {
+            updateNestNormalNodeStyle(context, node, templateData)
+        }
+    }
+
+    private fun updateContainerNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        updateNodeStyle(context, node, templateData)
+    }
+
+    private fun updateNestContainerNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
+        val dataBinding = node.templateNode.dataBinding
+
+        // 虚拟节点所在的模板，需要传递数据给下一层子模板
+        // 若没有数据需要传递，那么给下一层子模板传递一个空数据源
+        // 此处，双端已协商一致
+
+        // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
+        val valueData = visualDataBinding?.getDataValue(templateData)
+        val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
+
+        updateNodeStyle(context, node, childTemplateData)
+    }
+
+    private fun updateNestNormalNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        updateNodeStyle(context, node, templateData)
 
         node.children?.forEach { childNode ->
             // 使用原有数据为数据源
-            updateNodeTree(context, childNode, templateData)
+            updateNodeTreeStyle(context, childNode, templateData)
         }
     }
 
-    private fun updateNode(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
-        // 更新节点样式
-        nodeNodeStyle(context, node, templateData)
+    private fun updateNormalNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+        updateNodeStyle(context, node, templateData)
 
+        node.children?.forEach { childNode ->
+            // 使用原有数据为数据源
+            updateNodeTreeStyle(context, childNode, templateData)
+        }
+    }
+
+    private fun updateNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         // 更新视图样式
         nodeViewCss(context, node)
 
@@ -179,17 +253,17 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         node.templateNode.animationBinding?.executeAnimation(context, node, templateData)
     }
 
-    private fun nodeNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun nodeNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         // 容器节点
         if (node.isContainerType()) {
-            val isDirty = node.stretchNode.updateContainerStyle(context, node.templateNode, node, templateData)
+            val isDirty = node.stretchNode.updateContainerLayout(context, node.templateNode, node, templateData)
             if (isDirty) {
                 context.isDirty = isDirty
             }
         }
         // 普通节点
         else {
-            val isDirty = node.stretchNode.updateNormalStyle(context, node.templateNode, templateData)
+            val isDirty = node.stretchNode.updateNormalLayout(context, node.templateNode, templateData)
             if (isDirty) {
                 context.isDirty = isDirty
             }

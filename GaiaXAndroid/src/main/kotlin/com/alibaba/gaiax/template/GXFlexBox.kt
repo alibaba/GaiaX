@@ -46,6 +46,12 @@ data class GXFlexBox(
     val maxSize: Size<Dimension>? = null,
     val aspectRatio: Float? = null
 ) {
+
+    fun isEmpty(): Boolean {
+        return display == null && positionType == null && direction == null && flexDirection == null && flexWrap == null && overflow == null && alignItems == null && alignSelf == null && alignContent == null && justifyContent == null
+                && position == null && margin == null && padding == null && border == null && flexGrow == null && flexShrink == null && flexBasis == null && size == null && minSize == null && maxSize == null && aspectRatio == null
+    }
+
     companion object {
 
         fun create(lowPriorityStyle: GXFlexBox, heightPriorityStyle: GXFlexBox): GXFlexBox {

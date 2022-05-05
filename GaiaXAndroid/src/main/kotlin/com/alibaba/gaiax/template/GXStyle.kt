@@ -51,6 +51,31 @@ data class GXStyle(
     val fitContent: Boolean? = null
 ) {
 
+    fun isEmpty(): Boolean {
+        return fontSize == null &&
+                fontFamily == null &&
+                fontWeight == null &&
+                fontLines == null &&
+                fontColor == null &&
+                fontTextOverflow == null &&
+                fontTextAlign == null &&
+                backgroundColor == null &&
+                backgroundImage == null &&
+                opacity == null &&
+                overflow == null &&
+                display == null &&
+                hidden == null &&
+                padding == null &&
+                borderWidth == null &&
+                borderColor == null &&
+                borderRadius == null &&
+                fontLineHeight == null &&
+                fontTextDecoration == null &&
+                mode == null &&
+                fitContent == null &&
+                boxShadow == null
+    }
+
     fun isEmptyStyle(): Boolean {
         return padding == null &&
                 backgroundColor == null &&

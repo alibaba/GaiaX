@@ -20,7 +20,9 @@ import android.content.Context
 import android.view.View
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.node.text.GXFitContentPending
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.lang.ref.SoftReference
@@ -29,6 +31,13 @@ import java.lang.ref.SoftReference
  * @suppress
  */
 class GXTemplateContext(val context: Context) {
+
+    /**
+     * Text fitcontent pending logic
+     */
+    var fitContentPending: MutableMap<GXStretchNode, GXFitContentPending>? = null
+
+    var isLayoutWillChangedByExtend: Boolean = false
 
     /**
      * Is dirty
@@ -88,7 +97,12 @@ class GXTemplateContext(val context: Context) {
 
     companion object {
 
-        fun createContext(templateItem: GXTemplateEngine.GXTemplateItem, size: GXTemplateEngine.GXMeasureSize, templateInfo: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null): GXTemplateContext {
+        fun createContext(
+            templateItem: GXTemplateEngine.GXTemplateItem,
+            size: GXTemplateEngine.GXMeasureSize,
+            templateInfo: GXTemplateInfo,
+            visualTemplateNode: GXTemplateNode? = null
+        ): GXTemplateContext {
             val context = GXTemplateContext(templateItem.context)
             context.size = size
             context.templateItem = templateItem

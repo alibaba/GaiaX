@@ -6,7 +6,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 
-data class GXFitContentPending(
+data class GXTextPending(
     val templateContext: GXTemplateContext,
     val stretchStyle: Style,
     val currentNode: GXTemplateNode,

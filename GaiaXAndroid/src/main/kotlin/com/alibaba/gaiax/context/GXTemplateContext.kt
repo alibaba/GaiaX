@@ -22,7 +22,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.render.node.text.GXFitContentPending
+import com.alibaba.gaiax.render.node.text.GXTextPending
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.lang.ref.SoftReference
@@ -33,11 +33,14 @@ import java.lang.ref.SoftReference
 class GXTemplateContext(val context: Context) {
 
     /**
-     * Text fitcontent pending logic
+     * @see isDirtyWillText
      */
-    var fitContentPending: MutableMap<GXStretchNode, GXFitContentPending>? = null
+    var textPending: MutableMap<GXStretchNode, GXTextPending>? = null
 
-    var isLayoutWillChangedByExtend: Boolean = false
+    /**
+     * Is dirty text
+     */
+    var isDirtyWillText: Boolean = false
 
     /**
      * Is dirty

@@ -21,7 +21,7 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.text.GXFitContentPending
+import com.alibaba.gaiax.render.node.text.GXTextPending
 import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.template.GXFlexBox
 import com.alibaba.gaiax.template.GXStyle
@@ -351,13 +351,13 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         if (finalCssStyle.fitContent == true) {
 
             // 如果存在通过扩展属性修改布局属性的情况存在，那么fitContent逻辑需要延迟处理
-            if (templateContext.isLayoutWillChangedByExtend) {
-                if (templateContext.fitContentPending == null) {
-                    templateContext.fitContentPending = mutableMapOf()
+            if (templateContext.isDirtyWillText) {
+                if (templateContext.textPending == null) {
+                    templateContext.textPending = mutableMapOf()
                 }
-                templateContext.fitContentPending?.put(
+                templateContext.textPending?.put(
                     this,
-                    GXFitContentPending(
+                    GXTextPending(
                         templateContext,
                         stretchStyle,
                         currentNode,

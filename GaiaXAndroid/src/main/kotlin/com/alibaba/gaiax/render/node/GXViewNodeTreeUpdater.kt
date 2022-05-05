@@ -57,8 +57,8 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
 
         // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
-        if (context.fitContentPending?.isNotEmpty() == true) {
-            context.fitContentPending?.forEach {
+        if (context.textPending?.isNotEmpty() == true) {
+            context.textPending?.forEach {
                 it.key.updateLayoutByFitContent(
                     it.value.templateContext,
                     it.value.currentNode,
@@ -67,7 +67,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                     it.value.stretchStyle
                 )
             }
-            context.fitContentPending?.clear()
+            context.textPending?.clear()
             GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
         }
 

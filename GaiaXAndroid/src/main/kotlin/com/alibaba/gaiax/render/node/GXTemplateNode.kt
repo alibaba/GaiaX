@@ -120,7 +120,7 @@ data class GXTemplateNode(
 
         // 记录扩展属性中是否存在会导致布局变化的属性
         if (finalExtendCss?.flexBox?.isEmpty() == false) {
-            gxTemplateContext.isLayoutWillChangedByExtend = true
+            gxTemplateContext.isDirtyWillText = true
         }
     }
 

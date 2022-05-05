@@ -28,10 +28,10 @@ import androidx.annotation.Keep
 import androidx.core.content.res.ResourcesCompat
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXMode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.bumptech.glide.Glide
 
 /**
@@ -45,7 +45,11 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     companion object {
         private const val NET_HTTP_PREFIX = "http:"
@@ -75,7 +79,8 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
         }
     }
 
-    private fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
+    private fun isNetUri(uri: String) =
+        (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
 
     private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
 
@@ -112,7 +117,8 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
 
     private fun bindRes(resUri: String) {
         try {
-            val res: Int = this.resources.getIdentifier(resUri, "drawable", this.context.packageName)
+            val res: Int =
+                this.resources.getIdentifier(resUri, "drawable", this.context.packageName)
             // 2020 1117
             // 增加主题，用于处理暗黑模式下，资源获取不正确的问题
             val theme: Resources.Theme = this.context.theme
@@ -149,12 +155,15 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
 
     private fun updateMatrix(imageView: ImageView, drawable: Drawable?) {
         if (drawable != null && imageView.scaleType == ScaleType.MATRIX) {
-            val viewWidth: Int = imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
-            val viewHeight: Int = imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
+            val viewWidth: Int =
+                imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
+            val viewHeight: Int =
+                imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
             val drawableWidth = drawable.intrinsicWidth
             val drawableHeight = drawable.intrinsicHeight
             if (drawableWidth > 0 && drawableHeight > 0) {
-                val matrix: Matrix? = mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
+                val matrix: Matrix? =
+                    mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
                 imageView.imageMatrix = matrix
             }
         }
@@ -190,7 +199,12 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
         delegate?.setRoundCornerRadius(radius)
     }
 
-    fun setRoundCornerRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerRadius(
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
@@ -204,11 +218,25 @@ open class GXImageView : androidx.appcompat.widget.AppCompatImageView,
         delegate?.setRoundCornerBorder(borderColor, borderWidth, radius)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerBorder(
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
-        delegate?.setRoundCornerBorder(borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight)
+        delegate?.setRoundCornerBorder(
+            borderColor,
+            borderWidth,
+            topLeft,
+            topRight,
+            bottomLeft,
+            bottomRight
+        )
     }
 
 }

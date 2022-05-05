@@ -39,20 +39,30 @@ import com.alibaba.gaiax.render.node.GXNode
 abstract class GXViewTreeMerger<T>(val context: GXTemplateContext, val rootNode: GXNode) {
 
     fun build(): View {
-        val layout = rootNode.stretchNode.finalLayout ?: rootNode.stretchNode.layout ?: throw IllegalArgumentException("Stretch layout info is null")
+        val layout = rootNode.stretchNode.finalLayout ?: rootNode.stretchNode.layout
+        ?: throw IllegalArgumentException("Stretch layout info is null")
         val parentMerges = mutableListOf<Layout>().apply {
             this.add(layout)
         }
-        val root = withRootView(context, rootNode, layout) ?: throw IllegalArgumentException("Create root view error")
+        val root = withRootView(context, rootNode, layout)
+            ?: throw IllegalArgumentException("Create root view error")
         createMergeViewChildTree(context, rootNode, root, parentMerges)
-        return rootNode.viewRef?.get() ?: throw IllegalArgumentException("Create root view error, not found root view reference")
+        return rootNode.viewRef?.get()
+            ?: throw IllegalArgumentException("Create root view error, not found root view reference")
     }
 
-    private fun createMergeViewChildTree(context: GXTemplateContext, parentNode: GXNode, parentView: T, parentMerges: MutableList<Layout>) {
+    private fun createMergeViewChildTree(
+        context: GXTemplateContext,
+        parentNode: GXNode,
+        parentView: T,
+        parentMerges: MutableList<Layout>
+    ) {
         parentNode.children?.forEach { childNode ->
 
             val childTemplateNode = childNode.templateNode
-            val childStretchLayout = childNode.stretchNode.finalLayout ?: childNode.stretchNode.layout ?: throw IllegalArgumentException("Stretch layout info is null")
+            val childStretchLayout =
+                childNode.stretchNode.finalLayout ?: childNode.stretchNode.layout
+                ?: throw IllegalArgumentException("Stretch layout info is null")
 
             val childNodeType = childTemplateNode.layer.getNodeType()
             val childCustomViewType = childTemplateNode.layer.customNodeClass
@@ -86,7 +96,16 @@ abstract class GXViewTreeMerger<T>(val context: GXTemplateContext, val rootNode:
                     mergeY += it.y
                 }
 
-                val childView = withChildView(context, childNodeType, childCustomViewType, parentView, childNode, childStretchLayout, mergeX, mergeY) ?: throw IllegalArgumentException("Create child view error")
+                val childView = withChildView(
+                    context,
+                    childNodeType,
+                    childCustomViewType,
+                    parentView,
+                    childNode,
+                    childStretchLayout,
+                    mergeX,
+                    mergeY
+                ) ?: throw IllegalArgumentException("Create child view error")
                 // Recurse to their own children
                 if (childNode.children?.isNotEmpty() == true) {
                     // If you are of type View, you need to pass yourself in as the root View
@@ -113,6 +132,15 @@ abstract class GXViewTreeMerger<T>(val context: GXTemplateContext, val rootNode:
 
     internal abstract fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): T?
 
-    internal abstract fun withChildView(context: GXTemplateContext, childType: String, childViewType: String?, parentMergeView: T, childNode: GXNode, childLayout: Layout, mergeX: Float, mergeY: Float): T?
+    internal abstract fun withChildView(
+        context: GXTemplateContext,
+        childType: String,
+        childViewType: String?,
+        parentMergeView: T,
+        childNode: GXNode,
+        childLayout: Layout,
+        mergeX: Float,
+        mergeY: Float
+    ): T?
 }
 

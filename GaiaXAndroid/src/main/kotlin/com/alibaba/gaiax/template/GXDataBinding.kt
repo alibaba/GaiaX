@@ -75,9 +75,11 @@ class GXDataBinding(
             // 图片占位图字段
             placeholder?.value(templateData)?.let { result[GXTemplateKey.GAIAX_PLACEHOLDER] = it }
             // View的无障碍描述
-            accessibilityDesc?.value(templateData)?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = it }
+            accessibilityDesc?.value(templateData)
+                ?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = it }
             // View的无障碍状态
-            accessibilityEnable?.value(templateData)?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = it }
+            accessibilityEnable?.value(templateData)
+                ?.let { result[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = it }
             dataCache = result
         }
         return dataCache
@@ -94,20 +96,27 @@ class GXDataBinding(
 
     companion object {
 
-        fun create(value: String? = null, placeholder: String? = null, accessibilityDesc: String? = null, accessibilityEnable: String? = null, extend: JSONObject? = null): GXDataBinding? {
-            val extendExp: MutableMap<String, GXIExpression>? = if (extend != null && extend.isNotEmpty()) {
-                val result: MutableMap<String, GXIExpression> = mutableMapOf()
-                for (entry in extend) {
-                    if (entry.key != null && entry.value != null) {
-                        GXExpressionUtils.create(entry.value)?.let {
-                            result[entry.key] = it
+        fun create(
+            value: String? = null,
+            placeholder: String? = null,
+            accessibilityDesc: String? = null,
+            accessibilityEnable: String? = null,
+            extend: JSONObject? = null
+        ): GXDataBinding? {
+            val extendExp: MutableMap<String, GXIExpression>? =
+                if (extend != null && extend.isNotEmpty()) {
+                    val result: MutableMap<String, GXIExpression> = mutableMapOf()
+                    for (entry in extend) {
+                        if (entry.key != null && entry.value != null) {
+                            GXExpressionUtils.create(entry.value)?.let {
+                                result[entry.key] = it
+                            }
                         }
                     }
+                    result
+                } else {
+                    null
                 }
-                result
-            } else {
-                null
-            }
             val valueExp = GXExpressionUtils.create(value)
             val placeholderExp = GXExpressionUtils.create(placeholder)
             val accessibilityDescExp = GXExpressionUtils.create(accessibilityDesc)

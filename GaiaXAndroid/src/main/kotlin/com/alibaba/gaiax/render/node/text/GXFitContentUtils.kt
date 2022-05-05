@@ -63,7 +63,12 @@ object GXFitContentUtils {
      *     2. 在处理文字自适应时，应先计算过一次布局
      *
      */
-    fun fitContent(templateContext: GXTemplateContext, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, templateData: JSONObject): Size<Dimension>? {
+    fun fitContent(
+        templateContext: GXTemplateContext,
+        currentNode: GXTemplateNode,
+        currentStretchNode: GXStretchNode,
+        templateData: JSONObject
+    ): Size<Dimension>? {
         if (!currentNode.isTextType() && currentNode.isRichTextType()) {
             return null
         }
@@ -79,7 +84,14 @@ object GXFitContentUtils {
 
         textView.setTextStyle(currentNode.css)
 
-        val textContent = getMeasureContent(templateContext, nodeId, textView, currentNode.css, nodeDataBinding, templateData)
+        val textContent = getMeasureContent(
+            templateContext,
+            nodeId,
+            textView,
+            currentNode.css,
+            nodeDataBinding,
+            templateData
+        )
 
         if (textContent == null) {
             GXMeasureViewPool.release(SoftReference(textView))
@@ -136,9 +148,13 @@ object GXFitContentUtils {
             }
 
             if (nodeWidth > 0) {
-                val widthSpec = View.MeasureSpec.makeMeasureSpec(nodeWidth.toInt(), View.MeasureSpec.AT_MOST)
+                val widthSpec =
+                    View.MeasureSpec.makeMeasureSpec(nodeWidth.toInt(), View.MeasureSpec.AT_MOST)
                 textView.measure(widthSpec, 0)
-                result = Size(Dimension.Points(nodeWidth), Dimension.Points(textView.measuredHeight.toFloat()))
+                result = Size(
+                    Dimension.Points(nodeWidth),
+                    Dimension.Points(textView.measuredHeight.toFloat())
+                )
             }
         }
 
@@ -150,13 +166,21 @@ object GXFitContentUtils {
     /**
      * 获取待测量的文字内容
      */
-    private fun getMeasureContent(context: GXTemplateContext, nodeId: String, view: View, css: GXCss, binding: GXDataBinding, templateData: JSONObject): CharSequence? {
+    private fun getMeasureContent(
+        context: GXTemplateContext,
+        nodeId: String,
+        view: View,
+        css: GXCss,
+        binding: GXDataBinding,
+        templateData: JSONObject
+    ): CharSequence? {
 
         val nodeData = binding.getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE)
 
         // 高亮内容
         if (nodeData is String) {
-            val highLightContent = GXHighLightUtil.getHighLightContent(binding, templateData, nodeData)
+            val highLightContent =
+                GXHighLightUtil.getHighLightContent(binding, templateData, nodeData)
             if (highLightContent != null) {
                 return highLightContent
             }
@@ -179,7 +203,14 @@ object GXFitContentUtils {
         return null
     }
 
-    private fun getTextData(context: GXTemplateContext, id: String, view: View, css: GXCss, dataBinding: GXDataBinding, templateData: JSONObject): Any? {
+    private fun getTextData(
+        context: GXTemplateContext,
+        id: String,
+        view: View,
+        css: GXCss,
+        dataBinding: GXDataBinding,
+        templateData: JSONObject
+    ): Any? {
         if (context.dataListener != null) {
             val nodeData = dataBinding.getData(templateData)
             val gxTextData = GXTemplateEngine.GXTextData().apply {

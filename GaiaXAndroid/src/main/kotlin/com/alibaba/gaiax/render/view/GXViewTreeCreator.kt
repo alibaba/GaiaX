@@ -27,39 +27,65 @@ import java.lang.ref.SoftReference
 /**
  * @suppress
  */
-class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) : GXViewTreeMerger<View>(context, rootNode) {
+class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) :
+    GXViewTreeMerger<View>(context, rootNode) {
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View {
-        val rootView = GXViewFactory.createView<View>(context.context, rootNode.getType(), rootNode.getCustomViewClass()).apply {
+        val rootView = GXViewFactory.createView<View>(
+            context.context,
+            rootNode.getType(),
+            rootNode.getCustomViewClass()
+        ).apply {
             this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(rootNode, layout)
             rootNode.viewRef = SoftReference(this)
         }
         return rootView
     }
 
-    override fun withChildView(context: GXTemplateContext, childType: String, childViewType: String?, parentMergeView: View, childNode: GXNode, childLayout: Layout, mergeX: Float, mergeY: Float): View? {
+    override fun withChildView(
+        context: GXTemplateContext,
+        childType: String,
+        childViewType: String?,
+        parentMergeView: View,
+        childNode: GXNode,
+        childLayout: Layout,
+        mergeX: Float,
+        mergeY: Float
+    ): View? {
 
         // If have the shadow
         // You need to build your own BOXLAYOUT and put it in the same place as the horizontal one
         if (childNode.isNeedShadow()) {
-            GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_SHADOW_LAYOUT, null).apply {
-                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(childNode, childLayout, mergeX, mergeY)
-                childNode.boxLayoutViewRef = SoftReference(this)
-                (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
+            GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_SHADOW_LAYOUT, null)
+                .apply {
+                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
+                        childNode,
+                        childLayout,
+                        mergeX,
+                        mergeY
+                    )
+                    childNode.boxLayoutViewRef = SoftReference(this)
+                    (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
+                    if (parentMergeView is ViewGroup) {
+                        parentMergeView.addView(this)
+                    }
+                }
+        }
+
+        // Child nodes
+        val childView =
+            GXViewFactory.createView<View>(context.context, childType, childViewType).apply {
+                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
+                    childNode,
+                    childLayout,
+                    mergeX,
+                    mergeY
+                )
+                childNode.viewRef = SoftReference(this)
                 if (parentMergeView is ViewGroup) {
                     parentMergeView.addView(this)
                 }
             }
-        }
-
-        // Child nodes
-        val childView = GXViewFactory.createView<View>(context.context, childType, childViewType).apply {
-            this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(childNode, childLayout, mergeX, mergeY)
-            childNode.viewRef = SoftReference(this)
-            if (parentMergeView is ViewGroup) {
-                parentMergeView.addView(this)
-            }
-        }
         return childView
     }
 }

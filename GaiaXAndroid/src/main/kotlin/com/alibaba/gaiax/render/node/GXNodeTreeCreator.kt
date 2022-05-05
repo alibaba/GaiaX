@@ -29,9 +29,18 @@ import com.alibaba.gaiax.template.GXTemplateInfo
 object GXNodeTreeCreator {
 
     fun create(context: GXTemplateContext): GXNode {
-        val rootNode = createNode(context, null, context.templateInfo.layer, context.visualTemplateNode, context.templateInfo)
+        val rootNode = createNode(
+            context,
+            null,
+            context.templateInfo.layer,
+            context.visualTemplateNode,
+            context.templateInfo
+        )
         rootNode.isRoot = true
-        GXNodeUtils.computeNodeTreeByCreateView(rootNode, Size(context.size.width, context.size.height))
+        GXNodeUtils.computeNodeTreeByCreateView(
+            rootNode,
+            Size(context.size.width, context.size.height)
+        )
         return rootNode
     }
 
@@ -44,14 +53,21 @@ object GXNodeTreeCreator {
      * @param visualTemplateNode 当前节点在父模板中的虚拟模板节点信息
      * @param currentTemplateInfo 当前节点的模板数据
      */
-    private fun createNode(context: GXTemplateContext, parentNode: GXNode?, currentLayer: GXLayer, visualTemplateNode: GXTemplateNode?, currentTemplateInfo: GXTemplateInfo): GXNode {
+    private fun createNode(
+        context: GXTemplateContext,
+        parentNode: GXNode?,
+        currentLayer: GXLayer,
+        visualTemplateNode: GXTemplateNode?,
+        currentTemplateInfo: GXTemplateInfo
+    ): GXNode {
         val node = GXNode()
 
         // 设置ID与ID路径
         node.setIdPath(parentNode, currentLayer)
 
         // 初始化详细数据
-        node.templateNode = GXTemplateNode.createNode(currentLayer.id, currentTemplateInfo, visualTemplateNode)
+        node.templateNode =
+            GXTemplateNode.createNode(currentLayer.id, currentTemplateInfo, visualTemplateNode)
 
         // 初始化节点数据
         node.stretchNode = GXStretchNode.createNode(node.templateNode, node.id, node.idPath)
@@ -71,24 +87,43 @@ object GXNodeTreeCreator {
         return node
     }
 
-    private fun initChildrenViewData(context: GXTemplateContext, parentNode: GXNode, currentLayers: MutableList<GXLayer>, currentTemplateInfo: GXTemplateInfo) {
+    private fun initChildrenViewData(
+        context: GXTemplateContext,
+        parentNode: GXNode,
+        currentLayers: MutableList<GXLayer>,
+        currentTemplateInfo: GXTemplateInfo
+    ) {
         currentLayers.forEach { currentLayer ->
             // 嵌套子模板类型，是个虚拟节点
             if (currentLayer.isNestChildTemplateType()) {
-                val childTemplateData = currentTemplateInfo.getChildTemplate(currentLayer.id) ?: throw IllegalArgumentException("Child template not found, id = ${currentLayer.id}")
+                val childTemplateData = currentTemplateInfo.getChildTemplate(currentLayer.id)
+                    ?: throw IllegalArgumentException("Child template not found, id = ${currentLayer.id}")
 
                 // 创建一个空节点
-                val childTemplateRootLayerVisualNestTemplateNode = GXTemplateNode.createNode(currentLayer.id, currentTemplateInfo)
+                val childTemplateRootLayerVisualNestTemplateNode =
+                    GXTemplateNode.createNode(currentLayer.id, currentTemplateInfo)
 
                 val childTemplateRootLayer = childTemplateData.layer
 
                 // 容器模板下的子模板
                 if (parentNode.isContainerType() && childTemplateData.isTemplate()) {
-                    parentNode.addChildTemplateItems(GXTemplateEngine.GXTemplateItem(context.context, context.templateItem.bizId, childTemplateRootLayer.id), childTemplateRootLayerVisualNestTemplateNode)
+                    parentNode.addChildTemplateItems(
+                        GXTemplateEngine.GXTemplateItem(
+                            context.context,
+                            context.templateItem.bizId,
+                            childTemplateRootLayer.id
+                        ), childTemplateRootLayerVisualNestTemplateNode
+                    )
                 }
                 // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                 else {
-                    createNode(context, parentNode, childTemplateRootLayer, childTemplateRootLayerVisualNestTemplateNode, childTemplateData).apply { isNestRoot = true }
+                    createNode(
+                        context,
+                        parentNode,
+                        childTemplateRootLayer,
+                        childTemplateRootLayerVisualNestTemplateNode,
+                        childTemplateData
+                    ).apply { isNestRoot = true }
                 }
             }
             // 普通子节点

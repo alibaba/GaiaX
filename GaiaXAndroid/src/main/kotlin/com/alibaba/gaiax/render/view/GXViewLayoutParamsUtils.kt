@@ -26,13 +26,28 @@ import com.alibaba.gaiax.render.node.GXNode
  */
 object GXViewLayoutParamsUtils {
 
-    fun createLayoutParams(data: GXNode, layout: Layout?, mergeX: Float = 0.0F, mergeY: Float = 0.0F): AbsoluteLayout.LayoutParams {
+    fun createLayoutParams(
+        data: GXNode,
+        layout: Layout?,
+        mergeX: Float = 0.0F,
+        mergeY: Float = 0.0F
+    ): AbsoluteLayout.LayoutParams {
         return if (layout != null) {
             val width = layout.width.toInt()
             val height = layout.height.toInt()
-            AbsoluteLayout.LayoutParams(width, height, layout.x.toInt() + mergeX.toInt(), layout.y.toInt() + mergeY.toInt())
+            AbsoluteLayout.LayoutParams(
+                width,
+                height,
+                layout.x.toInt() + mergeX.toInt(),
+                layout.y.toInt() + mergeY.toInt()
+            )
         } else {
-            AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0)
+            AbsoluteLayout.LayoutParams(
+                AbsoluteLayout.LayoutParams.WRAP_CONTENT,
+                AbsoluteLayout.LayoutParams.WRAP_CONTENT,
+                0,
+                0
+            )
         }
     }
 

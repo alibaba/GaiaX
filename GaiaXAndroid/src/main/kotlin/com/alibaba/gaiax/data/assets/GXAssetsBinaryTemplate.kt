@@ -31,8 +31,10 @@ class GXAssetsBinaryTemplate(val context: Context) : GXITemplateSource {
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
         try {
-            val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
-            return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
+            val bundlePath =
+                if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
+            return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
+                ?.use { it.readBytes() }
         } catch (e: Exception) {
         }
         return null
@@ -49,23 +51,30 @@ class GXAssetsBinaryTemplate(val context: Context) : GXITemplateSource {
         // 2. Check whether the compressed package exists in Assets. If the package exists, decompress it to the local PC and read data into the memory
         val templateContents = getTemplateContents(templateItem)
         if (templateContents != null) {
-            val templatePath = createTemplatePath(templateContents, templateItem.bizId, templateItem.templateId)
+            val templatePath =
+                createTemplatePath(templateContents, templateItem.bizId, templateItem.templateId)
             addToCache(templatePath)
             return getFromCache(templateItem.bizId, templateItem.templateId)
         }
         return null
     }
 
-    private fun createTemplatePath(bytes: ByteArray, templateBiz: String, templateId: String): GXTemplate {
+    private fun createTemplatePath(
+        bytes: ByteArray,
+        templateBiz: String,
+        templateId: String
+    ): GXTemplate {
         val binaryData = GXBinParser.parser(bytes)
-        val layer = binaryData.getString(GXTemplateKey.GAIAX_LAYER) ?: throw IllegalArgumentException("Layer mustn't empty, templateBiz = $templateBiz, templateId = $templateId")
+        val layer = binaryData.getString(GXTemplateKey.GAIAX_LAYER)
+            ?: throw IllegalArgumentException("Layer mustn't empty, templateBiz = $templateBiz, templateId = $templateId")
         val css = binaryData.getString(GXTemplateKey.GAIAX_CSS) ?: ""
         val dataBind = binaryData.getString(GXTemplateKey.GAIAX_DATABINDING) ?: ""
         val js = binaryData.getString(GXTemplateKey.GAIAX_JS) ?: ""
         return GXTemplate(templateId, templateBiz, -1, layer, css, dataBind, js)
     }
 
-    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
+    private fun getFromCache(templateBiz: String, templateId: String) =
+        templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
 
     private fun addToCache(template: GXTemplate) {
         var bizTemplates = templateCache[template.biz]

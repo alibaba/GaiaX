@@ -40,7 +40,11 @@ object GXHighLightUtil {
 
     private var regexCache: ConcurrentHashMap<String, Pattern>? = null
 
-    fun getHighLightContent(binding: GXDataBinding, rawJson: JSONObject, desireData: String): CharSequence? {
+    fun getHighLightContent(
+        binding: GXDataBinding,
+        rawJson: JSONObject,
+        desireData: String
+    ): CharSequence? {
         val extend = binding.getExtendData(rawJson) ?: return null
         val highlightTag = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_TAG)
         val highlightColor = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_COLOR)
@@ -61,7 +65,8 @@ object GXHighLightUtil {
             val pattern = if (regexCache != null && regexCache!!.containsKey(convertTag)) {
                 regexCache!![convertTag]!!
             } else {
-                regexCache!![convertTag] = Pattern.compile("$convertTag${GXTemplateKey.GAIAX_HIGHLIGHT_REGEX}${convertTag}")
+                regexCache!![convertTag] =
+                    Pattern.compile("$convertTag${GXTemplateKey.GAIAX_HIGHLIGHT_REGEX}${convertTag}")
                 regexCache!![convertTag]!!
             }
 
@@ -81,21 +86,41 @@ object GXHighLightUtil {
 
                     if (highlightColor != null && highlightColor.isNotBlank()) {
                         GXColor.create(highlightColor)?.value?.let {
-                            spannableString.setSpan(ForegroundColorSpan(it), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spannableString.setSpan(
+                                ForegroundColorSpan(it),
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         }
                     }
                     if (highlightFontSize != null && highlightFontSize.isNotBlank()) {
                         GXSize.create(highlightFontSize).let {
-                            spannableString.setSpan(AbsoluteSizeSpan(it.valueInt), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spannableString.setSpan(
+                                AbsoluteSizeSpan(it.valueInt),
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         }
                     }
                     if (highlightFontFamily != null && highlightFontFamily.isNotBlank()) {
                         GXStyleConvert.instance.fontFamily(highlightFontFamily)?.let {
-                            spannableString.setSpan(TypefaceSpan(highlightFontFamily), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spannableString.setSpan(
+                                TypefaceSpan(highlightFontFamily),
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         }
                     } else if (highlightFontWeight != null && highlightFontWeight.isNotBlank()) {
                         GXStyleConvert.instance.fontWeight(highlightFontWeight)?.let {
-                            spannableString.setSpan(StyleSpan(it.style), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spannableString.setSpan(
+                                StyleSpan(it.style),
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
                         }
                     }
                 }

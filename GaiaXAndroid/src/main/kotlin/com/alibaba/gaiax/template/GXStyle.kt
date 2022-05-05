@@ -109,20 +109,28 @@ data class GXStyle(
                 fontWeight = heightPriorityStyle.fontWeight ?: lowPriorityStyle.fontWeight,
                 fontLines = heightPriorityStyle.fontLines ?: lowPriorityStyle.fontLines,
                 fontColor = heightPriorityStyle.fontColor ?: lowPriorityStyle.fontColor,
-                fontTextOverflow = heightPriorityStyle.fontTextOverflow ?: lowPriorityStyle.fontTextOverflow,
+                fontTextOverflow = heightPriorityStyle.fontTextOverflow
+                    ?: lowPriorityStyle.fontTextOverflow,
                 fontTextAlign = heightPriorityStyle.fontTextAlign ?: lowPriorityStyle.fontTextAlign,
-                backgroundColor = heightPriorityStyle.backgroundColor ?: lowPriorityStyle.backgroundColor,
-                backgroundImage = heightPriorityStyle.backgroundImage ?: lowPriorityStyle.backgroundImage,
+                backgroundColor = heightPriorityStyle.backgroundColor
+                    ?: lowPriorityStyle.backgroundColor,
+                backgroundImage = heightPriorityStyle.backgroundImage
+                    ?: lowPriorityStyle.backgroundImage,
                 mode = heightPriorityStyle.mode ?: lowPriorityStyle.mode,
                 opacity = heightPriorityStyle.opacity ?: lowPriorityStyle.opacity,
                 overflow = heightPriorityStyle.overflow ?: lowPriorityStyle.overflow,
                 display = heightPriorityStyle.display ?: lowPriorityStyle.display,
                 hidden = heightPriorityStyle.hidden ?: lowPriorityStyle.hidden,
-                padding = GXTemplateUtils.createRectGXSizeByPriority(heightPriorityStyle.padding, lowPriorityStyle.padding),
+                padding = GXTemplateUtils.createRectGXSizeByPriority(
+                    heightPriorityStyle.padding,
+                    lowPriorityStyle.padding
+                ),
                 borderWidth = heightPriorityStyle.borderWidth ?: lowPriorityStyle.borderWidth,
                 borderColor = heightPriorityStyle.borderColor ?: lowPriorityStyle.borderColor,
-                fontLineHeight = heightPriorityStyle.fontLineHeight ?: lowPriorityStyle.fontLineHeight,
-                fontTextDecoration = heightPriorityStyle.fontTextDecoration ?: lowPriorityStyle.fontTextDecoration,
+                fontLineHeight = heightPriorityStyle.fontLineHeight
+                    ?: lowPriorityStyle.fontLineHeight,
+                fontTextDecoration = heightPriorityStyle.fontTextDecoration
+                    ?: lowPriorityStyle.fontTextDecoration,
                 borderRadius = heightPriorityStyle.borderRadius ?: lowPriorityStyle.borderRadius,
                 boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
                 fitContent = heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent,

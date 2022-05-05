@@ -36,7 +36,8 @@ class GXAssetsTemplate(val context: Context) : GXITemplateSource {
         }
 
         // 2.
-        val bundlePath = if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
+        val bundlePath =
+            if (templateItem.bundle.isNotEmpty()) templateItem.bundle else templateItem.bizId
         val indexPath = "${bundlePath}/${templateItem.templateId}/index.json"
         val cssPath = "${bundlePath}/${templateItem.templateId}/index.css"
         val databindingPath = "${bundlePath}/${templateItem.templateId}/index.databinding"
@@ -65,13 +66,15 @@ class GXAssetsTemplate(val context: Context) : GXITemplateSource {
 
     private fun readFileFromAssets(path: String): String? {
         return try {
-            context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8).use { it?.readText() }
+            context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8)
+                .use { it?.readText() }
         } catch (e: Exception) {
             null
         }
     }
 
-    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
+    private fun getFromCache(templateBiz: String, templateId: String) =
+        templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
 
     private fun addToCache(template: GXTemplate) {
         var bizTemplates = templateCache[template.biz]

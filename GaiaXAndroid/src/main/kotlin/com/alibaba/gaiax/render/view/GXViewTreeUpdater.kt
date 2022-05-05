@@ -24,7 +24,8 @@ import com.alibaba.gaiax.render.node.GXNode
 /**
  * @suppress
  */
-open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) : GXViewTreeMerger<View>(context, rootNode) {
+open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) :
+    GXViewTreeMerger<View>(context, rootNode) {
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View? {
         return node.viewRef?.get()?.also {
@@ -32,11 +33,25 @@ open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) : GXV
         }
     }
 
-    override fun withChildView(context: GXTemplateContext, childType: String, childViewType: String?, parentMergeView: View, childNode: GXNode, childLayout: Layout, mergeX: Float, mergeY: Float): View? {
+    override fun withChildView(
+        context: GXTemplateContext,
+        childType: String,
+        childViewType: String?,
+        parentMergeView: View,
+        childNode: GXNode,
+        childLayout: Layout,
+        mergeX: Float,
+        mergeY: Float
+    ): View? {
         return childNode.viewRef?.get()?.also { targetView ->
             if (childNode.isNeedShadow()) {
                 childNode.boxLayoutViewRef?.get()?.let { shadowView ->
-                    GXViewLayoutParamsUtils.updateLayoutParams(shadowView, childLayout, mergeX, mergeY)
+                    GXViewLayoutParamsUtils.updateLayoutParams(
+                        shadowView,
+                        childLayout,
+                        mergeX,
+                        mergeY
+                    )
                 }
             }
             GXViewLayoutParamsUtils.updateLayoutParams(targetView, childLayout, mergeX, mergeY)

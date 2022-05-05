@@ -71,7 +71,9 @@ class GXExpressionUtilsTest {
 
     @Test
     fun string_http() {
-        val value = GXExpressionUtils.create("'https://r1.ykimg.com/053400005DAE75E2859B5E44E509DD51'")?.value(null)
+        val value =
+            GXExpressionUtils.create("'https://r1.ykimg.com/053400005DAE75E2859B5E44E509DD51'")
+                ?.value(null)
         Assert.assertEquals("https://r1.ykimg.com/053400005DAE75E2859B5E44E509DD51", value)
     }
 }

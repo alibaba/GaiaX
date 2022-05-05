@@ -39,7 +39,11 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     private fun finalize() {
         if (gxTemplateContext?.rootView?.get() == this) {
@@ -97,7 +101,12 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView {
         delegate?.setRoundCornerRadius(radius)
     }
 
-    fun setRoundCornerRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerRadius(
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
@@ -111,10 +120,24 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView {
         delegate?.setRoundCornerBorder(borderColor, borderWidth, radius)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerBorder(
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
-        delegate?.setRoundCornerBorder(borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight)
+        delegate?.setRoundCornerBorder(
+            borderColor,
+            borderWidth,
+            topLeft,
+            topRight,
+            bottomLeft,
+            bottomRight
+        )
     }
 }

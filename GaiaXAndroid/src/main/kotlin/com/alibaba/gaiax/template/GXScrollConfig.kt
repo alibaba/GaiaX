@@ -44,7 +44,8 @@ data class GXScrollConfig(
             return GXScrollConfig(
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(edgeInsets) else srcConfig.itemSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets) ?: srcConfig.edgeInsets else srcConfig.edgeInsets
+                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
+                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets
             )
         }
     }

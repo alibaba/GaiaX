@@ -16,8 +16,8 @@
 
 package com.alibaba.gaiax.template
 
-import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.render.view.GXViewKey
+import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 
@@ -48,7 +48,10 @@ class GXLayerTest {
 
         Assert.assertEquals(true, GXMockUtils.createLottieTypeLayer().isLottieType())
 
-        Assert.assertEquals(true, GXMockUtils.createNestChildTemplateTypeLayer().isNestChildTemplateType())
+        Assert.assertEquals(
+            true,
+            GXMockUtils.createNestChildTemplateTypeLayer().isNestChildTemplateType()
+        )
 
         Assert.assertEquals(true, GXMockUtils.createRichTextTypeLayer().isRichTextType())
 
@@ -59,29 +62,65 @@ class GXLayerTest {
 
     @Test
     fun getNodeType() {
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_VIEW, GXMockUtils.createViewTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_VIEW,
+            GXMockUtils.createViewTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_GAIA_TEMPLATE, GXMockUtils.createRootTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_GAIA_TEMPLATE,
+            GXMockUtils.createRootTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_GAIA_TEMPLATE, GXMockUtils.createGaiaTemplateTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_GAIA_TEMPLATE,
+            GXMockUtils.createGaiaTemplateTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_CONTAINER_GRID, GXMockUtils.createGridTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_CONTAINER_GRID,
+            GXMockUtils.createGridTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_CONTAINER_SCROLL, GXMockUtils.createScrollTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_CONTAINER_SCROLL,
+            GXMockUtils.createScrollTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_ICON_FONT, GXMockUtils.createIconFontTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_ICON_FONT,
+            GXMockUtils.createIconFontTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_IMAGE, GXMockUtils.createImageTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_IMAGE,
+            GXMockUtils.createImageTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_LOTTIE, GXMockUtils.createLottieTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_LOTTIE,
+            GXMockUtils.createLottieTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_RICH_TEXT, GXMockUtils.createRichTextTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_RICH_TEXT,
+            GXMockUtils.createRichTextTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_TEXT, GXMockUtils.createTextTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_TEXT,
+            GXMockUtils.createTextTypeLayer().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_CUSTOM, GXMockUtils.createCustomType().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_CUSTOM,
+            GXMockUtils.createCustomType().getNodeType()
+        )
 
-        Assert.assertEquals(GXViewKey.VIEW_TYPE_CUSTOM, GXMockUtils.createNestChildTemplateTypeLayer().getNodeType())
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_CUSTOM,
+            GXMockUtils.createNestChildTemplateTypeLayer().getNodeType()
+        )
 
 
     }

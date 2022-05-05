@@ -66,89 +66,101 @@ object GXFlexBoxConvert {
         }
     }
 
-    fun display(cssJson: JSONObject): Display? = when (cssJson.getString(GXTemplateKey.FLEXBOX_DISPLAY)) {
-        "flex" -> Display.Flex
-        "none" -> Display.None
-        else -> null
-    }
+    fun display(cssJson: JSONObject): Display? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_DISPLAY)) {
+            "flex" -> Display.Flex
+            "none" -> Display.None
+            else -> null
+        }
 
-    fun positionType(cssJson: JSONObject): PositionType? = when (cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TYPE)) {
-        "relative" -> PositionType.Relative
-        "absolute" -> PositionType.Absolute
-        else -> null
-    }
+    fun positionType(cssJson: JSONObject): PositionType? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TYPE)) {
+            "relative" -> PositionType.Relative
+            "absolute" -> PositionType.Absolute
+            else -> null
+        }
 
-    fun direction(cssJson: JSONObject): Direction? = when (cssJson.getString(GXTemplateKey.FLEXBOX_DIRECTION)) {
-        "ltr" -> Direction.LTR
-        "absolute" -> Direction.RTL
-        "inherit" -> Direction.Inherit
-        else -> null
-    }
+    fun direction(cssJson: JSONObject): Direction? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_DIRECTION)) {
+            "ltr" -> Direction.LTR
+            "absolute" -> Direction.RTL
+            "inherit" -> Direction.Inherit
+            else -> null
+        }
 
-    fun flexDirection(cssJson: JSONObject): FlexDirection? = when (cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_DIRECTION)) {
-        "row" -> FlexDirection.Row
-        "column" -> FlexDirection.Column
-        "column-reverse" -> FlexDirection.ColumnReverse
-        "row-reverse" -> FlexDirection.RowReverse
-        else -> null
-    }
+    fun flexDirection(cssJson: JSONObject): FlexDirection? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_DIRECTION)) {
+            "row" -> FlexDirection.Row
+            "column" -> FlexDirection.Column
+            "column-reverse" -> FlexDirection.ColumnReverse
+            "row-reverse" -> FlexDirection.RowReverse
+            else -> null
+        }
 
-    fun flexWrap(cssJson: JSONObject): FlexWrap? = when (cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_WRAP)) {
-        "nowrap" -> FlexWrap.NoWrap
-        "wrap" -> FlexWrap.Wrap
-        "wrap-reverse" -> FlexWrap.WrapReverse
-        else -> null
-    }
+    fun flexWrap(cssJson: JSONObject): FlexWrap? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_WRAP)) {
+            "nowrap" -> FlexWrap.NoWrap
+            "wrap" -> FlexWrap.Wrap
+            "wrap-reverse" -> FlexWrap.WrapReverse
+            else -> null
+        }
 
-    fun overflow(cssJson: JSONObject): Overflow? = when (cssJson.getString(GXTemplateKey.FLEXBOX_OVERFLOW)) {
-        "visible" -> Overflow.Visible
-        "hidden" -> Overflow.Hidden
-        "scroll" -> Overflow.Scroll
-        else -> null
-    }
+    fun overflow(cssJson: JSONObject): Overflow? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_OVERFLOW)) {
+            "visible" -> Overflow.Visible
+            "hidden" -> Overflow.Hidden
+            "scroll" -> Overflow.Scroll
+            else -> null
+        }
 
-    fun alignItems(cssJson: JSONObject): AlignItems? = when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_ITEMS)) {
-        "flex-start" -> AlignItems.FlexStart
-        "flex-end" -> AlignItems.FlexEnd
-        "center" -> AlignItems.Center
-        "baseline" -> AlignItems.Baseline
-        "stretch" -> AlignItems.Stretch
-        else -> null
-    }
+    fun alignItems(cssJson: JSONObject): AlignItems? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_ITEMS)) {
+            "flex-start" -> AlignItems.FlexStart
+            "flex-end" -> AlignItems.FlexEnd
+            "center" -> AlignItems.Center
+            "baseline" -> AlignItems.Baseline
+            "stretch" -> AlignItems.Stretch
+            else -> null
+        }
 
-    fun alignSelf(cssJson: JSONObject): AlignSelf? = when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_SELF)) {
-        "auto" -> AlignSelf.Auto
-        "flex-start" -> AlignSelf.FlexStart
-        "flex-end" -> AlignSelf.FlexEnd
-        "center" -> AlignSelf.Center
-        "baseline" -> AlignSelf.Baseline
-        "stretch" -> AlignSelf.Stretch
-        else -> null
-    }
+    fun alignSelf(cssJson: JSONObject): AlignSelf? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_SELF)) {
+            "auto" -> AlignSelf.Auto
+            "flex-start" -> AlignSelf.FlexStart
+            "flex-end" -> AlignSelf.FlexEnd
+            "center" -> AlignSelf.Center
+            "baseline" -> AlignSelf.Baseline
+            "stretch" -> AlignSelf.Stretch
+            else -> null
+        }
 
-    fun alignContent(cssJson: JSONObject): AlignContent? = when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_CONTENT)) {
-        "flex-start" -> AlignContent.FlexStart
-        "flex-end" -> AlignContent.FlexEnd
-        "center" -> AlignContent.Center
-        "space-around" -> AlignContent.SpaceAround
-        "space-between" -> AlignContent.SpaceBetween
-        "stretch" -> AlignContent.Stretch
-        else -> null
-    }
+    fun alignContent(cssJson: JSONObject): AlignContent? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_ALIGN_CONTENT)) {
+            "flex-start" -> AlignContent.FlexStart
+            "flex-end" -> AlignContent.FlexEnd
+            "center" -> AlignContent.Center
+            "space-around" -> AlignContent.SpaceAround
+            "space-between" -> AlignContent.SpaceBetween
+            "stretch" -> AlignContent.Stretch
+            else -> null
+        }
 
-    fun justifyContent(cssJson: JSONObject): JustifyContent? = when (cssJson.getString(GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT)) {
-        "flex-start" -> JustifyContent.FlexStart
-        "flex-end" -> JustifyContent.FlexEnd
-        "center" -> JustifyContent.Center
-        "space-around" -> JustifyContent.SpaceAround
-        "space-between" -> JustifyContent.SpaceBetween
-        "space-evenly" -> JustifyContent.SpaceEvenly
-        else -> null
-    }
+    fun justifyContent(cssJson: JSONObject): JustifyContent? =
+        when (cssJson.getString(GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT)) {
+            "flex-start" -> JustifyContent.FlexStart
+            "flex-end" -> JustifyContent.FlexEnd
+            "center" -> JustifyContent.Center
+            "space-around" -> JustifyContent.SpaceAround
+            "space-between" -> JustifyContent.SpaceBetween
+            "space-evenly" -> JustifyContent.SpaceEvenly
+            else -> null
+        }
 
-    fun flexGrow(cssJson: JSONObject): Float? = cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_GROW)?.toFloat()
+    fun flexGrow(cssJson: JSONObject): Float? =
+        cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_GROW)?.toFloat()
 
-    fun flexShrink(cssJson: JSONObject): Float? = cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_SHRINK)?.toFloat()
+    fun flexShrink(cssJson: JSONObject): Float? =
+        cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_SHRINK)?.toFloat()
 
     fun flexBasis(cssJson: JSONObject): Dimension? {
         val value = cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_BASIS)

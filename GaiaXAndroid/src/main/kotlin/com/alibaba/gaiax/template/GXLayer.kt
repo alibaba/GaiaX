@@ -73,8 +73,11 @@ data class GXLayer constructor(
         }
 
         private fun createLayer(data: JSONObject): GXLayer {
-            val id = data.getString(GXTemplateKey.GAIAX_LAYER_ID) ?: throw IllegalArgumentException("Layer must have id property")
-            val type = data.getString(GXTemplateKey.GAIAX_LAYER_TYPE) ?: throw IllegalArgumentException("Layer must have type property")
+            val id = data.getString(GXTemplateKey.GAIAX_LAYER_ID) ?: throw IllegalArgumentException(
+                "Layer must have id property"
+            )
+            val type = data.getString(GXTemplateKey.GAIAX_LAYER_TYPE)
+                ?: throw IllegalArgumentException("Layer must have type property")
             val css = data.getString(GXTemplateKey.GAIAX_LAYER_CLASS)
             val subType = data.getString(GXTemplateKey.GAIAX_LAYER_SUB_TYPE)
             val viewClass = data.getString(GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS)
@@ -83,7 +86,14 @@ data class GXLayer constructor(
             return layer
         }
 
-        private fun initLayer(id: String, css: String?, type: String, subType: String?, viewClass: String?, data: JSONObject): GXLayer {
+        private fun initLayer(
+            id: String,
+            css: String?,
+            type: String,
+            subType: String?,
+            viewClass: String?,
+            data: JSONObject
+        ): GXLayer {
             val direction = data[GXTemplateKey.GAIAX_LAYER_DIRECTION]?.toString()
             val edgeInsets = data[GXTemplateKey.GAIAX_LAYER_EDGE_INSETS]?.toString()
             val itemSpacing = data[GXTemplateKey.GAIAX_LAYER_ITEM_SPACING]?.toString()
@@ -97,7 +107,8 @@ data class GXLayer constructor(
                     type = type,
                     subType = subType,
                     customNodeClass = viewClass,
-                    scrollConfig = GXScrollConfig.create(direction, edgeInsets, itemSpacing), gridConfig = null
+                    scrollConfig = GXScrollConfig.create(direction, edgeInsets, itemSpacing),
+                    gridConfig = null
                 )
                 isGridType(type, subType) -> GXLayer(
                     id = id,
@@ -106,7 +117,14 @@ data class GXLayer constructor(
                     subType = subType,
                     customNodeClass = viewClass,
                     scrollConfig = null,
-                    gridConfig = GXGridConfig.create(direction, edgeInsets, itemSpacing, rawSpacing, column, scrollable)
+                    gridConfig = GXGridConfig.create(
+                        direction,
+                        edgeInsets,
+                        itemSpacing,
+                        rawSpacing,
+                        column,
+                        scrollable
+                    )
                 )
                 else -> GXLayer(
                     id = id,
@@ -120,9 +138,11 @@ data class GXLayer constructor(
             }
         }
 
-        private fun isGridType(type: String, subType: String?) = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_GRID
+        private fun isGridType(type: String, subType: String?) =
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_GRID
 
-        private fun isScrollType(type: String, subType: String?) = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
+        private fun isScrollType(type: String, subType: String?) =
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
 
         private fun initChildrenLayer(data: JSONObject, layer: GXLayer) {
             data.getJSONArray(GXTemplateKey.GAIAX_LAYERS)?.forEach {
@@ -193,7 +213,8 @@ data class GXLayer constructor(
     /**
      * 视图类型
      */
-    fun isViewType(): Boolean = GXViewKey.VIEW_TYPE_VIEW == type || GXViewKey.VIEW_TYPE_GAIA_TEMPLATE == type && subType == null
+    fun isViewType(): Boolean =
+        GXViewKey.VIEW_TYPE_VIEW == type || GXViewKey.VIEW_TYPE_GAIA_TEMPLATE == type && subType == null
 
     /**
      * 可能是模板根节点、或者嵌套节点、或者自定义视图类型
@@ -218,7 +239,8 @@ data class GXLayer constructor(
     /**
      * 是否能够被合并
      */
-    fun isCanMergeType(): Boolean = !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE || type == GXViewKey.VIEW_TYPE_SHADOW_LAYOUT)
+    fun isCanMergeType(): Boolean =
+        !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE || type == GXViewKey.VIEW_TYPE_SHADOW_LAYOUT)
 
     override fun toString(): String {
         return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, layers=${layers.size})"

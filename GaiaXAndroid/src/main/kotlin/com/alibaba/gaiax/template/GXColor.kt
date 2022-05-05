@@ -51,7 +51,12 @@ class GXColor(val value: Int) {
         private fun parseRGBAColor(color: String): Int? {
             if (color.startsWith("rgba(") && color.endsWith(")")) {
                 val colors = color.substring("rgba(".length, color.lastIndexOf(")")).split(",")
-                return Color.argb((colors[3].trim().toFloat() * 255).toInt(), colors[0].trim().toInt(), colors[1].trim().toInt(), colors[2].trim().toInt())
+                return Color.argb(
+                    (colors[3].trim().toFloat() * 255).toInt(),
+                    colors[0].trim().toInt(),
+                    colors[1].trim().toInt(),
+                    colors[2].trim().toInt()
+                )
             }
             return null
         }
@@ -59,7 +64,11 @@ class GXColor(val value: Int) {
         private fun parseRGBColor(color: String): Int? {
             if (color.startsWith("rgb(") && color.endsWith(")")) {
                 val colors = color.substring("rgb(".length, color.lastIndexOf(")")).split(",")
-                return Color.rgb(colors[0].trim().toInt(), colors[1].trim().toInt(), colors[2].trim().toInt())
+                return Color.rgb(
+                    colors[0].trim().toInt(),
+                    colors[1].trim().toInt(),
+                    colors[2].trim().toInt()
+                )
             }
             return null
         }

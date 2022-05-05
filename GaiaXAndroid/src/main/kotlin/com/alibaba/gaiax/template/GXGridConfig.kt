@@ -54,7 +54,14 @@ data class GXGridConfig(
 
     companion object {
 
-        fun create(direction: String?, edgeInsets: String?, itemSpacing: String?, rowSpacing: String?, column: Int, scrollable: Boolean): GXGridConfig {
+        fun create(
+            direction: String?,
+            edgeInsets: String?,
+            itemSpacing: String?,
+            rowSpacing: String?,
+            column: Int,
+            scrollable: Boolean
+        ): GXGridConfig {
             return GXGridConfig(
                 column,
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
@@ -77,7 +84,8 @@ data class GXGridConfig(
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets) ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
+                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
+                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
                 scrollEnable ?: srcConfig.scrollEnable,
             )
         }

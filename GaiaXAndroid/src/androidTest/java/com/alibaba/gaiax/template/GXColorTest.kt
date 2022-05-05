@@ -35,7 +35,10 @@ class GXColorTest {
 
     @Test
     fun parseColor_RGBA() {
-        Assert.assertEquals(Color.argb((255 * 0.3).toInt(), 255, 0, 0), GXColor.parseColor("rgba(255,0,0,0.3)"))
+        Assert.assertEquals(
+            Color.argb((255 * 0.3).toInt(), 255, 0, 0),
+            GXColor.parseColor("rgba(255,0,0,0.3)")
+        )
         Assert.assertEquals(null, GXColor.parseColor(""))
     }
 

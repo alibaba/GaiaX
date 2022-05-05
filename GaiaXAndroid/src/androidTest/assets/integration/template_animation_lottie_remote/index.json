@@ -7,5 +7,10 @@
     "modify-timestamp": "Thu Dec 09 2021 16:10:07 GMT+0800 (China Standard Time)",
     "dependencies": {}
   },
-  "layers": [{ "id": "target", "type": "view" }]
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
 }

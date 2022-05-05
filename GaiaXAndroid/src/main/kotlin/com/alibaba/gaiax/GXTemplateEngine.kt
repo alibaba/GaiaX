@@ -400,7 +400,8 @@ class GXTemplateEngine {
 
     fun createView(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): View {
         val templateInfo = data.getTemplateInfo(templateItem)
-        val context = GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
+        val context =
+            GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
         return render.createView(context)
     }
 

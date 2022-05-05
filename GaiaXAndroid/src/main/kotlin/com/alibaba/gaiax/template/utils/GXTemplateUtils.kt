@@ -50,7 +50,10 @@ object GXTemplateUtils {
         }
     }
 
-    fun createRectGXSizeByPriority(heightPriority: Rect<GXSize>?, lowPriority: Rect<GXSize>?): Rect<GXSize>? {
+    fun createRectGXSizeByPriority(
+        heightPriority: Rect<GXSize>?,
+        lowPriority: Rect<GXSize>?
+    ): Rect<GXSize>? {
         return if (lowPriority != null && heightPriority != null) {
             Rect(
                 start = if (heightPriority.start !is GXSize.Undefined && heightPriority.start !is GXSize.Auto) heightPriority.start else lowPriority.start,
@@ -67,7 +70,10 @@ object GXTemplateUtils {
         }
     }
 
-    fun createRectDimensionByPriority(heightPriority: Rect<Dimension>?, lowPriority: Rect<Dimension>?): Rect<Dimension>? {
+    fun createRectDimensionByPriority(
+        heightPriority: Rect<Dimension>?,
+        lowPriority: Rect<Dimension>?
+    ): Rect<Dimension>? {
         return if (lowPriority != null && heightPriority != null) {
             Rect(
                 start = if (heightPriority.start !is Dimension.Undefined && heightPriority.start !is Dimension.Auto) heightPriority.start else lowPriority.start,
@@ -84,7 +90,10 @@ object GXTemplateUtils {
         }
     }
 
-    fun createSizeDimensionByPriority(heightPriority: Size<Dimension>?, lowPriority: Size<Dimension>?): Size<Dimension>? {
+    fun createSizeDimensionByPriority(
+        heightPriority: Size<Dimension>?,
+        lowPriority: Size<Dimension>?
+    ): Size<Dimension>? {
         return if (lowPriority != null && heightPriority != null) {
             Size(
                 width = if (heightPriority.width !is Dimension.Undefined && heightPriority.width !is Dimension.Auto) heightPriority.width else lowPriority.width,

@@ -78,7 +78,12 @@ class GXRoundBorderDelegate {
             roundCornerBorderPaint?.color = borderColor
 
             if (roundCornerBorderPathIsDirty) {
-                val rect = RectF(borderWidth / 2, borderWidth / 2, measureWidth - borderWidth / 2, measureHeight - borderWidth / 2)
+                val rect = RectF(
+                    borderWidth / 2,
+                    borderWidth / 2,
+                    measureWidth - borderWidth / 2,
+                    measureHeight - borderWidth / 2
+                )
                 roundCornerBorderPath?.addRoundRect(rect, borderRadiusArray, Path.Direction.CW)
                 roundCornerBorderPathIsDirty = false
             }
@@ -106,7 +111,11 @@ class GXRoundBorderDelegate {
             if (roundCornerRadiusPathIsDirty) {
                 val rect = RectF(0F, 0F, measureWidth, measureHeight)
                 roundCornerRadiusPath?.addRect(rect, Path.Direction.CW)
-                roundCornerRadiusPath?.addRoundRect(rect, roundCornerRadiusArray, Path.Direction.CCW)
+                roundCornerRadiusPath?.addRoundRect(
+                    rect,
+                    roundCornerRadiusArray,
+                    Path.Direction.CCW
+                )
                 roundCornerRadiusPathIsDirty = false
             }
 
@@ -114,7 +123,12 @@ class GXRoundBorderDelegate {
         }
     }
 
-    fun setRoundCornerRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerRadius(
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         this.setRoundCornerRadius(FloatArray(8).apply {
             this[0] = topLeft
             this[1] = topLeft
@@ -141,7 +155,14 @@ class GXRoundBorderDelegate {
         roundCornerBorderPathIsDirty = true
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerBorder(
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         this.setRoundCornerBorder(borderColor, borderWidth, FloatArray(8).apply {
             this[0] = topLeft
             this[1] = topLeft

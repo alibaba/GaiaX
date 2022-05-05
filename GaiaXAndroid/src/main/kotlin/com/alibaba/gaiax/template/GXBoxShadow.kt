@@ -19,4 +19,10 @@ package com.alibaba.gaiax.template
 /**
  * @suppress
  */
-class GXBoxShadow(val xOffset: GXSize, val yOffset: GXSize, val blurOffset: GXSize, val spreadOffset: GXSize, val color: GXColor)
+class GXBoxShadow(
+    val xOffset: GXSize,
+    val yOffset: GXSize,
+    val blurOffset: GXSize,
+    val spreadOffset: GXSize,
+    val color: GXColor
+)

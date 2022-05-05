@@ -249,7 +249,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         nodeViewAnimation(context, node, templateData)
     }
 
-    private fun nodeViewAnimation(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun nodeViewAnimation(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         node.templateNode.animationBinding?.executeAnimation(context, node, templateData)
     }
 
@@ -341,15 +345,38 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         when {
             node.isCustomViewType() -> bindCustom(context, view, dataBinding, templateData)
             node.isTextType() -> bindText(context, view, css, layer, dataBinding, templateData)
-            node.isRichTextType() -> bindRichText(context, view, css, layer, dataBinding, templateData)
+            node.isRichTextType() -> bindRichText(
+                context,
+                view,
+                css,
+                layer,
+                dataBinding,
+                templateData
+            )
             node.isIconFontType() -> bindIconFont(view, dataBinding, templateData)
             node.isImageType() -> bindImage(view, dataBinding, templateData)
-            node.isScrollType() || node.isGridType() -> bindScrollAndGrid(context, view, node, dataBinding, templateData)
-            node.isViewType() || node.isGaiaTemplateType() -> bindView(view, dataBinding, templateData)
+            node.isScrollType() || node.isGridType() -> bindScrollAndGrid(
+                context,
+                view,
+                node,
+                dataBinding,
+                templateData
+            )
+            node.isViewType() || node.isGaiaTemplateType() -> bindView(
+                view,
+                dataBinding,
+                templateData
+            )
         }
     }
 
-    private fun bindScrollAndGrid(context: GXTemplateContext, view: View, node: GXNode, dataBinding: GXDataBinding, templateData: JSONObject) {
+    private fun bindScrollAndGrid(
+        context: GXTemplateContext,
+        view: View,
+        node: GXNode,
+        dataBinding: GXDataBinding,
+        templateData: JSONObject
+    ) {
 
         // 容器数据源
         var containerTemplateData = dataBinding.getDataValue(templateData) as? JSONArray
@@ -397,7 +424,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         adapter.initFooter()
     }
 
-    private fun bindIconFont(view: GXIViewBindData, binding: GXDataBinding, templateData: JSONObject) {
+    private fun bindIconFont(
+        view: GXIViewBindData,
+        binding: GXDataBinding,
+        templateData: JSONObject
+    ) {
         val nodeData = binding.getData(templateData)
         if (nodeData != null) {
             view.onBindData(nodeData)
@@ -418,19 +449,29 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindRichText(context: GXTemplateContext, view: GXIViewBindData, css: GXCss?, layer: GXLayer, binding: GXDataBinding, templateData: JSONObject) {
+    private fun bindRichText(
+        context: GXTemplateContext,
+        view: GXIViewBindData,
+        css: GXCss?,
+        layer: GXLayer,
+        binding: GXDataBinding,
+        templateData: JSONObject
+    ) {
         val nodeData = binding.getData(templateData)
 
         val valueData = nodeData?.get(GXTemplateKey.GAIAX_VALUE)
 
         // 优先处理高亮逻辑
         if (valueData is String) {
-            val result: CharSequence? = GXHighLightUtil.getHighLightContent(binding, templateData, valueData)
+            val result: CharSequence? =
+                GXHighLightUtil.getHighLightContent(binding, templateData, valueData)
             if (result != null) {
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC]
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE]
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
+                    nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC]
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
+                    nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE]
                 view.onBindData(data)
                 return
             }
@@ -452,8 +493,10 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             if (result != null) {
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
+                    nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
+                    nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
                 view.onBindData(data)
             }
             return
@@ -484,8 +527,10 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] = nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] = nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
+                    nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+                data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
+                    nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
                 view.onBindData(data)
                 return
             }
@@ -496,7 +541,12 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindCustom(context: GXTemplateContext, view: GXIViewBindData, binding: GXDataBinding, templateData: JSONObject) {
+    private fun bindCustom(
+        context: GXTemplateContext,
+        view: GXIViewBindData,
+        binding: GXDataBinding,
+        templateData: JSONObject
+    ) {
         binding.getData(templateData)?.let {
             view.onBindData(it)
         }
@@ -546,7 +596,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
                 // 设置边距
                 if (edgeInsets.top == 0 && edgeInsets.bottom == 0) {
-                    view.setHorizontalScrollContainerLineSpacing(edgeInsets.left, edgeInsets.right, lineSpacing)
+                    view.setHorizontalScrollContainerLineSpacing(
+                        edgeInsets.left,
+                        edgeInsets.right,
+                        lineSpacing
+                    )
                 } else {
                     if (lineSpacing != 0) {
                         view.setHorizontalScrollContainerLineSpacing(lineSpacing)

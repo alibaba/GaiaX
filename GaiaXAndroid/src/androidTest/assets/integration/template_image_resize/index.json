@@ -7,5 +7,10 @@
     "modify-timestamp": "Wed Dec 15 2021 19:36:28 GMT+0800 (中国标准时间)",
     "dependencies": {}
   },
-  "layers": [{ "id": "image", "type": "image" }]
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    }
+  ]
 }

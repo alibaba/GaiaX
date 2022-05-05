@@ -72,13 +72,13 @@ open class GXDataBinding(
             // View的无障碍描述
             accessibilityDesc?.value(templateData)?.let {
                 result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
+                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC, it)
             }
 
             // View的无障碍状态
             accessibilityEnable?.value(templateData)?.let {
                 result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC, it)
+                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
             }
 
             gxDataCache = result

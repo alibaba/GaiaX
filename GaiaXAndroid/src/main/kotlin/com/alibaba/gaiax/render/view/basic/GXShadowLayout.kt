@@ -34,7 +34,11 @@ import kotlin.math.absoluteValue
  * @suppress
  */
 @Keep
-open class GXShadowLayout @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AbsoluteLayout(context, attrs, defStyleAttr) {
+open class GXShadowLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AbsoluteLayout(context, attrs, defStyleAttr) {
 
     private var shadowColor = Color.GRAY
     private var shadowBlur = 0f
@@ -71,39 +75,42 @@ open class GXShadowLayout @JvmOverloads constructor(context: Context, attrs: Att
 
     private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
         // Load attributes
-        context.obtainStyledAttributes(attrs, R.styleable.GXBoxShadowLayout, defStyleAttr, 0).apply {
+        context.obtainStyledAttributes(attrs, R.styleable.GXBoxShadowLayout, defStyleAttr, 0)
+            .apply {
 
-            val vOffset = getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetVertical, 0f)
-            setShadowYOffset(vOffset)
+                val vOffset =
+                    getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetVertical, 0f)
+                setShadowYOffset(vOffset)
 
-            val hOffset = getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetHorizontal, 0f)
-            setShadowXOffset(hOffset)
+                val hOffset =
+                    getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetHorizontal, 0f)
+                setShadowXOffset(hOffset)
 
-            setShadowColor(getColor(R.styleable.GXBoxShadowLayout_box_shadowColor, Color.GRAY))
+                setShadowColor(getColor(R.styleable.GXBoxShadowLayout_box_shadowColor, Color.GRAY))
 
-            setShadowBlur(getDimension(R.styleable.GXBoxShadowLayout_box_shadowBlur, 0f))
+                setShadowBlur(getDimension(R.styleable.GXBoxShadowLayout_box_shadowBlur, 0f))
 
-            setShadowInset(getBoolean(R.styleable.GXBoxShadowLayout_box_shadowInset, false))
+                setShadowInset(getBoolean(R.styleable.GXBoxShadowLayout_box_shadowInset, false))
 
-            setShadowSpread(getDimension(R.styleable.GXBoxShadowLayout_box_shadowSpread, 0f))
+                setShadowSpread(getDimension(R.styleable.GXBoxShadowLayout_box_shadowSpread, 0f))
 
-            boxRadius = getDimension(R.styleable.GXBoxShadowLayout_box_radius, 0f)
+                boxRadius = getDimension(R.styleable.GXBoxShadowLayout_box_radius, 0f)
 
-            if (hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopLeft) ||
-                hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopRight) ||
-                hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft) ||
-                hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomRight)
-            ) {
-                setBoxRadius(
-                    getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopLeft, boxRadius),
-                    getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopRight, boxRadius),
-                    getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft, boxRadius),
-                    getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomRight, boxRadius)
-                )
-            } else {
-                setBoxRadius(boxRadius)
-            }
-        }.recycle()
+                if (hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopLeft) ||
+                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopRight) ||
+                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft) ||
+                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomRight)
+                ) {
+                    setBoxRadius(
+                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopLeft, boxRadius),
+                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopRight, boxRadius),
+                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft, boxRadius),
+                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomRight, boxRadius)
+                    )
+                } else {
+                    setBoxRadius(boxRadius)
+                }
+            }.recycle()
     }
 
 
@@ -129,7 +136,12 @@ open class GXShadowLayout @JvmOverloads constructor(context: Context, attrs: Att
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         shadowDrawable.setBounds(0, 0, w, h)
-        setBoxRadius(this.topLeftBoxRadius, this.topRightBoxRadius, this.bottomLeftBoxRadius, this.bottomRightBoxRadius)
+        setBoxRadius(
+            this.topLeftBoxRadius,
+            this.topRightBoxRadius,
+            this.bottomLeftBoxRadius,
+            this.bottomRightBoxRadius
+        )
     }
 
     private fun clipRadius(canvas: Canvas) {

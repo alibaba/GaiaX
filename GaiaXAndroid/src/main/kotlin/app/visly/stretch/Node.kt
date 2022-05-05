@@ -16,7 +16,8 @@ interface MeasureFunc {
 private class MeasureFuncImpl(val measureFunc: WeakReference<MeasureFunc>) {
 
     fun measure(width: Float, height: Float): FloatArray {
-        val result = measureFunc.get()!!.measure(Size(if (width.isNaN()) null else width, if (height.isNaN()) null else height))
+        val result = measureFunc.get()!!
+            .measure(Size(if (width.isNaN()) null else width, if (height.isNaN()) null else height))
         return floatArrayOf(result.width, result.height)
     }
 }
@@ -44,7 +45,8 @@ open class Node {
         synchronized(Stretch::class.java) {
             this.id = id
             this.idPath = idPath
-            this.rustptr = nConstructLeaf(Stretch.ptr, style.rustptr, MeasureFuncImpl(WeakReference(measure)))
+            this.rustptr =
+                nConstructLeaf(Stretch.ptr, style.rustptr, MeasureFuncImpl(WeakReference(measure)))
             this.style = style
             this.children = mutableListOf()
             this.measure = measure
@@ -55,7 +57,10 @@ open class Node {
         synchronized(Stretch::class.java) {
             this.id = id
             this.idPath = idPath
-            this.rustptr = nConstruct(Stretch.ptr, style.rustptr, LongArray(children.size) { children[it].rustptr })
+            this.rustptr = nConstruct(
+                Stretch.ptr,
+                style.rustptr,
+                LongArray(children.size) { children[it].rustptr })
             this.style = style
             this.children = children.toMutableList()
         }
@@ -66,7 +71,10 @@ open class Node {
             val children: List<Node> = mutableListOf()
             this.id = id
             this.idPath = idPath
-            this.rustptr = nConstruct(Stretch.ptr, style.rustptr, LongArray(children.size) { children[it].rustptr })
+            this.rustptr = nConstruct(
+                Stretch.ptr,
+                style.rustptr,
+                LongArray(children.size) { children[it].rustptr })
             this.style = style
             this.children = children.toMutableList()
         }
@@ -128,13 +136,24 @@ open class Node {
     private external fun nSetMeasure(stretch: Long, ptr: Long, measure: MeasureFuncImpl)
     private external fun nSetChildren(stretch: Long, ptr: Long, children: LongArray)
     private external fun nAddChild(stretch: Long, ptr: Long, child: Long)
-    private external fun nReplaceChildAtIndex(stretch: Long, ptr: Long, index: Int, child: Long): Long
+    private external fun nReplaceChildAtIndex(
+        stretch: Long,
+        ptr: Long,
+        index: Int,
+        child: Long
+    ): Long
+
     private external fun nRemoveChild(stretch: Long, ptr: Long, child: Long): Long
     private external fun nRemoveChildAtIndex(stretch: Long, ptr: Long, index: Int): Long
     private external fun nSetStyle(stretch: Long, ptr: Long, args: Long): Boolean
     private external fun nIsDirty(stretch: Long, ptr: Long): Boolean
     private external fun nMarkDirty(stretch: Long, ptr: Long)
-    private external fun nComputeLayout(stretch: Long, ptr: Long, width: Float, height: Float): FloatArray
+    private external fun nComputeLayout(
+        stretch: Long,
+        ptr: Long,
+        width: Float,
+        height: Float
+    ): FloatArray
 
     override fun toString(): String {
         return "Node(id='$id', idPath='$idPath', rustptr=$rustptr, style=$style, children=${children.size})"

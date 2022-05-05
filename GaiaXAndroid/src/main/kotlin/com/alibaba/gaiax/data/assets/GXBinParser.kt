@@ -59,7 +59,8 @@ object GXBinParser {
 
     private const val FILE_NUM_BYTE = 4
 
-    private fun convertFourUnSignInt(byteArray: ByteArray): Int = (byteArray[1].toInt() and 0xFF) shl 8 or (byteArray[0].toInt() and 0xFF)
+    private fun convertFourUnSignInt(byteArray: ByteArray): Int =
+        (byteArray[1].toInt() and 0xFF) shl 8 or (byteArray[0].toInt() and 0xFF)
 
     private fun parserToBinaryData(bytes: ByteArray): GXBinaryData? {
         val binData = GXBinaryData()

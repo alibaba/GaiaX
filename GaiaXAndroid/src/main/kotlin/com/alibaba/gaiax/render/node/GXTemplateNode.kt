@@ -160,8 +160,13 @@ data class GXTemplateNode(
 
     companion object {
 
-        fun createNode(viewId: String, template: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null): GXTemplateNode {
-            val layer = template.findLayer(viewId) ?: throw IllegalStateException("Not found layer by view id, viewId = $viewId")
+        fun createNode(
+            viewId: String,
+            template: GXTemplateInfo,
+            visualTemplateNode: GXTemplateNode? = null
+        ): GXTemplateNode {
+            val layer = template.findLayer(viewId)
+                ?: throw IllegalStateException("Not found layer by view id, viewId = $viewId")
             val css = template.findCss(viewId) ?: GXCss.create()
             val dataBinding = template.findData(viewId)
             val eventBinding = template.findEvent(viewId)

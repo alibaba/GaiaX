@@ -33,8 +33,10 @@ object GXSystemProp {
         try {
             if (classType == null) {
                 classType = Class.forName("android.os.SystemProperties")
-                setMethod = classType?.getDeclaredMethod("set", String::class.java, String::class.java)
-                getMethod = classType?.getDeclaredMethod("get", String::class.java, String::class.java)
+                setMethod =
+                    classType?.getDeclaredMethod("set", String::class.java, String::class.java)
+                getMethod =
+                    classType?.getDeclaredMethod("get", String::class.java, String::class.java)
             }
         } catch (e: Exception) {
             e.printStackTrace()

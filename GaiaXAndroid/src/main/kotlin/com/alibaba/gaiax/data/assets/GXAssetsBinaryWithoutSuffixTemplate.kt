@@ -53,9 +53,14 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) : GXRegisterCent
         return null
     }
 
-    private fun createTemplatePath(bytes: ByteArray, templateBiz: String, templateId: String): GXTemplate {
+    private fun createTemplatePath(
+        bytes: ByteArray,
+        templateBiz: String,
+        templateId: String
+    ): GXTemplate {
         val binaryData = GXBinParser.parser(bytes)
-        val layer = binaryData.getString(GXTemplateKey.GAIAX_LAYER) ?: throw IllegalArgumentException("Layer mustn't empty, templateBiz = $templateBiz, templateId = $templateId")
+        val layer = binaryData.getString(GXTemplateKey.GAIAX_LAYER)
+            ?: throw IllegalArgumentException("Layer mustn't empty, templateBiz = $templateBiz, templateId = $templateId")
         val css = binaryData.getString(GXTemplateKey.GAIAX_CSS) ?: ""
         val dataBind = binaryData.getString(GXTemplateKey.GAIAX_DATABINDING) ?: ""
         val js = binaryData.getString(GXTemplateKey.GAIAX_JS) ?: ""

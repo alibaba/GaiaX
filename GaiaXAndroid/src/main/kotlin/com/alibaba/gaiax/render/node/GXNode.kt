@@ -91,9 +91,13 @@ class GXNode {
     /**
      * 容器嵌套子模板
      */
-    var childTemplateItems: MutableList<Pair<GXTemplateEngine.GXTemplateItem, GXTemplateNode>>? = null
+    var childTemplateItems: MutableList<Pair<GXTemplateEngine.GXTemplateItem, GXTemplateNode>>? =
+        null
 
-    fun addChildTemplateItems(templateItem: GXTemplateEngine.GXTemplateItem, visualTemplateNode: GXTemplateNode) {
+    fun addChildTemplateItems(
+        templateItem: GXTemplateEngine.GXTemplateItem,
+        visualTemplateNode: GXTemplateNode
+    ) {
         if (childTemplateItems == null) {
             childTemplateItems = mutableListOf()
         }

@@ -21,7 +21,8 @@ import android.graphics.*
 /**
  * @suppress
  */
-internal class GXBlurMaskBitmapShadowDrawable(shadowPath: Path) : GXBitmapShadowDrawable(shadowPath) {
+internal class GXBlurMaskBitmapShadowDrawable(shadowPath: Path) :
+    GXBitmapShadowDrawable(shadowPath) {
 
     private val shadowPaint = Paint().apply {
         isDither = true

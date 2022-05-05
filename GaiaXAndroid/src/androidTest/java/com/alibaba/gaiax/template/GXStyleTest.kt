@@ -77,7 +77,8 @@ class GXStyleTest {
             this[GXTemplateKey.FLEXBOX_PADDING] = "1px"
 
             // View Background Style
-            this[GXTemplateKey.STYLE_BACKGROUND_IMAGE] = "linear-gradient(to bottom right, red , yellow)"
+            this[GXTemplateKey.STYLE_BACKGROUND_IMAGE] =
+                "linear-gradient(to bottom right, red , yellow)"
             this[GXTemplateKey.STYLE_BACKGROUND_COLOR] = "#00FF00"
 
             // View Common Style

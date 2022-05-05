@@ -65,7 +65,8 @@ open class GXAssetsTemplate(open val context: Context) : GXRegisterCenter.GXITem
 
     private fun readFileFromAssets(path: String): String? {
         return try {
-            context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8).use { it?.readText() }
+            context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8)
+                .use { it?.readText() }
         } catch (e: Exception) {
             null
         }

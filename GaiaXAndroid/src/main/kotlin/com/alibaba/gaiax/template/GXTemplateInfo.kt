@@ -159,16 +159,20 @@ data class GXTemplateInfo(
             // val jsSrc = GXTemplatePathParserUtils.parseJS(context, templatePath)
 
             // Data expression
-            val dataExpJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_DATA) ?: JSONObject()
+            val dataExpJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_DATA) ?: JSONObject()
 
             // Data expression
-            val eventJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_EVENT) ?: JSONObject()
+            val eventJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_EVENT) ?: JSONObject()
 
             // The configuration data
-            val configJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_CONFIG) ?: JSONObject()
+            val configJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_CONFIG) ?: JSONObject()
 
             // Animation data
-            val animationJson = dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
+            val animationJson =
+                dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
 
             val layer = GXLayer.create(layerJson)
             val css = createCss(layer, cssJson)
@@ -192,7 +196,11 @@ data class GXTemplateInfo(
             return createCss(value, srcCssJson, layer)
         }
 
-        private fun createCss(value: MutableMap<String, GXCss>, srcCssJson: JSONObject, layer: GXLayer): MutableMap<String, GXCss> {
+        private fun createCss(
+            value: MutableMap<String, GXCss>,
+            srcCssJson: JSONObject,
+            layer: GXLayer
+        ): MutableMap<String, GXCss> {
             val layerId = layer.id
             val cssId = layer.css
             val cssByCssId = srcCssJson.getJSONObject(cssId) ?: JSONObject()

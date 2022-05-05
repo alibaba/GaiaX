@@ -44,7 +44,11 @@ open class GXImageView : AppCompatImageView, GXIImageView {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     companion object {
         const val NET_HTTP_PREFIX = "http:"
@@ -66,7 +70,8 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         return 0
     }
 
-    private fun isNetUri(uri: String) = (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
+    private fun isNetUri(uri: String) =
+        (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
 
     private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
 
@@ -147,12 +152,15 @@ open class GXImageView : AppCompatImageView, GXIImageView {
 
     private fun updateMatrix(imageView: ImageView, drawable: Drawable?) {
         if (drawable != null && imageView.scaleType == ScaleType.MATRIX) {
-            val viewWidth: Int = imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
-            val viewHeight: Int = imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
+            val viewWidth: Int =
+                imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
+            val viewHeight: Int =
+                imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
             val drawableWidth = drawable.intrinsicWidth
             val drawableHeight = drawable.intrinsicHeight
             if (drawableWidth > 0 && drawableHeight > 0) {
-                val matrix: Matrix? = mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
+                val matrix: Matrix? =
+                    mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
                 imageView.imageMatrix = matrix
             }
         }
@@ -201,7 +209,12 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         delegate?.setRoundCornerRadius(radius)
     }
 
-    fun setRoundCornerRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerRadius(
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
@@ -215,11 +228,25 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         delegate?.setRoundCornerBorder(borderColor, borderWidth, radius)
     }
 
-    fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setRoundCornerBorder(
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
+    ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
-        delegate?.setRoundCornerBorder(borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight)
+        delegate?.setRoundCornerBorder(
+            borderColor,
+            borderWidth,
+            topLeft,
+            topRight,
+            bottomLeft,
+            bottomRight
+        )
     }
 
 }

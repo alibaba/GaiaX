@@ -52,7 +52,7 @@ class GXRegisterCenter {
             childMeasureSize: GXTemplateEngine.GXMeasureSize,
             childTemplateItem: GXTemplateEngine.GXTemplateItem,
             childItemPosition: Int,
-            childVisualNestTemplateNode: GXTemplateNode,
+            childVisualNestTemplateNode: GXTemplateNode?,
             childItemData: JSONObject
         ): Any?
     }

@@ -36,7 +36,7 @@ class GXComponentScrollTest : GXBaseTest() {
                 childMeasureSize: GXTemplateEngine.GXMeasureSize,
                 childTemplateItem: GXTemplateEngine.GXTemplateItem,
                 childItemPosition: Int,
-                childVisualNestTemplateNode: GXTemplateNode,
+                childVisualNestTemplateNode: GXTemplateNode?,
                 childItemData: JSONObject
             ): Any? {
                 // 获取坑位View

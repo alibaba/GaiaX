@@ -965,7 +965,6 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
 
-    // TODO: 这个地方可以交给 @广雉
     @Test
     fun template_scroll_load_more_hasMore_true() {
         val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_load_more")

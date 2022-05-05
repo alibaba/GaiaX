@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
@@ -212,17 +213,17 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
         }
     }
 
-    fun initFooter(node: GXNode) {
-        mContainerBinding = node.templateNode.dataBinding
-        mContainerBinding?.getExtend(gxTemplateContext.templateData?.data ?: JSONObject())
-            ?.let { typeData ->
+    fun initFooter() {
+        mContainerBinding = gxNode.templateNode.dataBinding
+        val templateData: JSON = gxTemplateContext.templateData?.data ?: return
+        mContainerBinding?.getExtend(templateData)?.let { typeData ->
                 typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
                     mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
                         gxTemplateContext.context,
                         gxTemplateContext.templateItem.bizId,
-                        it.getString("id")
+                        it.getString(GXTemplateKey.GAIAX_LAYER_ID)
                     )
-                    mItemFooterTypeHasMore = it.getBoolean("hasMore") ?: false
+                    mItemFooterTypeHasMore = it.getBoolean(GXTemplateKey.GAIAX_SCROLL_HAS_MORE) ?: false
                 }
             }
     }

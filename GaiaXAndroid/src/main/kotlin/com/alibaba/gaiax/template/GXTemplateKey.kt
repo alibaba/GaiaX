@@ -380,6 +380,7 @@ object GXTemplateKey {
     const val GAIAX_DATABINDING_ITEM_TYPE_CONFIG = "config"
 
     const val GAIAX_SCROLL_FOOTER = "item-footer-type"
+    const val GAIAX_SCROLL_HAS_MORE = "hasMore"
 
 
 }

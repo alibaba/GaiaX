@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
@@ -62,7 +61,8 @@ class GXTemplateEngineTest : GXBaseTest() {
             "template_register_map_relation"
         )
 
-        GXRegisterCenter.instance.registerProcessBizMapRelation(object : GXRegisterCenter.GXIProcessBizMap {
+        GXRegisterCenter.instance.registerProcessBizMapRelation(object :
+            GXRegisterCenter.GXIProcessBizMap {
             override fun convert(item: GXTemplateEngine.GXTemplateItem) {
                 if (item.bizId == "mockBiz") {
                     item.bundle = "integration"
@@ -1124,7 +1124,10 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.FIT_CENTER, rootView.child<ImageView>(0).scaleType)
+            Assert.assertEquals(
+                ImageView.ScaleType.FIT_CENTER,
+                rootView.child<ImageView>(0).scaleType
+            )
         }
     }
 
@@ -1145,7 +1148,10 @@ class GXTemplateEngineTest : GXBaseTest() {
 
             Assert.assertEquals(1, rootView.childCount())
 
-            Assert.assertEquals(ImageView.ScaleType.CENTER_CROP, rootView.child<ImageView>(0).scaleType)
+            Assert.assertEquals(
+                ImageView.ScaleType.CENTER_CROP,
+                rootView.child<ImageView>(0).scaleType
+            )
         }
     }
 

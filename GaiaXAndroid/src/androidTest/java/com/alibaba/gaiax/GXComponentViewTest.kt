@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
@@ -17,7 +16,6 @@ import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.nio.charset.Charset
 
 
 @RunWith(AndroidJUnit4::class)
@@ -25,7 +23,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_merge_empty_nodes() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_merge_empty_nodes")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_merge_empty_nodes"
+        )
 
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
 
@@ -51,7 +53,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_merge_empty_nodes_exclude_container_type() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_merge_empty_nodes_exclude_container_type")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_merge_empty_nodes_exclude_container_type"
+        )
 
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
 
@@ -63,7 +69,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_aspect_ratio_height_to_width() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_aspect_ratio_height_to_width")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_aspect_ratio_height_to_width"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -79,7 +89,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_aspect_ratio_width_to_height() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_aspect_ratio_width_to_height")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_aspect_ratio_width_to_height"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -94,7 +108,8 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_width_max_size() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_max_size")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_max_size")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -109,7 +124,8 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_width_flex_grow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_flex_grow")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_flex_grow")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -119,7 +135,8 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_height_max_size() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_height_max_size")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_height_max_size")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -134,7 +151,8 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_width_min_size() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_min_size")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_width_min_size")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -149,7 +167,8 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_height_min_size() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_height_min_size")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_height_min_size")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -164,7 +183,13 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_height_flex_grow() {
-        val rootView = GXTemplateEngine.instance.createView(GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_height_flex_grow"), size)
+        val rootView = GXTemplateEngine.instance.createView(
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "view",
+                "template_height_flex_grow"
+            ), size
+        )
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
@@ -173,7 +198,13 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_shadow() {
-        val rootView = GXTemplateEngine.instance.createView(GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_shadow"), size)
+        val rootView = GXTemplateEngine.instance.createView(
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "view",
+                "template_shadow"
+            ), size
+        )
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
@@ -190,7 +221,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_display_none() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_display_none")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_display_none"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -208,7 +243,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_display_flex() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_display_flex")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_display_flex"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -223,7 +262,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_hidden_true() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_hidden_true")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_hidden_true"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -238,7 +281,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_hidden_false() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_hidden_false")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_hidden_false"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -251,7 +298,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_display_hidden() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_display_hidden")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_display_hidden"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -261,7 +312,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_opacity() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_opacity")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_opacity"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -274,7 +329,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_overflow_visible() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_overflow_visible")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_overflow_visible"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -287,7 +346,11 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_overflow_hidden() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_overflow_hidden")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_overflow_hidden"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -300,47 +363,69 @@ class GXComponentViewTest : GXBaseTest() {
 
     @Test
     fun template_view_property_background_color() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_background_color")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_background_color"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0).background is GradientDrawable)
-        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView.child(0).background as GradientDrawable).colors?.get(0))
+        Assert.assertEquals(
+            Color.parseColor("#e4e4e4"),
+            (rootView.child(0).background as GradientDrawable).colors?.get(0)
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
     }
 
     @Test
     fun template_view_property_background_image() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_view_property_background_image")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_background_image"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0).background is GradientDrawable)
-        Assert.assertEquals(Color.parseColor("#000000"), (rootView.child(0).background as GradientDrawable).colors?.get(0))
-        Assert.assertEquals(Color.parseColor("#ffffff"), (rootView.child(0).background as GradientDrawable).colors?.get(1))
+        Assert.assertEquals(
+            Color.parseColor("#000000"),
+            (rootView.child(0).background as GradientDrawable).colors?.get(0)
+        )
+        Assert.assertEquals(
+            Color.parseColor("#ffffff"),
+            (rootView.child(0).background as GradientDrawable).colors?.get(1)
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
     }
 
     @Test
     fun template_border() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_border")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_border")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
+        Assert.assertEquals(
+            null,
+            (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
+        )
     }
 
     @Test
     fun template_radius() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_radius")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_radius")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)

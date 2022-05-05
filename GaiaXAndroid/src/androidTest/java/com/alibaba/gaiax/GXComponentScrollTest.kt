@@ -28,7 +28,8 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_container_item_bind() {
 
-        GXRegisterCenter.instance.registerProcessContainerItemBind(object : GXRegisterCenter.GXIProcessContainerItemBind {
+        GXRegisterCenter.instance.registerProcessContainerItemBind(object :
+            GXRegisterCenter.GXIProcessContainerItemBind {
 
             override fun bindViewHolder(
                 tag: Any?,
@@ -43,7 +44,11 @@ class GXComponentScrollTest : GXBaseTest() {
                 val childView = if (childItemContainer.childCount != 0) {
                     childItemContainer.getChildAt(0)
                 } else {
-                    GXTemplateEngine.instance.createView(childTemplateItem, childMeasureSize, childVisualNestTemplateNode).apply {
+                    GXTemplateEngine.instance.createView(
+                        childTemplateItem,
+                        childMeasureSize,
+                        childVisualNestTemplateNode
+                    ).apply {
                         childItemContainer.addView(this)
                     }
                 }
@@ -56,7 +61,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_child_count")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_child_count"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -83,9 +92,15 @@ class GXComponentScrollTest : GXBaseTest() {
     fun template_data_update() {
 
         var isExecuteContainerDataUpdate = false
-        GXRegisterCenter.instance.registerProcessContainerDataUpdate(object : GXRegisterCenter.GXIProcessContainerDataUpdate {
+        GXRegisterCenter.instance.registerProcessContainerDataUpdate(object :
+            GXRegisterCenter.GXIProcessContainerDataUpdate {
 
-            override fun update(gxTemplateContext: GXTemplateContext, gxContainerViewAdapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray) {
+            override fun update(
+                gxTemplateContext: GXTemplateContext,
+                gxContainerViewAdapter: GXContainerViewAdapter,
+                old: JSONArray,
+                new: JSONArray
+            ) {
                 isExecuteContainerDataUpdate = true
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize(): Int {
@@ -96,12 +111,22 @@ class GXComponentScrollTest : GXBaseTest() {
                         return new.size
                     }
 
-                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                        return old.getJSONObject(oldItemPosition).getIntValue("id") == old.getJSONObject(newItemPosition).getIntValue("id")
+                    override fun areItemsTheSame(
+                        oldItemPosition: Int,
+                        newItemPosition: Int
+                    ): Boolean {
+                        return old.getJSONObject(oldItemPosition)
+                            .getIntValue("id") == old.getJSONObject(newItemPosition)
+                            .getIntValue("id")
                     }
 
-                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                        return old.getJSONObject(oldItemPosition).getIntValue("title") == old.getJSONObject(newItemPosition).getIntValue("title")
+                    override fun areContentsTheSame(
+                        oldItemPosition: Int,
+                        newItemPosition: Int
+                    ): Boolean {
+                        return old.getJSONObject(oldItemPosition)
+                            .getIntValue("title") == old.getJSONObject(newItemPosition)
+                            .getIntValue("title")
                     }
 
                 }, true)
@@ -109,7 +134,11 @@ class GXComponentScrollTest : GXBaseTest() {
             }
 
         })
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_horizontal")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_horizontal"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -150,7 +179,11 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_responsive_rule() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_responsive_rule")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_responsive_rule"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -172,13 +205,20 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(5, rootView.childCount())
 
-        Assert.assertEquals(GXScreenUtils.getScreenWidthPx(GXMockUtils.context) / 2.5F, rootView.child(0).width())
+        Assert.assertEquals(
+            GXScreenUtils.getScreenWidthPx(GXMockUtils.context) / 2.5F,
+            rootView.child(0).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
     }
 
     @Test
     fun template_scroll_horizontal() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_horizontal")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_horizontal"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -198,12 +238,19 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(LinearLayoutManager.HORIZONTAL, ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation)
+        Assert.assertEquals(
+            LinearLayoutManager.HORIZONTAL,
+            ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation
+        )
     }
 
     @Test
     fun template_scroll_vertical() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_vertical")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_vertical"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -223,12 +270,19 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(LinearLayoutManager.VERTICAL, ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation)
+        Assert.assertEquals(
+            LinearLayoutManager.VERTICAL,
+            ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation
+        )
     }
 
     @Test
     fun template_scroll_height_aspect_ratio() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_aspect_ratio")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_aspect_ratio"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -254,7 +308,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_auto() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_auto")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_auto"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -280,7 +338,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_200px_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_200px_item_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -311,7 +373,8 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
+            GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -323,7 +386,11 @@ class GXComponentScrollTest : GXBaseTest() {
             }
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_200px_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_200px_item_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -354,7 +421,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_percent_100_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_percent_100_item_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -386,7 +457,8 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
+            GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -398,7 +470,11 @@ class GXComponentScrollTest : GXBaseTest() {
             }
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_percent_100_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_percent_100_item_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -430,7 +506,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_percent_100_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_percent_100_item_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -462,7 +542,8 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
+            GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -474,7 +555,11 @@ class GXComponentScrollTest : GXBaseTest() {
             }
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_root_percent_100_item_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_root_percent_100_item_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -500,7 +585,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_min_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_min_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -521,7 +610,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_max_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_max_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_max_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -542,7 +635,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_vertical_height_auto")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_vertical_height_auto"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -568,7 +665,8 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
+            GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
@@ -580,7 +678,11 @@ class GXComponentScrollTest : GXBaseTest() {
             }
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_vertical_height_auto")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_vertical_height_auto"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -606,7 +708,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_flex_direction_vertical_flex_grow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_height_flex_direction_vertical_flex_grow")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_height_flex_direction_vertical_flex_grow"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -627,7 +733,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_item_spacing() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_item_spacing")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_item_spacing"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -659,7 +769,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_flex_direction_horizontal_flex_grow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_flex_direction_horizontal_flex_grow")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_flex_direction_horizontal_flex_grow"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -680,7 +794,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -701,7 +819,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_min_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_min_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -723,7 +845,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_min_100px_no_children() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_min_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
             }
@@ -739,7 +865,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_max_200px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_max_200px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_max_200px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -761,7 +891,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_max_200px_no_children() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_max_200px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_max_200px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -782,7 +916,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_auto() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_auto")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_auto"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -806,7 +944,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_width_aspect_ratio() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_width_aspect_ratio")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_width_aspect_ratio"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -827,7 +969,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_child_count() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_child_count")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_child_count"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -855,7 +1001,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         // 由于测试环境，不会触发requestLayout逻辑。所以holding-offset的逻辑无法验证
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_scroll_position")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_scroll_position"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -870,7 +1020,10 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(0, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
+        Assert.assertEquals(
+            0,
+            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+        )
     }
 
     @Test
@@ -878,7 +1031,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         // 由于测试环境，不会触发requestLayout逻辑。所以holding-offset的逻辑无法验证
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_scroll_position")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_scroll_position"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -895,7 +1052,10 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(3, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
+        Assert.assertEquals(
+            3,
+            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+        )
     }
 
     @Test
@@ -903,7 +1063,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         // 由于测试环境，不会触发requestLayout逻辑。所以holding-offset的逻辑无法验证
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_holding_offset")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_holding_offset"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -919,27 +1083,39 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(3, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
+        Assert.assertEquals(
+            3,
+            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+        )
 
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["nodes"] = JSONArray().apply {
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-            }
-        }).apply {
-            this.scrollIndex = 0
-        })
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                }
+            }).apply {
+                this.scrollIndex = 0
+            })
 
-        Assert.assertEquals(3, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
+        Assert.assertEquals(
+            3,
+            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+        )
     }
 
     @Test
     fun template_scroll_load_more_hasMore_false() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_load_more")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_load_more"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -967,7 +1143,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_load_more_hasMore_true() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_load_more")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_load_more"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -998,7 +1178,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_modify_item() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_modify_item")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_modify_item"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -1018,7 +1202,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_css_extend_modify_item() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_css_extend_modify_item")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_css_extend_modify_item"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -1038,7 +1226,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_multi_type_item_two() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_multi_type_item_two")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_item_two"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject().apply {
@@ -1069,7 +1261,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_multi_type_item_one() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_multi_type_item_one")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_item_one"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject().apply {
@@ -1100,7 +1296,8 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_edge() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_edge")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_edge")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -1133,7 +1330,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_background_color() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_background_color")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_background_color"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject())
@@ -1147,12 +1348,16 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView.background as? GradientDrawable)?.colors?.get(0))
+        Assert.assertEquals(
+            Color.parseColor("#e4e4e4"),
+            (rootView.background as? GradientDrawable)?.colors?.get(0)
+        )
     }
 
     @Test
     fun template_scroll_border() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_border")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_border")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -1173,12 +1378,16 @@ class GXComponentScrollTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
+        Assert.assertEquals(
+            null,
+            (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
+        )
     }
 
     @Test
     fun template_scroll_radius() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_radius")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "scroll", "template_scroll_radius")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {

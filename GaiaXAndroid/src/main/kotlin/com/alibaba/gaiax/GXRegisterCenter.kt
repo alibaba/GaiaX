@@ -58,7 +58,12 @@ class GXRegisterCenter {
     }
 
     interface GXIProcessContainerDataUpdate {
-        fun update(gxTemplateContext: GXTemplateContext, gxContainerViewAdapter: GXContainerViewAdapter, old: JSONArray, new: JSONArray)
+        fun update(
+            gxTemplateContext: GXTemplateContext,
+            gxContainerViewAdapter: GXContainerViewAdapter,
+            old: JSONArray,
+            new: JSONArray
+        )
     }
 
     interface GXIProcessNodeEvent {
@@ -111,11 +116,19 @@ class GXRegisterCenter {
     }
 
     interface GXIProcessGrid {
-        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig): Any?
+        fun convert(
+            propertyName: String,
+            gxTemplateContext: GXTemplateContext,
+            gridConfig: GXGridConfig
+        ): Any?
     }
 
     interface GXIProcessScroll {
-        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any?
+        fun convert(
+            propertyName: String,
+            gxTemplateContext: GXTemplateContext,
+            scrollConfig: GXScrollConfig
+        ): Any?
     }
 
     interface GXIProcessCompatible {
@@ -158,7 +171,10 @@ class GXRegisterCenter {
      * @param source
      * @param priority [0,99]
      */
-    fun registerTemplateInfoSource(source: GXITemplateInfoSource, priority: Int = 0): GXRegisterCenter {
+    fun registerTemplateInfoSource(
+        source: GXITemplateInfoSource,
+        priority: Int = 0
+    ): GXRegisterCenter {
         GXTemplateEngine.instance.data.templateInfoSource.registerByPriority(source, priority)
         return this
     }

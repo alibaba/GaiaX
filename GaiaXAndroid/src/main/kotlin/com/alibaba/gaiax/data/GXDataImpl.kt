@@ -65,7 +65,8 @@ class GXDataImpl(val context: Context) {
             }
         }
 
-        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        private val dataSource: PriorityQueue<Value> =
+            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
         private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
 
         override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
@@ -85,7 +86,8 @@ class GXDataImpl(val context: Context) {
             this.dataSource.remove(needRemove)
             this.dataSource.add(Value(priority, source))
 
-            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            val dataSource: PriorityQueue<Value> =
+                PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
             dataSource.addAll(this.dataSource)
             dataSourceSorted.clear()
             while (dataSource.isNotEmpty()) {
@@ -121,7 +123,8 @@ class GXDataImpl(val context: Context) {
             }
         }
 
-        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        private val dataSource: PriorityQueue<Value> =
+            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
 
         private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
 
@@ -142,7 +145,8 @@ class GXDataImpl(val context: Context) {
             this.dataSource.remove(needRemove)
             this.dataSource.add(Value(priority, source))
 
-            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            val dataSource: PriorityQueue<Value> =
+                PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
             dataSource.addAll(this.dataSource)
 
             dataSourceSorted.clear()

@@ -40,7 +40,11 @@ object GXHighLightUtil {
 
     private var regexCache: ConcurrentHashMap<String, Pattern>? = null
 
-    fun getHighLightContent(binding: GXDataBinding, rawJson: JSONObject, desireData: String): CharSequence? {
+    fun getHighLightContent(
+        binding: GXDataBinding,
+        rawJson: JSONObject,
+        desireData: String
+    ): CharSequence? {
         val extend = binding.getExtend(rawJson) ?: return null
         val highlightTag = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_TAG)
         val highlightColor = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_COLOR)

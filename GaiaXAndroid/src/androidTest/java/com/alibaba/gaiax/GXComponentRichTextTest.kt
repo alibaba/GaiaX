@@ -51,7 +51,11 @@ class GXComponentRichTextTest : GXBaseTest() {
 
     @Test
     fun template_richtext_fitcontent_case_1_lines_1_width_100_percent_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "richtext", "template_richtext_fitcontent_case_1_lines_1_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "richtext",
+            "template_richtext_fitcontent_case_1_lines_1_width_100_percent_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)

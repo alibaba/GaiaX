@@ -24,13 +24,26 @@ class GXComponentImageTest : GXBaseTest() {
 
     @Test
     fun template_image_view_support() {
-        GXRegisterCenter.instance.registerViewSupport(GXViewKey.VIEW_TYPE_IMAGE, MockImageView::class.java)
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "image", "template_image_view_support")
-        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        GXRegisterCenter.instance.registerViewSupport(
+            GXViewKey.VIEW_TYPE_IMAGE,
+            MockImageView::class.java
+        )
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "image",
+            "template_image_view_support"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(true, rootView.child(0) is MockImageView)
 
-        GXRegisterCenter.instance.registerViewSupport(GXViewKey.VIEW_TYPE_IMAGE, GXImageView::class.java)
+        GXRegisterCenter.instance.registerViewSupport(
+            GXViewKey.VIEW_TYPE_IMAGE,
+            GXImageView::class.java
+        )
     }
 }

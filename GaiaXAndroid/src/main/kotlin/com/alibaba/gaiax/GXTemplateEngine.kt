@@ -393,12 +393,20 @@ class GXTemplateEngine {
         GXRenderImpl()
     }
 
-    fun createTemplateContext(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): GXTemplateContext {
+    fun createTemplateContext(
+        templateItem: GXTemplateItem,
+        size: GXMeasureSize,
+        visualTemplateNode: GXTemplateNode?
+    ): GXTemplateContext {
         val templateInfo = data.getTemplateInfo(templateItem)
         return GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
     }
 
-    fun createView(templateItem: GXTemplateItem, size: GXMeasureSize, visualTemplateNode: GXTemplateNode?): View {
+    fun createView(
+        templateItem: GXTemplateItem,
+        size: GXMeasureSize,
+        visualTemplateNode: GXTemplateNode?
+    ): View {
         val templateInfo = data.getTemplateInfo(templateItem)
         val context =
             GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
@@ -425,7 +433,8 @@ class GXTemplateEngine {
      * @throws IllegalArgumentException
      */
     fun bindData(view: View, templateData: GXTemplateData) {
-        val templateContext = GXTemplateContext.getContext(view) ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        val templateContext = GXTemplateContext.getContext(view)
+            ?: throw IllegalArgumentException("Not found templateContext from targetView")
         templateContext.templateData = templateData
         render.bindViewData(templateContext)
     }

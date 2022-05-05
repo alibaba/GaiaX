@@ -38,7 +38,14 @@ class GXComponentEventTest : GXBaseTest() {
         private var longClickEventByDataBinding: GXTemplateEngine.GXGesture? = null
         private var longClickEventByJS: GXJSGesture? = null
 
-        fun addJSEvent(gxTemplateContext: GXTemplateContext, gxNode: GXNode, componentId: Long, eventType: String, optionCover: Boolean, optionLevel: Int) {
+        fun addJSEvent(
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
+            componentId: Long,
+            eventType: String,
+            optionCover: Boolean,
+            optionLevel: Int
+        ) {
             this.gxTemplateContext = gxTemplateContext
             val gxGesture = GXJSGesture().apply {
                 this.gestureType = eventType
@@ -47,9 +54,9 @@ class GXComponentEventTest : GXBaseTest() {
                 this.nodeId = gxNode.templateNode.layer.id
                 this.templateItem = gxTemplateContext.templateItem
                 this.index = -1
-                this.jsComponentId=componentId
-                this.jsOptionCover=optionCover
-                this.jsOptionLevel=optionLevel
+                this.jsComponentId = componentId
+                this.jsOptionCover = optionCover
+                this.jsOptionLevel = optionLevel
             }
             if (eventType == GXTemplateKey.GAIAX_GESTURE_TYPE_TAP) {
                 clickEventByJS = gxGesture
@@ -59,12 +66,17 @@ class GXComponentEventTest : GXBaseTest() {
             initViewEventListener(gxGesture)
         }
 
-        override fun addDataBindingEvent(gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject) {
+        override fun addDataBindingEvent(
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
+            templateData: JSONObject
+        ) {
             this.gxTemplateContext = gxTemplateContext
             val eventBinding = gxNode.templateNode.eventBinding ?: return
             val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
             val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
-                eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE) ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+                eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
+                    ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
             } else {
                 GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
             }
@@ -192,7 +204,11 @@ class GXComponentEventTest : GXBaseTest() {
         GXRegisterCenter.instance
             .registerProcessNodeEvent(GXProcessNodeEvent())
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_register_node_event_js_longpress")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_register_node_event_js_longpress"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -212,7 +228,14 @@ class GXComponentEventTest : GXBaseTest() {
         val gxTemplateContext = GXTemplateEngine.instance.getGXTemplateContext(rootView)
         val targetNode = GXTemplateEngine.instance.getGXNodeById(rootView, "target")
         targetNode?.event = GXRegisterCenter.instance.processNodeEvent?.create()
-        (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(gxTemplateContext!!, targetNode, 999L, "longpress", false, 999)
+        (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(
+            gxTemplateContext!!,
+            targetNode,
+            999L,
+            "longpress",
+            false,
+            999
+        )
 
         val targetView = GXTemplateEngine.instance.getGXViewById(rootView, "target")
 
@@ -227,7 +250,10 @@ class GXComponentEventTest : GXBaseTest() {
         Assert.assertEquals(true, gesture?.view == targetView)
         Assert.assertEquals(-1, gesture?.index)
         Assert.assertEquals("target", gesture?.nodeId)
-        Assert.assertEquals("template_event_register_node_event_js_longpress", gesture?.templateItem?.templateId)
+        Assert.assertEquals(
+            "template_event_register_node_event_js_longpress",
+            gesture?.templateItem?.templateId
+        )
         Assert.assertEquals(null, gesture?.eventParams?.toJSONString())
     }
 
@@ -237,7 +263,11 @@ class GXComponentEventTest : GXBaseTest() {
         GXRegisterCenter.instance
             .registerProcessNodeEvent(GXProcessNodeEvent())
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_register_node_event_js_tap")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_register_node_event_js_tap"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -257,7 +287,14 @@ class GXComponentEventTest : GXBaseTest() {
         val gxTemplateContext = GXTemplateEngine.instance.getGXTemplateContext(rootView)
         val targetNode = GXTemplateEngine.instance.getGXNodeById(rootView, "target")
         targetNode?.event = GXRegisterCenter.instance.processNodeEvent?.create()
-        (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(gxTemplateContext!!, targetNode, 999L, "tap", false, 999)
+        (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(
+            gxTemplateContext!!,
+            targetNode,
+            999L,
+            "tap",
+            false,
+            999
+        )
 
         val targetView = GXTemplateEngine.instance.getGXViewById(rootView, "target")
 
@@ -272,7 +309,10 @@ class GXComponentEventTest : GXBaseTest() {
         Assert.assertEquals(true, gesture?.view == targetView)
         Assert.assertEquals(-1, gesture?.index)
         Assert.assertEquals("target", gesture?.nodeId)
-        Assert.assertEquals("template_event_register_node_event_js_tap", gesture?.templateItem?.templateId)
+        Assert.assertEquals(
+            "template_event_register_node_event_js_tap",
+            gesture?.templateItem?.templateId
+        )
         Assert.assertEquals(null, gesture?.eventParams?.toJSONString())
     }
 
@@ -282,7 +322,11 @@ class GXComponentEventTest : GXBaseTest() {
         GXRegisterCenter.instance
             .registerProcessNodeEvent(GXProcessNodeEvent())
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_register_node_event_longpress")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_register_node_event_longpress"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -309,7 +353,10 @@ class GXComponentEventTest : GXBaseTest() {
         Assert.assertEquals(true, gesture?.view == targetView)
         Assert.assertEquals(-1, gesture?.index)
         Assert.assertEquals("target", gesture?.nodeId)
-        Assert.assertEquals("template_event_register_node_event_longpress", gesture?.templateItem?.templateId)
+        Assert.assertEquals(
+            "template_event_register_node_event_longpress",
+            gesture?.templateItem?.templateId
+        )
         Assert.assertEquals(JSONObject().apply {
             this["type"] = "longpress"
             this["value"] = null
@@ -322,7 +369,11 @@ class GXComponentEventTest : GXBaseTest() {
         GXRegisterCenter.instance
             .registerProcessNodeEvent(GXProcessNodeEvent())
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_register_node_event_tap")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_register_node_event_tap"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -349,7 +400,10 @@ class GXComponentEventTest : GXBaseTest() {
         Assert.assertEquals(true, gesture?.view == targetView)
         Assert.assertEquals(-1, gesture?.index)
         Assert.assertEquals("target", gesture?.nodeId)
-        Assert.assertEquals("template_event_register_node_event_tap", gesture?.templateItem?.templateId)
+        Assert.assertEquals(
+            "template_event_register_node_event_tap",
+            gesture?.templateItem?.templateId
+        )
         Assert.assertEquals(JSONObject().apply {
             this["type"] = "tap"
             this["value"] = null
@@ -358,7 +412,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_tap_listener() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_tap_listener")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_tap_listener"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -400,7 +458,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_tap_listener_display_none() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_tap_listener_display_none")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_tap_listener_display_none"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -430,7 +492,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_tap_listener_hidden_true() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_tap_listener_hidden_true")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_tap_listener_hidden_true"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -460,7 +526,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_longpress_listener() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_longpress_listener")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_longpress_listener"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -501,7 +571,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_track_listener() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_track_listener")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_track_listener"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -536,7 +610,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_track_listener_display_none() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_track_listener_display_none")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_track_listener_display_none"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {
@@ -560,7 +638,11 @@ class GXComponentEventTest : GXBaseTest() {
 
     @Test
     fun template_event_track_listener_hidden_true() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "event", "template_event_track_listener_hidden_true")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_track_listener_hidden_true"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["action"] = JSONObject().apply {

@@ -1,5 +1,10 @@
 {
   "id": "template_event_tap_listener_hidden_true",
   "type": "gaia-template",
-  "layers": [{ "id": "target", "type": "view" }]
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
 }

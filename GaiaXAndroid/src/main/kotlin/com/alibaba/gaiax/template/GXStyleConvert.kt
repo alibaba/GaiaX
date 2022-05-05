@@ -136,20 +136,26 @@ class GXStyleConvert {
         else -> null
     }
 
-    fun fontTextOverflow(css: JSONObject): TextUtils.TruncateAt? = when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW)) {
-        "clip" -> {
-            GXRegisterCenter
-                .instance
-                .processStaticProperty
-                ?.convert(GXRegisterCenter.GXIProcessStaticProperty.GXParams(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW, "clip"))
-                ?.let {
-                    return it as TextUtils.TruncateAt
-                }
-            null
+    fun fontTextOverflow(css: JSONObject): TextUtils.TruncateAt? =
+        when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW)) {
+            "clip" -> {
+                GXRegisterCenter
+                    .instance
+                    .processStaticProperty
+                    ?.convert(
+                        GXRegisterCenter.GXIProcessStaticProperty.GXParams(
+                            GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW,
+                            "clip"
+                        )
+                    )
+                    ?.let {
+                        return it as TextUtils.TruncateAt
+                    }
+                null
+            }
+            "ellipsis" -> TextUtils.TruncateAt.END
+            else -> TextUtils.TruncateAt.END
         }
-        "ellipsis" -> TextUtils.TruncateAt.END
-        else -> TextUtils.TruncateAt.END
-    }
 
     fun fontTextAlign(css: JSONObject): Int? =
         when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_ALIGN)) {
@@ -172,7 +178,11 @@ class GXStyleConvert {
                 .instance
                 .processStaticProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessStaticProperty.GXParams(GXTemplateKey.STYLE_FONT_FAMILY, fontFamily))
+                    GXRegisterCenter.GXIProcessStaticProperty.GXParams(
+                        GXTemplateKey.STYLE_FONT_FAMILY,
+                        fontFamily
+                    )
+                )
                 ?.let {
                     val newFontFamily = it as String
                     return Typeface.createFromAsset(assets, "$newFontFamily.ttf")

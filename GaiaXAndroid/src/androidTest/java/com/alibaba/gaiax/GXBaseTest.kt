@@ -62,8 +62,15 @@ open class GXBaseTest {
     }
 
     class GXProcessScroll : GXRegisterCenter.GXIProcessScroll {
-        override fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
-            Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $gxTemplateContext, scrollConfig = $scrollConfig")
+        override fun convert(
+            propertyName: String,
+            gxTemplateContext: GXTemplateContext,
+            scrollConfig: GXScrollConfig
+        ): Any? {
+            Log.d(
+                TAG,
+                "convertProcessing() called with: propertyName = $propertyName, context = $gxTemplateContext, scrollConfig = $scrollConfig"
+            )
             if (propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH) {
                 val responsiveRule = scrollConfig.data.getString("responsive-rule") ?: return null
                 val leftMargin = scrollConfig.edgeInsets.left
@@ -218,7 +225,10 @@ open class GXBaseTest {
                         /**
                          * 用于处理函数逻辑
                          */
-                        override fun computeFunctionExpression(functionName: String, params: LongArray): Long {
+                        override fun computeFunctionExpression(
+                            functionName: String,
+                            params: LongArray
+                        ): Long {
                             if (functionName == "size" && params.size == 1) {
                                 when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
                                     is GXString -> {

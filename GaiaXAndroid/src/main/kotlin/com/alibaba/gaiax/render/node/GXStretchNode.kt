@@ -45,11 +45,17 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         }
     }
 
-    fun updateContainerLayout(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, gxNode: GXNode, templateData: JSONObject): Boolean {
+    fun updateContainerLayout(
+        gxTemplateContext: GXTemplateContext,
+        gxTemplateNode: GXTemplateNode,
+        gxNode: GXNode,
+        templateData: JSONObject
+    ): Boolean {
 
         val containerDataBinding = gxNode.templateNode.dataBinding
         //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
-        val containerTemplateData = (containerDataBinding?.getDataValue(templateData) as? JSONArray) ?: JSONArray()
+        val containerTemplateData =
+            (containerDataBinding?.getDataValue(templateData) as? JSONArray) ?: JSONArray()
 
         val style = this.node.getStyle()
 
@@ -75,22 +81,31 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
         if (gxNode.isScrollType()) {
             // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
-            var isComputeContainerHeight = finalScrollConfig?.isHorizontal == true && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+            var isComputeContainerHeight =
+                finalScrollConfig?.isHorizontal == true && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
                 .processDynamicProperty
-                ?.convert(GXRegisterCenter.GXIProcessDynamicProperty.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
-                    this.gridConfig = finalGridConfig
-                    this.flexBox = finalFlexBox
-                })
+                ?.convert(
+                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                        GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT,
+                        isComputeContainerHeight
+                    ).apply {
+                        this.gridConfig = finalGridConfig
+                        this.flexBox = finalFlexBox
+                    })
                 ?.let {
                     isComputeContainerHeight = it as Boolean
                 }
 
             if (isComputeContainerHeight) {
-                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(gxTemplateContext, gxNode, containerTemplateData)
+                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(
+                    gxTemplateContext,
+                    gxNode,
+                    containerTemplateData
+                )
                 containerSize?.height?.let {
                     finalFlexBox.size?.height = it
                     isDirty = true
@@ -98,23 +113,32 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             }
         } else if (gxNode.isGridType()) {
 
-            var isComputeContainerHeight = finalGridConfig?.isVertical == true && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+            var isComputeContainerHeight =
+                finalGridConfig?.isVertical == true && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
                 .processDynamicProperty
-                ?.convert(GXRegisterCenter.GXIProcessDynamicProperty.GXParams(GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT, isComputeContainerHeight).apply {
-                    this.gridConfig = finalGridConfig
-                    this.flexBox = finalFlexBox
-                })
+                ?.convert(
+                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                        GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT,
+                        isComputeContainerHeight
+                    ).apply {
+                        this.gridConfig = finalGridConfig
+                        this.flexBox = finalFlexBox
+                    })
                 ?.let {
                     isComputeContainerHeight = it as Boolean
                 }
 
             // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
             if (isComputeContainerHeight) {
-                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(gxTemplateContext, gxNode, containerTemplateData)
+                val containerSize = GXNodeUtils.computeContainerHeightByItemTemplate(
+                    gxTemplateContext,
+                    gxNode,
+                    containerTemplateData
+                )
                 containerSize?.height?.let {
                     finalFlexBox.size?.height = it
                     isDirty = true
@@ -137,7 +161,11 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return result
     }
 
-    fun updateNormalLayout(context: GXTemplateContext, node: GXTemplateNode, templateData: JSONObject): Boolean {
+    fun updateNormalLayout(
+        context: GXTemplateContext,
+        node: GXTemplateNode,
+        templateData: JSONObject
+    ): Boolean {
 
         val style = this.node.getStyle()
 
@@ -175,7 +203,11 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         return result
     }
 
-    private fun updateLayoutByFlexBox(finalCssStyle: GXStyle, flexBox: GXFlexBox, style: Style): Boolean? {
+    private fun updateLayoutByFlexBox(
+        finalCssStyle: GXStyle,
+        flexBox: GXFlexBox,
+        style: Style
+    ): Boolean? {
         var isDirty: Boolean? = null
         flexBox.display?.let {
             style.display = it
@@ -266,9 +298,13 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             GXTemplateUtils.updateSize(it, style.size)
             GXRegisterCenter.instance
                 .processDynamicProperty
-                ?.convert(GXRegisterCenter.GXIProcessDynamicProperty.GXParams(GXTemplateKey.FLEXBOX_SIZE, style.size).apply {
-                    this.cssStyle = finalCssStyle
-                })
+                ?.convert(
+                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_SIZE,
+                        style.size
+                    ).apply {
+                        this.cssStyle = finalCssStyle
+                    })
             isDirty = true
         }
 
@@ -276,9 +312,13 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             GXTemplateUtils.updateSize(it, style.minSize)
             GXRegisterCenter.instance
                 .processDynamicProperty
-                ?.convert(GXRegisterCenter.GXIProcessDynamicProperty.GXParams(GXTemplateKey.FLEXBOX_MIN_SIZE, style.minSize).apply {
-                    this.cssStyle = finalCssStyle
-                })
+                ?.convert(
+                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_MIN_SIZE,
+                        style.minSize
+                    ).apply {
+                        this.cssStyle = finalCssStyle
+                    })
             isDirty = true
         }
 
@@ -286,16 +326,27 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             GXTemplateUtils.updateSize(it, style.maxSize)
             GXRegisterCenter.instance
                 .processDynamicProperty
-                ?.convert(GXRegisterCenter.GXIProcessDynamicProperty.GXParams(GXTemplateKey.FLEXBOX_MAX_SIZE, style.maxSize).apply {
-                    this.cssStyle = finalCssStyle
-                })
+                ?.convert(
+                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_MAX_SIZE,
+                        style.maxSize
+                    ).apply {
+                        this.cssStyle = finalCssStyle
+                    })
             isDirty = true
         }
 
         return isDirty
     }
 
-    private fun updateLayoutByCssStyle(templateContext: GXTemplateContext, finalCssStyle: GXStyle, stretchStyle: Style, currentNode: GXTemplateNode, currentStretchNode: GXStretchNode, data: JSONObject): Boolean? {
+    private fun updateLayoutByCssStyle(
+        templateContext: GXTemplateContext,
+        finalCssStyle: GXStyle,
+        stretchStyle: Style,
+        currentNode: GXTemplateNode,
+        currentStretchNode: GXStretchNode,
+        data: JSONObject
+    ): Boolean? {
 
         if (finalCssStyle.fitContent == true) {
 
@@ -304,7 +355,16 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
                 if (templateContext.fitContentPending == null) {
                     templateContext.fitContentPending = mutableMapOf()
                 }
-                templateContext.fitContentPending?.put(this, GXFitContentPending(templateContext, stretchStyle, currentNode, currentStretchNode, data))
+                templateContext.fitContentPending?.put(
+                    this,
+                    GXFitContentPending(
+                        templateContext,
+                        stretchStyle,
+                        currentNode,
+                        currentStretchNode,
+                        data
+                    )
+                )
                 return false
             }
 
@@ -327,7 +387,8 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         data: JSONObject,
         stretchStyle: Style
     ): Boolean {
-        GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)?.let { src ->
+        GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)
+            ?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上
                 GXTemplateUtils.updateSize(src, stretchStyle.size)

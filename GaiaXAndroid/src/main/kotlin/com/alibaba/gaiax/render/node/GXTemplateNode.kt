@@ -71,7 +71,11 @@ data class GXTemplateNode(
      * @param visualTemplateData 当前节点的虚拟父节点使用的数据源
      * @param nodeTemplateData 当前节点使用的数据源
      */
-    fun initFinal(gxTemplateContext: GXTemplateContext, visualTemplateData: JSONObject?, nodeTemplateData: JSONObject?) {
+    fun initFinal(
+        gxTemplateContext: GXTemplateContext,
+        visualTemplateData: JSONObject?,
+        nodeTemplateData: JSONObject?
+    ) {
 
         // 初始化扩展数据
         val extendCssData = dataBinding?.getExtend(nodeTemplateData)
@@ -104,12 +108,12 @@ data class GXTemplateNode(
             layer.scrollConfig?.let {
                 finalScrollConfig = it
             }
-            
+
             css
         }
 
         // 初始化虚拟节点的FinalStyle
-        visualTemplateNode?.initFinal(gxTemplateContext,null, visualTemplateData)
+        visualTemplateNode?.initFinal(gxTemplateContext, null, visualTemplateData)
 
         // 合并Self和Visual
         this.finalCss = GXCss.create(selfFinalCss, visualTemplateNode?.finalCss)

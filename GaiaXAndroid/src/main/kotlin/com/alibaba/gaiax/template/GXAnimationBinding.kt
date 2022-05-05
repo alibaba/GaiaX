@@ -97,7 +97,9 @@ class GXAnimationBinding(
             val type = GXAnimationType.create(data.getString(KEY_TYPE))
             if (type != null) {
                 val trigger = data.getBooleanValue(KEY_TRIGGER)
-                val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(data.getString(KEY_STATE)) else null
+                val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
+                    data.getString(KEY_STATE)
+                ) else null
                 when (type) {
                     GXAnimationType.LOTTIE -> {
                         val lottieAnimator =
@@ -311,19 +313,21 @@ class GXAnimationBinding(
                         GXExpressionFactory.valuePath(stateExp?.expression())?.let {
                             templateData.setValueExt(it, false)
                         }
-                        context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                            this.state = "END"
-                            this.nodeId = gxNode.id
-                            this.view = lottieView
-                        })
+                        context.templateData?.eventListener?.onAnimationEvent(
+                            GXTemplateEngine.GXAnimation().apply {
+                                this.state = "END"
+                                this.nodeId = gxNode.id
+                                this.view = lottieView
+                            })
                     }
 
                     override fun onAnimationStart(animation: Animator?) {
-                        context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                            this.state = "START"
-                            this.nodeId = gxNode.id
-                            this.view = lottieView
-                        })
+                        context.templateData?.eventListener?.onAnimationEvent(
+                            GXTemplateEngine.GXAnimation().apply {
+                                this.state = "START"
+                                this.nodeId = gxNode.id
+                                this.view = lottieView
+                            })
                     }
 
                 })
@@ -402,20 +406,22 @@ class GXAnimationBinding(
                                     GXExpressionFactory.valuePath(stateExp?.expression())?.let {
                                         rawJson.setValueExt(it, false)
                                     }
-                                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                                        this.state = "END"
-                                        this.nodeId = gxNode.id
-                                        this.view = lottieView
-                                    })
+                                    context.templateData?.eventListener?.onAnimationEvent(
+                                        GXTemplateEngine.GXAnimation().apply {
+                                            this.state = "END"
+                                            this.nodeId = gxNode.id
+                                            this.view = lottieView
+                                        })
                                 }
 
                                 override fun onAnimationStart(animation: Animator?) {
                                     gxNode.isAnimating = true
-                                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                                        this.state = "START"
-                                        this.nodeId = gxNode.id
-                                        this.view = lottieView
-                                    })
+                                    context.templateData?.eventListener?.onAnimationEvent(
+                                        GXTemplateEngine.GXAnimation().apply {
+                                            this.state = "START"
+                                            this.nodeId = gxNode.id
+                                            this.view = lottieView
+                                        })
                                 }
                             })
                             lottieView.playAnimation()
@@ -546,11 +552,12 @@ class GXAnimationBinding(
             child.propAnimatorSet?.removeAllListeners()
             child.propAnimatorSet?.addListener(object : DefaultAnimatorListener() {
                 override fun onAnimationStart(animation: Animator?) {
-                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                        this.state = "START"
-                        this.nodeId = child.id
-                        this.view = targetView
-                    })
+                    context.templateData?.eventListener?.onAnimationEvent(
+                        GXTemplateEngine.GXAnimation().apply {
+                            this.state = "START"
+                            this.nodeId = child.id
+                            this.view = targetView
+                        })
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {
@@ -559,11 +566,12 @@ class GXAnimationBinding(
 
                 override fun onAnimationEnd(animation: Animator?) {
                     child.isAnimating = false
-                    context.templateData?.eventListener?.onAnimationEvent(GXTemplateEngine.GXAnimation().apply {
-                        this.state = "END"
-                        this.nodeId = child.id
-                        this.view = targetView
-                    })
+                    context.templateData?.eventListener?.onAnimationEvent(
+                        GXTemplateEngine.GXAnimation().apply {
+                            this.state = "END"
+                            this.nodeId = child.id
+                            this.view = targetView
+                        })
                 }
             })
             child.propAnimatorSet?.start()

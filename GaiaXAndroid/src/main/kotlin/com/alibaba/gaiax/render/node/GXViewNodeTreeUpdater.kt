@@ -26,7 +26,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
@@ -37,7 +36,6 @@ import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.template.utils.GXTemplateUtils
 
 /**
  * @suppress
@@ -46,7 +44,8 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
     fun build() {
         val rootNode = context.rootNode ?: throw IllegalArgumentException("RootNode is null")
-        val templateData = context.templateData?.data ?: throw IllegalArgumentException("Data is null")
+        val templateData =
+            context.templateData?.data ?: throw IllegalArgumentException("Data is null")
         val size = Size(context.size.width, context.size.height)
 
         // 更新布局
@@ -58,9 +57,15 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
 
         // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
-        if (context.fitContentPending?.isNotEmpty()==true) {
+        if (context.fitContentPending?.isNotEmpty() == true) {
             context.fitContentPending?.forEach {
-                it.key.updateLayoutByFitContent(it.value.templateContext, it.value.currentNode,it.value.currentStretchNode, it.value.data, it.value.stretchStyle )
+                it.key.updateLayoutByFitContent(
+                    it.value.templateContext,
+                    it.value.currentNode,
+                    it.value.currentStretchNode,
+                    it.value.data,
+                    it.value.stretchStyle
+                )
             }
             context.fitContentPending?.clear()
             GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
@@ -70,7 +75,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         updateNodeTreeStyle(context, rootNode, templateData)
     }
 
-    private fun updateNodeTreeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNodeTreeLayout(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         node.stretchNode.reset()
         node.templateNode.reset()
 
@@ -83,7 +92,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNestNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNodeLayout(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         // 容器节点
         if (node.templateNode.isContainerType()) {
             updateNestContainerNodeLayout(context, node, templateData)
@@ -94,16 +107,32 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateContainerNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateContainerNodeLayout(
+        gxTemplateContext: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = null, nodeTemplateData = templateData)
+        node.templateNode.initFinal(
+            gxTemplateContext,
+            visualTemplateData = null,
+            nodeTemplateData = templateData
+        )
 
         updateNodeLayout(gxTemplateContext, node, templateData)
     }
 
-    private fun updateNormalNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNormalNodeLayout(
+        gxTemplateContext: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = null, nodeTemplateData = templateData)
+        node.templateNode.initFinal(
+            gxTemplateContext,
+            visualTemplateData = null,
+            nodeTemplateData = templateData
+        )
 
         updateNodeLayout(gxTemplateContext, node, templateData)
 
@@ -113,12 +142,20 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNodeLayout(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         // 更新节点布局
         nodeNodeLayout(context, node, templateData)
     }
 
-    private fun updateNestContainerNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestContainerNodeLayout(
+        gxTemplateContext: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
         val dataBinding = node.templateNode.dataBinding
 
@@ -148,12 +185,20 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = templateData, nodeTemplateData = childTemplateData)
+        node.templateNode.initFinal(
+            gxTemplateContext,
+            visualTemplateData = templateData,
+            nodeTemplateData = childTemplateData
+        )
 
         updateNodeLayout(gxTemplateContext, node, childTemplateData)
     }
 
-    private fun updateNestNormalNodeLayout(gxTemplateContext: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNormalNodeLayout(
+        gxTemplateContext: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
 
         // 虚拟节点所在的模板，需要传递数据给下一层子模板
@@ -161,10 +206,15 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 此处，双端已协商一致
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
-        val childTemplateData = (visualDataBinding?.getDataValue(templateData) as? JSONObject) ?: JSONObject()
+        val childTemplateData =
+            (visualDataBinding?.getDataValue(templateData) as? JSONObject) ?: JSONObject()
 
         node.stretchNode.initFinal()
-        node.templateNode.initFinal(gxTemplateContext,visualTemplateData = templateData, nodeTemplateData = childTemplateData)
+        node.templateNode.initFinal(
+            gxTemplateContext,
+            visualTemplateData = templateData,
+            nodeTemplateData = childTemplateData
+        )
 
         updateNodeLayout(gxTemplateContext, node, childTemplateData)
 
@@ -174,7 +224,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNodeTreeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNodeTreeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         if (node.isNestRoot) {
             updateNestNodeStyle(context, node, templateData)
         } else if (node.isContainerType()) {
@@ -184,7 +238,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNestNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         // 容器节点
         if (node.templateNode.isContainerType()) {
             updateNestContainerNodeStyle(context, node, templateData)
@@ -195,11 +253,19 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateContainerNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateContainerNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         updateNodeStyle(context, node, templateData)
     }
 
-    private fun updateNestContainerNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestContainerNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         val visualDataBinding = node.templateNode.visualTemplateNode?.dataBinding
         val dataBinding = node.templateNode.dataBinding
 
@@ -214,7 +280,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         updateNodeStyle(context, node, childTemplateData)
     }
 
-    private fun updateNestNormalNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNestNormalNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         updateNodeStyle(context, node, templateData)
 
         node.children?.forEach { childNode ->
@@ -223,7 +293,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNormalNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNormalNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         updateNodeStyle(context, node, templateData)
 
         node.children?.forEach { childNode ->
@@ -232,7 +306,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNodeStyle(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
+    private fun updateNodeStyle(
+        context: GXTemplateContext,
+        node: GXNode,
+        templateData: JSONObject
+    ) {
         // 更新视图样式
         nodeViewCss(context, node)
 
@@ -260,14 +338,20 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun nodeNodeLayout(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         // 容器节点
         if (node.isContainerType()) {
-            val isDirty = node.stretchNode.updateContainerLayout(context, node.templateNode, node, templateData)
+            val isDirty = node.stretchNode.updateContainerLayout(
+                context,
+                node.templateNode,
+                node,
+                templateData
+            )
             if (isDirty) {
                 context.isDirty = isDirty
             }
         }
         // 普通节点
         else {
-            val isDirty = node.stretchNode.updateNormalLayout(context, node.templateNode, templateData)
+            val isDirty =
+                node.stretchNode.updateNormalLayout(context, node.templateNode, templateData)
             if (isDirty) {
                 context.isDirty = isDirty
             }
@@ -301,7 +385,8 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         if (node.templateNode.eventBinding != null) {
 
             // 创建事件处理器
-            node.event = node.event ?: GXRegisterCenter.instance.processNodeEvent?.create() ?: GXNodeEvent()
+            node.event =
+                node.event ?: GXRegisterCenter.instance.processNodeEvent?.create() ?: GXNodeEvent()
 
             val gxNodeEvent = node.event
             if (gxNodeEvent is GXINodeEvent) {
@@ -403,7 +488,9 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // scroll item to position
         context.templateData?.scrollIndex?.let { scrollPosition ->
             if (scrollPosition <= 0) {
-                val holdingOffset = extendData?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
+                val holdingOffset =
+                    extendData?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET)
+                        ?: false
                 if (holdingOffset) {
                     // no process
                 } else {
@@ -507,7 +594,14 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindText(context: GXTemplateContext, view: GXIViewBindData, css: GXCss?, layer: GXLayer, binding: GXDataBinding, templateData: JSONObject) {
+    private fun bindText(
+        context: GXTemplateContext,
+        view: GXIViewBindData,
+        css: GXCss?,
+        layer: GXLayer,
+        binding: GXDataBinding,
+        templateData: JSONObject
+    ) {
 
         val nodeData = binding.getData(templateData)
 
@@ -582,7 +676,11 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindGridContainerCSS(context: GXTemplateContext, view: View, node: GXNode) {
         node.templateNode.finalGridConfig?.let {
             view.setGridContainerDirection(context, it, node.stretchNode.finalLayout)
-            view.setGridContainerItemSpacingAndRowSpacing(it.edgeInsets, it.itemSpacing, it.rowSpacing)
+            view.setGridContainerItemSpacingAndRowSpacing(
+                it.edgeInsets,
+                it.itemSpacing,
+                it.rowSpacing
+            )
         }
     }
 
@@ -619,18 +717,20 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        context.templateData?.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
-                            this.view = recyclerView
-                            this.dx = dx
-                            this.dy = dy
-                        })
+                        context.templateData?.eventListener?.onScrollEvent(
+                            GXTemplateEngine.GXScroll().apply {
+                                this.view = recyclerView
+                                this.dx = dx
+                                this.dy = dy
+                            })
                     }
 
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        context.templateData?.eventListener?.onScrollEvent(GXTemplateEngine.GXScroll().apply {
-                            this.view = recyclerView
-                            this.state = newState
-                        })
+                        context.templateData?.eventListener?.onScrollEvent(
+                            GXTemplateEngine.GXScroll().apply {
+                                this.view = recyclerView
+                                this.state = newState
+                            })
                     }
                 })
             }

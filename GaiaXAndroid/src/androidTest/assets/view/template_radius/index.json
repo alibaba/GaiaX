@@ -1,5 +1,10 @@
 {
   "id": "template_radius",
   "type": "gaia-template",
-  "layers": [{ "id": "container1", "type": "view" }]
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view"
+    }
+  ]
 }

@@ -86,7 +86,14 @@ data class GXLayer constructor(
             return layer
         }
 
-        private fun initLayer(id: String, css: String?, type: String, subType: String?, viewClass: String?, data: JSONObject): GXLayer {
+        private fun initLayer(
+            id: String,
+            css: String?,
+            type: String,
+            subType: String?,
+            viewClass: String?,
+            data: JSONObject
+        ): GXLayer {
             val direction = data.getString(GXTemplateKey.GAIAX_LAYER_DIRECTION)
             val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
             var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
@@ -106,7 +113,8 @@ data class GXLayer constructor(
                     type = type,
                     subType = subType,
                     customNodeClass = viewClass,
-                    scrollConfig = GXScrollConfig.create(data, direction, edgeInsets, itemSpacing), gridConfig = null
+                    scrollConfig = GXScrollConfig.create(data, direction, edgeInsets, itemSpacing),
+                    gridConfig = null
                 )
                 isGridType(type, subType) -> GXLayer(
                     id = id,
@@ -115,7 +123,15 @@ data class GXLayer constructor(
                     subType = subType,
                     customNodeClass = viewClass,
                     scrollConfig = null,
-                    gridConfig = GXGridConfig.create(data, direction, edgeInsets, itemSpacing, rowSpacing, column, scrollable)
+                    gridConfig = GXGridConfig.create(
+                        data,
+                        direction,
+                        edgeInsets,
+                        itemSpacing,
+                        rowSpacing,
+                        column,
+                        scrollable
+                    )
                 )
                 else -> GXLayer(
                     id = id,

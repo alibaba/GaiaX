@@ -31,7 +31,12 @@ data class GXScrollConfig(
 ) {
     companion object {
 
-        fun create(data: JSONObject, direction: String?, edgeInsets: String?, itemSpacing: String?): GXScrollConfig {
+        fun create(
+            data: JSONObject,
+            direction: String?,
+            edgeInsets: String?,
+            itemSpacing: String?
+        ): GXScrollConfig {
             return GXScrollConfig(
                 data,
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
@@ -50,7 +55,8 @@ data class GXScrollConfig(
                 srcConfig.data,
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets) ?: srcConfig.edgeInsets else srcConfig.edgeInsets
+                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
+                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets
             )
         }
     }

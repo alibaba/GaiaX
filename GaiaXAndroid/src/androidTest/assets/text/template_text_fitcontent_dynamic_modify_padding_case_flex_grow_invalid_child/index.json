@@ -15,7 +15,12 @@
         {
           "id": "newc-row2",
           "type": "view",
-          "layers": [{ "id": "newc-title", "type": "richtext" }]
+          "layers": [
+            {
+              "id": "newc-title",
+              "type": "richtext"
+            }
+          ]
         }
       ]
     }

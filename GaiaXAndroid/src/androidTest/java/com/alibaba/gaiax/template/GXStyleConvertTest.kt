@@ -633,7 +633,8 @@ class GXStyleConvertTest {
 
     @Test
     fun getLinearGradientColors2() {
-        val results = convert.getLinearGradient("linear-gradient(to bottom right, red 0% , yellow 100%)")
+        val results =
+            convert.getLinearGradient("linear-gradient(to bottom right, red 0% , yellow 100%)")
         val colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 3)
         Assert.assertEquals(colors.size, 2)

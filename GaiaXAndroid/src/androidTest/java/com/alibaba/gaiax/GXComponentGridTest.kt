@@ -24,8 +24,15 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_column_responsive() {
         GXRegisterCenter.instance.registerProcessGrid(object : GXRegisterCenter.GXIProcessGrid {
-            override fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig): Any? {
-                if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue("responsive-enable")) {
+            override fun convert(
+                propertyName: String,
+                gxTemplateContext: GXTemplateContext,
+                gridConfig: GXGridConfig
+            ): Any? {
+                if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue(
+                        "responsive-enable"
+                    )
+                ) {
                     if (gridConfig.column == 2) {
                         return 3
                     }
@@ -35,7 +42,11 @@ class GXComponentGridTest : GXBaseTest() {
 
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column_responsive")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_column_responsive"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -68,7 +79,11 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_column_responsive_enable_false() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column_responsive_enable_false")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_column_responsive_enable_false"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -97,7 +112,8 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_column() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -123,7 +139,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_column_extend() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column_extend")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_column_extend"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -149,7 +169,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_column_item_width_average() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_column_item_width_average")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_column_item_width_average"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -178,7 +202,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_height_min_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_height_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_min_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -204,7 +232,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_height_max_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_height_max_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_max_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -236,7 +268,8 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_height_100px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object : GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
+            GXRegisterCenter.GXIProcessDynamicProperty {
 
             override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT) {
@@ -248,7 +281,11 @@ class GXComponentGridTest : GXBaseTest() {
             }
         })
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -279,7 +316,11 @@ class GXComponentGridTest : GXBaseTest() {
      */
     @Test
     fun template_grid_height_100px_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -310,7 +351,11 @@ class GXComponentGridTest : GXBaseTest() {
      */
     @Test
     fun template_grid_height_auto() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_height_auto")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_auto"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -336,7 +381,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_width_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_width_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_width_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -361,7 +410,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_width_min_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_width_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_width_min_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -386,7 +439,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_width_100_percent() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_width_100_percent")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_width_100_percent"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -411,7 +468,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_width_flex_grow_horizontal() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_width_flex_grow_horizontal")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_width_flex_grow_horizontal"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -436,7 +497,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_width_max_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_width_max_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_width_max_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -461,7 +526,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_edge_insets() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_edge_insets")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_edge_insets"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -492,7 +561,11 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_item_spacing() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_item_spacing")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_item_spacing"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -513,21 +586,34 @@ class GXComponentGridTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals((1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(), rootView.child(0).width())
+        Assert.assertEquals(
+            (1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(),
+            rootView.child(0).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
         Assert.assertEquals(0F, rootView.child(0).x)
         Assert.assertEquals(0F.dpToPx(), rootView.child(0).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals((1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(), rootView.child(1).width())
+        Assert.assertEquals(
+            (1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(),
+            rootView.child(1).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GXMockUtils.deviceGap(), rootView.child(1).x)
+        Assert.assertEquals(
+            1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GXMockUtils.deviceGap(),
+            rootView.child(1).x
+        )
         Assert.assertEquals(0F.dpToPx(), rootView.child(1).y)
     }
 
     @Test
     fun template_grid_row_spacing() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_row_spacing")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_row_spacing"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -571,7 +657,11 @@ class GXComponentGridTest : GXBaseTest() {
      */
     @Test
     fun template_grid_aspect_ratio() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_aspect_ratio")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_aspect_ratio"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -597,7 +687,11 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_item_spacing_row_spacing() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_item_spacing_row_spacing")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_item_spacing_row_spacing"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -618,19 +712,31 @@ class GXComponentGridTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals((1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(), rootView.child(0).width())
+        Assert.assertEquals(
+            (1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(),
+            rootView.child(0).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
         Assert.assertEquals(0F, rootView.child(0).x)
         Assert.assertEquals(0F.dpToPx(), rootView.child(0).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals((1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(), rootView.child(1).width())
+        Assert.assertEquals(
+            (1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(),
+            rootView.child(1).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
-        Assert.assertEquals(1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GXMockUtils.deviceGap(), rootView.child(1).x)
+        Assert.assertEquals(
+            1080F.dpToPx() / 2 + 9F.dpToPx() / 2 - GXMockUtils.deviceGap(),
+            rootView.child(1).x
+        )
         Assert.assertEquals(0F.dpToPx(), rootView.child(1).y)
 
         // 有0.5F被Stretch抹去了
-        Assert.assertEquals((1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(), rootView.child(2).width())
+        Assert.assertEquals(
+            (1080F.dpToPx() - 9F.dpToPx()) / 2 - GXMockUtils.deviceGap(),
+            rootView.child(2).width()
+        )
         Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
         Assert.assertEquals(0F, rootView.child(2).x)
         Assert.assertEquals(100F.dpToPx() + 20F.dpToPx(), rootView.child(2).y)
@@ -643,7 +749,11 @@ class GXComponentGridTest : GXBaseTest() {
      */
     @Test
     fun template_grid_scrollable_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_scrollable_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_scrollable_height_100px"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -666,13 +776,20 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
         Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
-        Assert.assertEquals(false, (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally())
+        Assert.assertEquals(
+            false,
+            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
+        )
     }
 
     @Test
     fun template_grid_scrollable_height_100_percent() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_scrollable_height_100_percent")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_scrollable_height_100_percent"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -695,12 +812,19 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(200F.dpToPx(), rootView.height())
         Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
-        Assert.assertEquals(false, (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally())
+        Assert.assertEquals(
+            false,
+            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
+        )
     }
 
     @Test
     fun template_grid_scrollable_height_flow_root() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_scrollable_height_flow_root")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_scrollable_height_flow_root"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -729,13 +853,23 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
 
-        Assert.assertEquals(true, (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollVertically())
-        Assert.assertEquals(false, (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollHorizontally())
+        Assert.assertEquals(
+            true,
+            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollVertically()
+        )
+        Assert.assertEquals(
+            false,
+            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollHorizontally()
+        )
     }
 
     @Test
     fun template_grid_background_color() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_background_color")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_background_color"
+        )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -755,12 +889,16 @@ class GXComponentGridTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView.background as? GradientDrawable)?.colors?.get(0))
+        Assert.assertEquals(
+            Color.parseColor("#e4e4e4"),
+            (rootView.background as? GradientDrawable)?.colors?.get(0)
+        )
     }
 
     @Test
     fun template_grid_shadow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_shadow")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_shadow")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -785,7 +923,8 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_border() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_border")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_border")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -806,12 +945,16 @@ class GXComponentGridTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
+        Assert.assertEquals(
+            null,
+            (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
+        )
     }
 
     @Test
     fun template_grid_radius() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_radius")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "grid", "template_grid_radius")
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {

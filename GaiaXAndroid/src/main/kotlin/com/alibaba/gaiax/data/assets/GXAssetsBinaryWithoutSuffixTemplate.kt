@@ -26,13 +26,15 @@ import com.alibaba.gaiax.template.GXTemplateKey
  * The template file don't have suffix - .gaiax
  * @suppress
  */
-class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) : GXRegisterCenter.GXITemplateSource {
+class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
+    GXRegisterCenter.GXITemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
         val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
-        return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")?.use { it.readBytes() }
+        return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
+            ?.use { it.readBytes() }
     }
 
     override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
@@ -46,7 +48,11 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) : GXRegisterCent
         // 2. Check whether the compressed package exists in Assets. If the package exists, decompress it to the local PC and read data into the memory
         val templateContents = getTemplateContents(gxTemplateItem)
         if (templateContents != null) {
-            val templatePath = createTemplatePath(templateContents, gxTemplateItem.bizId, gxTemplateItem.templateId)
+            val templatePath = createTemplatePath(
+                templateContents,
+                gxTemplateItem.bizId,
+                gxTemplateItem.templateId
+            )
             addToCache(templatePath)
             return getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         }
@@ -67,7 +73,8 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) : GXRegisterCent
         return GXTemplate(templateId, templateBiz, -1, layer, css, dataBind, js)
     }
 
-    private fun getFromCache(templateBiz: String, templateId: String) = templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
+    private fun getFromCache(templateBiz: String, templateId: String) =
+        templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
 
     private fun addToCache(template: GXTemplate) {
         var bizTemplates = templateCache[template.biz]

@@ -133,7 +133,8 @@ data class GXTemplateInfo(
 
         fun createTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
             val template = GXTemplateEngine.instance.data.templateSource.getTemplate(templateItem)
-            val templatePath = template ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
+            val templatePath = template
+                ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
             val templateInfo = createTemplate(templatePath)
             return templateInfo.apply { initChildren(this, templateItem) }
         }
@@ -308,12 +309,20 @@ data class GXTemplateInfo(
             }
         }
 
-        private fun initChildren(templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem) {
+        private fun initChildren(
+            templateInfo: GXTemplateInfo,
+            templateItem: GXTemplateEngine.GXTemplateItem
+        ) {
             forChildrenTemplate(templateInfo.layer) {
-                val childTemplate = createTemplate(GXTemplateEngine.GXTemplateItem(templateItem.context, templateItem.bizId, it.id).apply {
-                    this.isLocal = templateItem.isLocal
-                    this.templateVersion = templateItem.templateVersion
-                })
+                val childTemplate = createTemplate(
+                    GXTemplateEngine.GXTemplateItem(
+                        templateItem.context,
+                        templateItem.bizId,
+                        it.id
+                    ).apply {
+                        this.isLocal = templateItem.isLocal
+                        this.templateVersion = templateItem.templateVersion
+                    })
                 if (templateInfo.children == null) {
                     templateInfo.children = mutableListOf()
                 }

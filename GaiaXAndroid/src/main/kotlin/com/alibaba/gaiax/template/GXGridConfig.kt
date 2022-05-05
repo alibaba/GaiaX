@@ -45,7 +45,11 @@ data class GXGridConfig(
 ) {
 
     fun column(context: GXTemplateContext): Int {
-        GXRegisterCenter.instance.processGrid?.convert(GXTemplateKey.GAIAX_LAYER_COLUMN, context, this)?.let {
+        GXRegisterCenter.instance.processGrid?.convert(
+            GXTemplateKey.GAIAX_LAYER_COLUMN,
+            context,
+            this
+        )?.let {
             return it as Int
         }
         return column
@@ -63,7 +67,15 @@ data class GXGridConfig(
 
     companion object {
 
-        fun create(data: JSONObject, direction: String?, edgeInsets: String?, itemSpacing: String?, rowSpacing: String?, column: Int, scrollable: Boolean): GXGridConfig {
+        fun create(
+            data: JSONObject,
+            direction: String?,
+            edgeInsets: String?,
+            itemSpacing: String?,
+            rowSpacing: String?,
+            column: Int,
+            scrollable: Boolean
+        ): GXGridConfig {
             return GXGridConfig(
                 data,
                 column,
@@ -95,7 +107,8 @@ data class GXGridConfig(
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets) ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
+                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
+                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
                 scrollEnable ?: srcConfig.scrollEnable
             )
         }

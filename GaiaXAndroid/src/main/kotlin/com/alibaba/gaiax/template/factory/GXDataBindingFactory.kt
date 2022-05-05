@@ -29,19 +29,20 @@ object GXDataBindingFactory {
         val placeholderExp = GXExpressionFactory.create(placeholder)
         val accessibilityDescExp = GXExpressionFactory.create(accessibilityDesc)
         val accessibilityEnableExp = GXExpressionFactory.create(accessibilityEnable)
-        val extendExp: MutableMap<String, GXIExpression>? = if (extend != null && extend.isNotEmpty()) {
-            val result: MutableMap<String, GXIExpression> = mutableMapOf()
-            for (entry in extend) {
-                if (entry.key != null && entry.value != null) {
-                    GXExpressionFactory.create(entry.value)?.let {
-                        result[entry.key] = it
+        val extendExp: MutableMap<String, GXIExpression>? =
+            if (extend != null && extend.isNotEmpty()) {
+                val result: MutableMap<String, GXIExpression> = mutableMapOf()
+                for (entry in extend) {
+                    if (entry.key != null && entry.value != null) {
+                        GXExpressionFactory.create(entry.value)?.let {
+                            result[entry.key] = it
+                        }
                     }
                 }
+                result
+            } else {
+                null
             }
-            result
-        } else {
-            null
-        }
 
         return if (valueExp != null || placeholderExp != null || accessibilityDescExp != null || accessibilityEnableExp != null || extendExp != null) {
             GXDataBinding(

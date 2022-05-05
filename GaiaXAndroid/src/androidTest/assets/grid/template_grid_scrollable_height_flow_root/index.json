@@ -2,7 +2,10 @@
   "id": "template_grid_scrollable_height_flow_root",
   "type": "gaia-template",
   "layers": [
-    { "id": "view1", "type": "view" },
+    {
+      "id": "view1",
+      "type": "view"
+    },
     {
       "id": "template_grid_scrollable_height_flow",
       "type": "gaia-template",

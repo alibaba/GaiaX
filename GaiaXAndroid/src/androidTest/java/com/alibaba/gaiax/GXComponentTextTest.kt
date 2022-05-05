@@ -29,27 +29,39 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_background_color() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_background_color")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_background_color"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(true, rootView.child(0).background is GradientDrawable1)
-        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView.child(0).background as GradientDrawable1).colors?.get(0))
+        Assert.assertEquals(
+            Color.parseColor("#e4e4e4"),
+            (rootView.child(0).background as GradientDrawable1).colors?.get(0)
+        )
     }
 
     @Test
     fun template_text_border() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_border")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_border")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         Assert.assertEquals(null, (rootView.child(0).background as? GradientDrawable1)?.shape)
-        Assert.assertEquals(null, (rootView.child(0).background as? GradientDrawable1)?.cornerRadii?.get(0))
+        Assert.assertEquals(
+            null,
+            (rootView.child(0).background as? GradientDrawable1)?.cornerRadii?.get(0)
+        )
     }
 
     @Test
     fun template_text_radius() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_radius")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_radius")
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -58,30 +70,45 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_responsive_scale() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_responsive_scale")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_responsive_scale"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(20F.dpToPx() * responsiveLayoutScale, (rootView.child(0) as TextView).textSize)
+        Assert.assertEquals(
+            20F.dpToPx() * responsiveLayoutScale,
+            (rootView.child(0) as TextView).textSize
+        )
     }
 
     @Test
     fun template_text_line_height_scale() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_line_height_scale")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_line_height_scale"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals((100F.dpToPx() * largeFontScale).roundToInt().toFloat(), rootView.child(0).lineHeight())
+        Assert.assertEquals(
+            (100F.dpToPx() * largeFontScale).roundToInt().toFloat(),
+            rootView.child(0).lineHeight()
+        )
     }
 
     @Test
     fun template_text_font_scale() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_font_scale")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_font_scale")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -95,7 +122,8 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_font_scale_double_bind_data() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_font_scale")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_font_scale")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -112,7 +140,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_processor_font_family() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_processor_font_family")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_processor_font_family"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -123,7 +155,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_flex_grow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_flex_grow")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_flex_grow"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -135,7 +171,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -147,7 +187,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_min_100px_text_less_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_min_100px_text_less_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_min_100px_text_less_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -159,7 +203,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_min_100px_text_than_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_min_100px_text_than_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_min_100px_text_than_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -171,7 +219,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_max_100px_text_less_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_max_100px_text_less_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_max_100px_text_less_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -183,7 +235,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_max_100px_text_than_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_max_100px_text_than_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_max_100px_text_than_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -196,7 +252,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_width_aspect_ratio() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_width_aspect_ratio")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_width_aspect_ratio"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -208,7 +268,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -220,7 +284,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_height_flex_grow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_height_flex_grow")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_height_flex_grow"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -232,7 +300,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_height_min_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_height_min_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_height_min_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -244,7 +316,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_height_max_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_height_max_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_height_max_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -256,7 +332,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_height_aspect_ratio() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_height_aspect_ratio")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_height_aspect_ratio"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -268,7 +348,8 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_margin() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_margin")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_margin")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -282,7 +363,8 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_padding() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_padding")
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_padding")
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -293,12 +375,19 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(10F.dpToPx(), (rootView.child(0) as? TextView)?.paddingLeft?.toFloat())
         Assert.assertEquals(10F.dpToPx(), (rootView.child(0) as? TextView)?.paddingTop?.toFloat())
         Assert.assertEquals(10F.dpToPx(), (rootView.child(0) as? TextView)?.paddingRight?.toFloat())
-        Assert.assertEquals(10F.dpToPx(), (rootView.child(0) as? TextView)?.paddingBottom?.toFloat())
+        Assert.assertEquals(
+            10F.dpToPx(),
+            (rootView.child(0) as? TextView)?.paddingBottom?.toFloat()
+        )
     }
 
     @Test
     fun template_text_text_process() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_text_process")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_text_process"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["text"] = "HelloWorld"
         })
@@ -317,7 +406,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_padding() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_padding")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_padding"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -333,7 +426,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_padding_and_padding_bottom() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_padding_and_padding_bottom")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_padding_and_padding_bottom"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -348,7 +445,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_size() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_size")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_size"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -359,7 +460,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_family() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_family")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_family"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -370,7 +475,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_weight() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_weight")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_weight"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -387,7 +496,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_property_font_color_default_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_color_default")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_color_default"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -405,7 +518,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_property_font_color_default_youku_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_color_default")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_color_default"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -416,7 +533,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_color() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_font_color")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_font_color"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -434,7 +555,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_property_text_overflow_clip_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_overflow_clip")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_overflow_clip"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -450,7 +575,8 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_property_text_overflow_clip_youku_version() {
-        GXRegisterCenter.instance.registerProcessStaticProperty(object : GXRegisterCenter.GXIProcessStaticProperty {
+        GXRegisterCenter.instance.registerProcessStaticProperty(object :
+            GXRegisterCenter.GXIProcessStaticProperty {
             override fun convert(params: GXRegisterCenter.GXIProcessStaticProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW && params.value == "clip") {
                     return TextUtils.TruncateAt.END
@@ -459,7 +585,11 @@ class GXComponentTextTest : GXBaseTest() {
             }
 
         })
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_overflow_clip")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_overflow_clip"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -470,7 +600,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_overflow() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_overflow")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_overflow"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -481,7 +615,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_overflow_ellipsis() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_overflow_ellipsis")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_overflow_ellipsis"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -492,7 +630,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_decoration() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_decoration")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_decoration"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -503,7 +645,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_decoration_line_through() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_decoration_line_through")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_decoration_line_through"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -514,7 +660,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_decoration_underline() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_decoration_underline")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_decoration_underline"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -525,7 +675,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_line_height() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_line_height")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_line_height"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -542,13 +696,20 @@ class GXComponentTextTest : GXBaseTest() {
      **/
     @Test
     fun template_text_property_line_height_same_size_height_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_line_height_same_size_height")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_line_height_same_size_height"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(50F.dpToPx(), rootView.child<GXText>(0).lineHeight.toFloat())
-        Assert.assertEquals(Gravity.CENTER_VERTICAL, rootView.child<GXText>(0).gravity.and(Gravity.CENTER_VERTICAL))
+        Assert.assertEquals(
+            Gravity.CENTER_VERTICAL,
+            rootView.child<GXText>(0).gravity.and(Gravity.CENTER_VERTICAL)
+        )
     }
 
     /**
@@ -559,20 +720,31 @@ class GXComponentTextTest : GXBaseTest() {
      **/
     @Test
     fun template_text_property_line_height_same_size_height_youku_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_line_height_same_size_height")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_line_height_same_size_height"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         // TODO: 此处暂时这么直接使用开源版本兼容优酷版本，但是可能会导致低端机型显示不正确。
         Assert.assertEquals(50F.dpToPx(), rootView.child<GXText>(0).lineHeight.toFloat())
-        Assert.assertEquals(Gravity.CENTER_VERTICAL, rootView.child<GXText>(0).gravity.and(Gravity.CENTER_VERTICAL))
+        Assert.assertEquals(
+            Gravity.CENTER_VERTICAL,
+            rootView.child<GXText>(0).gravity.and(Gravity.CENTER_VERTICAL)
+        )
     }
 
 
     @Test
     fun template_text_property_lines() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_lines")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_lines"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -587,7 +759,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_align_left() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_align_left")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_align_left"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -597,27 +773,45 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_text_align_center() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_align_center")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_align_center"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(Gravity.CENTER, (rootView.child(0) as TextView).gravity.and(Gravity.CENTER))
+        Assert.assertEquals(
+            Gravity.CENTER,
+            (rootView.child(0) as TextView).gravity.and(Gravity.CENTER)
+        )
     }
 
     @Test
     fun template_text_property_text_align_right() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_property_text_align_right")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_property_text_align_right"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(Gravity.RIGHT, (rootView.child(0) as TextView).gravity.and(Gravity.RIGHT))
+        Assert.assertEquals(
+            Gravity.RIGHT,
+            (rootView.child(0) as TextView).gravity.and(Gravity.RIGHT)
+        )
     }
 
     @Test
     fun template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -625,7 +819,7 @@ class GXComponentTextTest : GXBaseTest() {
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         val padding = 10F.dpToPx().roundToInt()
-        textView.setPadding(padding,0, padding,0)
+        textView.setPadding(padding, 0, padding, 0)
         textView.setFontSize(13F.dpToPx())
         textView.measure(0, 0)
 
@@ -635,7 +829,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_1_width_100_percent_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_1_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_width_100_percent_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -651,7 +849,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_1_width_null_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_1_width_null_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_width_null_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -667,7 +869,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_1_width_null_height_null() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_1_width_null_height_null")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_width_null_height_null"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -683,7 +889,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_null_width_100_percent_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_null_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_100_percent_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -699,11 +909,18 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_null_width_null_height_100px_repeat_bind_data() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_null_width_null_height_100px_repeat_bind_data")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_null_height_100px_repeat_bind_data"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["text"] = "0"
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "0"
+            })
+        )
 
         val textView = GXText(GXMockUtils.context)
         textView.text = "0"
@@ -720,9 +937,12 @@ class GXComponentTextTest : GXBaseTest() {
         textView1.setFontSize(14F.dpToPx())
         textView1.measure(0, 0)
 
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["text"] = "300"
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "300"
+            })
+        )
 
         Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
@@ -730,14 +950,20 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_0_width_100_percent_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_0_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100_percent_height_100px"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         val textView = GXText(GXMockUtils.context)
-        textView.text = "HelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorld"
+        textView.text =
+            "HelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(MOCK_SCREEN_WIDTH.toInt(), View.MeasureSpec.AT_MOST)
+        val widthSpec =
+            View.MeasureSpec.makeMeasureSpec(MOCK_SCREEN_WIDTH.toInt(), View.MeasureSpec.AT_MOST)
         textView.measure(widthSpec, 0)
 
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
@@ -747,14 +973,19 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_0_width_100px_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_0_width_100px_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100px_height_100px"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
+        val widthSpec =
+            View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
         textView.measure(widthSpec, 0)
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
@@ -768,7 +999,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test(expected = IllegalArgumentException::class)
     fun template_text_fitcontent_lines_0_width_null_height_100px() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_0_width_null_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_null_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -781,7 +1016,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_fitcontent_lines_5_width_100_percent_height_100px_opensource_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_5_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_5_width_100_percent_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -802,7 +1041,11 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_fitcontent_lines_5_width_100_percent_height_100px_youku_version() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_5_width_100_percent_height_100px")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_5_width_100_percent_height_100px"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
@@ -820,11 +1063,18 @@ class GXComponentTextTest : GXBaseTest() {
     @Test
     fun template_text_fitcontent_lines_null_width_null_height_20px_lead_to_error_update_flexbox_size_minsize_maxsize() {
 
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_null_width_null_height_20px_lead_to_error_update_flexbox_size_minsize_maxsize")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_null_height_20px_lead_to_error_update_flexbox_size_minsize_maxsize"
+        )
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["text"] = "0"
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "0"
+            })
+        )
 
         val textView = GXText(GXMockUtils.context)
         textView.text = "0"
@@ -836,9 +1086,12 @@ class GXComponentTextTest : GXBaseTest() {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["text"] = "300"
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "300"
+            })
+        )
 
         val textView1 = GXText(GXMockUtils.context)
         textView1.text = "300"
@@ -851,7 +1104,11 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_null_width_flex_grow_height_fixed() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_lines_null_width_flex_grow_height_fixed")
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_flex_grow_height_fixed"
+        )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(1080F, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
@@ -868,14 +1125,26 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "text", "template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child")
-        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(1080F, null))
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject.parseObject(context.assets.open("text/template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child.json").reader(Charset.forName("utf-8")).readText()))
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(1080F, null)
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(
+            JSONObject.parseObject(
+                context.assets.open("text/template_text_fitcontent_dynamic_modify_padding_case_flex_grow_invalid_child.json")
+                    .reader(Charset.forName("utf-8")).readText()
+            )
+        )
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1080F, rootView.width())
         Assert.assertEquals(99F, rootView.child(0).width())
-        Assert.assertEquals(1080F-99F-39F-39F, rootView.child(1).width())
+        Assert.assertEquals(1080F - 99F - 39F - 39F, rootView.child(1).width())
     }
 
 }

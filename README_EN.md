@@ -20,13 +20,9 @@ The following goals are the way forward for our project:
 
 ### Android
 
-#### Dependency  [![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
-```
-// Dependency
-dependencies {
-    implementation 'com.github.alibaba:GaiaX:0.1.2'
-}
-```
+#### Dependency  
+
+[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
 
 #### Template File
 ```
@@ -88,7 +84,7 @@ xxx.bundle/templateId
 #import <GaiaXiOS/GaiaXiOS.h>
 
 //register template service
-[TheGXRegisterCenter registerTemplateServiceWithBizId:templateId templateBundle:@"xxx.bundle"];
+[TheGXRegisterCenter registerTemplateServiceWithBizId:bizId templateBundle:@"xxx.bundle"];
 
 // Build template parameters - Template information
 // activity       - context

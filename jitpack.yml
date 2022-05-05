@@ -1,0 +1,19 @@
+jdk:
+  - openjdk11
+install:
+   - echo "Publish GaiaX Analyze"
+   - cd /home/jitpack/build/GaiaXAnalyze/GXAnalyzeAndroid
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=GaiaX-Analyze VERSION=${VERSION}"
+   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
+   - cd ~/.m2/repository/com/github/alibaba
+   - ls -ll
+   - echo "Publish GaiaX"
+   - cd /home/jitpack/build/GaiaXAndroid
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=GaiaX VERSION=${VERSION}"
+   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
+   - cd ~/.m2/repository/com/github/alibaba
+   - ls -ll

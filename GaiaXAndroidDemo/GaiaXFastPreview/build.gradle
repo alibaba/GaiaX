@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 allprojects {
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 }
@@ -12,6 +13,7 @@ buildscript {
 
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 
@@ -50,14 +52,16 @@ android {
 
 dependencies {
 
+    implementation 'com.github.alibaba.GaiaX:GaiaX:dev-SNAPSHOT'
+
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.alibaba:fastjson:1.2.76'
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
 
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
+
     implementation project(path: ':GaiaXWebSocket')
-    implementation project(path: ':GaiaXAndroid')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

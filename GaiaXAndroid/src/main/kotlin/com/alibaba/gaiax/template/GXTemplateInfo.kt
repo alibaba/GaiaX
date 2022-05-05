@@ -133,9 +133,7 @@ data class GXTemplateInfo(
 
         fun createTemplate(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
             val template = GXTemplateEngine.instance.data.templateSource.getTemplate(templateItem)
-            val templatePath = template
-                ?: throw IllegalArgumentException("Not found target template path, templateItem = $templateItem")
-            val templateInfo = createTemplate(templatePath)
+            val templateInfo = createTemplate(template)
             return templateInfo.apply { initChildren(this, templateItem) }
         }
 

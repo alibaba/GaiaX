@@ -379,5 +379,7 @@ object GXTemplateKey {
     const val GAIAX_DATABINDING_ITEM_TYPE_PATH = "path"
     const val GAIAX_DATABINDING_ITEM_TYPE_CONFIG = "config"
 
+    const val GAIAX_SCROLL_FOOTER = "item-footer-type"
+
 
 }

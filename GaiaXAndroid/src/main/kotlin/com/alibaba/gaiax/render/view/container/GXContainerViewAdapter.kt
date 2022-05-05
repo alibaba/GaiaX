@@ -30,7 +30,9 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
+import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
@@ -51,6 +53,10 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode, val container: GXContainer) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var containerData: JSONArray = JSONArray()
+
+    private var mItemFooterTypeId: GXTemplateEngine.GXTemplateItem? = null
+    private var mItemFooterTypeHasMore: Boolean = false
+    private var mContainerBinding: GXDataBinding? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
 
@@ -87,9 +93,11 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
-        val childTemplateItem = holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
-        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode ?: throw IllegalArgumentException("childVisualNestTemplateNode is null")
-        val childMeasureSize = holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
+        val childTemplateItem =
+            holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
+        val childMeasureSize =
+            holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
         val childItemContainer = holder.itemView as ViewGroup
         val childItemPosition = holder.adapterPosition
         val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
@@ -134,6 +142,15 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     private val positionMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
 
     override fun getItemViewType(position: Int): Int {
+        val itemFooterTypeId = mItemFooterTypeId;
+        if (mItemFooterTypeHasMore && itemFooterTypeId != null && position == containerData.size) {
+            val viewType: Int = mItemFooterTypeId.hashCode()
+            viewTypeMap[viewType] = itemFooterTypeId
+            positionMap[position] = itemFooterTypeId
+            containerData.add(JSONObject())
+            return viewType
+        }
+
         val templateItem = getCurrentPositionTemplateItem(position)
         if (templateItem != null) {
             val viewType: Int = templateItem.templateId.hashCode()
@@ -168,7 +185,15 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
     }
 
     override fun getItemCount(): Int {
-        return containerData.size
+        return if (hasFooterView()) {
+            containerData.size + 1;
+        } else {
+            containerData.size
+        }
+    }
+
+    fun hasFooterView(): Boolean {
+        return mItemFooterTypeId != null && mItemFooterTypeHasMore
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -185,6 +210,21 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNod
             containerData = data
             notifyDataSetChanged()
         }
+    }
+
+    fun initFooter(node: GXNode) {
+        mContainerBinding = node.templateNode.dataBinding
+        mContainerBinding?.getExtend(gxTemplateContext.templateData?.data ?: JSONObject())
+            ?.let { typeData ->
+                typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
+                    mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
+                        gxTemplateContext.context,
+                        gxTemplateContext.templateItem.bizId,
+                        it.getString("id")
+                    )
+                    mItemFooterTypeHasMore = it.getBoolean("hasMore") ?: false
+                }
+            }
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {

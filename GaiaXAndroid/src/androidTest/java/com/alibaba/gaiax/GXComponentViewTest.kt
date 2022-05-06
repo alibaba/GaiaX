@@ -254,7 +254,13 @@ class GXComponentViewTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(View.VISIBLE, rootView.child(0).visibility)
+        Assert.assertEquals(View.VISIBLE, rootView.child(1).visibility)
+
+        Assert.assertEquals(1080F.dpToPx() - 100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
 
     @Test
@@ -270,7 +276,13 @@ class GXComponentViewTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(View.GONE, rootView.child(0).visibility)
+        Assert.assertEquals(View.GONE, rootView.child(1).visibility)
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(0F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(0F.dpToPx(), rootView.child(1).height())
     }
 
     @Test

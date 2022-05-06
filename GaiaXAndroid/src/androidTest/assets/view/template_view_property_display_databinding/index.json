@@ -3,6 +3,10 @@
   "type": "gaia-template",
   "layers": [
     {
+      "id": "empty_view0",
+      "type": "view"
+    },
+    {
       "id": "empty_view",
       "type": "view"
     }

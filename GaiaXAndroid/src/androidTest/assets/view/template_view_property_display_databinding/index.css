@@ -5,6 +5,11 @@
   justify-content: center;
   align-items: center;
 }
+#empty_view0 {
+  flex-grow:1;
+  height: 100px;
+  background-color: #e4e4e4;
+}
 #empty_view {
   width: 100px;
   height: 100px;

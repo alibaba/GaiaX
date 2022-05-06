@@ -82,6 +82,9 @@ class GXTemplateContext(val context: Context) {
     }
 
     fun release() {
+        isDirty = false
+        dirtyText?.clear()
+        dirtyText = null
         templateData = null
         rootView?.clear()
         rootView = null

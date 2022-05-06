@@ -373,9 +373,9 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         } else if (view is GXIImageView && node.isImageType()) {
             view.setImageStyle(gxCss)
         } else if (node.isContainerType()) {
-            bindContainerViewCss(context, view, node)
+            bindContainerViewCss(context, gxCss, view, node)
         }
-        bindCommonViewCss(view, node)
+        bindCommonViewCss(view, gxCss, node)
     }
 
     private fun nodeViewEvent(
@@ -687,24 +687,30 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindCommonViewCss(view: View, node: GXNode) {
-        view.setDisplay(node.templateNode.css.style.display)
+    private fun bindCommonViewCss(view: View, gxCss: GXCss, node: GXNode) {
+
+        view.setDisplay(gxCss.style.display)
 
         if (!node.isCustomViewType()) {
 
-            view.setHidden(node.templateNode.css.style.display, node.templateNode.css.style.hidden)
+            view.setHidden(gxCss.style.display, gxCss.style.hidden)
 
-            view.setOpacity(node.templateNode.css.style.opacity)
+            view.setOpacity(gxCss.style.opacity)
 
-            view.setOverflow(node.templateNode.css.style.overflow)
+            view.setOverflow(gxCss.style.overflow)
 
-            view.setBackgroundColorAndBackgroundImage(node.templateNode.css.style)
+            view.setBackgroundColorAndBackgroundImage(gxCss.style)
 
-            view.setRoundCornerRadiusAndRoundCornerBorder(node.templateNode.css.style)
+            view.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
         }
     }
 
-    private fun bindContainerViewCss(context: GXTemplateContext, view: View, node: GXNode) {
+    private fun bindContainerViewCss(
+        context: GXTemplateContext,
+        gxCss: GXCss,
+        view: View,
+        node: GXNode
+    ) {
         if (node.isContainerType()) {
             if (node.isGridType()) {
                 bindGridContainerCSS(context, view, node)

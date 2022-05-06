@@ -53,7 +53,6 @@ data class GXTemplateNode(
     fun reset() {
         dataBinding?.reset()
         visualTemplateNode?.reset()
-        finalExtendCss = null
         finalCss = null
         finalGridConfig = null
         finalScrollConfig = null
@@ -64,8 +63,6 @@ data class GXTemplateNode(
     var finalScrollConfig: GXScrollConfig? = null
 
     var finalCss: GXCss? = null
-
-    var finalExtendCss: GXCss? = null
 
     /**
      * @param visualTemplateData 当前节点的虚拟父节点使用的数据源
@@ -83,7 +80,7 @@ data class GXTemplateNode(
         // 创建FinalStyle
         val selfFinalCss: GXCss = if (extendCssData != null) {
             // 创建Css
-            finalExtendCss = GXCss.create(extendCssData)
+            val extendCss = GXCss.create(extendCssData)
 
             // 更新除了CSS外的其他节点信息
 
@@ -98,7 +95,7 @@ data class GXTemplateNode(
             }
 
             // 合并原有CSS和扩展属性的CSS
-            GXCss.create(css, finalExtendCss)
+            GXCss.create(css, extendCss)
         } else {
 
             layer.gridConfig?.let {

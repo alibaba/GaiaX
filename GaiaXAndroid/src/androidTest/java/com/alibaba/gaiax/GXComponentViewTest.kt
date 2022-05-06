@@ -242,6 +242,38 @@ class GXComponentViewTest : GXBaseTest() {
     }
 
     @Test
+    fun template_view_property_display_databinding_flex() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_display_databinding"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["isFlex"] = true
+        })
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(View.VISIBLE, rootView.child(0).visibility)
+    }
+
+    @Test
+    fun template_view_property_display_databinding_none() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_view_property_display_databinding"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["isFlex"] = false
+        })
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(View.GONE, rootView.child(0).visibility)
+    }
+
+    @Test
     fun template_view_property_display_flex() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

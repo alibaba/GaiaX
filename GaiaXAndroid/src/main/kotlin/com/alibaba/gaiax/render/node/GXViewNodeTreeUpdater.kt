@@ -57,18 +57,24 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
 
         // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
-        if (context.textPending?.isNotEmpty() == true) {
-            context.textPending?.forEach {
-                it.key.updateLayoutByFitContent(
+        if (context.dirtyText?.isNotEmpty() == true) {
+            var isTextDirty = false
+            context.dirtyText?.forEach {
+                val result = it.key.updateTextLayoutByFitContent(
                     it.value.templateContext,
                     it.value.currentNode,
                     it.value.currentStretchNode,
                     it.value.data,
                     it.value.stretchStyle
                 )
+                if (result) {
+                    isTextDirty = true
+                }
             }
-            context.textPending?.clear()
-            GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
+            context.dirtyText?.clear()
+            if (isTextDirty) {
+                GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
+            }
         }
 
         // 更新样式

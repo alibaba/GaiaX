@@ -12,6 +12,7 @@ import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.nio.charset.Charset
 
 
 @RunWith(AndroidJUnit4::class)

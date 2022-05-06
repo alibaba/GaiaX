@@ -118,10 +118,6 @@ data class GXTemplateNode(
         // 合并Self和Visual
         this.finalCss = GXCss.create(selfFinalCss, visualTemplateNode?.finalCss)
 
-        // 记录扩展属性中是否存在会导致布局变化的属性
-        if (finalExtendCss?.flexBox?.isEmpty() == false) {
-            gxTemplateContext.isDirtyWillText = true
-        }
     }
 
     fun getNodeType() = layer.getNodeType()

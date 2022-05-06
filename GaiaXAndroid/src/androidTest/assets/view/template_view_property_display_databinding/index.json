@@ -1,0 +1,10 @@
+{
+  "id": "template_view_property_display_databinding",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "empty_view",
+      "type": "view"
+    }
+  ]
+}

@@ -7,10 +7,6 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
-        mavenCentral()
     }
 }
 
@@ -32,16 +28,11 @@ buildscript {
             url "http://mvnrepo.alibaba-inc.com/mvn/repository"
         }
         google()
-        maven {
-            url "https://jitpack.io"
-        }
-        mavenCentral()
     }
 
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.10"
     }
 }
 

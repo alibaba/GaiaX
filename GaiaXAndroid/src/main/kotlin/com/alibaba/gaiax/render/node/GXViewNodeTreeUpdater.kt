@@ -372,26 +372,61 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         bindCommonViewCss(view, node)
     }
 
-    private fun nodeViewEvent(context: GXTemplateContext, node: GXNode, templateData: JSON) {
+    private fun nodeViewEvent(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        templateData: JSON
+    ) {
         if (templateData !is JSONObject) {
             return
         }
-        val invisible = node.templateNode.finalCss?.style?.isInvisible() ?: false
+        val invisible = gxNode.templateNode.finalCss?.style?.isInvisible() ?: false
         if (invisible) {
             return
         }
 
-        // 存在事件
-        if (node.templateNode.eventBinding != null) {
+        val targetView = gxNode.viewRef?.get()
+
+        // 滚动事件
+        if (targetView is RecyclerView) {
+            if (gxTemplateContext.templateData?.eventListener != null) {
+                targetView.clearOnScrollListeners()
+                targetView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
+                            GXTemplateEngine.GXScroll().apply {
+                                this.type = "onScrolled"
+                                this.view = recyclerView
+                                this.dx = dx
+                                this.dy = dy
+                            })
+                    }
+
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
+                            GXTemplateEngine.GXScroll().apply {
+                                this.type = "onScrollStateChanged"
+                                this.view = recyclerView
+                                this.state = newState
+                            })
+                    }
+                })
+            }
+        }
+
+        // 数据绑定事件
+        if (gxNode.templateNode.eventBinding != null) {
 
             // 创建事件处理器
-            node.event =
-                node.event ?: GXRegisterCenter.instance.processNodeEvent?.create() ?: GXNodeEvent()
+            gxNode.event =
+                gxNode.event ?: GXRegisterCenter.instance.processNodeEvent?.create()
+                        ?: GXNodeEvent()
 
-            val gxNodeEvent = node.event
+            val gxNodeEvent = gxNode.event
             if (gxNodeEvent is GXINodeEvent) {
                 // 添加事件
-                gxNodeEvent.addDataBindingEvent(context, node, templateData)
+                gxNodeEvent.addDataBindingEvent(gxTemplateContext, gxNode, templateData)
             } else {
                 throw IllegalArgumentException("Not support the event $gxNodeEvent")
             }
@@ -710,29 +745,6 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                     view.setVerticalScrollContainerLineSpacing(lineSpacing)
                 }
                 view.setScrollContainerPadding(edgeInsets)
-            }
-
-            if (context.templateData?.eventListener != null && view is RecyclerView) {
-                view.clearOnScrollListeners()
-                view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        context.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.view = recyclerView
-                                this.dx = dx
-                                this.dy = dy
-                            })
-                    }
-
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                        context.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.view = recyclerView
-                                this.state = newState
-                            })
-                    }
-                })
             }
         }
     }

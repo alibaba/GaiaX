@@ -190,6 +190,8 @@ class GXTemplateEngine {
      */
     class GXScroll {
 
+        var type: String = ""
+
         /**
          * Target view
          */

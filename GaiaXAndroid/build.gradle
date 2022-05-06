@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'maven-publish'
+// apply plugin: 'org.jetbrains.dokka'
+// apply plugin: 'maven-publish'
 
 allprojects {
     repositories {
@@ -140,30 +140,30 @@ publishing {
     }
 }
 
-dokkaHtml {
-    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
+// dokkaHtml {
+//     outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
 
-    moduleName.set("GaiaX")
-}
+//     moduleName.set("GaiaX")
+// }
 
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                if (project.hasProperty("version")) {
-                    version = project.getProperty("version")
-                } else {
-                    version = '0.0.0'
-                }
-                if (project.hasProperty("group")) {
-                    groupId = project.getProperty("group")
-                } else {
-                    groupId = 'com.github.alibaba'
-                }
-                artifactId = 'GaiaX'
-            }
-        }
-    }
-}
+// afterEvaluate {
+//     publishing {
+//         publications {
+//             // Creates a Maven publication called "release".
+//             release(MavenPublication) {
+//                 from components.release
+//                 if (project.hasProperty("version")) {
+//                     version = project.getProperty("version")
+//                 } else {
+//                     version = '0.0.0'
+//                 }
+//                 if (project.hasProperty("group")) {
+//                     groupId = project.getProperty("group")
+//                 } else {
+//                     groupId = 'com.github.alibaba'
+//                 }
+//                 artifactId = 'GaiaX'
+//             }
+//         }
+//     }
+// }

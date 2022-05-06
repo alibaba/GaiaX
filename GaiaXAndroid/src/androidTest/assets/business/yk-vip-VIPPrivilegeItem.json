@@ -1,0 +1,35 @@
+{
+  "action": {
+    "extra": {
+      "enableAppendReport": 0,
+      "value": "https://t.youku.com/yep/page/m/un848v7roj?wh_weex=true&isNeedBaseImage=1&from=vip_ball_01",
+      "vmp": ""
+    },
+    "report": {
+      "index": 1,
+      "pageName": "page_channelmain_viphy_jingxuan_grouth",
+      "scmAB": "20140719.manual",
+      "scmC": "16203",
+      "scmD": "url_https://t.youku.com/yep/page/m/un848v7roj?wh_weex=true&isNeedBaseImage=1&from=vip_ball_01",
+      "spmAB": "a2h07.8166627_viphy_jingxuan_grouth",
+      "spmC": "drawer3",
+      "spmD": "zj1_1",
+      "trackInfo": {
+        "cms_req_id": "213e6d2e16518287112976973e134e",
+        "component_id": "COMPONENT_PHONE_VIP_CARD_PRIVILEGE",
+        "drawerid": "16203",
+        "itemid": 654186,
+        "object_title": "开嘭嘭卡",
+        "servertime": 1651828711299,
+        "wx_rule_ids": "subChannel_58153"
+      }
+    },
+    "type": "JUMP_TO_URL",
+    "value": "https://t.youku.com/yep/page/m/un848v7roj?wh_weex=true&isNeedBaseImage=1&from=vip_ball_01"
+  },
+  "img": "http://ykimg.alicdn.com/develop/image/2022-04-26/ace61ff209877a33b575a012914280ba.png",
+  "subtitle": "抢麦当劳5折特惠",
+  "templateBiz": "yk-vip",
+  "templateId": "yk-vip-VIPPrivilegeItem",
+  "title": "开嘭嘭卡"
+}

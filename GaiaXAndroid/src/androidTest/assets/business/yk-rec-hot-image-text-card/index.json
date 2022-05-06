@@ -1,0 +1,85 @@
+{
+  "id": "yk-rec-hot-image-text-card",
+  "type": "gaia-template",
+  "package": {
+    "engines": { "gaiax": ">=0.0.1" },
+    "id": "yk-rec-hot-image-text-card",
+    "version": "0",
+    "priority": "0",
+    "modify-timestamp": "Fri May 06 2022 15:19:11 GMT+0800 (China Standard Time)",
+    "constraint-size": { "width": 375, "height": 81, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "view-image",
+      "type": "view",
+      "layers": [
+        { "id": "image-item", "type": "image" },
+        {
+          "id": "view-shadow",
+          "type": "view",
+          "layers": [
+            { "id": "text-time", "type": "text" },
+            {
+              "id": "video-info-container",
+              "type": "view",
+              "layers": [
+                { "id": "bottom-left-icon-1", "type": "iconfont" },
+                { "id": "bottom-left-title-1", "type": "text" },
+                { "id": "bottom-left-icon-2", "type": "iconfont" },
+                { "id": "bottom-left-title-2", "type": "text" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "view-desc",
+      "type": "view",
+      "layers": [
+        { "id": "text-title", "type": "text" },
+        {
+          "id": "rec-reasons-wrapper",
+          "type": "view",
+          "layers": [
+            {
+              "id": "rec-reason-container",
+              "type": "view",
+              "layers": [
+                { "id": "rec-reason-content", "type": "text" },
+                { "id": "right-arrow", "type": "image" }
+              ]
+            },
+            {
+              "id": "right-area",
+              "type": "view",
+              "layers": [
+                {
+                  "id": "rec-reason-container-2",
+                  "type": "view",
+                  "layers": [
+                    { "id": "rec-reason-icon", "type": "image" },
+                    { "id": "rec-reason-content-2", "type": "text" },
+                    { "id": "right-arrow-2", "type": "image" }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "author-info",
+          "type": "view",
+          "layers": [
+            { "id": "image-avator", "type": "image" },
+            { "id": "text-author", "type": "text" },
+            { "id": "dot", "type": "text" },
+            { "id": "rec-tag", "type": "text" }
+          ]
+        }
+      ]
+    }
+  ]
+}

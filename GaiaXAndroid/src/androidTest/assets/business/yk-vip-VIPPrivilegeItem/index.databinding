@@ -1,0 +1,27 @@
+{
+  "event": { "yk-vip-VIPPrivilegeItem": "${action}" },
+  "data": {
+    "title": {
+      "extend": {
+        "fit-content": "true",
+        "color": "@{${style.titleColor} ? ${style.titleColor} : #ffdd9a}"
+      },
+      "value": "${title}"
+    },
+    "markText": {
+      "extend": {
+        "fit-content": "true",
+        "color": "@{${markTextColor} ? ${markTextColor} : #ffffff}",
+        "background-color": "@{${markBgColor} ? ${markBgColor} : #FF4F34}",
+        "display": "@{${markText} ? flex : none}"
+      },
+      "value": "${markText}"
+    },
+    "subTitle": {
+      "value": "${subtitle}",
+      "extend": {
+        "color": "@{${style.subtitleColor} ? ${style.subtitleColor} : #999999}"
+      }
+    }
+  }
+}

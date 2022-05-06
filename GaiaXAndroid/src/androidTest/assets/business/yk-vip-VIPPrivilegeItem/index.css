@@ -1,0 +1,43 @@
+#yk-vip-VIPPrivilegeItem {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  border-radius: 0px;
+}
+#headerView {
+  width: 100%;
+  height: 18px;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-top: 13pt;
+}
+#title {
+  text-overflow: ellipsis;
+  font-size: 13px;
+  fit-content: true;
+  height: 18px;
+  flex-shrink: 1;
+  color: cv_4;
+}
+#markText {
+  text-overflow: ellipsis;
+  height: 14px;
+  font-size: 11px;
+  fit-content: true;
+  margin-left: 3px;
+  background-color: #FF4F34;
+  width: 42px;
+  color: #ffffff;
+  border-radius: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+#subTitle {
+  text-overflow: ellipsis;
+  height: 16px;
+  font-size: 11px;
+  margin-left: 12px;
+  margin-right: 12px;
+  color: #999999;
+}

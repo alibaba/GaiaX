@@ -1,0 +1,129 @@
+{
+  "config": {
+    "preload": {
+      "cover": {
+        "imagePaths": ["nodes[0].data.img"],
+        "layout": { "width": "144px", "height": "81px" },
+        "aspectRatio": "1.78",
+        "scale": "1"
+      }
+    }
+  },
+  "event": {
+    "yk-rec-hot-image-text-card": "${nodes[0].data.action}",
+    "rec-reason-container": "@{${nodes[0].data.reasonTags.reasons[0].action} ? ${nodes[0].data.reasonTags.reasons[0].action} : ${nodes[0].data.action}}",
+    "rec-reason-container-2": "@{${nodes[0].data.contentTags.reasons[0].action} ? ${nodes[0].data.contentTags.reasons[0].action} : ${nodes[0].data.action}}"
+  },
+  "data": {
+    "image-item": {
+      "value": "@{${nodes[0].data.gifImg} ? ${nodes[0].data.gifImg} : ${nodes[0].data.img}}",
+      "mark": {
+        "type": "${nodes[0].data.mark.type}",
+        "img": "${nodes[0].data.mark.data.img}",
+        "text": "${nodes[0].data.mark.data.text}",
+        "color": "${nodes[0].data.mark.data.color}"
+      }
+    },
+    "text-time": {
+      "extend": { "fit-content": "true" },
+      "value": "${nodes[0].data.summary}"
+    },
+    "bottom-left-icon-1": {
+      "value": "&#xe63b;",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${nodes[0].data.lbTexts[0].title} ? flex : none}"
+      }
+    },
+    "bottom-left-title-1": {
+      "value": "${nodes[0].data.lbTexts[0].title}",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${nodes[0].data.lbTexts[0].title} ? flex : none}"
+      }
+    },
+    "bottom-left-icon-2": {
+      "value": "&#xe63e;",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${nodes[0].data.lbTexts[1].title} ? flex : none}"
+      }
+    },
+    "bottom-left-title-2": {
+      "value": "${nodes[0].data.lbTexts[1].title}",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${nodes[0].data.lbTexts[1].title} ? flex : none}"
+      }
+    },
+    "text-title": {
+      "extend": { "fit-content": "true" },
+      "value": "${nodes[0].data.title}"
+    },
+    "rec-reason-container": {
+      "extend": { "display": "@{${nodes[0].data.reasonTags} ? flex : none}" }
+    },
+    "rec-reason-content": {
+      "extend": { "fit-content": "true", "color": "#ff008c" },
+      "value": "${nodes[0].data.reasonTags.reasons[0].text.title}"
+    },
+    "right-arrow": {
+      "value": "https://img.alicdn.com/imgextra/i2/O1CN01HrEPWY1CgQG5LBEdW_!!6000000000110-2-tps-80-80.png",
+      "extend": {
+        "display": "@{${nodes[0].data.reasonTags.reasons[0].action} ? flex : none}"
+      }
+    },
+    "rec-reason-container-2": {
+      "extend": {
+        "display": "@{${nodes[0].data.contentTagsV2} ? flex : none}",
+        "max-width": "@{${nodes[0].data.reasonTags} ? 150px : 200px}"
+      }
+    },
+    "rec-reason-icon": {
+      "value": "${nodes[0].data.contentTagsV2.reasons[0].icon}",
+      "extend": {
+        "display": "@{${nodes[0].data.contentTagsV2.reasons[0].icon} ? flex : none}"
+      }
+    },
+    "rec-reason-content-2": {
+      "extend": {
+        "fit-content": "true",
+        "color": "@{${nodes[0].data.contentTags.reasons[0].icon} ? #ff008c : tertiaryInfo}",
+        "max-width": "@{${nodes[0].data.reasonTags} ? 120px : 170px}"
+      },
+      "value": "${nodes[0].data.contentTags.reasons[0].text.title} "
+    },
+    "right-arrow-2": {
+      "value": "https://img.alicdn.com/imgextra/i2/O1CN01sX4k3j1XfbUS9IT6O_!!6000000002951-2-tps-12-19.png",
+      "extend": {
+        "display": "@{${nodes[0].data.contentTags.reasons[0].action} ? flex : none}"
+      }
+    },
+    "image-avator": {
+      "value": "${nodes[0].data.uploader.icon}",
+      "extend": { "display": "@{${isLargeMode} ? none : flex}" }
+    },
+    "text-author": {
+      "value": "${nodes[0].data.uploader.name}",
+      "extend": {
+        "display": "@{${isLargeMode} ? none : flex}",
+        "fit-content": "true"
+      }
+    },
+    "dot": {
+      "value": "·",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${isLargeMode} ? none : @{${nodes[0].data.follow.isFollow} ? flex : none}}"
+      }
+    },
+    "rec-tag": {
+      "value": "已关注",
+      "extend": {
+        "fit-content": "true",
+        "display": "@{${isLargeMode} ? none : @{${nodes[0].data.follow.isFollow} ? flex : none}}",
+        "color": "@{${isDarkMode} ? #cccccc : #666666}"
+      }
+    }
+  }
+}

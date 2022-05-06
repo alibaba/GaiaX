@@ -49,14 +49,30 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val size = Size(context.size.width, context.size.height)
 
         // 更新布局
+        updateNodeTreeLayout(rootNode, templateData, size)
+
+        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+        updateNodeTreeLayoutByDirtyText(rootNode, size)
+
+        // 更新样式
+        updateNodeTreeStyle(context, rootNode, templateData)
+    }
+
+    private fun updateNodeTreeLayout(
+        rootNode: GXNode,
+        templateData: JSONObject,
+        size: Size<Float?>
+    ) {
+        // 更新布局
         updateNodeTreeLayout(context, rootNode, templateData)
 
         // 计算布局
         if (context.isDirty) {
             GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
         }
+    }
 
-        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+    private fun updateNodeTreeLayoutByDirtyText(rootNode: GXNode, size: Size<Float?>) {
         if (context.dirtyText?.isNotEmpty() == true) {
             var isTextDirty = false
             context.dirtyText?.forEach {
@@ -76,9 +92,6 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
             }
         }
-
-        // 更新样式
-        updateNodeTreeStyle(context, rootNode, templateData)
     }
 
     private fun updateNodeTreeLayout(

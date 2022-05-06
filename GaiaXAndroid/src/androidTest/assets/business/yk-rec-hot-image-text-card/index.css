@@ -1,0 +1,216 @@
+#yk-rec-hot-image-text-card {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 84px;
+  width: 100%;
+  padding-right: youku_margin_right;
+  padding-left: youku_margin_left;
+}
+#view-image {
+  overflow: hidden;
+  height: 84px;
+  width: 150px;
+}
+#image-item {
+  overflow: hidden;
+  background-color: primaryFillColor;
+  border-radius: 7px;
+  mode: scaleToFill;
+  width: 150px;
+  height: 84px;
+}
+#view-shadow {
+  width: 100%;
+  overflow: hidden;
+  height: 34px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  color: rgba(0, 0, 0, 1);
+  opacity: 0.9;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+  background-image: linear-gradient(to bottom, #00000000, #00000066);
+}
+#text-time {
+  overflow: hidden;
+  height: 15px;
+  text-align: center;
+  font-size: 10px;
+  right: 6px;
+  bottom: 3px;
+  color: #ffffff;
+  position: absolute;
+  line-height: 15px;
+  fit-content: true;
+  width: 100px;
+  font-weight: 400;
+}
+#video-info-container {
+  height: 15px;
+  position: absolute;
+  bottom: 3px;
+  padding-left: 5px;
+  align-items: center;
+}
+#bottom-left-icon-1 {
+  font-family: iconfont;
+  font-style: normal;
+  font-size: 10px;
+  color: #ffffff;
+  line-height: 15px;
+  height: 15px;
+  fit-content: true;
+  width: 10px;
+}
+#bottom-left-title-1 {
+  text-overflow: ellipsis;
+  color: #ffffff;
+  font-size: 10px;
+  height: 15px;
+  line-height: 15px;
+  fit-content: true;
+}
+#bottom-left-icon-2 {
+  font-family: iconfont;
+  font-style: normal;
+  font-size: 10px;
+  color: #ffffff;
+  line-height: 15px;
+  height: 15px;
+  fit-content: true;
+  width: 10px;
+  margin-left: 4px;
+}
+#bottom-left-title-2 {
+  text-overflow: ellipsis;
+  color: #ffffff;
+  font-size: 10px;
+  height: 15px;
+  line-height: 15px;
+  fit-content: true;
+}
+#view-desc {
+  overflow: hidden;
+  height: 84px;
+  flex-grow: 1;
+}
+#text-title {
+  overflow: hidden;
+  lines: 2;
+  text-overflow: ellipsis;
+  font-size: carditem_maintitle;
+  color: primaryInfo;
+  fit-content: true;
+  flex-grow: 1;
+  margin-left: 9px;
+  line-height: 16px;
+  text-align: left;
+}
+#rec-reasons-wrapper {
+  position: absolute;
+  left: 9px;
+  bottom: 0px;
+  width: 100%;
+}
+#rec-reason-container {
+  align-items: center;
+  justify-content: center;
+  padding-right: 4px;
+  background-color: rgba(157, 159, 168, 0.07);
+  opacity: 1;
+  border-radius: 2px;
+  padding-left: 4px;
+  margin-right: 4px;
+}
+#rec-reason-content {
+  text-overflow: ellipsis;
+  color: #ff008c;
+  font-size: posteritem_auxiliary_text;
+  line-height: 18px;
+  fit-content: true;
+  text-align: center;
+  height: 18px;
+}
+#right-arrow {
+  border-radius: 7px;
+  width: 10px;
+  height: 10px;
+}
+#right-area {
+  max-width: 100%;
+}
+#rec-reason-container-2 {
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 4px;
+  opacity: 1;
+  border-radius: 2px;
+  padding-left: 4px;
+  background-color: rgba(157, 159, 168, 0.07);
+  max-width: 150px;
+}
+#rec-reason-icon {
+  border-radius: 0px;
+  width: 10px;
+  height: 10px;
+  margin-right: 2px;
+}
+#rec-reason-content-2 {
+  text-overflow: ellipsis;
+  color: #ff008c;
+  font-size: posteritem_auxiliary_text;
+  line-height: 18px;
+  fit-content: true;
+  text-align: center;
+  height: 18px;
+  max-width: 120px;
+}
+#right-arrow-2 {
+  border-radius: 0px;
+  margin-left: 2px;
+  width: 4px;
+  height: 7px;
+}
+#author-info {
+  position: absolute;
+  left: 9px;
+  align-items: center;
+  height: 15px;
+  bottom: 24px;
+}
+#image-avator {
+  width: 13px;
+  overflow: hidden;
+  height: 13px;
+  background-color: primaryFillColor;
+  border-radius: 6.5px;
+}
+#text-author {
+  overflow: hidden;
+  font-size: 12px;
+  color: tertiaryInfo;
+  margin-left: 3px;
+  line-height: 15px;
+  fit-content: true;
+  height: 100%;
+}
+#dot {
+  text-overflow: ellipsis;
+  height: 100%;
+  color: tertiaryInfo;
+  font-size: 11px;
+  fit-content: true;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+#rec-tag {
+  text-overflow: ellipsis;
+  color: #666666;
+  font-size: 11px;
+  height: 100%;
+  fit-content: true;
+}

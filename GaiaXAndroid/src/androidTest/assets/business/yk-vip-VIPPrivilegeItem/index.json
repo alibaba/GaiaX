@@ -1,0 +1,15 @@
+{
+  "id": "yk-vip-VIPPrivilegeItem",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "headerView",
+      "type": "view",
+      "layers": [
+        { "id": "title", "type": "text" },
+        { "id": "markText", "type": "text" }
+      ]
+    },
+    { "id": "subTitle", "type": "text" }
+  ]
+}

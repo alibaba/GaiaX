@@ -388,7 +388,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         currentStretchNode: GXStretchNode,
         data: JSONObject,
         stretchStyle: Style
-    ): Boolean {
+    ): Boolean? {
         GXFitContentUtils.fitContent(templateContext, currentNode, currentStretchNode, data)
             ?.let { src ->
 
@@ -403,7 +403,8 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
 
                 return true
             }
-        return false
+
+        return null
     }
 
     override fun toString(): String {
@@ -433,7 +434,7 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             stretchStyle
         )
 
-        if (isDirty) {
+        if (isDirty == true) {
             stretchStyle.free()
             stretchStyle.init()
             this.node.setStyle(stretchStyle)

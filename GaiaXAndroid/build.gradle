@@ -46,7 +46,7 @@ buildscript {
 }
 
 group = 'com.youku.android'
-version = '1.0.0.18-DEV-SNAPSHOT'
+version = '1.0.0.19-DEV-SNAPSHOT'
 ext.gaiax_version = version
 
 apply from: 'http://gitlab.alibaba-inc.com/zhihua.bzh/build_script/raw/master/mtl-publish.gradle'
@@ -89,15 +89,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 
     testOptions {

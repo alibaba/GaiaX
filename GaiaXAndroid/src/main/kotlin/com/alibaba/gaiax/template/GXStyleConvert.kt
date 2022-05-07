@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.template
 
 import android.content.res.AssetManager
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Shader
 import android.graphics.Typeface
@@ -299,7 +298,7 @@ class GXStyleConvert {
         colors: IntArray
     ): Shader? = when (direction) {
         // draw the gradient from the top to the bottom
-        GradientDrawable.Orientation.TOP_BOTTOM -> LinearGradient(
+        GradientDrawable.Orientation.TOP_BOTTOM -> GXLinearColorGradient(
             0F,
             0F,
             0F,
@@ -309,7 +308,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // raw the gradient from the bottom-left to the top-right
-        GradientDrawable.Orientation.BOTTOM_TOP -> LinearGradient(
+        GradientDrawable.Orientation.BOTTOM_TOP -> GXLinearColorGradient(
             0F,
             height,
             0F,
@@ -319,7 +318,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the left to the right
-        GradientDrawable.Orientation.LEFT_RIGHT -> LinearGradient(
+        GradientDrawable.Orientation.LEFT_RIGHT -> GXLinearColorGradient(
             0F,
             0F,
             width,
@@ -329,7 +328,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the right to the left
-        GradientDrawable.Orientation.RIGHT_LEFT -> LinearGradient(
+        GradientDrawable.Orientation.RIGHT_LEFT -> GXLinearColorGradient(
             width,
             0F,
             0F,
@@ -339,7 +338,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the top-left to the bottom-right
-        GradientDrawable.Orientation.TL_BR -> LinearGradient(
+        GradientDrawable.Orientation.TL_BR -> GXLinearColorGradient(
             0F,
             0F,
             width,
@@ -349,7 +348,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the top-right to the bottom-left
-        GradientDrawable.Orientation.TR_BL -> LinearGradient(
+        GradientDrawable.Orientation.TR_BL -> GXLinearColorGradient(
             width,
             0F,
             0F,
@@ -359,7 +358,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the bottom-right to the top-left
-        GradientDrawable.Orientation.BR_TL -> LinearGradient(
+        GradientDrawable.Orientation.BR_TL -> GXLinearColorGradient(
             width,
             height,
             0F,
@@ -369,7 +368,7 @@ class GXStyleConvert {
             Shader.TileMode.CLAMP
         )
         // draw the gradient from the bottom-left to the top-right
-        GradientDrawable.Orientation.BL_TR -> LinearGradient(
+        GradientDrawable.Orientation.BL_TR -> GXLinearColorGradient(
             0F,
             height,
             width,

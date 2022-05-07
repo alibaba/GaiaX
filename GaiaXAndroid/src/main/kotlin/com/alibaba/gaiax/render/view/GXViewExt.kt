@@ -36,6 +36,8 @@ import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.template.*
 
 /**
@@ -120,24 +122,29 @@ fun View.setOverflow(overflow: Boolean?) {
 /**
  * @suppress
  */
-fun View.setBackgroundColorAndBackgroundImage(style: GXStyle?) {
-    if (style?.backgroundColor != null) {
-        val drawable = GradientDrawable(
+fun View.setBackgroundColorAndBackgroundImageAndRadius(style: GXStyle?) {
+    if (style?.backgroundImage != null) {
+        if (this is GXText) {
+            // GXText needs to be handled separately
+            // @see GXViewExt.setFontBackgroundImage
+        } else {
+            val drawable = style.backgroundImage.createDrawable()
+            this.background = drawable
+        }
+    } else if (style?.backgroundColor != null) {
+        val drawable = GXColorGradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
             intArrayOf(style.backgroundColor.value, style.backgroundColor.value)
         )
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
         this.background = drawable
-    } else if (style?.backgroundImage != null) {
-        if (this is GXText) {
-            // GXText needs to be handled separately
-            // @see GXViewExt.setFontBackgroundImage
-        } else {
-            this.background = style.backgroundImage.createDrawable()
-        }
     } else {
         this.background = null
+    }
+
+    if (background is GXColorGradientDrawable || background is GXLinearColorGradientDrawable) {
+        (background as GradientDrawable).cornerRadii = style?.borderRadius?.value
     }
 }
 

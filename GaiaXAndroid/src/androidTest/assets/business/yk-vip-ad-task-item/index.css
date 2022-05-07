@@ -1,0 +1,78 @@
+#yk-vip-ad-task-item {
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  padding-left: dim_8;
+  padding-right: 12px;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 0px;
+  background-color: #252730;
+}
+#yk-vip-ad-task-item-line {
+  background-color: #60667d;
+  position: absolute;
+  top: 0px;
+  height: 1px;
+  left: dim_8;
+  right: dim_8;
+  opacity: 0.2;
+}
+#yk-vip-ad-task-item-title-container {
+  height: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: #252730;
+}
+#yk-vip-ad-task-item-title {
+  text-overflow: ellipsis;
+  height: 21px;
+  color: #ffffff;
+  font-size: carditem_maintitle;
+  margin-bottom: dim_3;
+  width: 100%;
+}
+#yk-vip-ad-tast-subtitle {
+  text-overflow: ellipsis;
+  height: 20px;
+  color: cg_3;
+  font-size: posteritem_subhead;
+  width: 100%;
+}
+#yk-vip-ad-task-item-button {
+  justify-content: center;
+  align-items: center;
+  margin-top: 17px;
+  margin-bottom: 17px;
+  height: 30px;
+  border-radius: 15px;
+  background-image: linear-gradient(to right, #ffe9e4 0%, #ff9c85 100%);
+  border-color: #979797;
+  border-width: 1px;
+  border-style: solid;
+  padding-left: dim_7;
+  padding-right: dim_7;
+}
+#yk-vip-ad-task-item-button-tv {
+  text-overflow: ellipsis;
+  color: #881717;
+  font-size: button_text;
+  fit-content: true;
+  font-weight: 500;
+  text-align: center;
+  height: 100%;
+}
+#yk-vip-ad-task-item-feedback {
+  height: 30px;
+  align-items: center;
+  justify-content: flex-end;
+  width: 26px;
+  background-color: #e4e4e400;
+}
+#feedback {
+  height: 16px;
+  border-radius: 7px;
+  width: 16px;
+}

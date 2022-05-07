@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.view.container
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.support.annotation.Keep
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
@@ -29,6 +30,8 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 
 
 /**
@@ -85,11 +88,6 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView, GXIRoundCor
                         outline.setRoundRect(0, 0, view.width, view.height, tl)
                     }
                 }
-            } else {
-                val shape = GradientDrawable()
-                shape.shape = GradientDrawable.RECTANGLE
-                shape.cornerRadii = radius
-                background = shape
             }
         }
     }
@@ -99,10 +97,10 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView, GXIRoundCor
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
             shape.cornerRadii = radius
-            if (borderWidth.toInt() > 0) {
-                shape.setStroke(borderWidth.toInt(), borderColor)
+            shape.setStroke(borderWidth.toInt(), borderColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                foreground = shape
             }
-            background = shape
         }
     }
 }

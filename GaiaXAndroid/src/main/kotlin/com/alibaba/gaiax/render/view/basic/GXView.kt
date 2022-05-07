@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -29,6 +30,9 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXTemplateKey
 import kotlin.math.roundToInt
 
@@ -103,20 +107,17 @@ open class GXView : AbsoluteLayout,
                         outline.setRoundRect(0, 0, view.width, view.height, tl)
                     }
                 }
-            } else {
-                val shape = GradientDrawable()
-                shape.shape = GradientDrawable.RECTANGLE
-                shape.cornerRadii = radius
-                background = shape
             }
         }
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        val shape = GradientDrawable()
+        val shape = GXRoundCornerBorderGradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.cornerRadii = radius
         shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
-        background = shape
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            foreground = shape
+        }
     }
 }

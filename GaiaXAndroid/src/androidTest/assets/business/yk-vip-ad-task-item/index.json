@@ -1,0 +1,25 @@
+{
+  "id": "yk-vip-ad-task-item",
+  "type": "gaia-template",
+  "layers": [
+    { "id": "yk-vip-ad-task-item-line", "type": "view" },
+    {
+      "id": "yk-vip-ad-task-item-title-container",
+      "type": "view",
+      "layers": [
+        { "id": "yk-vip-ad-task-item-title", "type": "text" },
+        { "id": "yk-vip-ad-tast-subtitle", "type": "richtext" }
+      ]
+    },
+    {
+      "id": "yk-vip-ad-task-item-button",
+      "type": "view",
+      "layers": [{ "id": "yk-vip-ad-task-item-button-tv", "type": "text" }]
+    },
+    {
+      "id": "yk-vip-ad-task-item-feedback",
+      "type": "view",
+      "layers": [{ "id": "feedback", "type": "image" }]
+    }
+  ]
+}

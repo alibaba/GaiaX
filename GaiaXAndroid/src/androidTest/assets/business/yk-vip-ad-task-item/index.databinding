@@ -1,0 +1,37 @@
+{
+  "data": {
+    "yk-vip-ad-task-item-line": {
+      "extend": { "display": "@{eval( scroll(position) == 0 ) ? none : flex}" }
+    },
+    "yk-vip-ad-task-item-title": {
+      "extend": { "fit-content": "false" },
+      "value": "${data.title}"
+    },
+    "yk-vip-ad-tast-subtitle": {
+      "extend": {
+        "fit-content": "false",
+        "highlight-color": "#ff887b",
+        "highlight-tag": "#"
+      },
+      "value": "#+ + ${data.subtitlePrefix} + # + ${data.subtitle}"
+    },
+    "yk-vip-ad-task-item-button": {
+      "extend": {
+        "background-image": "@{ eval(${data.taskFinishStatus} == '1' ) ? linear-gradient(to right,  #ffe9e4 0%,#ff9c85 100%) : @{eval(${data.taskFinishStatus} == '3') ? '#d9d9d9' :  transparent } }",
+        "background-color": "@{eval(${data.taskFinishStatus} == '3') ? '#3C3F49' :  transparent }",
+        "border-color": "@{ eval(${data.taskFinishStatus} == '1') ? transparent : @{eval(${data.taskFinishStatus} == '3') ? transparent :  '#9999994d' }}"
+      }
+    },
+    "yk-vip-ad-task-item-button-tv": {
+      "extend": {
+        "fit-content": "true",
+        "color": "@{ eval(${data.taskFinishStatus} == '1') ? #881717 : @{eval(${data.taskFinishStatus} == '3') ? '#9D9EA4' :  #999999 } }"
+      },
+      "value": "${data.buttonText}"
+    },
+    "feedback": {
+      "value": "https://img.alicdn.com/imgextra/i3/O1CN01orDLVN1WnYmkhQUEb_!!6000000002833-2-tps-48-48.png"
+    }
+  },
+  "event": { "yk-vip-ad-task-item-button": "${data.action}" }
+}

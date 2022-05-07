@@ -76,19 +76,20 @@ object GXFitContentUtils {
         val androidContext = templateContext.context
         val nodeId = currentNode.getNodeId()
         val nodeDataBinding = currentNode.dataBinding ?: return null
-        val nodeFlexBox = currentNode.css.flexBox
-        val nodeStyle = currentNode.css.style
+        val finalCss = currentNode.finalCss ?: return null
+        val nodeFlexBox = finalCss.flexBox
+        val nodeStyle = finalCss.style
         val nodeLayout = currentStretchNode.finalLayout ?: return null
 
         val textView = GXMeasureViewPool.obtain(androidContext)
 
-        textView.setTextStyle(currentNode.css)
+        textView.setTextStyle(finalCss)
 
         val textContent = getMeasureContent(
             templateContext,
             nodeId,
             textView,
-            currentNode.css,
+            finalCss,
             nodeDataBinding,
             templateData
         )

@@ -19,6 +19,7 @@ package com.alibaba.gaiax.template
 import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
+import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 
 /**
  * @suppress
@@ -32,6 +33,7 @@ class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: Int
     }
 
     fun createDrawable(): GradientDrawable {
-        return GradientDrawable(direction, colors)
+        return GXLinearColorGradientDrawable(direction, colors)
     }
 }
+

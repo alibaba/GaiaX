@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXIExpression
+import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GaiaXExpression
@@ -23,6 +24,30 @@ class GXBusinessTest : GXBaseTest() {
         override fun create(value: Any): GXIExpression {
             return GaiaXExpression.create(value)
         }
+
+    }
+
+    @Test
+    fun yk_vip_ad_task_item() {
+        GXRegisterCenter.instance
+            .registerProcessExpression(GXProcessExpression())
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "business",
+            "yk-vip-ad-task-item"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(363F.dpToPx(), 64F.dpToPx())
+        )
+        val path = "business/yk-vip-ad-task-item.json"
+        val templateData = GXTemplateEngine.GXTemplateData(readJsonFromAssets(path))
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(363F.dpToPx(), rootView.width())
+        Assert.assertEquals(64F.dpToPx(), rootView.height())
+        Assert.assertEquals(true, rootView.child(2).background is GXLinearColorGradientDrawable)
 
     }
 

@@ -28,6 +28,8 @@ import android.widget.TextView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.*
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
 import kotlin.math.roundToInt
@@ -143,17 +145,21 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
                     outline.setRoundRect(0, 0, view.width, view.height, radius)
                 }
             }
-        } else {
-            // 不支持GXText的异圆角设置，请联系开发者
-            throw IllegalArgumentException("Not support difference radius for GXText")
         }
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        val shape = GradientDrawable()
-        shape.shape = GradientDrawable.RECTANGLE
-        shape.cornerRadii = radius
-        shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
-        background = shape
+        if (background is GXColorGradientDrawable) {
+            (background as GXColorGradientDrawable).setStroke(
+                borderWidth.toDouble().roundToInt(),
+                borderColor
+            )
+        } else {
+            val shape = GXRoundCornerBorderGradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = radius
+            shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
+            background = shape
+        }
     }
 }

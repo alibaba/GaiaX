@@ -18,10 +18,26 @@ package com.alibaba.gaiax.template.animation
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 abstract class GXLottieAnimation : GXIAnimation {
+
+    override fun onAnimation(
+        gxState: GXIExpression?,
+        gxAnimationExpression: GXIExpression?,
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxTemplateData: JSONObject
+    ) {
+        // nothing
+    }
+
+    var gxLocalUri: GXIExpression? = null
+    var gxRemoteUri: GXIExpression? = null
+    var loopCount: Int = 0
 
     companion object {
         private const val KEY_VALUE = "value"
@@ -38,12 +54,13 @@ abstract class GXLottieAnimation : GXIAnimation {
             if (localUri == null && remoteUri == null) {
                 return null
             }
-            val animator = GXRegisterCenter.instance.lottieAnimation?.create() ?: return null
+            val animator = GXRegisterCenter.instance.extensionLottieAnimation?.create()
+                ?: return null
             if (localUri != null) {
-                animator.localUriExp = GXExpressionFactory.create(localUri)
+                animator.gxLocalUri = GXExpressionFactory.create(localUri)
             }
             if (remoteUri != null) {
-                animator.remoteUriExp = GXExpressionFactory.create(remoteUri)
+                animator.gxRemoteUri = GXExpressionFactory.create(remoteUri)
             }
             if (data.containsKey(KEY_LOOP) && data.getBoolean(KEY_LOOP)) {
                 animator.loopCount = Int.MAX_VALUE
@@ -53,16 +70,4 @@ abstract class GXLottieAnimation : GXIAnimation {
             return animator
         }
     }
-
-    var stateExp: GXIExpression? = null
-
-    var localUriExp: GXIExpression? = null
-
-    var remoteUriExp: GXIExpression? = null
-
-    var localUri: String? = null
-
-    var remoteUri: String? = null
-
-    var loopCount: Int = 0
 }

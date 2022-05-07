@@ -187,8 +187,8 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_container_nest_template_judegment_condition() {
-        GXRegisterCenter.instance.registerProcessCompatible(object :
-            GXRegisterCenter.GXIProcessCompatible {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
             override fun isCompatibilityContainerNestTemplateJudgementCondition(): Boolean {
                 return true
             }
@@ -224,8 +224,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerProcessCompatible(object :
-            GXRegisterCenter.GXIProcessCompatible {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
             override fun isCompatibilityContainerNestTemplateJudgementCondition(): Boolean {
                 return false
             }
@@ -234,8 +234,8 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_datapass_nest_scroll_nodes_self_youku_version() {
-        GXRegisterCenter.instance.registerProcessCompatible(object :
-            GXRegisterCenter.GXIProcessCompatible {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
             override fun isCompatibilityContainerDataPassSequence(): Boolean {
                 return true
             }
@@ -274,8 +274,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerProcessCompatible(object :
-            GXRegisterCenter.GXIProcessCompatible {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
             override fun isCompatibilityContainerDataPassSequence(): Boolean {
                 return false
             }

@@ -46,13 +46,13 @@ open class GXBaseTest {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
         GXRegisterCenter.instance
-            .registerProcessExpression(GXProcessExpression())
-            .registerProcessDataBinding(GXProcessDataBinding())
-            .registerProcessColor(GXProcessorColor())
-            .registerProcessSize(GXProcessSize())
-            .registerProcessDynamicProperty(GXProcessDynamicProperty())
-            .registerProcessStaticProperty(GXProcessStaticProperty())
-            .registerProcessScroll(GXProcessScroll())
+            .registerExtensionExpression(GXExtensionExpression())
+            .registerExtensionDataBinding(GXExtensionDataBinding())
+            .registerExtensionColor(GXProcessorColor())
+            .registerExtensionSize(GXExtensionSize())
+            .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
+            .registerExtensionStaticProperty(GXExtensionStaticProperty())
+            .registerExtensionScroll(GXExtensionScroll())
 
     }
 
@@ -61,7 +61,7 @@ open class GXBaseTest {
         GXRegisterCenter.instance.reset()
     }
 
-    class GXProcessScroll : GXRegisterCenter.GXIProcessScroll {
+    class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
         override fun convert(
             propertyName: String,
             gxTemplateContext: GXTemplateContext,
@@ -87,7 +87,7 @@ open class GXBaseTest {
 
     }
 
-    class GXProcessDataBinding : GXRegisterCenter.GXIProcessDataBinding {
+    class GXExtensionDataBinding : GXRegisterCenter.GXIExtensionDataBinding {
 
         override fun create(value: Any): GXDataBinding? {
             Log.d(TAG, "createProcessing() called with: data = $value")
@@ -95,9 +95,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessDynamicProperty : GXRegisterCenter.GXIProcessDynamicProperty {
+    class GXExtensionDynamicProperty : GXRegisterCenter.GXIExtensionDynamicProperty {
 
-        override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
             Log.d(TAG, "convertProcessing() called with: params = $params")
             if (params.propertyName == GXTemplateKey.FLEXBOX_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MIN_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MAX_SIZE) {
                 @Suppress("UNCHECKED_CAST")
@@ -121,9 +121,9 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessStaticProperty : GXRegisterCenter.GXIProcessStaticProperty {
+    class GXExtensionStaticProperty : GXRegisterCenter.GXIExtensionStaticProperty {
 
-        override fun convert(params: GXRegisterCenter.GXIProcessStaticProperty.GXParams): Any? {
+        override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
             if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
                 return "fontfamily3"
             }
@@ -131,7 +131,7 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessSize : GXRegisterCenter.GXIProcessSize {
+    class GXExtensionSize : GXRegisterCenter.GXIExtensionSize {
         override fun create(value: String): Float? {
             Log.d(TAG, "createProcessing() called with: size = $value")
             if ("gaiax_font" == value) {
@@ -150,7 +150,7 @@ open class GXBaseTest {
 
     }
 
-    class GXProcessorColor : GXRegisterCenter.GXIProcessColor {
+    class GXProcessorColor : GXRegisterCenter.GXIExtensionColor {
 
         override fun convert(color: String): Int? {
             Log.d(TAG, "convertProcessing() called with: color = $color")
@@ -161,7 +161,7 @@ open class GXBaseTest {
         }
     }
 
-    class GXProcessExpression : GXRegisterCenter.GXIProcessExpression {
+    class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
 
         override fun create(value: Any): GXIExpression {
             Log.d(TAG, "createProcessing() called with: expression = $value")

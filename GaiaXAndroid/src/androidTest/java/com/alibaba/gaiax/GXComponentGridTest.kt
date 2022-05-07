@@ -23,7 +23,7 @@ class GXComponentGridTest : GXBaseTest() {
 
     @Test
     fun template_grid_column_responsive() {
-        GXRegisterCenter.instance.registerProcessGrid(object : GXRegisterCenter.GXIProcessGrid {
+        GXRegisterCenter.instance.registerExtensionGrid(object : GXRegisterCenter.GXIExtensionGrid {
             override fun convert(
                 propertyName: String,
                 gxTemplateContext: GXTemplateContext,
@@ -268,10 +268,10 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_height_100px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
-            GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true

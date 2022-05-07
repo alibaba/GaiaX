@@ -140,9 +140,9 @@ class GXStyleConvert {
             "clip" -> {
                 GXRegisterCenter
                     .instance
-                    .processStaticProperty
+                    .extensionStaticProperty
                     ?.convert(
-                        GXRegisterCenter.GXIProcessStaticProperty.GXParams(
+                        GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
                             GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW,
                             "clip"
                         )
@@ -175,9 +175,9 @@ class GXStyleConvert {
             // extend
             GXRegisterCenter
                 .instance
-                .processStaticProperty
+                .extensionStaticProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessStaticProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
                         GXTemplateKey.STYLE_FONT_FAMILY,
                         fontFamily
                     )

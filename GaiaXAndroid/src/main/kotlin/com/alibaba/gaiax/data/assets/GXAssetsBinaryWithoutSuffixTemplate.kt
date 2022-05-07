@@ -27,7 +27,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
  * @suppress
  */
 class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
-    GXRegisterCenter.GXITemplateSource {
+    GXRegisterCenter.GXIExtensionTemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 

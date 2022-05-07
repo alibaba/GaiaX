@@ -180,7 +180,7 @@ object GXNodeUtils {
         val finalScrollConfig = node.templateNode.finalScrollConfig ?: return null
 
         GXRegisterCenter.instance
-            .processScroll?.convert(
+            .extensionScroll?.convert(
                 GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
                 context,
                 finalScrollConfig

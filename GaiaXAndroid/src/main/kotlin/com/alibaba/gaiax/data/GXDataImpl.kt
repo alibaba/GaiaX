@@ -29,7 +29,7 @@ import java.util.*
 class GXDataImpl(val context: Context) {
 
     fun getTemplateInfo(templateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo {
-        GXRegisterCenter.instance.processBizMap?.convert(templateItem)
+        GXRegisterCenter.instance.extensionBizMap?.convert(templateItem)
         return templateInfoSource.getTemplateInfo(templateItem)
     }
 
@@ -46,9 +46,9 @@ class GXDataImpl(val context: Context) {
     /**
      * @suppress
      */
-    class GXTemplateSource(val context: Context) : GXRegisterCenter.GXITemplateSource {
+    class GXTemplateSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateSource {
 
-        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateSource) {
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXIExtensionTemplateSource) {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (javaClass != other?.javaClass) return false
@@ -76,7 +76,7 @@ class GXDataImpl(val context: Context) {
             throw IllegalArgumentException("Not found target template path, templateItem = $gxTemplateItem")
         }
 
-        fun registerByPriority(source: GXRegisterCenter.GXITemplateSource, priority: Int) {
+        fun registerByPriority(source: GXRegisterCenter.GXIExtensionTemplateSource, priority: Int) {
             var needRemove: Value? = null
             this.dataSource.forEach {
                 if (it.priority == priority) {
@@ -104,9 +104,9 @@ class GXDataImpl(val context: Context) {
     /**
      * @suppress
      */
-    class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
+    class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateInfoSource {
 
-        data class Value(val priority: Int, val source: GXRegisterCenter.GXITemplateInfoSource) {
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXIExtensionTemplateInfoSource) {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (javaClass != other?.javaClass) return false
@@ -135,7 +135,7 @@ class GXDataImpl(val context: Context) {
             throw IllegalStateException("Template exist but reference is null")
         }
 
-        fun registerByPriority(source: GXRegisterCenter.GXITemplateInfoSource, priority: Int) {
+        fun registerByPriority(source: GXRegisterCenter.GXIExtensionTemplateInfoSource, priority: Int) {
             var needRemove: Value? = null
             this.dataSource.forEach {
                 if (it.priority == priority) {

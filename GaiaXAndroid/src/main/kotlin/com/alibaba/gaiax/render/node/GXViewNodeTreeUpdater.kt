@@ -186,7 +186,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         var valueData = visualDataBinding?.getDataValue(templateData)
         if (valueData is JSONArray) {
 
-            if (GXRegisterCenter.instance.processCompatible?.isCompatibilityContainerDataPassSequence() == true) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityContainerDataPassSequence() == true) {
                 // 是否兼容处理先$nodes取数组，再去$$的情况
 
                 val tmp = visualDataBinding?.value
@@ -439,7 +439,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
             // 创建事件处理器
             gxNode.event =
-                gxNode.event ?: GXRegisterCenter.instance.processNodeEvent?.create()
+                gxNode.event ?: GXRegisterCenter.instance.extensionNodeEvent?.create()
                         ?: GXNodeEvent()
 
             val gxNodeEvent = gxNode.event
@@ -520,7 +520,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         // 容器数据源
         var containerTemplateData = dataBinding.getDataValue(templateData) as? JSONArray
         if (containerTemplateData == null) {
-            if (GXRegisterCenter.instance.processCompatible?.isPreventContainerDataSourceThrowException() == true) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventContainerDataSourceThrowException() == true) {
                 containerTemplateData = JSONArray()
             } else {
                 throw IllegalArgumentException("Scroll or Grid must be have a array data source")

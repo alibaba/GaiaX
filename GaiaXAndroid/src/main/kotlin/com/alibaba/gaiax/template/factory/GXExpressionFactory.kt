@@ -35,7 +35,7 @@ object GXExpressionFactory {
         return if (expression == null) {
             null
         } else {
-            GXRegisterCenter.instance.processExpression?.create(expression)
+            GXRegisterCenter.instance.extensionExpression?.create(expression)
         }
     }
 }

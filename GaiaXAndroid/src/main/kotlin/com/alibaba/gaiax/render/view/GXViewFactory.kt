@@ -39,7 +39,7 @@ object GXViewFactory {
         viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_SCROLL] = GXScrollView::class.java
         viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_GRID] = GXGridView::class.java
         viewSupport[GXViewKey.VIEW_TYPE_ICON_FONT] = GXIconFont::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_LOTTIE] = GXLottie::class.java
+        // viewSupport[GXViewKey.VIEW_TYPE_LOTTIE] = GXLottie::class.java
         viewSupport[GXViewKey.VIEW_TYPE_SHADOW_LAYOUT] = GXShadowLayout::class.java
     }
 

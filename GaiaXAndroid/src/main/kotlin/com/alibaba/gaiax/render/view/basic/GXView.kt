@@ -30,8 +30,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
-import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXTemplateKey
 import kotlin.math.roundToInt
@@ -85,7 +83,7 @@ open class GXView : AbsoluteLayout,
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
                 throw e
             }
         }

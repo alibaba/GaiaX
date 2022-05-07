@@ -117,11 +117,10 @@ dependencies {
     providedCompile 'com.alibaba:fastjson:1.2.26@jar'
     providedCompile 'com.android.support:recyclerview-v7:28.0.0'
     providedCompile 'com.android.support:appcompat-v7:28.0.0'
-    providedCompile 'com.youku.android:lottie:3.4.2.15'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.youku.android:GaiaX-Analyze-Android:1.0.0-DEV-SNAPSHOT'
-    androidTestImplementation 'com.youku.android:lottie:3.4.2.15'
+    androidTestImplementation 'com.airbnb.android:lottie:2.7.0'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {
         exclude group: 'javax.inject'

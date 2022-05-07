@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * @suppress
  */
-class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXITemplateInfoSource {
+class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateInfoSource {
 
     private val dataCache = ConcurrentHashMap<String, ConcurrentHashMap<String, GXTemplateInfo>>()
 

@@ -86,7 +86,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
                 throw e
             }
         }

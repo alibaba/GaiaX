@@ -16,25 +16,25 @@
 
 package com.alibaba.gaiax.render.view.basic
 
-import android.content.Context
-import android.support.annotation.Keep
-import android.util.AttributeSet
-import com.airbnb.lottie.LottieAnimationView
-
-/**
- * @suppress
- */
-@Keep
-class GXLottie : LottieAnimationView {
-
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    )
-
-}
+//import android.content.Context
+//import android.support.annotation.Keep
+//import android.util.AttributeSet
+//import com.airbnb.lottie.LottieAnimationView
+//
+///**
+// * @suppress
+// */
+//@Keep
+//class GXLottie : LottieAnimationView {
+//
+//    constructor(context: Context) : super(context)
+//
+//    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+//
+//    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+//        context,
+//        attrs,
+//        defStyleAttr
+//    )
+//
+//}

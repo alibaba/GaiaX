@@ -53,7 +53,7 @@ class GXColor(val name: String, val value: Int) {
             parseRGBColor(color)?.let { return it }
             parseSimpleColor(color)?.let { return it }
             parseExtendColor(color)?.let {
-                GXRegisterCenter.instance.processColor?.convert(it)?.let { return it }
+                GXRegisterCenter.instance.extensionColor?.convert(it)?.let { return it }
             }
             return null
         }

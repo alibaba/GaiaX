@@ -169,7 +169,7 @@ class GXNode {
 
     fun initEventByRegisterCenter() {
         if (event == null) {
-            event = GXRegisterCenter.instance.processNodeEvent?.create()
+            event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         }
     }
 }

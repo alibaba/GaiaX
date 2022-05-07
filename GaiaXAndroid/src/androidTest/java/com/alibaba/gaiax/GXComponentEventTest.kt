@@ -191,7 +191,7 @@ class GXComponentEventTest : GXBaseTest() {
         }
     }
 
-    class GXProcessNodeEvent : GXRegisterCenter.GXIProcessNodeEvent {
+    class GXExtensionNodeEvent : GXRegisterCenter.GXIExtensionNodeEvent {
 
         override fun create(): GXINodeEvent {
             return GXMixNodeEvent()
@@ -202,7 +202,7 @@ class GXComponentEventTest : GXBaseTest() {
     fun template_event_register_node_event_js_longpress() {
 
         GXRegisterCenter.instance
-            .registerProcessNodeEvent(GXProcessNodeEvent())
+            .registerExtensionNodeEvent(GXExtensionNodeEvent())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -227,7 +227,7 @@ class GXComponentEventTest : GXBaseTest() {
 
         val gxTemplateContext = GXTemplateEngine.instance.getGXTemplateContext(rootView)
         val targetNode = GXTemplateEngine.instance.getGXNodeById(rootView, "target")
-        targetNode?.event = GXRegisterCenter.instance.processNodeEvent?.create()
+        targetNode?.event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(
             gxTemplateContext!!,
             targetNode,
@@ -261,7 +261,7 @@ class GXComponentEventTest : GXBaseTest() {
     fun template_event_register_node_event_js_tap() {
 
         GXRegisterCenter.instance
-            .registerProcessNodeEvent(GXProcessNodeEvent())
+            .registerExtensionNodeEvent(GXExtensionNodeEvent())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -286,7 +286,7 @@ class GXComponentEventTest : GXBaseTest() {
 
         val gxTemplateContext = GXTemplateEngine.instance.getGXTemplateContext(rootView)
         val targetNode = GXTemplateEngine.instance.getGXNodeById(rootView, "target")
-        targetNode?.event = GXRegisterCenter.instance.processNodeEvent?.create()
+        targetNode?.event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         (targetNode?.event as? GXMixNodeEvent)?.addJSEvent(
             gxTemplateContext!!,
             targetNode,
@@ -320,7 +320,7 @@ class GXComponentEventTest : GXBaseTest() {
     fun template_event_register_node_event_longpress() {
 
         GXRegisterCenter.instance
-            .registerProcessNodeEvent(GXProcessNodeEvent())
+            .registerExtensionNodeEvent(GXExtensionNodeEvent())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -367,7 +367,7 @@ class GXComponentEventTest : GXBaseTest() {
     fun template_event_register_node_event_tap() {
 
         GXRegisterCenter.instance
-            .registerProcessNodeEvent(GXProcessNodeEvent())
+            .registerExtensionNodeEvent(GXExtensionNodeEvent())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

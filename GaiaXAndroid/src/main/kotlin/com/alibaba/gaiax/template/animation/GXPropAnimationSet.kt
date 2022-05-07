@@ -27,18 +27,20 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXColor
+import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.getStringExt
 
 class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
 
     override fun onAnimation(
-        context: GXTemplateContext,
+        gxAnimationExpression: GXIExpression?,
+        gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        templateData: JSONObject
+        gxTemplateData: JSONObject
     ) {
         gxNode.viewRef?.get()?.let { targetView ->
-            playAnimation(context, gxNode, targetView)
+            playAnimation(gxTemplateContext, gxNode, targetView)
         }
     }
 

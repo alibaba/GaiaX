@@ -20,7 +20,7 @@ import java.nio.charset.Charset
 @RunWith(AndroidJUnit4::class)
 class GXBusinessTest : GXBaseTest() {
 
-    class GXProcessExpression : GXRegisterCenter.GXIProcessExpression {
+    class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
 
         override fun create(value: Any): GXIExpression {
             return GaiaXExpression.create(value)
@@ -31,7 +31,7 @@ class GXBusinessTest : GXBaseTest() {
     @Test
     fun yk_vip_ad_task_item() {
         GXRegisterCenter.instance
-            .registerProcessExpression(GXProcessExpression())
+            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -56,7 +56,7 @@ class GXBusinessTest : GXBaseTest() {
     @Test
     fun yk_vip_VIPPrivilegeItem() {
         GXRegisterCenter.instance
-            .registerProcessExpression(GXProcessExpression())
+            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

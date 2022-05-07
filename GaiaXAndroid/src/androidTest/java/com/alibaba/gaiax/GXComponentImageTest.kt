@@ -24,7 +24,7 @@ class GXComponentImageTest : GXBaseTest() {
 
     @Test
     fun template_image_view_support() {
-        GXRegisterCenter.instance.registerViewSupport(
+        GXRegisterCenter.instance.registerExtensionViewSupport(
             GXViewKey.VIEW_TYPE_IMAGE,
             MockImageView::class.java
         )
@@ -41,7 +41,7 @@ class GXComponentImageTest : GXBaseTest() {
 
         Assert.assertEquals(true, rootView.child(0) is MockImageView)
 
-        GXRegisterCenter.instance.registerViewSupport(
+        GXRegisterCenter.instance.registerExtensionViewSupport(
             GXViewKey.VIEW_TYPE_IMAGE,
             GXImageView::class.java
         )

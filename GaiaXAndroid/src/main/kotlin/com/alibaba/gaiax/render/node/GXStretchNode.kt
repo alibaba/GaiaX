@@ -87,9 +87,9 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
-                .processDynamicProperty
+                .extensionDynamicProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT,
                         isComputeContainerHeight
                     ).apply {
@@ -119,9 +119,9 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             // 对计算结果进行处理
             GXRegisterCenter
                 .instance
-                .processDynamicProperty
+                .extensionDynamicProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT,
                         isComputeContainerHeight
                     ).apply {
@@ -300,9 +300,9 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         flexBox.size?.let {
             GXTemplateUtils.updateSize(it, style.size)
             GXRegisterCenter.instance
-                .processDynamicProperty
+                .extensionDynamicProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_SIZE,
                         style.size
                     ).apply {
@@ -314,9 +314,9 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         flexBox.minSize?.let {
             GXTemplateUtils.updateSize(it, style.minSize)
             GXRegisterCenter.instance
-                .processDynamicProperty
+                .extensionDynamicProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_MIN_SIZE,
                         style.minSize
                     ).apply {
@@ -328,9 +328,9 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
         flexBox.maxSize?.let {
             GXTemplateUtils.updateSize(it, style.maxSize)
             GXRegisterCenter.instance
-                .processDynamicProperty
+                .extensionDynamicProperty
                 ?.convert(
-                    GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_MAX_SIZE,
                         style.maxSize
                     ).apply {

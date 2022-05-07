@@ -142,7 +142,7 @@ open class GXImageView : AppCompatImageView, GXIImageView {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            if (GXRegisterCenter.instance.processCompatible?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
                 throw e
             }
         }

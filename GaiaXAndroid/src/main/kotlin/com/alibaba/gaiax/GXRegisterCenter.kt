@@ -39,7 +39,7 @@ class GXRegisterCenter {
     /**
      * GXTemplateInfo data source interface
      */
-    interface GXITemplateInfoSource {
+    interface GXIExtensionTemplateInfoSource {
 
         /**
          * To get GXTemplateData from data source
@@ -52,7 +52,7 @@ class GXRegisterCenter {
     /**
      * GXTemplate data source interface
      */
-    interface GXITemplateSource {
+    interface GXIExtensionTemplateSource {
 
         /**
          * To get GXTemplate from data source
@@ -62,7 +62,7 @@ class GXRegisterCenter {
         fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate?
     }
 
-    interface GXIProcessContainerItemBind {
+    interface GXIExtensionContainerItemBind {
         fun bindViewHolder(
             tag: Any?,
             childItemContainer: ViewGroup,
@@ -74,7 +74,7 @@ class GXRegisterCenter {
         ): Any?
     }
 
-    interface GXIProcessContainerDataUpdate {
+    interface GXIExtensionContainerDataUpdate {
         fun update(
             gxTemplateContext: GXTemplateContext,
             gxContainerViewAdapter: GXContainerViewAdapter,
@@ -83,23 +83,23 @@ class GXRegisterCenter {
         )
     }
 
-    interface GXIProcessNodeEvent {
+    interface GXIExtensionNodeEvent {
         fun create(): GXINodeEvent
     }
 
-    interface GXIProcessExpression {
+    interface GXIExtensionExpression {
         fun create(value: Any): GXIExpression
     }
 
-    interface GXIProcessDataBinding {
+    interface GXIExtensionDataBinding {
         fun create(value: Any): GXDataBinding?
     }
 
-    interface GXIProcessColor {
+    interface GXIExtensionColor {
         fun convert(value: String): Int?
     }
 
-    interface GXIProcessSize {
+    interface GXIExtensionSize {
         fun create(value: String): Float?
         fun convert(value: Float): Float?
     }
@@ -107,7 +107,7 @@ class GXRegisterCenter {
     /**
      * Dynamic property have context, but static property haven't context.
      */
-    interface GXIProcessDynamicProperty {
+    interface GXIExtensionDynamicProperty {
 
         data class GXParams(val propertyName: String, val value: Any) {
             var gridConfig: GXGridConfig? = null
@@ -121,18 +121,18 @@ class GXRegisterCenter {
     /**
      * Dynamic property have context, but static property haven't context.
      */
-    interface GXIProcessStaticProperty {
+    interface GXIExtensionStaticProperty {
 
         data class GXParams(val propertyName: String, val value: Any)
 
         fun convert(params: GXParams): Any?
     }
 
-    interface GXIProcessBizMap {
+    interface GXIExtensionBizMap {
         fun convert(item: GXTemplateEngine.GXTemplateItem)
     }
 
-    interface GXIProcessGrid {
+    interface GXIExtensionGrid {
         fun convert(
             propertyName: String,
             gxTemplateContext: GXTemplateContext,
@@ -140,7 +140,7 @@ class GXRegisterCenter {
         ): Any?
     }
 
-    interface GXIProcessScroll {
+    interface GXIExtensionScroll {
         fun convert(
             propertyName: String,
             gxTemplateContext: GXTemplateContext,
@@ -148,11 +148,11 @@ class GXRegisterCenter {
         ): Any?
     }
 
-    interface GXILottieAnimation {
+    interface GXIExtensionLottieAnimation {
         fun create(): GXLottieAnimation?
     }
 
-    interface GXIProcessCompatible {
+    interface GXIExtensionCompatibility {
 
         /**
          * 是否兼容容器数据的传递顺序
@@ -177,10 +177,10 @@ class GXRegisterCenter {
         fun isPreventAccessibilityThrowException() = false
     }
 
-    internal var processBizMap: GXIProcessBizMap? = null
+    internal var extensionBizMap: GXIExtensionBizMap? = null
 
-    fun registerProcessBizMapRelation(processBizMap: GXIProcessBizMap): GXRegisterCenter {
-        this.processBizMap = processBizMap
+    fun registerExtensionBizMapRelation(extensionBizMap: GXIExtensionBizMap): GXRegisterCenter {
+        this.extensionBizMap = extensionBizMap
         return this
     }
 
@@ -188,7 +188,10 @@ class GXRegisterCenter {
      * @param source
      * @param priority [0,99]
      */
-    fun registerTemplateSource(source: GXITemplateSource, priority: Int = 0): GXRegisterCenter {
+    fun registerExtensionTemplateSource(
+        source: GXIExtensionTemplateSource,
+        priority: Int = 0
+    ): GXRegisterCenter {
         GXTemplateEngine.instance.data.templateSource.registerByPriority(source, priority)
         return this
     }
@@ -197,125 +200,124 @@ class GXRegisterCenter {
      * @param source
      * @param priority [0,99]
      */
-    fun registerTemplateInfoSource(
-        source: GXITemplateInfoSource,
+    fun registerExtensionTemplateInfoSource(
+        source: GXIExtensionTemplateInfoSource,
         priority: Int = 0
     ): GXRegisterCenter {
         GXTemplateEngine.instance.data.templateInfoSource.registerByPriority(source, priority)
         return this
     }
 
-    internal var processDataBinding: GXIProcessDataBinding? = null
+    internal var extensionDataBinding: GXIExtensionDataBinding? = null
 
-    fun registerProcessDataBinding(databindingProcessDataBinding: GXIProcessDataBinding): GXRegisterCenter {
-        this.processDataBinding = databindingProcessDataBinding
+    fun registerExtensionDataBinding(databindingExtensionDataBinding: GXIExtensionDataBinding): GXRegisterCenter {
+        this.extensionDataBinding = databindingExtensionDataBinding
         return this
     }
 
-    internal var processExpression: GXIProcessExpression? = null
+    internal var extensionExpression: GXIExtensionExpression? = null
 
-    fun registerProcessExpression(processExpression: GXIProcessExpression): GXRegisterCenter {
-        this.processExpression = processExpression
+    fun registerExtensionExpression(extensionExpression: GXIExtensionExpression): GXRegisterCenter {
+        this.extensionExpression = extensionExpression
         return this
     }
 
-    internal var processColor: GXIProcessColor? = null
+    internal var extensionColor: GXIExtensionColor? = null
 
-    fun registerProcessColor(processColor: GXIProcessColor): GXRegisterCenter {
-        this.processColor = processColor
+    fun registerExtensionColor(extensionColor: GXIExtensionColor): GXRegisterCenter {
+        this.extensionColor = extensionColor
         return this
     }
 
-    internal var processSize: GXIProcessSize? = null
+    internal var extensionSize: GXIExtensionSize? = null
 
-    fun registerProcessSize(processSize: GXIProcessSize): GXRegisterCenter {
-        this.processSize = processSize
+    fun registerExtensionSize(extensionSize: GXIExtensionSize): GXRegisterCenter {
+        this.extensionSize = extensionSize
         return this
     }
 
-    internal var processDynamicProperty: GXIProcessDynamicProperty? = null
+    internal var extensionDynamicProperty: GXIExtensionDynamicProperty? = null
 
-    fun registerProcessDynamicProperty(processDynamicProperty: GXIProcessDynamicProperty): GXRegisterCenter {
-        this.processDynamicProperty = processDynamicProperty
+    fun registerExtensionDynamicProperty(extensionDynamicProperty: GXIExtensionDynamicProperty): GXRegisterCenter {
+        this.extensionDynamicProperty = extensionDynamicProperty
         return this
     }
 
-    internal var processStaticProperty: GXIProcessStaticProperty? = null
+    internal var extensionStaticProperty: GXIExtensionStaticProperty? = null
 
-    fun registerProcessStaticProperty(processStaticProperty: GXIProcessStaticProperty): GXRegisterCenter {
-        this.processStaticProperty = processStaticProperty
+    fun registerExtensionStaticProperty(extensionStaticProperty: GXIExtensionStaticProperty): GXRegisterCenter {
+        this.extensionStaticProperty = extensionStaticProperty
         return this
     }
 
-    internal var processGrid: GXIProcessGrid? = null
+    internal var extensionGrid: GXIExtensionGrid? = null
 
-    fun registerProcessGrid(processGrid: GXIProcessGrid): GXRegisterCenter {
-        this.processGrid = processGrid
+    fun registerExtensionGrid(extensionGrid: GXIExtensionGrid): GXRegisterCenter {
+        this.extensionGrid = extensionGrid
         return this
     }
 
-    internal var processScroll: GXIProcessScroll? = null
+    internal var extensionScroll: GXIExtensionScroll? = null
 
-    fun registerProcessScroll(processScroll: GXIProcessScroll): GXRegisterCenter {
-        this.processScroll = processScroll
+    fun registerExtensionScroll(extensionScroll: GXIExtensionScroll): GXRegisterCenter {
+        this.extensionScroll = extensionScroll
         return this
     }
 
-    fun registerViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
+    fun registerExtensionViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
         GXViewFactory.viewSupport[viewType] = clazz
         return this
     }
 
-    internal var processCompatible: GXIProcessCompatible? = null
+    internal var extensionCompatibility: GXIExtensionCompatibility? = null
 
-    fun registerProcessCompatible(processCompatible: GXIProcessCompatible): GXRegisterCenter {
-        this.processCompatible = processCompatible
+    fun registerExtensionCompatibility(extensionCompatibility: GXIExtensionCompatibility): GXRegisterCenter {
+        this.extensionCompatibility = extensionCompatibility
         return this
     }
 
-    internal var processNodeEvent: GXIProcessNodeEvent? = null
+    internal var extensionNodeEvent: GXIExtensionNodeEvent? = null
 
-    fun registerProcessNodeEvent(processNodeEvent: GXIProcessNodeEvent): GXRegisterCenter {
-        this.processNodeEvent = processNodeEvent
+    fun registerExtensionNodeEvent(extensionNodeEvent: GXIExtensionNodeEvent): GXRegisterCenter {
+        this.extensionNodeEvent = extensionNodeEvent
         return this
     }
 
-    internal var processContainerDataUpdate: GXIProcessContainerDataUpdate? = null
+    internal var extensionContainerDataUpdate: GXIExtensionContainerDataUpdate? = null
 
-    fun registerProcessContainerDataUpdate(processContainerDataUpdate: GXIProcessContainerDataUpdate): GXRegisterCenter {
-        this.processContainerDataUpdate = processContainerDataUpdate
+    fun registerExtensionContainerDataUpdate(extensionContainerDataUpdate: GXIExtensionContainerDataUpdate): GXRegisterCenter {
+        this.extensionContainerDataUpdate = extensionContainerDataUpdate
         return this
     }
 
-    internal var processContainerItemBind: GXIProcessContainerItemBind? = null
+    internal var extensionContainerItemBind: GXIExtensionContainerItemBind? = null
 
-    fun registerProcessContainerItemBind(processContainerItemBind: GXIProcessContainerItemBind): GXRegisterCenter {
-        this.processContainerItemBind = processContainerItemBind
+    fun registerExtensionContainerItemBind(extensionContainerItemBind: GXIExtensionContainerItemBind): GXRegisterCenter {
+        this.extensionContainerItemBind = extensionContainerItemBind
         return this
     }
 
-    internal var lottieAnimation: GXILottieAnimation? = null
+    internal var extensionLottieAnimation: GXIExtensionLottieAnimation? = null
 
-    fun registerLottieAnimation(lottieAnimation: GXILottieAnimation): GXRegisterCenter {
-        this.lottieAnimation = lottieAnimation
+    fun registerExtensionLottieAnimation(extensionLottieAnimation: GXIExtensionLottieAnimation): GXRegisterCenter {
+        this.extensionLottieAnimation = extensionLottieAnimation
         return this
     }
 
     fun reset() {
-        processNodeEvent = null
-        processCompatible = null
-        processScroll = null
-        processGrid = null
-        processBizMap = null
-        processColor = null
-        processExpression = null
-        processDynamicProperty = null
-        processStaticProperty = null
-        processContainerDataUpdate = null
-        processContainerItemBind = null
-        processSize = null
+        extensionNodeEvent = null
+        extensionCompatibility = null
+        extensionScroll = null
+        extensionGrid = null
+        extensionBizMap = null
+        extensionColor = null
+        extensionExpression = null
+        extensionDynamicProperty = null
+        extensionStaticProperty = null
+        extensionContainerDataUpdate = null
+        extensionContainerItemBind = null
+        extensionSize = null
     }
-
 
     companion object {
 

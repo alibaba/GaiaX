@@ -120,7 +120,7 @@ class GXContainerViewAdapter(
         val childItemPosition = holder.adapterPosition
         val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
 
-        val processContainerItemBind = GXRegisterCenter.instance.processContainerItemBind
+        val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
             holder.childTag = processContainerItemBind.bindViewHolder(
                 gxTemplateContext.templateData?.tag,
@@ -229,7 +229,7 @@ class GXContainerViewAdapter(
     fun setContainerData(data: JSONArray) {
         viewTypeMap.clear()
         positionMap.clear()
-        val containerDataUpdate = GXRegisterCenter.instance.processContainerDataUpdate
+        val containerDataUpdate = GXRegisterCenter.instance.extensionContainerDataUpdate
         if (containerDataUpdate != null) {
             val oldData = containerData
             val newData = data

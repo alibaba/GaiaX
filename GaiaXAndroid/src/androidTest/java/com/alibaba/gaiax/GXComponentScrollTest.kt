@@ -28,8 +28,8 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_container_item_bind() {
 
-        GXRegisterCenter.instance.registerProcessContainerItemBind(object :
-            GXRegisterCenter.GXIProcessContainerItemBind {
+        GXRegisterCenter.instance.registerExtensionContainerItemBind(object :
+            GXRegisterCenter.GXIExtensionContainerItemBind {
 
             override fun bindViewHolder(
                 tag: Any?,
@@ -92,8 +92,8 @@ class GXComponentScrollTest : GXBaseTest() {
     fun template_data_update() {
 
         var isExecuteContainerDataUpdate = false
-        GXRegisterCenter.instance.registerProcessContainerDataUpdate(object :
-            GXRegisterCenter.GXIProcessContainerDataUpdate {
+        GXRegisterCenter.instance.registerExtensionContainerDataUpdate(object :
+            GXRegisterCenter.GXIExtensionContainerDataUpdate {
 
             override fun update(
                 gxTemplateContext: GXTemplateContext,
@@ -373,10 +373,10 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_200px_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
-            GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -457,10 +457,10 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_height_root_percent_100_item_100px_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
-            GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -542,10 +542,10 @@ class GXComponentScrollTest : GXBaseTest() {
     @Test
     fun template_scroll_height_root_percent_100_item_100px_limit_view_port_200px_youku_version() {
 
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
-            GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true
@@ -665,10 +665,10 @@ class GXComponentScrollTest : GXBaseTest() {
 
     @Test
     fun template_scroll_vertical_height_auto_youku_version() {
-        GXRegisterCenter.instance.registerProcessDynamicProperty(object :
-            GXRegisterCenter.GXIProcessDynamicProperty {
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
 
-            override fun convert(params: GXRegisterCenter.GXIProcessDynamicProperty.GXParams): Any? {
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
                 if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT) {
                     if (params.value == false) {
                         return true

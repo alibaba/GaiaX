@@ -166,9 +166,9 @@ fun GXText.setFontTextLineHeight(style: GXStyle) {
 
         GXRegisterCenter
             .instance
-            .processDynamicProperty
+            .extensionDynamicProperty
             ?.convert(
-                GXRegisterCenter.GXIProcessDynamicProperty.GXParams(
+                GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.STYLE_FONT_LINE_HEIGHT,
                     lineHeight
                 ).apply {
@@ -274,7 +274,7 @@ fun GXText.setFontFamilyAndFontWeight(style: GXStyle) {
 
     // check
     if (this is GXIconFont) {
-        if (GXRegisterCenter.instance.processCompatible?.isPreventIconFontTypefaceThrowException() == true) {
+        if (GXRegisterCenter.instance.extensionCompatibility?.isPreventIconFontTypefaceThrowException() == true) {
             this.typeface =
                 GXStyleConvert.instance.fontFamily(GXTemplateKey.GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME)
         } else {

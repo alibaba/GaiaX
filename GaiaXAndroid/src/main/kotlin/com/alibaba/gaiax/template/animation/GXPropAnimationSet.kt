@@ -32,7 +32,7 @@ import com.alibaba.gaiax.utils.getStringExt
 
 class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
 
-    override fun doAnimation(
+    override fun onAnimation(
         context: GXTemplateContext,
         gxNode: GXNode,
         templateData: JSONObject
@@ -121,14 +121,9 @@ class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
                                     set.animations.add(this)
                                 }
                             } else if (it.containsKey(KEY_PROP_ANIMATOR)) {
-                                GXPropAnimation.create(
-                                    it.getJSONObject(
-                                        KEY_PROP_ANIMATOR
-                                    )
-                                )
-                                    ?.apply {
-                                        set.animations.add(this)
-                                    }
+                                GXPropAnimation.create(it.getJSONObject(KEY_PROP_ANIMATOR))?.apply {
+                                    set.animations.add(this)
+                                }
                             } else {
                                 GXPropAnimation.create(it)?.apply {
                                     set.animations.add(this)

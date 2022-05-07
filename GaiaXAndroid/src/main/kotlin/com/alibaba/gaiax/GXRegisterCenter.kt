@@ -25,6 +25,7 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.animation.GXLottieAnimation
 
 /**
  * GaiaX register center. For extended functionality.
@@ -145,6 +146,10 @@ class GXRegisterCenter {
             gxTemplateContext: GXTemplateContext,
             scrollConfig: GXScrollConfig
         ): Any?
+    }
+
+    interface GXILottieAnimation {
+        fun create(): GXLottieAnimation?
     }
 
     interface GXIProcessCompatible {
@@ -289,6 +294,13 @@ class GXRegisterCenter {
         return this
     }
 
+    internal var lottieAnimation: GXILottieAnimation? = null
+
+    fun registerLottieAnimation(lottieAnimation: GXILottieAnimation): GXRegisterCenter {
+        this.lottieAnimation = lottieAnimation
+        return this
+    }
+
     fun reset() {
         processNodeEvent = null
         processCompatible = null
@@ -303,6 +315,7 @@ class GXRegisterCenter {
         processContainerItemBind = null
         processSize = null
     }
+
 
     companion object {
 

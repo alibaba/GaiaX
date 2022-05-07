@@ -24,5 +24,5 @@ import com.alibaba.gaiax.render.node.GXNode
  * @suppress
  */
 interface GXIAnimation {
-    fun doAnimation(context: GXTemplateContext, gxNode: GXNode, templateData: JSONObject) {}
+    fun onAnimation(context: GXTemplateContext, gxNode: GXNode, templateData: JSONObject) {}
 }

@@ -49,11 +49,11 @@ class GXAnimationBinding(
 
         // 符合条件触发动画
         if (trigger && (state is Boolean && state == true)) {
-            animation.doAnimation(context, child, templateData)
+            animation.onAnimation(context, child, templateData)
         }
         // 自动触发动画
         else if (!trigger) {
-            animation.doAnimation(context, child, templateData)
+            animation.onAnimation(context, child, templateData)
         }
     }
 
@@ -66,32 +66,28 @@ class GXAnimationBinding(
         private const val KEY_LOTTIE_ANIMATOR = "lottieAnimator"
 
         fun create(data: JSONObject): GXAnimationBinding? {
-            val type = data.getString(KEY_TYPE)
-            if (type != null) {
+            val type = data.getString(KEY_TYPE) ?: return null
+            val trigger = data.getBooleanValue(KEY_TRIGGER)
+            val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
+                data.getString(KEY_STATE)
+            ) else null
 
-                val trigger = data.getBooleanValue(KEY_TRIGGER)
-
-                val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
-                    data.getString(KEY_STATE)
-                ) else null
-
-                if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, false)) {
-                    val lottieAnimator =
-                        GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
-                    if (lottieAnimator != null) {
-                        return GXAnimationBinding(type, trigger, state, lottieAnimator)
-                    }
-                    return null
-                } else if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP, false)) {
-                    val animatorSet =
-                        GXPropAnimationSet.create(data.getJSONObject(KEY_PROP_ANIMATOR_SET))
-                    if (animatorSet != null) {
-                        return GXAnimationBinding(type, trigger, state, animatorSet)
-                    }
+            if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true)) {
+                val lottieAnimator =
+                    GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
+                if (lottieAnimator != null) {
+                    return GXAnimationBinding(type, trigger, state, lottieAnimator)
+                }
+                return null
+            } else if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP, true)) {
+                val animatorSet =
+                    GXPropAnimationSet.create(data.getJSONObject(KEY_PROP_ANIMATOR_SET))
+                if (animatorSet != null) {
+                    return GXAnimationBinding(type, trigger, state, animatorSet)
                 }
             }
+
             return null
         }
     }
-
 }

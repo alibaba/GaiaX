@@ -1,0 +1,11 @@
+{
+  "id": "template_container_nest_template_judegment_condition",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_container_nest_template_judegment_condition_scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

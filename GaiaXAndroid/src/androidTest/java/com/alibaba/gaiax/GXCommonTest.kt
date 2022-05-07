@@ -12,7 +12,6 @@ import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.nio.charset.Charset
 
 
 @RunWith(AndroidJUnit4::class)
@@ -135,10 +134,57 @@ class GXCommonTest : GXBaseTest() {
     }
 
     @Test
+    fun template_container_nest_template_judegment_condition() {
+        GXRegisterCenter.instance.registerProcessCompatible(object :
+            GXRegisterCenter.GXIProcessCompatible {
+            override fun isCompatibilityContainerNestTemplateJudgementCondition(): Boolean {
+                return true
+            }
+        })
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "common",
+            "template_container_nest_template_judegment_condition"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                }
+            })
+        )
+
+        rootView.child(0).executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+
+        GXRegisterCenter.instance.registerProcessCompatible(object :
+            GXRegisterCenter.GXIProcessCompatible {
+            override fun isCompatibilityContainerNestTemplateJudgementCondition(): Boolean {
+                return false
+            }
+        })
+    }
+
+    @Test
     fun template_datapass_nest_scroll_nodes_self_youku_version() {
         GXRegisterCenter.instance.registerProcessCompatible(object :
             GXRegisterCenter.GXIProcessCompatible {
-            override fun isCompatibleContainerDataPassSequence(): Boolean {
+            override fun isCompatibilityContainerDataPassSequence(): Boolean {
                 return true
             }
         })
@@ -178,7 +224,7 @@ class GXCommonTest : GXBaseTest() {
 
         GXRegisterCenter.instance.registerProcessCompatible(object :
             GXRegisterCenter.GXIProcessCompatible {
-            override fun isCompatibleContainerDataPassSequence(): Boolean {
+            override fun isCompatibilityContainerDataPassSequence(): Boolean {
                 return false
             }
         })

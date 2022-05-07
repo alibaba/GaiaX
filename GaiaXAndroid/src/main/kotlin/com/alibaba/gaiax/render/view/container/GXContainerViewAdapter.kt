@@ -31,7 +31,6 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
-import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
 import com.alibaba.gaiax.utils.getStringExt
@@ -59,9 +58,8 @@ class GXContainerViewAdapter(
 
     private var containerData: JSONArray = JSONArray()
 
-    private var mItemFooterTypeId: GXTemplateEngine.GXTemplateItem? = null
-    private var mItemFooterTypeHasMore: Boolean = false
-    private var mContainerBinding: GXDataBinding? = null
+    private var footerTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+    private var footerTypeHasMore: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
 
@@ -167,22 +165,26 @@ class GXContainerViewAdapter(
     private val positionMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
 
     override fun getItemViewType(position: Int): Int {
-        val itemFooterTypeId = mItemFooterTypeId;
-        if (mItemFooterTypeHasMore && itemFooterTypeId != null && position == containerData.size) {
-            val viewType: Int = mItemFooterTypeId.hashCode()
-            viewTypeMap[viewType] = itemFooterTypeId
-            positionMap[position] = itemFooterTypeId
+
+        // footer type
+        val footerTemplateItem = footerTemplateItem
+        if (footerTypeHasMore && footerTemplateItem != null && position == containerData.size) {
+            val viewType: Int = footerTemplateItem.hashCode()
+            viewTypeMap[viewType] = footerTemplateItem
+            positionMap[position] = footerTemplateItem
             containerData.add(JSONObject())
             return viewType
         }
 
-        val templateItem = getCurrentPositionTemplateItem(position)
-        if (templateItem != null) {
-            val viewType: Int = templateItem.templateId.hashCode()
-            viewTypeMap[viewType] = templateItem
-            positionMap[position] = templateItem
+        // multi type
+        val normalTemplateItem = getCurrentPositionTemplateItem(position)
+        if (normalTemplateItem != null) {
+            val viewType: Int = normalTemplateItem.templateId.hashCode()
+            viewTypeMap[viewType] = normalTemplateItem
+            positionMap[position] = normalTemplateItem
             return viewType
         }
+
         return super.getItemViewType(position)
     }
 
@@ -219,8 +221,8 @@ class GXContainerViewAdapter(
         }
     }
 
-    fun hasFooterView(): Boolean {
-        return mItemFooterTypeId != null && mItemFooterTypeHasMore
+    private fun hasFooterView(): Boolean {
+        return footerTemplateItem != null && footerTypeHasMore
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -240,16 +242,15 @@ class GXContainerViewAdapter(
     }
 
     fun initFooter() {
-        mContainerBinding = gxNode.templateNode.dataBinding
         val templateData: JSON = gxTemplateContext.templateData?.data ?: return
-        mContainerBinding?.getExtend(templateData)?.let { typeData ->
+        gxNode.templateNode.dataBinding?.getExtend(templateData)?.let { typeData ->
             typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
-                mItemFooterTypeId = GXTemplateEngine.GXTemplateItem(
+                footerTemplateItem = GXTemplateEngine.GXTemplateItem(
                     gxTemplateContext.context,
                     gxTemplateContext.templateItem.bizId,
                     it.getString(GXTemplateKey.GAIAX_LAYER_ID)
                 )
-                mItemFooterTypeHasMore = it.getBoolean(GXTemplateKey.GAIAX_SCROLL_HAS_MORE) ?: false
+                footerTypeHasMore = it.getBoolean(GXTemplateKey.GAIAX_SCROLL_HAS_MORE) ?: false
             }
         }
     }

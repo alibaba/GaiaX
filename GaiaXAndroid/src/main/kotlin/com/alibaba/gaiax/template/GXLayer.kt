@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.GXViewKey
 
 /**
@@ -197,6 +198,10 @@ data class GXLayer constructor(
      * 嵌套子模板类型，是个虚拟节点
      */
     fun isNestChildTemplateType(): Boolean {
+        if (GXRegisterCenter.instance.processCompatible?.isCompatibilityContainerNestTemplateJudgementCondition() == true) {
+            return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
+                    || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == null && customNodeClass == null
+        }
         return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
     }
 

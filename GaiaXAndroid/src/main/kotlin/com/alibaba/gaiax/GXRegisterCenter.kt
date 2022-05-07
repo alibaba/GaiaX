@@ -136,7 +136,12 @@ class GXRegisterCenter {
         /**
          * 是否兼容容器数据的传递顺序
          */
-        fun isCompatibleContainerDataPassSequence() = false
+        fun isCompatibilityContainerDataPassSequence() = false
+
+        /**
+         * 是否兼容容器嵌套模板的判定逻辑
+         */
+        fun isCompatibilityContainerNestTemplateJudgementCondition() = false
 
         /**
          * 是否兼容容器数据源抛异常的行为

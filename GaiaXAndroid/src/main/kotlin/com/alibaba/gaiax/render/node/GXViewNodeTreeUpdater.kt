@@ -186,7 +186,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         var valueData = visualDataBinding?.getDataValue(templateData)
         if (valueData is JSONArray) {
 
-            if (GXRegisterCenter.instance.processCompatible?.isCompatibleContainerDataPassSequence() == true) {
+            if (GXRegisterCenter.instance.processCompatible?.isCompatibilityContainerDataPassSequence() == true) {
                 // 是否兼容处理先$nodes取数组，再去$$的情况
 
                 val tmp = visualDataBinding?.value

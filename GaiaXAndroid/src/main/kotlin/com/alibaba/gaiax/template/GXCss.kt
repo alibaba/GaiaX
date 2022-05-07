@@ -41,5 +41,9 @@ data class GXCss(
         fun create(data: JSONObject = JSONObject()): GXCss {
             return GXCss(GXStyle.create(data), GXFlexBox.create(data))
         }
+
+        fun createByExtend(data: JSONObject = JSONObject()): GXCss {
+            return GXCss(GXStyle.create(data), GXFlexBox.createByExtend(data))
+        }
     }
 }

@@ -18,11 +18,46 @@ import org.junit.runner.RunWith
 class GXCommonTest : GXBaseTest() {
 
     @Test
-    fun template_position_databinding() {
+    fun template_position_relative_left() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
-            "template_position_databinding"
+            "template_position_relative_left"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject())
+        )
+
+        Assert.assertEquals(0F.dpToPx(), rootView.child(0).x())
+    }
+
+
+    @Test
+    fun template_position_relative_databinding_left() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "common",
+            "template_position_relative_databinding_left"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this[GXTemplateKey.FLEXBOX_POSITION_LEFT] = "30px"
+            })
+        )
+
+        Assert.assertEquals(0F.dpToPx(), rootView.child(0).x())
+    }
+
+    @Test
+    fun template_position_absolute_databinding_left() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "common",
+            "template_position_absolute_databinding_left"
         )
         val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
         GXTemplateEngine.instance.bindData(

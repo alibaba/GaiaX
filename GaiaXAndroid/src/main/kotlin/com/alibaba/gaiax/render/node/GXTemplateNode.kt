@@ -80,7 +80,7 @@ data class GXTemplateNode(
         // 创建FinalStyle
         val selfFinalCss: GXCss = if (extendCssData != null) {
             // 创建Css
-            val extendCss = GXCss.create(extendCssData)
+            val extendCss = GXCss.createByExtend(extendCssData)
 
             // 更新除了CSS外的其他节点信息
 

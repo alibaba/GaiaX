@@ -1,0 +1,5 @@
+{
+  "id": "template_position_relative_left",
+  "type": "gaia-template",
+  "layers": [{ "id": "view1", "type": "view" }]
+}

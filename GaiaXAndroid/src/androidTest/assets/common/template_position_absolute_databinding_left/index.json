@@ -1,0 +1,5 @@
+{
+  "id": "template_position_absolute_databinding_left",
+  "type": "gaia-template",
+  "layers": [{ "id": "view1", "type": "view" }]
+}

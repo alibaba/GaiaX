@@ -264,9 +264,12 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             isDirty = true
         }
 
-        flexBox.position?.let {
-            GXTemplateUtils.updateDimension(it, style.position)
-            isDirty = true
+        // 仅在绝对布局下，才能更新position的数据
+        if (style.positionType == PositionType.Absolute) {
+            flexBox.position?.let {
+                GXTemplateUtils.updateDimension(it, style.position)
+                isDirty = true
+            }
         }
 
         flexBox.margin?.let {

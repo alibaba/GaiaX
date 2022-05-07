@@ -132,5 +132,34 @@ data class GXFlexBox(
                 flexShrink = GXFlexBoxConvert.flexShrink(css)
             )
         }
+
+        fun createByExtend(css: JSONObject): GXFlexBox {
+            if (css.isEmpty()) {
+                return GXFlexBox()
+            }
+            return GXFlexBox(
+                display = GXFlexBoxConvert.display(css),
+                positionType = GXFlexBoxConvert.positionType(css),
+                direction = GXFlexBoxConvert.direction(css),
+                flexDirection = GXFlexBoxConvert.flexDirection(css),
+                flexWrap = GXFlexBoxConvert.flexWrap(css),
+                overflow = GXFlexBoxConvert.overflow(css),
+                alignItems = GXFlexBoxConvert.alignItems(css),
+                alignSelf = GXFlexBoxConvert.alignSelf(css),
+                alignContent = GXFlexBoxConvert.alignContent(css),
+                justifyContent = GXFlexBoxConvert.justifyContent(css),
+                position = GXFlexBoxConvert.positionByExtend(css),
+                margin = GXFlexBoxConvert.margin(css),
+                padding = GXFlexBoxConvert.padding(css),
+                border = GXFlexBoxConvert.border(css),
+                flexBasis = GXFlexBoxConvert.flexBasis(css),
+                size = GXFlexBoxConvert.size(css),
+                minSize = GXFlexBoxConvert.minSize(css),
+                maxSize = GXFlexBoxConvert.maxSize(css),
+                aspectRatio = GXFlexBoxConvert.aspectRatio(css),
+                flexGrow = GXFlexBoxConvert.flexGrow(css),
+                flexShrink = GXFlexBoxConvert.flexShrink(css)
+            )
+        }
     }
 }

@@ -25,7 +25,7 @@ import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 abstract class GXLottieAnimation : GXIAnimation {
 
-    override fun onAnimation(
+    override fun executeAnimation(
         gxState: GXIExpression?,
         gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,

@@ -52,7 +52,7 @@ class GXAnimationBinding(
 
         // 符合条件触发动画
         if (trigger && (state is Boolean && state == true)) {
-            gxAnimation.onAnimation(
+            gxAnimation.executeAnimation(
                 gxState,
                 gxAnimationExpression,
                 gxTemplateContext,
@@ -62,7 +62,7 @@ class GXAnimationBinding(
         }
         // 自动触发动画
         else if (!trigger) {
-            gxAnimation.onAnimation(
+            gxAnimation.executeAnimation(
                 gxState,
                 gxAnimationExpression,
                 gxTemplateContext,

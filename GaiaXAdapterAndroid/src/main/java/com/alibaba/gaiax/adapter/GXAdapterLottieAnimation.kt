@@ -37,7 +37,7 @@ import com.alibaba.gaiax.utils.setValueExt
 
 class GXAdapterLottieAnimation : GXLottieAnimation() {
 
-    override fun onAnimation(
+    override fun executeAnimation(
         gxState: GXIExpression?,
         gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,

@@ -25,7 +25,7 @@ import com.alibaba.gaiax.template.GXIExpression
  * @suppress
  */
 interface GXIAnimation {
-    fun onAnimation(
+    fun executeAnimation(
         gxState: GXIExpression?,
         gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,

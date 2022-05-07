@@ -1,0 +1,11 @@
+{
+  "id": "template_position_databinding",
+  "type": "gaia-template",
+  "package": {
+    "id": "template_position_databinding",
+    "version": "0.0.1",
+    "modify-timestamp": "Sat May 07 2022 15:54:06 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [{ "id": "view1", "type": "view" }]
+}

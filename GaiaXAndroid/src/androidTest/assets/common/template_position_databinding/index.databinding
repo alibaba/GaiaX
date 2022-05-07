@@ -1,0 +1,1 @@
+{ "data": { "view1": { "extend": { "left": "$left" } } } }

@@ -1,0 +1,12 @@
+#template_position_databinding {
+  width: 100%;
+  height: 100px;
+  background-color: #ffffff;
+}
+#view1 {
+  width: 100px;
+  height: 100px;
+  background-color: #e4e4e4;
+  position: absolute;
+  left: 20px;
+}

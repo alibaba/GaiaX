@@ -262,19 +262,18 @@ object GXFlexBoxConvert {
     }
 
     fun position(cssJson: JSONObject): Rect<Dimension>? {
-        if (positionType(cssJson) == PositionType.Absolute) {
-            val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
-            val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
-            val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
-            val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
-            if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
-                return Rect(
-                    GXSize.create(start ?: "").valueDimension,
-                    GXSize.create(end ?: "").valueDimension,
-                    GXSize.create(top ?: "").valueDimension,
-                    GXSize.create(bottom ?: "").valueDimension
-                )
-            }
+        // 增加判断会导致databinding的时候无法执行过去
+        val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
+        val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
+        val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
+        val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
+        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+            return Rect(
+                GXSize.create(start ?: "").valueDimension,
+                GXSize.create(end ?: "").valueDimension,
+                GXSize.create(top ?: "").valueDimension,
+                GXSize.create(bottom ?: "").valueDimension
+            )
         }
         return null
     }

@@ -263,6 +263,7 @@ object GXFlexBoxConvert {
 
     fun position(cssJson: JSONObject): Rect<Dimension>? {
         // 增加判断会导致databinding的时候无法执行过去
+        // if (positionType(cssJson) == PositionType.Absolute) {
         val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
         val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
@@ -275,6 +276,7 @@ object GXFlexBoxConvert {
                 GXSize.create(bottom ?: "").valueDimension
             )
         }
+        // }
         return null
     }
 }

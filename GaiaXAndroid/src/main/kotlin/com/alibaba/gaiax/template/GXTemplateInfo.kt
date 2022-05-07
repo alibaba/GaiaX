@@ -19,6 +19,7 @@ package com.alibaba.gaiax.template
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.view.GXViewKey
+import com.alibaba.gaiax.template.animation.GXAnimationBinding
 import com.alibaba.gaiax.template.factory.GXDataBindingFactory
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXCssFileParserUtils

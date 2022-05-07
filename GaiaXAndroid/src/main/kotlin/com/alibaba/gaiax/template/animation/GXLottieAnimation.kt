@@ -1,0 +1,318 @@
+/*
+ * Copyright (c) 2021, Alibaba Group Holding Limited;
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.alibaba.gaiax.template.animation
+
+import android.animation.Animator
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.AbsoluteLayout
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieCompositionFactory
+import com.airbnb.lottie.LottieListener
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.R
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.template.GXIExpression
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
+import com.alibaba.gaiax.utils.setValueExt
+
+class GXLottieAnimation : GXIAnimation {
+
+    companion object {
+
+        private const val KEY_VALUE = "value"
+        private const val KEY_URL = "url"
+        private const val KEY_LOOP = "loop"
+        private const val KEY_LOOP_COUNT = "loopCount"
+
+        fun create(data: JSONObject?): GXLottieAnimation? {
+            val localUri = data?.getString(KEY_VALUE)
+            val remoteUri = data?.getString(KEY_URL)
+            if (localUri != null || remoteUri != null) {
+                val animator = GXLottieAnimation()
+                if (localUri != null) {
+                    animator.localUriExp = GXExpressionFactory.create(localUri)
+                }
+                if (remoteUri != null) {
+                    animator.remoteUriExp = GXExpressionFactory.create(remoteUri)
+                }
+                if (data.containsKey(KEY_LOOP) && data.getBoolean(KEY_LOOP)) {
+                    animator.loopCount = Int.MAX_VALUE
+                } else if (data.containsKey(KEY_LOOP_COUNT)) {
+                    animator.loopCount = data.getIntValue(KEY_LOOP_COUNT)
+                }
+                return animator
+            }
+            return null
+        }
+    }
+
+    var stateExp: GXIExpression? = null
+
+    var localUriExp: GXIExpression? = null
+
+    var remoteUriExp: GXIExpression? = null
+
+    var localUri: String? = null
+
+    var remoteUri: String? = null
+
+    var loopCount: Int = 0
+
+    override fun doAnimation(
+        context: GXTemplateContext,
+        gxNode: GXNode,
+        templateData: JSONObject
+    ) {
+        val lottieContainer = (gxNode.viewRef?.get() as? ViewGroup) ?: return
+        this.remoteUri = this.remoteUriExp?.value(templateData) as? String
+        this.localUri = this.localUriExp?.value(templateData) as? String
+        when {
+            this.remoteUri != null -> GXRemoteLottie(
+                context,
+                lottieContainer,
+                this,
+                gxNode,
+                templateData
+            ).play()
+            this.localUri != null -> GXLocalLottie(
+                context,
+                lottieContainer,
+                this,
+                gxNode,
+                templateData
+            ).play()
+        }
+    }
+
+    open class GXDefaultAnimatorListener : Animator.AnimatorListener {
+        override fun onAnimationRepeat(animation: Animator?) {
+        }
+
+        override fun onAnimationEnd(animation: Animator?) {
+        }
+
+        override fun onAnimationCancel(animation: Animator?) {
+        }
+
+        override fun onAnimationStart(animation: Animator?) {
+        }
+    }
+
+    class GXLocalLottie(
+        val context: GXTemplateContext,
+        private val lottieContainer: ViewGroup,
+        val animator: GXLottieAnimation,
+        val gxNode: GXNode,
+        val templateData: JSONObject
+    ) {
+
+        private fun appendJson(value: String?): String? {
+            if (value != null && !value.endsWith(".json")) {
+                return "$value.json"
+            }
+            return value
+        }
+
+        private fun createLottieView(context: Context): LottieAnimationView {
+            val lottieView: LottieAnimationView = LayoutInflater.from(context)
+                .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
+            lottieView.layoutParams = AbsoluteLayout.LayoutParams(
+                AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                0,
+                0
+            )
+            return lottieView
+        }
+
+        private fun initLottieLocalResourceDir(value: String, lottieView: LottieAnimationView) {
+            val dirIndex = value.indexOf("/")
+            if (dirIndex > 0) {
+                val dir = value.substring(0, dirIndex)
+                if (dir.isNotEmpty()) {
+                    lottieView.imageAssetsFolder = "$dir/images/"
+                }
+            }
+        }
+
+        fun play() {
+            val lottieView: LottieAnimationView? = if (lottieContainer.childCount == 0) {
+                createLottieView(lottieContainer.context)
+            } else {
+                lottieContainer.getChildAt(0) as? LottieAnimationView
+            }
+
+            if (lottieView?.isAnimating == true || gxNode.isAnimating) {
+                return
+            }
+
+            val localUri = animator.localUri ?: return
+
+            if (lottieView == null) {
+                return
+            }
+
+            initLottieLocalResourceDir(localUri, lottieView)
+
+            lottieView.removeAllAnimatorListeners()
+            lottieView.removeAllUpdateListeners()
+            lottieView.removeAllLottieOnCompositionLoadedListener()
+
+            lottieView.setAnimation(appendJson(localUri))
+            lottieView.repeatCount = animator.loopCount
+            lottieView.addAnimatorListener(object : GXDefaultAnimatorListener() {
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    gxNode.isAnimating = false
+                    lottieView.removeAllAnimatorListeners()
+                    lottieView.removeAllUpdateListeners()
+                    lottieView.removeAllLottieOnCompositionLoadedListener()
+                    lottieView.progress = 1F
+                    val stateExp = animator.stateExp
+                    GXExpressionFactory.valuePath(stateExp?.expression())?.let {
+                        templateData.setValueExt(it, false)
+                    }
+                    context.templateData?.eventListener?.onAnimationEvent(
+                        GXTemplateEngine.GXAnimation().apply {
+                            this.state = "END"
+                            this.nodeId = gxNode.id
+                            this.view = lottieView
+                        })
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    context.templateData?.eventListener?.onAnimationEvent(
+                        GXTemplateEngine.GXAnimation().apply {
+                            this.state = "START"
+                            this.nodeId = gxNode.id
+                            this.view = lottieView
+                        })
+                }
+
+            })
+            lottieView.playAnimation()
+
+            if (lottieContainer.childCount == 0) {
+                lottieView.isClickable = false
+                lottieContainer.isClickable = false
+                lottieContainer.addView(lottieView)
+            }
+        }
+    }
+
+    class GXRemoteLottie(
+        val context: GXTemplateContext,
+        private val lottieContainer: ViewGroup,
+        val animator: GXLottieAnimation,
+        val gxNode: GXNode,
+        val rawJson: JSON
+    ) {
+
+        private fun createLottieView(context: Context): LottieAnimationView {
+            val lottieView: LottieAnimationView = LayoutInflater.from(context)
+                .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
+            lottieView.layoutParams = AbsoluteLayout.LayoutParams(
+                AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                0,
+                0
+            )
+            return lottieView
+        }
+
+        fun play() {
+            val lottieView: LottieAnimationView? = if (lottieContainer.childCount == 0) {
+                createLottieView(lottieContainer.context)
+            } else {
+                lottieContainer.getChildAt(0) as? LottieAnimationView
+            }
+
+            if (lottieView?.isAnimating == true || gxNode.isAnimating) {
+                return
+            }
+
+            val remoteUri = animator.remoteUri ?: return
+
+            if (lottieView == null) {
+                return
+            }
+
+            lottieView.removeAllAnimatorListeners()
+            lottieView.removeAllUpdateListeners()
+            lottieView.removeAllLottieOnCompositionLoadedListener()
+
+            gxNode.isAnimating = true
+            val downloadTask = LottieCompositionFactory.fromUrl(lottieView.context, remoteUri)
+            downloadTask.addListener(object : LottieListener<LottieComposition> {
+
+                override fun onResult(composition: LottieComposition?) {
+                    downloadTask.removeListener(this)
+                    gxNode.isAnimating = composition != null
+
+                    composition?.let { it ->
+                        lottieView.setComposition(it)
+                        lottieView.repeatCount = animator.loopCount
+                        lottieView.addAnimatorListener(object : GXDefaultAnimatorListener() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                gxNode.isAnimating = false
+
+                                lottieView.removeAllAnimatorListeners()
+                                lottieView.removeAllUpdateListeners()
+                                lottieView.removeAllLottieOnCompositionLoadedListener()
+
+                                lottieView.progress = 1F
+                                val stateExp = animator.stateExp
+                                GXExpressionFactory.valuePath(stateExp?.expression())?.let {
+                                    rawJson.setValueExt(it, false)
+                                }
+                                context.templateData?.eventListener?.onAnimationEvent(
+                                    GXTemplateEngine.GXAnimation().apply {
+                                        this.state = "END"
+                                        this.nodeId = gxNode.id
+                                        this.view = lottieView
+                                    })
+                            }
+
+                            override fun onAnimationStart(animation: Animator?) {
+                                gxNode.isAnimating = true
+                                context.templateData?.eventListener?.onAnimationEvent(
+                                    GXTemplateEngine.GXAnimation().apply {
+                                        this.state = "START"
+                                        this.nodeId = gxNode.id
+                                        this.view = lottieView
+                                    })
+                            }
+                        })
+                        lottieView.playAnimation()
+                    }
+                }
+            })
+
+            if (lottieContainer.childCount == 0) {
+                lottieView.isClickable = false
+                lottieContainer.isClickable = false
+                lottieContainer.addView(lottieView)
+            }
+        }
+    }
+}

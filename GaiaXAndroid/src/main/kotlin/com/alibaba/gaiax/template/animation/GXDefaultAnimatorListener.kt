@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.template
+package com.alibaba.gaiax.template.animation
 
-import android.graphics.LinearGradient
+import android.animation.Animator
 
-class GXLinearColorGradient(
-    x0: Float,
-    y0: Float,
-    x1: Float,
-    y1: Float,
-    colors: IntArray,
-    positions: FloatArray?,
-    tile: TileMode
-) : LinearGradient(x0, y0, x1, y1, colors, positions, tile)
+open class GXDefaultAnimatorListener : Animator.AnimatorListener {
+    override fun onAnimationRepeat(animation: Animator?) {
+    }
+
+    override fun onAnimationEnd(animation: Animator?) {
+    }
+
+    override fun onAnimationCancel(animation: Animator?) {
+    }
+
+    override fun onAnimationStart(animation: Animator?) {
+    }
+}

@@ -384,4 +384,8 @@ object GXTemplateKey {
     const val GAIAX_SCROLL_HAS_MORE = "hasMore"
 
 
+    const val GAIAX_ANIMATION_TYPE_LOTTIE = "LOTTIE"
+    const val GAIAX_ANIMATION_TYPE_PROP = "PROP"
+
+
 }

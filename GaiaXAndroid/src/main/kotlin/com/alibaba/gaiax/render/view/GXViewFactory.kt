@@ -21,6 +21,7 @@ import android.view.View
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXGridView
 import com.alibaba.gaiax.render.view.container.GXScrollView
+import com.alibaba.gaiax.render.view.container.banner.GXBannerView
 
 /**
  * View factory class, used to produce the View corresponding to the Type tag
@@ -41,6 +42,7 @@ object GXViewFactory {
         viewSupport[GXViewKey.VIEW_TYPE_ICON_FONT] = GXIconFont::class.java
         viewSupport[GXViewKey.VIEW_TYPE_LOTTIE] = GXLottie::class.java
         viewSupport[GXViewKey.VIEW_TYPE_SHADOW_LAYOUT] = GXShadowLayout::class.java
+        viewSupport[GXViewKey.VIEW_TYPE_BANNER] = GXBannerView::class.java
     }
 
     /**

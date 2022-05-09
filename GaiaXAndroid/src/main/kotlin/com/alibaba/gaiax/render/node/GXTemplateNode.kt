@@ -124,6 +124,8 @@ data class GXTemplateNode(
 
     fun isGridType(): Boolean = layer.isGridType()
 
+    fun isBannerType(): Boolean = layer.isBannerType()
+
     fun isGaiaTemplateType(): Boolean = layer.isGaiaTemplate()
 
     fun isCustomType(): Boolean = layer.isCustomType()

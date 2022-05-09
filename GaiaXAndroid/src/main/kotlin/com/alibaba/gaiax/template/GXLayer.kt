@@ -169,7 +169,7 @@ data class GXLayer constructor(
      * 是否是容器类型
      */
     fun isContainerType(): Boolean {
-        return isScrollType() || isGridType()
+        return isScrollType() || isGridType() || isBannerType()
     }
 
     /**
@@ -235,6 +235,11 @@ data class GXLayer constructor(
      * 图片类型
      */
     fun isImageType(): Boolean = GXViewKey.VIEW_TYPE_IMAGE == type
+
+    /**
+     * Banner 容器节点类型
+     */
+    fun isBannerType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_BANNER
 
     /**
      * 是否能够被合并

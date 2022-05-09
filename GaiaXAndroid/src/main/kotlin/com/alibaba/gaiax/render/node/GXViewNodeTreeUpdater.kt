@@ -31,6 +31,8 @@ import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.container.banner.GXBannerView
+import com.alibaba.gaiax.render.view.container.banner.GXBannerViewAdapter
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
@@ -322,6 +324,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 dataBinding,
                 templateData
             )
+            node.isBannerType() -> bindBanner(context, view, node, dataBinding, templateData)
             node.isViewType() || node.isGaiaTemplateType() -> bindView(
                 view,
                 dataBinding,
@@ -576,5 +579,29 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 })
             }
         }
+    }
+
+    private fun bindBanner(context: GXTemplateContext,
+                           view: View,
+                           node: GXNode,
+                           dataBinding: GXDataBinding,
+                           templateData: JSONObject) {
+
+        val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: JSONArray()
+
+        val container = view as GXBannerView
+
+        val adapter: GXBannerViewAdapter?
+        if (container.viewPager?.adapter != null) {
+            adapter = container.viewPager?.adapter as GXBannerViewAdapter
+        } else {
+            adapter = GXBannerViewAdapter(context, node)
+            container.viewPager?.adapter = adapter
+        }
+
+        adapter.setData(containerTemplateData)
+        container.setIndicatorCount(containerTemplateData.size)
+
+        container.onBindData(templateData)
     }
 }

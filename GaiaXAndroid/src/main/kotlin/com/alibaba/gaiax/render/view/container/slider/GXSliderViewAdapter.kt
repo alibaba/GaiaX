@@ -8,18 +8,27 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.template.GXSliderConfig
 
 /**
  * @author guaiyu
  * @date 2022/4/14 19:04
  */
-class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode) :
+class GXSliderViewAdapter(
+    val gxTemplateContext: GXTemplateContext,
+    val gxNode: GXNode,
+    val config: GXSliderConfig?
+) :
     PagerAdapter() {
 
     private var data = JSONArray()
 
     override fun getCount(): Int {
-        return data.size
+        return if (config?.infinityScroll == false) {
+            data.size
+        } else {
+            Int.MAX_VALUE
+        }
     }
 
     override fun isViewFromObject(view: View, obj: Any): Boolean {
@@ -27,9 +36,15 @@ class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: 
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val realPosition = if (data.size > 0) {
+            position % data.size
+        } else {
+            position
+        }
+
         val templateItem = getTemplateItem()
             ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
-        val itemData = data.getJSONObject(position) ?: JSONObject()
+        val itemData = data.getJSONObject(realPosition) ?: JSONObject()
         val itemView = GXTemplateEngine.instance.createView(
             templateItem,
             GXTemplateEngine.GXMeasureSize(

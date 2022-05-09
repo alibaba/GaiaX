@@ -62,7 +62,16 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             }
 
             override fun onPageSelected(position: Int) {
-                indicatorChanged(position)
+                if (mConfig?.hasIndicator == true) {
+                    if (mConfig?.hasIndicator == true
+                        && mConfig?.infinityScroll == true
+                        && mIndicatorItems.size > 0
+                    ) {
+                        indicatorChanged(position % mIndicatorItems.size)
+                    } else {
+                        indicatorChanged(position)
+                    }
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -92,30 +101,41 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     override fun onBindData(data: JSONObject) {
+        mConfig?.selectedIndex?.let {
+            viewPager?.adapter?.count?.let { count ->
+                if (it in 0 until count) {
+                    viewPager?.setCurrentItem(it, false)
+                }
+            }
+        }
         startTimer()
     }
 
     fun setIndicatorCount(count: Int) {
         mIndicatorItems.clear()
-        for (i in 0 until count) {
-            val view = ImageView(context)
-            view.setImageResource(R.drawable.gaiax_slider_indicator_dot)
-            if (i == 0) {
-                mSelectedIndicatorItem = view
-                mSelectedIndicatorItem?.isSelected = true
-            }
-            mIndicatorItems.add(view)
+        mIndicatorContainer?.removeAllViews()
 
-            mIndicatorContainer?.addView(
-                view,
-                LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setMargins(10, 0, 10, 0)
-                })
+        if (mConfig?.hasIndicator != false) {
+            for (i in 0 until count) {
+                val view = ImageView(context)
+                view.setImageResource(R.drawable.gaiax_slider_indicator_dot)
+                if (i == 0) {
+                    mSelectedIndicatorItem = view
+                    mSelectedIndicatorItem?.isSelected = true
+                }
+                mIndicatorItems.add(view)
+
+                mIndicatorContainer?.addView(
+                    view,
+                    LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                        setMargins(10, 0, 10, 0)
+                    })
+            }
         }
     }
 
     private fun indicatorChanged(position: Int) {
-        if (position >= 0 && position < mIndicatorItems.size) {
+        if (position in 0 until mIndicatorItems.size) {
             val item = mIndicatorItems[position]
             if (item != mSelectedIndicatorItem) {
                 item.isSelected = true
@@ -126,26 +146,26 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun startTimer() {
-        mTimer = Timer()
-        mTimerTask = object : TimerTask() {
-            override fun run() {
-                viewPager?.currentItem?.let { currentItem ->
-                    viewPager?.adapter?.count?.let { count ->
-                        Handler(Looper.getMainLooper()).post {
-                            viewPager?.setCurrentItem(
-                                (currentItem + 1) % count,
-                                true
-                            )
+        mConfig?.scrollTimeInterval?.let {
+            if (it > 0) {
+                mTimer = Timer()
+                mTimerTask = object : TimerTask() {
+                    override fun run() {
+                        viewPager?.currentItem?.let { currentItem ->
+                            viewPager?.adapter?.count?.let { count ->
+                                Handler(Looper.getMainLooper()).post {
+                                    viewPager?.setCurrentItem(
+                                        (currentItem + 1) % count,
+                                        true
+                                    )
+                                }
+                            }
                         }
                     }
                 }
+                mTimer?.schedule(mTimerTask, it, it)
             }
         }
-        mTimer?.schedule(
-            mTimerTask,
-            mConfig?.scrollTimeInterval ?: 3000,
-            mConfig?.scrollTimeInterval ?: 3000
-        )
     }
 
     private fun stopTimer() {

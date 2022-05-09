@@ -356,5 +356,8 @@ object GXTemplateKey {
     const val GAIAX_GESTURE_TYPE_LONGPRESS = "longpress"
 
     // GXSliderView
-    const val GAIAX_LAYER_SCROLL_TIME_INTERVAL = "scroll-time-interval"
+    const val GAIAX_LAYER_SLIDER_SCROLL_TIME_INTERVAL = "slider-scroll-time-interval"
+    const val GAIAX_LAYER_SLIDER_INFINITY_SCROLL = "slider-infinity-scroll"
+    const val GAIAX_LAYER_SLIDER_HAS_INDICATOR = "slider-has-indicator"
+    const val GAIAX_LAYER_SLIDER_SELECTED_INDEX = "slider-selected-index"
 }

@@ -355,5 +355,6 @@ object GXTemplateKey {
     const val GAIAX_GESTURE_TYPE_JS_TAP = "click"
     const val GAIAX_GESTURE_TYPE_LONGPRESS = "longpress"
 
-
+    // GXBannerView
+    const val GAIAX_LAYER_SCROLL_TIME_INTERVAL = "scroll-time-interval"
 }

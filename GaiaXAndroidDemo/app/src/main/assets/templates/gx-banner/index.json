@@ -2,6 +2,7 @@
   "id": "gx-banner",
   "type": "gaia-template",
   "sub-type": "banner",
+  "scroll-time-interval": 6000,
   "layers": [
     {
       "id": "gx-banner-item",

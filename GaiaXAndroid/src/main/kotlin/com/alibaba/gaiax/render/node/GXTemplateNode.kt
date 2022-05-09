@@ -61,6 +61,8 @@ data class GXTemplateNode(
 
     var finalScrollConfig: GXScrollConfig? = null
 
+    var finalBannerConfig: GXBannerConfig? = null
+
     var finalCss: GXCss? = null
 
     /**
@@ -87,6 +89,10 @@ data class GXTemplateNode(
             // 仅当有Scroll配置信息时，才处理更新
             layer.scrollConfig?.let {
                 finalScrollConfig = GXScrollConfig.create(it, extendCssData)
+            }
+
+            layer.bannerConfig?.let {
+                finalBannerConfig = GXBannerConfig.create(it, extendCssData)
             }
 
             // 合并原有CSS和扩展属性的CSS

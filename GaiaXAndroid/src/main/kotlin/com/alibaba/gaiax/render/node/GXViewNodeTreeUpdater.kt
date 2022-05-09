@@ -598,6 +598,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
             adapter = GXBannerViewAdapter(context, node)
             container.viewPager?.adapter = adapter
         }
+        container.setConfig(node.templateNode.finalBannerConfig)
 
         adapter.setData(containerTemplateData)
         container.setIndicatorCount(containerTemplateData.size)

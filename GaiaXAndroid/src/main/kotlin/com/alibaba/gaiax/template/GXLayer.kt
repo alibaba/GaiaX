@@ -61,6 +61,10 @@ data class GXLayer constructor(
      */
     val gridConfig: GXGridConfig? = null,
     /**
+     * banner配置
+     */
+    val bannerConfig: GXBannerConfig? = null,
+    /**
      * 子节点
      */
     val layers: MutableList<GXLayer> = mutableListOf(),
@@ -126,6 +130,14 @@ data class GXLayer constructor(
                         scrollable
                     )
                 )
+                isBannerType(type, subType) -> GXLayer(
+                    id = id,
+                    css = css ?: id,
+                    type = type,
+                    subType = subType,
+                    customNodeClass = viewClass,
+                    bannerConfig = GXBannerConfig.create(data)
+                )
                 else -> GXLayer(
                     id = id,
                     css = css ?: id,
@@ -143,6 +155,9 @@ data class GXLayer constructor(
 
         private fun isScrollType(type: String, subType: String?) =
             type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
+
+        private fun isBannerType(type: String, subType: String?) =
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_BANNER
 
         private fun initChildrenLayer(data: JSONObject, layer: GXLayer) {
             data.getJSONArray(GXTemplateKey.GAIAX_LAYERS)?.forEach {

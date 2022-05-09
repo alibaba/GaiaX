@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.render.view.container.banner
 
 import android.content.Context
+import android.graphics.Canvas
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -10,8 +11,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.view.marginLeft
-import androidx.core.view.size
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
@@ -19,6 +18,8 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.R
+import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
+import com.alibaba.gaiax.template.GXBannerConfig
 import java.util.*
 
 /**
@@ -35,19 +36,21 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
         initView()
     }
 
-    private var gxTemplateContext: GXTemplateContext? = null
-    var viewPager: ViewPager? = null
-    private var indicatorContainer: LinearLayout? = null
-    private var selectedIndicatorItem: View? = null
+    private var mGxTemplateContext: GXTemplateContext? = null
+    private var mConfig: GXBannerConfig? = null
 
-    private var indicatorItems = mutableListOf<View>()
+    var viewPager: ViewPager? = null
+    private var mIndicatorContainer: LinearLayout? = null
+    private var mSelectedIndicatorItem: View? = null
+
+    private var mIndicatorItems = mutableListOf<View>()
 
     private var mTimer: Timer? = null
     private var mTimerTask: TimerTask? = null
 
     private fun initView() {
         viewPager = ViewPager(context)
-        indicatorContainer = LinearLayout(context).apply {
+        mIndicatorContainer = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.END
         }
@@ -71,7 +74,7 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
 
         addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(
-            indicatorContainer,
+            mIndicatorContainer,
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
                 setMargins(70, 0, 70, 30)
@@ -86,22 +89,26 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
         })
     }
 
+    fun setConfig(config: GXBannerConfig?) {
+        mConfig = config
+    }
+
     override fun onBindData(data: JSONObject) {
         startTimer()
     }
 
     fun setIndicatorCount(count: Int) {
-        indicatorItems.clear()
+        mIndicatorItems.clear()
         for (i in 0 until count) {
             val view = ImageView(context)
             view.setImageResource(R.drawable.gaiax_banner_indicator_dot)
             if (i == 0) {
-                selectedIndicatorItem = view
-                selectedIndicatorItem?.isSelected = true
+                mSelectedIndicatorItem = view
+                mSelectedIndicatorItem?.isSelected = true
             }
-            indicatorItems.add(view)
+            mIndicatorItems.add(view)
 
-            indicatorContainer?.addView(
+            mIndicatorContainer?.addView(
                 view,
                 LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                     setMargins(10, 0, 10, 0)
@@ -110,12 +117,12 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun indicatorChanged(position: Int) {
-        if (position >= 0 && position < indicatorItems.size) {
-            val item = indicatorItems[position]
-            if (item != selectedIndicatorItem) {
+        if (position >= 0 && position < mIndicatorItems.size) {
+            val item = mIndicatorItems[position]
+            if (item != mSelectedIndicatorItem) {
                 item.isSelected = true
-                selectedIndicatorItem?.isSelected = false
-                selectedIndicatorItem = item
+                mSelectedIndicatorItem?.isSelected = false
+                mSelectedIndicatorItem = item
             }
         }
     }
@@ -136,7 +143,11 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
                 }
             }
         }
-        mTimer?.schedule(mTimerTask, 4000, 4000)
+        mTimer?.schedule(
+            mTimerTask,
+            mConfig?.scrollTimeInterval ?: 3000,
+            mConfig?.scrollTimeInterval ?: 3000
+        )
     }
 
     private fun stopTimer() {
@@ -148,17 +159,17 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     override fun manualRelease() {
-        if (gxTemplateContext?.rootView?.get() == this) {
-            if (gxTemplateContext?.rootNode?.isRoot == true) {
-                GXTemplateEngine.instance.render.onDestroy(gxTemplateContext!!)
-                gxTemplateContext = null
+        if (mGxTemplateContext?.rootView?.get() == this) {
+            if (mGxTemplateContext?.rootNode?.isRoot == true) {
+                GXTemplateEngine.instance.render.onDestroy(mGxTemplateContext!!)
+                mGxTemplateContext = null
             }
         }
     }
 
     override fun setTemplateContext(gxContext: GXTemplateContext) {
-        this.gxTemplateContext = gxContext
+        this.mGxTemplateContext = gxContext
     }
 
-    override fun getTemplateContext(): GXTemplateContext? = gxTemplateContext
+    override fun getTemplateContext(): GXTemplateContext? = mGxTemplateContext
 }

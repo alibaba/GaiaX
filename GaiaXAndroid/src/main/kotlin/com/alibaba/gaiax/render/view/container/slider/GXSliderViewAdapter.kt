@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.render.view.container.banner
+package com.alibaba.gaiax.render.view.container.slider
 
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import com.alibaba.gaiax.render.node.GXNode
  * @author guaiyu
  * @date 2022/4/14 19:04
  */
-class GXBannerViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode) :
+class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode) :
     PagerAdapter() {
 
     private var data = JSONArray()

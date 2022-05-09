@@ -31,8 +31,8 @@ import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
-import com.alibaba.gaiax.render.view.container.banner.GXBannerView
-import com.alibaba.gaiax.render.view.container.banner.GXBannerViewAdapter
+import com.alibaba.gaiax.render.view.container.slider.GXSliderView
+import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXLayer
@@ -324,7 +324,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                 dataBinding,
                 templateData
             )
-            node.isBannerType() -> bindBanner(context, view, node, dataBinding, templateData)
+            node.isSliderType() -> bindSlider(context, view, node, dataBinding, templateData)
             node.isViewType() || node.isGaiaTemplateType() -> bindView(
                 view,
                 dataBinding,
@@ -581,7 +581,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindBanner(context: GXTemplateContext,
+    private fun bindSlider(context: GXTemplateContext,
                            view: View,
                            node: GXNode,
                            dataBinding: GXDataBinding,
@@ -589,16 +589,16 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
 
         val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: JSONArray()
 
-        val container = view as GXBannerView
+        val container = view as GXSliderView
 
-        val adapter: GXBannerViewAdapter?
+        val adapter: GXSliderViewAdapter?
         if (container.viewPager?.adapter != null) {
-            adapter = container.viewPager?.adapter as GXBannerViewAdapter
+            adapter = container.viewPager?.adapter as GXSliderViewAdapter
         } else {
-            adapter = GXBannerViewAdapter(context, node)
+            adapter = GXSliderViewAdapter(context, node)
             container.viewPager?.adapter = adapter
         }
-        container.setConfig(node.templateNode.finalBannerConfig)
+        container.setConfig(node.templateNode.finalSliderConfig)
 
         adapter.setData(containerTemplateData)
         container.setIndicatorCount(containerTemplateData.size)

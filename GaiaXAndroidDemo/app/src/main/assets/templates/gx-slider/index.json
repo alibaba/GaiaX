@@ -1,11 +1,11 @@
 {
-  "id": "gx-banner",
+  "id": "gx-slider",
   "type": "gaia-template",
-  "sub-type": "banner",
+  "sub-type": "slider",
   "scroll-time-interval": 6000,
   "layers": [
     {
-      "id": "gx-banner-item",
+      "id": "gx-slider-item",
       "type": "gaia-template",
       "sub-type": "custom"
     }

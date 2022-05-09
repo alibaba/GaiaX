@@ -61,7 +61,7 @@ data class GXTemplateNode(
 
     var finalScrollConfig: GXScrollConfig? = null
 
-    var finalBannerConfig: GXBannerConfig? = null
+    var finalSliderConfig: GXSliderConfig? = null
 
     var finalCss: GXCss? = null
 
@@ -91,8 +91,8 @@ data class GXTemplateNode(
                 finalScrollConfig = GXScrollConfig.create(it, extendCssData)
             }
 
-            layer.bannerConfig?.let {
-                finalBannerConfig = GXBannerConfig.create(it, extendCssData)
+            layer.sliderConfig?.let {
+                finalSliderConfig = GXSliderConfig.create(it, extendCssData)
             }
 
             // 合并原有CSS和扩展属性的CSS
@@ -130,7 +130,7 @@ data class GXTemplateNode(
 
     fun isGridType(): Boolean = layer.isGridType()
 
-    fun isBannerType(): Boolean = layer.isBannerType()
+    fun isSliderType(): Boolean = layer.isSliderType()
 
     fun isGaiaTemplateType(): Boolean = layer.isGaiaTemplate()
 

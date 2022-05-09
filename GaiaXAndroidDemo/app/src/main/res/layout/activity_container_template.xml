@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Banner容器模板"
+            android:text="Slider容器模板"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.LinearLayoutCompat

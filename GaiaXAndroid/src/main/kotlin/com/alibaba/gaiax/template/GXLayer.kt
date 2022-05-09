@@ -61,9 +61,9 @@ data class GXLayer constructor(
      */
     val gridConfig: GXGridConfig? = null,
     /**
-     * banner配置
+     * slider配置
      */
-    val bannerConfig: GXBannerConfig? = null,
+    val sliderConfig: GXSliderConfig? = null,
     /**
      * 子节点
      */
@@ -130,13 +130,13 @@ data class GXLayer constructor(
                         scrollable
                     )
                 )
-                isBannerType(type, subType) -> GXLayer(
+                isSliderType(type, subType) -> GXLayer(
                     id = id,
                     css = css ?: id,
                     type = type,
                     subType = subType,
                     customNodeClass = viewClass,
-                    bannerConfig = GXBannerConfig.create(data)
+                    sliderConfig = GXSliderConfig.create(data)
                 )
                 else -> GXLayer(
                     id = id,
@@ -156,8 +156,8 @@ data class GXLayer constructor(
         private fun isScrollType(type: String, subType: String?) =
             type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
 
-        private fun isBannerType(type: String, subType: String?) =
-            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_BANNER
+        private fun isSliderType(type: String, subType: String?) =
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_SLIDER
 
         private fun initChildrenLayer(data: JSONObject, layer: GXLayer) {
             data.getJSONArray(GXTemplateKey.GAIAX_LAYERS)?.forEach {
@@ -184,7 +184,7 @@ data class GXLayer constructor(
      * 是否是容器类型
      */
     fun isContainerType(): Boolean {
-        return isScrollType() || isGridType() || isBannerType()
+        return isScrollType() || isGridType() || isSliderType()
     }
 
     /**
@@ -252,9 +252,9 @@ data class GXLayer constructor(
     fun isImageType(): Boolean = GXViewKey.VIEW_TYPE_IMAGE == type
 
     /**
-     * Banner 容器节点类型
+     * Slider 容器节点类型
      */
-    fun isBannerType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_BANNER
+    fun isSliderType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_SLIDER
 
     /**
      * 是否能够被合并

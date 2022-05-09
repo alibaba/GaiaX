@@ -117,13 +117,13 @@ class ContainerTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-banner")
+        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-slider")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), 100F.dpToPx())
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/gx-banner-item-data.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/gx-slider-item-data.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)

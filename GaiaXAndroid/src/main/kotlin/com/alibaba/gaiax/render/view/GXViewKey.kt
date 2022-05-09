@@ -42,7 +42,7 @@ object GXViewKey {
 
     const val VIEW_TYPE_SHADOW_LAYOUT = "shadow"
 
-    const val VIEW_TYPE_BANNER = "banner"
+    const val VIEW_TYPE_SLIDER = "slider"
 
     const val VIEW_TYPE_CUSTOM = "custom"
 }

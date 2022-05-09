@@ -1,7 +1,6 @@
-package com.alibaba.gaiax.render.view.container.banner
+package com.alibaba.gaiax.render.view.container.slider
 
 import android.content.Context
-import android.graphics.Canvas
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -18,15 +17,14 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.R
-import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
-import com.alibaba.gaiax.template.GXBannerConfig
+import com.alibaba.gaiax.template.GXSliderConfig
 import java.util.*
 
 /**
  * @author guaiyu
  * @date 2022/4/13 19:48
  */
-class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
+class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     constructor(context: Context) : super(context) {
         initView()
@@ -37,7 +35,7 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private var mGxTemplateContext: GXTemplateContext? = null
-    private var mConfig: GXBannerConfig? = null
+    private var mConfig: GXSliderConfig? = null
 
     var viewPager: ViewPager? = null
     private var mIndicatorContainer: LinearLayout? = null
@@ -89,7 +87,7 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
         })
     }
 
-    fun setConfig(config: GXBannerConfig?) {
+    fun setConfig(config: GXSliderConfig?) {
         mConfig = config
     }
 
@@ -101,7 +99,7 @@ class GXBannerView : RelativeLayout, GXIViewBindData, GXIRootView {
         mIndicatorItems.clear()
         for (i in 0 until count) {
             val view = ImageView(context)
-            view.setImageResource(R.drawable.gaiax_banner_indicator_dot)
+            view.setImageResource(R.drawable.gaiax_slider_indicator_dot)
             if (i == 0) {
                 mSelectedIndicatorItem = view
                 mSelectedIndicatorItem?.isSelected = true

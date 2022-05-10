@@ -58,7 +58,7 @@ class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
             override fun onAnimationStart(animation: Animator?) {
                 context.templateData?.eventListener?.onAnimationEvent(
                     GXTemplateEngine.GXAnimation().apply {
-                        this.state = "START"
+                        this.state = GXTemplateEngine.GXAnimation.STATE_START
                         this.nodeId = child.id
                         this.view = targetView
                     })
@@ -72,7 +72,7 @@ class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
                 child.isAnimating = false
                 context.templateData?.eventListener?.onAnimationEvent(
                     GXTemplateEngine.GXAnimation().apply {
-                        this.state = "END"
+                        this.state = GXTemplateEngine.GXAnimation.STATE_END
                         this.nodeId = child.id
                         this.view = targetView
                     })

@@ -222,6 +222,11 @@ class GXTemplateEngine {
      */
     class GXAnimation {
 
+        companion object {
+            const val STATE_START = "START"
+            const val STATE_END = "END"
+        }
+
         /**
          * Animation state
          * START/END

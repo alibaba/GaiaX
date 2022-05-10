@@ -1,0 +1,16 @@
+{
+  "id": "gx-content-uper-slider",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "direction": "horizontal",
+  "edge-insets": "{0,0,0,0}",
+  "item-spacing": 0,
+  "row-spacing": 0,
+  "layers": [
+    {
+      "type": "gaia-template",
+      "id": "gx-content-uper-slider-item",
+      "sub-type": "custom"
+    }
+  ]
+}

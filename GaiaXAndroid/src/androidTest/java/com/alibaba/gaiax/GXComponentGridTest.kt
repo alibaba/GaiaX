@@ -155,7 +155,6 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(4).height())
     }
 
-
     @Test
     fun template_grid_column_responsive() {
         GXRegisterCenter.instance.registerExtensionGrid(object : GXRegisterCenter.GXIExtensionGrid {

@@ -7,6 +7,7 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -25,6 +26,61 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentScrollTest : GXBaseTest() {
+
+//    @Test
+//    fun template_scroll_binding_scroll_index() {
+//        val templateItem = GXTemplateEngine.GXTemplateItem(
+//            GXMockUtils.context,
+//            "scroll",
+//            "template_scroll_scroll_index"
+//        )
+//
+//        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+//            this["nodes"] = JSONArray().apply {
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//            }
+//        })
+//        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+//        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+//        GXTemplateEngine.instance.bindData(rootView, templateData)
+//
+//        Assert.assertEquals(
+//            3,
+//            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+//        )
+//    }
+//
+//    @Test
+//    fun template_scroll_binding_scroll_index_and_params_position() {
+//        val templateItem = GXTemplateEngine.GXTemplateItem(
+//            GXMockUtils.context,
+//            "scroll",
+//            "template_scroll_scroll_index"
+//        )
+//
+//        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+//            this["nodes"] = JSONArray().apply {
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//                this.add(JSONObject())
+//            }
+//        })
+//        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+//        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+//        GXTemplateEngine.instance.bindData(rootView, templateData)
+//
+//        Assert.assertEquals(
+//            3,
+//            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+//        )
+//    }
+
     @Test
     fun template_container_item_bind() {
 

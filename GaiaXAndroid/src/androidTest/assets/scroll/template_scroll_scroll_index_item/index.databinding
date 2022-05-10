@@ -1,0 +1,7 @@
+{
+  "event": { "template_scroll_scroll_index_item": "${data.action}" },
+  "data": {
+    "title": { "value": "${data.amount}" },
+    "subTitle": { "value": "${data.title}" }
+  }
+}

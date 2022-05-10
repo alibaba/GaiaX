@@ -1,0 +1,34 @@
+#template_scroll_scroll_index_item {
+  height: 72px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #252730;
+  width: 100%;
+  justify-content: center;
+}
+#title {
+  height: 29px;
+  text-align: center;
+  font-family: Akrobat;
+  font-size: 24px;
+  color: #ffdd9a;
+  line-height: 29px;
+  letter-spacing: inherit;
+  lines: 1;
+}
+#subTitle {
+  height: 18px;
+  opacity: 0.6;
+  text-align: center;
+  font-weight: 0;
+  font-size: 13px;
+  color: #ffffff;
+  line-height: 18px;
+  letter-spacing: inherit;
+  margin-top: 1px;
+  lines: 1;
+}

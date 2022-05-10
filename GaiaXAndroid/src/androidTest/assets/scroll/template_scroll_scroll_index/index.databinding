@@ -1,0 +1,8 @@
+{
+  "data": {
+    "template_scroll_scroll_index": {
+      "value": "$nodes",
+      "extend": { "scroll-index": 3 }
+    }
+  }
+}

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
+import android.widget.FrameLayout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -20,6 +21,140 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentGridTest : GXBaseTest() {
+
+    /**
+     * 验证grid纵向滑动，footer是否加载正确
+     */
+    @Test
+    fun template_grid_load_more_hasMore_true() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_load_more"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+            this["isHasMore"] = true
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(150F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(4, rootView.childCount())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.child(3).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).height())
+    }
+
+    @Test
+    fun template_grid_load_more_hasMore_false() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_load_more"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+            this["isHasMore"] = false
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(150F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(3, rootView.childCount())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
+    }
+
+    @Test
+    fun template_grid_load_more_hasMore_with_column_4() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_load_more_column_4"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+            this["isHasMore"] = true
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(150F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(5, rootView.childCount())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).height())
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.child(4).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(4).height())
+    }
+
 
     @Test
     fun template_grid_column_responsive() {

@@ -1,0 +1,29 @@
+{
+  "id": "template_scroll_scroll_index_item",
+  "type": "gaia-template",
+  "package": {
+    "engines": {
+      "gaiax": ">=0.0.1"
+    },
+    "id": "template_scroll_scroll_index_item",
+    "version": "0",
+    "priority": "0",
+    "modify-timestamp": "Fri Apr 15 2022 16:56:00 GMT+0800 (中国标准时间)",
+    "constraint-size": {
+      "width": 66,
+      "height": 48,
+      "zoom": 1
+    },
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "title",
+      "type": "text"
+    },
+    {
+      "id": "subTitle",
+      "type": "text"
+    }
+  ]
+}

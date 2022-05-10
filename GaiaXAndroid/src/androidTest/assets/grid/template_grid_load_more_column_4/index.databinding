@@ -1,0 +1,13 @@
+{
+  "data": {
+    "template_grid_load_more_column_4": {
+      "value": "$nodes",
+      "extend": {
+        "item-footer-type": {
+          "id": "'template_grid_load_more_item_load_more'",
+          "hasMore": true
+        }
+      }
+    }
+  }
+}

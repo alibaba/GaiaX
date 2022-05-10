@@ -157,7 +157,7 @@ data class GXLayer constructor(
             type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
 
         private fun isSliderType(type: String, subType: String?) =
-            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_SLIDER
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
 
         private fun initChildrenLayer(data: JSONObject, layer: GXLayer) {
             data.getJSONArray(GXTemplateKey.GAIAX_LAYERS)?.forEach {
@@ -254,7 +254,7 @@ data class GXLayer constructor(
     /**
      * Slider 容器节点类型
      */
-    fun isSliderType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_SLIDER
+    fun isSliderType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
 
     /**
      * 是否能够被合并

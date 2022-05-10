@@ -4,52 +4,12 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXIExpression
-import com.alibaba.gaiax.utils.getAnyExt
-import com.alibaba.gaiax.utils.getIntExt
-import com.alibaba.gaiax.utils.setValueExt
 import java.util.regex.Pattern
 
 /**
  * 模板中的表达式
  */
 sealed class GaiaXExpression : GXIExpression {
-
-    fun doCopy(): GaiaXExpression {
-        return when (this) {
-            is Self -> Self
-            is GTextValue -> {
-                val result = GTextValue()
-                this.values.forEach {
-                    result.values.add(it.doCopy())
-                }
-                result
-            }
-            is GValue -> GValue(this.value)
-            is GTernaryValue1 -> GTernaryValue1(
-                condition.doCopy(),
-                trueBranch.doCopy(),
-                falseBranch.doCopy()
-            )
-            is GTernaryValue2 -> GTernaryValue2(
-                conditionAndTrueBranch.doCopy(),
-                falseBranch.doCopy()
-            )
-            is GTernaryValue3 -> copy()
-            is GNull -> GNull()
-            is GBool -> GBool(this.value)
-            is GString -> GString(this.value)
-            is GEval -> GEval(this.operate, this.leftValue.doCopy(), this.rightValue.doCopy())
-            is GEnv -> GEnv(this.value)
-            is GScroll -> GScroll(this.value)
-            is GSize -> GSize(this.value)
-            is GInt -> GInt(this.value)
-            is GFloat -> GFloat(this.value)
-            is GText -> GText(this.value)
-            is GJsonObj -> GJsonObj(value)
-            is GJsonArrayObj -> GJsonArrayObj(value)
-            else -> Undefined
-        }
-    }
 
     override fun expression(): Any {
         return ""
@@ -927,10 +887,6 @@ sealed class GaiaXExpression : GXIExpression {
             }
 
             return falseBranch.desireData(rawJson)
-        }
-
-        fun copy(): GTernaryValue3 {
-            return GTernaryValue3(value.doCopy(), trueBranch?.doCopy(), falseBranch?.doCopy())
         }
 
         override fun toString(): String {

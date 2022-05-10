@@ -595,9 +595,10 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         if (container.viewPager?.adapter != null) {
             adapter = container.viewPager?.adapter as GXSliderViewAdapter
         } else {
-            adapter = GXSliderViewAdapter(context, node, node.templateNode.finalSliderConfig)
+            adapter = GXSliderViewAdapter(context, node)
             container.viewPager?.adapter = adapter
         }
+        adapter.setConfig(node.templateNode.finalSliderConfig)
         container.setConfig(node.templateNode.finalSliderConfig)
 
         adapter.setData(containerTemplateData)

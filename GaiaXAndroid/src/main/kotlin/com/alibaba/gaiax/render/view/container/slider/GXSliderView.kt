@@ -41,6 +41,16 @@ import java.util.*
  */
 class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
+    // 指示器左右间距
+    private val INDICATOR_HORIZONTAL_MARGIN = 70
+
+    // 指示器底部间距
+    private val INDICATOR_BOTTOM_MARGIN = 30
+
+    // 指示器 Item 之间的间距
+    private val INDICATOR_ITEM_HORIZONTAL_MARGIN = 10
+
+
     constructor(context: Context) : super(context) {
         initView()
     }
@@ -60,6 +70,8 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     private var mTimer: Timer? = null
     private var mTimerTask: TimerTask? = null
+
+    private val mMainHandler = Handler(Looper.getMainLooper())
 
     private fun initView() {
         viewPager = ViewPager(context)
@@ -93,14 +105,6 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             }
 
         })
-
-        addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
-        addView(
-            mIndicatorContainer,
-            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                setMargins(70, 0, 70, 30)
-            })
         viewPager?.setOnTouchListener(OnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> stopTimer()
@@ -109,6 +113,19 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             }
             false
         })
+
+        addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        addView(
+            mIndicatorContainer,
+            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                setMargins(
+                    INDICATOR_HORIZONTAL_MARGIN,
+                    0,
+                    INDICATOR_HORIZONTAL_MARGIN,
+                    INDICATOR_BOTTOM_MARGIN
+                )
+            })
     }
 
     fun setConfig(config: GXSliderConfig?) {
@@ -116,6 +133,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     override fun onBindData(data: JSONObject) {
+        viewPager?.adapter?.notifyDataSetChanged()
         mConfig?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
                 if (it in 0 until count) {
@@ -143,7 +161,12 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
                 mIndicatorContainer?.addView(
                     view,
                     LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                        setMargins(10, 0, 10, 0)
+                        setMargins(
+                            INDICATOR_ITEM_HORIZONTAL_MARGIN,
+                            0,
+                            INDICATOR_ITEM_HORIZONTAL_MARGIN,
+                            0
+                        )
                     })
             }
         }
@@ -168,7 +191,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
                     override fun run() {
                         viewPager?.currentItem?.let { currentItem ->
                             viewPager?.adapter?.count?.let { count ->
-                                Handler(Looper.getMainLooper()).post {
+                                mMainHandler.post {
                                     viewPager?.setCurrentItem(
                                         (currentItem + 1) % count,
                                         true

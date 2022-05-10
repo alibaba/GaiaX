@@ -33,7 +33,8 @@ import com.alibaba.gaiax.utils.getStringExt
 
 class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
 
-    override fun onAnimation(
+    override fun executeAnimation(
+        gxState: GXIExpression?,
         gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,

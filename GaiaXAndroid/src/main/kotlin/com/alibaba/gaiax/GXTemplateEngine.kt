@@ -189,6 +189,10 @@ class GXTemplateEngine {
      * Scroll parameters
      */
     class GXScroll {
+        companion object {
+            const val TYPE_ON_SCROLL_STATE_CHANGED = "onScrollStateChanged"
+            const val TYPE_ON_SCROLLED = "onScrolled"
+        }
 
         var type: String = ""
 

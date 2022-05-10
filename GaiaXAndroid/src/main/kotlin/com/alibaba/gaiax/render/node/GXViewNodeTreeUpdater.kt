@@ -415,7 +415,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
-                                this.type = "onScrolled"
+                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
                                 this.view = recyclerView
                                 this.dx = dx
                                 this.dy = dy
@@ -425,7 +425,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
                     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
-                                this.type = "onScrollStateChanged"
+                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
                                 this.view = recyclerView
                                 this.state = newState
                             })

@@ -444,10 +444,23 @@ class GXTemplateEngine {
      * @throws IllegalArgumentException
      */
     fun bindData(view: View, templateData: GXTemplateData) {
+        val templateContext = GXTemplateContext.getContext(view) ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        templateContext.templateData = templateData
+        render.bindViewData(templateContext)
+    }
+
+    fun bindDataOnlyNodeTree(view: View, templateData: GXTemplateData) {
         val templateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
         templateContext.templateData = templateData
-        render.bindViewData(templateContext)
+        render.bindViewDataOnlyNodeTree(templateContext)
+    }
+
+    fun bindDataOnlyViewTree(view: View, templateData: GXTemplateData) {
+        val templateContext = GXTemplateContext.getContext(view)
+            ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        templateContext.templateData = templateData
+        render.bindViewDataOnlyViewTree(templateContext)
     }
 
     /**

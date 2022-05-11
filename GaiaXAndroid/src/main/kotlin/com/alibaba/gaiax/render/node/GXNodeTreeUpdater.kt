@@ -40,12 +40,36 @@ import com.alibaba.gaiax.template.GXTemplateKey
 /**
  * @suppress
  */
-class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
+class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
-    fun build() {
-        val rootNode = context.rootNode ?: throw IllegalArgumentException("RootNode is null")
-        val templateData =
-            context.templateData?.data ?: throw IllegalArgumentException("Data is null")
+    fun buildNodeLayout() {
+        val rootNode = context.rootNode
+            ?: throw IllegalArgumentException("RootNode is null")
+        val templateData = context.templateData?.data
+            ?: throw IllegalArgumentException("Data is null")
+        val size = Size(context.size.width, context.size.height)
+
+        // 更新布局
+        updateNodeTreeLayout(rootNode, templateData, size)
+
+        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+        updateNodeTreeLayoutByDirtyText(rootNode, size)
+    }
+
+    fun buildViewStyle() {
+        val rootNode = context.rootNode
+            ?: throw IllegalArgumentException("RootNode is null")
+        val templateData = context.templateData?.data
+            ?: throw IllegalArgumentException("Data is null")
+        // 更新样式
+        updateNodeTreeStyle(context, rootNode, templateData)
+    }
+
+    fun buildLayoutAndStyle() {
+        val rootNode = context.rootNode
+            ?: throw IllegalArgumentException("RootNode is null")
+        val templateData = context.templateData?.data
+            ?: throw IllegalArgumentException("Data is null")
         val size = Size(context.size.width, context.size.height)
 
         // 更新布局

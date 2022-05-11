@@ -82,7 +82,6 @@ open class GXView : AbsoluteLayout,
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
                 throw e
             }

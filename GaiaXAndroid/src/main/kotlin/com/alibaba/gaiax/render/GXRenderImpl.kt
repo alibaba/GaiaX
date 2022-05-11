@@ -20,7 +20,7 @@ import android.view.View
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeTreeCreator
-import com.alibaba.gaiax.render.node.GXViewNodeTreeUpdater
+import com.alibaba.gaiax.render.node.GXNodeTreeUpdater
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdater
@@ -39,13 +39,11 @@ class GXRenderImpl {
 
     fun bindNodeData(templateContext: GXTemplateContext) {
         val rootNode = templateContext.rootNode
-        if (rootNode != null) {
+            ?: throw IllegalArgumentException("RootNode is null")
+        templateContext.isDirty = false
 
-            templateContext.isDirty = false
-
-            // Update the virtual node tree
-            GXViewNodeTreeUpdater(templateContext).build()
-        }
+        // Update the virtual node tree
+        GXNodeTreeUpdater(templateContext).buildLayoutAndStyle()
     }
 
     fun createView(templateContext: GXTemplateContext): View {
@@ -64,14 +62,33 @@ class GXRenderImpl {
     }
 
     fun bindViewData(templateContext: GXTemplateContext) {
-        val rootNode =
-            templateContext.rootNode ?: throw IllegalArgumentException("RootNode is null")
+        val rootNode = templateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null")
 
         // Resetting the Template Status
         templateContext.isDirty = false
 
         // Update the virtual node tree
-        GXViewNodeTreeUpdater(templateContext).build()
+        GXNodeTreeUpdater(templateContext).buildLayoutAndStyle()
+
+        // Update view layout
+        GXViewTreeUpdater(templateContext, rootNode).build()
+    }
+
+    fun bindViewDataOnlyNodeTree(templateContext: GXTemplateContext) {
+        // Resetting the Template Status
+        templateContext.isDirty = false
+
+        // Update the node tree
+        GXNodeTreeUpdater(templateContext).buildNodeLayout()
+    }
+
+    fun bindViewDataOnlyViewTree(templateContext: GXTemplateContext) {
+        val rootNode = templateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null")
+
+        // Update the view tree
+        GXNodeTreeUpdater(templateContext).buildViewStyle()
 
         // Update view layout
         GXViewTreeUpdater(templateContext, rootNode).build()

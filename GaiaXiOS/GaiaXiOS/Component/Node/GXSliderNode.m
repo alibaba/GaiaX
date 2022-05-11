@@ -54,8 +54,12 @@
 @property (nonatomic , strong) UIPageControl *pageControl;
 //是否自动轮播
 @property (nonatomic, assign) bool autoScroll;
+//轮播时长
+@property (nonatomic, assign) CGFloat interval;
 //是否开始无限轮播
 @property (nonatomic, assign) bool infiniteLoop;
+//是否展示指示器
+@property (nonatomic, assign) bool isShowPageControl;
 //总数
 @property (nonatomic, assign) NSInteger totalItems;
 //坑位宽度
@@ -163,11 +167,11 @@
     //赋值
     [self processListData:dataArray];
     
-    //轮播属性初始化
-    [self handleSlider];
-    
     //extend处理 & 计算itemSize
     [self handleExtend:extend isCalculate:NO];
+    
+    //轮播属性初始化
+    [self handleSlider];
     
     //刷新数据
     GXScrollView *scrollView = (GXScrollView *)self.associatedView;
@@ -492,8 +496,6 @@
 
 #pragma mark - 轮播
 - (void)handleSlider {
-    self.autoScroll = YES;
-    self.infiniteLoop = YES;
     _pageControl.numberOfPages = self.items.count;
     self.totalItems = self.infiniteLoop ? self.items.count * 100 : self.items.count;
     GXScrollView *view = (GXScrollView *)self.associatedView;
@@ -515,6 +517,7 @@
         }
         [view scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
     }
+    [self positionPageControl:view];
 }
 
 - (void)setAutoScroll:(BOOL)autoScroll {
@@ -588,7 +591,7 @@
 #pragma mark 定时器
 - (void)setupTimer{
     [self invalidateTimer];
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(automaticScroll) userInfo:nil repeats:YES];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(automaticScroll) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     self.timer = timer ;
     
@@ -631,8 +634,7 @@
     NSString *itemSpacing = [viewInfo gx_stringForKey:@"item-spacing"];
     self.itemSpacing = [GXStyleHelper converSimpletValue:itemSpacing];
     
-    //edge-insets
-    //self.contentInset = UIEdgeInsetsFromString(edgeInsets);(为了支持DesignToken)
+    //edge-inset
     NSString *edgeInsets = [viewInfo gx_stringForKey:@"edge-insets"];
     edgeInsets = [edgeInsets stringByReplacingOccurrencesOfString:@" " withString:@""];
     if (edgeInsets.length > 3) {
@@ -658,6 +660,8 @@
         self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     }
     
+    //slider属性设置
+    [self configSlider:viewInfo];
 }
 
 //获取坑位类型 & 表达式
@@ -674,6 +678,13 @@
     }
 }
 
+- (void)configSlider:(NSDictionary *)viewInfo{
+    CGFloat interval = [viewInfo gx_floatForKey:@"slider-scroll-time-interval"];
+    self.interval = interval == 0.0 ?  3 : interval/1000.;
+    self.autoScroll = interval == 0.0 ? NO : YES;
+    self.infiniteLoop = [viewInfo gx_boolForKey:@"slider-infinity-scroll"];
+    self.isShowPageControl = [viewInfo gx_boolForKey:@"lider-has-indicator"];
+}
 
 #pragma mark - lazy load
 - (NSMutableArray *)items{

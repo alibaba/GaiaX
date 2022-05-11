@@ -30,8 +30,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "-bindData:"
             landmarkType = "7">
          </BreakpointContent>
@@ -87,48 +87,96 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "839EFE84-8242-4E0A-B4C3-E0DB00F9A47C"
+            uuid = "D68BC44B-E225-4A55-9EE4-84562929602C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
-            landmarkName = "-calculateItemSize:"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
+            landmarkName = "-updateLayoutStyle:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4582A780-8A71-462E-BCD9-65ECA116D251"
+            uuid = "A70C180E-13EF-4B68-842B-7CEFD3DA9552"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
-            landmarkName = "-calculateItemSize:"
+            startingLineNumber = "625"
+            endingLineNumber = "625"
+            landmarkName = "-configureViewInfo:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9833F64B-E910-4D9B-852A-A219FAD7C1A0"
+            uuid = "09884AE7-4551-4F98-8398-5BAE95508557"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "327"
-            endingLineNumber = "327"
-            landmarkName = "-calculateItemSize:"
+            startingLineNumber = "682"
+            endingLineNumber = "682"
+            landmarkName = "-configSlider:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "099FD8EA-DD53-4C50-924D-288843165455"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "536"
+            endingLineNumber = "536"
+            landmarkName = "-automaticScroll"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FAE1F141-2DB9-4DE5-A2A3-D54B783987F2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "520"
+            endingLineNumber = "520"
+            landmarkName = "-handleSlider"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5DB08B9F-8158-4B88-AC82-7AC5B731E52C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "579"
+            endingLineNumber = "579"
+            landmarkName = "-positionPageControl:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

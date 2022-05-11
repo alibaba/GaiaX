@@ -368,8 +368,7 @@ data class GXStretchNode(
         if (gxCssStyle.fitContent == true) {
 
             // 如果文字使用了flexGrow，那么fitContent逻辑需要延迟处理
-            // 问什么需要延迟处理？因为flexGrow的最终大小还受到了padding、margin等影响
-            // 如果提前计算，会导致结果不正确
+            // 为什么需要延迟处理？因为flexGrow的最终大小还受到了padding、margin等影响, 如果提前计算，会导致结果不正确
             if (stretchStyle.flexGrow != 0F) {
                 if (gxTemplateContext.dirtyText == null) {
                     gxTemplateContext.dirtyText = mutableMapOf()

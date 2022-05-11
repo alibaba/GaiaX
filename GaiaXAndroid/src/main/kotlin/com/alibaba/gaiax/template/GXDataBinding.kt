@@ -81,8 +81,4 @@ open class GXDataBinding(
         }
         return result
     }
-
-    open fun getDataValue(templateData: JSONObject): JSON? {
-        return getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE) as? JSON
-    }
 }

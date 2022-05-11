@@ -68,7 +68,8 @@ data class GXTemplateNode(
 
     fun getDataValue(templateData: JSONObject): JSON? {
         if (dataValueCache == null) {
-            dataValueCache = dataBinding?.getDataValue(templateData)
+            dataValueCache =
+                dataBinding?.getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE) as? JSON
         }
         return dataValueCache
     }

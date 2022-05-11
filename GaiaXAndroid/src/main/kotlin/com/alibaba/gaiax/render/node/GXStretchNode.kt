@@ -38,8 +38,12 @@ data class GXStretchNode(
 ) {
 
     fun reset() {
-//        node.reset()
+        resetStyle()
         layoutByBind = null
+    }
+
+    private fun resetStyle() {
+
     }
 
     fun initFinal() {
@@ -398,20 +402,24 @@ data class GXStretchNode(
         templateData: JSONObject,
         stretchStyle: Style
     ): Boolean? {
-        GXFitContentUtils.fitContent(templateContext, gxTemplateNode, gxStretchNode, templateData)
-            ?.let { src ->
+        GXFitContentUtils.fitContent(
+            templateContext,
+            gxTemplateNode,
+            gxStretchNode,
+            templateData
+        )?.let { src ->
 
-                // 自适应之后的宽度，要更新到原有尺寸上
-                GXTemplateUtils.updateSize(src, stretchStyle.size)
+            // 自适应之后的宽度，要更新到原有尺寸上
+            GXTemplateUtils.updateSize(src, stretchStyle.size)
 
-                // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
-                // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
-                if (stretchStyle.flexGrow != 0F) {
-                    stretchStyle.flexGrow = 0F
-                }
-
-                return true
+            // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
+            // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
+            if (stretchStyle.flexGrow != 0F) {
+                stretchStyle.flexGrow = 0F
             }
+
+            return true
+        }
 
         return null
     }
@@ -461,23 +469,23 @@ data class GXStretchNode(
             return GXStretchNode(stretchNode, null)
         }
 
-        private fun createStretchStyle(currentNode: GXTemplateNode): Style {
+        private fun createStretchStyle(gxTemplateNode: GXTemplateNode): Style {
             val style = Style()
 
             // Set Self FlexBox Property
-            val flexBox = currentNode.css.flexBox
-            setBuilder(flexBox, style)
+            val flexBox = gxTemplateNode.css.flexBox
+            updateStyle(flexBox, style)
 
             // Override Property From Parent FlexBox
-            val visualTemplateNodeFlexBox = currentNode.visualTemplateNode?.css?.flexBox
-            visualTemplateNodeFlexBox?.let { setBuilder(it, style) }
+            val visualTemplateNodeFlexBox = gxTemplateNode.visualTemplateNode?.css?.flexBox
+            visualTemplateNodeFlexBox?.let { updateStyle(it, style) }
 
             style.init()
 
             return style
         }
 
-        private fun setBuilder(flexBox: GXFlexBox, style: Style) {
+        private fun updateStyle(flexBox: GXFlexBox, style: Style) {
             flexBox.display?.let { style.display = it }
 
             flexBox.aspectRatio?.let { style.aspectRatio = it }

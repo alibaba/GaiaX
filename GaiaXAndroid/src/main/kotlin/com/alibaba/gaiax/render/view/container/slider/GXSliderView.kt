@@ -74,12 +74,12 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     private val mMainHandler = Handler(Looper.getMainLooper())
 
     private fun initView() {
-        viewPager = ViewPager(context)
-        mIndicatorContainer = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.END
-        }
+        initViewPager()
+        initIndicator()
+    }
 
+    private fun initViewPager() {
+        viewPager = ViewPager(context)
         viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
@@ -115,6 +115,14 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         })
 
         addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+    }
+
+    private fun initIndicator() {
+        mIndicatorContainer = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.END
+        }
+
         addView(
             mIndicatorContainer,
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {

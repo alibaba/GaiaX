@@ -59,7 +59,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         initView()
     }
 
-    private var mGxTemplateContext: GXTemplateContext? = null
+    private var gxTemplateContext: GXTemplateContext? = null
     private var mConfig: GXSliderConfig? = null
 
     var viewPager: ViewPager? = null
@@ -215,17 +215,17 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     override fun manualRelease() {
-        if (mGxTemplateContext?.rootView?.get() == this) {
-            if (mGxTemplateContext?.rootNode?.isRoot == true) {
-                GXTemplateEngine.instance.render.onDestroy(mGxTemplateContext!!)
-                mGxTemplateContext = null
+        if (gxTemplateContext?.rootView?.get() == this) {
+            if (gxTemplateContext?.rootNode?.isRoot == true) {
+                GXTemplateEngine.instance.render.onDestroy(gxTemplateContext!!)
+                gxTemplateContext = null
             }
         }
     }
 
     override fun setTemplateContext(gxContext: GXTemplateContext) {
-        this.mGxTemplateContext = gxContext
+        this.gxTemplateContext = gxContext
     }
 
-    override fun getTemplateContext(): GXTemplateContext? = mGxTemplateContext
+    override fun getTemplateContext(): GXTemplateContext? = gxTemplateContext
 }

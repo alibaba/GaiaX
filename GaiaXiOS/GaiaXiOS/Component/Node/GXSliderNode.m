@@ -582,8 +582,8 @@
     
     UIPageControl *pageControl = (UIPageControl *)_pageControl;
     CGRect frame = pageControl.frame;
-    frame.size.width = 150;
-    frame.origin.x = scrollView.contentOffset.x + _itemWidth - 120;
+    frame.size.width =  [pageControl sizeForNumberOfPages:self.items.count].width;
+    frame.origin.x = scrollView.contentOffset.x + _itemWidth - frame.size.width;
     frame.origin.y = _containerHeight - 20;
     pageControl.frame = frame;
     pageControl.currentPage = indexOnPageControl;

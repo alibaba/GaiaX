@@ -590,6 +590,7 @@ class GXViewNodeTreeUpdater(val context: GXTemplateContext) {
         val containerTemplateData = (dataBinding.getValueData(templateData) as? JSONArray) ?: JSONArray()
 
         val container = view as GXSliderView
+        container.setTemplateContext(context)
 
         val adapter: GXSliderViewAdapter?
         if (container.viewPager?.adapter != null) {

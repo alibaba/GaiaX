@@ -236,4 +236,6 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     override fun getTemplateContext(): GXTemplateContext? = gxTemplateContext
+
+    fun getConfig(): GXSliderConfig? = mConfig
 }

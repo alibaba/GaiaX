@@ -37,13 +37,17 @@ data class GXStretchNode(
     var layoutByBind: Layout? = null
 ) {
 
-    fun reset() {
-        resetStyle()
+    fun reset(gxTemplateNode: GXTemplateNode) {
+        resetStyle(gxTemplateNode)
         layoutByBind = null
     }
 
-    private fun resetStyle() {
-
+    private fun resetStyle(gxTemplateNode: GXTemplateNode) {
+        val stretchStyle = createStretchStyle(gxTemplateNode)
+        val oldStyle = node.getStyle()
+        oldStyle.free()
+        this.node.setStyle(stretchStyle)
+        this.node.markDirty()
     }
 
     fun initFinal() {
@@ -463,8 +467,8 @@ data class GXStretchNode(
 
     companion object {
 
-        fun createNode(currentNode: GXTemplateNode, id: String, idPath: String): GXStretchNode {
-            val stretchStyle = createStretchStyle(currentNode)
+        fun createNode(gxTemplateNode: GXTemplateNode, id: String, idPath: String): GXStretchNode {
+            val stretchStyle = createStretchStyle(gxTemplateNode)
             val stretchNode = Node(id, idPath, stretchStyle, mutableListOf())
             return GXStretchNode(stretchNode, null)
         }

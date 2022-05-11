@@ -100,10 +100,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             var isTextDirty = false
             context.dirtyText?.forEach {
                 val result = it.key.updateTextLayoutByFitContent(
-                    it.value.templateContext,
-                    it.value.currentNode,
-                    it.value.currentStretchNode,
-                    it.value.data,
+                    it.value.gxTemplateContext,
+                    it.value.gxTemplateNode,
+                    it.value.gxStretchNode,
+                    it.value.templateData,
                     it.value.stretchStyle
                 )
                 if (result) {

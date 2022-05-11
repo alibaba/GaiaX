@@ -363,10 +363,10 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
                     this,
                     GXDirtyText(
                         gxTemplateContext,
-                        stretchStyle,
                         gxTemplateNode,
                         gxStretchNode,
-                        templateData
+                        templateData,
+                        stretchStyle
                     )
                 )
                 return false

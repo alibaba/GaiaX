@@ -970,7 +970,6 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 
-
     @Test
     fun template_text_fitcontent_lines_0_width_100px_height_100px() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
@@ -1147,4 +1146,46 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(1080F - 99F - 39F - 39F, rootView.child(1).width())
     }
 
+    @Test
+    fun template_text_fitcontent_lines_null_width_flex_grow_height_fixed_repeat_bind_data() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_flex_grow_height_fixed_repeat_bind_data"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(1080F, null)
+        )
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "哈哈"
+            })
+        )
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "哈哈"
+        textView.setFontSize(14F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
+
+        ////////////////////////////////////////////////////////////
+
+        val textView1 = GXText(GXMockUtils.context)
+        textView1.text = "哈哈哈哈哈哈哈哈"
+        textView1.setFontSize(14F.dpToPx())
+        textView1.measure(0, 0)
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "哈哈哈哈哈哈哈哈"
+            })
+        )
+
+        Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).width())
+    }
 }

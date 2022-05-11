@@ -7,9 +7,9 @@ import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 
 data class GXDirtyText(
-    val templateContext: GXTemplateContext,
-    val stretchStyle: Style,
-    val currentNode: GXTemplateNode,
-    val currentStretchNode: GXStretchNode,
-    val data: JSONObject
+    val gxTemplateContext: GXTemplateContext,
+    val gxTemplateNode: GXTemplateNode,
+    val gxStretchNode: GXStretchNode,
+    val templateData: JSONObject,
+    val stretchStyle: Style
 )

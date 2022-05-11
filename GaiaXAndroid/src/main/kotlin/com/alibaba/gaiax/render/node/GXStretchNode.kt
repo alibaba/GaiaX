@@ -31,18 +31,17 @@ import com.alibaba.gaiax.template.utils.GXTemplateUtils
 /**
  * @suppress
  */
-data class GXStretchNode(val node: Node, var layout: Layout? = null) {
-
-    var finalLayout: Layout? = null
+data class GXStretchNode(
+    val node: Node,
+    var layoutByCreate: Layout? = null,
+    var layoutByBind: Layout? = null
+) {
 
     fun reset() {
-        finalLayout = null
+        layoutByBind = null
     }
 
     fun initFinal() {
-        layout?.let {
-            finalLayout = Layout(it.x, it.y, it.width, it.height, it.children, it.id, it.idPath)
-        }
     }
 
     fun updateContainerLayout(
@@ -187,7 +186,14 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
             isDirty = it
         }
 
-        updateLayoutByCssStyle(gxTemplateContext, finalCssStyle, style, gxTemplateNode, this, templateData)?.let {
+        updateLayoutByCssStyle(
+            gxTemplateContext,
+            finalCssStyle,
+            style,
+            gxTemplateNode,
+            this,
+            templateData
+        )?.let {
             isDirty = it
         }
 
@@ -410,12 +416,11 @@ data class GXStretchNode(val node: Node, var layout: Layout? = null) {
     }
 
     override fun toString(): String {
-        return "GXStretchNode(node=$node, layout=$layout)"
+        return "GXStretchNode(node=$node, layout=$layoutByCreate)"
     }
 
     fun free() {
-        layout = null
-        finalLayout = null
+        layoutByCreate = null
         node.free()
     }
 

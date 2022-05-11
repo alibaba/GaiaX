@@ -1158,6 +1158,15 @@ class GXComponentTextTest : GXBaseTest() {
             GXTemplateEngine.GXMeasureSize(1080F, null)
         )
 
+        Assert.assertEquals(1080F, rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(1080F - 100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+
         GXTemplateEngine.instance.bindData(
             rootView,
             GXTemplateEngine.GXTemplateData(JSONObject().apply {

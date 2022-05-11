@@ -39,8 +39,8 @@ import com.alibaba.gaiax.render.node.GXNode
 abstract class GXViewTreeMerger<T>(val context: GXTemplateContext, val rootNode: GXNode) {
 
     fun build(): View {
-        val layout = rootNode.stretchNode.finalLayout
-            ?: rootNode.stretchNode.layout
+        val layout = rootNode.stretchNode.layoutByBind
+            ?: rootNode.stretchNode.layoutByCreate
             ?: throw IllegalArgumentException("Stretch layout info is null")
         val parentMerges = mutableListOf<Layout>().apply {
             this.add(layout)
@@ -61,8 +61,8 @@ abstract class GXViewTreeMerger<T>(val context: GXTemplateContext, val rootNode:
         parentNode.children?.forEach { childNode ->
 
             val childTemplateNode = childNode.templateNode
-            val childStretchLayout =
-                childNode.stretchNode.finalLayout ?: childNode.stretchNode.layout
+            val childStretchLayout = childNode.stretchNode.layoutByBind
+                ?: childNode.stretchNode.layoutByCreate
                 ?: throw IllegalArgumentException("Stretch layout info is null")
 
             val childNodeType = childTemplateNode.layer.getNodeType()

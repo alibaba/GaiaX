@@ -246,7 +246,8 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
         val childTemplateData =
-            ( node.templateNode.visualTemplateNode?.getDataValue(templateData) as? JSONObject) ?: JSONObject()
+            (node.templateNode.visualTemplateNode?.getDataValue(templateData) as? JSONObject)
+                ?: JSONObject()
 
         node.stretchNode.initFinal()
         node.templateNode.initFinal(
@@ -311,7 +312,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         // 此处，双端已协商一致
 
         // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
-        val valueData =  node.templateNode.visualTemplateNode?.getDataValue(templateData)
+        val valueData = node.templateNode.visualTemplateNode?.getDataValue(templateData)
         val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
 
         updateNodeStyle(context, node, childTemplateData)
@@ -500,7 +501,14 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         when {
             node.isCustomViewType() -> bindCustom(context, view, node.templateNode, templateData)
-            node.isTextType() -> bindText(context, view, css, layer, node.templateNode, templateData)
+            node.isTextType() -> bindText(
+                context,
+                view,
+                css,
+                layer,
+                node.templateNode,
+                templateData
+            )
             node.isRichTextType() -> bindRichText(
                 context,
                 view,
@@ -593,7 +601,11 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun bindImage(view: GXIViewBindData, binding: GXTemplateNode, templateData: JSONObject) {
+    private fun bindImage(
+        view: GXIViewBindData,
+        binding: GXTemplateNode,
+        templateData: JSONObject
+    ) {
         val nodeData = binding.getData(templateData)
         if (nodeData != null) {
             view.onBindData(nodeData)
@@ -752,7 +764,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
     private fun bindGridContainerCSS(context: GXTemplateContext, view: View, node: GXNode) {
         node.templateNode.finalGridConfig?.let {
-            view.setGridContainerDirection(context, it, node.stretchNode.finalLayout)
+            view.setGridContainerDirection(context, it, node.stretchNode.layoutByBind)
             view.setGridContainerItemSpacingAndRowSpacing(
                 it.edgeInsets,
                 it.itemSpacing,
@@ -764,7 +776,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
     private fun bindScrollContainerCSS(context: GXTemplateContext, view: View, node: GXNode) {
         node.templateNode.finalScrollConfig?.let { scrollConfig ->
 
-            view.setScrollContainerDirection(scrollConfig.direction, node.stretchNode.finalLayout)
+            view.setScrollContainerDirection(scrollConfig.direction, node.stretchNode.layoutByBind)
 
             val edgeInsets = scrollConfig.edgeInsets
             val lineSpacing = scrollConfig.itemSpacing

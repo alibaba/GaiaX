@@ -40,7 +40,7 @@ object GXNodeUtils {
     private fun composeStretchNodeByBindData(gxNode: GXNode, layout: Layout) {
         layout.id = gxNode.stretchNode.node.id
         layout.idPath = gxNode.stretchNode.node.idPath
-        gxNode.stretchNode.finalLayout = layout
+        gxNode.stretchNode.layoutByBind = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
         }
@@ -54,7 +54,7 @@ object GXNodeUtils {
     private fun composeStretchNodeByCreateView(gxNode: GXNode, layout: Layout) {
         layout.id = gxNode.stretchNode.node.id
         layout.idPath = gxNode.stretchNode.node.idPath
-        gxNode.stretchNode.layout = layout
+        gxNode.stretchNode.layoutByCreate = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByCreateView(childViewData, layout.children[index])
         }
@@ -106,13 +106,14 @@ object GXNodeUtils {
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData =
                     GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(
+                val stretchNode = computeItemSizeByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode?.finalLayout
+                )?.stretchNode
+                return stretchNode?.layoutByBind
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -121,13 +122,14 @@ object GXNodeUtils {
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData =
                     GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemSizeByCreateAndBindNode(
+                val stretchNode = computeItemSizeByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode?.finalLayout
+                )?.stretchNode
+                return stretchNode?.layoutByBind
             }
             else -> {
                 return null
@@ -198,7 +200,7 @@ object GXNodeUtils {
     }
 
     private fun computeGridItemViewPortWidth(context: GXTemplateContext, gxNode: GXNode): Float? {
-        val containerWidth = gxNode.stretchNode.finalLayout?.width
+        val containerWidth = gxNode.stretchNode.layoutByCreate?.width
         val gridConfig = gxNode.templateNode.finalGridConfig
         return if (containerWidth != null) {
             when {

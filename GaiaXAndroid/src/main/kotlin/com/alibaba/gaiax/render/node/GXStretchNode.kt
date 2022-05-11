@@ -38,6 +38,7 @@ data class GXStretchNode(
 ) {
 
     fun reset() {
+//        node.reset()
         layoutByBind = null
     }
 
@@ -461,59 +462,61 @@ data class GXStretchNode(
         }
 
         private fun createStretchStyle(currentNode: GXTemplateNode): Style {
-            val builder = Style.Builder()
+            val style = Style()
 
             // Set Self FlexBox Property
             val flexBox = currentNode.css.flexBox
-            setBuilder(flexBox, builder)
+            setBuilder(flexBox, style)
 
             // Override Property From Parent FlexBox
             val visualTemplateNodeFlexBox = currentNode.visualTemplateNode?.css?.flexBox
-            visualTemplateNodeFlexBox?.let { setBuilder(it, builder) }
+            visualTemplateNodeFlexBox?.let { setBuilder(it, style) }
 
-            return builder.build()
+            style.init()
+
+            return style
         }
 
-        private fun setBuilder(flexBox: GXFlexBox, builder: Style.Builder) {
-            flexBox.display?.let { builder.display = it }
+        private fun setBuilder(flexBox: GXFlexBox, style: Style) {
+            flexBox.display?.let { style.display = it }
 
-            flexBox.aspectRatio?.let { builder.aspectRatio = it }
+            flexBox.aspectRatio?.let { style.aspectRatio = it }
 
-            flexBox.direction?.let { builder.direction = it }
+            flexBox.direction?.let { style.direction = it }
 
-            flexBox.flexDirection?.let { builder.flexDirection = it }
+            flexBox.flexDirection?.let { style.flexDirection = it }
 
-            flexBox.flexWrap?.let { builder.flexWrap = it }
+            flexBox.flexWrap?.let { style.flexWrap = it }
 
-            flexBox.overflow?.let { builder.overflow = it }
+            flexBox.overflow?.let { style.overflow = it }
 
-            flexBox.alignItems?.let { builder.alignItems = it }
+            flexBox.alignItems?.let { style.alignItems = it }
 
-            flexBox.alignSelf?.let { builder.alignSelf = it }
+            flexBox.alignSelf?.let { style.alignSelf = it }
 
-            flexBox.alignContent?.let { builder.alignContent = it }
+            flexBox.alignContent?.let { style.alignContent = it }
 
-            flexBox.justifyContent?.let { builder.justifyContent = it }
+            flexBox.justifyContent?.let { style.justifyContent = it }
 
-            flexBox.positionType?.let { builder.positionType = it }
+            flexBox.positionType?.let { style.positionType = it }
 
-            flexBox.position?.let { builder.position = it }
+            flexBox.position?.let { style.position = it }
 
-            flexBox.margin?.let { builder.margin = it }
+            flexBox.margin?.let { style.margin = it }
 
-            flexBox.padding?.let { builder.padding = it }
+            flexBox.padding?.let { style.padding = it }
 
-            flexBox.border?.let { builder.border = it }
+            flexBox.border?.let { style.border = it }
 
-            flexBox.flexGrow?.let { builder.flexGrow = it }
+            flexBox.flexGrow?.let { style.flexGrow = it }
 
-            flexBox.flexShrink?.let { builder.flexShrink = it }
+            flexBox.flexShrink?.let { style.flexShrink = it }
 
-            flexBox.size?.let { builder.size = Size(it.width, it.height) }
+            flexBox.size?.let { style.size = Size(it.width, it.height) }
 
-            flexBox.minSize?.let { builder.minSize = Size(it.width, it.height) }
+            flexBox.minSize?.let { style.minSize = Size(it.width, it.height) }
 
-            flexBox.maxSize?.let { builder.maxSize = Size(it.width, it.height) }
+            flexBox.maxSize?.let { style.maxSize = Size(it.width, it.height) }
         }
     }
 }

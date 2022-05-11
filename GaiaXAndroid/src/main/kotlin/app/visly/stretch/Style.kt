@@ -197,7 +197,7 @@ data class Style(
         Dimension.Undefined
     ),
     var flexGrow: Float = 0f,
-    var flexShrink: Float = 1f,
+    var flexShrink: Float = 0f,
     var flexBasis: Dimension = Dimension.Auto,
     var size: Size<Dimension> = Size(Dimension.Auto, Dimension.Auto),
     var minSize: Size<Dimension> = Size(Dimension.Auto, Dimension.Auto),
@@ -212,10 +212,6 @@ data class Style(
     }
 
     var rustptr: Long = -1
-
-    init {
-        init()
-    }
 
     fun init() {
         rustptr = nConstruct(
@@ -376,60 +372,4 @@ data class Style(
     override fun toString(): String {
         return "Style(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, position=$position, margin=$margin, padding=$padding, border=$border, flexGrow=$flexGrow, flexShrink=$flexShrink, flexBasis=$flexBasis, size=$size, minSize=$minSize, maxSize=$maxSize, aspectRatio=$aspectRatio, rustptr=$rustptr)"
     }
-
-    // This class exists for use with Java which does not have support for named / default arguments as in kotlin.
-    class Builder {
-        var display: Display = Display.Flex
-        var positionType: PositionType = PositionType.Relative
-        var direction: Direction = Direction.Inherit
-        var flexDirection: FlexDirection = FlexDirection.Row
-        var flexWrap: FlexWrap = FlexWrap.NoWrap
-        var overflow: Overflow = Overflow.Hidden
-        var alignItems: AlignItems = AlignItems.Stretch
-        var alignSelf: AlignSelf = AlignSelf.Auto
-        var alignContent: AlignContent = AlignContent.FlexStart
-        var justifyContent: JustifyContent = JustifyContent.FlexStart
-        var position: Rect<Dimension> =
-            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var margin: Rect<Dimension> =
-            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var padding: Rect<Dimension> =
-            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var border: Rect<Dimension> =
-            Rect(Dimension.Undefined, Dimension.Undefined, Dimension.Undefined, Dimension.Undefined)
-        var flexGrow: Float = 0f
-        var flexShrink: Float = 0f
-        var flexBasis: Dimension = Dimension.Auto
-        var size: Size<Dimension> = Size(Dimension.Auto, Dimension.Auto)
-        var minSize: Size<Dimension> = Size(Dimension.Auto, Dimension.Auto)
-        var maxSize: Size<Dimension> = Size(Dimension.Auto, Dimension.Auto)
-        var aspectRatio: Float? = null
-
-        fun build(): Style {
-            return Style(
-                display,
-                positionType,
-                direction,
-                flexDirection,
-                flexWrap,
-                overflow,
-                alignItems,
-                alignSelf,
-                alignContent,
-                justifyContent,
-                position,
-                margin,
-                padding,
-                border,
-                flexGrow,
-                flexShrink,
-                flexBasis,
-                size,
-                minSize,
-                maxSize,
-                aspectRatio
-            )
-        }
-    }
-
 }

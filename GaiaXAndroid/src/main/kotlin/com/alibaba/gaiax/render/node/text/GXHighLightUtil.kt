@@ -23,6 +23,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.template.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Pattern
@@ -41,11 +42,11 @@ object GXHighLightUtil {
     private var regexCache: ConcurrentHashMap<String, Pattern>? = null
 
     fun getHighLightContent(
-        binding: GXDataBinding,
-        rawJson: JSONObject,
-        desireData: String
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject,
+        data: String
     ): CharSequence? {
-        val extend = binding.getExtend(rawJson) ?: return null
+        val extend = gxTemplateNode.getExtend(templateData) ?: return null
         val highlightTag = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_TAG)
         val highlightColor = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_COLOR)
         val highlightFontSize = extend.getString(GXTemplateKey.GAIAX_HIGHLIGHT_FONT_SIZE)
@@ -70,8 +71,8 @@ object GXHighLightUtil {
                 regexCache!![convertTag]!!
             }
 
-            val matcher = pattern.matcher(desireData)
-            val spannableString = SpannableString(desireData.replace(Regex(convertTag), ""))
+            val matcher = pattern.matcher(data)
+            val spannableString = SpannableString(data.replace(Regex(convertTag), ""))
             var count = 0
             while (matcher.find()) {
                 count++

@@ -26,7 +26,6 @@ import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
-import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXTemplateKey
 import java.lang.ref.SoftReference
 
@@ -65,21 +64,21 @@ object GXFitContentUtils {
      */
     fun fitContent(
         templateContext: GXTemplateContext,
-        currentNode: GXTemplateNode,
-        currentStretchNode: GXStretchNode,
+        gxTemplateNode: GXTemplateNode,
+        gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Size<Dimension>? {
-        if (!currentNode.isTextType() && !currentNode.isRichTextType()) {
+        if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
             return null
         }
 
         val androidContext = templateContext.context
-        val nodeId = currentNode.getNodeId()
-        val nodeDataBinding = currentNode.dataBinding ?: return null
-        val finalCss = currentNode.finalCss ?: return null
+        val nodeId = gxTemplateNode.getNodeId()
+        val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
+        val finalCss = gxTemplateNode.finalCss ?: return null
         val nodeFlexBox = finalCss.flexBox
         val nodeStyle = finalCss.style
-        val nodeLayout = currentStretchNode.finalLayout ?: return null
+        val nodeLayout = gxStretchNode.finalLayout ?: return null
 
         val textView = GXMeasureViewPool.obtain(androidContext)
 
@@ -90,7 +89,7 @@ object GXFitContentUtils {
             nodeId,
             textView,
             finalCss,
-            nodeDataBinding,
+            gxTemplateNode,
             templateData
         )
 
@@ -177,27 +176,28 @@ object GXFitContentUtils {
      * 获取待测量的文字内容
      */
     private fun getMeasureContent(
-        context: GXTemplateContext,
+        gxTemplateContext: GXTemplateContext,
         nodeId: String,
         view: View,
         css: GXCss,
-        binding: GXDataBinding,
+        gxTemplateNode: GXTemplateNode,
         templateData: JSONObject
     ): CharSequence? {
 
-        val nodeData = binding.getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE)
+        val data = gxTemplateNode.getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE)
 
         // 高亮内容
-        if (nodeData is String) {
+        if (data is String) {
             val highLightContent =
-                GXHighLightUtil.getHighLightContent(binding, templateData, nodeData)
+                GXHighLightUtil.getHighLightContent(gxTemplateNode, templateData, data)
             if (highLightContent != null) {
                 return highLightContent
             }
         }
 
         // 管道内容
-        val pipelineData = getTextData(context, nodeId, view, css, binding, templateData)
+        val pipelineData =
+            getTextData(gxTemplateContext, nodeId, view, css, gxTemplateNode, templateData)
         if (pipelineData != null) {
             if (pipelineData is CharSequence) {
                 return pipelineData
@@ -206,34 +206,34 @@ object GXFitContentUtils {
         }
 
         // 普通内容
-        if (nodeData != null) {
-            return nodeData.toString()
+        if (data != null) {
+            return data.toString()
         }
 
         return null
     }
 
     private fun getTextData(
-        context: GXTemplateContext,
+        gxTemplateContext: GXTemplateContext,
         id: String,
         view: View,
         css: GXCss,
-        binding: GXDataBinding,
+        gxTemplateNode: GXTemplateNode,
         templateData: JSONObject
     ): Any? {
-        if (context.templateData?.dataListener != null) {
-            val nodeData = binding.getData(templateData)
+        if (gxTemplateContext.templateData?.dataListener != null) {
+            val nodeData = gxTemplateNode.getData(templateData)
             val gxTextData = GXTemplateEngine.GXTextData().apply {
                 this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
                 this.view = view
                 this.nodeId = id
-                this.templateItem = context.templateItem
+                this.templateItem = gxTemplateContext.templateItem
                 this.nodeCss = css
                 this.nodeData = nodeData
-                this.index = context.indexPosition
-                this.extendData = binding.getExtend(templateData)
+                this.index = gxTemplateContext.indexPosition
+                this.extendData = gxTemplateNode.getExtend(templateData)
             }
-            context.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
+            gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)?.let { result ->
                 return result
             }
         }

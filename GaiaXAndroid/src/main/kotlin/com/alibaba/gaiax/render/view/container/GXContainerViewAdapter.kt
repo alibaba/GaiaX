@@ -195,9 +195,8 @@ class GXContainerViewAdapter(
         gxNode.childTemplateItems?.let { items ->
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
-                val dataBinding = gxNode.templateNode.dataBinding
-                dataBinding?.reset()
-                dataBinding?.getExtend(itemData)?.let { typeData ->
+                gxNode.templateNode.reset()
+                gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                     val path =
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
                     val templateId =
@@ -243,7 +242,7 @@ class GXContainerViewAdapter(
 
     fun initFooter() {
         val templateData: JSON = gxTemplateContext.templateData?.data ?: return
-        gxNode.templateNode.dataBinding?.getExtend(templateData)?.let { typeData ->
+        gxNode.templateNode.getExtend(templateData)?.let { typeData ->
             typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
                 footerTemplateItem = GXTemplateEngine.GXTemplateItem(
                     gxTemplateContext.context,

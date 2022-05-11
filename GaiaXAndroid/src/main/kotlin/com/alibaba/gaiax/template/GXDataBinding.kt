@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 
 /**
+ * 只能通过GXTemplateNode来调用
  * @suppress
  */
 open class GXDataBinding(
@@ -29,19 +30,6 @@ open class GXDataBinding(
     val placeholder: GXIExpression? = null,
     val extend: MutableMap<String, GXIExpression>? = null
 ) {
-
-    var gxDataCache: JSONObject? = null
-    var gxDataValueCache: JSON? = null
-    var gxExtendCache: JSONObject? = null
-
-    /**
-     * reset all cache
-     */
-    open fun reset() {
-        gxExtendCache = null
-        gxDataValueCache = null
-        gxDataCache = null
-    }
 
     /**
      * 获取数据绑定的计算结果，其数据结构如下：
@@ -53,69 +41,48 @@ open class GXDataBinding(
     }
      */
     open fun getData(templateData: JSONObject): JSONObject? {
-        if (gxDataCache == null) {
 
-            var result: JSONObject? = null
+        var result: JSONObject? = null
 
-            // 渲染字段
-            value?.value(templateData)?.let {
-                result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_VALUE, it)
-            }
-
-            // 图片占位图字段
-            placeholder?.value(templateData)?.let {
-                result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_PLACEHOLDER, it)
-            }
-
-            // View的无障碍描述
-            accessibilityDesc?.value(templateData)?.let {
-                result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC, it)
-            }
-
-            // View的无障碍状态
-            accessibilityEnable?.value(templateData)?.let {
-                result = result ?: JSONObject()
-                result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
-            }
-
-            gxDataCache = result
+        // 渲染字段
+        value?.value(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_VALUE, it)
         }
-        return gxDataCache
-    }
 
-    open fun getDataCache(): JSONObject? {
-        return gxDataCache
+        // 图片占位图字段
+        placeholder?.value(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_PLACEHOLDER, it)
+        }
+
+        // View的无障碍描述
+        accessibilityDesc?.value(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC, it)
+        }
+
+        // View的无障碍状态
+        accessibilityEnable?.value(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
+        }
+
+        return result
     }
 
     open fun getExtend(templateData: JSON?): JSONObject? {
-        if (gxExtendCache == null) {
-            var result: JSONObject? = null
-            if (extend != null) {
-                for (entry in extend) {
-                    result = result ?: JSONObject()
-                    result[entry.key] = entry.value.value(templateData)
-                }
+        var result: JSONObject? = null
+        if (extend != null) {
+            for (entry in extend) {
+                result = result ?: JSONObject()
+                result[entry.key] = entry.value.value(templateData)
             }
-            gxExtendCache = result
         }
-        return gxExtendCache
-    }
-
-    open fun getExtendCache(): JSONObject? {
-        return gxExtendCache
+        return result
     }
 
     open fun getDataValue(templateData: JSONObject): JSON? {
-        if (gxDataValueCache == null) {
-            gxDataValueCache = getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE) as? JSON
-        }
-        return gxDataValueCache
-    }
-
-    open fun getDataValueCache(): JSON? {
-        return gxDataValueCache
+        return getData(templateData)?.get(GXTemplateKey.GAIAX_VALUE) as? JSON
     }
 }

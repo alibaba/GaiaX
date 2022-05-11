@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
+import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
@@ -36,7 +37,7 @@ data class GXTemplateNode(
     /**
      * 节点的数据绑定信息
      */
-    val dataBinding: GXDataBinding? = null,
+    var dataBinding: GXDataBinding? = null,
     /**
      * 节点的事件绑定信息
      */
@@ -51,8 +52,34 @@ data class GXTemplateNode(
     val visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    fun getData(templateData: JSONObject): JSONObject? {
+        if (dataCache == null) {
+            dataCache = dataBinding?.getData(templateData)
+        }
+        return dataCache
+    }
+
+    fun getExtend(templateData: JSON?): JSONObject? {
+        if (dataExtendCache == null) {
+            dataExtendCache = dataBinding?.getExtend(templateData)
+        }
+        return dataExtendCache
+    }
+
+    fun getDataValue(templateData: JSONObject): JSON? {
+        if (dataValueCache == null) {
+            dataValueCache = dataBinding?.getDataValue(templateData)
+        }
+        return dataValueCache
+    }
+
+    var dataCache: JSONObject? = null
+    var dataValueCache: JSON? = null
+    var dataExtendCache: JSONObject? = null
+
     fun reset() {
-        dataBinding?.reset()
+        resetData()
+
         visualTemplateNode?.reset()
         finalCss = null
         finalGridConfig = null
@@ -60,6 +87,12 @@ data class GXTemplateNode(
     }
 
     var finalGridConfig: GXGridConfig? = null
+
+    fun resetData() {
+        dataExtendCache = null
+        dataValueCache = null
+        dataCache = null
+    }
 
     var finalScrollConfig: GXScrollConfig? = null
 
@@ -155,6 +188,7 @@ data class GXTemplateNode(
     override fun toString(): String {
         return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode, finalCss=$finalCss)"
     }
+
 
     companion object {
 

@@ -58,6 +58,8 @@ class GXLayerTest {
         Assert.assertEquals(true, GXMockUtils.createTextTypeLayer().isTextType())
 
         Assert.assertEquals(true, GXMockUtils.createCustomType().isCustomType())
+
+        Assert.assertEquals(true, GXMockUtils.createSliderTypeLayer().isSliderType())
     }
 
     @Test
@@ -122,6 +124,9 @@ class GXLayerTest {
             GXMockUtils.createNestChildTemplateTypeLayer().getNodeType()
         )
 
-
+        Assert.assertEquals(
+            GXViewKey.VIEW_TYPE_CONTAINER_SLIDER,
+            GXMockUtils.createSliderTypeLayer().getNodeType()
+        )
     }
 }

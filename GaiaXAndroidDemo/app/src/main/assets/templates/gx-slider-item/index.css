@@ -1,0 +1,22 @@
+#gx-slider-item {
+  width: 100%;
+  height: 100%;
+}
+
+#image {
+  width: 90%;
+  height: 100%;
+  mode: aspectFill;
+  border-radius: 10px;
+  margin-left: 5%;
+}
+
+#title {
+  text-overflow: ellipsis;
+  color: #FFFFFF;
+  font-size: 15px;
+  fit-content: true;
+  position: absolute;
+  bottom: 10px;
+  left: 10%;
+}

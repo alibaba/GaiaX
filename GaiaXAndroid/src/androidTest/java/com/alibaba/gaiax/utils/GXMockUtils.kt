@@ -129,6 +129,14 @@ object GXMockUtils {
         })
     }
 
+    fun createSliderTypeLayer(): GXLayer {
+        return GXLayer.create(JSONObject().apply {
+            this[GXTemplateKey.GAIAX_LAYER_ID] = "layerId" + layerIdCount++
+            this[GXTemplateKey.GAIAX_LAYER_TYPE] = GXViewKey.VIEW_TYPE_GAIA_TEMPLATE
+            this[GXTemplateKey.GAIAX_LAYER_SUB_TYPE] = GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
+        })
+    }
+
     fun createDataBindingWithExtend(extend: JSONObject = JSONObject()): GXDataBinding {
         return GXDataBinding.create(
             value = "\${data.title}",

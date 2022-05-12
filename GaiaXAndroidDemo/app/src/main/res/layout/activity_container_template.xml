@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -58,6 +59,18 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/template_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Slider容器模板"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/template_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </androidx.appcompat.widget.LinearLayoutCompat>

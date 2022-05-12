@@ -94,8 +94,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "-updateLayoutStyle:"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "640"
+            endingLineNumber = "640"
             landmarkName = "-configureViewInfo:"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "682"
-            endingLineNumber = "682"
+            startingLineNumber = "697"
+            endingLineNumber = "697"
             landmarkName = "-configSlider:"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "536"
-            endingLineNumber = "536"
+            startingLineNumber = "539"
+            endingLineNumber = "539"
             landmarkName = "-automaticScroll"
             landmarkType = "7">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
             landmarkName = "-handleSlider"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "../GaiaXiOS/GaiaXiOS/Component/Node/GXSliderNode.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "579"
-            endingLineNumber = "579"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "-positionPageControl:"
             landmarkType = "7">
          </BreakpointContent>

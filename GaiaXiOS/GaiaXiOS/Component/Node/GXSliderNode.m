@@ -188,6 +188,9 @@
         [self updateNormalStyle:extend isMark:isMark];
     }
     
+    //处理指定滑动
+    [self handleScrollToIndex:extend];
+    
     //确认属性发生变化，更新布局
     if (isMark) {
         //更改style + rustPtr
@@ -600,6 +603,18 @@
 - (void)invalidateTimer{
     [self.timer invalidate];
     self.timer = nil;
+}
+
+- (void)handleScrollToIndex:(NSDictionary *) extend{
+    NSUInteger index = [extend gx_intForKey:@"scroll-index"];
+    if (index > 0 && index < self.items.count) {
+        BOOL animated = [extend gx_boolForKey:@"scroll-animated"];
+        NSUInteger duration = [extend gx_intForKey:@"scroll-duration"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [(GXScrollView *)self.associatedView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:animated];
+        });
+    }
 }
 
 #pragma mark - 属性设置

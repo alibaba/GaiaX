@@ -60,18 +60,18 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private var gxTemplateContext: GXTemplateContext? = null
-    private var mConfig: GXSliderConfig? = null
+    private var config: GXSliderConfig? = null
 
     var viewPager: ViewPager? = null
-    private var mIndicatorContainer: LinearLayout? = null
-    private var mSelectedIndicatorItem: View? = null
+    private var indicatorContainer: LinearLayout? = null
+    private var selectedIndicatorItem: View? = null
 
-    private var mIndicatorItems = mutableListOf<View>()
+    private var indicatorItems = mutableListOf<View>()
 
-    private var mTimer: Timer? = null
-    private var mTimerTask: TimerTask? = null
+    private var timer: Timer? = null
+    private var timerTask: TimerTask? = null
 
-    private val mMainHandler = Handler(Looper.getMainLooper())
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private fun initView() {
         initViewPager()
@@ -89,12 +89,12 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             }
 
             override fun onPageSelected(position: Int) {
-                if (mConfig?.hasIndicator == true) {
-                    if (mConfig?.hasIndicator == true
-                        && mConfig?.infinityScroll == true
-                        && mIndicatorItems.size > 0
+                if (config?.hasIndicator == true) {
+                    if (config?.hasIndicator == true
+                        && config?.infinityScroll == true
+                        && indicatorItems.size > 0
                     ) {
-                        indicatorChanged(position % mIndicatorItems.size)
+                        indicatorChanged(position % indicatorItems.size)
                     } else {
                         indicatorChanged(position)
                     }
@@ -118,13 +118,13 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun initIndicator() {
-        mIndicatorContainer = LinearLayout(context).apply {
+        indicatorContainer = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.END
         }
 
         addView(
-            mIndicatorContainer,
+            indicatorContainer,
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
                 setMargins(
@@ -137,12 +137,12 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     fun setConfig(config: GXSliderConfig?) {
-        mConfig = config
+        this.config = config
     }
 
     override fun onBindData(data: JSONObject) {
         viewPager?.adapter?.notifyDataSetChanged()
-        mConfig?.selectedIndex?.let {
+        config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
                 if (it in 0 until count) {
                     viewPager?.setCurrentItem(it, false)
@@ -153,20 +153,20 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     fun setIndicatorCount(count: Int) {
-        mIndicatorItems.clear()
-        mIndicatorContainer?.removeAllViews()
+        indicatorItems.clear()
+        indicatorContainer?.removeAllViews()
 
-        if (mConfig?.hasIndicator != false) {
+        if (config?.hasIndicator != false) {
             for (i in 0 until count) {
                 val view = ImageView(context)
                 view.setImageResource(R.drawable.gaiax_slider_indicator_dot)
                 if (i == 0) {
-                    mSelectedIndicatorItem = view
-                    mSelectedIndicatorItem?.isSelected = true
+                    selectedIndicatorItem = view
+                    selectedIndicatorItem?.isSelected = true
                 }
-                mIndicatorItems.add(view)
+                indicatorItems.add(view)
 
-                mIndicatorContainer?.addView(
+                indicatorContainer?.addView(
                     view,
                     LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
                         setMargins(
@@ -181,25 +181,25 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun indicatorChanged(position: Int) {
-        if (position in 0 until mIndicatorItems.size) {
-            val item = mIndicatorItems[position]
-            if (item != mSelectedIndicatorItem) {
+        if (position in 0 until indicatorItems.size) {
+            val item = indicatorItems[position]
+            if (item != selectedIndicatorItem) {
                 item.isSelected = true
-                mSelectedIndicatorItem?.isSelected = false
-                mSelectedIndicatorItem = item
+                selectedIndicatorItem?.isSelected = false
+                selectedIndicatorItem = item
             }
         }
     }
 
     private fun startTimer() {
-        mConfig?.scrollTimeInterval?.let {
+        config?.scrollTimeInterval?.let {
             if (it > 0) {
-                mTimer = Timer()
-                mTimerTask = object : TimerTask() {
+                timer = Timer()
+                timerTask = object : TimerTask() {
                     override fun run() {
                         viewPager?.currentItem?.let { currentItem ->
                             viewPager?.adapter?.count?.let { count ->
-                                mMainHandler.post {
+                                mainHandler.post {
                                     viewPager?.setCurrentItem(
                                         (currentItem + 1) % count,
                                         true
@@ -209,17 +209,17 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
                         }
                     }
                 }
-                mTimer?.schedule(mTimerTask, it, it)
+                timer?.schedule(timerTask, it, it)
             }
         }
     }
 
     private fun stopTimer() {
-        mTimer?.cancel()
-        mTimerTask?.cancel()
+        timer?.cancel()
+        timerTask?.cancel()
 
-        mTimer = null
-        mTimerTask = null
+        timer = null
+        timerTask = null
     }
 
     override fun manualRelease() {
@@ -237,5 +237,5 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     override fun getTemplateContext(): GXTemplateContext? = gxTemplateContext
 
-    fun getConfig(): GXSliderConfig? = mConfig
+    fun getConfig(): GXSliderConfig? = config
 }

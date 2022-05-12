@@ -35,12 +35,12 @@ class GXSliderViewAdapter(
 ) :
     PagerAdapter() {
 
-    private var mConfig: GXSliderConfig? = null
-    private var mData = JSONArray()
+    private var config: GXSliderConfig? = null
+    private var data = JSONArray()
 
     override fun getCount(): Int {
-        return if (mConfig?.infinityScroll == false) {
-            mData.size
+        return if (config?.infinityScroll == false) {
+            data.size
         } else {
             Int.MAX_VALUE
         }
@@ -51,15 +51,15 @@ class GXSliderViewAdapter(
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val realPosition = if (mData.size > 0) {
-            position % mData.size
+        val realPosition = if (data.size > 0) {
+            position % data.size
         } else {
             position
         }
 
         val templateItem = getTemplateItem()
             ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
-        val itemData = mData.getJSONObject(realPosition) ?: JSONObject()
+        val itemData = data.getJSONObject(realPosition) ?: JSONObject()
         val itemView = GXTemplateEngine.instance.createView(
             templateItem,
             GXTemplateEngine.GXMeasureSize(
@@ -77,12 +77,12 @@ class GXSliderViewAdapter(
     }
 
     fun setData(data: JSONArray) {
-        this.mData = data
+        this.data = data
         notifyDataSetChanged()
     }
 
     fun setConfig(config: GXSliderConfig?) {
-        mConfig = config
+        this.config = config
     }
 
     private fun getTemplateItem(): GXTemplateEngine.GXTemplateItem? {

@@ -413,17 +413,6 @@ class GXTemplateEngine {
         return GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
     }
 
-    fun createView(
-        templateItem: GXTemplateItem,
-        size: GXMeasureSize,
-        visualTemplateNode: GXTemplateNode?
-    ): View {
-        val templateInfo = data.getTemplateInfo(templateItem)
-        val context =
-            GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
-        return render.createView(context)
-    }
-
     /**
      * Create template View
      *
@@ -436,6 +425,35 @@ class GXTemplateEngine {
         return createView(templateItem, size, null)
     }
 
+    fun createView(
+        templateItem: GXTemplateItem,
+        size: GXMeasureSize,
+        visualTemplateNode: GXTemplateNode?
+    ): View {
+        val templateInfo = data.getTemplateInfo(templateItem)
+        val context =
+            GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
+        return render.createView(context)
+    }
+
+    fun createViewOnlyNodeTree(
+        templateItem: GXTemplateItem,
+        size: GXMeasureSize,
+        visualTemplateNode: GXTemplateNode?
+    ): GXTemplateContext {
+        val templateInfo = data.getTemplateInfo(templateItem)
+        val context =
+            GXTemplateContext.createContext(templateItem, size, templateInfo, visualTemplateNode)
+        render.createViewOnlyNodeTree(context)
+        return context
+    }
+
+    fun createViewOnlyViewTree(
+        gxTemplateContext: GXTemplateContext
+    ): View {
+        return render.createViewOnlyViewTree(gxTemplateContext)
+    }
+
     /**
      * Data binding
      *
@@ -444,7 +462,8 @@ class GXTemplateEngine {
      * @throws IllegalArgumentException
      */
     fun bindData(view: View, templateData: GXTemplateData) {
-        val templateContext = GXTemplateContext.getContext(view) ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        val templateContext = GXTemplateContext.getContext(view)
+            ?: throw IllegalArgumentException("Not found templateContext from targetView")
         templateContext.templateData = templateData
         render.bindViewData(templateContext)
     }

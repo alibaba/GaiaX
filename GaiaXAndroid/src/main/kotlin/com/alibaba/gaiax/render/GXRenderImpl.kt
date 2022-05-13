@@ -61,6 +61,27 @@ class GXRenderImpl {
             ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
     }
 
+    fun createViewOnlyNodeTree(templateContext: GXTemplateContext): GXNode {
+        // Create a virtual node tree
+        val rootNode = GXNodeTreeCreator.create(templateContext)
+        templateContext.rootNode = rootNode
+        return rootNode
+    }
+
+    fun createViewOnlyViewTree(templateContext: GXTemplateContext): View {
+        val rootNode = templateContext.rootNode
+            ?: throw IllegalArgumentException("Create template view exception, root node null")
+
+        // Create a view based on the virtual node tree
+        val rootView = GXViewTreeCreator(templateContext, rootNode).build().apply {
+            (this as GXIRootView).setTemplateContext(templateContext)
+        }
+        templateContext.rootView = SoftReference(rootView)
+
+        return templateContext.rootView?.get()
+            ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
+    }
+
     fun bindViewData(templateContext: GXTemplateContext) {
         val rootNode = templateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null")

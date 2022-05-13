@@ -69,7 +69,11 @@ data class GXTemplateInfo(
         return null
     }
 
-    fun checkJS(): Boolean {
+    val isJsExist: Boolean by lazy {
+        checkJS()
+    }
+
+    private fun checkJS(): Boolean {
         val result = js?.isNotEmpty()
         if (result == true) {
             return true

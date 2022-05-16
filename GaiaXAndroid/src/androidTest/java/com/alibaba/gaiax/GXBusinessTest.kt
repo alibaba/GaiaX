@@ -26,6 +26,10 @@ class GXBusinessTest : GXBaseTest() {
             return GaiaXExpression.create(value)
         }
 
+        override fun isTrue(value: Any?): Boolean {
+            return GaiaXExpression.isCondition(value)
+        }
+
     }
 
     @Test

@@ -89,6 +89,7 @@ class GXRegisterCenter {
 
     interface GXIExtensionExpression {
         fun create(value: Any): GXIExpression
+        fun isTrue(value: Any?): Boolean
     }
 
     interface GXIExtensionDataBinding {

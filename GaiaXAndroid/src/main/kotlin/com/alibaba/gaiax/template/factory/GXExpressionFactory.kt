@@ -24,6 +24,10 @@ import com.alibaba.gaiax.template.GXIExpression
  */
 object GXExpressionFactory {
 
+    fun isTrue(value: Any?): Boolean? {
+        return GXRegisterCenter.instance.extensionExpression?.isTrue(value)
+    }
+
     fun valuePath(expression: Any?): String? {
         if (expression is String && expression.startsWith("$")) {
             return expression.substring(1, expression.length)

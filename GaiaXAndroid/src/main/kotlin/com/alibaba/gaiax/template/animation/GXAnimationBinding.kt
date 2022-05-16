@@ -51,7 +51,10 @@ class GXAnimationBinding(
         val state = gxState?.value(gxTemplateData)
 
         // 符合条件触发动画
-        if (trigger && (state is Boolean && state == true)) {
+        if (trigger &&
+            // 这里兼容1的状态
+            GXExpressionFactory.isTrue(state) == true
+        ) {
             gxAnimation.executeAnimation(
                 gxState,
                 gxAnimationExpression,

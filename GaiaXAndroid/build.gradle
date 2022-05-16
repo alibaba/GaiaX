@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.dokka'
+//apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
 allprojects {
@@ -112,11 +112,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
 
-dokkaHtml {
-    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
-
-    moduleName.set("GaiaX")
-}
+//dokkaHtml {
+//    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
+//
+//    moduleName.set("GaiaX")
+//}
 
 afterEvaluate {
     publishing {

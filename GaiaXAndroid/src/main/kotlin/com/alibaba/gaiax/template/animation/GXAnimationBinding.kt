@@ -90,15 +90,15 @@ class GXAnimationBinding(
             val gxExpression = GXExpressionFactory.create(data)
 
             if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true)) {
-                val lottieAnimator =
-                    GXLottieAnimation.create(data.getJSONObject(KEY_LOTTIE_ANIMATOR))
+                val lottieData = data.getJSONObject(KEY_LOTTIE_ANIMATOR) ?: data
+                val lottieAnimator = GXLottieAnimation.create(lottieData)
                 if (lottieAnimator != null) {
                     return GXAnimationBinding(type, trigger, state, lottieAnimator, gxExpression)
                 }
                 return null
             } else if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP, true)) {
-                val animatorSet =
-                    GXPropAnimationSet.create(data.getJSONObject(KEY_PROP_ANIMATOR_SET))
+                val animatorData = data.getJSONObject(KEY_PROP_ANIMATOR_SET)
+                val animatorSet = GXPropAnimationSet.create(animatorData)
                 if (animatorSet != null) {
                     return GXAnimationBinding(type, trigger, state, animatorSet, gxExpression)
                 }

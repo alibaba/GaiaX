@@ -1,15 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
 allprojects {
     repositories {
-        mavenLocal()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 }
@@ -19,11 +15,8 @@ buildscript {
     ext.kotlin_version = '1.3.50'
 
     repositories {
-        mavenLocal()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 
@@ -45,6 +38,11 @@ android {
     // https://www.jianshu.com/p/681589927f1f
     compileOptions {
         kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX"]
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets {
@@ -95,10 +93,10 @@ android {
 
 dependencies {
 
-    providedCompile "org.jetbrains.kotlin:kotlin-stdlib:1.3.50@jar"
-    providedCompile 'com.alibaba:fastjson:1.2.26@jar'
-    providedCompile 'com.android.support:recyclerview-v7:28.0.0'
-    providedCompile 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.50@jar'
+    implementation 'com.alibaba:fastjson:1.2.26@jar'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.youku.android:GaiaX-Analyze-Android:1.0.0-DEV-SNAPSHOT'

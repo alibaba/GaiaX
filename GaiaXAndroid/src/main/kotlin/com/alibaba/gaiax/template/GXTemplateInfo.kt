@@ -159,8 +159,7 @@ data class GXTemplateInfo(
             val dataBindFileJson = template.dataBind.safeParseToJson()
 
             // JS code content
-            val jsSrc = ""
-            // val jsSrc = GXTemplatePathParserUtils.parseJS(context, templatePath)
+            val jsSrc = template.js
 
             // Data expression
             val dataExpJson =

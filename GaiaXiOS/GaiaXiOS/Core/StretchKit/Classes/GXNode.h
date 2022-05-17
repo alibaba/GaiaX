@@ -139,7 +139,7 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 - (void)renderView:(UIView *)view;
 
 //是否需要绑定数据
-- (BOOL)shouldBind;
+- (BOOL)shouldBind; 
 //数据绑定
 - (void)bindData:(NSDictionary *)data;
 //动画绑定

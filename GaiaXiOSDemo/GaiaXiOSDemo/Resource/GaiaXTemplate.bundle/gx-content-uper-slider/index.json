@@ -1,0 +1,19 @@
+{
+  "id": "gx-content-uper-slider",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "slider-scroll-time-interval": 3000,
+   "slider-infinity-scroll": true,
+   "slider-has-indicator": true,
+  "direction": "horizontal",
+  "edge-insets": "{0,0,0,0}",
+  "item-spacing": 0,
+  "row-spacing": 0,
+  "layers": [
+    {
+      "type": "gaia-template",
+      "id": "gx-content-uper-slider-item",
+      "sub-type": "custom"
+    }
+  ]
+}

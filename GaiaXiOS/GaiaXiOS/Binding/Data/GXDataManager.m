@@ -26,6 +26,7 @@
 #import "GXFunctionDef.h"
 #import "GXCommonDef.h"
 #import "GXGridNode.h"
+#import "GXSliderNode.h"
 #import "UIView+GX.h"
 #import "GXTextNode.h"
 #import "GXUtils.h"

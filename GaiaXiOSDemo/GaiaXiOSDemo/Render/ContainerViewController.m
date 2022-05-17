@@ -25,6 +25,7 @@
     UIView *_view2;
     UIView *_view3;
     UIView *_view4;
+    UIView *_view5;
 }
 
 @end
@@ -44,10 +45,11 @@
     [self renderTemplate2];
     [self renderTemplate3];
     [self renderTemplate4];
+    [self renderTemplate5];
     
     //更新contentSize
     UIScrollView *scrollView = (UIScrollView *)self.view;
-    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(_view4.frame) + 30);
+    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(_view5.frame) + 30);
 }
 
 - (void)renderTemplate1{
@@ -158,6 +160,32 @@
     GXTemplateData *data4 = [[GXTemplateData alloc] init];
     data4.data = [GaiaXHelper jsonWithFileName:@"uper"];
     [TheGXTemplateEngine bindData:data4 onView:_view4];
+}
+
+- (void)renderTemplate5{
+    UILabel *label5 = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_view4.frame) + 10, self.view.frame.size.width - 30, 40)];
+    label5.textColor = [UIColor blackColor];
+    NSString *tmpString = NSLocalizedString(@"container_template", nil);
+    label5.text = [NSString stringWithFormat:@"Slider %@ 1",tmpString];
+    [self.view addSubview:label5];
+
+    //templateItem
+    GXTemplateItem *templateItem5 = [[GXTemplateItem alloc] init];
+    templateItem5.templateId = @"gx-content-uper-slider";
+    templateItem5.bizId = [GaiaXHelper bizId];
+    templateItem5.isLocal = YES;
+
+    //渲染view
+    _view5 = [TheGXTemplateEngine creatViewByTemplateItem:templateItem5 measureSize:CGSizeMake(self.view.frame.size.width, NAN)];
+    CGRect frame1 = _view5.frame;
+    frame1.origin.y = CGRectGetMaxY(label5.frame);
+    _view5.frame = frame1;
+    [self.view addSubview:_view5];
+
+    //绑定数据
+    GXTemplateData *data5 = [[GXTemplateData alloc] init];
+    data5.data = [GaiaXHelper jsonWithFileName:@"uper"];
+    [TheGXTemplateEngine bindData:data5 onView:_view5];
 }
 
 

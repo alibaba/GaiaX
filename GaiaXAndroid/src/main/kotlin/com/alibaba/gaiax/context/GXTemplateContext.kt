@@ -24,8 +24,10 @@ import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIRootView
+import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.lang.ref.SoftReference
+import java.util.concurrent.CopyOnWriteArraySet
 
 /**
  * @suppress
@@ -77,11 +79,16 @@ class GXTemplateContext(val context: Context) {
      */
     var visualTemplateNode: GXTemplateNode? = null
 
+    val containers: CopyOnWriteArraySet<GXContainer> by lazy {
+        CopyOnWriteArraySet<GXContainer>()
+    }
+
     override fun toString(): String {
         return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
     }
 
     fun release() {
+        containers.clear()
         isDirty = false
         dirtyText?.clear()
         dirtyText = null

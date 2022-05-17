@@ -556,6 +556,8 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         val container = view as GXContainer
 
+        gxTemplateContext.containers.add(container)
+
         val adapter: GXContainerViewAdapter?
         if (container.adapter != null) {
             adapter = container.adapter as GXContainerViewAdapter

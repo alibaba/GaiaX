@@ -53,7 +53,7 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class GXContainerViewAdapter(
     val gxTemplateContext: GXTemplateContext,
     val gxNode: GXNode,
-    val container: GXContainer
+    val gxContainer: GXContainer
 ) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var containerData: JSONArray = JSONArray()

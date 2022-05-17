@@ -168,6 +168,10 @@ open class GXBaseTest {
             return GXAnalyzeWrapper(value)
         }
 
+        override fun isTrue(value: Any?): Boolean {
+            return value == true
+        }
+
         class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
             override fun expression(): Any {
                 return expression

@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
+import android.support.annotation.Keep
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -37,6 +38,7 @@ import kotlin.math.roundToInt
 /**
  * @suppress
  */
+@Keep
 open class GXView : AbsoluteLayout,
     GXIViewBindData,
     GXIRootView,

@@ -372,7 +372,12 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
         p++; //判断运算符和界符的这部分由于指针 p 没有向后指，所以需要将指针 p 向后移一位
     }
     string str1 = token;
-    GXATSNode temp = GXATSNode(str1, syn, sign);
+    GXATSNode temp;
+    if(sign == "bool" || sign == "op"){
+        temp = GXATSNode(str1, str1, sign);
+    }else{
+        temp = GXATSNode(str1, sign, sign);
+    }
     delete []token;
     return temp;
 }

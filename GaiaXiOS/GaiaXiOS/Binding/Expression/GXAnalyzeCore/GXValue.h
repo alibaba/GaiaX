@@ -26,9 +26,6 @@ enum {
 #define GX_VALUE_GET_FLOAT64(v) ((v).u.float64)
 #define GX_VALUE_GET_OBJECT(v) ((v).u.ptr)
 
-
-typedef struct GXString GXString;
-
 //Value值
 typedef union GXValueUnion {
     int32_t int32;  //Bool 1，0
@@ -53,6 +50,7 @@ static inline GXValue __GX_NewFloat64(float d) {
     v.u.float64 = d;
     return v;
 }
+
 /**
  * 通过该方法NewNull对象
  * @param val long值
@@ -60,20 +58,23 @@ static inline GXValue __GX_NewFloat64(float d) {
 static gx_force_inline GXValue GX_NewNull(int val) {
     return GX_MKVAL(GX_TAG_NULL, (val != 0));
 }
+
 /**
  * 通过该方法NewArray对象
  * @param val long值
  */
-static gx_force_inline GXValue GX_NewArray(void* val) {
+static gx_force_inline GXValue GX_NewArray(void *val) {
     return GX_MKOBJECT(GX_TAG_ARRAY, val);
 }
+
 /**
  * 通过该方法NewMap对象
  * @param val long值
  */
-static gx_force_inline GXValue GX_NewMap(void* val) {
+static gx_force_inline GXValue GX_NewMap(void *val) {
     return GX_MKOBJECT(GX_TAG_MAP, val);
 }
+
 /**
  * 通过该方法NewBool对象
  * @param val bool对应的int值
@@ -91,6 +92,7 @@ static gx_force_inline GXValue GX_NewFloat64(float d) {
     v = __GX_NewFloat64(d);
     return v;
 }
+
 /**
  * 通过该方法NewString对象
  * @param str 字符串的值

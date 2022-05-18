@@ -17,22 +17,23 @@
 package com.alibaba.gaiax.render.view.container.slider
 
 import android.content.Context
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.StateListDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.os.Handler
 import android.os.Looper
-import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.R
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXSliderConfig
 import java.util.*
 
@@ -41,14 +42,19 @@ import java.util.*
  */
 class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
+    val TAG = "GXSliderView"
+
     // 指示器左右间距
-    private val INDICATOR_HORIZONTAL_MARGIN = 70
+    private val INDICATOR_HORIZONTAL_MARGIN = 10.0F
 
     // 指示器底部间距
-    private val INDICATOR_BOTTOM_MARGIN = 30
+    private val INDICATOR_BOTTOM_MARGIN = 10.0F
 
     // 指示器 Item 之间的间距
-    private val INDICATOR_ITEM_HORIZONTAL_MARGIN = 10
+    private val INDICATOR_ITEM_HORIZONTAL_MARGIN = 5.0F
+
+    // 指示器大小
+    private val INDICATOR_ITEM_SIZE = 8.0F
 
 
     constructor(context: Context) : super(context) {
@@ -120,7 +126,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     private fun initIndicator() {
         indicatorContainer = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.END
+            gravity = Gravity.CENTER
         }
 
         addView(
@@ -128,10 +134,10 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
                 setMargins(
-                    INDICATOR_HORIZONTAL_MARGIN,
+                    INDICATOR_HORIZONTAL_MARGIN.dpToPx().toInt(),
                     0,
-                    INDICATOR_HORIZONTAL_MARGIN,
-                    INDICATOR_BOTTOM_MARGIN
+                    INDICATOR_HORIZONTAL_MARGIN.dpToPx().toInt(),
+                    INDICATOR_BOTTOM_MARGIN.dpToPx().toInt()
                 )
             })
     }
@@ -158,8 +164,8 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
         if (config?.hasIndicator != false) {
             for (i in 0 until count) {
-                val view = ImageView(context)
-                view.setImageResource(R.drawable.gaiax_slider_indicator_dot)
+                val view = View(context)
+                view.background = getIndicatorItemDrawable()
                 if (i == 0) {
                     selectedIndicatorItem = view
                     selectedIndicatorItem?.isSelected = true
@@ -168,11 +174,14 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
                 indicatorContainer?.addView(
                     view,
-                    LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+                    LayoutParams(
+                        INDICATOR_ITEM_SIZE.dpToPx().toInt(),
+                        INDICATOR_ITEM_SIZE.dpToPx().toInt()
+                    ).apply {
                         setMargins(
-                            INDICATOR_ITEM_HORIZONTAL_MARGIN,
+                            INDICATOR_ITEM_HORIZONTAL_MARGIN.dpToPx().toInt(),
                             0,
-                            INDICATOR_ITEM_HORIZONTAL_MARGIN,
+                            INDICATOR_ITEM_HORIZONTAL_MARGIN.dpToPx().toInt(),
                             0
                         )
                     })
@@ -220,6 +229,30 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
         timer = null
         timerTask = null
+    }
+
+    private fun getIndicatorItemDrawable(): StateListDrawable {
+        val drawable = StateListDrawable()
+        val selectedDrawable = ShapeDrawable(OvalShape())
+        val unselectedDrawable = ShapeDrawable(OvalShape())
+
+        selectedDrawable.intrinsicWidth = INDICATOR_ITEM_SIZE.dpToPx().toInt()
+        selectedDrawable.intrinsicHeight = INDICATOR_ITEM_SIZE.dpToPx().toInt()
+        unselectedDrawable.intrinsicWidth = INDICATOR_ITEM_SIZE.dpToPx().toInt()
+        unselectedDrawable.intrinsicHeight = INDICATOR_ITEM_SIZE.dpToPx().toInt()
+
+        drawable.addState(
+            intArrayOf(android.R.attr.state_selected),
+            selectedDrawable
+        )
+        drawable.addState(intArrayOf(), unselectedDrawable)
+        config?.indicatorSelectedColor?.let {
+            selectedDrawable.paint?.color = it
+        }
+        config?.indicatorUnselectedColor?.let {
+            unselectedDrawable.paint?.color = it
+        }
+        return drawable
     }
 
     override fun setTemplateContext(gxContext: GXTemplateContext) {

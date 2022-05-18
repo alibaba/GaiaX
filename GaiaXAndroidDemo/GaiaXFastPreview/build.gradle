@@ -52,7 +52,7 @@ android {
 
 dependencies {
 
-    implementation 'com.github.alibaba.GaiaX:GaiaX:dev-SNAPSHOT'
+    implementation 'com.github.alibaba:GaiaX:0.2.1'
 
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.alibaba:fastjson:1.2.76'

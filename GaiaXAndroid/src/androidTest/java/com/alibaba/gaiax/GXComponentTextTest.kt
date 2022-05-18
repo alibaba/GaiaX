@@ -1010,6 +1010,35 @@ class GXComponentTextTest : GXBaseTest() {
 
     /**
      * TODO:
+     * 优酷版本，在这种情况下，给出了错误的处理结果
+     * 开源版本，不处理这种情况，直接抛出异常
+     */
+    @Test
+    fun template_text_fitcontent_lines_0_width_null_height_100px_youku_version() {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isPreventFitContentThrowException(): Boolean {
+                return true
+            }
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_null_height_100px"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isPreventFitContentThrowException(): Boolean {
+                return false
+            }
+        })
+    }
+
+    /**
+     * TODO:
      * 优酷版本，文字宽度为实际文字宽度，高度也为实际文字高度
      * 开源版本包，文字宽度为设置的文字宽度，高度为自适应的高度
      */

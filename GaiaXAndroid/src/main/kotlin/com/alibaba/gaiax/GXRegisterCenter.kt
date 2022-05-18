@@ -175,8 +175,14 @@ class GXRegisterCenter {
          */
         fun isPreventIconFontTypefaceThrowException() = false
 
+        /**
+         *
+         */
         fun isPreventAccessibilityThrowException() = false
 
+        /**
+         *
+         */
         fun isPreventFitContentThrowException() = false
     }
 

@@ -39,7 +39,7 @@ class GXRenderImpl {
 
     fun bindNodeData(templateContext: GXTemplateContext) {
         val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(bindNodeData)")
         templateContext.isDirty = false
 
         // Update the virtual node tree
@@ -84,7 +84,7 @@ class GXRenderImpl {
 
     fun bindViewData(templateContext: GXTemplateContext) {
         val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(bindViewData)")
 
         // Resetting the Template Status
         templateContext.isDirty = false
@@ -106,7 +106,7 @@ class GXRenderImpl {
 
     fun bindViewDataOnlyViewTree(templateContext: GXTemplateContext) {
         val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree")
 
         // Update the view tree
         GXNodeTreeUpdater(templateContext).buildViewStyle()

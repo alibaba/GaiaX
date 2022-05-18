@@ -43,7 +43,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
     fun buildNodeLayout() {
         val rootNode = context.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(buildNodeLayout)")
         val templateData = context.templateData?.data
             ?: throw IllegalArgumentException("Data is null")
         val size = Size(context.size.width, context.size.height)
@@ -57,7 +57,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
     fun buildViewStyle() {
         val rootNode = context.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(buildViewStyle)")
         val templateData = context.templateData?.data
             ?: throw IllegalArgumentException("Data is null")
         // 更新样式
@@ -66,7 +66,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
     fun buildLayoutAndStyle() {
         val rootNode = context.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+            ?: throw IllegalArgumentException("RootNode is null(buildLayoutAndStyle)")
         val templateData = context.templateData?.data
             ?: throw IllegalArgumentException("Data is null")
         val size = Size(context.size.width, context.size.height)

@@ -112,7 +112,7 @@ afterEvaluate {
                 if (project.hasProperty("group")) {
                     groupId = project.getProperty("group")
                 } else {
-                    groupId = 'com.github.alibaba'
+                    groupId = 'com.github.alibaba.GaiaX'
                 }
 
                 artifactId = 'GaiaX-Analyze'

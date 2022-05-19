@@ -101,16 +101,16 @@ class GXTemplateContext(val context: Context) {
     companion object {
 
         fun createContext(
-            templateItem: GXTemplateEngine.GXTemplateItem,
-            size: GXTemplateEngine.GXMeasureSize,
-            templateInfo: GXTemplateInfo,
-            visualTemplateNode: GXTemplateNode? = null
+            gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+            gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+            gxTemplateInfo: GXTemplateInfo,
+            gxVisualTemplateNode: GXTemplateNode? = null
         ): GXTemplateContext {
-            val context = GXTemplateContext(templateItem.context)
-            context.size = size
-            context.templateItem = templateItem
-            context.templateInfo = templateInfo
-            context.visualTemplateNode = visualTemplateNode
+            val context = GXTemplateContext(gxTemplateItem.context)
+            context.size = gxMeasureSize
+            context.templateItem = gxTemplateItem
+            context.templateInfo = gxTemplateInfo
+            context.visualTemplateNode = gxVisualTemplateNode
             return context
         }
 

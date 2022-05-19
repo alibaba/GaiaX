@@ -30,9 +30,9 @@ import com.alibaba.gaiax.render.view.GXViewTreeUpdater
  */
 class GXRenderImpl {
 
-    fun createNode(templateContext: GXTemplateContext): GXNode {
-        val rootNode = GXNodeTreeCreator.create(templateContext)
-        templateContext.rootNode = rootNode
+    fun createNode(gxTemplateContext: GXTemplateContext): GXNode {
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
         return rootNode
     }
 
@@ -60,10 +60,10 @@ class GXRenderImpl {
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
-    fun createViewOnlyNodeTree(templateContext: GXTemplateContext): GXNode {
+    fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
         // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(templateContext)
-        templateContext.rootNode = rootNode
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
         return rootNode
     }
 
@@ -95,12 +95,12 @@ class GXRenderImpl {
         GXViewTreeUpdater(gxTemplateContext, rootNode).build()
     }
 
-    fun bindViewDataOnlyNodeTree(templateContext: GXTemplateContext) {
+    fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
-        templateContext.isDirty = false
+        gxTemplateContext.isDirty = false
 
         // Update the node tree
-        GXNodeTreeUpdater(templateContext).buildNodeLayout()
+        GXNodeTreeUpdater(gxTemplateContext).buildNodeLayout()
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {

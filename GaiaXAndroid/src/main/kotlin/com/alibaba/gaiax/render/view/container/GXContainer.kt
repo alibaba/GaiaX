@@ -30,8 +30,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
-import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 
 
 /**
@@ -49,15 +47,6 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView, GXIRoundCor
         attrs,
         defStyleAttr
     )
-
-    private fun finalize() {
-        if (gxTemplateContext?.rootView?.get() == this) {
-            if (gxTemplateContext?.rootNode?.isRoot == true) {
-                gxTemplateContext?.release()
-                gxTemplateContext = null
-            }
-        }
-    }
 
     override fun onBindData(data: JSONObject) {
     }

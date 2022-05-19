@@ -24,7 +24,6 @@ import com.alibaba.gaiax.render.node.GXNodeTreeUpdater
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdater
-import java.lang.ref.SoftReference
 
 /**
  * @suppress
@@ -55,9 +54,9 @@ class GXRenderImpl {
         val rootView = GXViewTreeCreator(gxTemplateContext, rootNode).build().apply {
             (this as GXIRootView).setTemplateContext(gxTemplateContext)
         }
-        gxTemplateContext.rootView = SoftReference(rootView)
+        gxTemplateContext.rootView = rootView
 
-        return gxTemplateContext.rootView?.get()
+        return gxTemplateContext.rootView
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
@@ -76,9 +75,9 @@ class GXRenderImpl {
         val rootView = GXViewTreeCreator(gxTemplateContext, rootNode).build().apply {
             (this as GXIRootView).setTemplateContext(gxTemplateContext)
         }
-        gxTemplateContext.rootView = SoftReference(rootView)
+        gxTemplateContext.rootView = rootView
 
-        return gxTemplateContext.rootView?.get()
+        return gxTemplateContext.rootView
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 

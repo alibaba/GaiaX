@@ -26,7 +26,6 @@ import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXTemplateInfo
-import java.lang.ref.SoftReference
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -59,7 +58,7 @@ class GXTemplateContext(val context: Context) {
     /**
      * A soft or weak reference to a view
      */
-    var rootView: SoftReference<View>? = null
+    var rootView: View? = null
 
     /**
      * View Information about the virtual node tree associated with the template
@@ -93,7 +92,6 @@ class GXTemplateContext(val context: Context) {
         dirtyText?.clear()
         dirtyText = null
         templateData = null
-        rootView?.clear()
         rootView = null
         visualTemplateNode = null
         rootNode?.release()

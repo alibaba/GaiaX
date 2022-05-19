@@ -44,7 +44,7 @@ class GXAdapterLottieAnimation : GXLottieAnimation() {
         gxNode: GXNode,
         gxTemplateData: JSONObject
     ) {
-        val lottieContainer = (gxNode.viewRef?.get() as? ViewGroup) ?: return
+        val lottieContainer = (gxNode.view as? ViewGroup) ?: return
         val gxAnimationData = gxAnimationExpression?.value(gxTemplateData) as? JSONObject
 
         val remoteUri = this.gxRemoteUri?.value(gxTemplateData) as? String

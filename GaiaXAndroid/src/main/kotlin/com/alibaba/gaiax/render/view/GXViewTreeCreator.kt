@@ -22,13 +22,12 @@ import app.visly.stretch.Layout
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
-import java.lang.ref.SoftReference
 
 /**
  * @suppress
  */
-class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) :
-    GXViewTreeMerger<View>(context, rootNode) {
+class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) :
+    GXViewTreeMerger<View>(gxTemplateContext, rootNode) {
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View {
         val rootView = GXViewFactory.createView<View>(
@@ -37,7 +36,7 @@ class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) :
             rootNode.getCustomViewClass()
         ).apply {
             this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(rootNode, layout)
-            rootNode.viewRef = SoftReference(this)
+            rootNode.view = this
         }
         return rootView
     }
@@ -64,7 +63,7 @@ class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) :
                         mergeX,
                         mergeY
                     )
-                    childNode.boxLayoutViewRef = SoftReference(this)
+                    childNode.boxLayoutView = this
                     (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
                     if (parentMergeView is ViewGroup) {
                         parentMergeView.addView(this)
@@ -81,7 +80,7 @@ class GXViewTreeCreator(context: GXTemplateContext, rootNode: GXNode) :
                     mergeX,
                     mergeY
                 )
-                childNode.viewRef = SoftReference(this)
+                childNode.view = this
                 if (parentMergeView is ViewGroup) {
                     parentMergeView.addView(this)
                 }

@@ -49,7 +49,7 @@ class GXComponentEventTest : GXBaseTest() {
             this.gxTemplateContext = gxTemplateContext
             val gxGesture = GXJSGesture().apply {
                 this.gestureType = eventType
-                this.view = gxNode.viewRef?.get()
+                this.view = gxNode.view
                 this.eventParams = null
                 this.nodeId = gxNode.templateNode.layer.id
                 this.templateItem = gxTemplateContext.templateItem
@@ -82,7 +82,7 @@ class GXComponentEventTest : GXBaseTest() {
             }
             val gxGesture = GXTemplateEngine.GXGesture().apply {
                 this.gestureType = eventType
-                this.view = gxNode.viewRef?.get()
+                this.view = gxNode.view
                 this.eventParams = eventData
                 this.nodeId = gxNode.templateNode.layer.id
                 this.templateItem = gxTemplateContext.templateItem

@@ -40,7 +40,7 @@ class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
         gxNode: GXNode,
         gxTemplateData: JSONObject
     ) {
-        gxNode.viewRef?.get()?.let { targetView ->
+        gxNode.view?.let { targetView ->
             playAnimation(gxTemplateContext, gxNode, targetView)
         }
     }

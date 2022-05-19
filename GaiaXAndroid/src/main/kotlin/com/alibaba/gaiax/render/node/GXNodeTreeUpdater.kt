@@ -397,7 +397,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
     }
 
     private fun nodeViewCss(context: GXTemplateContext, node: GXNode) {
-        val view = node.viewRef?.get() ?: return
+        val view = node.view ?: return
         val gxCss = node.templateNode.finalCss ?: return
 
         if (view is GXText && (node.isTextType() || node.isRichTextType() || node.isIconFontType())) {
@@ -423,7 +423,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             return
         }
 
-        val targetView = gxNode.viewRef?.get()
+        val targetView = gxNode.view
 
         // 滚动事件
         if (targetView is RecyclerView) {
@@ -472,7 +472,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
     }
 
     private fun nodeViewTrack(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
-        val view = node.viewRef?.get() ?: return
+        val view = node.view ?: return
         val templateNode = node.templateNode
         val eventBinding = templateNode.eventBinding ?: return
         val invisible = templateNode.finalCss?.style?.isInvisible() ?: false
@@ -491,7 +491,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
     private fun nodeViewData(context: GXTemplateContext, node: GXNode, templateData: JSONObject) {
         node.templateNode.dataBinding ?: return
-        val view = node.viewRef?.get() ?: return
+        val view = node.view ?: return
         if (view !is GXIViewBindData) {
             return
         }

@@ -21,7 +21,6 @@ import android.view.View
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXLayer
-import java.lang.ref.SoftReference
 
 /**
  * @suppress
@@ -61,12 +60,12 @@ class GXNode {
     /**
      * View引用
      */
-    var viewRef: SoftReference<View>? = null
+    var view: View? = null
 
     /**
      * 同级阴影View引用
      */
-    var boxLayoutViewRef: SoftReference<View>? = null
+    var boxLayoutView: View? = null
 
     /**
      * 节点的模板数据
@@ -107,10 +106,8 @@ class GXNode {
     fun release() {
         isAnimating = false
         idPath = ""
-        viewRef?.clear()
-        viewRef = null
-        boxLayoutViewRef?.clear()
-        boxLayoutViewRef = null
+        view = null
+        boxLayoutView = null
         stretchNode.free()
         children?.forEach {
             it.release()

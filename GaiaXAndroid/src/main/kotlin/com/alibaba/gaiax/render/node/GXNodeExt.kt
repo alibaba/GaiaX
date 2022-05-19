@@ -31,7 +31,7 @@ fun GXNode.getGXViewById(id: String): View? {
  */
 private fun GXNode.findViewById(viewData: GXNode, id: String): View? {
     if (viewData.templateNode.layer.id == id) {
-        return viewData.viewRef?.get()
+        return viewData.view
     }
     viewData.children?.forEach {
         val view = findViewById(it, id)

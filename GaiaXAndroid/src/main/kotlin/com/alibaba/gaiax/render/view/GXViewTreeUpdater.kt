@@ -28,7 +28,7 @@ open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(context, rootNode) {
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View? {
-        return node.viewRef?.get()?.also {
+        return node.view?.also {
             GXViewLayoutParamsUtils.updateLayoutParams(it, layout, 0F, 0F)
         }
     }
@@ -43,9 +43,9 @@ open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) :
         mergeX: Float,
         mergeY: Float
     ): View? {
-        return childNode.viewRef?.get()?.also { targetView ->
+        return childNode.view?.also { targetView ->
             if (childNode.isNeedShadow()) {
-                childNode.boxLayoutViewRef?.get()?.let { shadowView ->
+                childNode.boxLayoutView?.let { shadowView ->
                     GXViewLayoutParamsUtils.updateLayoutParams(
                         shadowView,
                         childLayout,

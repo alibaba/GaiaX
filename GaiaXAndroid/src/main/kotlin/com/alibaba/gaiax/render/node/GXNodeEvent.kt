@@ -22,11 +22,11 @@ class GXNodeEvent : GXINodeEvent {
         }
         when (eventType) {
             GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
-                gxNode.viewRef?.get()?.setOnClickListener {
+                gxNode.view?.setOnClickListener {
                     gxTemplateContext.templateData?.eventListener?.onGestureEvent(
                         GXTemplateEngine.GXGesture().apply {
                             this.gestureType = eventType
-                            this.view = gxNode.viewRef?.get()
+                            this.view = gxNode.view
                             this.eventParams = eventData
                             this.nodeId = gxNode.templateNode.layer.id
                             this.templateItem = gxTemplateContext.templateItem
@@ -35,11 +35,11 @@ class GXNodeEvent : GXINodeEvent {
                 }
             }
             GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
-                gxNode.viewRef?.get()?.setOnLongClickListener {
+                gxNode.view?.setOnLongClickListener {
                     gxTemplateContext.templateData?.eventListener?.onGestureEvent(
                         GXTemplateEngine.GXGesture().apply {
                             this.gestureType = eventType
-                            this.view = gxNode.viewRef?.get()
+                            this.view = gxNode.view
                             this.eventParams = eventData
                             this.nodeId = gxNode.templateNode.layer.id
                             this.templateItem = gxTemplateContext.templateItem

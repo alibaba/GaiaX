@@ -26,7 +26,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
 
 object GXMockUtils {
     fun deviceGap(): Float {
-        if (Build.BRAND == "Xiaomi" && Build.MODEL == "Mi 10") {
+        if ((Build.BRAND == "Xiaomi" && Build.MODEL == "Mi 10") || (Build.BRAND == "HUAWEI" && Build.MODEL == "NAM-AL00")) {
             return 0.5F
         }
         return 0F

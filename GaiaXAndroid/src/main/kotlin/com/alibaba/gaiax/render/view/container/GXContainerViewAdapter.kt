@@ -86,8 +86,11 @@ class GXContainerViewAdapter(
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
-        val containerWidthLP =
+        var containerWidthLP =
             childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        if (isGridFooterView(childTemplateItem)) {
+            containerWidthLP = gxTemplateContext.size.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        }
         val containerHeightLP =
             childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         childItemContainer.layoutParams =
@@ -222,6 +225,10 @@ class GXContainerViewAdapter(
 
     private fun hasFooterView(): Boolean {
         return footerTemplateItem != null && footerTypeHasMore
+    }
+
+    private fun isGridFooterView(templateItem: GXTemplateEngine.GXTemplateItem?): Boolean {
+        return hasFooterView() && footerTemplateItem == templateItem && gxNode.templateNode.finalGridConfig != null
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -183,7 +183,7 @@ class GXStyleConvert {
                     )
                 )
                 ?.let {
-                    return it as? Typeface
+                    (it as? Typeface)?.let { return it }
                 }
 
             // src

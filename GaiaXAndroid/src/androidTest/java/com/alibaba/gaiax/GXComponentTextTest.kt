@@ -1171,8 +1171,8 @@ class GXComponentTextTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1080F, rootView.width())
-        Assert.assertEquals(99F, rootView.child(0).width())
-        Assert.assertEquals(1080F - 99F - 39F - 39F, rootView.child(1).width())
+        Assert.assertEquals(36F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(), rootView.child(1).width())
     }
 
     @Test

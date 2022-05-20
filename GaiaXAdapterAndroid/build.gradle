@@ -97,10 +97,10 @@ dependencies {
     if (System.getProperties().get("DEMO") == "true") {
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation('com.github.alibaba.GaiaX:GaiaX:features~open_source_merge-SNAPSHOT') { changing = true }
+        implementation('com.github.alibaba.GaiaX:GaiaX:release~androidsupport-0.2.1-SNAPSHOT') { changing = true }
     }
 
-    implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:features~open_source_merge-SNAPSHOT'
+    implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:release~androidsupport-0.2.1-SNAPSHOT'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'

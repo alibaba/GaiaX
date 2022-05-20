@@ -17,7 +17,7 @@
 package com.alibaba.gaiax.render.view.container
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -39,7 +39,7 @@ import com.alibaba.gaiax.utils.getStringExtCanNull
 /**
  * @suppress
  */
-class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class GXViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
     var childTag: Any? = null
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
@@ -54,7 +54,7 @@ class GXContainerViewAdapter(
     val gxTemplateContext: GXTemplateContext,
     val gxNode: GXNode,
     val gxContainer: GXContainer
-) : RecyclerView.Adapter<GXViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<GXViewHolder>() {
 
     private var containerData: JSONArray = JSONArray()
 

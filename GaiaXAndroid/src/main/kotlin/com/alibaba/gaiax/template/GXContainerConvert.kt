@@ -17,7 +17,7 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 
 /**
  * @suppress
@@ -25,9 +25,9 @@ import android.support.v7.widget.LinearLayoutManager
 object GXContainerConvert {
 
     fun direction(direction: String): Int = when (direction) {
-        GXTemplateKey.GAIAX_HORIZONTAL -> LinearLayoutManager.HORIZONTAL
-        GXTemplateKey.GAIAX_VERTICAL -> LinearLayoutManager.VERTICAL
-        else -> LinearLayoutManager.VERTICAL
+        GXTemplateKey.GAIAX_HORIZONTAL -> androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+        GXTemplateKey.GAIAX_VERTICAL -> androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+        else -> androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
     }
 
     fun edgeInsets(edgeInsets: String?): Rect? = if (edgeInsets?.isNotEmpty() == true) {

@@ -2,7 +2,7 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View

@@ -1,3 +1,10 @@
+[![GitHub release](https://img.shields.io/github/release/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/releases)
+[![License](https://img.shields.io/github/license/alibaba/GaiaX?color=4D7A97&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![GitHub Stars](https://img.shields.io/github/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/fork)
+[![user repos](https://badgen.net/github/dependents-repo/alibaba/GaiaX?label=user%20repos)](https://github.com/alibaba/GaiaX/network/dependents)
+[![GitHub Contributors](https://img.shields.io/github/contributors/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/graphs/contributors)
+
 # 动态模板引擎
 
 动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案。除了客户端渲染SDK之外，同时提供了配套的模板可视化搭建工具Studio和Demo（模板示例，以及扫码预览），支持从模板搭建/编辑、真机调试/预览等研发全链路技术支撑，动态模板引擎的目标是在保证原生体验与性能的同时，帮助客户端开发领域实现低代码。
@@ -59,7 +66,7 @@ implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
 
 AndroidX版本:
 ```
-implementation 'com.github.alibaba:GaiaX:0.1.4'
+implementation 'com.github.alibaba:GaiaX:0.2.1'
 ```
 
 #### 模板文件

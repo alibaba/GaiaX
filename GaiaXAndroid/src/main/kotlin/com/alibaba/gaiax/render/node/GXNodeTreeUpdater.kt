@@ -32,6 +32,8 @@ import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.container.slider.GXSliderView
+import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -553,6 +555,13 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                 gxNode.templateNode,
                 templateData
             )
+            gxNode.isSliderType() -> bindSlider(
+                gxTemplateContext,
+                view,
+                gxNode,
+                gxNode.templateNode,
+                templateData
+            )
             gxNode.isViewType() || gxNode.isGaiaTemplateType() -> bindView(
                 view,
                 gxNode.templateNode,
@@ -845,5 +854,42 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                 view.setScrollContainerPadding(edgeInsets)
             }
         }
+    }
+
+    private fun bindSlider(
+        gxTemplateContext: GXTemplateContext,
+        view: View,
+        gxNode: GXNode,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
+
+        // 容器数据源
+        var containerTemplateData = gxTemplateNode.getDataValue(templateData) as? JSONArray
+        if (containerTemplateData == null) {
+            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventContainerDataSourceThrowException() == true) {
+                containerTemplateData = JSONArray()
+            } else {
+                throw IllegalArgumentException("Slider or Grid must be have a array data source")
+            }
+        }
+
+        val container = view as GXSliderView
+        container.setTemplateContext(gxTemplateContext)
+
+        val adapter: GXSliderViewAdapter?
+        if (container.viewPager?.adapter != null) {
+            adapter = container.viewPager?.adapter as GXSliderViewAdapter
+        } else {
+            adapter = GXSliderViewAdapter(gxTemplateContext, gxNode)
+            container.viewPager?.adapter = adapter
+        }
+        adapter.setConfig(gxNode.templateNode.finalSliderConfig)
+        container.setConfig(gxNode.templateNode.finalSliderConfig)
+
+        adapter.setData(containerTemplateData)
+        container.setIndicatorCount(containerTemplateData.size)
+
+        container.onBindData(templateData)
     }
 }

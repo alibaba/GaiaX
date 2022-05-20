@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2CECF30401B7B1202EFE178B /* libPods-GaiaXiOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */; };
+		8A962CCA282A9DD100335552 /* GXSliderNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A962CC8282A9DD100335552 /* GXSliderNode.h */; };
+		8A962CCB282A9DD100335552 /* GXSliderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A962CC9282A9DD100335552 /* GXSliderNode.m */; };
 		8D0210D7278F1B640032958A /* GXITemplateSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D0210D6278F1B640032958A /* GXITemplateSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8D1CBCE727560A5F00EC2B4D /* GXBizHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1CBCE527560A5F00EC2B4D /* GXBizHelper.h */; };
 		8D1CBCE827560A5F00EC2B4D /* GXBizHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1CBCE627560A5F00EC2B4D /* GXBizHelper.m */; };
@@ -46,13 +48,11 @@
 		8DB60A1227F4764E0038BE13 /* GXContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8DB609F527F4764E0038BE13 /* GXContext.mm */; };
 		8DB60A1327F4764E0038BE13 /* GXNativeAnalyze.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8DB609F627F4764E0038BE13 /* GXNativeAnalyze.mm */; };
 		8DB60A1427F4764E0038BE13 /* GXValueParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DB609F727F4764E0038BE13 /* GXValueParser.m */; };
-		8DB60A1527F4764E0038BE13 /* GXDataWarehouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB609F927F4764E0038BE13 /* GXDataWarehouse.h */; };
 		8DB60A1827F4764E0038BE13 /* GXAnalyze.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB609FC27F4764E0038BE13 /* GXAnalyze.h */; };
 		8DB60A1927F4764E0038BE13 /* GXValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB609FD27F4764E0038BE13 /* GXValue.h */; };
 		8DB60A1A27F4764E0038BE13 /* GXATSNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DB609FE27F4764E0038BE13 /* GXATSNode.cpp */; };
 		8DB60A1B27F4764E0038BE13 /* GXWordAnalyze.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB609FF27F4764E0038BE13 /* GXWordAnalyze.h */; };
 		8DB60A1D27F4764E0038BE13 /* GXWordAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DB60A0127F4764E0038BE13 /* GXWordAnalyze.cpp */; };
-		8DB60A1E27F4764E0038BE13 /* GXDataWarehouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DB60A0227F4764E0038BE13 /* GXDataWarehouse.cpp */; };
 		8DB60A2127F4764E0038BE13 /* GXAnalyze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8DB60A0527F4764E0038BE13 /* GXAnalyze.cpp */; };
 		8DB60A2227F4764E0038BE13 /* GXATSNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB60A0627F4764E0038BE13 /* GXATSNode.h */; };
 		8DB60A2327F4764E0038BE13 /* GXObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB60A0727F4764E0038BE13 /* GXObject.h */; };
@@ -191,6 +191,8 @@
 		1E4542E269BE8A2CC48A5DBD /* Pods-GaiaXiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.debug.xcconfig"; sourceTree = "<group>"; };
 		26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A962CC8282A9DD100335552 /* GXSliderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXSliderNode.h; sourceTree = "<group>"; };
+		8A962CC9282A9DD100335552 /* GXSliderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXSliderNode.m; sourceTree = "<group>"; };
 		8CF100DA07FB9596328219B4 /* Pods-GaiaXiOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8D0210D6278F1B640032958A /* GXITemplateSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXITemplateSource.h; sourceTree = "<group>"; };
 		8D1CBCE527560A5F00EC2B4D /* GXBizHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXBizHelper.h; sourceTree = "<group>"; };
@@ -230,13 +232,11 @@
 		8DB609F527F4764E0038BE13 /* GXContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GXContext.mm; sourceTree = "<group>"; };
 		8DB609F627F4764E0038BE13 /* GXNativeAnalyze.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GXNativeAnalyze.mm; sourceTree = "<group>"; };
 		8DB609F727F4764E0038BE13 /* GXValueParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXValueParser.m; sourceTree = "<group>"; };
-		8DB609F927F4764E0038BE13 /* GXDataWarehouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXDataWarehouse.h; sourceTree = "<group>"; };
 		8DB609FC27F4764E0038BE13 /* GXAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXAnalyze.h; sourceTree = "<group>"; };
 		8DB609FD27F4764E0038BE13 /* GXValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXValue.h; sourceTree = "<group>"; };
 		8DB609FE27F4764E0038BE13 /* GXATSNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GXATSNode.cpp; sourceTree = "<group>"; };
 		8DB609FF27F4764E0038BE13 /* GXWordAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXWordAnalyze.h; sourceTree = "<group>"; };
 		8DB60A0127F4764E0038BE13 /* GXWordAnalyze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GXWordAnalyze.cpp; sourceTree = "<group>"; };
-		8DB60A0227F4764E0038BE13 /* GXDataWarehouse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GXDataWarehouse.cpp; sourceTree = "<group>"; };
 		8DB60A0527F4764E0038BE13 /* GXAnalyze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GXAnalyze.cpp; sourceTree = "<group>"; };
 		8DB60A0627F4764E0038BE13 /* GXATSNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXATSNode.h; sourceTree = "<group>"; };
 		8DB60A0727F4764E0038BE13 /* GXObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXObject.h; sourceTree = "<group>"; };
@@ -423,13 +423,11 @@
 		8DB609F827F4764E0038BE13 /* GXAnalyzeCore */ = {
 			isa = PBXGroup;
 			children = (
-				8DB609F927F4764E0038BE13 /* GXDataWarehouse.h */,
 				8DB609FC27F4764E0038BE13 /* GXAnalyze.h */,
 				8DB609FD27F4764E0038BE13 /* GXValue.h */,
 				8DB609FE27F4764E0038BE13 /* GXATSNode.cpp */,
 				8DB609FF27F4764E0038BE13 /* GXWordAnalyze.h */,
 				8DB60A0127F4764E0038BE13 /* GXWordAnalyze.cpp */,
-				8DB60A0227F4764E0038BE13 /* GXDataWarehouse.cpp */,
 				8DB60A0527F4764E0038BE13 /* GXAnalyze.cpp */,
 				8DB60A0627F4764E0038BE13 /* GXATSNode.h */,
 			);
@@ -748,6 +746,8 @@
 		8DFEC2D427351928001F3B74 /* Node */ = {
 			isa = PBXGroup;
 			children = (
+				8A962CC8282A9DD100335552 /* GXSliderNode.h */,
+				8A962CC9282A9DD100335552 /* GXSliderNode.m */,
 				8DFEC2EC27351BB6001F3B74 /* GXBaseNode.h */,
 				8DFEC2ED27351BB6001F3B74 /* GXBaseNode.m */,
 				8D9FC9CA273A21F600912EE6 /* GXViewNode.h */,
@@ -897,6 +897,7 @@
 				8DFEC2702734DDBE001F3B74 /* NSDictionary+GX.h in Headers */,
 				8DE5E3A32745FD9400C9FA02 /* GXExpression.h in Headers */,
 				8DE5E3862743A3F800C9FA02 /* GXRegisterCenter.h in Headers */,
+				8A962CCA282A9DD100335552 /* GXSliderNode.h in Headers */,
 				8DB521692759C7C900EB8126 /* GXTrack.h in Headers */,
 				8D1CBCED275770F700EC2B4D /* GXEvent.h in Headers */,
 				8DB521652759C6A300EB8126 /* GXData.h in Headers */,
@@ -959,7 +960,6 @@
 				8DB60A2927F4764E0038BE13 /* GXNativeAnalyze.h in Headers */,
 				8DE5E37A274382BB00C9FA02 /* GXTemplateReader.h in Headers */,
 				8DB60A2B27F4764E0038BE13 /* GXValueParser.h in Headers */,
-				8DB60A1527F4764E0038BE13 /* GXDataWarehouse.h in Headers */,
 				8DE5E3A72746794300C9FA02 /* GXImageNode.h in Headers */,
 				8DFEC2CE27350E34001F3B74 /* GXNode.h in Headers */,
 				8D9FC9D4273A221A00912EE6 /* GXGridNode.h in Headers */,
@@ -1145,12 +1145,12 @@
 				8DFEC2E127351975001F3B74 /* GXText.m in Sources */,
 				8D9FC9DD273A223A00912EE6 /* GXCustomNode.m in Sources */,
 				8DE5E3762743820A00C9FA02 /* GXTemplateParser.c in Sources */,
+				8A962CCB282A9DD100335552 /* GXSliderNode.m in Sources */,
 				8DB60A1A27F4764E0038BE13 /* GXATSNode.cpp in Sources */,
 				8DFEC2552734DB27001F3B74 /* GXUtils.m in Sources */,
 				8D9FC9CD273A21F600912EE6 /* GXViewNode.m in Sources */,
 				8DE5E3AC274777C300C9FA02 /* UIImage+GX.m in Sources */,
 				8DFEC28E27350795001F3B74 /* UIView+GX.m in Sources */,
-				8DB60A1E27F4764E0038BE13 /* GXDataWarehouse.cpp in Sources */,
 				8DE5E37327424CFD00C9FA02 /* GXTemplateContext.m in Sources */,
 				8DB60A1227F4764E0038BE13 /* GXContext.mm in Sources */,
 				8DE5E3972744DAA200C9FA02 /* GXUIHelper.m in Sources */,

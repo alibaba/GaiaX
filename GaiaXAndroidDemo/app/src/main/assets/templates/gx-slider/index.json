@@ -1,0 +1,15 @@
+{
+  "id": "gx-slider",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "slider-scroll-time-interval": 6000,
+  "slider-has-indicator": true,
+  "slider-infinity-scroll": true,
+  "layers": [
+    {
+      "id": "gx-slider-item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

@@ -20,7 +20,6 @@ message("LOG ENGINE CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
 add_library(${PROJECT_NAME} SHARED
         GXAnalyze.cpp
         GXATSNode.cpp
-        GXDataWarehouse.cpp
         GXWordAnalyze.cpp
         )
 

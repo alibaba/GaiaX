@@ -139,6 +139,8 @@ class GXNode {
 
     fun isScrollType(): Boolean = templateNode.isScrollType()
 
+    fun isSliderType(): Boolean = templateNode.isSliderType()
+
     fun isNeedShadow(): Boolean {
         return (isViewType() || isImageType()) && templateNode.css.style.boxShadow != null
     }

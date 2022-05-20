@@ -24,6 +24,7 @@
 #import "NSDictionary+GX.h"
 #import "GXDataManager.h"
 #import "GXCacheCenter.h"
+#import "GXEXPression.h"
 #import "UIView+GX.h"
 
 @interface GXTemplateEngine ()
@@ -51,6 +52,8 @@
     if (self = [super init]) {
         //初始化数据相关
         self.isNeedFlat = YES;
+        //初始化表达式环境
+        [GXExpression setup];
     }
     return self;
 }

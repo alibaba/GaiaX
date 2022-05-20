@@ -28,6 +28,25 @@ struct CLOSURE {                                  //闭包CLOSURE
     unordered_map<char, int> go;   // GO函数
 };
 static vector<CLOSURE> cloArray;
+static unordered_map<char, string> CtoS;     //Char to String
+static unordered_map<string, char> StoC;     //String to Char
+
+//初始化终结符和非终结符
+void init_SAndC() {
+    int sizeC = sizeof(tString) / sizeof(tString[0]);
+    int sizeU = sizeof(ntString) / sizeof(ntString[0]);
+    set<char> m;
+    //终结符
+    for (int i = 0; i < sizeC; i++) {
+        CtoS.insert(pair<char, string>(tSymbol[i], tString[i]));
+        StoC.insert(pair<string, char>(tString[i], tSymbol[i]));
+
+    }
+    for (int i = 0; i < sizeU; i++) {
+        CtoS.insert(pair<char, string>(ntSymbol[i], ntString[i]));
+        StoC.insert(pair<string, char>(ntString[i], ntSymbol[i]));
+    }
+}
 
 void read_G() {
     int sizeG = sizeof(grammar) / sizeof(grammar[0]);
@@ -363,14 +382,6 @@ void init_Terminal() {
     }
 }
 
-char change_Word(string s) {
-    if (is_terminal_char(s)) {
-        return Vt[s];
-    } else {
-        return Vn[s];
-    }
-}
-
 void init() {
     if (isInit == false) {
         isInit = true;
@@ -379,7 +390,7 @@ void init() {
         get_Closure();
         init_Terminal();
         get_Table();
-        init_All();
+        init_SAndC();
     }
 }
 
@@ -392,7 +403,7 @@ GXAnalyze::~GXAnalyze() {
 
 //获取两个数值计算的结果
 GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op) {
-    GXATSNode result = GXATSNode(left.name, left.syn, left.token);
+    GXATSNode result = GXATSNode(left.name, left.token, left.token);
     string name;
     if (((op == "?") && (left.token != "map" && left.token != "array")) ||
         (op == ":") || (op == "?:")) {
@@ -803,7 +814,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
 
 //获取单个数值计算的结果
 GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
-    GXATSNode result = GXATSNode(left.name, left.syn, left.token);
+    GXATSNode result = GXATSNode(left.name, left.token, left.token);
     if (left.token == "map" || left.token == "array") {
         return result;
     }
@@ -849,15 +860,6 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
     return result;
 }
 
-string GXAnalyze::grammarScanner(vector<GXATSNode> array) {
-    string temp;
-    for (vector<GXATSNode>::iterator i = array.begin(); i != array.end(); i++) {
-        temp = temp + change_Word(get_Word_By_Code((*i).syn));
-    }
-    return temp;
-}
-
-
 long GXAnalyze::getValue(string expression, void *source) {
     char *input;
     int inputLength = expression.length();
@@ -873,12 +875,16 @@ long GXAnalyze::getValue(string expression, void *source) {
             p++;
         } else {
             GXATSNode token = scanner(synCode, p, input, this);
+            if (is_terminal_char(token.detail)) {
+                result = result + Vt[token.detail];
+            } else {
+                result = result + Vn[token.detail];
+            }
             array.push_back(token);
         }
     }
     //释放s的内存空间
     delete[]input;
-    result = result + grammarScanner(array);
     result = result + "#";
     long Res = check(result, array, this, source);
     array.clear();
@@ -946,7 +952,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             // 1
             symbolStack[symbolSize] = cur_symbol; //读入一个字符
             ++symbolSize;
-            string temp = get_S_By_C(cur_symbol);
+            string temp = CtoS[cur_symbol];
             if ((is_terminal_char(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
                   temp == "num" || temp == "string" || temp == "data" || temp == "id")) ||
@@ -1020,7 +1026,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 bool isChangedOp = false;
                 char reduced_symbol = G[gid][0];
                 for (int i = 0; i < len; i++) {
-                    action[i] = get_S_By_C(symbolStack[symbolSize - 1]);
+                    action[i] = CtoS[symbolStack[symbolSize - 1]];
                     --statusSize;
                     --symbolSize;
                 }

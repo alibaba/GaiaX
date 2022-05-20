@@ -393,48 +393,6 @@
 }
 
 
-+ (void)handleExtend:(NSDictionary *)resultData withNode:(GXNode *)node{
-    //①获取外部extend，合并外部和内部的extend
-    NSDictionary *extendDict = [resultData gx_dictionaryForKey:@"extend"];
-    if (extendDict) {
-        //获取节点的databinding
-        NSDictionary *tmpData = node.data;
-        if (!tmpData){
-            //为空的话直接赋值
-            NSMutableDictionary *dataDict = [NSMutableDictionary dictionary];
-            [dataDict gx_setObject:extendDict forKey:@"extend"];
-            node.data = dataDict;
-            
-        } else if (tmpData && [tmpData isKindOfClass:[NSDictionary class]]){
-            //获取data数据
-            NSMutableDictionary *dataDict = nil;
-            if ([GXUtils isMutableDictionary:tmpData]) {
-                dataDict = (NSMutableDictionary *)tmpData;
-            } else {
-                dataDict = [NSMutableDictionary dictionaryWithDictionary:tmpData];
-            }
-            
-            //获取extend
-            NSMutableDictionary *tmpExtend = [dataDict gx_mutableDictionaryForKey:@"extend"];
-            if (tmpExtend) {
-                [tmpExtend addEntriesFromDictionary:extendDict];
-            } else {
-                tmpExtend = [NSMutableDictionary dictionaryWithDictionary:extendDict];
-            }
-            
-            //设置extend
-            [dataDict gx_setObject:tmpExtend forKey:@"extend"];
-            
-            //重新赋值
-            node.data = dataDict;
-        }
-        
-    }
-    
-}
-
-
-
 #pragma mark - 绑定（数据，事件，动画）
 
 //节点创建视图

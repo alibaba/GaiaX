@@ -34,6 +34,8 @@
             containerType = GXContainerTypeGrid;
         } else if ([subType isEqualToString:kGXComDef_KW_Scroll]){
             containerType = GXContainerTypeScroll;
+        }else if ([subType isEqualToString:kGXComDef_KW_Slider]){
+            containerType = GXContainerTypeSlider;
         }
     }
     
@@ -56,6 +58,11 @@
             case GXContainerTypeScroll:{
                 //容器scroll
                 nodeClass = NSClassFromString(@"GXScrollNode");
+            }
+                break;
+            case GXContainerTypeSlider:{
+                //容器scroll
+                nodeClass = NSClassFromString(@"GXSliderNode");
             }
                 break;
             default:{
@@ -112,8 +119,8 @@
     BOOL isContainer = NO;
     //类型判断
     if ([type isEqualToString:kGXComDef_KW_GaiaTemplate] &&
-        ([subType isEqualToString:kGXComDef_KW_Grid] || [subType isEqualToString:kGXComDef_KW_Scroll])) {
-        // scroll & grid
+        ([subType isEqualToString:kGXComDef_KW_Grid] || [subType isEqualToString:kGXComDef_KW_Scroll] || [subType isEqualToString:kGXComDef_KW_Slider])) {
+        // scroll & grid &slider
         isContainer = YES;
     }
     

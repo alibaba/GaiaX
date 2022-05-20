@@ -1,6 +1,5 @@
 package com.alibaba.gaiax.analyze
 
-import com.alibaba.fastjson.JSONObject
 import org.junit.Test
 
 

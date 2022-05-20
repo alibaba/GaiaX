@@ -25,13 +25,15 @@ class ContainerTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-content-uper-scroll")
+        val params =
+            GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-content-uper-scroll")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -54,7 +56,12 @@ class ContainerTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/recommend.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/recommend.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -77,7 +84,12 @@ class ContainerTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/multi-scroll.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/multi-scroll.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -100,7 +112,8 @@ class ContainerTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -120,10 +133,16 @@ class ContainerTemplateActivity : AppCompatActivity() {
         val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-slider")
 
         // 模板绘制尺寸
-        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), 100F.dpToPx())
+        val size =
+            GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), 100F.dpToPx())
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/gx-slider-item-data.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/gx-slider-item-data.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)

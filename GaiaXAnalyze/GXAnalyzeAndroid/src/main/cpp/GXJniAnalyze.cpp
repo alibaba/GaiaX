@@ -324,8 +324,8 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueString(JNIEnv *e
     GXValue *val = (GXValue *) value;
     const char *str = GX_ToCString(*val);
     jstring j_str = env->NewStringUTF(str);
-    if(val->tag == GX_TAG_STRING && val->u.str != NULL){
-        delete []val->u.str;
+    if (val->tag == GX_TAG_STRING && val->u.str != NULL) {
+        delete[]val->u.str;
         val->u.str = NULL;
     }
     return j_str;

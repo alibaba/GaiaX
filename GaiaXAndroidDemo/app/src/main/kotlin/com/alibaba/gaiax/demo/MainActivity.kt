@@ -12,13 +12,15 @@ import com.alibaba.gaiax.fastpreview.GaiaXQRCodeActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        val scanResult = it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
-        Log.d("MainActivity", "StartActivityForResult() called scanResult = $scanResult")
-        val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
-        intent.putExtra(GaiaXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
-        startActivity(intent)
-    }
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val scanResult =
+                it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
+            Log.d("MainActivity", "StartActivityForResult() called scanResult = $scanResult")
+            val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
+            intent.putExtra(GaiaXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
+            startActivity(intent)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

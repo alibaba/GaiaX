@@ -1,8 +1,9 @@
 package com.zhangke.websocket.response;
 
-import org.java_websocket.framing.Framedata;
 import com.zhangke.websocket.dispatcher.IResponseDispatcher;
 import com.zhangke.websocket.dispatcher.ResponseDelivery;
+
+import org.java_websocket.framing.Framedata;
 
 /**
  * 接收到 Ping 数据

@@ -28,7 +28,12 @@ class NormalTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(100F.dpToPx(), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/vertical-item.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/vertical-item.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -51,7 +56,12 @@ class NormalTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/horizontal-item.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/horizontal-item.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)

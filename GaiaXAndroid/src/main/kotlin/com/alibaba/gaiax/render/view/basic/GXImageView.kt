@@ -56,12 +56,12 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         const val LOCAL_PREFIX = "local:"
     }
 
-    private fun getDrawableByResId(imageView: ImageView, resId: Int): Drawable? {
+    fun getDrawableByResId(imageView: ImageView, resId: Int): Drawable? {
         val theme: Resources.Theme = imageView.context.theme
         return ResourcesCompat.getDrawable(imageView.resources, resId, theme)
     }
 
-    private fun getResIdByUri(imageView: ImageView, uri: String): Int {
+    fun getResIdByUri(imageView: ImageView, uri: String): Int {
         try {
             return imageView.resources.getIdentifier(uri, "drawable", imageView.context.packageName)
         } catch (e: Exception) {
@@ -70,12 +70,12 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         return 0
     }
 
-    private fun isNetUri(uri: String) =
+    fun isNetUri(uri: String) =
         (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
 
-    private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
+    fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
 
-    private fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
+    fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
 
     override fun onBindData(data: JSONObject) {
         bindUri(data)

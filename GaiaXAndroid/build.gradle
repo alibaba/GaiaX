@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:release~androidsupport-0.2.1-SNAPSHOT'
+    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:androidsupport-SNAPSHOT'
     androidTestImplementation 'com.airbnb.android:lottie:2.7.0'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {

@@ -62,6 +62,13 @@ import com.alibaba.gaiax.template.GXTemplateKey
 class GXTemplateEngine {
 
     /**
+     * GX adapter
+     */
+    interface GXIAdapter {
+        fun init(context: Context)
+    }
+
+    /**
      * Data processing parameter
      */
     abstract class GXData {
@@ -393,6 +400,7 @@ class GXTemplateEngine {
         }
     }
 
+
     internal lateinit var context: Context
 
     internal val data by lazy {
@@ -534,7 +542,20 @@ class GXTemplateEngine {
             .registerExtensionTemplateSource(GXAssetsBinaryWithoutSuffixTemplate(this.context), 0)
             // priority 1
             .registerExtensionTemplateSource(GXAssetsTemplate(this.context), 1)
+
+        // init adapter
+        initGXAdapter()?.init(context)
         return this
+    }
+
+    private fun initGXAdapter(): GXIAdapter? {
+        return try {
+            val clazz = Class.forName("com.alibaba.gaiax.adapter.GXAdapter")
+            clazz.newInstance() as GXIAdapter
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     companion object {

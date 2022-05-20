@@ -183,8 +183,7 @@ class GXStyleConvert {
                     )
                 )
                 ?.let {
-                    val newFontFamily = it as String
-                    return Typeface.createFromAsset(assets, "$newFontFamily.ttf")
+                    return it as? Typeface
                 }
 
             // src

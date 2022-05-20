@@ -2,6 +2,7 @@ package com.alibaba.gaiax
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.support.test.InstrumentationRegistry
 import android.util.Log
 import app.visly.stretch.Dimension
@@ -20,6 +21,7 @@ import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
+import com.alibaba.gaiax.utils.GXMockUtils.context
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.alibaba.gaiax.utils.getAnyExt
 import org.junit.After
@@ -125,7 +127,10 @@ open class GXBaseTest {
 
         override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
             if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
-                return "fontfamily3"
+                return Typeface.createFromAsset(
+                    context.assets,
+                    "fontfamily3.ttf"
+                )
             }
             return null
         }

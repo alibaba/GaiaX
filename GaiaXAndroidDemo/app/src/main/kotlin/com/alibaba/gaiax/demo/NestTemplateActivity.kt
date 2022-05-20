@@ -28,7 +28,8 @@ class NestTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -45,13 +46,15 @@ class NestTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-content-uper-scroll")
+        val params =
+            GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-content-uper-scroll")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -74,7 +77,8 @@ class NestTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper-top.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper-top.json"))
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)

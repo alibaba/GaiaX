@@ -223,7 +223,7 @@ class GXContainerViewAdapter(
         }
     }
 
-    private fun hasFooterView(): Boolean {
+    fun hasFooterView(): Boolean {
         return footerTemplateItem != null && footerTypeHasMore
     }
 

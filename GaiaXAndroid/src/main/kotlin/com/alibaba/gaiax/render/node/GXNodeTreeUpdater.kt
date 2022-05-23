@@ -590,6 +590,9 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         adapter.setContainerData(containerTemplateData)
         adapter.initFooter()
+        if(adapter.hasFooterView()){
+            container.setSpanSizeLookup()
+        }
     }
 
     private fun bindIconFont(

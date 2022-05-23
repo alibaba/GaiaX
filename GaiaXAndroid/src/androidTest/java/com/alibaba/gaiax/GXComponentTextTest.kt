@@ -1226,4 +1226,25 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).width())
     }
+
+    @Test
+    fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(20F.dpToPx())
+        val widthSpec =
+            View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
+        textView.measure(widthSpec, 0)
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
+    }
 }

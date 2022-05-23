@@ -96,6 +96,36 @@ data class GXStyle(
 
     companion object {
 
+        fun createByExtend(css: JSONObject): GXStyle {
+            if (css.isEmpty()) {
+                return GXStyle()
+            }
+            val convertStyle = GXStyleConvert.instance
+            return GXStyle(
+                fontSize = convertStyle.font(css),
+                fontFamily = convertStyle.fontFamily(css),
+                fontWeight = convertStyle.fontWeight(css),
+                fontLines = convertStyle.fontLines(css),
+                fontColor = convertStyle.fontColor(css),
+                fontTextOverflow = convertStyle.fontTextOverflow(css),
+                fontTextAlign = convertStyle.fontTextAlign(css),
+                backgroundColor = convertStyle.backgroundColor(css),
+                backgroundImage = convertStyle.backgroundImage(css),
+                mode = convertStyle.mode(css),
+                opacity = convertStyle.opacity(css),
+                borderRadius = convertStyle.borderRadius(css),
+                overflow = convertStyle.overflow(css),
+                display = convertStyle.display(css),
+                hidden = convertStyle.hidden(css),
+                padding = convertStyle.padding(css),
+                borderWidth = convertStyle.borderWidth(css),
+                borderColor = convertStyle.borderColor(css),
+                fontLineHeight = convertStyle.fontLineHeight(css),
+                fontTextDecoration = convertStyle.textDecoration(css),
+                boxShadow = convertStyle.boxShadow(css)
+            )
+        }
+
         fun create(css: JSONObject): GXStyle {
             if (css.isEmpty()) {
                 return GXStyle()

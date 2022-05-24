@@ -357,17 +357,15 @@ fun View.setGridContainerDirection(
 }
 
 fun View.setSpanSizeLookup() {
-    if (this is RecyclerView) {
-        if (this.layoutManager is GridLayoutManager) {
-            val adapterSize = this.adapter?.itemCount ?: 1
-            val column = (this.layoutManager as GridLayoutManager).spanCount
-            (this.layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(currentPosition: Int): Int {
-                    return if (adapterSize - 1 == currentPosition) {
-                        column
-                    } else {
-                        1
-                    }
+    if (this is RecyclerView && this.layoutManager is GridLayoutManager) {
+        val adapterSize = this.adapter?.itemCount ?: 1
+        val column = (this.layoutManager as GridLayoutManager).spanCount
+        (this.layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(currentPosition: Int): Int {
+                return if (adapterSize - 1 == currentPosition) {
+                    column
+                } else {
+                    1
                 }
             }
         }

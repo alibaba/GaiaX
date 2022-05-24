@@ -275,7 +275,7 @@ data class GXLayer constructor(
         !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE || type == GXViewKey.VIEW_TYPE_SHADOW_LAYOUT)
 
     override fun toString(): String {
-        return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, layers=${layers.size})"
+        return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, sliderConfig=$sliderConfig, layers=$layers)"
     }
 
 }

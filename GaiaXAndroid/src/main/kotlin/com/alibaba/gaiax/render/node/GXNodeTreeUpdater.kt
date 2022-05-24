@@ -598,9 +598,11 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         if (container.adapter != null) {
             adapter = container.adapter as GXContainerViewAdapter
         } else {
-            adapter = GXContainerViewAdapter(gxTemplateContext, gxNode, container)
+            adapter = GXContainerViewAdapter(gxTemplateContext, container)
             container.adapter = adapter
         }
+
+        adapter.gxNode = gxNode
 
         // scroll item to position
         gxTemplateContext.templateData?.scrollIndex?.let { scrollPosition ->

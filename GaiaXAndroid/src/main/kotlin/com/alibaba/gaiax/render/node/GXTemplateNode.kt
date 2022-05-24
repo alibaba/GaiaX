@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
@@ -74,10 +75,6 @@ data class GXTemplateNode(
         return dataValueCache
     }
 
-    var dataCache: JSONObject? = null
-    var dataValueCache: JSON? = null
-    var dataExtendCache: JSONObject? = null
-
     fun reset() {
         resetData()
 
@@ -87,13 +84,17 @@ data class GXTemplateNode(
         finalScrollConfig = null
     }
 
-    var finalGridConfig: GXGridConfig? = null
+    var dataCache: JSONObject? = null
+    var dataValueCache: JSON? = null
+    var dataExtendCache: JSONObject? = null
 
     fun resetData() {
         dataExtendCache = null
         dataValueCache = null
         dataCache = null
     }
+
+    var finalGridConfig: GXGridConfig? = null
 
     var finalScrollConfig: GXScrollConfig? = null
 
@@ -145,6 +146,10 @@ data class GXTemplateNode(
 
             layer.scrollConfig?.let {
                 finalScrollConfig = it
+            }
+
+            layer.sliderConfig?.let {
+                finalSliderConfig = it
             }
 
             css

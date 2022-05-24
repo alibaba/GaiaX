@@ -33,7 +33,6 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
-import com.alibaba.gaiax.utils.GXLog
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
@@ -53,9 +52,10 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
  */
 class GXContainerViewAdapter(
     val gxTemplateContext: GXTemplateContext,
-    val gxNode: GXNode,
     val gxContainer: GXContainer
 ) : RecyclerView.Adapter<GXViewHolder>() {
+
+    lateinit var gxNode: GXNode
 
     private var containerData: JSONArray = JSONArray()
 
@@ -77,10 +77,6 @@ class GXContainerViewAdapter(
             childVisualNestTemplateNode
         )
 
-        if (GXLog.isLog()) {
-            GXLog.e("onCreateViewHolder childTemplateContext = $childTemplateContext")
-        }
-
         // TODO: 此处可能有耗时问题，可以进行优化
         val childContainerSize = GXNodeUtils.computeContainerItemSize(
             childTemplateContext,
@@ -89,10 +85,6 @@ class GXContainerViewAdapter(
             childVisualNestTemplateNode,
             containerData
         )
-
-        if (GXLog.isLog()) {
-            GXLog.e("onCreateViewHolder childContainerSize = $childContainerSize")
-        }
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
@@ -205,7 +197,7 @@ class GXContainerViewAdapter(
         gxNode.childTemplateItems?.let { items ->
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
-                gxNode.templateNode.reset()
+                gxNode.templateNode.resetData()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                     val path =
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")

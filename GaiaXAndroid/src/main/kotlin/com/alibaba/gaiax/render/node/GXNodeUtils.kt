@@ -148,10 +148,6 @@ object GXNodeUtils {
         // 1. 获取坑位的ViewPort信息
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
-        if (GXLog.isLog()) {
-            GXLog.e("computeContainerItemSize itemViewPort = $itemViewPort")
-        }
-
         // 2. 计算坑位实际宽高结果
         return computeItemSize(
             gxTemplateContext,
@@ -184,7 +180,8 @@ object GXNodeUtils {
     }
 
     private fun computeScrollItemViewPortWidth(context: GXTemplateContext, node: GXNode): Float? {
-        val finalScrollConfig = node.templateNode.finalScrollConfig ?: return null
+        val finalScrollConfig = node.templateNode.finalScrollConfig
+            ?: throw IllegalArgumentException("Want to computeScrollItemViewPortWidth, but finalScrollConfig is null")
 
         GXRegisterCenter.instance
             .extensionScroll?.convert(
@@ -205,25 +202,25 @@ object GXNodeUtils {
     }
 
     private fun computeGridItemViewPortWidth(context: GXTemplateContext, gxNode: GXNode): Float? {
-        val containerWidth = gxNode.stretchNode.layoutByCreate?.width
+        val containerWidth = gxNode.stretchNode.layoutByBind?.width
+            ?: gxNode.stretchNode.layoutByCreate?.width
+            ?: throw IllegalArgumentException("Want to computeGridItemViewPortWidth, but containerWith is null")
         val gridConfig = gxNode.templateNode.finalGridConfig
-        return if (containerWidth != null) {
-            when {
-                gridConfig?.isVertical == true -> {
-                    val totalItemSpacing = gridConfig.itemSpacing * (gridConfig.column(context) - 1)
-                    val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
-                    (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column(context)
-                }
-                gridConfig?.isHorizontal == true -> {
-                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                    null
-                }
-                else -> {
-                    null
-                }
+            ?: throw IllegalArgumentException("Want to computeGridItemViewPortWidth, but finalGridConfig is null")
+
+        return when {
+            gridConfig.isVertical -> {
+                val totalItemSpacing = gridConfig.itemSpacing * (gridConfig.column(context) - 1)
+                val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
+                (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column(context)
             }
-        } else {
-            null
+            gridConfig.isHorizontal -> {
+                // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                null
+            }
+            else -> {
+                null
+            }
         }
     }
 
@@ -234,10 +231,6 @@ object GXNodeUtils {
         templateData: GXTemplateEngine.GXTemplateData,
         visualTemplateNode: GXTemplateNode?
     ): GXNode? {
-
-        if (GXLog.isLog()) {
-            GXLog.e("computeItemSizeByCreateAndBindNode templateItem = $templateItem, measureSize = $measureSize, templateData = $templateData, visualTemplateNode = $visualTemplateNode")
-        }
 
         // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
         val templateInfo = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)

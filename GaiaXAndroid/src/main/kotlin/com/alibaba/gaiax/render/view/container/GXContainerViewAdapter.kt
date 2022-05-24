@@ -88,6 +88,8 @@ class GXContainerViewAdapter(
         val childItemContainer = GXItemContainer(parent.context)
         var containerWidthLP =
             childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        //如果为grid模板的footer，需要重新设置width
+        //即一个item占据一行
         if (isGridFooterView(childTemplateItem)) {
             containerWidthLP = gxTemplateContext.size.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }

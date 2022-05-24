@@ -67,10 +67,15 @@ class GXContainerViewAdapter(
         // 准备构建坑位容器的参数
         val childTemplateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
+
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
+
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-        val childMeasureSize =
-            GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
+
+        val childMeasureSize = GXTemplateEngine.GXMeasureSize(
+            childItemViewPort.width, childItemViewPort.height
+        )
+
         val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
             childTemplateItem,
             childMeasureSize,
@@ -88,12 +93,16 @@ class GXContainerViewAdapter(
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
-        val containerWidthLP =
-            childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-        val containerHeightLP =
-            childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
-        childItemContainer.layoutParams =
-            FrameLayout.LayoutParams(containerWidthLP, containerHeightLP)
+
+        val containerWidthLP = childContainerSize?.width?.toInt()
+            ?: FrameLayout.LayoutParams.WRAP_CONTENT
+
+        val containerHeightLP = childContainerSize?.height?.toInt()
+            ?: FrameLayout.LayoutParams.WRAP_CONTENT
+
+        childItemContainer.layoutParams = FrameLayout.LayoutParams(
+            containerWidthLP, containerHeightLP
+        )
 
         // 返回ViewHolder
         return GXViewHolder(childItemContainer).apply {
@@ -115,11 +124,16 @@ class GXContainerViewAdapter(
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
         val childTemplateItem = holder.childTemplateItem
             ?: throw IllegalArgumentException("childTemplateItem is null")
+
         val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
+
         val childMeasureSize = holder.childMeasureSize
             ?: throw IllegalArgumentException("childMeasureSize is null")
+
         val childItemContainer = holder.itemView as ViewGroup
+
         val childItemPosition = holder.adapterPosition
+
         val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
 
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind

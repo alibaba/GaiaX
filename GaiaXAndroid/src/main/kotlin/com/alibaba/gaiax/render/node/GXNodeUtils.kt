@@ -25,7 +25,6 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.utils.GXLog
 import kotlin.math.ceil
 
 /**
@@ -255,55 +254,55 @@ object GXNodeUtils {
         if (itemSize != null) {
             // 容器的尺寸计算需要氛围Scroll和Grid
             if (gxNode.isScrollType()) {
-                gxNode.templateNode.finalScrollConfig?.let { gxScrollConfig ->
+                val finalScrollConfig = gxNode.templateNode.finalScrollConfig
+                    ?: throw IllegalArgumentException("Want to computeContainerSize, but finalScrollConfig is null")
 
-                    // 如果是横向，那么高度就是坑位高度
-                    if (gxScrollConfig.isHorizontal) {
-                        return Size(
-                            Dimension.Points(itemSize.width),
-                            Dimension.Points(itemSize.height)
-                        )
-                    }
-                    // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                    else if (gxScrollConfig.isVertical) {
-                        val lines = ceil((containerTemplateData.size * 1.0F).toDouble()).toInt()
-                        var containerHeight = itemSize.height
-                        containerHeight *= lines
-                        containerHeight += gxScrollConfig.itemSpacing * (lines - 1)
-                        return Size(
-                            Dimension.Points(itemSize.width),
-                            Dimension.Points(containerHeight)
-                        )
-                    }
+                // 如果是横向，那么高度就是坑位高度
+                if (finalScrollConfig.isHorizontal) {
+                    return Size(
+                        Dimension.Points(itemSize.width),
+                        Dimension.Points(itemSize.height)
+                    )
+                }
+                // 如果是竖向，那么高度就是坑位高度*行数+总间距
+                else if (finalScrollConfig.isVertical) {
+                    val lines = ceil((containerTemplateData.size * 1.0F).toDouble()).toInt()
+                    var containerHeight = itemSize.height
+                    containerHeight *= lines
+                    containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
+                    return Size(
+                        Dimension.Points(itemSize.width),
+                        Dimension.Points(containerHeight)
+                    )
                 }
             } else if (gxNode.isGridType()) {
-                gxNode.templateNode.finalGridConfig?.let { gxGridConfig ->
+                val finalGridConfig = gxNode.templateNode.finalGridConfig
+                    ?: throw IllegalArgumentException("Want to computeContainerSize, but finalGridConfig is null")
 
-                    // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                    if (gxGridConfig.isVertical) {
+                // 如果是竖向，那么高度就是坑位高度*行数+总间距
+                if (finalGridConfig.isVertical) {
 
-                        // 获取行数
-                        val lines =
-                            ceil((containerTemplateData.size * 1.0F / gxGridConfig.column(context)).toDouble()).toInt()
+                    // 获取行数
+                    val lines =
+                        ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
 
-                        var containerHeight = itemSize.height
+                    var containerHeight = itemSize.height
 
-                        // 计算高度
-                        containerHeight *= lines
-                        containerHeight += gxGridConfig.rowSpacing * (lines - 1)
+                    // 计算高度
+                    containerHeight *= lines
+                    containerHeight += finalGridConfig.rowSpacing * (lines - 1)
 
-                        // 处理padding
-                        val edgeInsets = gxGridConfig.edgeInsets
-                        containerHeight += edgeInsets.top + edgeInsets.bottom
+                    // 处理padding
+                    val edgeInsets = finalGridConfig.edgeInsets
+                    containerHeight += edgeInsets.top + edgeInsets.bottom
 
-                        return Size(
-                            Dimension.Points(itemSize.width),
-                            Dimension.Points(containerHeight)
-                        )
-                    } else if (gxGridConfig.isHorizontal) {
-                        // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                        return null
-                    }
+                    return Size(
+                        Dimension.Points(itemSize.width),
+                        Dimension.Points(containerHeight)
+                    )
+                } else if (finalGridConfig.isHorizontal) {
+                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                    return null
                 }
             }
         }

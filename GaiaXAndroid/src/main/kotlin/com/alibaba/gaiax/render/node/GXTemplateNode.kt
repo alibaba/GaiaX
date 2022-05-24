@@ -21,7 +21,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
-import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
@@ -77,11 +76,11 @@ data class GXTemplateNode(
 
     fun reset() {
         resetData()
-
         visualTemplateNode?.reset()
-        finalCss = null
-        finalGridConfig = null
-        finalScrollConfig = null
+
+        // 此处不能重置config和css，不会产生好处，仅有负面影响
+        // 如果外部按异步调用更新逻辑，那么重置config和css可能导致取值为空，从而抛出异常
+        // resetBasic()
     }
 
     var dataCache: JSONObject? = null
@@ -92,6 +91,13 @@ data class GXTemplateNode(
         dataExtendCache = null
         dataValueCache = null
         dataCache = null
+    }
+
+    private fun resetBasic() {
+        finalCss = null
+        finalGridConfig = null
+        finalScrollConfig = null
+        finalSliderConfig = null
     }
 
     var finalGridConfig: GXGridConfig? = null

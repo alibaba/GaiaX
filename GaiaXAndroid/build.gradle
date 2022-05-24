@@ -42,10 +42,10 @@ android {
         kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX"]
     }
 
-    // compileOptions {
-    //     sourceCompatibility JavaVersion.VERSION_1_7
-    //     targetCompatibility JavaVersion.VERSION_1_7
-    // }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_7
+//        targetCompatibility JavaVersion.VERSION_1_7
+//    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

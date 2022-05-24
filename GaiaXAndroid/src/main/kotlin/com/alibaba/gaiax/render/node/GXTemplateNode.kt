@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress

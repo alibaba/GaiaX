@@ -33,6 +33,7 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
+import com.alibaba.gaiax.utils.GXLog
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
@@ -75,6 +76,11 @@ class GXContainerViewAdapter(
             childMeasureSize,
             childVisualNestTemplateNode
         )
+
+        if (GXLog.isLog()) {
+            GXLog.e("onCreateViewHolder childTemplateContext = $childTemplateContext")
+        }
+
         // TODO: 此处可能有耗时问题，可以进行优化
         val childContainerSize = GXNodeUtils.computeContainerItemSize(
             childTemplateContext,
@@ -83,6 +89,10 @@ class GXContainerViewAdapter(
             childVisualNestTemplateNode,
             containerData
         )
+
+        if (GXLog.isLog()) {
+            GXLog.e("onCreateViewHolder childContainerSize = $childContainerSize")
+        }
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
@@ -111,11 +121,11 @@ class GXContainerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
-        val childTemplateItem =
-            holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+        val childTemplateItem = holder.childTemplateItem
+            ?: throw IllegalArgumentException("childTemplateItem is null")
         val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
-        val childMeasureSize =
-            holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
+        val childMeasureSize = holder.childMeasureSize
+            ?: throw IllegalArgumentException("childMeasureSize is null")
         val childItemContainer = holder.itemView as ViewGroup
         val childItemPosition = holder.adapterPosition
         val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()

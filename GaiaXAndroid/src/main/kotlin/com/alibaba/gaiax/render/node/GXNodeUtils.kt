@@ -25,6 +25,7 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXLog
 import kotlin.math.ceil
 
 /**
@@ -147,6 +148,10 @@ object GXNodeUtils {
         // 1. 获取坑位的ViewPort信息
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
+        if (GXLog.isLog()) {
+            GXLog.e("computeContainerItemSize itemViewPort = $itemViewPort")
+        }
+
         // 2. 计算坑位实际宽高结果
         return computeItemSize(
             gxTemplateContext,
@@ -229,6 +234,11 @@ object GXNodeUtils {
         templateData: GXTemplateEngine.GXTemplateData,
         visualTemplateNode: GXTemplateNode?
     ): GXNode? {
+
+        if (GXLog.isLog()) {
+            GXLog.e("computeItemSizeByCreateAndBindNode templateItem = $templateItem, measureSize = $measureSize, templateData = $templateData, visualTemplateNode = $visualTemplateNode")
+        }
+
         // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
         val templateInfo = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
         val context = GXTemplateContext.createContext(

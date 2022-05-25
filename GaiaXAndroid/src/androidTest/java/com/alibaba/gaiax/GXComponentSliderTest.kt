@@ -1,5 +1,6 @@
 package com.alibaba.gaiax
 
+import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager.widget.ViewPager
 import android.widget.LinearLayout
@@ -42,7 +43,6 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(MOCK_SCREEN_WIDTH, rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
         Assert.assertEquals(true, rootView is GXSliderView)
-        Assert.assertEquals(true, rootView is GXSliderView)
         Assert.assertEquals(2, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0) is androidx.viewpager.widget.ViewPager)
         Assert.assertEquals(true, rootView.child(1) is LinearLayout)
@@ -54,5 +54,7 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(true, config?.infinityScroll)
         Assert.assertEquals(true, config?.hasIndicator)
         Assert.assertEquals(1, config?.selectedIndex)
+        Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColor)
+        Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor)
     }
 }

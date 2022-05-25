@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.template;
 
+import android.graphics.Color
 import com.alibaba.fastjson.JSONObject
 
 /**
@@ -25,9 +26,13 @@ data class GXSliderConfig(
     val scrollTimeInterval: Long,
     val infinityScroll: Boolean,
     val hasIndicator: Boolean,
-    val selectedIndex: Int
+    val selectedIndex: Int,
+    val indicatorSelectedColor: GXColor,
+    val indicatorUnselectedColor: GXColor
 ) {
     companion object {
+
+        val TAG = "GXSliderView"
 
         fun create(data: JSONObject): GXSliderConfig {
             val scrollTimeInterval =
@@ -38,11 +43,23 @@ data class GXSliderConfig(
                 getBoolean(data, GXTemplateKey.GAIAX_LAYER_SLIDER_HAS_INDICATOR) ?: true
             val selectedIndex =
                 data.getInteger(GXTemplateKey.GAIAX_LAYER_SLIDER_SELECTED_INDEX) ?: 0
+            val indicatorSelectedColor =
+                parseColor(
+                    data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR),
+                    GXColor("#FFFFFF", Color.parseColor("#FFFFFF"))
+                )
+            val indicatorUnselectedColor =
+                parseColor(
+                    data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR),
+                    GXColor("#BBBBBB", Color.parseColor("#BBBBBB"))
+                )
             return GXSliderConfig(
                 scrollTimeInterval,
                 infinityScroll,
                 hasIndicator,
-                selectedIndex
+                selectedIndex,
+                indicatorSelectedColor,
+                indicatorUnselectedColor
             )
         }
 
@@ -57,12 +74,25 @@ data class GXSliderConfig(
                 getBoolean(data, GXTemplateKey.GAIAX_LAYER_SLIDER_HAS_INDICATOR)
                     ?: srcConfig.hasIndicator
             val selectedIndex =
-                data.getInteger(GXTemplateKey.GAIAX_LAYER_SLIDER_SELECTED_INDEX) ?: 0
+                data.getInteger(GXTemplateKey.GAIAX_LAYER_SLIDER_SELECTED_INDEX)
+                    ?: srcConfig.selectedIndex
+            val indicatorSelectedColor =
+                parseColor(
+                    data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR),
+                    srcConfig.indicatorSelectedColor
+                )
+            val indicatorUnselectedColor =
+                parseColor(
+                    data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR),
+                    srcConfig.indicatorUnselectedColor
+                )
             return GXSliderConfig(
                 scrollTimeInterval,
                 infinityScroll,
                 hasIndicator,
-                selectedIndex
+                selectedIndex,
+                indicatorSelectedColor,
+                indicatorUnselectedColor
             )
         }
 
@@ -71,6 +101,14 @@ data class GXSliderConfig(
                 return data.getBoolean(key)
             }
             return null
+        }
+
+        private fun parseColor(colorString: String?, default: GXColor): GXColor {
+            var color: GXColor? = null
+            colorString?.let {
+                color = GXColor.create(it)
+            }
+            return color ?: default
         }
     }
 }

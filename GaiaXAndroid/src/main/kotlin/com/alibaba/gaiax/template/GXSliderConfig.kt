@@ -106,7 +106,7 @@ data class GXSliderConfig(
         private fun parseColor(colorString: String?, default: GXColor): GXColor {
             var color: GXColor? = null
             colorString?.let {
-                color = GXColor.create(colorString)
+                color = GXColor.create(it)
             }
             return color ?: default
         }

@@ -43,13 +43,7 @@ The following goals are the way forward for our project:
 
 ## The technology used
 
-- Rust
-- Android
-- Kotlin
-- iOS
-- OC
-- C++
-- JNI
+Rust/Android/Kotlin/iOS/OC/C++/JNI/CSS/FlexBox
 
 ## Usage
 

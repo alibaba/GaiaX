@@ -43,13 +43,7 @@
 
 ## 使用到的技术
 
-- Rust
-- Android
-- Kotlin
-- iOS
-- OC
-- C++
-- JNI
+Rust/Android/Kotlin/iOS/OC/C++/JNI/CSS/FlexBox
 
 ## 使用方法
 

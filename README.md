@@ -49,7 +49,7 @@ The following goals are the way forward for our project:
 
 add jitpack source:
 ```
-// method 1: 在setting.gradle中增加
+// with setting.gradle
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -67,7 +67,7 @@ dependencyResolutionManagement {
     }
 }
 
-// method 2: 在根build.gradle中增加
+// with build.gradle
 allprojects {
     repositories {
         maven { url 'https://jitpack.io' }

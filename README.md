@@ -2,7 +2,7 @@
     <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="300" alt="GaiaX-logo">
 </h1>
 <p align="center">
-    Dynamic template engine is a lightweight cross-end solution of pure native dynamic card developed by Alibaba Youku technology team
+    Dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team
 </p>
 
 <p align="center">
@@ -21,16 +21,20 @@
 
 # Dynamic template engine
 
-Dynamic template engine is a lightweight cross-end solution of pure native dynamic card developed by Alibaba Youku technology team. In addition to render the client SDK, and at the same time provides the necessary Template visual build Studio and Demo (template sample, and sweep code preview), support from the template set/edit, real machine debugging/preview all link technical support such as r&d, dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code development field.
+Dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team. 
+
+Except client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real time preview, it support to create template, edit template, real machine debug and real time preview.
+
+Dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
 
 ## Goals
 
 The following goals are the way forward for our project:
 
 - High performance
-- Cross-end technology
+- Cross-platform technology
 - Visual construction
-- Pure Native rendering
+- Pure native rendering
 
 ## Supported Platforms
 
@@ -41,10 +45,47 @@ The following goals are the way forward for our project:
 
 ### Android
 
-#### Dependency  
+#### 依赖 
 
-[![](https://jitpack.io/v/alibaba/GaiaX.svg)](https://jitpack.io/#alibaba/GaiaX)
+add jitpack source:
+```
+// method 1: 在setting.gradle中增加
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
 
+// method 2: 在根build.gradle中增加
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+```
+
+
+Android-Support version:
+```
+implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
+```
+
+AndroidX version:
+```
+implementation 'com.github.alibaba:GaiaX:0.2.1'
+```
 #### Template File
 ```
 // Path used to store template resources
@@ -148,9 +189,22 @@ We very welcome your to contribute code for the project. In you before writing a
 
 - [Template visual build Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
 
-## Document
+## Contact us
 
-- [SDK Document](https://www.yuque.com/biezhihua/gaiax)
+DingTalk：
+<img src="https://user-images.githubusercontent.com/6761107/165739677-13c68f86-fa43-466f-939c-cc54d6827908.png" width="200" height="200" />
+
+WeChat：
+<img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
+
+Email:
+biezhihua@gmail.com
+
+## Supporters
+
+[![Forkers repo roster for @alibaba/GaiaX](https://reporoster.com/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/network/members)
+
+[![Stargazers repo roster for @alibaba/GaiaX](https://reporoster.com/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
 
 # LICENSE
 ```

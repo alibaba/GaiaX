@@ -21,7 +21,11 @@
 
 # 动态模板引擎
 
-动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案。除了客户端渲染SDK之外，同时提供了配套的模板可视化搭建工具Studio和Demo（模板示例，以及扫码预览），支持从模板搭建/编辑、真机调试/预览等研发全链路技术支撑，动态模板引擎的目标是在保证原生体验与性能的同时，帮助客户端开发领域实现低代码。
+动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案。
+
+除了客户端SDK外，还提供了模板可视化搭建工具Studio，以及Demo工程（包含模板示例，以及扫码预览），支持从模板创建、编辑、真机调试、预览等研发全链路技术。
+
+动态模板引擎的目标是在保证原生体验与性能的同时，帮助客户端开发实现低代码。
 
 ## 目标
 
@@ -184,9 +188,6 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 - [模板可视化搭建工具Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
 
-## 文档
-
-- [SDK文档](https://www.yuque.com/biezhihua/gaiax)
 
 ## 联系我们
 
@@ -195,7 +196,6 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 微信：
 <img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
-
 
 ## 支持者
 

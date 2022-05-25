@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.template;
 
 import android.graphics.Color
-import android.util.Log
 import com.alibaba.fastjson.JSONObject
 
 /**
@@ -28,8 +27,8 @@ data class GXSliderConfig(
     val infinityScroll: Boolean,
     val hasIndicator: Boolean,
     val selectedIndex: Int,
-    val indicatorSelectedColor: Int,
-    val indicatorUnselectedColor: Int
+    val indicatorSelectedColor: GXColor,
+    val indicatorUnselectedColor: GXColor
 ) {
     companion object {
 
@@ -47,12 +46,12 @@ data class GXSliderConfig(
             val indicatorSelectedColor =
                 parseColor(
                     data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR),
-                    Color.parseColor("#FFFFFF")
+                    GXColor("#FFFFFF", Color.parseColor("#FFFFFF"))
                 )
             val indicatorUnselectedColor =
                 parseColor(
                     data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR),
-                    Color.parseColor("#BBBBBB")
+                    GXColor("#BBBBBB", Color.parseColor("#BBBBBB"))
                 )
             return GXSliderConfig(
                 scrollTimeInterval,
@@ -104,14 +103,10 @@ data class GXSliderConfig(
             return null
         }
 
-        private fun parseColor(colorString: String?, default: Int): Int {
-            var color: Int? = null
+        private fun parseColor(colorString: String?, default: GXColor): GXColor {
+            var color: GXColor? = null
             colorString?.let {
-                try {
-                    color = Color.parseColor(it)
-                } catch (e: Exception) {
-                    Log.e(TAG, "color parse error, detail: ${e.localizedMessage}")
-                }
+                color = GXColor.create(colorString)
             }
             return color ?: default
         }

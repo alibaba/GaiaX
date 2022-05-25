@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="300" alt="GaiaX-logo">
+    <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
 </h1>
 <p align="center">
     动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案
@@ -44,7 +44,7 @@
 ## 核心概念
 
 <p align="center">
-    <img src="https://gw.alicdn.com/imgextra/i1/O1CN01RkMn5l1qUaj25LCFp_!!6000000005499-2-tps-2901-886.png" width="400" alt="GaiaX-arch">
+    <img src="https://gw.alicdn.com/imgextra/i1/O1CN01RkMn5l1qUaj25LCFp_!!6000000005499-2-tps-2901-886.png" width="1000" alt="GaiaX-arch">
 </p>
 
 ## 使用到的技术

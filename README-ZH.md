@@ -41,6 +41,16 @@
 - Android
 - iOS
 
+## 使用到的技术
+
+- Rust
+- Android
+- Kotlin
+- iOS
+- OC
+- C++
+- JNI
+
 ## 使用方法
 
 ### Android

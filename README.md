@@ -41,6 +41,16 @@ The following goals are the way forward for our project:
 - Android
 - iOS
 
+## The technology used
+
+- Rust
+- Android
+- Kotlin
+- iOS
+- OC
+- C++
+- JNI
+
 ## Usage
 
 ### Android

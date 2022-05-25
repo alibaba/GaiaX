@@ -45,7 +45,7 @@ The following goals are the way forward for our project:
 
 ### Android
 
-#### 依赖 
+#### Dependency
 
 add jitpack source:
 ```

@@ -41,6 +41,13 @@ The following goals are the way forward for our project:
 - Android
 - iOS
 
+## Core Concept
+
+<p align="center">
+    <img src="https://gw.alicdn.com/imgextra/i1/O1CN01RkMn5l1qUaj25LCFp_!!6000000005499-2-tps-2901-886.png" width="400" alt="GaiaX-arch">
+</p>
+
+
 ## The technology used
 
 Rust/Android/Kotlin/iOS/OC/C++/JNI/CSS/FlexBox

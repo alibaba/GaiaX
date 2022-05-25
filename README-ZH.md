@@ -41,6 +41,12 @@
 - Android
 - iOS
 
+## 核心概念
+
+<p align="center">
+    <img src="https://gw.alicdn.com/imgextra/i1/O1CN01RkMn5l1qUaj25LCFp_!!6000000005499-2-tps-2901-886.png" width="400" alt="GaiaX-arch">
+</p>
+
 ## 使用到的技术
 
 Rust/Android/Kotlin/iOS/OC/C++/JNI/CSS/FlexBox

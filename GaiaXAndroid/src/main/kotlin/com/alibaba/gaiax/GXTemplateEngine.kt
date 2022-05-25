@@ -553,7 +553,6 @@ class GXTemplateEngine {
             val clazz = Class.forName("com.alibaba.gaiax.adapter.GXAdapter")
             clazz.newInstance() as GXIAdapter
         } catch (e: Exception) {
-            e.printStackTrace()
             null
         }
     }

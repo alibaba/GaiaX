@@ -74,26 +74,33 @@ data class GXTemplateNode(
         return dataValueCache
     }
 
+    fun reset() {
+        resetData()
+        visualTemplateNode?.reset()
+
+        // 此处不能重置config和css，不会产生好处，仅有负面影响
+        // 如果外部按异步调用更新逻辑，那么重置config和css可能导致取值为空，从而抛出异常
+        // resetBasic()
+    }
+
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
-
-    fun reset() {
-        resetData()
-
-        visualTemplateNode?.reset()
-        finalCss = null
-        finalGridConfig = null
-        finalScrollConfig = null
-    }
-
-    var finalGridConfig: GXGridConfig? = null
 
     fun resetData() {
         dataExtendCache = null
         dataValueCache = null
         dataCache = null
     }
+
+    private fun resetBasic() {
+        finalCss = null
+        finalGridConfig = null
+        finalScrollConfig = null
+        finalSliderConfig = null
+    }
+
+    var finalGridConfig: GXGridConfig? = null
 
     var finalScrollConfig: GXScrollConfig? = null
 
@@ -145,6 +152,10 @@ data class GXTemplateNode(
 
             layer.scrollConfig?.let {
                 finalScrollConfig = it
+            }
+
+            layer.sliderConfig?.let {
+                finalSliderConfig = it
             }
 
             css

@@ -20,7 +20,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Rect
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 
 /**
  * @suppress

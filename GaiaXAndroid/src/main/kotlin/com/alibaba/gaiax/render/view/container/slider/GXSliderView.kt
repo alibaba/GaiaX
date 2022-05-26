@@ -22,7 +22,6 @@ import android.graphics.drawable.StateListDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
@@ -69,7 +68,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     private var gxTemplateContext: GXTemplateContext? = null
     private var config: GXSliderConfig? = null
 
-    var viewPager: ViewPager? = null
+    var viewPager: androidx.viewpager.widget.ViewPager? = null
     private var indicatorContainer: LinearLayout? = null
     private var selectedIndicatorItem: View? = null
 
@@ -86,8 +85,8 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun initViewPager() {
-        viewPager = ViewPager(context)
-        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager = androidx.viewpager.widget.ViewPager(context)
+        viewPager?.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,

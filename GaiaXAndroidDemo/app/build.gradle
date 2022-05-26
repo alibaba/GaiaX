@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         maven { url 'https://jitpack.io' }
         mavenCentral()
@@ -12,6 +13,7 @@ allprojects {
 buildscript {
 
     repositories {
+        mavenLocal()
         google()
         maven { url 'https://jitpack.io' }
         mavenCentral()
@@ -61,7 +63,8 @@ dependencies {
 
     implementation project(path: ':GaiaXFastPreview')
 
-    implementation 'com.github.alibaba:GaiaX:0.2.1'
+    implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:main-SNAPSHOT'
+    implementation 'com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'

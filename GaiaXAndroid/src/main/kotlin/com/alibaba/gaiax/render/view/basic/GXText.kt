@@ -19,8 +19,8 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
-import android.support.annotation.Keep
-import android.support.v7.widget.AppCompatTextView
+import androidx.annotation.Keep
+import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider

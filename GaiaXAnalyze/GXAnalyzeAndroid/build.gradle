@@ -43,7 +43,7 @@ android {
         minSdk 21
         targetSdk 31
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
 
         externalNativeBuild {

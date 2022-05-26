@@ -74,6 +74,7 @@
     [self.view addSubview:_descLabel];
     
     _resultView = [[UITextView alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_descLabel.frame), self.view.frame.size.width - 20, 200)];
+    _resultView.backgroundColor = [UIColor whiteColor];
     _resultView.font = [UIFont systemFontOfSize:14];
     _resultView.textColor = [UIColor blackColor];
     _resultView.layer.borderColor = [UIColor lightGrayColor].CGColor;

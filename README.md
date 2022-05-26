@@ -91,11 +91,13 @@ allprojects {
 Android-Support version:
 ```
 implementation 'com.github.alibaba:GaiaX:release-androidsupport-0.1.3-SNAPSHOT'
+implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
 AndroidX version:
 ```
 implementation 'com.github.alibaba:GaiaX:0.2.1'
+implementation 'com.alibaba:fastjson:1.2.76'
 ```
 #### Template File
 ```

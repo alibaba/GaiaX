@@ -50,8 +50,8 @@ class GaiaXFastPreview {
 
     init {
         GXRegisterCenter.instance
-            .registerExtensionTemplateSource(manualPushSource, 15)
-            .registerExtensionTemplateSource(fastPreviewSource, 16)
+            .registerExtensionTemplateSource(manualPushSource, 101)
+            .registerExtensionTemplateSource(fastPreviewSource, 102)
     }
 
     private var socketHelper: GaiaXSocket = GaiaXSocket()

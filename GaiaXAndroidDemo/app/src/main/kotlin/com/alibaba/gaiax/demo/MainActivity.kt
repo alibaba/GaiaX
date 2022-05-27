@@ -58,5 +58,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, EventTemplateActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<AppCompatButton>(R.id.api)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, ApiTemplateActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -194,7 +194,15 @@ data class GXStyle(
                     ?: lowPriorityStyle.fontTextDecoration,
                 borderRadius = heightPriorityStyle.borderRadius ?: lowPriorityStyle.borderRadius,
                 boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
-                fitContent = heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
+                fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
+                    if (lowPriorityStyle.fitContent == true && heightPriorityStyle.fitContent == false) {
+                        lowPriorityStyle.fitContent
+                    } else {
+                        heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
+                    }
+                } else {
+                    heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
+                }
             )
         }
     }

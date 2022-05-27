@@ -1243,8 +1243,9 @@ class GXComponentTextTest : GXBaseTest() {
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec =
-            View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(
+            100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST
+        )
         textView.measure(widthSpec, 0)
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
@@ -1267,8 +1268,16 @@ class GXComponentTextTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(20F.dpToPx())
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(
+            100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST
+        )
+        textView.measure(widthSpec, 0)
+
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(object :
             GXRegisterCenter.GXIExtensionCompatibility {

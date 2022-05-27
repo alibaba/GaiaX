@@ -87,7 +87,7 @@
 }
 
 //绑定数据
-- (void)bindData:(GXTemplateData *)data onView:(UIView *)view{
+- (void)bindData:(GXTemplateData *)data measureSize:(CGSize)size onRootView:(UIView *)view{
     if (![data isAvailable]) {
         return;
     }
@@ -96,9 +96,26 @@
     GXNode *node = view.gxNode;
     GXTemplateContext *ctx = node.templateContext;
     ctx.templateData = data;
-    
+    ctx.measureSize = size;
     //绑定数据
     [GXDataManager bindData:data onRootNode:node];
+}
+
+//绑定数据
+- (void)bindData:(GXTemplateData *)data onView:(UIView *)view{
+    //获取size
+    CGSize size = view.gxNode.templateContext.measureSize;
+    [self bindData:data measureSize:size onRootView:view];
+}
+
+//重新布局
+- (void)relayoutRootView:(UIView *)view withMeasureSize:(CGSize)measureSize{
+    //更新context
+    GXNode *node = view.gxNode;
+    GXTemplateContext *ctx = node.templateContext;
+    ctx.measureSize = measureSize;
+    //绑定数据
+    [self.renderManager relayout:ctx measureSize:measureSize];
 }
 
 //通过nodeId获取根视图中的某个view

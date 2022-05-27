@@ -18,7 +18,7 @@ package com.alibaba.gaiax.render.node.text
 
 import android.content.Context
 import android.graphics.Typeface
-import android.support.v4.util.Pools
+import androidx.core.util.Pools
 import android.view.ViewGroup
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.GXViewKey

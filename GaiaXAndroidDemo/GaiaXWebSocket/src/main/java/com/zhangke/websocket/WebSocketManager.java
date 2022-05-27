@@ -3,8 +3,6 @@ package com.zhangke.websocket;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.java_websocket.framing.Framedata;
-import org.java_websocket.framing.PingFrame;
 import com.zhangke.websocket.dispatcher.MainThreadResponseDelivery;
 import com.zhangke.websocket.dispatcher.ResponseDelivery;
 import com.zhangke.websocket.dispatcher.ResponseProcessEngine;
@@ -14,6 +12,9 @@ import com.zhangke.websocket.response.ErrorResponse;
 import com.zhangke.websocket.response.Response;
 import com.zhangke.websocket.response.ResponseFactory;
 import com.zhangke.websocket.util.LogUtil;
+
+import org.java_websocket.framing.Framedata;
+import org.java_websocket.framing.PingFrame;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;

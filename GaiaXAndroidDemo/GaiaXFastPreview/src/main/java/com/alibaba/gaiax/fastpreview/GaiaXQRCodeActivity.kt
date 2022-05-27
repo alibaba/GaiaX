@@ -18,7 +18,8 @@ class GaiaXQRCodeActivity : CaptureActivity() {
         decodeConfig.setHints(DecodeFormatManager.QR_CODE_HINTS) //如果只有识别二维码的需求，这样设置效率会更高，不设置默认为DecodeFormatManager.DEFAULT_HINTS
             .setFullAreaScan(false) //设置是否全区域识别，默认false
             .setAreaRectRatio(0.8f) //设置识别区域比例，默认0.8，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
-            .setAreaRectVerticalOffset(0).areaRectHorizontalOffset = 0 //设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
+            .setAreaRectVerticalOffset(0).areaRectHorizontalOffset =
+            0 //设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
 
         //在启动预览之前，设置分析器，只识别二维码
         cameraScan

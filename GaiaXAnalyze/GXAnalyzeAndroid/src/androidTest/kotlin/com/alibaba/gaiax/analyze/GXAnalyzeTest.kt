@@ -125,9 +125,15 @@ class GXAnalyzeTest {
         Assert.assertEquals(16f, instance.getResult("\$data*2", testData))
         Assert.assertEquals(1f, instance.getResult("1*1", testData))
         Assert.assertEquals(true, instance.getResult("(1+1)>1 ? 1>0 : 2<3", testData))
-        Assert.assertEquals(2f,instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData))
+        Assert.assertEquals(
+            2f,
+            instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData)
+        )
         Assert.assertEquals(true, instance.getResult("\$data.size+1>1 ? true : false ", testData))
-        Assert.assertEquals(2f,instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData))
+        Assert.assertEquals(
+            2f,
+            instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData)
+        )
         Assert.assertEquals(true, instance.getResult("5%3 == 2", testData))
         Assert.assertEquals(true, instance.getResult("0-2==-2", testData))
         Assert.assertEquals(true, instance.getResult("1/2 == 0.5", testData))

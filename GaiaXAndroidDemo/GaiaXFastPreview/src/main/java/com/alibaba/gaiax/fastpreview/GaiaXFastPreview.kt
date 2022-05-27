@@ -6,14 +6,12 @@ import android.util.Log
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.data.GXITemplateSource
 import com.alibaba.gaiax.template.GXTemplate
-import com.alibaba.gaiax.template.GXTemplateInfo
 import com.alibaba.gaiax.template.GXTemplateKey
 
 class GaiaXFastPreview {
 
-    class ManualPushSource : GXRegisterCenter.GXITemplateSource {
+    class ManualPushSource : GXRegisterCenter.GXIExtensionTemplateSource {
 
         private val cache = mutableMapOf<String, GXTemplate>()
 
@@ -30,7 +28,7 @@ class GaiaXFastPreview {
         }
     }
 
-    class FastPreviewSource : GXRegisterCenter.GXITemplateSource {
+    class FastPreviewSource : GXRegisterCenter.GXIExtensionTemplateSource {
 
         private val cache = mutableMapOf<String, GXTemplate>()
 
@@ -51,8 +49,9 @@ class GaiaXFastPreview {
     private var fastPreviewSource = FastPreviewSource()
 
     init {
-        GXRegisterCenter.instance.registerTemplateSource(manualPushSource)
-        GXRegisterCenter.instance.registerTemplateSource(fastPreviewSource)
+        GXRegisterCenter.instance
+            .registerExtensionTemplateSource(manualPushSource, 101)
+            .registerExtensionTemplateSource(fastPreviewSource, 102)
     }
 
     private var socketHelper: GaiaXSocket = GaiaXSocket()
@@ -102,7 +101,8 @@ class GaiaXFastPreview {
             Log.e(TAG, "onFastPreviewDataChanged() called with: templateId = [$templateId]")
             var constraintSize = JSONObject()
             try {
-                constraintSize = template.getJSONObject("index.json")?.getJSONObject("package")?.getJSONObject("constraint-size") ?: JSONObject()
+                constraintSize = template.getJSONObject("index.json")?.getJSONObject("package")
+                    ?.getJSONObject("constraint-size") ?: JSONObject()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -144,7 +144,8 @@ class GaiaXFastPreview {
     }
 
     private fun isConnectVpn(context: Context): Boolean {
-        val allNetworkInfo = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).allNetworkInfo
+        val allNetworkInfo =
+            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).allNetworkInfo
         for (i in allNetworkInfo.indices) {
             val networkInfo = allNetworkInfo[i]
             if (networkInfo.type == ConnectivityManager.TYPE_VPN && networkInfo.isConnected) {
@@ -155,7 +156,10 @@ class GaiaXFastPreview {
     }
 
     private fun tryToConnectGaiaStudio(address: String, templateId: String?, type: String) {
-        Log.e(TAG, "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]")
+        Log.e(
+            TAG,
+            "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]"
+        )
         val tmpAddress = currentAddress
         currentType = type
         currentAddress = address

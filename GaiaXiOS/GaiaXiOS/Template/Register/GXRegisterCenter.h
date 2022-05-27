@@ -18,9 +18,9 @@
 
 #import <Foundation/Foundation.h>
 #import <GaiaXiOS/GXLottieAniamtionProtocal.h>
+#import <GaiaXiOS/GXTemplateSourceProtocal.h>
 #import <GaiaXiOS/GXBizServiceProtocol.h>
 #import <GaiaXiOS/GXImageViewProtocal.h>
-#import <GaiaXiOS/GXITemplateSource.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,42 +38,41 @@ typedef NS_ENUM(NSUInteger, GXNodeType) {
 //Support ImageView implementation corresponding to business registration
 @property (nonatomic, readonly) Class <GXImageViewProtocal> imageViewClass;
 //Class impl supported by business capabilities
-@property (nonatomic, strong) Class <GXBizServiceProtocol> bizServiceImpl;
-//preview data source
-@property (nonatomic, strong) id <GXITemplatePreviewSource> previewSource;
+@property (nonatomic, strong, nullable) Class <GXBizServiceProtocol> bizServiceImpl;
 
+//default template data source，priority is 50
+@property (nonatomic, strong, readonly) id <GXTemplateSourceProtocal> defaultTemplateSource;
+//template data source（支持注册各种数据源）//preview priority is 99
+@property (nonatomic, strong, readonly) NSArray <GXTemplateSourceProtocal> * templateSources;
 
 /// singleton
 + (instancetype)defaultCenter;
-
-
-/// Register the class of Lottie animation
-/// @param aClass lottieView class
-- (void)registerLottieViewClass:(Class <GXLottieAniamtionProtocal>)aClass;
-
 
 /// Register the view class corresponding to the node
 /// @param aClass view class
 /// @param type node type
 - (void)registerClass:(Class)aClass forNodeType:(GXNodeType)type;
 
-
 /// Register the impl for business capability support
 /// @param impl Impl corresponding to the business
 - (void)registerBizServiceImpl:(Class <GXBizServiceProtocol>)impl;
+
+/// Register the class of Lottie animation
+/// @param aClass lottieView class
+- (void)registerLottieViewClass:(Class <GXLottieAniamtionProtocal>)aClass;
 
 @end
 
 
 @interface GXRegisterCenter (Source)
 
-/// Registering a preview data source
+/// Registering a data source
 /// @param source data source
-- (void)registerPreviewTemplateSource:(id <GXITemplatePreviewSource>)source;
+- (void)registerTemplateSource:(id <GXTemplateSourceProtocal>)source;
 
-/// Remove a preview data source
+/// Remove a data source
 /// @param source data source
-- (void)unregisterPreviewTemplateSource:(id <GXITemplatePreviewSource>)source;
+- (void)unregisterTemplateSource:(id <GXTemplateSourceProtocal>)source;
 
 @end
 

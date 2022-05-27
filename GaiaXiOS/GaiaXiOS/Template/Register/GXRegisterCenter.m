@@ -18,15 +18,23 @@
 
 #import "GXRegisterCenter.h"
 #import "GXTemplatePathHelper.h"
+#import "GXTemplateSource.h"
 #import "NSDictionary+GX.h"
+#import "GXFunctionDef.h"
+#import "NSArray+GX.h"
 #import "GXUtils.h"
 
-@interface GXRegisterCenter ()
+@interface GXRegisterCenter (){
+    //外部数据源
+    BOOL _isNeedSort;
+    NSArray *_resultSources;
+    NSMutableDictionary *_kvSources;
+    //默认内部数据源
+    GXTemplateSource *_defaultTemplateSource;
+}
 
 //对应的ImageView的class
 @property (nonatomic, strong) Class imageViewClass;
-//业务模板注册关系
-@property (nonatomic, strong) NSMutableDictionary *bizRegisterMap;
 
 @end
 
@@ -49,18 +57,58 @@
     if (self) {
         //默认的imageClass
         self.imageViewClass = NSClassFromString(@"GXImageView");
+        //数据源数组
+        _kvSources = [NSMutableDictionary dictionary];
+        
+        //默认内部数据源
+        _defaultTemplateSource = [[GXTemplateSource alloc] init];
+        [self registerTemplateSource:_defaultTemplateSource];
     }
     return self;
 }
 
 
-- (NSMutableDictionary *)bizRegisterMap{
-    if (!_bizRegisterMap) {
-        _bizRegisterMap = [NSMutableDictionary dictionary];
-    }
-    return _bizRegisterMap;
+- (id <GXTemplateSourceProtocal>)defaultTemplateSource{
+    return _defaultTemplateSource;
 }
 
+- (NSArray <GXTemplateSourceProtocal> *)templateSources{
+    if (_isNeedSort) {
+        _isNeedSort = NO;
+        // 进行排序处理
+        _resultSources = [self sortByPriority];
+    }
+    
+    return (NSArray <GXTemplateSourceProtocal> *)_resultSources;
+}
+
+- (NSArray *)sortByPriority{
+    NSMutableArray *resultArray = nil;
+    if (_kvSources.count > 0) {
+        NSMutableDictionary *tmpDict = [_kvSources mutableCopy];
+        NSArray *sortedArray = [[tmpDict allKeys] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+            //优先级降序排列，由大到小
+            NSInteger priority1 = [obj1 integerValue];
+            NSInteger priority2 = [obj2 integerValue];
+            if (priority1 > priority2){
+                return NSOrderedAscending;//降序
+            } else if (priority1 < priority2){
+                return NSOrderedDescending;//升序
+            } else {
+                return NSOrderedSame;
+            }
+        }];
+        
+        //读取数据源
+        resultArray = [NSMutableArray array];
+        for (int i = 0; i < sortedArray.count; i++) {
+            NSString *key = [sortedArray objectAtIndex:i];
+            NSString *value = [tmpDict objectForKey:key];
+            [resultArray gx_addObject:value];
+        }
+    }
+    return resultArray;
+}
 
 // 注册Lottie动画的class
 - (void)registerLottieViewClass:(Class <GXLottieAniamtionProtocal>)aClass{
@@ -79,8 +127,7 @@
     
     // 进行注册
     switch (type) {
-        case GXNodeTypeImage:
-        {
+        case GXNodeTypeImage: {
             if ([aClass isSubclassOfClass:[UIImageView class]] &&
                 [aClass conformsToProtocol:@protocol(GXImageViewProtocal)]) {
                 //注册
@@ -110,17 +157,26 @@
 
 @implementation GXRegisterCenter (Preview)
 
-//注册预览的数据源
-- (void)registerPreviewTemplateSource:(id <GXITemplatePreviewSource>)source{
-    if (source && [source conformsToProtocol:@protocol(GXITemplatePreviewSource)]) {
-        _previewSource = source;
+- (void)registerTemplateSource:(id <GXTemplateSourceProtocal>)source {
+    if (source && [source conformsToProtocol:@protocol(GXTemplateSourceProtocal)]) {
+        NSInteger priority = [source priority];
+        if (priority >= 0 && priority <= 99) {
+            _isNeedSort = YES;
+            NSString *key = [NSString stringWithFormat:@"%ld", priority];
+            GXAssert(![_kvSources objectForKey:key] , @"已经存在相同优先级的数据源，请重新设置数据源优先级");
+            [_kvSources gx_setObject:source forKey:key];
+        }
     }
 }
 
-//移除预览的数据源
-- (void)unregisterPreviewTemplateSource:(id <GXITemplatePreviewSource>)source{
-    if (source == _previewSource) {
-        _previewSource = nil;
+- (void)unregisterTemplateSource:(id <GXTemplateSourceProtocal>)source {
+    if (source) {
+        NSInteger priority = [source priority];
+        if (priority >= 0 && priority <= 99) {
+            _isNeedSort = YES;
+            NSString *key = [NSString stringWithFormat:@"%ld", priority];
+            [_kvSources removeObjectForKey:key];
+        }
     }
 }
 
@@ -133,59 +189,17 @@
 /// 注册业务模板
 - (BOOL)registerTemplateServiceWithBizId:(NSString *)bizId
                           templateBundle:(NSString *)templateBundle{
-    //获取前置条件
-    if (bizId == nil || templateBundle == nil) {
-        return NO;
-    }
-    
-    //获取UserDefaults
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    //获取模板路径
-    NSString *currentBundlePath = [GXTemplatePathHelper loadBizBundlePathWithBundleName:templateBundle];
-    
-    //获取bundle的name
-    NSString *currentBundle = [defaults stringForKey:bizId];
-    if (currentBundle.length > 0 && [currentBundle isEqualToString:templateBundle]) {
-        [self.bizRegisterMap gx_setObject:currentBundlePath forKey:bizId];
-        //已经注册，则直接返回
-        return YES;
-    }
-    
-    //重新写入
-    [self.bizRegisterMap gx_setObject:currentBundlePath forKey:bizId];
-    [defaults setObject:templateBundle forKey:bizId];
-    
-    return YES;    
+    return [_defaultTemplateSource registerTemplateServiceWithBizId:bizId templateBundle:templateBundle];
 }
 
 /// 注销业务离散化服务
 - (BOOL)unRegisterTemplateServiceWithBizId:(NSString *)bizId{
-    if ([GXUtils isValidString:bizId]) {
-        //移除本地存储
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults removeObjectForKey:bizId];
-        //移除缓存
-        [self.bizRegisterMap removeObjectForKey:bizId];
-        return YES;
-    } else {
-        return NO;
-    }
+    return [_defaultTemplateSource unRegisterTemplateServiceWithBizId:bizId];
 }
 
 /// 通过bizId来获取已经注册过的bundle
 - (NSString *)loadTemplateBundlePathForBizId:(NSString *)bizId{
-    NSString *bizBundlePath = [self.bizRegisterMap gx_stringForKey:bizId];
-    if (!bizBundlePath.length) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        //获取bundleName
-        NSString *bizBundleName = [defaults stringForKey:bizId];
-        //获取bundlePath
-        bizBundlePath = [GXTemplatePathHelper loadBizBundlePathWithBundleName:bizBundleName];
-        //写入缓存
-        [self.bizRegisterMap gx_setObject:bizBundlePath forKey:bizId];
-    }
-    return bizBundlePath;
+    return [_defaultTemplateSource loadTemplateBundlePathForBizId:bizId];
 }
 
 @end

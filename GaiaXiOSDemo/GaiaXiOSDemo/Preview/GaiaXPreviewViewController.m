@@ -86,7 +86,7 @@
 
 - (void)registerPreviewSource{
     _previewTemplateSource = [[GaiaXPreviewTemplateSource alloc] init];
-    [TheGXRegisterCenter registerPreviewTemplateSource:_previewTemplateSource];
+    [TheGXRegisterCenter registerTemplateSource:_previewTemplateSource];
 }
 
 - (void)setupRightButtonItem{
@@ -118,7 +118,7 @@
     //关闭socket链接
     [_client webSocketClose];
     //清除预览数据源
-    [TheGXRegisterCenter unregisterPreviewTemplateSource:_previewTemplateSource];
+    [TheGXRegisterCenter unregisterTemplateSource:_previewTemplateSource];
     //清除相关依赖模板
     _dependenciesTemplateInfo = nil;
     _previewTemplateSource = nil;

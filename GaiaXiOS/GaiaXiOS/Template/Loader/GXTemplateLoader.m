@@ -158,29 +158,3 @@
 }
 
 @end
-
-
-@implementation GXTemplateLoader (Cloud)
-
-// 根据模板的version倒序获取最新末班
-- (NSDictionary *)loadTemplateInfoOrderByTemplateId:(NSString *_Nonnull)templateId{
-    return nil;
-}
-
-
-// 同步加载沙盒模板（远端）
-- (NSDictionary *_Nullable)loadTemplateInfoWithTemplateId:(NSString *)templateId
-                                          templateVersion:(NSString *)templateVersion{
-    return nil;
-}
-
-
-/// 异步加载沙盒模板（远端）
-- (void)loadTemplateInfoWithTemplateId:(NSString *)templateId
-                       templateVersion:(NSString *)templateVersion
-                            completion:(GXTemplateLoadCompletion)completion{
-
-}
-
-
-@end

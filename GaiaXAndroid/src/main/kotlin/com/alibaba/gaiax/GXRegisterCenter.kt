@@ -184,6 +184,8 @@ class GXRegisterCenter {
          *
          */
         fun isPreventFitContentThrowException() = false
+
+        fun isCompatibilityDataBindingFitContent() = false
     }
 
     internal var extensionBizMap: GXIExtensionBizMap? = null

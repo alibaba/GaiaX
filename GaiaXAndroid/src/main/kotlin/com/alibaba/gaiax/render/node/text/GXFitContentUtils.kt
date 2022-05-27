@@ -20,6 +20,7 @@ import android.view.View
 import app.visly.stretch.Dimension
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXStretchNode
@@ -155,12 +156,16 @@ object GXFitContentUtils {
             val nodeWidth = nodeLayout.width
 
             if (nodeWidth == 0F) {
-                throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")
-            }
-
-            if (nodeWidth > 0) {
-                val widthSpec =
-                    View.MeasureSpec.makeMeasureSpec(nodeWidth.toInt(), View.MeasureSpec.AT_MOST)
+                if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {
+                    result = null
+                } else {
+                    throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")
+                }
+            } else if (nodeWidth > 0) {
+                val widthSpec = View.MeasureSpec.makeMeasureSpec(
+                    nodeWidth.toInt(),
+                    View.MeasureSpec.AT_MOST
+                )
                 textView.measure(widthSpec, 0)
                 result = Size(
                     Dimension.Points(nodeWidth),

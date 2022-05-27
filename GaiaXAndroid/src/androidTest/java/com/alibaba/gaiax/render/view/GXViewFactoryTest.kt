@@ -16,11 +16,12 @@
 
 package com.alibaba.gaiax.render.view
 
-import android.support.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import android.view.View
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXGridView
 import com.alibaba.gaiax.render.view.container.GXScrollView
+import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import org.junit.Assert
 import org.junit.Test
 
@@ -77,6 +78,13 @@ class GXViewFactoryTest {
                 context,
                 GXViewKey.VIEW_TYPE_SHADOW_LAYOUT
             ) is GXShadowLayout
+        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(
+                context,
+                GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
+            ) is GXSliderView
         )
     }
 

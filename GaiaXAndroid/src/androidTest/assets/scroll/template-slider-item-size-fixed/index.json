@@ -1,0 +1,14 @@
+{
+  "id": "template-slider-item-size-fixed",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    },
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ]
+}

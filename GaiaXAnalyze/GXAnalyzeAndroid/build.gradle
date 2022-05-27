@@ -43,7 +43,7 @@ android {
         minSdk 21
         targetSdk 31
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'
 
         externalNativeBuild {
@@ -133,7 +133,7 @@ afterEvaluate {
                 if (project.hasProperty("group")) {
                     groupId = project.getProperty("group")
                 } else {
-                    groupId = 'com.github.alibaba'
+                    groupId = 'com.github.alibaba.GaiaX'
                 }
 
                 artifactId = 'GaiaX-Analyze'

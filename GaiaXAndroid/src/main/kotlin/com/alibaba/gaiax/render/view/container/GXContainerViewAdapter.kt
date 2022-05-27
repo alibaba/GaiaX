@@ -17,7 +17,7 @@
 package com.alibaba.gaiax.render.view.container
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -39,7 +39,7 @@ import com.alibaba.gaiax.utils.getStringExtCanNull
 /**
  * @suppress
  */
-class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class GXViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
     var childTag: Any? = null
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
@@ -52,9 +52,10 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
  */
 class GXContainerViewAdapter(
     val gxTemplateContext: GXTemplateContext,
-    val gxNode: GXNode,
     val gxContainer: GXContainer
-) : RecyclerView.Adapter<GXViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<GXViewHolder>() {
+
+    lateinit var gxNode: GXNode
 
     private var containerData: JSONArray = JSONArray()
 
@@ -66,15 +67,21 @@ class GXContainerViewAdapter(
         // 准备构建坑位容器的参数
         val childTemplateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
+
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
+
         val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-        val childMeasureSize =
-            GXTemplateEngine.GXMeasureSize(childItemViewPort.width, childItemViewPort.height)
+
+        val childMeasureSize = GXTemplateEngine.GXMeasureSize(
+            childItemViewPort.width, childItemViewPort.height
+        )
+
         val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
             childTemplateItem,
             childMeasureSize,
             childVisualNestTemplateNode
         )
+
         // TODO: 此处可能有耗时问题，可以进行优化
         val childContainerSize = GXNodeUtils.computeContainerItemSize(
             childTemplateContext,
@@ -116,13 +123,18 @@ class GXContainerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
-        val childTemplateItem =
-            holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+        val childTemplateItem = holder.childTemplateItem
+            ?: throw IllegalArgumentException("childTemplateItem is null")
+
         val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
-        val childMeasureSize =
-            holder.childMeasureSize ?: throw IllegalArgumentException("childMeasureSize is null")
+
+        val childMeasureSize = holder.childMeasureSize
+            ?: throw IllegalArgumentException("childMeasureSize is null")
+
         val childItemContainer = holder.itemView as ViewGroup
+
         val childItemPosition = holder.adapterPosition
+
         val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
 
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
@@ -200,7 +212,7 @@ class GXContainerViewAdapter(
         gxNode.childTemplateItems?.let { items ->
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
-                gxNode.templateNode.reset()
+                gxNode.templateNode.resetData()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                     val path =
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")

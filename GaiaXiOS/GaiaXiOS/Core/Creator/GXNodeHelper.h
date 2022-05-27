@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, GXContainerType) {
     GXContainerTypeNone = 0,//非容器类型
     GXContainerTypeGrid,//Grid类型
     GXContainerTypeScroll,//Scroll类型
+    GXContainerTypeSlider,//Slider类型
     GXContainerTypeCustom//自定义类型
 };
 

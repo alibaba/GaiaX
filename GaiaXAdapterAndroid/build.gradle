@@ -6,9 +6,7 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 }
@@ -17,14 +15,10 @@ buildscript {
 
     ext.kotlin_version = '1.3.50'
 
-    apply from: 'http://gitlab.alibaba-inc.com/android-build-system/buildscript/raw/master_increment/mtl-versions-2.3-incremental-SNAPSHOT.gradle'
-
     repositories {
         mavenLocal()
         google()
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 
@@ -32,15 +26,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:4.2.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
-
 }
-group = 'com.youku.android'
-version = '1.0.0-DEV-SNAPSHOT'
-ext.gaiax_version = version
-
-apply from: 'http://gitlab.alibaba-inc.com/zhihua.bzh/build_script/raw/master/mtl-publish.gradle'
-
-def platformVersion = 21
 
 android {
 
@@ -49,7 +35,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     // https://www.jianshu.com/p/681589927f1f
@@ -101,21 +87,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.50@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    implementation 'com.airbnb.android:lottie:2.7.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.airbnb.android:lottie:4.1.0'
 
-    implementation project(path: ':GaiaXAndroid')
+    implementation 'com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT'
+    implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {
+    androidTestImplementation 'androidx.annotation:annotation:1.3.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0') {
         exclude group: 'javax.inject'
     }
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 }
 
 afterEvaluate {
@@ -133,7 +123,7 @@ afterEvaluate {
                 if (project.hasProperty("group")) {
                     groupId = project.getProperty("group")
                 } else {
-                    groupId = 'com.github.alibaba'
+                    groupId = 'com.github.alibaba.GaiaX'
                 }
 
                 artifactId = 'GaiaX-Adapter'

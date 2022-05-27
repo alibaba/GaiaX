@@ -7,7 +7,8 @@ import com.alibaba.fastjson.JSONObject
 object AssetsUtils {
 
     fun parseAssets(context: Context, path: String): JSONObject {
-        val content = context.resources.assets.open(path).bufferedReader(Charsets.UTF_8).use { it.readText() }
+        val content =
+            context.resources.assets.open(path).bufferedReader(Charsets.UTF_8).use { it.readText() }
         return JSON.parseObject(content)
     }
 

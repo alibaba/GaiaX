@@ -22,6 +22,10 @@
 
 @implementation GXExpression
 
++ (void)setup{
+    [GXNativeAnalyze sharedInstance];
+}
+
 + (id)valueWithExpression:(id)expression Source:(NSDictionary *)source{
     id value = [[GXNativeAnalyze sharedInstance] valueWithExpression:expression Source:source];
     return value;

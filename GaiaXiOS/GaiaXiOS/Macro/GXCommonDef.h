@@ -37,6 +37,7 @@
 #define kGXComDef_KW_Custom        @"custom"//自定义模板
 #define kGXComDef_KW_Scroll        @"scroll"//横滑容器
 #define kGXComDef_KW_Grid          @"grid"//栅格容器
+#define kGXComDef_KW_Slider        @"slider"//栅格容器
 
 //the template content - key
 #define kGXComDef_KW_VH            @"vh"//层级

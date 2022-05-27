@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GXExpression : NSObject
 
+//用于初始化表达式
++ (void)setup;
+
 /// 通过表达式获取值
 /// @param expression 表达式内容（number，string类型）
 /// @param source 数据源

@@ -2,7 +2,7 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
@@ -1010,6 +1010,35 @@ class GXComponentTextTest : GXBaseTest() {
 
     /**
      * TODO:
+     * 优酷版本，在这种情况下，给出了错误的处理结果
+     * 开源版本，不处理这种情况，直接抛出异常
+     */
+    @Test
+    fun template_text_fitcontent_lines_0_width_null_height_100px_youku_version() {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isPreventFitContentThrowException(): Boolean {
+                return true
+            }
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_null_height_100px"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isPreventFitContentThrowException(): Boolean {
+                return false
+            }
+        })
+    }
+
+    /**
+     * TODO:
      * 优酷版本，文字宽度为实际文字宽度，高度也为实际文字高度
      * 开源版本包，文字宽度为设置的文字宽度，高度为自适应的高度
      */
@@ -1142,8 +1171,8 @@ class GXComponentTextTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1080F, rootView.width())
-        Assert.assertEquals(99F, rootView.child(0).width())
-        Assert.assertEquals(1080F - 99F - 39F - 39F, rootView.child(1).width())
+        Assert.assertEquals(36F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(), rootView.child(1).width())
     }
 
     @Test
@@ -1196,5 +1225,26 @@ class GXComponentTextTest : GXBaseTest() {
         )
 
         Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).width())
+    }
+
+    @Test
+    fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(20F.dpToPx())
+        val widthSpec =
+            View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
+        textView.measure(widthSpec, 0)
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 }

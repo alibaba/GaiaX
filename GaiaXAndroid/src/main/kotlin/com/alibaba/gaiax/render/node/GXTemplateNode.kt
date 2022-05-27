@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
@@ -74,20 +75,18 @@ data class GXTemplateNode(
         return dataValueCache
     }
 
+    fun reset() {
+        resetData()
+        visualTemplateNode?.reset()
+
+        // 此处不能重置config和css，不会产生好处，仅有负面影响
+        // 如果外部按异步调用更新逻辑，那么重置config和css可能导致取值为空，从而抛出异常
+        // resetBasic()
+    }
+
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
-
-    fun reset() {
-        resetData()
-
-        visualTemplateNode?.reset()
-        finalCss = null
-        finalGridConfig = null
-        finalScrollConfig = null
-    }
-
-    var finalGridConfig: GXGridConfig? = null
 
     fun resetData() {
         dataExtendCache = null
@@ -95,7 +94,18 @@ data class GXTemplateNode(
         dataCache = null
     }
 
+    private fun resetBasic() {
+        finalCss = null
+        finalGridConfig = null
+        finalScrollConfig = null
+        finalSliderConfig = null
+    }
+
+    var finalGridConfig: GXGridConfig? = null
+
     var finalScrollConfig: GXScrollConfig? = null
+
+    var finalSliderConfig: GXSliderConfig? = null
 
     var finalCss: GXCss? = null
 
@@ -129,6 +139,10 @@ data class GXTemplateNode(
                 finalScrollConfig = GXScrollConfig.create(it, extendCssData)
             }
 
+            layer.sliderConfig?.let {
+                finalSliderConfig = GXSliderConfig.create(it, extendCssData)
+            }
+
             // 合并原有CSS和扩展属性的CSS
             GXCss.create(css, extendCss)
         } else {
@@ -139,6 +153,10 @@ data class GXTemplateNode(
 
             layer.scrollConfig?.let {
                 finalScrollConfig = it
+            }
+
+            layer.sliderConfig?.let {
+                finalSliderConfig = it
             }
 
             css
@@ -173,6 +191,8 @@ data class GXTemplateNode(
     fun isContainerType(): Boolean = layer.isContainerType()
 
     fun isGridType(): Boolean = layer.isGridType()
+
+    fun isSliderType(): Boolean = layer.isSliderType()
 
     fun isGaiaTemplateType(): Boolean = layer.isGaiaTemplate()
 

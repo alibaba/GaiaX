@@ -1,0 +1,15 @@
+{
+    "data":{
+        "gx-slider":{
+            "value":"$nodes",
+            "extend": {
+                "slider-scroll-time-interval": 3000,
+                "slider-infinity-scroll": true,
+                "slider-has-indicator": true,
+                "slider-selected-index": 1,
+                "slider-indicator-selected-color": "'#FFFFFF'",
+                "slider-indicator-unselected-color": "'#BBBBBB'"
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+[package]
+name = "stretch"
+version = "0.3.2"
+authors = ["Emil Sjölander <emil@visly.app>"]
+edition = "2018"
+include = ["src/**/*", "Cargo.toml"]
+description = "High performance & cross-platform Flexbox implementation"
+repository = "https://github.com/vislyhq/stretch"
+readme = "README.md"
+keywords = ["ios", "android", "cross-platform", "layout", "flexbox"]
+categories = ["gui"]
+license-file = "LICENSE"
+
+[badges]
+circle-ci = { repository = "vislyhq/stretch", branch = "master" }
+maintenance = { status = "experimental" }
+
+[dependencies]
+arrayvec = { version = "0.5.1", default-features = false }
+hash32 = "0.1.1"
+hash32-derive = "0.1.0"
+heapless = "0.5.1"
+num-traits = { version = "0.2.10", default-features = false }
+typenum = "1.11.2"
+
+[dependencies.hashbrown]
+version = "0.6.3"
+optional = true
+
+[dependencies.serde]
+version = "1.0.102"
+features = ["serde_derive"]
+optional = true
+
+[features]
+default = ["std"]
+alloc = ["hashbrown"]
+std = ["num-traits/std"]
+serde_camel_case = ["serde"]
+serde_kebab_case = ["serde"]
+
+[dev-dependencies]
+criterion = "0.3.0"
+
+[profile.release]
+lto = true
+panic = 'abort'
+
+[[bench]]
+name = "generated"
+path = "benches/generated/mod.rs"
+harness = false
+
+[[bench]]
+name = "complex"
+harness = false
+
+[workspace]
+members = [ "scripts/gentest" ]

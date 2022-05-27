@@ -2,10 +2,10 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.test.runner.AndroidJUnit4
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.alibaba.fastjson.JSONArray
@@ -295,8 +295,8 @@ class GXComponentScrollTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(
-            LinearLayoutManager.HORIZONTAL,
-            ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation
+            androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as? androidx.recyclerview.widget.LinearLayoutManager)?.orientation
         )
     }
 
@@ -327,8 +327,8 @@ class GXComponentScrollTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(
-            LinearLayoutManager.VERTICAL,
-            ((rootView as RecyclerView).layoutManager as? LinearLayoutManager)?.orientation
+            androidx.recyclerview.widget.LinearLayoutManager.VERTICAL,
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as? androidx.recyclerview.widget.LinearLayoutManager)?.orientation
         )
     }
 
@@ -1078,7 +1078,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             0,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as androidx.recyclerview.widget.LinearLayoutManager).getFieldInt("mPendingScrollPosition")
         )
     }
 
@@ -1110,7 +1110,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             3,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as androidx.recyclerview.widget.LinearLayoutManager).getFieldInt("mPendingScrollPosition")
         )
     }
 
@@ -1141,7 +1141,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             3,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as androidx.recyclerview.widget.LinearLayoutManager).getFieldInt("mPendingScrollPosition")
         )
 
         GXTemplateEngine.instance.bindData(
@@ -1160,7 +1160,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             3,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+            ((rootView as androidx.recyclerview.widget.RecyclerView).layoutManager as androidx.recyclerview.widget.LinearLayoutManager).getFieldInt("mPendingScrollPosition")
         )
     }
 

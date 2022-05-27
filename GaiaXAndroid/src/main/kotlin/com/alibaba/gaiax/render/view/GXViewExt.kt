@@ -20,9 +20,9 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -333,25 +333,25 @@ fun View.setGridContainerDirection(
     val direction: Int = config.direction
     val column: Int = config.column(context)
     val scrollEnable: Boolean = config.scrollEnable
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         val needForceRefresh =
             (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
                 ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
-            val target = object : GridLayoutManager(this.context, column, direction, false) {
+            val target = object : androidx.recyclerview.widget.GridLayoutManager(this.context, column, direction, false) {
                 override fun canScrollHorizontally(): Boolean {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     return false
                 }
 
                 override fun canScrollVertically(): Boolean {
-                    return direction == LinearLayoutManager.VERTICAL && scrollEnable
+                    return direction == androidx.recyclerview.widget.LinearLayoutManager.VERTICAL && scrollEnable
                 }
             }
             this.layoutManager = target
         } else {
-            (this.layoutManager as GridLayoutManager).spanCount = column
+            (this.layoutManager as androidx.recyclerview.widget.GridLayoutManager).spanCount = column
         }
     }
 }
@@ -376,13 +376,17 @@ fun View.setSpanSizeLookup() {
  * @suppress
  */
 fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         val needForceRefresh =
             (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
                 ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
-            val target = LinearLayoutManager(this.context, direction, false)
+            val target = androidx.recyclerview.widget.LinearLayoutManager(
+                this.context,
+                direction,
+                false
+            )
             this.layoutManager = target
         }
     }
@@ -392,7 +396,7 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
  * @suppress
  */
 fun View.setScrollContainerPadding(padding: Rect) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         this.setPadding(padding.left, padding.top, padding.right, padding.bottom)
     }
 }
@@ -405,21 +409,21 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
     itemSpacing: Int,
     rowSpacing: Int
 ) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         if (this.itemDecorationCount > 0) {
             return
         }
-        val decoration = object : RecyclerView.ItemDecoration() {
+        val decoration = object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
 
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
+                parent: androidx.recyclerview.widget.RecyclerView,
+                state: androidx.recyclerview.widget.RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
 
-                val manager: GridLayoutManager = parent.layoutManager as GridLayoutManager
+                val manager: androidx.recyclerview.widget.GridLayoutManager = parent.layoutManager as androidx.recyclerview.widget.GridLayoutManager
                 val childPosition: Int = parent.getChildAdapterPosition(view)
                 val itemCount: Int = parent.adapter?.itemCount ?: 0
                 val spanCount = manager.spanCount
@@ -429,7 +433,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                 val itemHeight = view.layoutParams.height
 
                 // 在一行的状态下，需要特殊处理上下居中的问题
-                if (orientation == GridLayoutManager.VERTICAL && (itemCount * 1.0F / spanCount) <= 1 && itemHeight > 0 && containerHeight > 0) {
+                if (orientation == androidx.recyclerview.widget.GridLayoutManager.VERTICAL && (itemCount * 1.0F / spanCount) <= 1 && itemHeight > 0 && containerHeight > 0) {
                     val heightDiff = containerHeight - itemHeight
                     if (heightDiff > 0) {
                         val value = (heightDiff / 2.0F).toInt()
@@ -508,7 +512,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                 var top: Float
                 var bottom: Float
 
-                if (orientation == GridLayoutManager.VERTICAL) {
+                if (orientation == androidx.recyclerview.widget.GridLayoutManager.VERTICAL) {
 
                     // 横向的总空间
                     // 总共的padding值
@@ -600,16 +604,16 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
  * @suppress
  */
 fun View.setVerticalScrollContainerLineSpacing(lineSpacing: Int) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         if (this.itemDecorationCount > 0) {
             return
         }
-        val decoration = object : RecyclerView.ItemDecoration() {
+        val decoration = object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
+                parent: androidx.recyclerview.widget.RecyclerView,
+                state: androidx.recyclerview.widget.RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
@@ -628,16 +632,16 @@ fun View.setVerticalScrollContainerLineSpacing(lineSpacing: Int) {
  * @suppress
  */
 fun View.setHorizontalScrollContainerLineSpacing(lineSpacing: Int) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         if (this.itemDecorationCount > 0) {
             return
         }
-        val decoration = object : RecyclerView.ItemDecoration() {
+        val decoration = object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
+                parent: androidx.recyclerview.widget.RecyclerView,
+                state: androidx.recyclerview.widget.RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
@@ -656,16 +660,16 @@ fun View.setHorizontalScrollContainerLineSpacing(lineSpacing: Int) {
  * @suppress
  */
 fun View.setHorizontalScrollContainerLineSpacing(left: Int, right: Int, lineSpacing: Int) {
-    if (this is RecyclerView) {
+    if (this is androidx.recyclerview.widget.RecyclerView) {
         if (this.itemDecorationCount > 0) {
             return
         }
-        val decoration = object : RecyclerView.ItemDecoration() {
+        val decoration = object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
+                parent: androidx.recyclerview.widget.RecyclerView,
+                state: androidx.recyclerview.widget.RecyclerView.State
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {

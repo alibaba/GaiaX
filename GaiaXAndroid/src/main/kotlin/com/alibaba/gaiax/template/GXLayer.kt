@@ -62,6 +62,10 @@ data class GXLayer constructor(
      */
     val gridConfig: GXGridConfig? = null,
     /**
+     * slider配置
+     */
+    val sliderConfig: GXSliderConfig? = null,
+    /**
      * 子节点
      */
     val layers: MutableList<GXLayer> = mutableListOf()
@@ -134,6 +138,14 @@ data class GXLayer constructor(
                         scrollable
                     )
                 )
+                isSliderType(type, subType) -> GXLayer(
+                    id = id,
+                    css = css ?: id,
+                    type = type,
+                    subType = subType,
+                    customNodeClass = viewClass,
+                    sliderConfig = GXSliderConfig.create(data)
+                )
                 else -> GXLayer(
                     id = id,
                     css = css ?: id,
@@ -151,6 +163,9 @@ data class GXLayer constructor(
 
         private fun isScrollType(type: String, subType: String?) =
             type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
+
+        private fun isSliderType(type: String, subType: String?) =
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
 
         private fun initChildrenLayer(data: JSONObject, layer: GXLayer) {
             data.getJSONArray(GXTemplateKey.GAIAX_LAYERS)?.forEach {
@@ -177,7 +192,7 @@ data class GXLayer constructor(
      * 是否是容器类型
      */
     fun isContainerType(): Boolean {
-        return isScrollType() || isGridType()
+        return isScrollType() || isGridType() || isSliderType()
     }
 
     /**
@@ -249,13 +264,18 @@ data class GXLayer constructor(
     fun isImageType(): Boolean = GXViewKey.VIEW_TYPE_IMAGE == type
 
     /**
+     * Slider 容器节点类型
+     */
+    fun isSliderType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
+
+    /**
      * 是否能够被合并
      */
     fun isCanMergeType(): Boolean =
         !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE || type == GXViewKey.VIEW_TYPE_SHADOW_LAYOUT)
 
     override fun toString(): String {
-        return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, layers=${layers.size})"
+        return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, sliderConfig=$sliderConfig, layers=$layers)"
     }
 
 }

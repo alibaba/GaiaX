@@ -24,7 +24,8 @@ import com.alibaba.gaiax.template.GXTemplate
 /**
  * @suppress
  */
-open class GXAssetsTemplate(open val context: Context) : GXRegisterCenter.GXIExtensionTemplateSource {
+open class GXAssetsTemplate(open val context: Context) :
+    GXRegisterCenter.GXIExtensionTemplateSource {
 
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 

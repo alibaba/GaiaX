@@ -388,4 +388,11 @@ object GXTemplateKey {
     const val GAIAX_ANIMATION_TYPE_PROP = "PROP"
 
 
+    // GXSliderView
+    const val GAIAX_LAYER_SLIDER_SCROLL_TIME_INTERVAL = "slider-scroll-time-interval"
+    const val GAIAX_LAYER_SLIDER_INFINITY_SCROLL = "slider-infinity-scroll"
+    const val GAIAX_LAYER_SLIDER_HAS_INDICATOR = "slider-has-indicator"
+    const val GAIAX_LAYER_SLIDER_SELECTED_INDEX = "slider-selected-index"
+    const val GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR = "slider-indicator-selected-color"
+    const val GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR = "slider-indicator-unselected-color"
 }

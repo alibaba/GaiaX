@@ -24,7 +24,10 @@ import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXColor
+import com.alibaba.gaiax.template.GXSize
+import com.alibaba.gaiax.template.GXStyleConvert
+import com.alibaba.gaiax.template.GXTemplateKey
 import java.util.concurrent.ConcurrentHashMap
 import java.util.regex.Pattern
 

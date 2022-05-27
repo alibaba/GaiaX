@@ -21,9 +21,9 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
-import android.support.annotation.Keep
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.AppCompatImageView
+import androidx.annotation.Keep
+import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView

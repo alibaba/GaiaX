@@ -6,7 +6,7 @@ install:
    - echo `pwd`
    - ls -ll
    - echo "GROUP=${GROUP} ARTIFACT=GaiaX-Analyze VERSION=${VERSION}"
-   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
+   - ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
    - cd ~/.m2/repository/com/github/alibaba
    - ls -ll
    - echo "Publish GaiaX"
@@ -14,6 +14,14 @@ install:
    - echo `pwd`
    - ls -ll
    - echo "GROUP=${GROUP} ARTIFACT=GaiaX VERSION=${VERSION}"
-   - ./gradlew clean build -Pgroup=${GROUP} -Pversion=${VERSION} -xtest -xlint publishToMavenLocal
+   - ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd ~/.m2/repository/com/github/alibaba
+   - ls -ll
+   - echo "Publish GaiaX Adapter"
+   - cd /home/jitpack/build/GaiaXAdapterAndroid
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=GaiaX-Adapter VERSION=${VERSION}"
+   - ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
    - cd ~/.m2/repository/com/github/alibaba
    - ls -ll

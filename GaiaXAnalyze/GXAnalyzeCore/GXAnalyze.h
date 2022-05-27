@@ -6,8 +6,10 @@
 #include "GXATSNode.h"
 #include "GXWordAnalyze.h"
 #include <vector>
-#include "GXDataWarehouse.h"
 #include "GXValue.h"
+#include <set>
+#include <unordered_map>
+
 
 using namespace std;
 

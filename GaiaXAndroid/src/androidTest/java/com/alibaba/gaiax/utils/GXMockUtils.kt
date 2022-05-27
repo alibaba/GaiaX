@@ -18,7 +18,7 @@ package com.alibaba.gaiax.utils
 
 import android.content.Context
 import android.os.Build
-import android.support.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.GXLayer
@@ -121,6 +121,14 @@ object GXMockUtils {
             this[GXTemplateKey.GAIAX_LAYER_ID] = "layerId" + layerIdCount++
             this[GXTemplateKey.GAIAX_LAYER_TYPE] = GXViewKey.VIEW_TYPE_CUSTOM
             this[GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS] = "com.alibaba.view.CustomView"
+        })
+    }
+
+    fun createSliderTypeLayer(): GXLayer {
+        return GXLayer.create(JSONObject().apply {
+            this[GXTemplateKey.GAIAX_LAYER_ID] = "layerId" + layerIdCount++
+            this[GXTemplateKey.GAIAX_LAYER_TYPE] = GXViewKey.VIEW_TYPE_GAIA_TEMPLATE
+            this[GXTemplateKey.GAIAX_LAYER_SUB_TYPE] = GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
         })
     }
 }

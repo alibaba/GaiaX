@@ -24,94 +24,93 @@ import com.alibaba.gaiax.render.node.GXNodeTreeUpdater
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdater
-import java.lang.ref.SoftReference
 
 /**
  * @suppress
  */
 class GXRenderImpl {
 
-    fun createNode(templateContext: GXTemplateContext): GXNode {
-        val rootNode = GXNodeTreeCreator.create(templateContext)
-        templateContext.rootNode = rootNode
+    fun createNode(gxTemplateContext: GXTemplateContext): GXNode {
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
         return rootNode
     }
 
-    fun bindNodeData(templateContext: GXTemplateContext) {
-        val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
-        templateContext.isDirty = false
+    fun bindNodeData(gxTemplateContext: GXTemplateContext) {
+        val rootNode = gxTemplateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null(bindNodeData) gxTemplateContext = $gxTemplateContext")
+        gxTemplateContext.isDirty = false
 
         // Update the virtual node tree
-        GXNodeTreeUpdater(templateContext).buildLayoutAndStyle()
+        GXNodeTreeUpdater(gxTemplateContext).buildLayoutAndStyle()
     }
 
-    fun createView(templateContext: GXTemplateContext): View {
+    fun createView(gxTemplateContext: GXTemplateContext): View {
         // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(templateContext)
-        templateContext.rootNode = rootNode
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
 
         // Create a view based on the virtual node tree
-        val rootView = GXViewTreeCreator(templateContext, rootNode).build().apply {
-            (this as GXIRootView).setTemplateContext(templateContext)
+        val rootView = GXViewTreeCreator(gxTemplateContext, rootNode).build().apply {
+            (this as GXIRootView).setTemplateContext(gxTemplateContext)
         }
-        templateContext.rootView = SoftReference(rootView)
+        gxTemplateContext.rootView = rootView
 
-        return templateContext.rootView?.get()
-            ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
+        return gxTemplateContext.rootView
+            ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
-    fun createViewOnlyNodeTree(templateContext: GXTemplateContext): GXNode {
+    fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
         // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(templateContext)
-        templateContext.rootNode = rootNode
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
         return rootNode
     }
 
-    fun createViewOnlyViewTree(templateContext: GXTemplateContext): View {
-        val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("Create template view exception, root node null")
+    fun createViewOnlyViewTree(gxTemplateContext: GXTemplateContext): View {
+        val rootNode = gxTemplateContext.rootNode
+            ?: throw IllegalArgumentException("Create template view exception, root node null, $gxTemplateContext")
 
         // Create a view based on the virtual node tree
-        val rootView = GXViewTreeCreator(templateContext, rootNode).build().apply {
-            (this as GXIRootView).setTemplateContext(templateContext)
+        val rootView = GXViewTreeCreator(gxTemplateContext, rootNode).build().apply {
+            (this as GXIRootView).setTemplateContext(gxTemplateContext)
         }
-        templateContext.rootView = SoftReference(rootView)
+        gxTemplateContext.rootView = rootView
 
-        return templateContext.rootView?.get()
-            ?: throw IllegalArgumentException("Create template view exception, templateContext = $templateContext")
+        return gxTemplateContext.rootView
+            ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
-    fun bindViewData(templateContext: GXTemplateContext) {
-        val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+    fun bindViewData(gxTemplateContext: GXTemplateContext) {
+        val rootNode = gxTemplateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null(bindViewData) gxTemplateContext = $gxTemplateContext")
 
         // Resetting the Template Status
-        templateContext.isDirty = false
+        gxTemplateContext.isDirty = false
 
         // Update the virtual node tree
-        GXNodeTreeUpdater(templateContext).buildLayoutAndStyle()
+        GXNodeTreeUpdater(gxTemplateContext).buildLayoutAndStyle()
 
         // Update view layout
-        GXViewTreeUpdater(templateContext, rootNode).build()
+        GXViewTreeUpdater(gxTemplateContext, rootNode).build()
     }
 
-    fun bindViewDataOnlyNodeTree(templateContext: GXTemplateContext) {
+    fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
-        templateContext.isDirty = false
+        gxTemplateContext.isDirty = false
 
         // Update the node tree
-        GXNodeTreeUpdater(templateContext).buildNodeLayout()
+        GXNodeTreeUpdater(gxTemplateContext).buildNodeLayout()
     }
 
-    fun bindViewDataOnlyViewTree(templateContext: GXTemplateContext) {
-        val rootNode = templateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null")
+    fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
+        val rootNode = gxTemplateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree) gxTemplateContext = $gxTemplateContext")
 
         // Update the view tree
-        GXNodeTreeUpdater(templateContext).buildViewStyle()
+        GXNodeTreeUpdater(gxTemplateContext).buildViewStyle()
 
         // Update view layout
-        GXViewTreeUpdater(templateContext, rootNode).build()
+        GXViewTreeUpdater(gxTemplateContext, rootNode).build()
     }
 }

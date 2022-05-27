@@ -21,6 +21,7 @@ import android.text.TextUtils
 import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
 
 /**
@@ -122,7 +123,12 @@ data class GXStyle(
                 borderColor = convertStyle.borderColor(css),
                 fontLineHeight = convertStyle.fontLineHeight(css),
                 fontTextDecoration = convertStyle.textDecoration(css),
-                boxShadow = convertStyle.boxShadow(css)
+                boxShadow = convertStyle.boxShadow(css),
+                fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
+                    convertStyle.fitContent(css)
+                } else {
+                    null
+                }
             )
         }
 

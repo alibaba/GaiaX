@@ -1172,7 +1172,10 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(1080F, rootView.width())
         Assert.assertEquals(36F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(
+            1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(),
+            rootView.child(1).width()
+        )
     }
 
     @Test
@@ -1246,5 +1249,32 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
+    }
+
+    @Test
+    fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent_youku_version() {
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isCompatibilityDataBindingFitContent(): Boolean {
+                return true
+            }
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isCompatibilityDataBindingFitContent(): Boolean {
+                return false
+            }
+        })
     }
 }

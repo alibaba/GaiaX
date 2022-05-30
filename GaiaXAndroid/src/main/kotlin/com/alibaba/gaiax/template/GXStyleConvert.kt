@@ -234,6 +234,13 @@ class GXStyleConvert {
                 val colors = getLinearGradientColors(linear)
                 val direction = getDirection(linear)
                 return GXLinearColor(direction, colors)
+            } else {
+                GXColor.parseColor(it)?.let {
+                    val intColors = IntArray(2)
+                    intColors[0] = it
+                    intColors[1] = it
+                    return GXLinearColor(GradientDrawable.Orientation.LEFT_RIGHT, intColors)
+                }
             }
             return null
         }

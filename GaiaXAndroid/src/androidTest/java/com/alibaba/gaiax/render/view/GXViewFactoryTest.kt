@@ -16,8 +16,8 @@
 
 package com.alibaba.gaiax.render.view
 
-import androidx.test.platform.app.InstrumentationRegistry
 import android.view.View
+import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXGridView
 import com.alibaba.gaiax.render.view.container.GXScrollView

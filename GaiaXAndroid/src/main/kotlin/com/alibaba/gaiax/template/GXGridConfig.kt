@@ -63,7 +63,7 @@ data class GXGridConfig(
 
     val isHorizontal
         get():Boolean {
-            return direction == androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+            return direction == LinearLayoutManager.HORIZONTAL
         }
 
     companion object {

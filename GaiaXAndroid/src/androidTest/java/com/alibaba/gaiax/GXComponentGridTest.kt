@@ -2,9 +2,8 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.FrameLayout
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -971,10 +970,10 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
-        Assert.assertEquals(true, (rootView as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollVertically())
+        Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
         Assert.assertEquals(
             false,
-            (rootView as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollHorizontally()
+            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
         )
     }
 
@@ -1007,10 +1006,10 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(200F.dpToPx(), rootView.height())
-        Assert.assertEquals(true, (rootView as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollVertically())
+        Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
         Assert.assertEquals(
             false,
-            (rootView as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollHorizontally()
+            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
         )
     }
 
@@ -1051,11 +1050,11 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(
             true,
-            (rootView.child(1) as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollVertically()
+            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollVertically()
         )
         Assert.assertEquals(
             false,
-            (rootView.child(1) as? androidx.recyclerview.widget.RecyclerView)?.layoutManager?.canScrollHorizontally()
+            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollHorizontally()
         )
     }
 

@@ -2,11 +2,11 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.Paint
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize
@@ -1172,7 +1172,10 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(1080F, rootView.width())
         Assert.assertEquals(36F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(
+            1080F - 36F.dpToPx() - 14F.dpToPx() - 14F.dpToPx(),
+            rootView.child(1).width()
+        )
     }
 
     @Test

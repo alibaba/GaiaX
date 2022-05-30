@@ -1,7 +1,7 @@
 package com.alibaba.gaiax
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.view.View
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent

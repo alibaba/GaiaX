@@ -44,7 +44,7 @@ The following goals are the way forward for our project:
 ## Core Concept
 
 <p align="center">
-    <img src="https://gw.alicdn.com/imgextra/i1/O1CN01RkMn5l1qUaj25LCFp_!!6000000005499-2-tps-2901-886.png" width="1000" alt="GaiaX-arch">
+    <img src="https://gw.alicdn.com/imgextra/i3/O1CN01Y4sMkn1Nmnc7thyzR_!!6000000001613-2-tps-3423-886.png" width="1000" alt="GaiaX-arch">
 </p>
 
 

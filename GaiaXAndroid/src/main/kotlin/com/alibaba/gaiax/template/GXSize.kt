@@ -39,9 +39,18 @@ sealed class GXSize {
                 value.endsWith(GXTemplateKey.GAIAX_PE) -> PE(value, convertPE(value))
                 value == GXTemplateKey.GAIAX_AUTO -> Auto
                 value.isNotBlank() -> {
+
+                    // 先判断是否可以转化为数字，如果可以，那么直接转换
+                    value.toFloatOrNull()?.let {
+                        return PX(value, it.dpToPx())
+                    }
+
+                    // 桥接到外部处理
                     GXRegisterCenter.instance.extensionSize?.create(value)?.let {
                         return PX(value, it)
                     }
+
+                    // 返回未定义
                     return Undefined
                 }
                 else -> Undefined

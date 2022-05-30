@@ -32,16 +32,16 @@ object GXContainerConvert {
 
     fun edgeInsets(edgeInsets: String?): Rect? = if (edgeInsets?.isNotEmpty() == true) {
         val edge = edgeInsets.replace("{", "").replace("}", "").split(",")
-        val top = GXSize.create(edge[0] + "px").valueInt
-        val left = GXSize.create(edge[1] + "px").valueInt
-        val bottom = GXSize.create(edge[2] + "px").valueInt
-        val right = GXSize.create(edge[3] + "px").valueInt
+        val top = GXSize.create(edge[0]).valueInt
+        val left = GXSize.create(edge[1]).valueInt
+        val bottom = GXSize.create(edge[2]).valueInt
+        val right = GXSize.create(edge[3]).valueInt
         Rect(left, top, right, bottom)
     } else {
         null
     }
 
     fun spacing(itemSpacing: String?): Int {
-        return itemSpacing?.let { GXSize.create(it + "px").valueInt } ?: 0
+        return itemSpacing?.let { GXSize.create(it).valueInt } ?: 0
     }
 }

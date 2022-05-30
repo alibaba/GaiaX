@@ -1,0 +1,34 @@
+{
+  "id": "yk-vip-equity-item",
+  "type": "gaia-template",
+  "package": {
+    "id": "yk-vip-equity-item",
+    "version": "0.0.1",
+    "constraint-size": { "width": 165, "height": 400, "zoom": 1 },
+    "modify-timestamp": "Mon May 30 2022 14:43:00 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "top-view",
+      "type": "view",
+      "layers": [
+        { "id": "top-img", "type": "image" },
+        {
+          "id": "mark-view",
+          "type": "view",
+          "layers": [{ "id": "mark-text", "type": "text" }]
+        }
+      ]
+    },
+    { "id": "title", "type": "text" },
+    {
+      "id": "button",
+      "type": "view",
+      "layers": [
+        { "id": "button-bg", "type": "view" },
+        { "id": "button-text", "type": "text" }
+      ]
+    }
+  ]
+}

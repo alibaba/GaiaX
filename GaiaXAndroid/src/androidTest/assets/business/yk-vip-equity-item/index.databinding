@@ -1,0 +1,27 @@
+{
+  "data": {
+    "top-img": { "value": "${data.img}" },
+    "mark-view": {
+      "extend": { "display": "@{ ${data.markText} ? flex : none }" }
+    },
+    "mark-text": {
+      "extend": { "fit-content": "true" },
+      "value": "${data.markText}"
+    },
+    "title": { "value": "${data.title}" },
+    "button-bg": {
+      "extend": {
+        "background-image": "@{ eval(${data.button.status}  == 0 ) ? linear-gradient(to bottom right,#ff3a6d 0%,#ff5aa1 100%) : transparent }",
+        "border-color": "@{ eval(${data.button.status}  != 0 ) ? #454851 : transparent}",
+        "border-width": "@{ eval(${data.button.status}  != 0 ) ? 1px : 0px}"
+      }
+    },
+    "button-text": {
+      "value": "${data.button.text}",
+      "extend": {
+        "color": "@{ eval(${data.button.status} == 0) ? #FFFFFF : #9d9fa8 }"
+      }
+    }
+  },
+  "event": { "button-bg": "${data.button.action}" }
+}

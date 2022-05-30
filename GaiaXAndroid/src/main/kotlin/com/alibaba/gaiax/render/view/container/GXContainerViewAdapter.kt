@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.render.view.container
 
 import android.annotation.SuppressLint
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -32,14 +31,15 @@ import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_SCROLL_FOOTER
+import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
 /**
  * @suppress
  */
-class GXViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+class GXViewHolder(itemView: View) :
+    androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
     var childTag: Any? = null
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
@@ -68,9 +68,15 @@ class GXContainerViewAdapter(
         val childTemplateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
 
+        val isChildFooterItem = childTemplateItem == footerTemplateItem
+
+
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
 
-        val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
+        val childItemViewPort = if (isChildFooterItem)
+            GXNodeUtils.computeFooterItemViewPort(gxTemplateContext, gxNode)
+        else
+            GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
 
         val childMeasureSize = GXTemplateEngine.GXMeasureSize(
             childItemViewPort.width, childItemViewPort.height
@@ -83,13 +89,24 @@ class GXContainerViewAdapter(
         )
 
         // TODO: 此处可能有耗时问题，可以进行优化
-        val childContainerSize = GXNodeUtils.computeContainerItemSize(
-            childTemplateContext,
-            gxNode,
-            childTemplateItem,
-            childVisualNestTemplateNode,
-            containerData
-        )
+        val childContainerSize = if (isChildFooterItem)
+            GXNodeUtils.computeContainerFooterItemSize(
+                childTemplateContext,
+                gxNode,
+                childItemViewPort,
+                childTemplateItem,
+                childVisualNestTemplateNode,
+                containerData
+            )
+        else
+            GXNodeUtils.computeContainerItemSize(
+                childTemplateContext,
+                gxNode,
+                childItemViewPort,
+                childTemplateItem,
+                childVisualNestTemplateNode,
+                containerData
+            )
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
@@ -134,7 +151,10 @@ class GXContainerViewAdapter(
 
         val childItemPosition = holder.adapterPosition
 
-        val childItemData = containerData.getJSONObject(childItemPosition) ?: JSONObject()
+        val childItemData = if (childItemPosition < containerData.size)
+            containerData.getJSONObject(childItemPosition) ?: JSONObject()
+        else
+            JSONObject()
 
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
@@ -188,11 +208,10 @@ class GXContainerViewAdapter(
             val viewType: Int = footerTemplateItem.hashCode()
             viewTypeMap[viewType] = footerTemplateItem
             positionMap[position] = footerTemplateItem
-            containerData.add(JSONObject())
             return viewType
         }
 
-        // multi type
+        // normal multi type
         val normalTemplateItem = getCurrentPositionTemplateItem(position)
         if (normalTemplateItem != null) {
             val viewType: Int = normalTemplateItem.templateId.hashCode()
@@ -201,6 +220,7 @@ class GXContainerViewAdapter(
             return viewType
         }
 
+        // normal type
         return super.getItemViewType(position)
     }
 
@@ -229,14 +249,14 @@ class GXContainerViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (hasFooterView()) {
+        return if (hasFooter()) {
             containerData.size + 1;
         } else {
             containerData.size
         }
     }
 
-    private fun hasFooterView(): Boolean {
+    fun hasFooter(): Boolean {
         return footerTemplateItem != null && footerTypeHasMore
     }
 
@@ -258,15 +278,16 @@ class GXContainerViewAdapter(
 
     fun initFooter() {
         val templateData: JSON = gxTemplateContext.templateData?.data ?: return
-        gxNode.templateNode.getExtend(templateData)?.let { typeData ->
-            typeData.getJSONObject(GAIAX_SCROLL_FOOTER)?.let {
-                footerTemplateItem = GXTemplateEngine.GXTemplateItem(
-                    gxTemplateContext.context,
-                    gxTemplateContext.templateItem.bizId,
-                    it.getString(GXTemplateKey.GAIAX_LAYER_ID)
-                )
-                footerTypeHasMore = it.getBoolean(GXTemplateKey.GAIAX_SCROLL_HAS_MORE) ?: false
-            }
+        val extend = gxNode.templateNode.getExtend(templateData)
+        val footer = extend?.getJSONObject(GAIAX_CONTAINER_FOOTER)
+        if (footer != null) {
+            val templateId = footer.getString(GXTemplateKey.GAIAX_LAYER_ID)
+            footerTemplateItem = GXTemplateEngine.GXTemplateItem(
+                gxTemplateContext.context,
+                gxTemplateContext.templateItem.bizId,
+                templateId
+            )
+            footerTypeHasMore = footer.getBoolean(GXTemplateKey.GAIAX_CONTAINER_HAS_MORE) ?: false
         }
     }
 

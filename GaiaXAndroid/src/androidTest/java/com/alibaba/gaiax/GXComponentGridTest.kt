@@ -22,6 +22,68 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXComponentGridTest : GXBaseTest() {
 
+    @Test
+    fun template_grid_load_more_fixed_footer_size() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_load_more_fixed_footer_size"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+            this["isHasMore"] = true
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).height())
+    }
+
+
+    /**
+     * 验证grid纵向滑动，footer是否加载正确
+     */
+    @Test
+    fun template_grid_load_more_padding() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_load_more_padding"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+            this["isHasMore"] = true
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx() - 10F.dpToPx() - 10F.dpToPx(), rootView.child(3).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(3).height())
+    }
+
     /**
      * 验证grid纵向滑动，footer是否加载正确
      */

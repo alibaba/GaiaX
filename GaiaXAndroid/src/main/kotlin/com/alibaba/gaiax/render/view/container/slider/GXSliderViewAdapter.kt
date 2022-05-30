@@ -16,7 +16,6 @@
 
 package com.alibaba.gaiax.render.view.container.slider
 
-import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSONArray

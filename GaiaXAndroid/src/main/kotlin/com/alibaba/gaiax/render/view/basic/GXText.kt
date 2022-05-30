@@ -19,12 +19,12 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
-import androidx.annotation.Keep
-import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
+import androidx.annotation.Keep
+import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.*

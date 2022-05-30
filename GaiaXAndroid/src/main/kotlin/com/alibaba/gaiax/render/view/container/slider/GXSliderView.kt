@@ -86,7 +86,8 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     private fun initViewPager() {
         viewPager = androidx.viewpager.widget.ViewPager(context)
-        viewPager?.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+        viewPager?.addOnPageChangeListener(object :
+            androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,

@@ -16,8 +16,6 @@
 
 package com.alibaba.gaiax.render.node
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
@@ -444,9 +442,14 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         if (targetView is androidx.recyclerview.widget.RecyclerView) {
             if (gxTemplateContext.templateData?.eventListener != null) {
                 targetView.clearOnScrollListeners()
-                targetView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                targetView.addOnScrollListener(object :
+                    androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
 
-                    override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+                    override fun onScrolled(
+                        recyclerView: androidx.recyclerview.widget.RecyclerView,
+                        dx: Int,
+                        dy: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
@@ -456,7 +459,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                             })
                     }
 
-                    override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
+                    override fun onScrollStateChanged(
+                        recyclerView: androidx.recyclerview.widget.RecyclerView,
+                        newState: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
@@ -628,6 +634,9 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         adapter.setContainerData(containerTemplateData)
         adapter.initFooter()
+        if (adapter.hasFooter()) {
+            container.setSpanSizeLookup()
+        }
     }
 
     private fun bindIconFont(

@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSONObject
 
 /**

@@ -19,10 +19,10 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.*
 import android.os.Build
-import android.support.annotation.Keep
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
+import androidx.annotation.Keep
 import com.alibaba.gaiax.R
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskBitmapShadowDrawable
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskShadowDrawable

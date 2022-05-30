@@ -46,5 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/event" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/api" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXITemplatePreviewSource>
+@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
+
+- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
+
+- (void)clearPreviewTemplates;
 
 @end
 

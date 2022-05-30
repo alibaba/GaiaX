@@ -621,12 +621,8 @@ static NSArray *GXLinesRefArray(UIFont *font,
         [self.attributes setObject:self.font forKey:NSFontAttributeName];
     }
     
-    //fit-content
+    //fit-content（仅支持CSS设置）
     BOOL fitContent = self.style.styleModel.fitContent;
-    if (!fitContent && [self.data isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dataDict = (NSDictionary *)self.data;
-        fitContent = [[dataDict gx_dictionaryForKey:@"extend"] gx_boolForKey:@"fit-content"];
-    }
     self.fitContent = fitContent;
     
     //gxadding

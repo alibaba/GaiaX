@@ -12,6 +12,7 @@ class EventTemplateActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "EventTemplateActivity"
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event_template)
@@ -31,7 +32,8 @@ class EventTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/uper.json"))
         templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
 
             override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {

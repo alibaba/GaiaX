@@ -36,13 +36,26 @@
 
 #pragma mark - GXITemplateSource
 
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId{
-    [self.previewSource gx_setObject:aTemplate forKey:templateId];
+- (NSInteger)priority{
+    //优先级最高，优先读取
+    return 99;
 }
 
-- (NSDictionary *)getPreviewTemplateWithTemplateId:(NSString *)templateId{
-    NSDictionary *resultDict = [self.previewSource gx_dictionaryForKey:templateId];
+- (NSDictionary *)getTemplateInfoWithTemplateItem:(GXTemplateItem *)templateItem{
+    NSDictionary *resultDict = nil;
+    
+    NSString *templateId = templateItem.templateId;
+    if (templateId.length) {
+        resultDict = [self.previewSource gx_dictionaryForKey:templateId];
+    }
     return resultDict;
+}
+
+
+#pragma mark - Method
+
+- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId{
+    [self.previewSource gx_setObject:aTemplate forKey:templateId];
 }
 
 - (void)clearPreviewTemplates{

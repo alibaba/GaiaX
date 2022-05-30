@@ -16,9 +16,9 @@
 
 package com.alibaba.gaiax.render.node
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -446,7 +446,11 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                 targetView.clearOnScrollListeners()
                 targetView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
@@ -456,7 +460,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                             })
                     }
 
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    override fun onScrollStateChanged(
+                        recyclerView: RecyclerView,
+                        newState: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
@@ -628,6 +635,9 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         adapter.setContainerData(containerTemplateData)
         adapter.initFooter()
+        if (adapter.hasFooter()) {
+            container.setSpanSizeLookup()
+        }
     }
 
     private fun bindIconFont(

@@ -17,7 +17,8 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -28,7 +29,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 data class GXGridConfig(
     val data: JSONObject,
     val column: Int = 1,
-    val direction: Int = LinearLayoutManager.VERTICAL,
+    val direction: Int = RecyclerView.VERTICAL,
     /**
      * Item spacing
      */

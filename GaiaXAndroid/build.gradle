@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.dokka'
 
 allprojects {
     repositories {
@@ -25,6 +26,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.10"
     }
 }
 
@@ -34,7 +36,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     // https://www.jianshu.com/p/681589927f1f
@@ -102,27 +104,26 @@ dependencies {
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.50@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:androidsupport-SNAPSHOT'
-    androidTestImplementation 'com.airbnb.android:lottie:2.7.0'
-    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2') {
+    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0') {
         exclude group: 'javax.inject'
     }
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
 }
 
-//dokkaHtml {
-//    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
-//
-//    moduleName.set("GaiaX")
-//}
+dokkaHtml {
+    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
+
+    moduleName.set("GaiaX")
+}
 
 afterEvaluate {
     publishing {

@@ -2,11 +2,11 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.test.runner.AndroidJUnit4
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText

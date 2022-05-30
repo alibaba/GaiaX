@@ -2,8 +2,8 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.support.test.runner.AndroidJUnit4
 import android.widget.TextView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -24,7 +24,10 @@ class GXCommonTest : GXBaseTest() {
             "common",
             "template_position_relative_left"
         )
-        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
         GXTemplateEngine.instance.bindData(
             rootView,
             GXTemplateEngine.GXTemplateData(JSONObject())
@@ -41,7 +44,10 @@ class GXCommonTest : GXBaseTest() {
             "common",
             "template_position_relative_databinding_left"
         )
-        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
         GXTemplateEngine.instance.bindData(
             rootView,
             GXTemplateEngine.GXTemplateData(JSONObject().apply {
@@ -59,7 +65,10 @@ class GXCommonTest : GXBaseTest() {
             "common",
             "template_position_absolute_databinding_left"
         )
-        val rootView = GXTemplateEngine.instance.createView(templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null))
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
         GXTemplateEngine.instance.bindData(
             rootView,
             GXTemplateEngine.GXTemplateData(JSONObject().apply {

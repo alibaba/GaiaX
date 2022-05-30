@@ -32,7 +32,12 @@ class DataTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/subscribe-item.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/subscribe-item.json"
+            )
+        )
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
@@ -55,14 +60,24 @@ class DataTemplateActivity : AppCompatActivity() {
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
 
         // 模板数据
-        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/subscribe-item.json"))
+        val templateData = GXTemplateEngine.GXTemplateData(
+            AssetsUtils.parseAssets(
+                activity,
+                "data/subscribe-item.json"
+            )
+        )
         templateData.dataListener = object : GXTemplateEngine.GXIDataListener {
 
             override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
                 if (gxTextData.templateItem?.templateId == "gx-subscribe-item" && gxTextData.nodeId == "title") {
                     val value = "两个光头的故事"
                     val spannableString = SpannableString(value)
-                    spannableString.setSpan(ForegroundColorSpan(Color.RED), 0, value.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.RED),
+                        0,
+                        value.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     return spannableString
                 }
                 return null

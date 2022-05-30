@@ -20,13 +20,13 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -366,7 +366,11 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
                 ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
-            val target = LinearLayoutManager(this.context, direction, false)
+            val target = LinearLayoutManager(
+                this.context,
+                direction,
+                false
+            )
             this.layoutManager = target
         }
     }
@@ -669,5 +673,22 @@ fun View.setHorizontalScrollContainerLineSpacing(left: Int, right: Int, lineSpac
             }
         }
         this.addItemDecoration(decoration)
+    }
+}
+
+fun View.setSpanSizeLookup() {
+    if (this is RecyclerView && this.layoutManager is GridLayoutManager) {
+        val adapterSize = this.adapter?.itemCount ?: 1
+        val column = (this.layoutManager as GridLayoutManager).spanCount
+        (this.layoutManager as GridLayoutManager).spanSizeLookup =
+            object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(currentPosition: Int): Int {
+                    return if (adapterSize - 1 == currentPosition) {
+                        column
+                    } else {
+                        1
+                    }
+                }
+            }
     }
 }

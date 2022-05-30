@@ -22,7 +22,6 @@ import android.graphics.drawable.StateListDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
@@ -30,6 +29,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView

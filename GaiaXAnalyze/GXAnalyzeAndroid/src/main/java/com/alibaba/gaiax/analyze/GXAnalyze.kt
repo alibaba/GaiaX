@@ -78,7 +78,7 @@ class GXAnalyze {
     fun getResult(expression: Any, data: Any?): Any? {
         when (expression) {
             is String -> {
-                if(expression.trim() == "\$\$"){
+                if (expression.trim() == "\$\$") {
                     return data
                 }
                 val result = this.getResultNative(this, expression, data);

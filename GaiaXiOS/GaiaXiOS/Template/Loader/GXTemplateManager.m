@@ -30,18 +30,14 @@
 + (NSDictionary * _Nullable)loadTemplateContentWithTemplateItem:(GXTemplateItem *)templateItem{
     //基础信息
     BOOL isLocal = templateItem.isLocal;
-    NSString *bizId = templateItem.bizId;
-    NSString *templateId = templateItem.templateId;
-    NSString *templateVersion = templateItem.templateVersion;
-    
     //读取模板信息
     NSDictionary *resultDict = nil;
     if (isLocal) {
         //只读取本地模板
-        resultDict = [[GXTemplateLoader defaultLoader] loadTemplateInfoWithBizId:bizId templateId:templateId];
+        resultDict = [TheGXRegisterCenter.defaultTemplateSource getTemplateInfoWithTemplateItem:templateItem];
     } else {
         //读取预览，远端，本地，以及推送等模板
-        resultDict = [self loadTemplateContentWithBizId:bizId templateId:templateId templateVersion:templateVersion];
+        resultDict = [self gx_loadTemplateContentWithTemplateItem:templateItem];
     }
     
     return resultDict;
@@ -83,41 +79,25 @@
 
 #pragma mark - 读取优先级逻辑
 
-+ (NSDictionary * _Nullable)loadTemplateContentWithBizId:(NSString *)bizId
-                                              templateId:(NSString *)templateId
-                                         templateVersion:(NSString *)templateVersion {
++ (NSDictionary * _Nullable)gx_loadTemplateContentWithTemplateItem:(GXTemplateItem *)templateItem {
     
-    NSDictionary *templateDict = nil;
-    if (![GXUtils isValidString:templateId]) {
-        return templateDict;
+    NSDictionary *templateInfo = nil;
+    if (![templateItem isAvailable]) {
+        return templateInfo;
     }
     
-    //预览优先
-    id previewSource = TheGXRegisterCenter.previewSource;
-    if (previewSource && [previewSource respondsToSelector:@selector(getPreviewTemplateWithTemplateId:)]) {
-        templateDict = [previewSource getPreviewTemplateWithTemplateId:templateId];
-        if (templateDict) {
-            return templateDict;
+    //读取数据源
+    NSArray *templateSources = TheGXRegisterCenter.templateSources;
+    for (int i = 0; i < templateSources.count; i++) {
+        id <GXTemplateSourceProtocal> source = templateSources[i];
+        NSDictionary *tmpTemplateInfo = [source getTemplateInfoWithTemplateItem:templateItem];
+        if (tmpTemplateInfo.count > 0) {
+            templateInfo = tmpTemplateInfo;
+            break;
         }
     }
-
-    // ① 若templateId 与 templateVersion均不为空，则优先返回对应的服务端模板
-    if (templateDict.count <= 0) {
-        templateDict = [[GXTemplateLoader defaultLoader] loadTemplateInfoWithTemplateId:templateId templateVersion:templateVersion];
-    }
     
-    // ② 优先返回服务端返回的动态模板，并按照template_version版本号倒序排列
-    if (templateDict.count <= 0) {
-        templateDict = [[GXTemplateLoader defaultLoader] loadTemplateInfoOrderByTemplateId:templateId];
-    }
-    
-    // ③ bizId不为空,则返回业务Bundle中存放的模板信息
-    if (templateDict.count <= 0) {
-        bizId = [GXUtils isValidString:bizId] ? bizId : @"GaiaX";
-        templateDict = [[GXTemplateLoader defaultLoader] loadTemplateInfoWithBizId:bizId templateId:templateId];
-    }
-    
-    return templateDict;
+    return templateInfo;
 }
 
 

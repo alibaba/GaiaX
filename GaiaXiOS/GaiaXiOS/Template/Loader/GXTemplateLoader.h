@@ -62,31 +62,4 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface GXTemplateLoader (Cloud)
-
-/// 根据模板的version倒序获取最新末班
-/// @param templateId 模板id
-- (NSDictionary *)loadTemplateInfoOrderByTemplateId:(NSString *)templateId;
-
-
-/// 同步加载沙盒模板（远端）
-/// @param templateId 模板Id
-/// @param templateVersion 模板Version
-- (NSDictionary *_Nullable)loadTemplateInfoWithTemplateId:(NSString *)templateId
-                                          templateVersion:(NSString *)templateVersion;
-
-
-/// 异步加载沙盒模板（远端）
-/// @param templateId 模板Id
-/// @param templateVersion 模板Version
-/// @param completion 回调
-- (void)loadTemplateInfoWithTemplateId:(NSString *)templateId
-                       templateVersion:(NSString *)templateVersion
-                            completion:(GXTemplateLoadCompletion)completion;
-
-
-@end
-
-
-
 NS_ASSUME_NONNULL_END

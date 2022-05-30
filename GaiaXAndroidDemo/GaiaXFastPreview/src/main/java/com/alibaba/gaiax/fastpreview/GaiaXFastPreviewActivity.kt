@@ -96,7 +96,11 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
         super.onDestroy()
     }
 
-    override fun notifyUpdateUI(template: JSONObject, templateId: String, constraintSize: JSONObject) {
+    override fun notifyUpdateUI(
+        template: JSONObject,
+        templateId: String,
+        constraintSize: JSONObject
+    ) {
         val fastPreviewRoot = findViewById<ViewGroup>(R.id.fast_preview_layout)
         fastPreviewRoot.removeAllViews()
 

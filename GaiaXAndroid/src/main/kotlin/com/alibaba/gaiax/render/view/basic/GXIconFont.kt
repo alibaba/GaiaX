@@ -17,10 +17,10 @@
 package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
-import android.support.annotation.Keep
 import android.text.Html
 import android.util.AttributeSet
 import android.widget.TextView
+import androidx.annotation.Keep
 
 /**
  * @suppress

@@ -16,9 +16,9 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.View
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -441,12 +441,16 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         val targetView = gxNode.view
 
         // 滚动事件
-        if (targetView is androidx.recyclerview.widget.RecyclerView) {
+        if (targetView is RecyclerView) {
             if (gxTemplateContext.templateData?.eventListener != null) {
                 targetView.clearOnScrollListeners()
-                targetView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                targetView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-                    override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView,
+                        dx: Int,
+                        dy: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
@@ -456,7 +460,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                             })
                     }
 
-                    override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
+                    override fun onScrollStateChanged(
+                        recyclerView: RecyclerView,
+                        newState: Int
+                    ) {
                         gxTemplateContext.templateData?.eventListener?.onScrollEvent(
                             GXTemplateEngine.GXScroll().apply {
                                 this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
@@ -628,6 +635,9 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         adapter.setContainerData(containerTemplateData)
         adapter.initFooter()
+        if (adapter.hasFooter()) {
+            container.setSpanSizeLookup()
+        }
     }
 
     private fun bindIconFont(
@@ -835,7 +845,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
             val edgeInsets = scrollConfig.edgeInsets
             val lineSpacing = scrollConfig.itemSpacing
-            if (scrollConfig.direction == androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL) {
+            if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
                 // 设置边距
                 if (edgeInsets.top == 0 && edgeInsets.bottom == 0) {
                     view.setHorizontalScrollContainerLineSpacing(

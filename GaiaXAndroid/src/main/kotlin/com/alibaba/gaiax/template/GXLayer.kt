@@ -266,7 +266,8 @@ data class GXLayer constructor(
     /**
      * Slider 容器节点类型
      */
-    fun isSliderType(): Boolean = type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
+    fun isSliderType(): Boolean =
+        type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
 
     /**
      * 是否能够被合并

@@ -18,6 +18,7 @@ package com.alibaba.gaiax.template
 
 import android.graphics.Rect
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -28,7 +29,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 data class GXGridConfig(
     val data: JSONObject,
     val column: Int = 1,
-    val direction: Int = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL,
+    val direction: Int = RecyclerView.VERTICAL,
     /**
      * Item spacing
      */
@@ -57,12 +58,12 @@ data class GXGridConfig(
 
     val isVertical
         get():Boolean {
-            return direction == androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+            return direction == LinearLayoutManager.VERTICAL
         }
 
     val isHorizontal
         get():Boolean {
-            return direction == androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+            return direction == LinearLayoutManager.HORIZONTAL
         }
 
     companion object {

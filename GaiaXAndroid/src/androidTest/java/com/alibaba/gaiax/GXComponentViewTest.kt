@@ -2,11 +2,11 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText
@@ -64,7 +64,7 @@ class GXComponentViewTest : GXBaseTest() {
         Assert.assertEquals(2, rootView.childCount())
 
         Assert.assertEquals(true, rootView.child(0) is ImageView)
-        Assert.assertEquals(true, rootView.child(1) is androidx.recyclerview.widget.RecyclerView)
+        Assert.assertEquals(true, rootView.child(1) is RecyclerView)
     }
 
     @Test

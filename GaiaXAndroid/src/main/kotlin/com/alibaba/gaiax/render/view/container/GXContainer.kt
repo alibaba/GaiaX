@@ -20,11 +20,11 @@ import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import androidx.annotation.Keep
-import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
+import androidx.annotation.Keep
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
@@ -36,7 +36,8 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
  * @suppress
  */
 @Keep
-open class GXContainer : androidx.recyclerview.widget.RecyclerView, GXIViewBindData, GXIRootView, GXIRoundCorner {
+open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
+    GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 

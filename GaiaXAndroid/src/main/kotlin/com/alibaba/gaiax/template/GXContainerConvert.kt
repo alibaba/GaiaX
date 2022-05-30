@@ -25,9 +25,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 object GXContainerConvert {
 
     fun direction(direction: String): Int = when (direction) {
-        GXTemplateKey.GAIAX_HORIZONTAL -> androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
-        GXTemplateKey.GAIAX_VERTICAL -> androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
-        else -> androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+        GXTemplateKey.GAIAX_HORIZONTAL -> LinearLayoutManager.HORIZONTAL
+        GXTemplateKey.GAIAX_VERTICAL -> LinearLayoutManager.VERTICAL
+        else -> LinearLayoutManager.VERTICAL
     }
 
     fun edgeInsets(edgeInsets: String?): Rect? = if (edgeInsets?.isNotEmpty() == true) {

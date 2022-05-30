@@ -1,0 +1,14 @@
+{
+    "data": {
+        "gx-grid-with-footer":{
+            "value":"$nodes",
+            "extend": {
+                "item-footer-type": {
+                  "id": "'gx-grid-with-footer-footer'",
+                  "hasMore": "$isHasMore"
+                }
+            }
+        }
+    },
+    "event": {}
+}

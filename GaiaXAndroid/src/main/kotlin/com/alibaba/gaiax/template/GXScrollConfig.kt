@@ -25,7 +25,7 @@ import com.alibaba.fastjson.JSONObject
  */
 data class GXScrollConfig(
     val data: JSONObject,
-    val direction: Int = androidx.recyclerview.widget.LinearLayoutManager.VERTICAL,
+    val direction: Int = LinearLayoutManager.VERTICAL,
     val itemSpacing: Int = 0,
     val edgeInsets: Rect = Rect(0, 0, 0, 0)
 ) {
@@ -67,11 +67,11 @@ data class GXScrollConfig(
 
     val isVertical
         get():Boolean {
-            return direction == androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+            return direction == LinearLayoutManager.VERTICAL
         }
 
     val isHorizontal
         get():Boolean {
-            return direction == androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
+            return direction == LinearLayoutManager.HORIZONTAL
         }
 }

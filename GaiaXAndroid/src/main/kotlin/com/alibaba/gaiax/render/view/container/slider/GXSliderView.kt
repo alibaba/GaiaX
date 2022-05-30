@@ -29,6 +29,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
@@ -68,7 +69,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     private var gxTemplateContext: GXTemplateContext? = null
     private var config: GXSliderConfig? = null
 
-    var viewPager: androidx.viewpager.widget.ViewPager? = null
+    var viewPager: ViewPager? = null
     private var indicatorContainer: LinearLayout? = null
     private var selectedIndicatorItem: View? = null
 
@@ -85,8 +86,8 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     }
 
     private fun initViewPager() {
-        viewPager = androidx.viewpager.widget.ViewPager(context)
-        viewPager?.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+        viewPager = ViewPager(context)
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,

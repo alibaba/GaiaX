@@ -1,9 +1,9 @@
 package com.alibaba.gaiax
 
 import android.graphics.Color
+import android.widget.LinearLayout
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager.widget.ViewPager
-import android.widget.LinearLayout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
@@ -44,7 +44,7 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.height())
         Assert.assertEquals(true, rootView is GXSliderView)
         Assert.assertEquals(2, rootView.childCount())
-        Assert.assertEquals(true, rootView.child(0) is androidx.viewpager.widget.ViewPager)
+        Assert.assertEquals(true, rootView.child(0) is ViewPager)
         Assert.assertEquals(true, rootView.child(1) is LinearLayout)
         Assert.assertEquals(3, rootView.child(1).childCount())
 

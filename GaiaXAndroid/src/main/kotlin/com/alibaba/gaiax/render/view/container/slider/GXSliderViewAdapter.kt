@@ -16,9 +16,9 @@
 
 package com.alibaba.gaiax.render.view.container.slider
 
-import androidx.viewpager.widget.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
@@ -32,8 +32,7 @@ import com.alibaba.gaiax.template.GXSliderConfig
 class GXSliderViewAdapter(
     val gxTemplateContext: GXTemplateContext,
     val gxNode: GXNode
-) :
-    androidx.viewpager.widget.PagerAdapter() {
+) : PagerAdapter() {
 
     private var config: GXSliderConfig? = null
     private var data = JSONArray()

@@ -1,0 +1,15 @@
+{
+  "id": "template_grid_load_more_padding",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "column": 3,
+  "edge-insets": "{0,10,0,10}",
+  "scroll-enable": true,
+  "layers": [
+    {
+      "id": "template_grid_load_more_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

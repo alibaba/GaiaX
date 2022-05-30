@@ -18,6 +18,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
         renderTemplate3(this)
         renderTemplate4(this)
         renderTemplate5(this)
+        renderTemplate6(this)
     }
 
     private fun renderTemplate1(activity: ContainerTemplateActivity) {
@@ -130,6 +131,30 @@ class ContainerTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-grid-with-footer")
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        val templateData =
+            GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "data/grid-with-footer.json"))
+
+        // 创建模板View
+        val view = GXTemplateEngine.instance.createView(params, size)
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_5).addView(view, 0)
+    }
+
+    private fun renderTemplate6(activity: ContainerTemplateActivity) {
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
         val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-slider")
 
         // 模板绘制尺寸
@@ -151,6 +176,6 @@ class ContainerTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.bindData(view, templateData)
 
         // 插入模板View
-        findViewById<LinearLayoutCompat>(R.id.template_5).addView(view, 0)
+        findViewById<LinearLayoutCompat>(R.id.template_6).addView(view, 0)
     }
 }

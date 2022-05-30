@@ -380,9 +380,8 @@ object GXTemplateKey {
     const val GAIAX_DATABINDING_ITEM_TYPE_PATH = "path"
     const val GAIAX_DATABINDING_ITEM_TYPE_CONFIG = "config"
 
-    const val GAIAX_SCROLL_FOOTER = "item-footer-type"
-    const val GAIAX_SCROLL_HAS_MORE = "hasMore"
-
+    const val GAIAX_CONTAINER_FOOTER = "item-footer-type"
+    const val GAIAX_CONTAINER_HAS_MORE = "hasMore"
 
     const val GAIAX_ANIMATION_TYPE_LOTTIE = "LOTTIE"
     const val GAIAX_ANIMATION_TYPE_PROP = "PROP"

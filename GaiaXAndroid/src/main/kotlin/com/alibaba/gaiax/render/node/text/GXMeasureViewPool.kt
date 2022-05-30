@@ -18,8 +18,8 @@ package com.alibaba.gaiax.render.node.text
 
 import android.content.Context
 import android.graphics.Typeface
-import androidx.core.util.Pools
 import android.view.ViewGroup
+import androidx.core.util.Pools
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXText

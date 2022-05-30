@@ -2,7 +2,7 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.widget.TextView
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.support.test.runner.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize

@@ -1,7 +1,7 @@
 package com.alibaba.gaiax
 
 import android.view.View
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.support.test.runner.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable

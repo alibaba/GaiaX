@@ -17,7 +17,7 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 
 /**
  * @suppress

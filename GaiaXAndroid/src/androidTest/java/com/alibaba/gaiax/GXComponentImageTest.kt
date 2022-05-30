@@ -1,8 +1,8 @@
 package com.alibaba.gaiax
 
 import android.content.Context
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.support.test.runner.AndroidJUnit4
+import android.support.v7.widget.AppCompatImageView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXIImageView

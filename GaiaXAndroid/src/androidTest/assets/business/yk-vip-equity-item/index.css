@@ -1,0 +1,78 @@
+#yk-vip-equity-item {
+  width: 100%;
+  background-color: #20232d;
+  border-radius: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 12px;
+}
+#top-view {
+  margin-top: 12px;
+  flex-grow: 0;
+  width: 100%;
+  flex-direction: column;
+}
+#top-img {
+  width: 100%;
+  border-radius: 7px;
+  margin-top: 0px;
+  flex-grow: 0;
+  aspect-ratio: 2.222;
+}
+#mark-view {
+  height: 16px;
+  position: absolute;
+  right: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: cv_4;
+}
+#mark-text {
+  text-overflow: clip;
+  height: 16px;
+  font-size: 10px;
+  color: #733306;
+  fit-content: true;
+  padding-right: 6px;
+  padding-left: 6px;
+  text-align: center;
+  line-height: 16px;
+  width: 100px;
+}
+#title {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 17px;
+  font-size: 12px;
+  margin-top: 9px;
+  color: #ffdd9a;
+  text-align: center;
+}
+#button {
+  width: 117px;
+  height: 26px;
+  margin-top: 9px;
+  flex-direction: column;
+}
+#button-bg {
+  border-radius: 13px;
+  background-image: linear-gradient(to right, #ff3a6d 0%, #ff5aa1 100%);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+#button-text {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 600;
+  line-height: 26px;
+  position: absolute;
+}

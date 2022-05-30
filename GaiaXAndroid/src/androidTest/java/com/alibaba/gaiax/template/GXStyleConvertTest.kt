@@ -343,6 +343,14 @@ class GXStyleConvertTest {
             })?.colors?.size
         )
 
+        Assert.assertEquals(
+            2,
+            convert.backgroundImage(JSONObject().apply {
+                this[GXTemplateKey.STYLE_BACKGROUND_IMAGE] =
+                    "yellow"
+            })?.colors?.size
+        )
+
     }
 
 

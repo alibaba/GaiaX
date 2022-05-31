@@ -125,7 +125,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         templateData: JSONObject
     ) {
         gxNode.templateNode.reset()
-        gxNode.stretchNode.reset(gxNode.templateNode)
+        gxNode.stretchNode.reset(gxTemplateContext, gxNode.templateNode)
 
         if (gxNode.isNestRoot) {
             updateNestNodeLayout(gxTemplateContext, gxNode, templateData)

@@ -104,7 +104,7 @@
 - (void)relayout:(GXTemplateContext *)ctx measureSize:(CGSize)size{
     GXNode *node = ctx.rootNode;
     CGSize measureSize = ctx.measureSize;
-    if (node == nil || !CGSizeEqualToSize(size, measureSize)) {
+    if (node == nil || CGSizeEqualToSize(size, measureSize)) {
         return;
     }
     

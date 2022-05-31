@@ -22,21 +22,27 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Build GaiaXAnalyze with Gradle
-      run: 
-        cd ./GaiaXAnalyze/GXAnalyzeAndroid
-        chmod +x ./gradlew
-        ./gradlew build
-        cd ../..
-    - name: Build GaiaXAndroid with Gradle
-      run: 
-        cd ./GaiaXAndroid
-        chmod +x ./gradlew
-        ./gradlew build
-        cd ..
-    - name: Build GaiaXAdapterAndroid with Gradle
-      run: 
-        cd ./GaiaXAdapterAndroid
-        chmod +x ./gradlew
-        ./gradlew build
-        cd ..
+    - name: Build GaiaXAnalyze with Gradle step 1
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid
+    - name: Build GaiaXAnalyze with Gradle step 2
+      run: chmod +x ./gradlew
+    - name: Build GaiaXAnalyze with Gradle step 3
+      run: ./gradlew build
+    - name: Build GaiaXAnalyze with Gradle step 4
+      run: cd ../..
+    - name: Build GaiaXAndroid with Gradle step 1
+      run: cd ./GaiaXAndroid
+    - name: Build GaiaXAndroid with Gradle step 2
+      run: chmod +x ./gradlew
+    - name: Build GaiaXAndroid with Gradle step 3
+      run: ./gradlew build
+    - name: Build GaiaXAndroid with Gradle step 4
+      run: cd ..
+    - name: Build GaiaXAdapterAndroid with Gradle step 1
+      run: cd ./GaiaXAdapterAndroid
+    - name: Build GaiaXAdapterAndroid with Gradle step 2
+      run: chmod +x ./gradlew
+    - name: Build GaiaXAdapterAndroid with Gradle step 3
+      run: ./gradlew build
+    - name: Build GaiaXAdapterAndroid with Gradle step 4
+      run: cd ..

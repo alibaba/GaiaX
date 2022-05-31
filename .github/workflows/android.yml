@@ -32,6 +32,6 @@ jobs:
     - name: Build GaiaXAdapterAndroid with Gradle step 1
       run: cd ./GaiaXAdapterAndroid && chmod +x ./gradlew && ./gradlew build
     - name: Build run tests
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: --stacktrace test connectedAndroidTest 
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --stacktrace test connectedAndroidTest 

@@ -25,10 +25,10 @@ jobs:
       run: ls -ll
     - name: Build GaiaXAnalyze with Gradle step 1
       run: cd ./GaiaXAnalyze/GXAnalyzeAndroid
+    - name: Build GaiaXAnalyze with Gradle step 1.1
+      run: ls -ll
     - name: Build GaiaXAnalyze with Gradle step 2
-      run: 
-        ls -ll
-        chmod +x ./gradlew
+      run: chmod +x ./gradlew
     - name: Build GaiaXAnalyze with Gradle step 3
       run: ./gradlew build
     - name: Build GaiaXAnalyze with Gradle step 4

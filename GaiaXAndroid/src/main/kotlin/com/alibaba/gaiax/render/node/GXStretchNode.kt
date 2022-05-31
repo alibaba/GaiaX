@@ -37,13 +37,13 @@ data class GXStretchNode(
     var layoutByBind: Layout? = null
 ) {
 
-    fun reset(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        resetStyle(gxTemplateContext, gxTemplateNode)
+    fun reset(gxTemplateNode: GXTemplateNode) {
+        resetStyle(gxTemplateNode)
         layoutByBind = null
     }
 
-    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
+    private fun resetStyle(gxTemplateNode: GXTemplateNode) {
+        val stretchStyle = createStretchStyle(gxTemplateNode)
         val oldStyle = node.getStyle()
         oldStyle.free()
         this.node.setStyle(stretchStyle)
@@ -156,7 +156,7 @@ data class GXStretchNode(
             }
         }
 
-        updateLayoutByFlexBox(gxTemplateContext, finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
             isDirty = it
         }
 
@@ -194,7 +194,7 @@ data class GXStretchNode(
             throw IllegalArgumentException("final css style is null, please check!")
         }
 
-        updateLayoutByFlexBox(gxTemplateContext, finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(finalCssStyle, finalFlexBox, style)?.let {
             isDirty = it
         }
 
@@ -221,7 +221,6 @@ data class GXStretchNode(
     }
 
     private fun updateLayoutByFlexBox(
-        gxTemplateContext: GXTemplateContext,
         gxCssStyle: GXStyle,
         gxFlexBox: GXFlexBox,
         style: Style
@@ -307,7 +306,6 @@ data class GXStretchNode(
 
         gxFlexBox.flexGrow?.let {
             style.flexGrow = it
-            gxTemplateContext.isFlexGrowLayout = true
             isDirty = true
         }
 
@@ -369,12 +367,13 @@ data class GXStretchNode(
         gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Boolean? {
-        if (gxCssStyle.fitContent == true && stretchStyle.display == Display.Flex) {
 
-            // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
-            // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
-            // 如果提前计算，会导致结果不正确
-            if (gxTemplateContext.isFlexGrowLayout) {
+        if (gxCssStyle.fitContent == true) {
+
+            // 如果文字使用了flexGrow，那么fitContent逻辑需要延迟处理
+            // 为什么需要延迟处理？因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响, 如果提前计算，会导致结果不正确
+            // TODO: 此处可以优化，缩小进入的范围
+            if (stretchStyle.flexGrow != 0F) {
                 if (gxTemplateContext.dirtyText == null) {
                     gxTemplateContext.dirtyText = mutableMapOf()
                 }
@@ -400,7 +399,6 @@ data class GXStretchNode(
                 stretchStyle
             )
         }
-
         return null
     }
 
@@ -472,41 +470,29 @@ data class GXStretchNode(
 
     companion object {
 
-        fun createNode(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode,
-            id: String,
-            idPath: String
-        ): GXStretchNode {
-            val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
+        fun createNode(gxTemplateNode: GXTemplateNode, id: String, idPath: String): GXStretchNode {
+            val stretchStyle = createStretchStyle(gxTemplateNode)
             val stretchNode = Node(id, idPath, stretchStyle, mutableListOf())
             return GXStretchNode(stretchNode, null)
         }
 
-        private fun createStretchStyle(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode
-        ): Style {
+        private fun createStretchStyle(gxTemplateNode: GXTemplateNode): Style {
             val style = Style()
 
             // Set Self FlexBox Property
             val flexBox = gxTemplateNode.css.flexBox
-            updateStyle(gxTemplateContext, flexBox, style)
+            updateStyle(flexBox, style)
 
             // Override Property From Parent FlexBox
             val visualTemplateNodeFlexBox = gxTemplateNode.visualTemplateNode?.css?.flexBox
-            visualTemplateNodeFlexBox?.let { updateStyle(gxTemplateContext, it, style) }
+            visualTemplateNodeFlexBox?.let { updateStyle(it, style) }
 
             style.init()
 
             return style
         }
 
-        private fun updateStyle(
-            gxTemplateContext: GXTemplateContext,
-            flexBox: GXFlexBox,
-            style: Style
-        ) {
+        private fun updateStyle(flexBox: GXFlexBox, style: Style) {
             flexBox.display?.let { style.display = it }
 
             flexBox.aspectRatio?.let { style.aspectRatio = it }
@@ -537,10 +523,7 @@ data class GXStretchNode(
 
             flexBox.border?.let { style.border = it }
 
-            flexBox.flexGrow?.let {
-                style.flexGrow = it
-                gxTemplateContext.isFlexGrowLayout = true
-            }
+            flexBox.flexGrow?.let { style.flexGrow = it }
 
             flexBox.flexShrink?.let { style.flexShrink = it }
 

@@ -22,7 +22,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.alibaba.gaiax.R
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskBitmapShadowDrawable
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskShadowDrawable

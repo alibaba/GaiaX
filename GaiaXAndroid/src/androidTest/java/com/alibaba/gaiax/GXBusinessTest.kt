@@ -85,15 +85,18 @@ class GXBusinessTest : GXBaseTest() {
         textView.setFontSize(13F.dpToPx())
         textView.measure(0, 0)
 
-        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
-        Assert.assertEquals(18F.dpToPx(), rootView.child(0).child(0).height())
+        val title = GXTemplateEngine.instance.getGXViewById(rootView, "title")
+        Assert.assertEquals(textView.measuredWidth.toFloat(), title?.width())
+        Assert.assertEquals(18F.dpToPx(), title?.height())
 
-        Assert.assertEquals(View.GONE, rootView.child(0).child(1).visibility)
-        Assert.assertEquals(0F.dpToPx(), rootView.child(0).child(1).width())
-        Assert.assertEquals(0F.dpToPx(), rootView.child(0).child(1).height())
+        val markText = GXTemplateEngine.instance.getGXViewById(rootView, "markText")
+        Assert.assertEquals(View.GONE, markText?.visibility)
+        Assert.assertEquals(0F.dpToPx(), markText?.width())
+        Assert.assertEquals(0F.dpToPx(), markText?.height())
 
-        Assert.assertEquals(93F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(16F.dpToPx(), rootView.child(1).height())
+        val subTitle = GXTemplateEngine.instance.getGXViewById(rootView, "subTitle")
+        Assert.assertEquals(93F.dpToPx(), subTitle?.width())
+        Assert.assertEquals(16F.dpToPx(), subTitle?.height())
     }
 
     // yk-rec-hot-image-text-card
@@ -117,6 +120,35 @@ class GXBusinessTest : GXBaseTest() {
 //
 //        Assert.assertEquals(1080F, rootView.width())
 //    }
+
+    @Test
+    fun search_component_1011() {
+        GXRegisterCenter.instance
+            .registerExtensionExpression(GXExtensionExpression())
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "business",
+            "search_component_1011"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(1080F.dpToPx(), null)
+        )
+        val path = "business/search_component_1011.json"
+        val templateData = GXTemplateEngine.GXTemplateData(readJsonFromAssets(path))
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(60F.dpToPx(), rootView.height())
+
+        val targetView = GXTemplateEngine.instance.getGXViewById(rootView, "third-title")
+        Assert.assertEquals(
+            1080F.dpToPx() - 15F.dpToPx() - 15F.dpToPx() - 60F.dpToPx() - 9F.dpToPx(),
+            targetView?.width()
+        )
+    }
+
 
     private fun readJsonFromAssets(path: String) = JSONObject.parseObject(
         context.assets.open(path).reader(Charset.forName("utf-8")).readText()

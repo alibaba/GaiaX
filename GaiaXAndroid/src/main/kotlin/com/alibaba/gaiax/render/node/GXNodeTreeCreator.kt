@@ -47,14 +47,14 @@ object GXNodeTreeCreator {
     /**
      * 创建节点树
      *
-     * @param context 模板上下文
+     * @param gxTemplateContext 模板上下文
      * @param parentNode 当前节点的父节点
      * @param currentLayer 当前节点的层级信息
      * @param visualTemplateNode 当前节点在父模板中的虚拟模板节点信息
      * @param currentTemplateInfo 当前节点的模板数据
      */
     private fun createNode(
-        context: GXTemplateContext,
+        gxTemplateContext: GXTemplateContext,
         parentNode: GXNode?,
         currentLayer: GXLayer,
         visualTemplateNode: GXTemplateNode?,
@@ -70,7 +70,10 @@ object GXNodeTreeCreator {
             GXTemplateNode.createNode(currentLayer.id, currentTemplateInfo, visualTemplateNode)
 
         // 初始化节点数据
-        node.stretchNode = GXStretchNode.createNode(node.templateNode, node.id, node.idPath)
+        node.stretchNode = GXStretchNode.createNode(
+            gxTemplateContext,
+            node.templateNode, node.id, node.idPath
+        )
 
         // 建立层级关系
         if (parentNode?.children == null) {
@@ -82,7 +85,7 @@ object GXNodeTreeCreator {
         parentNode?.stretchNode?.node?.addChild(node.stretchNode.node)
 
         // 构建子层级节点
-        initChildrenViewData(context, node, currentLayer.layers, currentTemplateInfo)
+        initChildrenViewData(gxTemplateContext, node, currentLayer.layers, currentTemplateInfo)
 
         return node
     }

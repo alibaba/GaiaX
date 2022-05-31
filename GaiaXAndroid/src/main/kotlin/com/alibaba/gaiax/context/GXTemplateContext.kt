@@ -41,6 +41,11 @@ class GXTemplateContext(val context: Context) {
     var isDirty: Boolean = false
 
     /**
+     * Is exist flexGrow logic
+     */
+    var isFlexGrowLayout: Boolean = false
+
+    /**
      * ViewPort size
      */
     lateinit var size: GXTemplateEngine.GXMeasureSize

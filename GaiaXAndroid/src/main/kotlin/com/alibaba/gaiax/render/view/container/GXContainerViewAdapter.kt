@@ -19,8 +19,7 @@ package com.alibaba.gaiax.render.view.container
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.support.v7.widget.RecyclerView
-import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject

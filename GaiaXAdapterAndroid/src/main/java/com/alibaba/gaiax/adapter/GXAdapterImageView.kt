@@ -1,7 +1,7 @@
 package com.alibaba.gaiax.adapter
 
 import android.content.Context
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.template.GXTemplateKey

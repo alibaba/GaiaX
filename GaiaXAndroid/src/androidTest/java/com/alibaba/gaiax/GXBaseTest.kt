@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.Log
-import androidx.test.platform.app.InstrumentationRegistry
+import android.support.test.InstrumentationRegistry
 import app.visly.stretch.Dimension
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON

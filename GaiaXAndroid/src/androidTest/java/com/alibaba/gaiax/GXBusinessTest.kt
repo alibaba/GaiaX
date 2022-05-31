@@ -57,7 +57,6 @@ class GXBusinessTest : GXBaseTest() {
             true,
             rootView.child(2).foreground is GXRoundCornerBorderGradientDrawable
         )
-
     }
 
     @Test

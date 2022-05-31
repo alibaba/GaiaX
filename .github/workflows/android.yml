@@ -1,0 +1,35 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+    - main
+    - androidsupport
+  pull_request:
+    branches:
+    - main
+    - androidsupport
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Build before
+      run: ls -ll
+    - name: Build GaiaXAnalyze with Gradle step 1
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew build
+    - name: Build GaiaXAndroid with Gradle step 1
+      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew build
+    - name: Build GaiaXAdapterAndroid with Gradle step 1
+      run: cd ./GaiaXAdapterAndroid && chmod +x ./gradlew && ./gradlew build
+    # - name: Build run tests
+      # run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew test connectedAndroidTest --stacktrace

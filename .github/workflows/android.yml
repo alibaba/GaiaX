@@ -23,15 +23,13 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-    - name: Build before
-      run: ls -ll
-    - name: Build GaiaXAnalyze with Gradle step 1
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew build
-    - name: Build GaiaXAndroid with Gradle step 1
-      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew build
-    - name: Build GaiaXAdapterAndroid with Gradle step 1
-      run: cd ./GaiaXAdapterAndroid && chmod +x ./gradlew && ./gradlew build
+    # - name: Build before
+    #   run: ls -ll
+    # - name: Build GaiaXAnalyze with Gradle step 1
+    #   run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew build
+    # - name: Build GaiaXAndroid with Gradle step 1
+    #   run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew build
+    # - name: Build GaiaXAdapterAndroid with Gradle step 1
+    #   run: cd ./GaiaXAdapterAndroid && chmod +x ./gradlew && ./gradlew build
     - name: Build run tests
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: --stacktrace test connectedAndroidTest 
+      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew build test connectedAndroidTest --stacktrace

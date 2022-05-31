@@ -23,8 +23,8 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
-import androidx.annotation.Keep
-import androidx.recyclerview.widget.RecyclerView
+import android.support.annotation.Keep
+import android.support.v7.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView

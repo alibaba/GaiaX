@@ -29,7 +29,8 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.viewpager.widget.ViewPager
+import android.support.annotation.Keep
+import android.support.v4.view.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
@@ -41,6 +42,7 @@ import java.util.*
 /**
  * @suppress
  */
+@Keep
 class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     val TAG = "GXSliderView"

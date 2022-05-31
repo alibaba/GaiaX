@@ -17,8 +17,8 @@
 package com.alibaba.gaiax.render.node
 
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -125,7 +125,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         templateData: JSONObject
     ) {
         gxNode.templateNode.reset()
-        gxNode.stretchNode.reset(gxNode.templateNode)
+        gxNode.stretchNode.reset(gxTemplateContext, gxNode.templateNode)
 
         if (gxNode.isNestRoot) {
             updateNestNodeLayout(gxTemplateContext, gxNode, templateData)

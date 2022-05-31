@@ -21,11 +21,14 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
+    - name: Build before
+      run: ls -ll
     - name: Build GaiaXAnalyze with Gradle step 1
       run: cd ./GaiaXAnalyze/GXAnalyzeAndroid
     - name: Build GaiaXAnalyze with Gradle step 2
-      run: chmod +x ./gradlew
+      run: 
+        ls -ll
+        chmod +x ./gradlew
     - name: Build GaiaXAnalyze with Gradle step 3
       run: ./gradlew build
     - name: Build GaiaXAnalyze with Gradle step 4

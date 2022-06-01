@@ -242,7 +242,7 @@ class GXCommonTest : GXBaseTest() {
     }
 
     @Test
-    fun template_datapass_nest_scroll_nodes_self_youku_version() {
+    fun template_databinding_nest_scroll_nodes_self_youku_version() {
         GXRegisterCenter.instance.registerExtensionCompatibility(object :
             GXRegisterCenter.GXIExtensionCompatibility {
             override fun isCompatibilityContainerDataPassSequence(): Boolean {
@@ -253,7 +253,7 @@ class GXCommonTest : GXBaseTest() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
-            "template_datapass_nest_scroll_nodes_self"
+            "template_databinding_nest_scroll_nodes_self"
         )
         val rootView = GXTemplateEngine.instance.createView(
             templateItem,
@@ -292,11 +292,11 @@ class GXCommonTest : GXBaseTest() {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun template_datapass_nest_scroll_nodes_self() {
+    fun template_databinding_nest_scroll_nodes_self() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
-            "template_datapass_nest_scroll_nodes_self"
+            "template_databinding_nest_scroll_nodes_self"
         )
         val rootView = GXTemplateEngine.instance.createView(
             templateItem,
@@ -328,11 +328,11 @@ class GXCommonTest : GXBaseTest() {
     }
 
     @Test
-    fun template_datapass_nest_scroll_self_nodes() {
+    fun template_databinding_nest_scroll_self_nodes() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
-            "template_datapass_nest_scroll_self_nodes"
+            "template_databinding_nest_scroll_self_nodes"
         )
         val rootView = GXTemplateEngine.instance.createView(
             templateItem,
@@ -710,6 +710,9 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
     }
 
+    /**
+     * 验证数据绑定
+     */
     @Test
     fun template_databinding() {
         val templateItem =
@@ -726,6 +729,34 @@ class GXCommonTest : GXBaseTest() {
         )
 
         Assert.assertEquals("HelloWorld", (rootView.child(0) as TextView).text)
+    }
+
+    /**
+     * 验证数据绑定，普通嵌套模板的数据传递
+     */
+    @Test
+    fun template_databinding_nest_normal_template() {
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "common",
+                "template_databinding_nest_normal_template"
+            )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["data"] = JSONObject().apply {
+                    this["title"] = "HelloWorld"
+                }
+            })
+        )
+
+        val text1 = GXTemplateEngine.instance.getGXViewById(rootView, "text1") as? TextView
+        Assert.assertEquals("HelloWorld", text1?.text)
     }
 
 }

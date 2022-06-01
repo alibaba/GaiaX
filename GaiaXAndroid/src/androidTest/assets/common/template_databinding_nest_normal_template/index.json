@@ -1,9 +1,9 @@
 {
-  "id": "template_datapass_nest_scroll_self_nodes",
+  "id": "template_databinding_nest_normal_template",
   "type": "gaia-template",
   "layers": [
     {
-      "id": "template_datapass_nest_scroll_self_nodes_scroll",
+      "id": "template_databinding_nest_normal_template_child",
       "type": "gaia-template",
       "sub-type": "custom"
     }

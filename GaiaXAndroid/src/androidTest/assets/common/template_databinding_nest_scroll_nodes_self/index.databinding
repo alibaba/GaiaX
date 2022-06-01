@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_databinding_nest_scroll_nodes_self_scroll": {
+            "value":"$nodes"
+        }
+    }
+}

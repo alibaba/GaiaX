@@ -1,0 +1,7 @@
+{
+    "data": {
+        "template_databinding_nest_normal_template_child": {
+            "value":"$data"
+        }
+    }
+}

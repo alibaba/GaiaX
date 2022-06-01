@@ -326,11 +326,17 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         gxNode: GXNode,
         templateData: JSONObject
     ) {
-        updateNodeStyle(gxTemplateContext, gxNode, templateData)
+
+        // 对于普通嵌套模板，传递给下一层的数据只能是JSONObject
+        val childTemplateData =
+            (gxNode.templateNode.visualTemplateNode?.getDataValue(templateData) as? JSONObject)
+                ?: JSONObject()
+
+        updateNodeStyle(gxTemplateContext, gxNode, childTemplateData)
 
         gxNode.children?.forEach { childNode ->
             // 使用原有数据为数据源
-            updateNodeTreeStyle(gxTemplateContext, childNode, templateData)
+            updateNodeTreeStyle(gxTemplateContext, childNode, childTemplateData)
         }
     }
 

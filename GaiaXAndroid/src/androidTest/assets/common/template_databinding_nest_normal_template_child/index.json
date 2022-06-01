@@ -1,0 +1,10 @@
+{
+  "id": "template_databinding_nest_normal_template_child",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text1",
+      "type": "text"
+    }
+  ]
+}

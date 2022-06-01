@@ -17,8 +17,8 @@
 package com.alibaba.gaiax.render.node
 
 import android.view.View
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray

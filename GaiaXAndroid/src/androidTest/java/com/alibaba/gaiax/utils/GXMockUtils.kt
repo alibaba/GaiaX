@@ -18,7 +18,7 @@ package com.alibaba.gaiax.utils
 
 import android.content.Context
 import android.os.Build
-import android.support.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.GXLayer

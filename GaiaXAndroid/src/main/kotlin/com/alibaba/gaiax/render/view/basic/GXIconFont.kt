@@ -20,7 +20,7 @@ import android.content.Context
 import android.text.Html
 import android.util.AttributeSet
 import android.widget.TextView
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 
 /**
  * @suppress

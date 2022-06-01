@@ -17,10 +17,11 @@
 //  limitations under the License.
 
 #import "GXUtils.h"
+#import "GXCommonDef.h"
 #import "GXCssParser.h"
 #import "GXFunctionDef.h"
-#import "GXCommonDef.h"
 #import "NSDictionary+GX.h"
+#import "GXTemplateLoader.h"
 
 @implementation GXUtils
 
@@ -233,6 +234,15 @@
         }
     }
     return NO;
+}
+
+/// 读取模板信息
+- (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString *)folderPath
+                                          templateId:(NSString *)templateId
+                                     templateVersion:(NSString *)templateVersion{
+    return [[GXTemplateLoader defaultLoader] loadTemplateContenttWithFolderPath:folderPath
+                                                                     templateId:templateId
+                                                                templateVersion:templateVersion];
 }
 
 @end

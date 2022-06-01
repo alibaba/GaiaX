@@ -237,7 +237,7 @@
 }
 
 /// 读取模板信息
-- (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString *)folderPath
++ (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString *)folderPath
                                           templateId:(NSString *)templateId
                                      templateVersion:(NSString *)templateVersion{
     return [[GXTemplateLoader defaultLoader] loadTemplateContenttWithFolderPath:folderPath

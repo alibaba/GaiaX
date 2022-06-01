@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param folderPath 模板目录
 /// @param templateId 模板id
 /// @param templateVersion 模板version
-- (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString * _Nonnull)folderPath
++ (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString * _Nonnull)folderPath
                                           templateId:(NSString * _Nonnull)templateId
                                      templateVersion:(NSString * _Nullable)templateVersion;
 

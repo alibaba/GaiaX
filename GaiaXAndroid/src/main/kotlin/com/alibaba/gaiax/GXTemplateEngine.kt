@@ -486,7 +486,8 @@ class GXTemplateEngine {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
         gxTemplateContext.templateData = gxTemplateData
-        render.bindViewData(gxTemplateContext)
+        render.bindViewDataOnlyNodeTree(gxTemplateContext)
+        render.bindViewDataOnlyViewTree(gxTemplateContext)
     }
 
     fun bindDataOnlyNodeTree(view: View, gxTemplateData: GXTemplateData) {

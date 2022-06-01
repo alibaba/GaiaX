@@ -37,8 +37,6 @@ class GXRenderImpl {
     }
 
     fun bindNodeData(gxTemplateContext: GXTemplateContext) {
-        val rootNode = gxTemplateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null(bindNodeData) gxTemplateContext = $gxTemplateContext")
         gxTemplateContext.isDirty = false
 
         // Update the virtual node tree
@@ -81,20 +79,6 @@ class GXRenderImpl {
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
-    fun bindViewData(gxTemplateContext: GXTemplateContext) {
-        val rootNode = gxTemplateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null(bindViewData) gxTemplateContext = $gxTemplateContext")
-
-        // Resetting the Template Status
-        gxTemplateContext.isDirty = false
-
-        // Update the virtual node tree
-        GXNodeTreeUpdater(gxTemplateContext).buildLayoutAndStyle()
-
-        // Update view layout
-        GXViewTreeUpdater(gxTemplateContext, rootNode).build()
-    }
-
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
         gxTemplateContext.isDirty = false
@@ -107,10 +91,10 @@ class GXRenderImpl {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree) gxTemplateContext = $gxTemplateContext")
 
-        // Update the view tree
-        GXNodeTreeUpdater(gxTemplateContext).buildViewStyle()
-
         // Update view layout
         GXViewTreeUpdater(gxTemplateContext, rootNode).build()
+
+        // Update the view tree
+        GXNodeTreeUpdater(gxTemplateContext).buildViewStyle()
     }
 }

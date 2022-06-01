@@ -45,7 +45,7 @@ class GXPropAnimation(
                 argbEvaluator = ArgbEvaluator()
             }
             valueAnimator.setEvaluator(argbEvaluator)
-            valueAnimator.setIntValues(value.valueFrom.value, value.valueTo.value)
+            valueAnimator.setIntValues(value.valueFrom.value(), value.valueTo.value())
         }
         valueAnimator.addUpdateListener {
             if (it.animatedValue is Float) {

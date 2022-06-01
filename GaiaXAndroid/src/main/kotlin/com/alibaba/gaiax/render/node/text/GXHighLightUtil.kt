@@ -89,7 +89,7 @@ object GXHighLightUtil {
                     // https://yuque.antfin-inc.com/gaia/document/ais32k
 
                     if (highlightColor != null && highlightColor.isNotBlank()) {
-                        GXColor.create(highlightColor)?.value?.let {
+                        GXColor.create(highlightColor)?.value()?.let {
                             spannableString.setSpan(
                                 ForegroundColorSpan(it),
                                 startIndex,

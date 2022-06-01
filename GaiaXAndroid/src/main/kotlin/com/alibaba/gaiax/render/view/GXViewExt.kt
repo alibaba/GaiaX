@@ -49,7 +49,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
 
     val borderRadius = style?.borderRadius?.value
     val borderWidth = style?.borderWidth?.valueFloat
-    val borderColor = style?.borderColor?.value
+    val borderColor = style?.borderColor?.value()
 
     if (this is GXIRoundCorner) {
         if (this is GXView) {
@@ -134,7 +134,7 @@ fun View.setBackgroundColorAndBackgroundImageAndRadius(style: GXStyle?) {
     } else if (style?.backgroundColor != null) {
         val drawable = GXColorGradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(style.backgroundColor.value, style.backgroundColor.value)
+            intArrayOf(style.backgroundColor.value(), style.backgroundColor.value())
         )
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
@@ -242,7 +242,7 @@ fun GXText.setFontLines(fontLiens: Int?) {
  */
 fun GXText.setFontColor(style: GXStyle) {
     if (style.fontColor != null) {
-        this.setTextColor(style.fontColor.value)
+        this.setTextColor(style.fontColor.value())
     } else {
         // The default color is black
         this.setTextColor(Color.BLACK)

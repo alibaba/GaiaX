@@ -25,35 +25,37 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXColorTest {
 
-
     @Test
     fun parseColor_RGB() {
-        Assert.assertEquals(Color.rgb(255, 0, 0), GXColor.parseColor("rgb(255,0,0)"))
-        Assert.assertEquals(null, GXColor.parseColor("rbg(255,0,0)"))
-        Assert.assertEquals(null, GXColor.parseColor(""))
+        Assert.assertEquals(Color.rgb(255, 0, 0), GXColor.create("rgb(255,0,0)")?.valueCanNull())
+        Assert.assertEquals(null, GXColor.create("rbg(255,0,0)")?.valueCanNull())
+        Assert.assertEquals(null, GXColor.create("")?.valueCanNull())
     }
 
     @Test
     fun parseColor_RGBA() {
         Assert.assertEquals(
             Color.argb((255 * 0.3).toInt(), 255, 0, 0),
-            GXColor.parseColor("rgba(255,0,0,0.3)")
+            GXColor.create("rgba(255,0,0,0.3)")?.valueCanNull()
         )
-        Assert.assertEquals(null, GXColor.parseColor(""))
+        Assert.assertEquals(null, GXColor.create("")?.valueCanNull())
     }
 
     @Test
     fun parseColor_HEX() {
-        Assert.assertEquals(Color.parseColor("#00FF00"), GXColor.parseColor("#00FF00"))
-        Assert.assertEquals(null, GXColor.parseColor("FF00FF"))
-        Assert.assertEquals(null, GXColor.parseColor(""))
-        Assert.assertEquals(Color.parseColor("#4C000000"), GXColor.parseColor("#0000004C"))
+        Assert.assertEquals(Color.parseColor("#00FF00"), GXColor.create("#00FF00")?.valueCanNull())
+        Assert.assertEquals(null, GXColor.create("FF00FF")?.valueCanNull())
+        Assert.assertEquals(null, GXColor.create("")?.valueCanNull())
+        Assert.assertEquals(
+            Color.parseColor("#4C000000"),
+            GXColor.create("#0000004C")?.valueCanNull()
+        )
     }
 
     @Test
     fun parseColor_SIMPLE() {
-        Assert.assertEquals(Color.RED, GXColor.parseColor("RED"))
-        Assert.assertEquals(Color.RED, GXColor.parseColor("red"))
+        Assert.assertEquals(Color.RED, GXColor.create("RED")?.valueCanNull())
+        Assert.assertEquals(Color.RED, GXColor.create("red")?.valueCanNull())
     }
 
 }

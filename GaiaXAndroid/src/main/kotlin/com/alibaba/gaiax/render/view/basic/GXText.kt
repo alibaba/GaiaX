@@ -50,7 +50,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         defStyleAttr
     )
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
         val content = getContent(data)
         bindText(this, content)
         bindDesc(this, content, data)
@@ -60,10 +60,10 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         textView.text = content
     }
 
-    private fun bindDesc(textView: TextView, content: CharSequence, data: JSONObject) {
+    private fun bindDesc(textView: TextView, content: CharSequence, data: JSONObject?) {
         try {
             // 原有无障碍逻辑
-            val desc = data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] as? String
+            val desc = data?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC) as? String
             if (desc != null && desc.isNotBlank()) {
                 textView.contentDescription = desc
                 textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
@@ -77,7 +77,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
             }
 
             // 新增Enable逻辑
-            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
                 if (enable) {
                     textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
                 } else {

@@ -18,7 +18,7 @@ class GXComponentImageTest : GXBaseTest() {
 
     class MockImageView(context: Context) : AppCompatImageView(context), GXIImageView {
 
-        override fun onBindData(data: JSONObject) {
+        override fun onBindData(data: JSONObject?) {
         }
     }
 

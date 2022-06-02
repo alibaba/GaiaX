@@ -64,10 +64,10 @@ open class GXView : AbsoluteLayout,
         return gxTemplateContext
     }
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
         try {
             // 原有无障碍逻辑
-            val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+            val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
             if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
                 contentDescription = accessibilityDesc
                 importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
@@ -76,7 +76,7 @@ open class GXView : AbsoluteLayout,
             }
 
             // 新增无障碍Enable逻辑
-            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
                 importantForAccessibility = if (enable) {
                     View.IMPORTANT_FOR_ACCESSIBILITY_YES
                 } else {

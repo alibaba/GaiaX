@@ -77,18 +77,20 @@ open class GXImageView : AppCompatImageView, GXIImageView {
 
     private fun getLocalUri(uri: String) = uri.replace(LOCAL_PREFIX, "")
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
         bindUri(data)
         bindDesc(data)
     }
 
-    open fun bindUri(data: JSONObject) {
-        val uri = data.getString(GXTemplateKey.GAIAX_VALUE)?.trim() ?: ""
+    open fun bindUri(data: JSONObject?) {
+        val uri = data?.getString(GXTemplateKey.GAIAX_VALUE)?.trim() ?: ""
         when {
             isNetUri(uri) -> {
-                // 占位图仅对网络图生效
-                val placeholder = data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)
-                bindNetUri(data, uri, placeholder)
+                data?.let {
+                    // 占位图仅对网络图生效
+                    val placeholder = data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)
+                    bindNetUri(data, uri, placeholder)
+                }
             }
             isLocalUri(uri) -> {
                 val finalUri = getLocalUri(uri)
@@ -118,10 +120,10 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         }
     }
 
-    open fun bindDesc(data: JSONObject) {
+    open fun bindDesc(data: JSONObject?) {
         try {
             // 原有无障碍逻辑
-            val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+            val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
             if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
                 this.contentDescription = accessibilityDesc
                 this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
@@ -130,7 +132,7 @@ open class GXImageView : AppCompatImageView, GXIImageView {
             }
 
             // 新增Enable逻辑
-            data.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
+            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
                 if (enable) {
                     this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
                     if (accessibilityDesc == null || accessibilityDesc.isEmpty()) {

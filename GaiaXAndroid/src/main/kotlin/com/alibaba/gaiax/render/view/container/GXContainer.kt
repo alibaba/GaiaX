@@ -49,7 +49,7 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
         defStyleAttr
     )
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
     }
 
     private var gxTemplateContext: GXTemplateContext? = null

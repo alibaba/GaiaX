@@ -149,7 +149,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         this.config = config
     }
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
         viewPager?.adapter?.notifyDataSetChanged()
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->

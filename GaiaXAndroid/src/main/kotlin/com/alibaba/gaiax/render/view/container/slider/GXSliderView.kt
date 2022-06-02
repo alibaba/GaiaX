@@ -248,10 +248,10 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         )
         drawable.addState(intArrayOf(), unselectedDrawable)
         config?.indicatorSelectedColor?.let {
-            selectedDrawable.paint?.color = it.value
+            selectedDrawable.paint?.color = it.value()
         }
         config?.indicatorUnselectedColor?.let {
-            unselectedDrawable.paint?.color = it.value
+            unselectedDrawable.paint?.color = it.value()
         }
         return drawable
     }

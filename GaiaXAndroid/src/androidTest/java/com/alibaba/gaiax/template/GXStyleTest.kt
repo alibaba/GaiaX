@@ -93,7 +93,7 @@ class GXStyleTest {
 
         // Text
         Assert.assertEquals(10F.dpToPx(), style.fontSize?.valueFloat)
-        Assert.assertEquals(GXColor.parseColor("#00FF00"), style.fontColor?.value)
+        Assert.assertEquals(GXColor.create("#00FF00")?.value(), style.fontColor?.value())
         Assert.assertEquals(Typeface.DEFAULT, style.fontWeight)
         Assert.assertEquals(2, style.fontLines)
         Assert.assertEquals(20F.dpToPx(), style.fontLineHeight?.valueFloat)
@@ -119,7 +119,10 @@ class GXStyleTest {
 
         // Background
         Assert.assertEquals(GradientDrawable.Orientation.TL_BR, style.backgroundImage?.direction)
-        Assert.assertEquals(GXColor.parseColor("#00FF00"), style.backgroundColor?.value)
+        Assert.assertEquals(
+            GXColor.create("#00FF00")?.value(),
+            style.backgroundColor?.value()
+        )
 
         // Common
         Assert.assertEquals(View.VISIBLE, style.display)

@@ -543,7 +543,7 @@ class GXComponentTextTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1, rootView.childCount())
-        val value = GXColor.create("#00ff00")?.value
+        val value = GXColor.create("#00ff00")?.value()
         Assert.assertEquals(value, rootView.child<GXText>(0).currentTextColor)
     }
 

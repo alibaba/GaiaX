@@ -18,8 +18,8 @@ enum {
     GX_TAG_MAP = 7,
     GX_TAG_INT = 8,
 };
-#define GX_MKVAL(tag, val) (GXValue){ (GXValueUnion){ .int32 = val }, tag }
-#define GX_MKOBJECT(tag, val) (GXValue){ (GXValueUnion){ .ptr = val }, tag }
+#define GX_MKVAL(tag, val,count,hasChanged) (GXValue){ (GXValueUnion){ .int32 = val }, tag ,count,hasChanged}
+#define GX_MKOBJECT(tag, val,count,hasChanged) (GXValue){ (GXValueUnion){ .ptr = val }, tag ,count,hasChanged}
 
 #define GX_VALUE_GET_TAG(v) ((int32_t)(v).tag)
 #define GX_VALUE_GET_BOOL(v) ((v).u.int32)
@@ -38,6 +38,8 @@ typedef union GXValueUnion {
 typedef struct GXValue {
     GXValueUnion u;
     int64_t tag;
+    int count;
+    bool hasChanged;
 } GXValue;
 
 static inline const char *GX_ToCString(GXValue val) {
@@ -48,6 +50,8 @@ static inline GXValue __GX_NewFloat64(float d) {
     GXValue v;
     v.tag = GX_TAG_FLOAT;
     v.u.float64 = d;
+    v.hasChanged = false;
+    v.count = -2;
     return v;
 }
 
@@ -56,7 +60,7 @@ static inline GXValue __GX_NewFloat64(float d) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewNull(int val) {
-    return GX_MKVAL(GX_TAG_NULL, (val != 0));
+    return GX_MKVAL(GX_TAG_NULL, (val != 0),-2,false);
 }
 
 /**
@@ -64,7 +68,7 @@ static gx_force_inline GXValue GX_NewNull(int val) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewArray(void *val) {
-    return GX_MKOBJECT(GX_TAG_ARRAY, val);
+    return GX_MKOBJECT(GX_TAG_ARRAY, val,-2,false);
 }
 
 /**
@@ -72,7 +76,7 @@ static gx_force_inline GXValue GX_NewArray(void *val) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewMap(void *val) {
-    return GX_MKOBJECT(GX_TAG_MAP, val);
+    return GX_MKOBJECT(GX_TAG_MAP, val,-2,false);
 }
 
 /**
@@ -80,7 +84,7 @@ static gx_force_inline GXValue GX_NewMap(void *val) {
  * @param val bool对应的int值
  */
 static gx_force_inline GXValue GX_NewBool(int val) {
-    return GX_MKVAL(GX_TAG_BOOL, (val != 0));
+    return GX_MKVAL(GX_TAG_BOOL, (val != 0),-2,false);
 }
 
 /**
@@ -100,6 +104,8 @@ static gx_force_inline GXValue GX_NewFloat64(float d) {
 static gx_force_inline GXValue GX_NewGXString(const char *str) {
     GXValue gxValue;
     gxValue.tag = GX_TAG_STRING;
+    gxValue.hasChanged = false;
+    gxValue.count = -2;
     int len = strlen(str);
     gxValue.u.str = new char[len + 1];
     for (int i = 0; i < len; i++) {

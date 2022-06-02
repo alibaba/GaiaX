@@ -8,6 +8,7 @@
 #import "GXContext.h"
 #include "GXObject.h"
 #include "GXValue.h"
+#include "GXAnalyzeCore/GXAnalyze.h"
 
 @implementation GXContext
 
@@ -24,6 +25,7 @@
         
         //解析结果
         result = [self parserValue:(*value)];
+
     }
     
     return result;
@@ -47,6 +49,8 @@
             break;
         case GX_TAG_STRING:{
             const char *cString = GX_ToCString(value);
+            //value log
+            NSLog(@"打印字符串：%@",[NSString stringWithUTF8String:value.u.str]);
             NSString *stringValue = [NSString stringWithUTF8String:cString];
             result = [GXStr getResultByValue:stringValue];
             if(value.tag == GX_TAG_STRING && value.u.str !=NULL){
@@ -58,17 +62,21 @@
         case GX_TAG_ARRAY:{
             void *array = GX_VALUE_GET_OBJECT(value);
             result = [GXArray getResultByValue:array];
+            value.u.ptr = nullptr;
         }
             break;
         case GX_TAG_MAP:{
             void *map = GX_VALUE_GET_OBJECT(value);
             result = [GXMap getResultByValue:map];
+            value.u.ptr = nullptr;
         }
             break;
         default:
             break;
     }
-    
+    if(value.hasChanged && value.count != -2){
+        GXAnalyze::eraseGXMap(value.count);
+    }
     return result;
 }
 
@@ -108,11 +116,13 @@
         val = GX_NewNull(0);
     }
     
-    //生成安全返回值
-    GXValue *result  = (GXValue *) malloc(sizeof(val));
-    memcpy(result, &val, sizeof(val));
+    return GXAnalyze::addGXMap(val);
     
-    return (long)(result);
+    //生成安全返回值
+//    GXValue *result  = (GXValue *) malloc(sizeof(val));
+//    memcpy(result, &val, sizeof(val));
+//
+//    return (long)(result);
 }
 
 @end

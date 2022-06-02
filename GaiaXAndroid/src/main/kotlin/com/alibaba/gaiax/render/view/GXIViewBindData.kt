@@ -23,5 +23,5 @@ import com.alibaba.fastjson.JSONObject
  */
 interface GXIViewBindData {
 
-    fun onBindData(data: JSONObject)
+    fun onBindData(data: JSONObject?)
 }

@@ -95,7 +95,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.airbnb.android:lottie:4.1.0'
 
-    implementation 'com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT'
+    implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
     implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
 
     testImplementation 'junit:junit:4.13.2'

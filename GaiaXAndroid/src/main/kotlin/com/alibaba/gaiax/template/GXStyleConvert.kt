@@ -215,7 +215,7 @@ class GXStyleConvert {
                     GXSize.create(yOffset),
                     GXSize.create(blurOffset),
                     GXSize.create(spreadOffset),
-                    GXColor.create(color) ?: GXColor.undefine()
+                    GXColor.create(color) ?: GXColor.createUndefine()
                 )
             }
         }
@@ -235,11 +235,10 @@ class GXStyleConvert {
                 val direction = getDirection(linear)
                 return GXLinearColor(direction, colors)
             } else {
-                GXColor.parseColor(it)?.let {
-                    val intColors = IntArray(2)
-                    intColors[0] = it
-                    intColors[1] = it
-                    return GXLinearColor(GradientDrawable.Orientation.LEFT_RIGHT, intColors)
+                GXColor.create(it)?.let {
+                    val colors = mutableListOf<GXColor>()
+                    colors.add(it)
+                    return GXLinearColor(GradientDrawable.Orientation.LEFT_RIGHT, colors)
                 }
             }
             return null
@@ -386,17 +385,19 @@ class GXStyleConvert {
         else -> null
     }
 
-    fun getLinearGradientColors(linear: List<String>): IntArray {
+    fun getLinearGradientColors(linear: List<String>): MutableList<GXColor> {
         val colors = mutableListOf<String>()
         linear.forEach {
             if (!it.startsWith("to")) {
                 colors.add(it)
             }
         }
-        val intColors = IntArray(colors.size)
-        colors.forEachIndexed { index, color ->
-            intColors[index] = GXColor.create(color)?.value
-                ?: throw IllegalArgumentException("linearColor create color error")
+        val intColors = mutableListOf<GXColor>()
+        colors.forEach { color ->
+            intColors.add(
+                GXColor.create(color)
+                    ?: throw IllegalArgumentException("linearColor create color error")
+            )
         }
         return intColors
     }

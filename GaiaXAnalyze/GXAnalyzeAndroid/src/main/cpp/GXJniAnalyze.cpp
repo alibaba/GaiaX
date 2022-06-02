@@ -399,3 +399,22 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueNull(JNIEnv *
     memcpy(result, &val, sizeof(val));
     return (jlong) result;
 }
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getCount(JNIEnv *env, jobject thiz,
+                                                                 jlong value) {
+    GXValue *val = (GXValue *) value;
+    if(val->hasChanged){
+        return val->count;
+    }else{
+        return -1;
+    }
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_releaseGXValue(JNIEnv *env, jobject thiz,
+                                                                       jint count) {
+    if(count != -1 && count != -2){
+        GXAnalyze::eraseGXMap(count);
+    }
+}

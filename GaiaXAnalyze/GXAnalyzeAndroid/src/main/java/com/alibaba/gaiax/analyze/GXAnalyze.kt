@@ -43,6 +43,8 @@ class GXAnalyze {
         external fun createValueArray(value: Any?): Long
         external fun createValueMap(value: Any?): Long
         external fun createValueNull(): Long
+        external fun releaseGXValue(count: Int)
+        external fun getCount(value: Long):Int
 
         val TYPE_FLOAT = 0
         val TYPE_BOOLEAN = 1
@@ -67,6 +69,9 @@ class GXAnalyze {
                     TYPE_MAP -> gxValue = GXMap(getValueMap(value))
                     TYPE_BOOLEAN -> gxValue = GXBool(getValueBoolean(value))
                     TYPE_FLOAT -> gxValue = GXFloat(getValueFloat(value))
+                }
+                if(gxValue!=null){
+                    releaseGXValue(getCount(value))
                 }
                 return gxValue
             } catch (e: Exception) {

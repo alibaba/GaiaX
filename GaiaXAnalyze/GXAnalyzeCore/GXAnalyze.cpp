@@ -30,6 +30,9 @@ struct CLOSURE {                                  //闭包CLOSURE
 static vector<CLOSURE> cloArray;
 static unordered_map<char, string> CtoS;     //Char to String
 static unordered_map<string, char> StoC;     //String to Char
+//暂存GXValue，持有引用，避免提早被释放掉
+static map<int , GXValue> GXValueMap;
+static atomic<int> GXCount (0);
 
 //初始化终结符和非终结符
 void init_SAndC() {
@@ -394,6 +397,16 @@ void init() {
     }
 }
 
+//静态函数 声明在非静态类里确实不行
+void GXAnalyze::eraseGXMap(int count){
+    GXValueMap.erase(count);
+}
+void GXAnalyze::addGXMap(GXValue gxValue){
+    ++GXCount;
+    gxValue.count = GXCount;
+    gxValue.hasChanged = true;
+    GXValueMap[GXCount] = gxValue;
+}
 GXAnalyze::GXAnalyze() {
     init();
 }
@@ -892,7 +905,6 @@ long GXAnalyze::getValue(string expression, void *source) {
 }
 
 long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source) {
-    static GXValue pointer;
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     string temp = "\0"; //需要分析的语句
     string sentence = s + temp;
@@ -922,6 +934,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         //当前new_status,下一入栈的新状态
         new_status = tableT[m];
         if (new_status == "acc") {
+            GXValue pointer;
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
                 pointer = GX_NewGXString(tem);
@@ -944,7 +957,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             delete[] symbolStack;
             delete[] valueStack;
             delete[] paramsStack;
-            return (long) (&pointer);
+            ++GXCount;
+            pointer.count = GXCount;
+            pointer.hasChanged = true;
+            GXValueMap[GXCount] = pointer;
+            return (long) (&GXValueMap[GXCount]);
         } else if (new_status[0] ==
                    's') {
             statusStack[statusSize] = new_status.substr(1);

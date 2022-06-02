@@ -9,6 +9,9 @@
 #include "GXValue.h"
 #include <set>
 #include <unordered_map>
+#include <map>
+#include<atomic>
+
 
 
 using namespace std;
@@ -31,6 +34,9 @@ public:
 
     virtual void throwError(string message) = 0;
 
+    static void eraseGXMap(int count);
+    static void addGXMap(GXValue gxValue);
+
 private:
 
     //获取两个数值计算的结果
@@ -38,9 +44,6 @@ private:
 
     //获取单个数值计算的结果
     GXATSNode singleCalculate(GXATSNode value1, string op);
-
-
-    string grammarScanner(vector<GXATSNode> array);
 
     long check(string s, vector<GXATSNode> array, void *p_analyze, void* source);
 };

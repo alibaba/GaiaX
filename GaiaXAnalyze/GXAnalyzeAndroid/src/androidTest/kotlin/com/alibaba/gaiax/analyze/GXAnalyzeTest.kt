@@ -40,7 +40,7 @@ class GXAnalyzeTest {
 
             override fun computeFunctionExpression(
                 functionName: String,
-                params: LongArray,
+                params: LongArray
             ): Long {
                 //获取返回的参数列表结果
                 if (functionName == "size" && params.size == 1) {

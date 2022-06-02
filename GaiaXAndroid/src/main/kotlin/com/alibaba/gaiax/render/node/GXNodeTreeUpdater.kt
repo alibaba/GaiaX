@@ -105,6 +105,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                     it.value.gxTemplateContext,
                     it.value.gxTemplateNode,
                     it.value.gxStretchNode,
+                    it.value.gxCssStyle,
                     it.value.templateData,
                     it.value.stretchStyle
                 )

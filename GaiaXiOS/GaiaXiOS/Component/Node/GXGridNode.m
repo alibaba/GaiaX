@@ -346,6 +346,8 @@
     templateItem.isLocal = self.templateItem.isLocal;
     templateItem.bizId = self.templateItem.bizId;
     templateItem.templateId = identifier;
+    templateItem.templateVersion = @"grid";
+
     //rootStyle
     templateItem.rootStyleInfo = [self.fullStyleJson gx_dictionaryForKey:identifier];
     self.subTemplateItem = templateItem;

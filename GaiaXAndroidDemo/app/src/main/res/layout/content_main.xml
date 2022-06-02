@@ -15,42 +15,49 @@
             android:id="@+id/fastpreview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/fastpreview" />
+            android:text="@string/fastpreview"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/normal_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/normal_template" />
+            android:text="@string/normal_template"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nest_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nest_template" />
+            android:text="@string/nest_template"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/container_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/container_template" />
+            android:text="@string/container_template"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/databinding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/data" />
+            android:text="@string/data"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/event" />
+            android:text="@string/event"
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/api"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/api" />
+            android:text="@string/api"
+            android:textColor="@color/black" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

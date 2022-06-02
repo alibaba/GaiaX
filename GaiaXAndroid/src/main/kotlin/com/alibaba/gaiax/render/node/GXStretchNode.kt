@@ -384,6 +384,7 @@ data class GXStretchNode(
                         gxTemplateContext,
                         gxTemplateNode,
                         gxStretchNode,
+                        gxCssStyle,
                         templateData,
                         stretchStyle
                     )
@@ -396,6 +397,7 @@ data class GXStretchNode(
                 gxTemplateContext,
                 gxTemplateNode,
                 gxStretchNode,
+                gxCssStyle,
                 templateData,
                 stretchStyle
             )
@@ -408,8 +410,9 @@ data class GXStretchNode(
         templateContext: GXTemplateContext,
         gxTemplateNode: GXTemplateNode,
         gxStretchNode: GXStretchNode,
+        gxCssStyle: GXStyle,
         templateData: JSONObject,
-        stretchStyle: Style
+        style: Style
     ): Boolean? {
         GXFitContentUtils.fitContent(
             templateContext,
@@ -419,12 +422,22 @@ data class GXStretchNode(
         )?.let { src ->
 
             // 自适应之后的宽度，要更新到原有尺寸上
-            GXTemplateUtils.updateSize(src, stretchStyle.size)
+            GXTemplateUtils.updateSize(src, style.size)
+
+            GXRegisterCenter.instance
+                .extensionDynamicProperty
+                ?.convert(
+                    GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_SIZE,
+                        style.size
+                    ).apply {
+                        this.cssStyle = gxCssStyle
+                    })
 
             // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
             // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
-            if (stretchStyle.flexGrow != 0F) {
-                stretchStyle.flexGrow = 0F
+            if (style.flexGrow != 0F) {
+                style.flexGrow = 0F
             }
 
             return true
@@ -446,6 +459,7 @@ data class GXStretchNode(
         gxTemplateContext: GXTemplateContext,
         gxTemplateNode: GXTemplateNode,
         gxStretchNode: GXStretchNode,
+        gxCssStyle: GXStyle,
         templateData: JSONObject,
         stretchStyle: Style
     ): Boolean {
@@ -455,6 +469,7 @@ data class GXStretchNode(
             gxTemplateContext,
             gxTemplateNode,
             gxStretchNode,
+            gxCssStyle,
             templateData,
             stretchStyle
         )

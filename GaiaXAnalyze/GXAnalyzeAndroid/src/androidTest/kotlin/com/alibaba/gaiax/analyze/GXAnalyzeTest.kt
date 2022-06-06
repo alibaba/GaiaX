@@ -97,6 +97,8 @@ class GXAnalyzeTest {
         Assert.assertEquals("abcd", instance.getResult("'ab'+'cd'", testData))
         Assert.assertEquals(10f, instance.getResult("\$data+2", testData))
         Assert.assertEquals(16f, instance.getResult("\$data+\$data", testData))
+        Assert.assertEquals("1231", instance.getResult("'123' + 1", testData))
+        Assert.assertEquals("1231", instance.getResult("123 + '1'", testData))
     }
 
     @Test
@@ -260,11 +262,6 @@ class GXAnalyzeTest {
     @Test(expected = RuntimeException::class)
     fun error_1_add_abc() {
         Assert.assertEquals(null, instance.getResult("1 + abc", testData))
-    }
-
-    @Test(expected = RuntimeException::class)
-    fun error_string_123_add_1() {
-        Assert.assertEquals(null, instance.getResult("'123' + 1", testData))
     }
 
     @Test(expected = RuntimeException::class)

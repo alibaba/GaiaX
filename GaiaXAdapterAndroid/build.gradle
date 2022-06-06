@@ -95,7 +95,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.airbnb.android:lottie:4.1.0'
 
-    if (System.getProperties().get("GaiaXDemo") == true) {
+    if (System.getProperties().get("GaiaXDemo") == "true") {
         implementation project(path: ':GXAnalyzeAndroid')
         implementation project(path: ':GaiaXAndroid')
     } else {

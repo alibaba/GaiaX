@@ -801,7 +801,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
             view.setOverflow(gxCss.style.overflow)
 
-            view.setBackgroundColorAndBackgroundImageAndRadius(gxCss.style)
+            view.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
 
             view.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
         }

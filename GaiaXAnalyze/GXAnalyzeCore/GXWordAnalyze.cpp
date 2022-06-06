@@ -45,7 +45,7 @@ int isKey(char s[]) {
 
 //判断是不是字母
 bool isChar(char ch) {
-    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))
+    if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_'))
         return true;
     else
         return false;

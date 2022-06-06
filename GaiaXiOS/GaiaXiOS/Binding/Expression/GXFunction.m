@@ -27,19 +27,21 @@
     NSInteger count = 0;
     
     //解析内容
-    id result = value[0];
-    if (result) {
-        if ([result isKindOfClass:[NSString class]]) {
-            //string
-            count = [(NSString *)result length];
-            
-        } else if ([result isKindOfClass:[NSArray class]]){
-            //array
-            count = [(NSArray *)result count];
-            
-        } else if ([result isKindOfClass:[NSDictionary class]]){
-            //dictionary
-            count = [(NSDictionary *)result count];
+    if (value.count > 0) {
+        id result = value[0];
+        if (result) {
+            if ([result isKindOfClass:[NSString class]]) {
+                //string
+                count = [(NSString *)result length];
+                
+            } else if ([result isKindOfClass:[NSArray class]]){
+                //array
+                count = [(NSArray *)result count];
+                
+            } else if ([result isKindOfClass:[NSDictionary class]]){
+                //dictionary
+                count = [(NSDictionary *)result count];
+            }
         }
     }
     

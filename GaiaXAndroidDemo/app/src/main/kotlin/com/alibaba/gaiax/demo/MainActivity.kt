@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.fastpreview.GaiaXFastPreviewActivity
 import com.alibaba.gaiax.fastpreview.GaiaXQRCodeActivity

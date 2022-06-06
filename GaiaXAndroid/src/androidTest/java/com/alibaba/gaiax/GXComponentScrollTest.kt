@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -1432,9 +1433,12 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
         Assert.assertEquals(
-            null,
+            true,
+            rootView.child(0).foreground is GXRoundCornerBorderGradientDrawable
+        )
+        Assert.assertEquals(
+            0F,
             (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
         )
     }

@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
@@ -459,9 +460,12 @@ class GXComponentViewTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
         Assert.assertEquals(
-            null,
+            true,
+            rootView.child(0).foreground is GXRoundCornerBorderGradientDrawable
+        )
+        Assert.assertEquals(
+            0F,
             (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
         )
     }

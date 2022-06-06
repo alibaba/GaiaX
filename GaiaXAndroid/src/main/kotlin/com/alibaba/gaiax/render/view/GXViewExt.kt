@@ -56,29 +56,29 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXText) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXIImageView) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXContainer) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         }
     }
@@ -122,7 +122,7 @@ fun View.setOverflow(overflow: Boolean?) {
 /**
  * @suppress
  */
-fun View.setBackgroundColorAndBackgroundImageAndRadius(style: GXStyle?) {
+fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
     if (style?.backgroundImage != null) {
         if (this is GXText) {
             // GXText needs to be handled separately

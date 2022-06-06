@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -1139,9 +1140,12 @@ class GXComponentGridTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(null, (rootView.child(0).foreground as? GradientDrawable)?.shape)
         Assert.assertEquals(
-            null,
+            true,
+            rootView.child(0).foreground is GXRoundCornerBorderGradientDrawable
+        )
+        Assert.assertEquals(
+            0F,
             (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
         )
     }

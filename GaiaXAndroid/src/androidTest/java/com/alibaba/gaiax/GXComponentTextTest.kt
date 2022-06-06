@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.support.test.runner.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXColor
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -51,9 +53,13 @@ class GXComponentTextTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
-        Assert.assertEquals(null, (rootView.child(0).background as? GradientDrawable1)?.shape)
         Assert.assertEquals(
-            null,
+            true,
+            rootView.child(0).background is GXRoundCornerBorderGradientDrawable ||
+            rootView.child(0).background is GXColorGradientDrawable
+        )
+        Assert.assertEquals(
+            0F,
             (rootView.child(0).background as? GradientDrawable1)?.cornerRadii?.get(0)
         )
     }

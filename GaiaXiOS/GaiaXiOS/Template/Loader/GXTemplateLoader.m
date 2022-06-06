@@ -158,3 +158,24 @@
 }
 
 @end
+
+
+@implementation GXTemplateLoader (Custom)
+
+/// 读取模板信息
+- (NSDictionary *)loadTemplateContenttWithFolderPath:(NSString *)folderPath
+                                          templateId:(NSString *)templateId
+                                     templateVersion:(NSString *)templateVersion{
+    //有效性判断
+    if (![GXUtils isValidString:folderPath] || ![GXUtils isValidString:templateId]) {
+        return nil;
+    }
+    
+    //读取路径 & 加载模板
+    NSDictionary *resultDict = [self.templateReader readTemplateContenttWithFolderPath:folderPath
+                                                                            templateId:templateId
+                                                                       templateVersion:templateVersion];
+    return resultDict;
+}
+
+@end

@@ -6,7 +6,7 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable

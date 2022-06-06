@@ -699,16 +699,14 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "string";
             result.name = left.name + right.name;
         } else {
-            result.token = "error";
-            if (left.token == "num" || left.token == "string") {
-                result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
-                        right.token;
-            } else if (right.token == "num" || right.token == "string") {
-                result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
-                        left.token;
+            if (left.token == "num" && right.token == "string") {
+                result.name = left.name + right.name;
+                result.token = "string";
+            } else if (right.token == "num" && left.token == "string") {
+                result.name = left.name + right.name;
+                result.token = "string";
             } else {
+                result.token = "error";
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;

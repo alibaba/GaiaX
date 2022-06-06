@@ -18,7 +18,7 @@ package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 
 /**
  * @suppress

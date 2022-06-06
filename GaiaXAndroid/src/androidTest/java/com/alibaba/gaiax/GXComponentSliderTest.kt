@@ -2,8 +2,8 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.widget.LinearLayout
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.viewpager.widget.ViewPager
+import android.support.test.runner.AndroidJUnit4
+import android.support.v4.view.ViewPager
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView

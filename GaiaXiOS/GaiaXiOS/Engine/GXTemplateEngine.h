@@ -55,12 +55,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param view the root view
 - (void)bindData:(GXTemplateData *)data onView:(UIView *)view;
 
-
-/// relayout
-/// @param measureSize measure size
-- (void)relayoutRootView:(UIView *)view withMeasureSize:(CGSize)measureSize;
-
-
 /// Get view in the root view by nodeId
 /// @param nodeId node id
 /// @param rootView the root view

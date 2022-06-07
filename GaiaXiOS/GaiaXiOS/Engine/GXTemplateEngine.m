@@ -108,16 +108,6 @@
     [self bindData:data measureSize:size onRootView:view];
 }
 
-//重新布局
-- (void)relayoutRootView:(UIView *)view withMeasureSize:(CGSize)measureSize{
-    //更新context
-    GXNode *node = view.gxNode;
-    GXTemplateContext *ctx = node.templateContext;
-    ctx.measureSize = measureSize;
-    //绑定数据
-    [self.renderManager relayout:ctx measureSize:measureSize];
-}
-
 //通过nodeId获取根视图中的某个view
 - (UIView * _Nullable)queryViewByNodeId:(NSString *)nodeId rootView:(UIView *)rootView{
     GXNode *rootNode = rootView.gxNode;

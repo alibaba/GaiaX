@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIView <GXRootViewProtocal> * _Nullable)creatViewByTemplateItem:(GXTemplateItem *)templateItem
                                                        measureSize:(CGSize)measureSize;
 
-/// Data binding
+/// Data binding (若无更新size的诉求，请使用bindData:onView:)
 /// @param data template data
 /// @param measureSize measure size
 /// @param view the root view
@@ -54,12 +54,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param data template data
 /// @param view the root view
 - (void)bindData:(GXTemplateData *)data onView:(UIView *)view;
-
-
-/// relayout
-/// @param measureSize measure size
-- (void)relayoutRootView:(UIView *)view withMeasureSize:(CGSize)measureSize;
-
 
 /// Get view in the root view by nodeId
 /// @param nodeId node id

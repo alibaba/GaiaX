@@ -1,0 +1,10 @@
+{
+  "id": "template_bind_data_measure_size",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view"
+    }
+  ]
+}

@@ -400,7 +400,6 @@ class GXTemplateEngine {
         }
     }
 
-
     internal lateinit var context: Context
 
     internal val data by lazy {
@@ -438,6 +437,42 @@ class GXTemplateEngine {
         return createView(gxTemplateItem, gxMeasureSize, null)
     }
 
+    /**
+     * Data binding
+     *
+     * @param view The root view
+     * @param gxTemplateData Template data
+     * @throws IllegalArgumentException
+     */
+    fun bindData(view: View, gxTemplateData: GXTemplateData) {
+        val gxTemplateContext = GXTemplateContext.getContext(view)
+            ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        gxTemplateContext.templateData = gxTemplateData
+        render.bindViewDataOnlyNodeTree(gxTemplateContext)
+        render.bindViewDataOnlyViewTree(gxTemplateContext)
+    }
+
+    /**
+     * Data binding
+     *
+     * @param view The root view
+     * @param gxTemplateData Template data
+     * @param gxMeasureSize Measuring the Size
+     * @throws IllegalArgumentException
+     */
+    fun bindData(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize) {
+        val gxTemplateContext = GXTemplateContext.getContext(view)
+            ?: throw IllegalArgumentException("Not found templateContext from targetView")
+        gxTemplateContext.templateData = gxTemplateData
+        gxTemplateContext.size = gxMeasureSize
+        render.bindViewDataOnlyNodeTree(gxTemplateContext)
+        render.bindViewDataOnlyViewTree(gxTemplateContext)
+    }
+
+    /**
+     * @suppress
+     * @hide
+     */
     fun createView(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
@@ -453,6 +488,10 @@ class GXTemplateEngine {
         return render.createView(context)
     }
 
+    /**
+     * @suppress
+     * @hide
+     */
     fun createViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
@@ -469,6 +508,10 @@ class GXTemplateEngine {
         return context
     }
 
+    /**
+     * @suppress
+     * @hide
+     */
     fun createViewOnlyViewTree(
         gxTemplateContext: GXTemplateContext
     ): View {
@@ -476,20 +519,9 @@ class GXTemplateEngine {
     }
 
     /**
-     * Data binding
-     *
-     * @param view The root view
-     * @param gxTemplateData Template data
-     * @throws IllegalArgumentException
+     * @suppress
+     * @hide
      */
-    fun bindData(view: View, gxTemplateData: GXTemplateData) {
-        val gxTemplateContext = GXTemplateContext.getContext(view)
-            ?: throw IllegalArgumentException("Not found templateContext from targetView")
-        gxTemplateContext.templateData = gxTemplateData
-        render.bindViewDataOnlyNodeTree(gxTemplateContext)
-        render.bindViewDataOnlyViewTree(gxTemplateContext)
-    }
-
     fun bindDataOnlyNodeTree(view: View, gxTemplateData: GXTemplateData) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
@@ -497,6 +529,10 @@ class GXTemplateEngine {
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
     }
 
+    /**
+     * @suppress
+     * @hide
+     */
     fun bindDataOnlyViewTree(view: View, gxTemplateData: GXTemplateData) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
@@ -507,6 +543,7 @@ class GXTemplateEngine {
     /**
      * Getting the template context
      * @suppress
+     * @hide
      */
     fun getGXTemplateContext(targetView: View?): GXTemplateContext? {
         return targetView?.let { GXTemplateContext.getContext(it) }
@@ -523,6 +560,11 @@ class GXTemplateEngine {
         return null
     }
 
+    /**
+     * Get GXNode
+     * @suppress
+     * @hide
+     */
     fun getGXNodeById(targetView: View, id: String): GXNode? {
         GXTemplateContext.getContext(targetView)?.let { context ->
             return context.rootNode?.getGXNodeById(id)

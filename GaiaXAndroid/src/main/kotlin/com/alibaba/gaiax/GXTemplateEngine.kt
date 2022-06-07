@@ -438,33 +438,20 @@ class GXTemplateEngine {
     }
 
     /**
-     * Data binding
+     * Bind template data
      *
      * @param view The root view
      * @param gxTemplateData Template data
+     * @param gxMeasureSize Measure Size
      * @throws IllegalArgumentException
      */
-    fun bindData(view: View, gxTemplateData: GXTemplateData) {
+    fun bindData(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
         gxTemplateContext.templateData = gxTemplateData
-        render.bindViewDataOnlyNodeTree(gxTemplateContext)
-        render.bindViewDataOnlyViewTree(gxTemplateContext)
-    }
-
-    /**
-     * Data binding
-     *
-     * @param view The root view
-     * @param gxTemplateData Template data
-     * @param gxMeasureSize Measuring the Size
-     * @throws IllegalArgumentException
-     */
-    fun bindData(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize) {
-        val gxTemplateContext = GXTemplateContext.getContext(view)
-            ?: throw IllegalArgumentException("Not found templateContext from targetView")
-        gxTemplateContext.templateData = gxTemplateData
-        gxTemplateContext.size = gxMeasureSize
+        if (gxMeasureSize != null) {
+            gxTemplateContext.size = gxMeasureSize
+        }
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
         render.bindViewDataOnlyViewTree(gxTemplateContext)
     }

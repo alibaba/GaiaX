@@ -1,0 +1,13 @@
+#template_bind_data_measure_size {
+  width: 100%;
+  height: 200px;
+  background-color: primaryBackground;
+  justify-content: center;
+  align-items: center;
+}
+#container1 {
+  width: 100px;
+  height: 100px;
+  background-color: #e4e4e4;
+  border-radius: 10px;
+}

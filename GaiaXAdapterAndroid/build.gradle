@@ -96,8 +96,13 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.airbnb.android:lottie:2.7.0'
 
-    implementation 'com.github.alibaba.GaiaX:GaiaX:androidsupport-SNAPSHOT'
-    implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:androidsupport-SNAPSHOT'
+    if (System.getProperties().get("GaiaXDemo") == "true") {
+        implementation project(path: ':GXAnalyzeAndroid')
+        implementation project(path: ':GaiaXAndroid')
+    } else {
+        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
+        implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
+    }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:androidsupport-SNAPSHOT'

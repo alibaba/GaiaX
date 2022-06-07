@@ -700,9 +700,21 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = left.name + right.name;
         } else {
             if (left.token == "num" && right.token == "string") {
+                if(left.name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    left.name = regex_replace(left.name, e, "");
+                    left.name = regex_replace(left.name, e2, "");
+                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else if (right.token == "num" && left.token == "string") {
+                if(right.name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    right.name = regex_replace(right.name, e, "");
+                    right.name = regex_replace(right.name, e2, "");
+                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else {
@@ -930,6 +942,12 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     pointer = GX_NewBool(0);
                 }
             } else if (valueStack[0].token == "num") {
+                if(valueStack[0].name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    valueStack[0].name = regex_replace(valueStack[0].name, e, "");
+                    valueStack[0].name = regex_replace(valueStack[0].name, e2, "");
+                }
                 pointer = GX_NewFloat64(atof(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "map") {
                 pointer = GX_NewMap((void *) atol(valueStack[0].name.c_str()));

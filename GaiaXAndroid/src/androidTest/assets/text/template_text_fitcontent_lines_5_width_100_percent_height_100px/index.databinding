@@ -1,7 +1,7 @@
 {
     "data": {
         "text": {
-            "value":"'HelloWorld'"
+            "value":"$title"
         }
     }
 }

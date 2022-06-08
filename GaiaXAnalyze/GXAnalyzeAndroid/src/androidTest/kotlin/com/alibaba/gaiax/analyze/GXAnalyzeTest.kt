@@ -99,6 +99,8 @@ class GXAnalyzeTest {
         Assert.assertEquals(16f, instance.getResult("\$data+\$data", testData))
         Assert.assertEquals("1231", instance.getResult("'123' + 1.000", testData))
         Assert.assertEquals("1231", instance.getResult("123.000 + '1'", testData))
+        Assert.assertEquals("123.1111", instance.getResult("123.111 + '1'", testData))
+        Assert.assertEquals("123.0011.0", instance.getResult("123.001 + '1.0'", testData))
     }
 
     @Test

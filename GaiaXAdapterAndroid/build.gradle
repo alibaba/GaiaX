@@ -100,8 +100,8 @@ dependencies {
         implementation project(path: ':GXAnalyzeAndroid')
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
-        implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
+        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:androidsupport-SNAPSHOT'
+        implementation('com.github.alibaba.GaiaX:GaiaX:androidsupport-SNAPSHOT') { changing = true }
     }
 
     testImplementation 'junit:junit:4.13.2'

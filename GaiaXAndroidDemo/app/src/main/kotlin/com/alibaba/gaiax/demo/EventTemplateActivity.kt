@@ -20,7 +20,6 @@ class EventTemplateActivity : AppCompatActivity() {
         renderTemplate1(this)
     }
 
-
     private fun renderTemplate1(activity: EventTemplateActivity) {
         // 初始化
         GXTemplateEngine.instance.init(activity)

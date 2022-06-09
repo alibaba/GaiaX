@@ -172,7 +172,38 @@ class GXContainerViewAdapter(
             }
 
             // 为坑位View绑定数据
-            val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+            val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData).apply {
+                this.eventListener = object : GXTemplateEngine.GXIEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        super.onGestureEvent(gxGesture)
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
+                    }
+
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        super.onScrollEvent(gxScroll)
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
+                    }
+
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        super.onAnimationEvent(gxAnimation)
+                        gxTemplateContext.templateData?.eventListener?.onAnimationEvent(gxAnimation)
+                    }
+                }
+
+                this.trackListener = object : GXTemplateEngine.GXITrackListener {
+                    override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        super.onTrackEvent(gxTrack)
+                        gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                    }
+                }
+
+                this.dataListener = object : GXTemplateEngine.GXIDataListener {
+                    override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
+                        return gxTemplateContext.templateData?.dataListener
+                            ?.onTextProcess(gxTextData)
+                    }
+                }
+            }
             GXTemplateEngine.instance.bindData(childView, childTemplateData)
         }
     }

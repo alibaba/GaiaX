@@ -9,6 +9,7 @@
 #include "GXValue.h"
 #include <set>
 #include <unordered_map>
+#include <regex>
 
 
 using namespace std;

@@ -2,6 +2,7 @@ package com.alibaba.gaiax
 
 import android.view.View
 import android.support.test.runner.AndroidJUnit4
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
@@ -662,6 +663,52 @@ class GXComponentEventTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(null, track)
+    }
+
+    @Test
+    fun template_event_scroll() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            "template_event_scroll"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+
+        var gesture: GXTemplateEngine.GXGesture? = null
+
+        templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
+
+            override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                super.onGestureEvent(gxGesture)
+                gesture = gxGesture
+            }
+        }
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        rootView.executeRecyclerView()
+
+        rootView.child(0).child(0).performClick()
+
+        Assert.assertEquals(true, gesture != null)
+        Assert.assertEquals("tap", gesture?.gestureType)
+        Assert.assertEquals(-1, gesture?.index)
+        Assert.assertEquals("template_event_scroll_item", gesture?.nodeId)
+        Assert.assertEquals(JSONObject().apply {
+            this["type"] = "tap"
+            this["value"] = JSONObject().apply {
+                this["value"] = "GaiaX"
+            }
+        }.toJSONString(), gesture?.eventParams?.toJSONString())
     }
 
 }

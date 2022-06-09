@@ -442,6 +442,7 @@
         if (!_longPress) {
             _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
             _longPress.delegate = self;
+            view.userInteractionEnabled = true;
             [view addGestureRecognizer:_longPress];
         }
         
@@ -450,6 +451,7 @@
         if (!_tap) {
             _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
             _tap.delegate = self;
+            view.userInteractionEnabled = true;
             [view addGestureRecognizer:_tap];
         }
     }

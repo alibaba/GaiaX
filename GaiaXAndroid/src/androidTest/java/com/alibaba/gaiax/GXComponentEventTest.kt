@@ -705,9 +705,7 @@ class GXComponentEventTest : GXBaseTest() {
         Assert.assertEquals("template_event_scroll_item", gesture?.nodeId)
         Assert.assertEquals(JSONObject().apply {
             this["type"] = "tap"
-            this["value"] = JSONObject().apply {
-                this["value"] = "GaiaX"
-            }
+            this["value"] = "GaiaX"
         }.toJSONString(), gesture?.eventParams?.toJSONString())
     }
 

@@ -1,0 +1,5 @@
+#template_event_scroll_item  {
+  flex-direction:column;
+  height:100px;
+  width:100px;
+}

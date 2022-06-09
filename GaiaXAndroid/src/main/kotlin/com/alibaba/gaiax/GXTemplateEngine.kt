@@ -289,7 +289,7 @@ class GXTemplateEngine {
         /**
          * Animation event
          */
-        fun onAnimationEvent(animation: GXAnimation) {}
+        fun onAnimationEvent(gxAnimation: GXAnimation) {}
     }
 
     /**

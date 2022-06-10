@@ -1,6 +1,7 @@
 package com.alibaba.gaiax
 
 import android.content.Context
+import android.graphics.Typeface
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
@@ -22,7 +23,17 @@ class GXCommonApiTest {
     }
 
     @Test
-    fun template_position_relative_left() {
+    fun template_font_family() {
+        GXRegisterCenter.instance.registerExtensionFontFamily(object :
+            GXRegisterCenter.GXIExtensionFontFamily {
+            override fun fontFamily(fontFamilyName: String): Typeface? {
+                return Typeface.createFromAsset(GXMockUtils.context.assets, fontFamilyName)
+            }
+        })
+    }
+
+    @Test
+    fun template_bind_data_measure_size() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "api",

@@ -171,27 +171,20 @@ class GXStyleConvert {
     }
 
     fun fontFamily(fontFamily: String): Typeface? {
-        try {
-            // extend
-            GXRegisterCenter
-                .instance
-                .extensionStaticProperty
-                ?.convert(
-                    GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
-                        GXTemplateKey.STYLE_FONT_FAMILY,
-                        fontFamily
-                    )
+        // extend
+        GXRegisterCenter
+            .instance
+            .extensionStaticProperty
+            ?.convert(
+                GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
+                    GXTemplateKey.STYLE_FONT_FAMILY,
+                    fontFamily
                 )
-                ?.let {
-                    (it as? Typeface)?.let { return it }
-                }
-
-            // src
-            return Typeface.createFromAsset(assets, "$fontFamily.ttf")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
-        }
+            )
+            ?.let {
+                (it as? Typeface)?.let { return it }
+            }
+        return null
     }
 
     fun font(css: JSONObject): GXSize? =

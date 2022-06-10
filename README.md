@@ -90,15 +90,15 @@ allprojects {
 
 Android-Support version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2-support'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3.0-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3.0-support'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
 AndroidX version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 #### Template File

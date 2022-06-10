@@ -53,7 +53,6 @@ open class GXBaseTest {
             .registerExtensionColor(GXProcessorColor())
             .registerExtensionSize(GXExtensionSize())
             .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
-            .registerExtensionStaticProperty(GXExtensionStaticProperty())
             .registerExtensionScroll(GXExtensionScroll())
 
     }
@@ -118,19 +117,6 @@ open class GXBaseTest {
                     val newValue = params.value as Float
                     return newValue * largeFontScale
                 }
-            }
-            return null
-        }
-    }
-
-    class GXExtensionStaticProperty : GXRegisterCenter.GXIExtensionStaticProperty {
-
-        override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
-            if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
-                return Typeface.createFromAsset(
-                    context.assets,
-                    "fontfamily3.ttf"
-                )
             }
             return null
         }

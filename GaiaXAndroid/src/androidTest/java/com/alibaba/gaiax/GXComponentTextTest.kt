@@ -2,6 +2,7 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -147,6 +148,19 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_processor_font_family() {
+        GXRegisterCenter.instance.registerExtensionStaticProperty(object :
+            GXRegisterCenter.GXIExtensionStaticProperty {
+            override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
+                    return Typeface.createFromAsset(
+                        GXMockUtils.context.assets,
+                        "fontfamily3.ttf"
+                    )
+                }
+                return null
+            }
+        })
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -467,6 +481,19 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_family() {
+        GXRegisterCenter.instance.registerExtensionStaticProperty(object :
+            GXRegisterCenter.GXIExtensionStaticProperty {
+            override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY) {
+                    return Typeface.createFromAsset(
+                        GXMockUtils.context.assets,
+                        "${params.value}.ttf"
+                    )
+                }
+                return null
+            }
+        })
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -1090,7 +1117,10 @@ class GXComponentTextTest : GXBaseTest() {
         )
         textView.measure(widthSpec, 0)
 
-        Log.e("[GaiaX]", "textView.measuredWidth=${textView.measuredWidth.toFloat()} textView.measuredHeight=${textView.measuredHeight.toFloat()}")
+        Log.e(
+            "[GaiaX]",
+            "textView.measuredWidth=${textView.measuredWidth.toFloat()} textView.measuredHeight=${textView.measuredHeight.toFloat()}"
+        )
 
         Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())

@@ -37,9 +37,9 @@ import com.alibaba.gaiax.template.GXTemplateKey
 /**
  * GaiaX engine class.
  *
- * GaiaX is a lightweight, pure native dynamic card cross-end solution developed by alibaba YouKu technology team.
- * In addition to the client rendering SDK, GaiaXStudio and GaiaXDemo (template samples, as well as scan preview) are provided to support the development of full-link technology support from template building and editing, real machine debugging and preview, etc.
- * GaiaX aims to ensure the performance of native experience at the same time, help the client development achieve low code.
+ * GaiaX dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team.
+ * Except client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real time preview, it support to create template, edit template, real machine debug and real time preview.
+ * Dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
  *
  * Basic usage:
  * ```
@@ -62,7 +62,20 @@ import com.alibaba.gaiax.template.GXTemplateKey
 class GXTemplateEngine {
 
     /**
-     * GX adapter
+     * GaiaX Engine adapter.
+     * The Adapter can use to register some extendable function, For example: lottie, expression, view-support
+     * ```
+     * GXRegisterCenter.instance
+     *  // lottie
+     *  .registerExtensionLottieAnimation(GXExtensionLottieAnimation())
+     *  // expression
+     *  .registerExtensionExpression(GXExtensionExpression())
+     *  // image view support
+     *  .registerExtensionViewSupport(
+     *      GXViewKey.VIEW_TYPE_IMAGE,
+     *      GXAdapterImageView::class.java
+     *  )
+     * ```
      */
     interface GXIAdapter {
         fun init(context: Context)

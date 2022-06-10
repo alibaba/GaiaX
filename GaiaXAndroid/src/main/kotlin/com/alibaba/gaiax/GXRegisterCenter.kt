@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax
 
+import android.graphics.Typeface
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -127,6 +128,23 @@ class GXRegisterCenter {
         data class GXParams(val propertyName: String, val value: Any)
 
         fun convert(params: GXParams): Any?
+    }
+
+    /**
+     * Load Typeface
+     *  Basic usage:
+     * ```
+     * GXRegisterCenter.instance.registerExtensionFontFamily(object :
+     *      GXRegisterCenter.GXIExtensionFontFamily {
+     *      override fun fontFamily(fontFamilyName: String): Typeface? {
+     *          return Typeface.createFromAsset(GXMockUtils.context.assets, fontFamilyName)
+     *      }
+     * })
+     * ```
+     */
+    interface GXIExtensionFontFamily {
+
+        fun fontFamily(fontFamilyName: String): Typeface?
     }
 
     interface GXIExtensionBizMap {
@@ -312,6 +330,18 @@ class GXRegisterCenter {
 
     fun registerExtensionLottieAnimation(extensionLottieAnimation: GXIExtensionLottieAnimation): GXRegisterCenter {
         this.extensionLottieAnimation = extensionLottieAnimation
+        return this
+    }
+
+    fun registerExtensionFontFamily(extensionFontFamily: GXIExtensionFontFamily): GXRegisterCenter {
+        this.extensionStaticProperty = object : GXIExtensionStaticProperty {
+            override fun convert(params: GXIExtensionStaticProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY) {
+                    return extensionFontFamily.fontFamily(params.value as String)
+                }
+                return null
+            }
+        }
         return this
     }
 

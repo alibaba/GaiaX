@@ -32,9 +32,14 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
-        val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
-        return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
-            ?.use { it.readBytes() }
+        try {
+            val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
+            return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
+                ?.use { it.readBytes() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {

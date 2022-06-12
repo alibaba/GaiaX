@@ -21,9 +21,9 @@
 
 # GaiaX dynamic template engine
 
-GaiasX dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team. 
+GaiaX dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team. 
 
-Except client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real time preview, it support to create template, edit template, real machine debug and real time preview.
+Besides client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real-time preview, which supports creating templates, editing templates, real machine debugging, and real-time preview.
 
 GaiaX dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
 

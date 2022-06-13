@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
+import java.lang.IllegalArgumentException
 
 /**
  * @suppress
@@ -218,7 +219,7 @@ data class GXTemplateNode(
             visualTemplateNode: GXTemplateNode? = null
         ): GXTemplateNode {
             val layer = template.findLayer(viewId)
-                ?: throw IllegalStateException("Not found layer by view id, viewId = $viewId")
+                ?: throw IllegalArgumentException("Not found layer by view id, viewId = $viewId")
             val css = template.findCss(viewId) ?: GXCss.create()
             val dataBinding = template.findData(viewId)
             val eventBinding = template.findEvent(viewId)

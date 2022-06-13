@@ -19,7 +19,7 @@ class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtension
     override fun getTemplateInfo(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateInfo? {
         return if (exist(gxTemplateItem.bizId, gxTemplateItem.templateId)) {
             dataCache[gxTemplateItem.bizId]?.get(gxTemplateItem.templateId)
-                ?: throw IllegalStateException("Template exist but reference is null")
+                ?: throw IllegalArgumentException("Template exist but reference is null")
         } else {
             val template = GXTemplateInfo.createTemplate(gxTemplateItem)
             return template.apply {

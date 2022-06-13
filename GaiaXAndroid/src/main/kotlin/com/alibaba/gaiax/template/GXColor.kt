@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.template
 
+import android.content.Context
 import android.graphics.Color
 import com.alibaba.gaiax.GXRegisterCenter
 
@@ -25,18 +26,18 @@ import com.alibaba.gaiax.GXRegisterCenter
  */
 class GXColor private constructor(val type: Int, private val value: Any) {
 
-    fun valueCanNull(): Int? {
+    fun valueCanNull(context: Context? = null): Int? {
         if (type == COLOR_TYPE_STATIC) {
             return value as Int
         } else if (type == COLOR_TYPE_DYNAMIC) {
-            return GXRegisterCenter.instance.extensionColor?.convert(value as String)
+            return GXRegisterCenter.instance.extensionColor?.convert(context, value as String)
                 ?.let { return it }
         }
         return null
     }
 
-    fun value(): Int {
-        return valueCanNull() ?: UNDEFINE_COLOR
+    fun value(context: Context? = null): Int {
+        return valueCanNull(context) ?: UNDEFINE_COLOR
     }
 
     override fun toString(): String {

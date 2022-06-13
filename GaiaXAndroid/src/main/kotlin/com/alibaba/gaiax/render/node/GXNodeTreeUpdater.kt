@@ -689,7 +689,12 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         // 优先处理高亮逻辑
         if (valueData is String) {
             val result: CharSequence? =
-                GXHighLightUtil.getHighLightContent(gxTemplateNode, templateData, valueData)
+                GXHighLightUtil.getHighLightContent(
+                    view as View,
+                    gxTemplateNode,
+                    templateData,
+                    valueData
+                )
             if (result != null) {
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result

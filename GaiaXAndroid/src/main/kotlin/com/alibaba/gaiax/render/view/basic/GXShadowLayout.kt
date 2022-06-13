@@ -282,7 +282,7 @@ open class GXShadowLayout @JvmOverloads constructor(
         if (boxShadow != null) {
             this.setShadowYOffset(boxShadow.yOffset.valueFloat)
             this.setShadowXOffset(boxShadow.xOffset.valueFloat)
-            this.setShadowColor(boxShadow.color.value())
+            this.setShadowColor(boxShadow.color.value(this.context))
             this.setShadowBlur(boxShadow.blurOffset.valueFloat)
             this.setShadowSpread(boxShadow.spreadOffset.valueFloat)
         }

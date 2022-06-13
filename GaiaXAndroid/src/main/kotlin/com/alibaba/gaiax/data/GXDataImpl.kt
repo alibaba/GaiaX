@@ -139,7 +139,7 @@ class GXDataImpl(val context: Context) {
             dataSourceSorted.forEach {
                 it.source.getTemplateInfo(gxTemplateItem)?.let { return it }
             }
-            throw IllegalStateException("Template exist but reference is null")
+            throw IllegalArgumentException("Template exist but reference is null")
         }
 
         fun registerByPriority(

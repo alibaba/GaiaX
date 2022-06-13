@@ -172,7 +172,7 @@ object GXFitContentUtils {
                     Dimension.Points(textView.measuredHeight.toFloat())
                 )
             }
-        }else if (fontLines > 1) {
+        } else if (fontLines > 1) {
             // 多行状态下，需要定宽求高
 
             textView.setFontLines(fontLines)
@@ -220,7 +220,7 @@ object GXFitContentUtils {
         // 高亮内容
         if (data is String) {
             val highLightContent =
-                GXHighLightUtil.getHighLightContent(gxTemplateNode, templateData, data)
+                GXHighLightUtil.getHighLightContent(view, gxTemplateNode, templateData, data)
             if (highLightContent != null) {
                 return highLightContent
             }

@@ -143,7 +143,7 @@ open class GXBaseTest {
 
     class GXProcessorColor : GXRegisterCenter.GXIExtensionColor {
 
-        override fun convert(color: String): Int? {
+        override fun convert(context: Context?, color: String): Int? {
             Log.d(TAG, "convertProcessing() called with: color = $color")
             if (color == "gaiax_color") {
                 return Color.RED

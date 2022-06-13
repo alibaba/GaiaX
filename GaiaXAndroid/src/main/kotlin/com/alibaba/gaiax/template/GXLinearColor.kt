@@ -30,7 +30,7 @@ class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: Mut
         val height = view.layoutParams.height.toFloat()
         val width = view.layoutParams.width.toFloat()
         return if (colors.size == 1) {
-            val value = colors[0].value()
+            val value = colors[0].value(view.context)
             val result = IntArray(2)
             result[0] = value
             result[1] = value
@@ -38,7 +38,7 @@ class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: Mut
         } else {
             val result = IntArray(colors.size)
             colors.forEachIndexed { index, color ->
-                result[index] = color.value()
+                result[index] = color.value(view.context)
             }
             GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
         }

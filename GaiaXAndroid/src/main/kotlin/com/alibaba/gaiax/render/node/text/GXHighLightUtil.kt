@@ -22,6 +22,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
+import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.template.GXColor
@@ -45,6 +46,7 @@ object GXHighLightUtil {
     private var regexCache: ConcurrentHashMap<String, Pattern>? = null
 
     fun getHighLightContent(
+        view: View,
         gxTemplateNode: GXTemplateNode,
         templateData: JSONObject,
         data: String
@@ -89,7 +91,7 @@ object GXHighLightUtil {
                     // https://yuque.antfin-inc.com/gaia/document/ais32k
 
                     if (highlightColor != null && highlightColor.isNotBlank()) {
-                        GXColor.create(highlightColor)?.value()?.let {
+                        GXColor.create(highlightColor)?.value(view.context)?.let {
                             spannableString.setSpan(
                                 ForegroundColorSpan(it),
                                 startIndex,

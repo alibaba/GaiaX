@@ -76,7 +76,7 @@ class GXDataImpl(val context: Context) {
             dataSourceSorted.forEach { it ->
                 it.source.getTemplate(gxTemplateItem)?.let { return it }
             }
-            throw IllegalArgumentException("Not found target template path, templateItem = $gxTemplateItem")
+            throw IllegalArgumentException("Not found target gxTemplate, templateItem = $gxTemplateItem")
         }
 
         fun registerByPriority(source: GXRegisterCenter.GXIExtensionTemplateSource, priority: Int) {
@@ -139,7 +139,7 @@ class GXDataImpl(val context: Context) {
             dataSourceSorted.forEach {
                 it.source.getTemplateInfo(gxTemplateItem)?.let { return it }
             }
-            throw IllegalStateException("Template exist but reference is null")
+            throw IllegalArgumentException("Not found target gxTemplateInfo, templateItem = $gxTemplateItem")
         }
 
         fun registerByPriority(

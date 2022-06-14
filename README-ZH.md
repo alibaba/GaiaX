@@ -206,10 +206,16 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 ## 联系我们
 
 钉钉：
-<img src="https://gw.alicdn.com/imgextra/i4/O1CN01yjayyb1yAudRg1WE5_!!6000000006539-2-tps-954-1242.png" width="238" height="310" />
+
+<img src="https://gw.alicdn.com/imgextra/i3/O1CN01mmrIDM1ofvIASkhPI_!!6000000005253-2-tps-474-469.png" width="200" height="200" />
 
 微信：
-<img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
+
+<img src="https://gw.alicdn.com/imgextra/i1/O1CN01LlZEeh1dLLjGAVpFn_!!6000000003719-2-tps-746-746.png" width="200" height="200" />
+
+Email:
+
+biezhihua@gmail.com
 
 ## 支持者
 

@@ -315,7 +315,7 @@
                 //容器模板
                 NSMutableArray *nodes = [NSMutableArray array];
                 for (int i = 0; i < 10; i++) {
-                    [nodes addObject:@{@"data":@"mock"}];
+                    [nodes addObject:@{@"data":@"'mock'"}];
                 }
                 [dbDict gx_setObject:@{@"value":nodes} forKey:templateId];
                 
@@ -323,7 +323,7 @@
                 //普通模板
                 NSDictionary *dependencies = [[indexJsonDict gx_dictionaryForKey:@"package"] gx_dictionaryForKey:@"dependencies"];
                 [dependencies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                    [dbDict gx_setObject:@{@"data":@"mock"} forKey:key];
+                    [dbDict gx_setObject:@{@"data":@"'mock'"} forKey:key];
                 }];
             }
             
@@ -333,7 +333,7 @@
             
             //获取数据源
             if (isRoot) {
-                _mockData = @{@"data":@"mock"};
+                _mockData = @{@"data":@"'mock'"};
             }
             
         }

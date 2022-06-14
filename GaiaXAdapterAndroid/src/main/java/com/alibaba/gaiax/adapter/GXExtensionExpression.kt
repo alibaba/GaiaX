@@ -83,6 +83,9 @@ class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
                                 is Float -> {
                                     return GXAnalyze.createValueFloat64(value)
                                 }
+                                is Double -> {
+                                    return GXAnalyze.createValueFloat64(value.toFloat())
+                                }
                                 null -> {
                                     return GXAnalyze.createValueNull()
                                 }

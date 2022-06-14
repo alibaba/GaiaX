@@ -207,7 +207,7 @@ We very welcome your to contribute code for the project. In you before writing a
 ## Contact us
 
 DingTalk：
-<img src="https://gw.alicdn.com/imgextra/i4/O1CN01yjayyb1yAudRg1WE5_!!6000000006539-2-tps-954-1242.png" width="238" height="310" />
+<img src="https://gw.alicdn.com/imgextra/i3/O1CN01mmrIDM1ofvIASkhPI_!!6000000005253-2-tps-474-469.png" width="200" height="200" />
 
 WeChat：
 <img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />

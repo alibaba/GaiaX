@@ -1,0 +1,12 @@
+#template_double {
+  width: 100%;
+  height: 100px;
+  background-color: primaryBackground;
+}
+#text {
+  width: 100px;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #000000;
+  font-size: 15px;
+}

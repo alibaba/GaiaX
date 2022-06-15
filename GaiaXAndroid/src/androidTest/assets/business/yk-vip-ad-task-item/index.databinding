@@ -30,7 +30,7 @@
       "value": "${data.buttonText}"
     },
     "feedback": {
-      "value": "https://img.alicdn.com/imgextra/i3/O1CN01orDLVN1WnYmkhQUEb_!!6000000002833-2-tps-48-48.png"
+      "value": ""
     }
   },
   "event": { "yk-vip-ad-task-item-button": "${data.action}" }

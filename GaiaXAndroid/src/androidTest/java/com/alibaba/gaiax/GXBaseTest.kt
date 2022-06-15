@@ -2,28 +2,17 @@ package com.alibaba.gaiax
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Typeface
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import app.visly.stretch.Dimension
 import app.visly.stretch.Size
-import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.JSONArray
-import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.analyze.GXAnalyze
-import com.alibaba.gaiax.analyze.GXArray
-import com.alibaba.gaiax.analyze.GXMap
-import com.alibaba.gaiax.analyze.GXString
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXDataBinding
-import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
-import com.alibaba.gaiax.utils.GXMockUtils.context
 import com.alibaba.gaiax.utils.GXScreenUtils
-import com.alibaba.gaiax.utils.getAnyExt
 import org.junit.After
 import org.junit.Before
 
@@ -48,7 +37,6 @@ open class GXBaseTest {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
         GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
             .registerExtensionDataBinding(GXExtensionDataBinding())
             .registerExtensionColor(GXProcessorColor())
             .registerExtensionSize(GXExtensionSize())
@@ -152,103 +140,4 @@ open class GXBaseTest {
         }
     }
 
-    class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
-
-        override fun create(value: Any): GXIExpression {
-            Log.d(TAG, "createProcessing() called with: expression = $value")
-            return GXAnalyzeWrapper(value)
-        }
-
-        override fun isTrue(value: Any?): Boolean {
-            return value == true
-        }
-
-        class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
-            override fun expression(): Any {
-                return expression
-            }
-
-            override fun value(templateData: JSON?): Any? {
-                return analyze.getResult(expression, templateData)
-            }
-
-            companion object {
-                val analyze = GXAnalyze()
-
-                init {
-                    analyze.initComputeExtend(object : GXAnalyze.IComputeExtend {
-
-                        /**
-                         * 用于处理取值逻辑
-                         */
-                        override fun computeValueExpression(valuePath: String, source: Any?): Long {
-                            if (valuePath == "$$") {
-                                if (source is JSONArray) {
-                                    return GXAnalyze.createValueArray(source)
-                                } else if (source is JSONObject) {
-                                    return GXAnalyze.createValueMap(source)
-                                }
-                            }
-                            if (source is JSONObject) {
-                                when (val value = source.getAnyExt(valuePath)) {
-                                    is JSONArray -> {
-                                        return GXAnalyze.createValueArray(value)
-                                    }
-                                    is JSONObject -> {
-                                        return GXAnalyze.createValueMap(value)
-                                    }
-                                    is Boolean -> {
-                                        return GXAnalyze.createValueBool(value)
-                                    }
-                                    is String -> {
-                                        return GXAnalyze.createValueString(value)
-                                    }
-                                    is Int -> {
-                                        return GXAnalyze.createValueFloat64(value.toFloat())
-                                    }
-                                    is Float -> {
-                                        return GXAnalyze.createValueFloat64(value)
-                                    }
-                                    null -> {
-                                        return GXAnalyze.createValueNull()
-                                    }
-                                }
-                            }
-                            return 0L
-                        }
-
-                        /**
-                         * 用于处理函数逻辑
-                         */
-                        override fun computeFunctionExpression(
-                            functionName: String,
-                            params: LongArray
-                        ): Long {
-                            if (functionName == "size" && params.size == 1) {
-                                when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
-                                    is GXString -> {
-                                        value.getString()?.let {
-                                            return GXAnalyze.createValueFloat64(it.length.toFloat())
-                                        }
-                                    }
-                                    is GXMap -> {
-                                        (value.getValue() as? JSONObject)?.let {
-                                            return GXAnalyze.createValueFloat64(it.size.toFloat())
-                                        }
-                                    }
-                                    is GXArray -> {
-                                        (value.getValue() as? JSONArray)?.let {
-                                            return GXAnalyze.createValueFloat64(it.size.toFloat())
-                                        }
-                                    }
-                                }
-                            } else if (functionName == "env") {
-                            }
-                            return 0L
-                        }
-                    })
-                }
-            }
-        }
-    }
 }

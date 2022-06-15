@@ -20,7 +20,6 @@ import android.content.Context
 import android.support.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
-import com.alibaba.gaiax.template.GXTemplateKey
 import com.bumptech.glide.Glide
 
 @Keep

@@ -53,18 +53,19 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
         // 2. Check whether the compressed package exists in Assets. If the package exists, decompress it to the local PC and read data into the memory
         val templateContents = getTemplateContents(gxTemplateItem)
         if (templateContents != null) {
-            val templatePath = createTemplatePath(
+            val gxTemplate = createTemplate(
                 templateContents,
                 gxTemplateItem.bizId,
                 gxTemplateItem.templateId
             )
-            addToCache(templatePath)
+            gxTemplate.type = "assets_binary"
+            addToCache(gxTemplate)
             return getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         }
         return null
     }
 
-    private fun createTemplatePath(
+    private fun createTemplate(
         bytes: ByteArray,
         templateBiz: String,
         templateId: String

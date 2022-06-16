@@ -29,6 +29,8 @@ class GXTemplate(
     val js: String
 ) {
 
+    var type = ""
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

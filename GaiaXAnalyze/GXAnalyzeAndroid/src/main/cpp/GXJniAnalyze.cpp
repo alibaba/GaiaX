@@ -89,13 +89,19 @@ public:
 
     long getSourceValue(string valuePath, void *source) override {
         jobject dataSource = static_cast<jobject>(source);
-        return getSourceValueFromJava(valuePath, dataSource, globalSelf);
+        long res = getSourceValueFromJava(valuePath, dataSource, globalSelf);
+        GXValue * v = (GXValue*)res;
+        GXAnalyze::addGXMap(*v);
+        return res;
     }
 
     long
     getFunctionValue(string funName, long *paramPointers, int paramsSize, string source) override {
-        return getFunctionValueFromJava(funName, getLongArray(paramPointers, paramsSize),
-                                        globalSelf);
+        long res = getFunctionValueFromJava(funName, getLongArray(paramPointers, paramsSize),
+                                            globalSelf);
+        GXValue * v = (GXValue*)res;
+        GXAnalyze::addGXMap(*v);
+        return res;
     }
 
     void throwError(string message) override {

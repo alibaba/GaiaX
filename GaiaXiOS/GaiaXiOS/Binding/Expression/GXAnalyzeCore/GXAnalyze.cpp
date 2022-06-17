@@ -1,5 +1,8 @@
 #include "GXAnalyze.h"
 #include <time.h>
+#include <pthread.h>
+#include <unistd.h>
+
 
 using namespace std;
 static vector<vector<char> > G;              //文法G[S]产生式 ，~为空字
@@ -397,23 +400,35 @@ void init() {
     }
 }
 
-void GXAnalyze::eraseGXMap(int count){
-    if(GXValueMap.count(count) > 0){
-        GXValueMap.erase(count);
+class spin_lock {
+public:
+    spin_lock() = default;
+    spin_lock(const spin_lock&) = delete;
+    spin_lock& operator=(const spin_lock) = delete;
+    void lock() {
+        while (flag.test_and_set()) {}
     }
-}
+    void unlock() {
+        flag.clear();
+    }
+private:
+    atomic_flag flag;
+};
 
+spin_lock splock;
+
+void GXAnalyze::eraseGXMap(int count){
+    splock.lock();
+    GXValueMap.erase(count);
+    splock.unlock();
+}
 long GXAnalyze::addGXMap(GXValue gxValue){
+    splock.lock();
     ++GXCount;
     gxValue.count = GXCount;
     gxValue.hasChanged = true;
-    if(GXValueMap.count(GXCount) > 0 && GXValueMap[GXCount].hasChanged == false){
-        eraseGXMap(GXCount);
-        GXCount = GXCount+1;
-        GXValueMap[GXCount] = gxValue;
-    }else{
-        GXValueMap[GXCount] = gxValue;
-    }
+    GXValueMap[GXCount] = gxValue;
+    splock.unlock();
     return (long)&GXValueMap[GXCount];
 }
 
@@ -986,12 +1001,12 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             delete[] valueStack;
             delete[] paramsStack;
             if(pointer.hasChanged == true){
-                if(GXValueMap[GXCount].hasChanged == false){
-                    eraseGXMap(GXCount);
-                    GXValueMap[GXCount] = pointer;
-                }else{
-                    GXValueMap[GXCount] = pointer;
+                splock.lock();
+                GXValueMap[GXCount] = pointer;
+                if(GXCount >= 5000){
+                    GXCount = 0;
                 }
+                splock.unlock();
             }
             return (long) (&GXValueMap[GXCount]);
         } else if (new_status[0] ==
@@ -1041,7 +1056,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     valueStack[valueSize] = t1;
                     ++valueSize;
                     eraseGXMap(gxv->count);
-//                    free(gxv);
                 } else {
                     valueStack[valueSize] = array[valueStep];
                     ++valueSize;
@@ -1158,7 +1172,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         --valueSize;
                                         isFunction = false;
                                         eraseGXMap(fun->count);
-//                                        free(fun);
                                         break;
                                     } else {
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用

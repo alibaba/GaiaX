@@ -1,5 +1,8 @@
 #include "GXAnalyze.h"
 #include <time.h>
+#include <pthread.h>
+#include <unistd.h>
+
 
 using namespace std;
 static vector<vector<char> > G;              //文法G[S]产生式 ，~为空字
@@ -397,16 +400,38 @@ void init() {
     }
 }
 
-//静态函数 声明在非静态类里确实不行
+class spin_lock {
+public:
+    spin_lock() = default;
+    spin_lock(const spin_lock&) = delete;
+    spin_lock& operator=(const spin_lock) = delete;
+    void lock() {
+        while (flag.test_and_set()) {}
+    }
+    void unlock() {
+        flag.clear();
+    }
+private:
+    atomic_flag flag;
+};
+
+spin_lock splock;
+
 void GXAnalyze::eraseGXMap(int count){
+    splock.lock();
     GXValueMap.erase(count);
+    splock.unlock();
 }
-void GXAnalyze::addGXMap(GXValue gxValue){
+long GXAnalyze::addGXMap(GXValue gxValue){
+    splock.lock();
     ++GXCount;
     gxValue.count = GXCount;
     gxValue.hasChanged = true;
     GXValueMap[GXCount] = gxValue;
+    splock.unlock();
+    return (long)&GXValueMap[GXCount];
 }
+
 GXAnalyze::GXAnalyze() {
     init();
 }
@@ -938,29 +963,51 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             if (valueStack[0].token == "string") {
                 const char *tem = valueStack[0].name.c_str();
                 pointer = GX_NewGXString(tem);
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             } else if (valueStack[0].token == "bool") {
                 if (valueStack[0].name == "true") {
                     pointer = GX_NewBool(1);
                 } else {
                     pointer = GX_NewBool(0);
                 }
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             } else if (valueStack[0].token == "num") {
                 pointer = GX_NewFloat64(atof(valueStack[0].name.c_str()));
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             } else if (valueStack[0].token == "map") {
                 pointer = GX_NewMap((void *) atol(valueStack[0].name.c_str()));
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             } else if (valueStack[0].token == "array") {
                 pointer = GX_NewArray((void *) atol(valueStack[0].name.c_str()));
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             } else if (valueStack[0].token == "null") {
                 pointer = GX_NewNull(1);
+                ++GXCount;
+                pointer.count = GXCount;
+                pointer.hasChanged = true;
             }
             delete[] statusStack;
             delete[] symbolStack;
             delete[] valueStack;
             delete[] paramsStack;
-            ++GXCount;
-            pointer.count = GXCount;
-            pointer.hasChanged = true;
-            GXValueMap[GXCount] = pointer;
+            if(pointer.hasChanged){
+                splock.lock();
+                GXValueMap[GXCount] = pointer;
+                if(GXCount >= 5000){
+                    GXCount = 0;
+                }
+                splock.unlock();
+            }
             return (long) (&GXValueMap[GXCount]);
         } else if (new_status[0] ==
                    's') {
@@ -1008,11 +1055,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     }
                     valueStack[valueSize] = t1;
                     ++valueSize;
-                    if (gxv->tag == GX_TAG_STRING && gxv->u.str != NULL) {
-                        delete[] gxv->u.str;
-                        gxv->u.str = NULL;
-                    }
-                    free(gxv);
+                    eraseGXMap(gxv->count);
                 } else {
                     valueStack[valueSize] = array[valueStep];
                     ++valueSize;
@@ -1128,11 +1171,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         }
                                         --valueSize;
                                         isFunction = false;
-                                        if (fun->tag == GX_TAG_STRING && fun->u.str != NULL) {
-                                            delete[] fun->u.str;
-                                            fun->u.str = NULL;
-                                        }
-                                        free(fun);
+                                        eraseGXMap(fun->count);
                                         break;
                                     } else {
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用

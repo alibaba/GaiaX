@@ -113,12 +113,6 @@
     }
     
     return GXAnalyze::addGXMap(val);
-    
-    //生成安全返回值
-//    GXValue *result  = (GXValue *) malloc(sizeof(val));
-//    memcpy(result, &val, sizeof(val));
-//
-//    return (long)(result);
 }
 
 @end

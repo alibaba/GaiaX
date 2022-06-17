@@ -35,7 +35,7 @@ public:
     virtual void throwError(string message) = 0;
 
     static void eraseGXMap(int count);
-    static void addGXMap(GXValue gxValue);
+    static long addGXMap(GXValue gxValue);
 
 private:
 

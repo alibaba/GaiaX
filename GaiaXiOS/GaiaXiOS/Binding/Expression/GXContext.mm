@@ -48,10 +48,7 @@
         }
             break;
         case GX_TAG_STRING:{
-//            const char *cString = GX_ToCString(value);
-//            //value log
             NSString *stringValue = [NSString stringWithUTF8String:value.u.str.c_str()];
-//            NSString *stringValue= [NSString stringWithCString:value.u.str.c_str() encoding:[NSString defaultCStringEncoding]];
             result = [GXStr getResultByValue:stringValue];
         }
             break;
@@ -98,7 +95,6 @@
         //string类型
         NSString *string = (NSString *)value;
         val = GX_NewGXString([string UTF8String]);
-        
     } else if ([value isKindOfClass:[NSArray class]]){
         //array类型
         val = GX_NewArray((__bridge void*)value);

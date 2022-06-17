@@ -398,15 +398,18 @@ void init() {
 }
 
 void GXAnalyze::eraseGXMap(int count){
-    GXValueMap.erase(count);
+    if(GXValueMap.count(count) > 0){
+        GXValueMap.erase(count);
+    }
 }
 
 long GXAnalyze::addGXMap(GXValue gxValue){
     ++GXCount;
     gxValue.count = GXCount;
     gxValue.hasChanged = true;
-    if(GXValueMap[GXCount].hasChanged == false){
+    if(GXValueMap.count(GXCount) > 0 && GXValueMap[GXCount].hasChanged == false){
         eraseGXMap(GXCount);
+        GXCount = GXCount+1;
         GXValueMap[GXCount] = gxValue;
     }else{
         GXValueMap[GXCount] = gxValue;
@@ -1037,10 +1040,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     }
                     valueStack[valueSize] = t1;
                     ++valueSize;
-                    if (gxv->tag == GX_TAG_STRING && gxv->u.str != NULL) {
-                        delete[] gxv->u.str;
-                        gxv->u.str = NULL;
-                    }
                     eraseGXMap(gxv->count);
 //                    free(gxv);
                 } else {
@@ -1158,10 +1157,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         }
                                         --valueSize;
                                         isFunction = false;
-                                        if (fun->tag == GX_TAG_STRING && fun->u.str != NULL) {
-                                            delete[] fun->u.str;
-                                            fun->u.str = NULL;
-                                        }
                                         eraseGXMap(fun->count);
 //                                        free(fun);
                                         break;

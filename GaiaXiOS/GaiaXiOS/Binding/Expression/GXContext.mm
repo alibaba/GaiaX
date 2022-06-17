@@ -48,15 +48,11 @@
         }
             break;
         case GX_TAG_STRING:{
-            const char *cString = GX_ToCString(value);
-            //value log
-            NSLog(@"打印字符串：%@",[NSString stringWithUTF8String:value.u.str]);
-            NSString *stringValue = [NSString stringWithUTF8String:cString];
+//            const char *cString = GX_ToCString(value);
+//            //value log
+            NSString *stringValue = [NSString stringWithUTF8String:value.u.str.c_str()];
+//            NSString *stringValue= [NSString stringWithCString:value.u.str.c_str() encoding:[NSString defaultCStringEncoding]];
             result = [GXStr getResultByValue:stringValue];
-            if(value.tag == GX_TAG_STRING && value.u.str !=NULL){
-                delete[]value.u.str;
-                value.u.str = NULL;
-            }
         }
             break;
         case GX_TAG_ARRAY:{

@@ -18,8 +18,6 @@ enum {
     GX_TAG_MAP = 7,
     GX_TAG_INT = 8,
 };
-#define GX_MKVAL(tag, val,count,hasChanged) (GXValue){ (GXValueUnion){ .int32 = val }, tag ,count,hasChanged}
-#define GX_MKOBJECT(tag, val,count,hasChanged) (GXValue){ (GXValueUnion){ .ptr = val }, tag ,count,hasChanged}
 
 #define GX_VALUE_GET_TAG(v) ((int32_t)(v).tag)
 #define GX_VALUE_GET_BOOL(v) ((v).u.int32)
@@ -27,11 +25,11 @@ enum {
 #define GX_VALUE_GET_OBJECT(v) ((v).u.ptr)
 
 //Value值
-typedef union GXValueUnion {
-    int32_t int32;  //Bool 1，0
-    float float64;  //Float
-    void *ptr;      //Array,Map
-    char *str;      //String
+typedef struct GXValueUnion {
+    int32_t int32 = 0;  //Bool 1，0
+    float float64 = 0;  //Float
+    void *ptr = nullptr;      //Array,Map
+    std::string str;      //String
 } GXValueUnion;
 
 //gx变量
@@ -43,7 +41,7 @@ typedef struct GXValue {
 } GXValue;
 
 static inline const char *GX_ToCString(GXValue val) {
-    return (const char *) val.u.str;
+    return val.u.str.c_str();
 }
 
 static inline GXValue __GX_NewFloat64(float d) {
@@ -52,6 +50,7 @@ static inline GXValue __GX_NewFloat64(float d) {
     v.u.float64 = d;
     v.hasChanged = false;
     v.count = -2;
+    v.u.ptr = nullptr;
     return v;
 }
 
@@ -60,7 +59,13 @@ static inline GXValue __GX_NewFloat64(float d) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewNull(int val) {
-    return GX_MKVAL(GX_TAG_NULL, (val != 0),-2,false);
+    GXValue v;
+    v.tag = GX_TAG_NULL;
+    v.u.ptr = nullptr;
+    v.u.int32 = val;
+    v.count = -2;
+    v.hasChanged = false;
+    return v;
 }
 
 /**
@@ -68,7 +73,12 @@ static gx_force_inline GXValue GX_NewNull(int val) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewArray(void *val) {
-    return GX_MKOBJECT(GX_TAG_ARRAY, val,-2,false);
+    GXValue v;
+    v.tag = GX_TAG_ARRAY;
+    v.u.ptr = val;
+    v.count = -2;
+    v.hasChanged = false;
+    return v;
 }
 
 /**
@@ -76,15 +86,27 @@ static gx_force_inline GXValue GX_NewArray(void *val) {
  * @param val long值
  */
 static gx_force_inline GXValue GX_NewMap(void *val) {
-    return GX_MKOBJECT(GX_TAG_MAP, val,-2,false);
+    GXValue v;
+    v.tag = GX_TAG_MAP;
+    v.u.ptr = val;
+    v.count = -2;
+    v.hasChanged = false;
+    return v;
 }
+
 
 /**
  * 通过该方法NewBool对象
  * @param val bool对应的int值
  */
 static gx_force_inline GXValue GX_NewBool(int val) {
-    return GX_MKVAL(GX_TAG_BOOL, (val != 0),-2,false);
+    GXValue v;
+    v.tag = GX_TAG_BOOL;
+    v.u.ptr = nullptr;
+    v.u.int32 = val;
+    v.count = -2;
+    v.hasChanged = false;
+    return v;
 }
 
 /**
@@ -104,14 +126,10 @@ static gx_force_inline GXValue GX_NewFloat64(float d) {
 static gx_force_inline GXValue GX_NewGXString(const char *str) {
     GXValue gxValue;
     gxValue.tag = GX_TAG_STRING;
-    gxValue.hasChanged = false;
+    gxValue.u.ptr = nullptr;
+    gxValue.u.str = str;
     gxValue.count = -2;
-    int len = strlen(str);
-    gxValue.u.str = new char[len + 1];
-    for (int i = 0; i < len; i++) {
-        gxValue.u.str[i] = str[i];
-    }
-    gxValue.u.str[len] = '\0';
+    gxValue.hasChanged = false;
     return gxValue;
 }
 

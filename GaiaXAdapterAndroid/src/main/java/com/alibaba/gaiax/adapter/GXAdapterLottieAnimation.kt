@@ -174,7 +174,6 @@ class GXAdapterLottieAnimation : GXLottieAnimation() {
 
         if (lottieContainer.childCount == 0) {
             lottieView.isClickable = false
-            lottieContainer.isClickable = false
             lottieContainer.addView(lottieView)
         }
     }
@@ -269,7 +268,6 @@ class GXAdapterLottieAnimation : GXLottieAnimation() {
 
         if (lottieContainer.childCount == 0) {
             lottieView.isClickable = false
-            lottieContainer.isClickable = false
             lottieContainer.addView(lottieView)
         }
     }

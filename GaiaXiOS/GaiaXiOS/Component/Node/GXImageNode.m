@@ -122,11 +122,11 @@
     _isNeedReload = NO;
     _imgData = imgData;
     
+    //获取view
+    GXImageView *imgView = (GXImageView *)self.associatedView;
+
     //数据类型判断
     if ([GXUtils isDictionary:imgData]) {
-        //获取view
-        GXImageView *imgView = (GXImageView *)self.associatedView;
-
         //读取 & 处理扩展属性
         NSDictionary *imgDict = (NSDictionary *)imgData;
         NSDictionary *extend = [imgDict gx_dictionaryForKey:@"extend"];
@@ -141,6 +141,8 @@
         
         //设置无障碍
         [self setupAccessibilityInfo:imgDict];
+    } else {
+        imgView.image = nil;
     }
     
 }

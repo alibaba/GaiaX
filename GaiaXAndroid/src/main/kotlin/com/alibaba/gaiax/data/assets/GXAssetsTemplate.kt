@@ -48,7 +48,7 @@ open class GXAssetsTemplate(open val context: Context) :
         val databinding = readFileFromAssets(databindingPath)
         val js = readFileFromAssets(jsPath)
         if (index != null) {
-            val templatePathAssets = GXTemplate(
+            val gxTemplate = GXTemplate(
                 gxTemplateItem.templateId,
                 gxTemplateItem.bizId,
                 -1,
@@ -57,8 +57,9 @@ open class GXAssetsTemplate(open val context: Context) :
                 databinding ?: "",
                 js ?: ""
             )
-            addToCache(templatePathAssets)
-            return templatePathAssets
+            gxTemplate.type = "assets"
+            addToCache(gxTemplate)
+            return gxTemplate
         }
 
         return null
@@ -69,6 +70,7 @@ open class GXAssetsTemplate(open val context: Context) :
             context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8)
                 .use { it?.readText() }
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
@@ -76,12 +78,12 @@ open class GXAssetsTemplate(open val context: Context) :
     private fun getFromCache(templateBiz: String, templateId: String) =
         templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
 
-    private fun addToCache(template: GXTemplate) {
-        var bizTemplates = templateCache[template.biz]
+    private fun addToCache(gxTemplate: GXTemplate) {
+        var bizTemplates = templateCache[gxTemplate.biz]
         if (bizTemplates == null) {
             bizTemplates = mutableListOf()
-            templateCache[template.biz] = bizTemplates
+            templateCache[gxTemplate.biz] = bizTemplates
         }
-        bizTemplates.add(template)
+        bizTemplates.add(gxTemplate)
     }
 }

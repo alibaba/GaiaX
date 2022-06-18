@@ -105,6 +105,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                     it.value.gxTemplateContext,
                     it.value.gxTemplateNode,
                     it.value.gxStretchNode,
+                    it.value.gxCssStyle,
                     it.value.templateData,
                     it.value.stretchStyle
                 )
@@ -652,9 +653,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         templateData: JSONObject
     ) {
         val nodeData = gxTemplateNode.getData(templateData)
-        if (nodeData != null) {
-            view.onBindData(nodeData)
-        }
+        view.onBindData(nodeData)
     }
 
     private fun bindImage(
@@ -663,9 +662,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         templateData: JSONObject
     ) {
         val nodeData = gxTemplateNode.getData(templateData)
-        if (nodeData != null) {
-            view.onBindData(nodeData)
-        }
+        view.onBindData(nodeData)
     }
 
     private fun bindView(
@@ -674,9 +671,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         templateData: JSONObject
     ) {
         val nodeData = gxTemplateNode.getData(templateData)
-        if (nodeData != null) {
-            view.onBindData(nodeData)
-        }
+        view.onBindData(nodeData)
     }
 
     private fun bindRichText(
@@ -694,7 +689,12 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         // 优先处理高亮逻辑
         if (valueData is String) {
             val result: CharSequence? =
-                GXHighLightUtil.getHighLightContent(gxTemplateNode, templateData, valueData)
+                GXHighLightUtil.getHighLightContent(
+                    view as View,
+                    gxTemplateNode,
+                    templateData,
+                    valueData
+                )
             if (result != null) {
                 val data = JSONObject()
                 data[GXTemplateKey.GAIAX_VALUE] = result
@@ -732,9 +732,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             return
         }
 
-        if (nodeData != null) {
-            view.onBindData(nodeData)
-        }
+        view.onBindData(nodeData)
     }
 
     private fun bindText(
@@ -773,9 +771,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             }
         }
 
-        if (nodeData != null) {
-            view.onBindData(nodeData)
-        }
+        view.onBindData(nodeData)
     }
 
     private fun bindCustom(
@@ -784,9 +780,8 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         gxTemplateNode: GXTemplateNode,
         templateData: JSONObject
     ) {
-        gxTemplateNode.getData(templateData)?.let {
-            view.onBindData(it)
-        }
+        val data = gxTemplateNode.getData(templateData)
+        view.onBindData(data)
     }
 
     private fun bindCommonViewCss(view: View, gxCss: GXCss, node: GXNode) {
@@ -801,7 +796,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
             view.setOverflow(gxCss.style.overflow)
 
-            view.setBackgroundColorAndBackgroundImageAndRadius(gxCss.style)
+            view.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
 
             view.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
         }

@@ -7,7 +7,7 @@ import com.alibaba.gaiax.template.GXCss
 
 interface GXIImageView : GXIViewBindData, GXIRoundCorner {
 
-    override fun onBindData(data: JSONObject)
+    override fun onBindData(data: JSONObject?)
 
     fun setImageStyle(gxCss: GXCss) {}
 

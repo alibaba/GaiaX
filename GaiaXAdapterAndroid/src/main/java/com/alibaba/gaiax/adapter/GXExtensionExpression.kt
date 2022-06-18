@@ -26,6 +26,7 @@ import com.alibaba.gaiax.analyze.GXMap
 import com.alibaba.gaiax.analyze.GXString
 import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.utils.getAnyExt
+import java.math.BigDecimal
 
 class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
 
@@ -83,8 +84,17 @@ class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
                                 is Float -> {
                                     return GXAnalyze.createValueFloat64(value)
                                 }
+                                is Double -> {
+                                    return GXAnalyze.createValueFloat64(value.toFloat())
+                                }
+                                is BigDecimal -> {
+                                    return GXAnalyze.createValueFloat64(value.toFloat())
+                                }
                                 null -> {
                                     return GXAnalyze.createValueNull()
+                                }
+                                else -> {
+                                    throw IllegalArgumentException("Not recognize value = $value")
                                 }
                             }
                         }

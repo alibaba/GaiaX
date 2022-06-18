@@ -147,7 +147,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         this.config = config
     }
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
         viewPager?.adapter?.notifyDataSetChanged()
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
@@ -166,7 +166,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         if (config?.hasIndicator != false) {
             for (i in 0 until count) {
                 val view = View(context)
-                view.background = getIndicatorItemDrawable()
+                view.background = getIndicatorItemDrawable(this)
                 if (i == 0) {
                     selectedIndicatorItem = view
                     selectedIndicatorItem?.isSelected = true
@@ -232,7 +232,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         timerTask = null
     }
 
-    private fun getIndicatorItemDrawable(): StateListDrawable {
+    private fun getIndicatorItemDrawable(gxSliderView: GXSliderView): StateListDrawable {
         val drawable = StateListDrawable()
         val selectedDrawable = ShapeDrawable(OvalShape())
         val unselectedDrawable = ShapeDrawable(OvalShape())
@@ -248,10 +248,10 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         )
         drawable.addState(intArrayOf(), unselectedDrawable)
         config?.indicatorSelectedColor?.let {
-            selectedDrawable.paint?.color = it.value
+            selectedDrawable.paint?.color = it.value(gxSliderView.context)
         }
         config?.indicatorUnselectedColor?.let {
-            unselectedDrawable.paint?.color = it.value
+            unselectedDrawable.paint?.color = it.value(gxSliderView.context)
         }
         return drawable
     }

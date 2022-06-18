@@ -1,0 +1,8 @@
+{
+    "event":{
+        "template_event_scroll_item":{
+            "type":"'tap'",
+            "value": "'GaiaX'"
+        }
+    }
+}

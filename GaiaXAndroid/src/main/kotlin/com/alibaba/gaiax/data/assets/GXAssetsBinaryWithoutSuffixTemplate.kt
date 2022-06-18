@@ -32,9 +32,14 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
     private val templateCache = mutableMapOf<String, MutableList<GXTemplate>>()
 
     private fun getTemplateContents(templateItem: GXTemplateEngine.GXTemplateItem): ByteArray? {
-        val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
-        return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
-            ?.use { it.readBytes() }
+        try {
+            val bundlePath = templateItem.bundle.ifEmpty { templateItem.bizId }
+            return context.resources?.assets?.open("$bundlePath/${templateItem.templateId}")
+                ?.use { it.readBytes() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate? {
@@ -48,18 +53,19 @@ class GXAssetsBinaryWithoutSuffixTemplate(val context: Context) :
         // 2. Check whether the compressed package exists in Assets. If the package exists, decompress it to the local PC and read data into the memory
         val templateContents = getTemplateContents(gxTemplateItem)
         if (templateContents != null) {
-            val templatePath = createTemplatePath(
+            val gxTemplate = createTemplate(
                 templateContents,
                 gxTemplateItem.bizId,
                 gxTemplateItem.templateId
             )
-            addToCache(templatePath)
+            gxTemplate.type = "assets_binary"
+            addToCache(gxTemplate)
             return getFromCache(gxTemplateItem.bizId, gxTemplateItem.templateId)
         }
         return null
     }
 
-    private fun createTemplatePath(
+    private fun createTemplate(
         bytes: ByteArray,
         templateBiz: String,
         templateId: String

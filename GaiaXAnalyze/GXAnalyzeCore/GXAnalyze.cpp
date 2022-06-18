@@ -737,16 +737,26 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "string";
             result.name = left.name + right.name;
         } else {
-            result.token = "error";
-            if (left.token == "num" || left.token == "string") {
-                result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
-                        right.token;
-            } else if (right.token == "num" || right.token == "string") {
-                result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
-                        left.token;
+            if (left.token == "num" && right.token == "string") {
+                if(left.name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    left.name = regex_replace(left.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    left.name = regex_replace(left.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                }
+                result.name = left.name + right.name;
+                result.token = "string";
+            } else if (right.token == "num" && left.token == "string") {
+                if(right.name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    right.name = regex_replace(right.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                }
+                result.name = left.name + right.name;
+                result.token = "string";
             } else {
+                result.token = "error";
                 result.name =
                         "\'" + left.name + "\'" + ": expected num value,not : " +
                         left.token;
@@ -976,6 +986,12 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 pointer.count = GXCount;
                 pointer.hasChanged = true;
             } else if (valueStack[0].token == "num") {
+                if(valueStack[0].name.find('.')){
+                    regex e("0+?$");
+                    regex e2("[.]$");
+                    valueStack[0].name = regex_replace(valueStack[0].name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    valueStack[0].name = regex_replace(valueStack[0].name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                }
                 pointer = GX_NewFloat64(atof(valueStack[0].name.c_str()));
                 ++GXCount;
                 pointer.count = GXCount;

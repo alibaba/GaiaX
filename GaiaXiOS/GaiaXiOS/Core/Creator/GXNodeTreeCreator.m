@@ -64,9 +64,9 @@
             NSDictionary *rootStyleInfo = templateItem.rootStyleInfo;
             if ([GXUtils isValidDictionary:rootStyleInfo]) {
                 //获取全部的Css样式
-                NSMutableDictionary *tmpStyleInfo = [templateInfo gx_mutableDictionaryForKey:kGXComDef_KW_SY];
+                NSMutableDictionary *tmpStyleInfo = [[templateInfo gx_dictionaryForKey:kGXComDef_KW_SY] mutableCopy];
                 //读取根节点的Css样式，将外部Merge到内部
-                NSMutableDictionary *tmpRootStyleInfo = [tmpStyleInfo gx_mutableDictionaryForKey:templateId];
+                NSMutableDictionary *tmpRootStyleInfo = [[tmpStyleInfo gx_dictionaryForKey:templateId] mutableCopy];
                 if (tmpRootStyleInfo) {
                     [tmpRootStyleInfo addEntriesFromDictionary:rootStyleInfo];
                 } else {

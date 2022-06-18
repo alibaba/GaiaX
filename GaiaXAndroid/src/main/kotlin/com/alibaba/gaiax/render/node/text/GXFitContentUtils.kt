@@ -148,7 +148,7 @@ object GXFitContentUtils {
                     Size(Dimension.Points(measuredWidth), Dimension.Points(textHeight))
                 }
             }
-        } else if (fontLines == 0 || fontLines > 1) {
+        } else if (fontLines == 0) {
             // 多行状态下，需要定宽求高
 
             textView.setFontLines(fontLines)
@@ -169,6 +169,30 @@ object GXFitContentUtils {
                 textView.measure(widthSpec, 0)
                 result = Size(
                     Dimension.Points(nodeWidth),
+                    Dimension.Points(textView.measuredHeight.toFloat())
+                )
+            }
+        } else if (fontLines > 1) {
+            // 多行状态下，需要定宽求高
+
+            textView.setFontLines(fontLines)
+
+            val nodeWidth = nodeLayout.width
+
+            if (nodeWidth == 0F) {
+                if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {
+                    result = null
+                } else {
+                    throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")
+                }
+            } else if (nodeWidth > 0) {
+                val widthSpec = View.MeasureSpec.makeMeasureSpec(
+                    nodeWidth.toInt(),
+                    View.MeasureSpec.AT_MOST
+                )
+                textView.measure(widthSpec, 0)
+                result = Size(
+                    Dimension.Points(textView.measuredWidth.toFloat()),
                     Dimension.Points(textView.measuredHeight.toFloat())
                 )
             }
@@ -196,7 +220,7 @@ object GXFitContentUtils {
         // 高亮内容
         if (data is String) {
             val highLightContent =
-                GXHighLightUtil.getHighLightContent(gxTemplateNode, templateData, data)
+                GXHighLightUtil.getHighLightContent(view, gxTemplateNode, templateData, data)
             if (highLightContent != null) {
                 return highLightContent
             }

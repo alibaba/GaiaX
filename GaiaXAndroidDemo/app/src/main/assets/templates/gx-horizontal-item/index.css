@@ -60,6 +60,7 @@
   text-overflow: ellipsis;
   color: #999999;
   lines: 2;
+  fit-content:true;
 }
 
 .reason-view {

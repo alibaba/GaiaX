@@ -89,15 +89,15 @@ allprojects {
 
 Android-Support version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2-support'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3-support'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
 AndroidX version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
@@ -206,10 +206,16 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 ## 联系我们
 
 钉钉：
-<img src="https://user-images.githubusercontent.com/6761107/165739677-13c68f86-fa43-466f-939c-cc54d6827908.png" width="200" height="200" />
+
+<img src="https://gw.alicdn.com/imgextra/i3/O1CN01mmrIDM1ofvIASkhPI_!!6000000005253-2-tps-474-469.png" width="200" height="200" />
 
 微信：
-<img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
+
+<img src="https://gw.alicdn.com/imgextra/i1/O1CN01LlZEeh1dLLjGAVpFn_!!6000000003719-2-tps-746-746.png" width="200" height="200" />
+
+Email:
+
+biezhihua@gmail.com
 
 ## 支持者
 

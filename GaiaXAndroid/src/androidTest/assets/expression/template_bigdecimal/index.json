@@ -1,0 +1,10 @@
+{
+  "id": "template_bigdecimal",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

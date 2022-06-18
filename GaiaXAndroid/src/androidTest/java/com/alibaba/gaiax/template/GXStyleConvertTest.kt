@@ -286,12 +286,12 @@ class GXStyleConvertTest {
     fun backgroundColor() {
         // create
         Assert.assertEquals(null, convert.backgroundColor(JSONObject()))
-        Assert.assertEquals(null, convert.backgroundColor(JSONObject())?.value)
+        Assert.assertEquals(null, convert.backgroundColor(JSONObject())?.value())
         Assert.assertEquals(
-            GXColor.parseColor("#00FF00"),
+            GXColor.create("#00FF00")?.value(),
             convert.backgroundColor(JSONObject().apply {
                 this[GXTemplateKey.STYLE_BACKGROUND_COLOR] = "#00FF00"
-            })?.value
+            })?.value()
         )
     }
 
@@ -299,12 +299,12 @@ class GXStyleConvertTest {
     fun borderColor() {
         // create
         Assert.assertEquals(null, convert.borderColor(JSONObject()))
-        Assert.assertEquals(null, convert.borderColor(JSONObject())?.value)
+        Assert.assertEquals(null, convert.borderColor(JSONObject())?.value())
         Assert.assertEquals(
-            GXColor.parseColor("#00FF00"),
+            GXColor.create("#00FF00")?.value(),
             convert.borderColor(JSONObject().apply {
                 this[GXTemplateKey.STYLE_BORDER_COLOR] = "#00FF00"
-            })?.value
+            })?.value()
         )
     }
 
@@ -344,7 +344,7 @@ class GXStyleConvertTest {
         )
 
         Assert.assertEquals(
-            2,
+            1,
             convert.backgroundImage(JSONObject().apply {
                 this[GXTemplateKey.STYLE_BACKGROUND_IMAGE] =
                     "yellow"
@@ -396,10 +396,10 @@ class GXStyleConvertTest {
             })?.spreadOffset?.valueFloat
         )
         Assert.assertEquals(
-            GXColor.parseColor("#ff0000"),
+            GXColor.create("#ff0000")?.value(),
             convert.boxShadow(JSONObject().apply {
                 this[GXTemplateKey.STYLE_BOX_SHADOW] = "0px 5px 5px 5px #ff0000"
-            })?.color?.value
+            })?.color?.value()
         )
 
     }
@@ -408,10 +408,10 @@ class GXStyleConvertTest {
     fun fontColor() {
         Assert.assertEquals(null, convert.fontColor(JSONObject()))
         Assert.assertEquals(
-            GXColor.parseColor("#00FF00"),
+            GXColor.create("#00FF00")?.value(),
             convert.fontColor(JSONObject().apply {
                 this[GXTemplateKey.STYLE_FONT_COLOR] = "#00FF00"
-            })?.value
+            })?.value()
         )
     }
 
@@ -609,34 +609,34 @@ class GXStyleConvertTest {
         var colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 7)
         Assert.assertEquals(colors.size, 6)
-        Assert.assertEquals(colors[0], Color.parseColor("#FFFFFF"))
-        Assert.assertEquals(colors[1], Color.parseColor("#ECEAFF"))
-        Assert.assertEquals(colors[2], Color.parseColor("#E6F1FF"))
-        Assert.assertEquals(colors[3], Color.parseColor("#DCFFFF"))
-        Assert.assertEquals(colors[4], Color.parseColor("#FFF8E5"))
-        Assert.assertEquals(colors[5], Color.parseColor("#FFDDF2"))
+        Assert.assertEquals(colors[0].value(), Color.parseColor("#FFFFFF"))
+        Assert.assertEquals(colors[1].value(), Color.parseColor("#ECEAFF"))
+        Assert.assertEquals(colors[2].value(), Color.parseColor("#E6F1FF"))
+        Assert.assertEquals(colors[3].value(), Color.parseColor("#DCFFFF"))
+        Assert.assertEquals(colors[4].value(), Color.parseColor("#FFF8E5"))
+        Assert.assertEquals(colors[5].value(), Color.parseColor("#FFDDF2"))
 
         results = convert.getLinearGradient("linear-gradient(to bottom right, red , yellow)")
         colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 3)
         Assert.assertEquals(colors.size, 2)
-        Assert.assertEquals(colors[0], Color.RED)
-        Assert.assertEquals(colors[1], Color.YELLOW)
+        Assert.assertEquals(colors[0].value(), Color.RED)
+        Assert.assertEquals(colors[1].value(), Color.YELLOW)
 
         results = convert.getLinearGradient("linear-gradient(red , green, yellow)")
         colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 3)
         Assert.assertEquals(colors.size, 3)
-        Assert.assertEquals(colors[0], Color.RED)
-        Assert.assertEquals(colors[1], Color.GREEN)
-        Assert.assertEquals(colors[2], Color.YELLOW)
+        Assert.assertEquals(colors[0].value(), Color.RED)
+        Assert.assertEquals(colors[1].value(), Color.GREEN)
+        Assert.assertEquals(colors[2].value(), Color.YELLOW)
 
         results = convert.getLinearGradient("linear-gradient(red , green)")
         colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 2)
         Assert.assertEquals(colors.size, 2)
-        Assert.assertEquals(colors[0], Color.RED)
-        Assert.assertEquals(colors[1], Color.GREEN)
+        Assert.assertEquals(colors[0].value(), Color.RED)
+        Assert.assertEquals(colors[1].value(), Color.GREEN)
     }
 
     @Test
@@ -646,8 +646,8 @@ class GXStyleConvertTest {
         val colors = convert.getLinearGradientColors(results)
         Assert.assertEquals(results.size, 3)
         Assert.assertEquals(colors.size, 2)
-        Assert.assertEquals(colors[0], Color.RED)
-        Assert.assertEquals(colors[1], Color.YELLOW)
+        Assert.assertEquals(colors[0].value(), Color.RED)
+        Assert.assertEquals(colors[1].value(), Color.YELLOW)
     }
 
     @Test

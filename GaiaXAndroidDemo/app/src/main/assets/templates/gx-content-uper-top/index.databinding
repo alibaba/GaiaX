@@ -29,9 +29,9 @@
             "value": "$recReason.title"
         },
         "follow-text": {
-            "value":"'按钮'",
+            "value":"$isFollowed ? '已关注' : '关注'",
             "extend":{
-                "color":"'#24a5ff'"
+                "color":"$isFollowed ? '#24a5ff' : 'red'"
             }
         },
         "follow-bg": {

@@ -49,36 +49,36 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
 
     val borderRadius = style?.borderRadius?.value
     val borderWidth = style?.borderWidth?.valueFloat
-    val borderColor = style?.borderColor?.value
+    val borderColor = style?.borderColor?.value(this.context)
 
     if (this is GXIRoundCorner) {
         if (this is GXView) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXText) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXIImageView) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXContainer) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
-            if (borderColor != null && borderWidth != null && borderRadius != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius)
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
             }
         }
     }
@@ -122,7 +122,7 @@ fun View.setOverflow(overflow: Boolean?) {
 /**
  * @suppress
  */
-fun View.setBackgroundColorAndBackgroundImageAndRadius(style: GXStyle?) {
+fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
     if (style?.backgroundImage != null) {
         if (this is GXText) {
             // GXText needs to be handled separately
@@ -134,7 +134,7 @@ fun View.setBackgroundColorAndBackgroundImageAndRadius(style: GXStyle?) {
     } else if (style?.backgroundColor != null) {
         val drawable = GXColorGradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(style.backgroundColor.value, style.backgroundColor.value)
+            intArrayOf(style.backgroundColor.value(this.context), style.backgroundColor.value(this.context))
         )
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
@@ -242,7 +242,7 @@ fun GXText.setFontLines(fontLiens: Int?) {
  */
 fun GXText.setFontColor(style: GXStyle) {
     if (style.fontColor != null) {
-        this.setTextColor(style.fontColor.value)
+        this.setTextColor(style.fontColor.value(this.context))
     } else {
         // The default color is black
         this.setTextColor(Color.BLACK)

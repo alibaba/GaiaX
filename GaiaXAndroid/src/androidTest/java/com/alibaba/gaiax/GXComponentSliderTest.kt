@@ -54,7 +54,7 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(true, config?.infinityScroll)
         Assert.assertEquals(true, config?.hasIndicator)
         Assert.assertEquals(1, config?.selectedIndex)
-        Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColor?.value)
-        Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor?.value)
+        Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColor?.value())
+        Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor?.value())
     }
 }

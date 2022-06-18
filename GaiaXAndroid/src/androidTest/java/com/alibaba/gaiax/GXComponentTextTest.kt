@@ -2,13 +2,17 @@ package com.alibaba.gaiax
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXColor
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -51,9 +55,13 @@ class GXComponentTextTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
-        Assert.assertEquals(null, (rootView.child(0).background as? GradientDrawable1)?.shape)
         Assert.assertEquals(
-            null,
+            true,
+            rootView.child(0).background is GXRoundCornerBorderGradientDrawable ||
+                    rootView.child(0).background is GXColorGradientDrawable
+        )
+        Assert.assertEquals(
+            0F,
             (rootView.child(0).background as? GradientDrawable1)?.cornerRadii?.get(0)
         )
     }
@@ -140,6 +148,19 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_processor_font_family() {
+        GXRegisterCenter.instance.registerExtensionStaticProperty(object :
+            GXRegisterCenter.GXIExtensionStaticProperty {
+            override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY && params.value == "unknow_fontfamily") {
+                    return Typeface.createFromAsset(
+                        GXMockUtils.context.assets,
+                        "fontfamily3.ttf"
+                    )
+                }
+                return null
+            }
+        })
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -460,6 +481,19 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_property_font_family() {
+        GXRegisterCenter.instance.registerExtensionStaticProperty(object :
+            GXRegisterCenter.GXIExtensionStaticProperty {
+            override fun convert(params: GXRegisterCenter.GXIExtensionStaticProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.STYLE_FONT_FAMILY) {
+                    return Typeface.createFromAsset(
+                        GXMockUtils.context.assets,
+                        "${params.value}.ttf"
+                    )
+                }
+                return null
+            }
+        })
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -543,7 +577,7 @@ class GXComponentTextTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(1, rootView.childCount())
-        val value = GXColor.create("#00ff00")?.value
+        val value = GXColor.create("#00ff00")?.value()
         Assert.assertEquals(value, rootView.child<GXText>(0).currentTextColor)
     }
 
@@ -1037,19 +1071,17 @@ class GXComponentTextTest : GXBaseTest() {
         })
     }
 
-    /**
-     * TODO:
-     * 优酷版本，文字宽度为实际文字宽度，高度也为实际文字高度
-     * 开源版本包，文字宽度为设置的文字宽度，高度为自适应的高度
-     */
     @Test
-    fun template_text_fitcontent_lines_5_width_100_percent_height_100px_opensource_version() {
+    fun template_text_fitcontent_lines_5_width_100_percent_height_100px() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
             "template_text_fitcontent_lines_5_width_100_percent_height_100px"
         )
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["title"] = "HelloWorld"
+        })
+        val size = GXTemplateEngine.GXMeasureSize(1080F, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
@@ -1058,33 +1090,39 @@ class GXComponentTextTest : GXBaseTest() {
         textView.setFontSize(20F.dpToPx())
         textView.measure(0, 0)
 
-        Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 
-    /**
-     * TODO:
-     * 优酷版本，文字宽度为实际文字宽度，高度也为实际文字高度
-     * 开源版本包，文字宽度为设置的文字宽度，高度为自适应的高度
-     */
     @Test
-    fun template_text_fitcontent_lines_5_width_100_percent_height_100px_youku_version() {
+    fun template_text_fitcontent_lines_5_width_100_percent_height_100px_length() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
             "template_text_fitcontent_lines_5_width_100_percent_height_100px"
         )
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["title"] = "HelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorld"
+        })
+        val size = GXTemplateEngine.GXMeasureSize(1080F, null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         val textView = GXText(GXMockUtils.context)
-        textView.text = "HelloWorld"
+        textView.text = "HelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHelloWorld"
         textView.setFontSize(20F.dpToPx())
-        textView.measure(0, 0)
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(
+            1080,
+            View.MeasureSpec.AT_MOST
+        )
+        textView.measure(widthSpec, 0)
 
-        // 这里或许可直接使用开源的逻辑兼容优酷的逻辑，并不会有什么负面影响
-        // Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
+        Log.e(
+            "[GaiaX]",
+            "textView.measuredWidth=${textView.measuredWidth.toFloat()} textView.measuredHeight=${textView.measuredHeight.toFloat()}"
+        )
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 

@@ -235,6 +235,8 @@
         templateItem.isLocal = self.templateItem.isLocal;
         templateItem.bizId = self.templateItem.bizId;
         templateItem.templateId = identifier;
+        templateItem.templateVersion = @"scroll";
+
         //子坑位样式信息更新
         templateItem.rootStyleInfo = [self.fullStyleJson gx_dictionaryForKey:identifier];
         [self.subTemplateItems gx_setObject:templateItem forKey:identifier];

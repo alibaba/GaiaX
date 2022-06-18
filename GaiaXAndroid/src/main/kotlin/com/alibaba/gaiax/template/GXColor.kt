@@ -16,30 +16,53 @@
 
 package com.alibaba.gaiax.template
 
+import android.content.Context
 import android.graphics.Color
 import com.alibaba.gaiax.GXRegisterCenter
 
 /**
- * The color wrapper class, all colors should be converted to GColor using the createColor method
+ * The color wrapper class, all colors should be converted to GColor using the create method
  * @suppress
  */
-class GXColor(val name: String, val value: Int) {
+class GXColor private constructor(val type: Int, private val value: Any) {
+
+    fun valueCanNull(context: Context? = null): Int? {
+        if (type == COLOR_TYPE_STATIC) {
+            return value as Int
+        } else if (type == COLOR_TYPE_DYNAMIC) {
+            return GXRegisterCenter.instance.extensionColor?.convert(context, value as String)
+                ?.let { return it }
+        }
+        return null
+    }
+
+    fun value(context: Context? = null): Int {
+        return valueCanNull(context) ?: UNDEFINE_COLOR
+    }
+
+    override fun toString(): String {
+        return "GXColor(type=$type, value=$value)"
+    }
 
     companion object {
+
+        const val COLOR_TYPE_STATIC: Int = 0
+        const val COLOR_TYPE_DYNAMIC: Int = 1
+
         private const val UNDEFINE_COLOR = Color.TRANSPARENT
 
-        private val UNDEFINE = GXColor("Undefine", UNDEFINE_COLOR)
+        private val UNDEFINE = GXColor(COLOR_TYPE_STATIC, UNDEFINE_COLOR)
 
-        fun undefine(): GXColor {
+        fun createUndefine(): GXColor {
             return UNDEFINE
         }
 
-        fun create(color: String): GXColor? {
-            parseColor(color)?.let { return GXColor(color, it) }
-            return null
+        fun createHex(color: String): GXColor {
+            parseHexColor(color)?.let { return GXColor(COLOR_TYPE_STATIC, it) }
+            throw IllegalArgumentException("Create hex color error")
         }
 
-        fun parseColor(targetColor: String): Int? {
+        fun create(targetColor: String): GXColor? {
             var color = targetColor.trim()
             if (color.contains("%")) {
                 val list = color.split(" ")
@@ -47,13 +70,12 @@ class GXColor(val name: String, val value: Int) {
                     color = list[0]
                 }
             }
-            // parseHexPositionColor(color)?.let { return it }
-            parseHexColor(color)?.let { return it }
-            parseRGBAColor(color)?.let { return it }
-            parseRGBColor(color)?.let { return it }
-            parseSimpleColor(color)?.let { return it }
+            parseHexColor(color)?.let { return GXColor(COLOR_TYPE_STATIC, it) }
+            parseRGBAColor(color)?.let { return GXColor(COLOR_TYPE_STATIC, it) }
+            parseRGBColor(color)?.let { return GXColor(COLOR_TYPE_STATIC, it) }
+            parseSimpleColor(color)?.let { return GXColor(COLOR_TYPE_STATIC, it) }
             parseExtendColor(color)?.let {
-                GXRegisterCenter.instance.extensionColor?.convert(it)?.let { return it }
+                return GXColor(COLOR_TYPE_DYNAMIC, it)
             }
             return null
         }

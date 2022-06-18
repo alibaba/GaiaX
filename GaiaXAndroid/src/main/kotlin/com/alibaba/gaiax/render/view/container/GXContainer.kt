@@ -30,6 +30,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 
 
 /**
@@ -49,7 +50,7 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
         defStyleAttr
     )
 
-    override fun onBindData(data: JSONObject) {
+    override fun onBindData(data: JSONObject?) {
     }
 
     private var gxTemplateContext: GXTemplateContext? = null
@@ -84,7 +85,7 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
         if (radius.size == 8) {
-            val shape = GradientDrawable()
+            val shape = GXRoundCornerBorderGradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
             shape.cornerRadii = radius
             shape.setStroke(borderWidth.toInt(), borderColor)

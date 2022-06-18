@@ -2,7 +2,7 @@
     <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
 </h1>
 <p align="center">
-    Dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team
+    GaiaX dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team
 </p>
 
 <p align="center">
@@ -19,13 +19,13 @@
 
 </p>
 
-# Dynamic template engine
+# GaiaX dynamic template engine
 
-Dynamic template engine is a lightweight cross-platform solution of pure native dynamic card, developed by Alibaba YouKu technology team. 
+GaiaX dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team. 
 
-Except client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real time preview, it support to create template, edit template, real machine debug and real time preview.
+Besides client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real-time preview, which supports creating templates, editing templates, real machine debugging, and real-time preview.
 
-Dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
+GaiaX dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
 
 ## Goals
 
@@ -90,15 +90,15 @@ allprojects {
 
 Android-Support version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2-support'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3.1-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3.1-support'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
 AndroidX version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.2.2'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.2.2'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.3.1'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.3.1'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 #### Template File
@@ -207,10 +207,12 @@ We very welcome your to contribute code for the project. In you before writing a
 ## Contact us
 
 DingTalk：
-<img src="https://user-images.githubusercontent.com/6761107/165739677-13c68f86-fa43-466f-939c-cc54d6827908.png" width="200" height="200" />
+
+<img src="https://gw.alicdn.com/imgextra/i3/O1CN01mmrIDM1ofvIASkhPI_!!6000000005253-2-tps-474-469.png" width="200" height="200" />
 
 WeChat：
-<img src="https://user-images.githubusercontent.com/6761107/165739894-301807db-949f-43be-b82a-421e968ee54d.png" width="200" height="200" />
+
+<img src="https://gw.alicdn.com/imgextra/i1/O1CN01LlZEeh1dLLjGAVpFn_!!6000000003719-2-tps-746-746.png" width="200" height="200" />
 
 Email:
 biezhihua@gmail.com

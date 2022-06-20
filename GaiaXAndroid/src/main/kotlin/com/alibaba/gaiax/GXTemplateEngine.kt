@@ -688,13 +688,7 @@ class GXTemplateEngine {
             val clazz = Class.forName("com.alibaba.gaiax.adapter.GXAdapter")
             clazz.newInstance() as GXIAdapter
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
-                null
-            } else {
-                throw e
-            }
+            null
         }
     }
 

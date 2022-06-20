@@ -57,28 +57,40 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                 this.setRoundCornerRadius(borderRadius)
             }
             if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
+                this.setRoundCornerBorder(
+                    borderColor,
+                    borderWidth,
+                    borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXText) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
             if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
+                this.setRoundCornerBorder(
+                    borderColor,
+                    borderWidth,
+                    borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXIImageView) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
             if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
+                this.setRoundCornerBorder(
+                    borderColor,
+                    borderWidth,
+                    borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXContainer) {
             if (borderRadius != null) {
                 this.setRoundCornerRadius(borderRadius)
             }
             if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
+                this.setRoundCornerBorder(
+                    borderColor,
+                    borderWidth,
+                    borderRadius ?: FloatArray(8) { 0F })
             }
         }
     }
@@ -134,7 +146,10 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
     } else if (style?.backgroundColor != null) {
         val drawable = GXColorGradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT,
-            intArrayOf(style.backgroundColor.value(this.context), style.backgroundColor.value(this.context))
+            intArrayOf(
+                style.backgroundColor.value(this.context),
+                style.backgroundColor.value(this.context)
+            )
         )
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
@@ -419,19 +434,17 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                 // 在一行的状态下，需要特殊处理上下居中的问题
                 if (orientation == GridLayoutManager.VERTICAL && (itemCount * 1.0F / spanCount) <= 1 && itemHeight > 0 && containerHeight > 0) {
                     val heightDiff = containerHeight - itemHeight
-                    if (heightDiff > 0) {
-                        val value = (heightDiff / 2.0F).toInt()
-                        val finalPadding = Rect(padding.left, value, padding.right, value)
-                        setSingleGridOffset(
-                            itemSpacing.toFloat(),
-                            finalPadding,
-                            orientation,
-                            spanCount,
-                            outRect,
-                            childPosition,
-                            itemCount
-                        )
-                    }
+                    val value = (heightDiff / 2.0F).toInt()
+                    val finalPadding = Rect(padding.left, value, padding.right, value)
+                    setSingleGridOffset(
+                        itemSpacing.toFloat(),
+                        finalPadding,
+                        orientation,
+                        spanCount,
+                        outRect,
+                        childPosition,
+                        itemCount
+                    )
                 } else {
                     setGridOffset(
                         itemSpacing.toFloat(),

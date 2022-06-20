@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax
 
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
@@ -75,4 +76,16 @@ fun Any.getFieldInt(name: String): Int {
     val declaredField = this.javaClass.getDeclaredField(name)
     declaredField.isAccessible = true
     return declaredField.getInt(this)
+}
+
+fun Any.getFieldAny(name: String): Any {
+    val declaredField = this.javaClass.getDeclaredField(name)
+    declaredField.isAccessible = true
+    return declaredField.get(this)
+}
+
+fun Any.getSuperFieldAny(name: String): Any {
+    val declaredField = this.javaClass.superclass.getDeclaredField(name)
+    declaredField.isAccessible = true
+    return declaredField.get(this)
 }

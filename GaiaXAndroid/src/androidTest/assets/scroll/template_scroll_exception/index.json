@@ -1,0 +1,13 @@
+{
+  "id": "template_scroll_exception",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "direction": "horizontal",
+  "layers": [
+    {
+      "id": "template_scroll_exception_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

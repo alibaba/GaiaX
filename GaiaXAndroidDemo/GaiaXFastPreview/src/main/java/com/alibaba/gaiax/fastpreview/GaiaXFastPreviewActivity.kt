@@ -112,8 +112,6 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
 
         val activity = this
 
-        GXTemplateEngine.instance.init(activity)
-
         val params = GXTemplateEngine.GXTemplateItem(activity, "fastpreview", templateId)
 
         val width = if (constraintSize.containsKey("width")) {
@@ -127,14 +125,10 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
             null
         }
 
-        try {
-            val size = GXTemplateEngine.GXMeasureSize(width, height)
-            val templateData = GXTemplateEngine.GXTemplateData(data)
-            val view = GXTemplateEngine.instance.createView(params, size)
-            GXTemplateEngine.instance.bindData(view, templateData)
-            fastPreviewRoot.addView(view, 0)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val size = GXTemplateEngine.GXMeasureSize(width, height)
+        val templateData = GXTemplateEngine.GXTemplateData(data)
+        val view = GXTemplateEngine.instance.createView(params, size)
+        GXTemplateEngine.instance.bindData(view, templateData)
+        fastPreviewRoot.addView(view, 0)
     }
 }

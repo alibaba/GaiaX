@@ -1468,4 +1468,59 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(true, (rootView.child(0).clipToOutline))
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun template_scroll_exception() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_exception"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        rootView.executeRecyclerView()
+    }
+
+    @Test
+    fun template_scroll_exception_process_exception() {
+        var throwException: Exception? = null
+        GXRegisterCenter.instance.registerExtensionException(object :
+            GXRegisterCenter.GXIExtensionException {
+            override fun exception(exception: Exception) {
+                throwException = exception
+            }
+        })
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_exception"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(true, throwException != null)
+
+        GXRegisterCenter.instance.reset()
+    }
 }

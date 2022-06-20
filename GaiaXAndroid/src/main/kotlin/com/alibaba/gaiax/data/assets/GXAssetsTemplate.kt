@@ -70,7 +70,6 @@ open class GXAssetsTemplate(open val context: Context) :
             context.resources?.assets?.open(path)?.bufferedReader(Charsets.UTF_8)
                 .use { it?.readText() }
         } catch (e: Exception) {
-            e.printStackTrace()
             null
         }
     }

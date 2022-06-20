@@ -52,7 +52,23 @@ class GXContainerViewAdapter(
     private var footerTypeHasMore: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
+        return try {
+            createGXViewHolder(viewType, parent)
+        } catch (e: Exception) {
+            val extensionException = GXRegisterCenter.instance.extensionException
+            if (extensionException != null) {
+                extensionException.exception(e)
+                GXViewHolder(GXItemContainer(parent.context))
+            } else {
+                throw e
+            }
+        }
+    }
 
+    private fun createGXViewHolder(
+        viewType: Int,
+        parent: ViewGroup
+    ): GXViewHolder {
         // 准备构建坑位容器的参数
         val childTemplateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")

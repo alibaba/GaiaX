@@ -1,0 +1,13 @@
+{
+  "id": "template_grid_single_line_different_height",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "column": 3,
+  "layers": [
+    {
+      "id": "template_grid_single_line_different_height_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

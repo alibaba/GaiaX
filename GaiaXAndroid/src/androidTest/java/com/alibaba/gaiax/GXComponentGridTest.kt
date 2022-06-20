@@ -1,6 +1,7 @@
 package com.alibaba.gaiax
 
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
@@ -21,6 +22,75 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class GXComponentGridTest : GXBaseTest() {
+
+    @Test
+    fun template_grid_single_line_same_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_single_line_same_height"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        val rect = rootView.child(0).layoutParams.getSuperFieldAny("mDecorInsets") as Rect
+        Assert.assertEquals(0F, rect.top.toFloat())
+        Assert.assertEquals(0F, rect.bottom.toFloat())
+    }
+
+    @Test
+    fun template_grid_single_line_different_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_single_line_different_height"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(200F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        val rect = rootView.child(0).layoutParams.getSuperFieldAny("mDecorInsets") as Rect
+        // 275/2=137.5 四舍五入 138
+        Assert.assertEquals(50F.dpToPx(), rect.top.toFloat() + 1)
+        Assert.assertEquals(50F.dpToPx(), rect.bottom.toFloat() + 1)
+    }
 
     @Test
     fun template_grid_load_more_fixed_footer_size() {

@@ -31,10 +31,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         GXTemplateEngine.instance.init(this)
+
+        // 注册IconFont字体的加载逻辑
         GXRegisterCenter.instance.registerExtensionFontFamily(object :
             GXRegisterCenter.GXIExtensionFontFamily {
             override fun fontFamily(fontFamilyName: String): Typeface? {
-                return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
+                if (fontFamilyName == "iconfont") {
+                    return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
+                }
+                return null
             }
         })
 

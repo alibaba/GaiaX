@@ -132,7 +132,9 @@ class GXRegisterCenter {
     }
 
     /**
-     * Process some internal exception to prevent app crash
+     * Process some internal exception to prevent app crash.
+     *
+     * If you implement this extension, GXEngine not to crash at anywhere, it will return a default value.
      */
     interface GXIExtensionException {
         fun exception(exception: Exception)

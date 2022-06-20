@@ -1,6 +1,5 @@
 package com.alibaba.gaiax.data.cache
 
-import android.content.Context
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXTemplateInfo
@@ -9,7 +8,13 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * @suppress
  */
-class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateInfoSource {
+class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
+
+    companion object {
+        val instance by lazy {
+            GXTemplateInfoSource()
+        }
+    }
 
     private val dataCache = ConcurrentHashMap<String, ConcurrentHashMap<String, GXTemplateInfo>>()
 
@@ -44,5 +49,9 @@ class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtension
                 collectionNestTemplate(bizList, it)
             }
         }
+    }
+
+    fun clean() {
+        dataCache.clear()
     }
 }

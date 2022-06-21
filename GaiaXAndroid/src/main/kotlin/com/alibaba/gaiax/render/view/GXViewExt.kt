@@ -50,11 +50,27 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
     val borderRadius = style?.borderRadius?.value
     val borderWidth = style?.borderWidth?.valueFloat
     val borderColor = style?.borderColor?.value(this.context)
+    var cornerRadius = style?.borderRadius?.value
+
+    // Fix a ui bug,
+    // if we set corner radius and border radius in the same time, it will produce some defects at the view corner.
+    // we need make a special process in order fix the defects.
+    if (cornerRadius != null && cornerRadius.size == 8 &&
+        borderRadius != null && borderWidth != null && borderColor != null
+    ) {
+        val tl = cornerRadius[0]
+        val tr = cornerRadius[2]
+        val bl = cornerRadius[4]
+        val br = cornerRadius[6]
+        if (tl == tr && tr == bl && bl == br) {
+            cornerRadius = FloatArray(8) { tl + 1 }
+        }
+    }
 
     if (this is GXIRoundCorner) {
         if (this is GXView) {
-            if (borderRadius != null) {
-                this.setRoundCornerRadius(borderRadius)
+            if (cornerRadius != null) {
+                this.setRoundCornerRadius(cornerRadius)
             }
             if (borderColor != null && borderWidth != null) {
                 this.setRoundCornerBorder(
@@ -63,8 +79,8 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXText) {
-            if (borderRadius != null) {
-                this.setRoundCornerRadius(borderRadius)
+            if (cornerRadius != null) {
+                this.setRoundCornerRadius(cornerRadius)
             }
             if (borderColor != null && borderWidth != null) {
                 this.setRoundCornerBorder(
@@ -73,8 +89,8 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXIImageView) {
-            if (borderRadius != null) {
-                this.setRoundCornerRadius(borderRadius)
+            if (cornerRadius != null) {
+                this.setRoundCornerRadius(cornerRadius)
             }
             if (borderColor != null && borderWidth != null) {
                 this.setRoundCornerBorder(
@@ -83,8 +99,8 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXContainer) {
-            if (borderRadius != null) {
-                this.setRoundCornerRadius(borderRadius)
+            if (cornerRadius != null) {
+                this.setRoundCornerRadius(cornerRadius)
             }
             if (borderColor != null && borderWidth != null) {
                 this.setRoundCornerBorder(

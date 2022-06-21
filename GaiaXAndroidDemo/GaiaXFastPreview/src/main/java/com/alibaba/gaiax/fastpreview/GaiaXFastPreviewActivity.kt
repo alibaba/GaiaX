@@ -3,6 +3,7 @@ package com.alibaba.gaiax.fastpreview
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.fastjson.JSONObject
@@ -24,9 +25,12 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
         const val GAIA_STUDIO_URL = "GAIA_STUDIO_URL"
     }
 
+    lateinit var fastPreviewRoot: ViewGroup
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gaiax_fast_preview_activity)
+        fastPreviewRoot = findViewById<ViewGroup>(R.id.fast_preview_layout)
         val url = intent.getStringExtra("GAIA_STUDIO_URL")
         val params = getParams(url)
         if (params == null) {
@@ -96,13 +100,14 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
         super.onDestroy()
     }
 
+    var gxTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+    var gxMeasureSize: GXTemplateEngine.GXMeasureSize? = null
+    var gxTemplateData: GXTemplateEngine.GXTemplateData? = null
     override fun notifyUpdateUI(
         template: JSONObject,
         templateId: String,
         constraintSize: JSONObject
     ) {
-        val fastPreviewRoot = findViewById<ViewGroup>(R.id.fast_preview_layout)
-        fastPreviewRoot.removeAllViews()
 
         var data = JSONObject()
         val indexMock = template.getJSONObject("index.mock")
@@ -111,8 +116,6 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
         }
 
         val activity = this
-
-        val params = GXTemplateEngine.GXTemplateItem(activity, "fastpreview", templateId)
 
         val width = if (constraintSize.containsKey("width")) {
             constraintSize.getFloat("width")
@@ -125,12 +128,43 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
             null
         }
 
+        gxTemplateItem = GXTemplateEngine.GXTemplateItem(activity, "fastpreview", templateId)
+        gxMeasureSize = GXTemplateEngine.GXMeasureSize(width, height)
+        gxTemplateData = GXTemplateEngine.GXTemplateData(data)
+
+        forceCreate()
+    }
+
+    private fun forceCreate() {
         try {
-            val size = GXTemplateEngine.GXMeasureSize(width, height)
-            val templateData = GXTemplateEngine.GXTemplateData(data)
-            val view = GXTemplateEngine.instance.createView(params, size)
-            GXTemplateEngine.instance.bindData(view, templateData)
+            val view = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
+            GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
+            fastPreviewRoot.removeAllViews()
             fastPreviewRoot.addView(view, 0)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun OnCreate(view: View) {
+        forceCreate()
+    }
+
+    fun OnVisible(view: View) {
+
+    }
+
+    fun OnInvisible(view: View) {
+
+    }
+
+    fun OnDestroy(view: View) {
+        fastPreviewRoot.removeAllViews()
+    }
+
+    fun OnReuse(view: View) {
+        try {
+            GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
         } catch (e: Exception) {
             e.printStackTrace()
         }

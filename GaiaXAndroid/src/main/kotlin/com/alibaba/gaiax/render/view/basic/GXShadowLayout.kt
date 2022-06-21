@@ -286,6 +286,15 @@ open class GXShadowLayout @JvmOverloads constructor(
             this.setShadowBlur(boxShadow.blurOffset.valueFloat)
             this.setShadowSpread(boxShadow.spreadOffset.valueFloat)
         }
+        val borderRadius = style?.borderRadius
+        if (borderRadius != null) {
+            val topLeft = borderRadius.topLeft?.valueFloat ?: 0F
+            val topRight = borderRadius.topRight?.valueFloat ?: 0F
+            val bottomLeft = borderRadius.bottomLeft?.valueFloat ?: 0F
+            val bottomRight = borderRadius.bottomRight?.valueFloat ?: 0F
+            this.setBoxRadius(topLeft, topRight, bottomLeft, bottomRight)
+        }
+
     }
 }
 

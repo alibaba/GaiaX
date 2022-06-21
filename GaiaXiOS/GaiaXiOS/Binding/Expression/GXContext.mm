@@ -76,7 +76,7 @@
 
 + (long)getAdressWithValue:(id)value{
     
-    GXValue val;
+    GXValue *val;
     
     if ([value isKindOfClass:[NSNumber class]]) {
         //number类型
@@ -105,11 +105,6 @@
         //未知类型，返回null
         val = GX_NewNull(0);
     }
-    
-    //生成安全返回值
-    GXValue *result  = (GXValue *) malloc(sizeof(val));
-    memcpy(result, &val, sizeof(val));
-    return (long)(result);
+        return (long)(val);
 }
-
 @end

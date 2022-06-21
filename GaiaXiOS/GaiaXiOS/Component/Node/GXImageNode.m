@@ -202,7 +202,7 @@
             if ([placeholder hasPrefix:kGXComDef_Prefix_Local]) {
                 tmpImg = [placeholder stringByReplacingOccurrencesOfString:kGXComDef_Prefix_Local withString:@""];
             }
-            placeholderImage = [UIImage imageNamed:placeholder];
+            placeholderImage = [UIImage imageNamed:tmpImg];
         }
     }
     

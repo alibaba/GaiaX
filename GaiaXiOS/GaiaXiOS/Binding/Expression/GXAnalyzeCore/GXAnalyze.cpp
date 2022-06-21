@@ -700,16 +700,16 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = left.name + right.name;
         } else {
             if (left.token == "num" && right.token == "string") {
-                if(left.name.find('.')){
+                if (left.name.find('.')) {
                     regex e("0+?$");
                     regex e2("[.]$");
-                    left.name = regex_replace(left.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    left.name = regex_replace(left.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    left.name = regex_replace(left.name, e, "");
+                    left.name = regex_replace(left.name, e2, "");
                 }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else if (right.token == "num" && left.token == "string") {
-                if(right.name.find('.')){
+                if (right.name.find('.')) {
                     regex e("0+?$");
                     regex e2("[.]$");
                     right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
@@ -933,27 +933,27 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         new_status = tableT[m];
         if (new_status == "acc") {
             if (valueStack[0].token == "string") {
-                pointer = new GXValue(GX_TAG_STRING,valueStack[0].name);
+                pointer = new GXValue(GX_TAG_STRING, valueStack[0].name);
             } else if (valueStack[0].token == "bool") {
                 if (valueStack[0].name == "true") {
-                    pointer = new GXValue(GX_TAG_BOOL,1);
+                    pointer = new GXValue(GX_TAG_BOOL, 1);
                 } else {
-                    pointer = new GXValue(GX_TAG_BOOL,0);
+                    pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (valueStack[0].token == "num") {
-                if(valueStack[0].name.find('.')){
+                if (valueStack[0].name.find('.')) {
                     regex e("0+?$");
                     regex e2("[.]$");
-                    valueStack[0].name = regex_replace(valueStack[0].name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    valueStack[0].name = regex_replace(valueStack[0].name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    valueStack[0].name = regex_replace(valueStack[0].name, e, "");
+                    valueStack[0].name = regex_replace(valueStack[0].name, e2, "");
                 }
-                pointer = new GXValue(GX_TAG_FLOAT,(float)atof(valueStack[0].name.c_str()));
+                pointer = new GXValue(GX_TAG_FLOAT, (float) atof(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "map") {
-                pointer = new GXValue(GX_TAG_MAP,(void *) atol(valueStack[0].name.c_str()));
+                pointer = new GXValue(GX_TAG_MAP, (void *) atol(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "array") {
-                pointer = new GXValue(GX_TAG_ARRAY,(void *) atol(valueStack[0].name.c_str()));
+                pointer = new GXValue(GX_TAG_ARRAY, (void *) atol(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "null") {
-                pointer = new GXValue(GX_TAG_NULL,1);
+                pointer = new GXValue(GX_TAG_NULL, 1);
             }
             delete[] statusStack;
             delete[] symbolStack;

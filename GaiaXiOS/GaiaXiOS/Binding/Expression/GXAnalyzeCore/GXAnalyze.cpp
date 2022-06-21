@@ -912,7 +912,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
     int symbolSize = 0;
     GXATSNode *valueStack = new GXATSNode[sentence.size() + 2];
     int valueSize = 0;
-    GXValue *paramsStack = new GXValue[sentence.size() + 2];
+    long *paramsStack = new long[sentence.size() + 2];
     int paramsSize = 0;
     int valueStep = 0; //数值数
     bool isFunction = false;
@@ -1087,17 +1087,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             } else if (op == ")") {
                                 for (int i = valueSize - 1; i >= 0; i--) {
                                     if (valueStack[i].token == "id") {
-                                        long *params = new long[paramsSize];
-                                        int j = paramsSize - 1;
-                                        for (int i = 0; i < paramsSize; i++) {
-                                            params[i] = (long) &paramsStack[j];
-                                            j--;
-                                        }
                                         //在这里调用获取函数结果方法
                                         long funVal = analyze->getFunctionValue(valueStack[i].name,
-                                                                                params,
+                                                                                paramsStack,
                                                                                 paramsSize, "");
-                                        delete[] params;
                                         GXValue *fun = (GXValue *) funVal;
                                         //取出结果
                                         if (fun->tag == GX_TAG_FLOAT) {
@@ -1135,32 +1128,38 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                     } else {
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用
                                         if (valueStack[i].token == "num") {
-                                            paramsStack[paramsSize] =
-                                                    GX_NewFloat64(
-                                                            atof(valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
+                                                    valueStack[i].name.c_str()));
+                                            paramsStack[paramsSize] = (long) par;
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "string") {
-                                            paramsStack[paramsSize] =
-                                                    GX_NewGXString(valueStack[i].name.c_str());
+                                            GXValue *par = new GXValue(GX_TAG_STRING,
+                                                                       valueStack[i].name.c_str());
+                                            paramsStack[paramsSize] = (long) par;
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "bool") {
                                             if (valueStack[i].name == "true") {
-                                                paramsStack[paramsSize] = GX_NewBool(1);
+                                                GXValue *par = new GXValue(GX_TAG_BOOL, 1);
+                                                paramsStack[paramsSize] = (long) par;
                                                 ++paramsSize;
                                             } else {
-                                                paramsStack[paramsSize] = GX_NewBool(0);
+                                                GXValue *par = new GXValue(GX_TAG_BOOL, 0);
+                                                paramsStack[paramsSize] = (long) par;
                                                 ++paramsSize;
                                             }
                                         } else if (valueStack[i].token == "map") {
-                                            paramsStack[paramsSize] = GX_NewMap(
-                                                    (void *) atol(valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(
+                                                    valueStack[i].name.c_str()));
+                                            paramsStack[paramsSize] = (long) par;
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "array") {
-                                            paramsStack[paramsSize] = GX_NewArray(
-                                                    (void *) atol(valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(
+                                                    valueStack[i].name.c_str()));
+                                            paramsStack[paramsSize] = (long) par;
                                             ++paramsSize;
                                         } else if (valueStack[i].token == "null") {
-                                            paramsStack[paramsSize] = GX_NewNull(1);
+                                            GXValue *par = new GXValue(GX_TAG_NULL, 1);
+                                            paramsStack[paramsSize] = (long) par;
                                             ++paramsSize;
                                         }
                                         --valueSize;

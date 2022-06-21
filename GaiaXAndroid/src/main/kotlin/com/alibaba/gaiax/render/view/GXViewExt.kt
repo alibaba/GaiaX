@@ -39,6 +39,7 @@ import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
 /**
  * @suppress
@@ -63,7 +64,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
         val bl = cornerRadius[4]
         val br = cornerRadius[6]
         if (tl == tr && tr == bl && bl == br) {
-            cornerRadius = FloatArray(8) { tl + 1 }
+            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
         }
     }
 

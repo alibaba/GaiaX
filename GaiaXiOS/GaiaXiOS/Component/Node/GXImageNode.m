@@ -198,7 +198,11 @@
         //placeholder
         NSString *placeholder = [imgDict gx_stringForKey:@"placeholder"];
         if (placeholder.length) {
-            placeholderImage = [UIImage imageNamed:placeholder];
+            NSString *tmpImg = placeholder;
+            if ([placeholder hasPrefix:kGXComDef_Prefix_Local]) {
+                tmpImg = [placeholder stringByReplacingOccurrencesOfString:kGXComDef_Prefix_Local withString:@""];
+            }
+            placeholderImage = [UIImage imageNamed:tmpImg];
         }
     }
     

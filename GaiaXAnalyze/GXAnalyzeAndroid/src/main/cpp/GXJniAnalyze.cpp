@@ -322,11 +322,11 @@ JNIEXPORT jstring JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueString(JNIEnv *env, jobject thiz,
                                                                        jlong value) {
     GXValue *val = (GXValue *) value;
-    const char *str = GX_ToCString(*val);
+    const char *str = (*val).str;
     jstring j_str = env->NewStringUTF(str);
-    if (val->tag == GX_TAG_STRING && val->u.str != NULL) {
-        delete[]val->u.str;
-        val->u.str = NULL;
+    if (val->tag == GX_TAG_STRING && val->str != NULL) {
+        delete[]val->str;
+        val->str = NULL;
     }
     return j_str;
 }
@@ -336,14 +336,14 @@ JNIEXPORT jobject JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueArray(JNIEnv *env, jobject thiz,
                                                                       jlong value) {
     GXValue *val = (GXValue *) value;
-    return static_cast<jobject>GX_VALUE_GET_OBJECT(*val);;
+    return static_cast<jobject>(GX_VALUE_GET_OBJECT(*val));
 }
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueMap(JNIEnv *env, jobject thiz,
                                                                     jlong value) {
     GXValue *val = (GXValue *) value;
-    return static_cast<jobject>GX_VALUE_GET_OBJECT(*val);;
+    return static_cast<jobject>(GX_VALUE_GET_OBJECT(*val));
 }
 
 extern "C"
@@ -398,4 +398,10 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueNull(JNIEnv *
     result = (GXValue *) malloc(sizeof(val));
     memcpy(result, &val, sizeof(val));
     return (jlong) result;
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_releaseGXValue(JNIEnv *env, jobject thiz,
+                                                                       jlong value) {
+    releaseGXValue(value);
 }

@@ -672,7 +672,7 @@ class GXTemplateEngine {
         GXStyleConvert.instance.init(context.assets)
         GXRegisterCenter.instance
             // priority 0
-            .registerExtensionTemplateInfoSource(GXTemplateInfoSource(this.context), 0)
+            .registerExtensionTemplateInfoSource(GXTemplateInfoSource.instance, 0)
             // priority 0
             .registerExtensionTemplateSource(GXAssetsBinaryWithoutSuffixTemplate(this.context), 0)
             // priority 1

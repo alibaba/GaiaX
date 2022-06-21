@@ -6,6 +6,7 @@ import android.util.Log
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.template.GXTemplate
 import com.alibaba.gaiax.template.GXTemplateKey
 
@@ -20,6 +21,7 @@ class GaiaXFastPreview {
         }
 
         fun addTemplate(templateId: String, data: JSONObject) {
+            GXTemplateInfoSource.instance.clean()
             val layer = data.getString(GXTemplateKey.GAIAX_INDEX_JSON) ?: ""
             val css = data.getString(GXTemplateKey.GAIAX_INDEX_CSS) ?: ""
             val dataBind = data.getString(GXTemplateKey.GAIAX_INDEX_DATABINDING) ?: ""
@@ -37,6 +39,7 @@ class GaiaXFastPreview {
         }
 
         fun addTemplate(templateId: String, data: JSONObject) {
+            GXTemplateInfoSource.instance.clean()
             val layer = data.getString(GXTemplateKey.GAIAX_INDEX_JSON) ?: ""
             val css = data.getString(GXTemplateKey.GAIAX_INDEX_CSS) ?: ""
             val dataBind = data.getString(GXTemplateKey.GAIAX_INDEX_DATABINDING) ?: ""

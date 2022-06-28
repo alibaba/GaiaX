@@ -75,7 +75,7 @@ open class GXAssetsTemplate(open val context: Context) :
     }
 
     private fun getFromCache(templateBiz: String, templateId: String) =
-        templateCache[templateBiz]?.filter { it.id == templateId }?.maxBy { it.version }
+        templateCache[templateBiz]?.filter { it.id == templateId }?.maxByOrNull { it.version }
 
     private fun addToCache(gxTemplate: GXTemplate) {
         var bizTemplates = templateCache[gxTemplate.biz]

@@ -144,6 +144,19 @@ class GXContainerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: GXViewHolder, position: Int) {
+        return try {
+            bindGXViewHolder(holder)
+        } catch (e: Exception) {
+            val extensionException = GXRegisterCenter.instance.extensionException
+            if (extensionException != null) {
+                extensionException.exception(e)
+            } else {
+                throw e
+            }
+        }
+    }
+
+    private fun bindGXViewHolder(holder: GXViewHolder) {
         val childTemplateItem = holder.childTemplateItem
             ?: throw IllegalArgumentException("childTemplateItem is null")
 

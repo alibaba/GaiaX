@@ -60,7 +60,7 @@ data class GXTemplateInfo(
         return result
     }
 
-    fun getChildTemplate(id: String): GXTemplateInfo? {
+    fun getChildTemplateInfo(id: String): GXTemplateInfo? {
         children?.forEach {
             if (it.layer.id == id) {
                 return it

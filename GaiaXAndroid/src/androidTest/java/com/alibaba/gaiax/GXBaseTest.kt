@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import app.visly.stretch.Dimension
 import app.visly.stretch.Size
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -36,13 +37,15 @@ open class GXBaseTest {
     fun before() {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
+        // 清除缓存，否则会导致模板复用，引发单测失败
+        GXTemplateInfoSource.instance.clear()
+
         GXRegisterCenter.instance
             .registerExtensionDataBinding(GXExtensionDataBinding())
             .registerExtensionColor(GXProcessorColor())
             .registerExtensionSize(GXExtensionSize())
             .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
             .registerExtensionScroll(GXExtensionScroll())
-
     }
 
     @After

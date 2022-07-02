@@ -60,43 +60,30 @@ object GXNodeTreeCreator {
         gxVisualTemplateNode: GXTemplateNode?,
         gxTemplateInfo: GXTemplateInfo
     ): GXNode {
-        val node = GXNode()
+
+        // 创建新节点
+        val gxNode = GXNode()
 
         // 设置ID与ID路径
-        node.setIdPath(gxParentNode, gxLayer)
+        gxNode.setIdPath(gxParentNode, gxLayer)
 
         // 初始化详细数据
-        node.templateNode =
-            GXTemplateNode.createNode(gxLayer.id, gxTemplateInfo, gxVisualTemplateNode)
-
-        // 初始化节点数据
-        node.stretchNode = GXStretchNode.createNode(
-            gxTemplateContext,
-            node.templateNode, node.id, node.idPath
+        gxNode.templateNode = GXTemplateNode.createNode(
+            gxLayer.id,
+            gxTemplateInfo,
+            gxVisualTemplateNode
         )
 
-        // 建立层级关系
-        if (gxParentNode?.children == null) {
-            gxParentNode?.children = mutableListOf()
-        }
-        gxParentNode?.children?.add(node)
-
-        // 建立节点的层级关系
-        gxParentNode?.stretchNode?.node?.addChild(node.stretchNode.node)
+        // 初始化节点数据
+        gxNode.stretchNode = GXStretchNode.createNode(
+            gxTemplateContext,
+            gxNode.templateNode,
+            gxNode.id,
+            gxNode.idPath
+        )
 
         // 构建子层级节点
-        initChildrenViewData(gxTemplateContext, node, gxLayer.layers, gxTemplateInfo)
-
-        return node
-    }
-
-    private fun initChildrenViewData(
-        gxTemplateContext: GXTemplateContext,
-        gxParentNode: GXNode,
-        gxLayers: MutableList<GXLayer>,
-        gxTemplateInfo: GXTemplateInfo
-    ) {
-        gxLayers.forEach { currentLayer ->
+        gxLayer.layers.forEach { currentLayer ->
             // 嵌套子模板类型，是个虚拟节点
             if (currentLayer.isNestChildTemplateType()) {
                 val gxChildTemplateInfo = gxTemplateInfo.getChildTemplateInfo(currentLayer.id)
@@ -111,8 +98,8 @@ object GXNodeTreeCreator {
                 val gxChildLayer = gxChildTemplateInfo.layer
 
                 // 容器模板下的子模板
-                if (gxParentNode.isContainerType() && gxChildTemplateInfo.isTemplate()) {
-                    gxParentNode.addChildTemplateItems(
+                if (gxNode.isContainerType() && gxChildTemplateInfo.isTemplate()) {
+                    gxNode.addChildTemplateItems(
                         GXTemplateEngine.GXTemplateItem(
                             gxTemplateContext.context,
                             gxTemplateContext.templateItem.bizId,
@@ -122,19 +109,44 @@ object GXNodeTreeCreator {
                 }
                 // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                 else {
-                    createNode(
+                    val gxChildNode = createNode(
                         gxTemplateContext,
-                        gxParentNode,
+                        gxNode,
                         gxChildLayer,
                         gxChildVisualTemplateNode,
                         gxChildTemplateInfo
                     ).apply { isNestRoot = true }
+
+                    // 建立层级关系
+                    if (gxNode.children == null) {
+                        gxNode.children = mutableListOf()
+                    }
+                    gxNode.children?.add(gxChildNode)
+
+                    // 建立节点的层级关系
+                    gxNode.stretchNode.node.addChild(gxChildNode.stretchNode.node)
                 }
             }
             // 普通子节点
             else {
-                createNode(gxTemplateContext, gxParentNode, currentLayer, null, gxTemplateInfo)
+                val gxChildNode = createNode(
+                    gxTemplateContext,
+                    gxNode,
+                    currentLayer, null,
+                    gxTemplateInfo
+                )
+
+                // 建立层级关系
+                if (gxNode.children == null) {
+                    gxNode.children = mutableListOf()
+                }
+                gxNode.children?.add(gxChildNode)
+
+                // 建立节点的层级关系
+                gxNode.stretchNode.node.addChild(gxChildNode.stretchNode.node)
             }
         }
+
+        return gxNode
     }
 }

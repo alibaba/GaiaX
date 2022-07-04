@@ -104,13 +104,14 @@ object GXFitContentUtils {
             var measuredWidth = textView.measuredWidth.toFloat()
             val measuredHeight = textView.measuredHeight.toFloat()
 
+            // 会对后续的计算结果起到拦截作用
             var nodeWidth = nodeLayout.width
 
             val isUndefineSize = finalCss.flexBox.size?.width == null ||
                     finalCss.flexBox.size.width is Dimension.Auto ||
                     finalCss.flexBox.size.width is Dimension.Undefined
 
-            val isDefineMinSize = finalCss.flexBox.minSize?.width != null &&
+            val isDefineMinSize = finalCss.flexBox.minSize != null &&
                     (finalCss.flexBox.minSize.width !is Dimension.Auto ||
                             finalCss.flexBox.minSize.width !is Dimension.Undefined)
 

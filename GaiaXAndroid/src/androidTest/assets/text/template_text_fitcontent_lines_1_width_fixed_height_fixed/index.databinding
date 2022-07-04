@@ -1,0 +1,5 @@
+{
+  "data": {
+    "text": { "extend": { "fit-content": "true" }, "value": "$data.title" }
+  }
+}

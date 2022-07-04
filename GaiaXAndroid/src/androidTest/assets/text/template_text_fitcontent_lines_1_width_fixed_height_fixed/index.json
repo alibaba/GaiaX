@@ -1,0 +1,17 @@
+{
+  "id": "Test3",
+  "type": "gaia-template",
+  "package": {
+    "id": "Test3",
+    "version": "0.0.1",
+    "modify-timestamp": "Mon Jul 04 2022 11:04:21 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "text_container",
+      "type": "view",
+      "layers": [{ "id": "text", "type": "text" }]
+    }
+  ]
+}

@@ -13,7 +13,7 @@
 
 + (id)getValueWithAdress:(long)adress{
     id result = nil;
-    
+
     if (adress > 0) {
         //获取value对应的地址
         NSString *hexAdress = [NSString stringWithFormat:@"%lx",adress];
@@ -24,8 +24,8 @@
         
         //解析结果
         result = [self parserValue:(*value)];
+        releaseGXValue(adress);
     }
-    releaseGXValue(adress);
     return result;
 }
 

@@ -51,7 +51,7 @@ class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
         }
     }
 
-    fun clear() {
+    fun clean() {
         dataCache.clear()
     }
 }

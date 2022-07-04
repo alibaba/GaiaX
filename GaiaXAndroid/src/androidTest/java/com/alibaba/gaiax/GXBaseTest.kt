@@ -38,7 +38,7 @@ open class GXBaseTest {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
         // 清除缓存，否则会导致模板复用，引发单测失败
-        GXTemplateInfoSource.instance.clear()
+        GXTemplateInfoSource.instance.clean()
 
         GXRegisterCenter.instance
             .registerExtensionDataBinding(GXExtensionDataBinding())

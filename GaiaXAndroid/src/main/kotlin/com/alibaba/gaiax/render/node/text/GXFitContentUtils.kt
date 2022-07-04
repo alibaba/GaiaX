@@ -40,28 +40,13 @@ object GXFitContentUtils {
      *  1. 自适应，行数=1，有宽度
      *     宽度需要自适应，高度不做处理
      *          文字自适应后的宽度以实际计算宽度为准，不应超过原有宽度设置值。
-     *          例如：
-     *              输入：lines=1;width=50px;fitcontent=true;text=哈哈(计算后宽度20px)
-     *              输出：width=20px
-     *
-     *              输入：lines=1;width=100px;fitcontent=true;text=哈哈哈哈哈哈哈哈(计算后宽度60px)
-     *              输出：width=50px
-     *
      *  2. 自适应，行数>1 or 行数=0, 有宽度
      *     高度需要自适应，宽度不做处理
      *          文字自适应的后的高度以实际计算为准，不受到原有高度的影响
-     *          例如：
-     *              输入：lines=3;width=20px;fitcontent=true;text=哈哈哈哈哈哈哈哈哈哈哈哈(计算后高度为60px)
-     *              输出：width=20px; height=60px
-     *
-     *              输入：lines=0;width=20px;fitcontent=true;text=哈哈哈哈哈哈哈哈哈哈哈哈(计算后高度为60px)
-     *              输出：width=20px; height=60px
-     *
      *
      *  前置处理与后置处理：
      *     1. 如果是flexGrow计算出的，那么文字自适应时，需要将flexGrow设置成0
      *     2. 在处理文字自适应时，应先计算过一次布局
-     *
      */
     fun fitContent(
         templateContext: GXTemplateContext,
@@ -116,10 +101,32 @@ object GXFitContentUtils {
             // 计算宽高
             textView.measure(0, 0)
 
-            val measuredWidth = textView.measuredWidth.toFloat()
+            var measuredWidth = textView.measuredWidth.toFloat()
             val measuredHeight = textView.measuredHeight.toFloat()
 
-            val nodeWidth = nodeLayout.width
+            var nodeWidth = nodeLayout.width
+
+            val isUndefineSize = finalCss.flexBox.size?.width == null ||
+                    finalCss.flexBox.size.width is Dimension.Auto ||
+                    finalCss.flexBox.size.width is Dimension.Undefined
+
+            val isDefineMinSize = finalCss.flexBox.minSize?.width != null &&
+                    (finalCss.flexBox.minSize.width !is Dimension.Auto ||
+                            finalCss.flexBox.minSize.width !is Dimension.Undefined)
+
+            // fix: 如果没有定义宽度，但是定义了最小宽度，那么需要做一下修正
+            if (isUndefineSize && isDefineMinSize) {
+                // 如果测量的宽度，大于最小宽度，那么清除nodeWidth
+                if (measuredWidth >= nodeWidth) {
+                    nodeWidth = 0F
+                }
+                // 如果测量的宽度，小于做小宽度，那么使用nodeWidth参与计算
+                else {
+                    measuredWidth = nodeWidth
+                    nodeWidth = 0F
+                }
+            }
+
             val nodeHeight = nodeLayout.height
 
             var textHeight = nodeHeight

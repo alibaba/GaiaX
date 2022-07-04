@@ -88,8 +88,8 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
         val rect = rootView.child(0).layoutParams.getSuperFieldAny("mDecorInsets") as Rect
         // 275/2=137.5 四舍五入 138
-        Assert.assertEquals(50F.dpToPx(), rect.top.toFloat())
-        Assert.assertEquals(50F.dpToPx(), rect.bottom.toFloat())
+        Assert.assertEquals(50F.dpToPx(), rect.top.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0)
+        Assert.assertEquals(50F.dpToPx(), rect.bottom.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0)
     }
 
     @Test

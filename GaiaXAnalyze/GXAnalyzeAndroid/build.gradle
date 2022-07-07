@@ -33,15 +33,15 @@ buildscript {
 
 }
 
-def platformVersion = 21
+def platformVersion = 16
 
 android {
 
-    compileSdk 31
+    compileSdk 28
 
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdk 16
+        targetSdk 28
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles 'consumer-rules.pro'

@@ -43,6 +43,7 @@ object GXViewFactory {
         // viewSupport[GXViewKey.VIEW_TYPE_LOTTIE] = GXLottie::class.java
         viewSupport[GXViewKey.VIEW_TYPE_SHADOW_LAYOUT] = GXShadowLayout::class.java
         viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_SLIDER] = GXSliderView::class.java
+        viewSupport[GXViewKey.VIEW_TYPE_PROGRESS] = GXProgressView::class.java
     }
 
     /**

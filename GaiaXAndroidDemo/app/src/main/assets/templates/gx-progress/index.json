@@ -1,0 +1,22 @@
+{
+  "id": "gx-progress",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "progress-view1",
+      "type": "progress",
+      "stroke-color": "#0000FF",
+      "trail-color": "#AAAAAA",
+      "progress-type": "line",
+      "animated": false
+    },
+    {
+      "id": "progress-view2",
+      "type": "progress",
+      "stroke-color": "#AA00AA",
+      "trail-color": "#CCCCCC",
+      "progress-type": "line",
+      "animated": true
+    }
+  ]
+}

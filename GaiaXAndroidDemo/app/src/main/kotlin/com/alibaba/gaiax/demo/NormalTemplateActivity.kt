@@ -3,6 +3,7 @@ package com.alibaba.gaiax.demo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -15,6 +16,7 @@ class NormalTemplateActivity : AppCompatActivity() {
 
         renderTemplate1(this)
         renderTemplate2(this)
+        renderTemplate3(this)
     }
 
     private fun renderTemplate1(activity: NormalTemplateActivity) {
@@ -71,5 +73,28 @@ class NormalTemplateActivity : AppCompatActivity() {
 
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
+    }
+
+    private fun renderTemplate3(activity: NormalTemplateActivity) {
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-progress")
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        // 创建模板View
+        val view = GXTemplateEngine.instance.createView(params, size)
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_3).addView(view, 0)
     }
 }

@@ -329,8 +329,21 @@ class GXTemplateEngine {
     }
 
     /**
-     * Template viewport parameters
-     * Used to determine the drawable size of a template
+     *
+     * GXMeasureSize是一个限制性的概念，它规定的是GaiaX模板内容的最大显示区域，并且是非必传的。
+     *
+     * 一般来说我们有三种使用情况。
+     *
+     * 1. 固定的MeasureSize-Width和固定的MeasureSize-Height。
+     *    如果内部的模板超出了宽度和高度，那么内容不会被显示，最终产物View就是MeasureSize-Width和MeasureSize-height。
+     * 2. 固定的MeasureSize-Width，不确定的MeasureSize-Height（不传入）。
+     *    如果内部的模板实际宽度超出了MeasureSize-width，那么超出的部分不会被显示；
+     *    如果内部模板的高度能够自我撑开（具备高度）；
+     *    最终产物View的宽度就是MeasureSize-Width，而高度就是模板通过FlexBox计算后撑开的高度。
+     * 3. 不确定的MeasureSize-Width（不传入），确定的MeasureSize-Height。
+     *    这种情况下，如果内部的模板实际高度超出了MeasureSize-height，那么超出的部分不会被显示；
+     *    如果内部模板的宽度能够自我撑开（具备宽度）；
+     *    最终产物View的宽度就是是模板通过FlexBox计算后撑开的宽度，而高度就是Measure-Height。
      */
     data class GXMeasureSize(var width: Float?, var height: Float?) {
 

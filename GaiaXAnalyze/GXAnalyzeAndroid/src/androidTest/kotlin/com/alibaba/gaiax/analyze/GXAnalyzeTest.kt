@@ -33,6 +33,8 @@ class GXAnalyzeTest {
                     GXAnalyze.createValueMap(JSONObject())
                 } else if (valuePath == "data.null") {
                     GXAnalyze.createValueNull()
+                }  else if (valuePath == "data.stringEmpty") {
+                    GXAnalyze.createValueString("");
                 } else {
                     GXAnalyze.createValueFloat64(8F)
                 }
@@ -64,6 +66,12 @@ class GXAnalyzeTest {
         })
         // 初始化数据
         testData.put("test", 11)
+    }
+
+    @Test
+    fun empty_test(){
+        Assert.assertEquals("", instance.getResult("\$data.stringEmpty", testData))
+        Assert.assertEquals("test", instance.getResult("\$data.stringEmpty + 'test'", testData))
     }
 
     @Test

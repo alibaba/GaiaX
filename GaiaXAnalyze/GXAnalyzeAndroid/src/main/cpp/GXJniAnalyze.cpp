@@ -347,7 +347,14 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueString(JNIEnv *env, jobject thiz,
                                                                           jstring value) {
-    GXValue *result = new GXValue(GX_TAG_STRING, jstring2str(env, value).c_str());
+
+    jsize size = env->GetStringUTFLength(value);
+    GXValue *result;
+    if(size <= 0){
+        result = new GXValue(GX_TAG_STRING, "");
+    }else{
+        result = new GXValue(GX_TAG_STRING, jstring2str(env, value).c_str());
+    }
     return (jlong) result;
 }
 extern "C"

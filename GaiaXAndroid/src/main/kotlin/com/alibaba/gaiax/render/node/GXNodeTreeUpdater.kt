@@ -29,6 +29,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
+import com.alibaba.gaiax.render.view.basic.GXProgressView
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
@@ -562,6 +563,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             )
             gxNode.isIconFontType() -> bindIconFont(view, gxNode.templateNode, templateData)
             gxNode.isImageType() -> bindImage(view, gxNode.templateNode, templateData)
+            gxNode.isProgressType() -> bindProgress(view, gxNode.templateNode, templateData)
             gxNode.isScrollType() || gxNode.isGridType() -> bindScrollAndGrid(
                 gxTemplateContext,
                 view,
@@ -904,5 +906,15 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         container.setIndicatorCount(containerTemplateData.size)
 
         container.onBindData(templateData)
+    }
+
+    private fun bindProgress(
+        view: GXIViewBindData,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
+        val progressView = view as? GXProgressView
+        progressView?.setConfig(gxTemplateNode.finalProgressConfig)
+        progressView?.onBindData(gxTemplateNode.getData(templateData))
     }
 }

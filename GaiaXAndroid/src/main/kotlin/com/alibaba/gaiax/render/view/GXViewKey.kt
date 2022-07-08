@@ -44,5 +44,7 @@ object GXViewKey {
 
     const val VIEW_TYPE_CONTAINER_SLIDER = "slider"
 
+    const val VIEW_TYPE_PROGRESS = "progress"
+
     const val VIEW_TYPE_CUSTOM = "custom"
 }

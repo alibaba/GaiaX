@@ -1,0 +1,14 @@
+#gx-progress {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#progress-view {
+  width: 100%;
+  height: 5px;
+  margin-top: 20px;
+}

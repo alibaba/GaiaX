@@ -394,4 +394,10 @@ object GXTemplateKey {
     const val GAIAX_LAYER_SLIDER_SELECTED_INDEX = "slider-selected-index"
     const val GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR = "slider-indicator-selected-color"
     const val GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR = "slider-indicator-unselected-color"
+
+    // GXProgressView
+    const val GAIAX_LAYER_PROGRESS_STROKE_COLOR = "stroke-color"
+    const val GAIAX_LAYER_PROGRESS_TRAIL_COLOR = "trail-color"
+    const val GAIAX_LAYER_PROGRESS_TYPE = "progress-type"
+    const val GAIAX_LAYER_PROGRESS_ANIMATED = "animated"
 }

@@ -43,14 +43,6 @@
   height: 12px;
   border-radius: 0px;
 }
-#subtitle {
-  text-overflow: ellipsis;
-  height: 17px;
-  color: #ffdd9a8c;
-  font-size: 12px;
-  width: 100%;
-  fit-content: true;
-}
 #button {
   height: 30px;
   width:48px;
@@ -58,10 +50,4 @@
   padding-left: 12px;
   padding-right: 12px;
   border-radius: 16px;
-}
-#buttonText {
-  text-overflow: ellipsis;
-  width:48px;
-  color: #222222;
-  font-size: 12px;
 }

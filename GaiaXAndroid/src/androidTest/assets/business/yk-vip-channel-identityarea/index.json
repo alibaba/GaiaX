@@ -21,28 +21,14 @@
                 {
                   "id": "title",
                   "type": "text"
-                },
-                {
-                  "id": "iconImage",
-                  "type": "image"
                 }
               ]
-            },
-            {
-              "id": "subtitle",
-              "type": "text"
             }
           ]
         },
         {
           "id": "button",
-          "type": "view",
-          "layers": [
-            {
-              "id": "buttonText",
-              "type": "text"
-            }
-          ]
+          "type": "view"
         }
       ]
     }

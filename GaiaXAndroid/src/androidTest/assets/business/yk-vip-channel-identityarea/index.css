@@ -1,12 +1,8 @@
 #yk-vip-channel-identityarea {
   width: 100%;
   height: 66px;
-}
-#topView {
-  width: 100%;
-  height: 66px;
   align-items: center;
-  justify-content: flex-start;
+    justify-content: flex-start;
 }
 #avatar {
   width: 36px;

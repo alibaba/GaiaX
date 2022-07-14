@@ -3,34 +3,28 @@
   "type": "gaia-template",
   "layers": [
     {
-      "id": "topView",
+      "id": "avatar",
+      "type": "image"
+    },
+    {
+      "id": "titleView",
       "type": "view",
       "layers": [
         {
-          "id": "avatar",
-          "type": "image"
-        },
-        {
-          "id": "titleView",
+          "id": "nameView",
           "type": "view",
           "layers": [
             {
-              "id": "nameView",
-              "type": "view",
-              "layers": [
-                {
-                  "id": "title",
-                  "type": "text"
-                }
-              ]
+              "id": "title",
+              "type": "text"
             }
           ]
-        },
-        {
-          "id": "button",
-          "type": "view"
         }
       ]
+    },
+    {
+      "id": "button",
+      "type": "view"
     }
   ]
 }

@@ -1,53 +1,86 @@
 mod gaiax_flex_grow_and_flex_shrink {
-    use stretch::Stretch;
-    use stretch::style::*;
     use stretch::geometry::*;
     use stretch::number::Number;
-    use stretch::number::Number::Defined;
+    use stretch::style::*;
+    use stretch::Stretch;
 
+    /// 
+    /// Input hierarchy:
+    ///    - root 400
+    ///         - group0 100
+    ///         - group1 flex_grow:1 flex_shrink:1
+    ///             - group1_group0 width:200 flex_shrink:1
+    ///             - group1_group1 width:200 flex_shrink:1
+    /// 
+    /// Output hierarchy:
+    ///     - root 400
+    ///         - group0 100
+    ///         - group1 300
+    ///             - group1_group0 width:150
+    ///             - group1_group1 width:150
     #[test]
     fn flex_grow_and_flex_shrink() {
         let mut stretch = Stretch::new();
 
-        let root = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let root = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(100.0), ..Default::default() },
-            flex_shrink: 0.0,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(100.0), ..Default::default() },
+                    flex_shrink: 0.0,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Column,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2 = stretch
+            .new_node(
+                Style { flex_grow: 1.0, flex_shrink: 1.0, flex_direction: FlexDirection::Column, ..Default::default() },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1 = stretch
+            .new_node(
+                Style { flex_grow: 1.0, flex_shrink: 1.0, flex_direction: FlexDirection::Row, ..Default::default() },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_2 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_2 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
         stretch.add_child(root, container_1).unwrap();
         stretch.add_child(root, container_2).unwrap();
@@ -90,44 +123,62 @@ mod gaiax_flex_grow_and_flex_shrink {
     fn flex_grow_and_flex_shrink1() {
         let mut stretch = Stretch::new();
 
-        let root = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let root = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(100.0), height: Dimension::Points(100.0) },
-            flex_shrink: 0.0,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(100.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 0.0,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_shrink: 0.0,
-            flex_direction: FlexDirection::Column,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2 = stretch
+            .new_node(
+                Style { flex_grow: 1.0, flex_shrink: 0.0, flex_direction: FlexDirection::Column, ..Default::default() },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1 = stretch
+            .new_node(Style { flex_grow: 1.0, flex_direction: FlexDirection::Row, ..Default::default() }, &[])
+            .unwrap();
 
-        let container_2_1_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), ..Default::default() },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), ..Default::default() },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_2 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), ..Default::default() },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_2 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), ..Default::default() },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
         stretch.add_child(root, container_1).unwrap();
         stretch.add_child(root, container_2).unwrap();
@@ -170,59 +221,89 @@ mod gaiax_flex_grow_and_flex_shrink {
     fn flex_grow_and_flex_shrink2() {
         let mut stretch = Stretch::new();
 
-        let root = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let root = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(100.0), ..Default::default() },
-            flex_shrink: 0.0,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(100.0), ..Default::default() },
+                    flex_shrink: 0.0,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Column,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2 = stretch
+            .new_node(
+                Style { flex_grow: 1.0, flex_shrink: 1.0, flex_direction: FlexDirection::Column, ..Default::default() },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1 = stretch.new_node(Style {
-            flex_grow: 1.0,
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1 = stretch
+            .new_node(
+                Style { flex_grow: 1.0, flex_shrink: 1.0, flex_direction: FlexDirection::Row, ..Default::default() },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_1 = stretch.new_node(Style {
-            size: Size { height: Dimension::Points(100.0), ..Default::default() },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { height: Dimension::Points(100.0), ..Default::default() },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_2 = stretch.new_node(Style {
-            size: Size { height: Dimension::Points(100.0), ..Default::default() },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_2 = stretch
+            .new_node(
+                Style {
+                    size: Size { height: Dimension::Points(100.0), ..Default::default() },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_1_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_1_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
-        let container_2_1_2_1 = stretch.new_node(Style {
-            size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
-            flex_shrink: 1.0,
-            flex_direction: FlexDirection::Row,
-            ..Default::default()
-        }, &[]).unwrap();
+        let container_2_1_2_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(200.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
 
         stretch.add_child(root, container_1).unwrap();
         stretch.add_child(root, container_2).unwrap();

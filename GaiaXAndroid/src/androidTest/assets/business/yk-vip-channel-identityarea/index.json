@@ -1,0 +1,50 @@
+{
+  "id": "yk-vip-channel-identityarea",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "topView",
+      "type": "view",
+      "layers": [
+        {
+          "id": "avatar",
+          "type": "image"
+        },
+        {
+          "id": "titleView",
+          "type": "view",
+          "layers": [
+            {
+              "id": "nameView",
+              "type": "view",
+              "layers": [
+                {
+                  "id": "title",
+                  "type": "text"
+                },
+                {
+                  "id": "iconImage",
+                  "type": "image"
+                }
+              ]
+            },
+            {
+              "id": "subtitle",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "button",
+          "type": "view",
+          "layers": [
+            {
+              "id": "buttonText",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

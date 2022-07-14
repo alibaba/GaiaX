@@ -43,7 +43,7 @@ class GXProgressView : View, GXIViewBindData {
         get() {
             return if (field < 0) {
                 0f
-            } else field.coerceAtMost(100f)
+            } else field.coerceAtMost(1f)
         }
 
     private val mPaint = Paint()
@@ -108,7 +108,7 @@ class GXProgressView : View, GXIViewBindData {
     }
 
     private fun updateProgressPath() {
-        val progressWidth = (measuredWidth - PADDING * 2) * percent / 100
+        val progressWidth = (measuredWidth - PADDING * 2) * percent
 
         if (config?.animated == false) {
             progressPath.reset()

@@ -1,7 +1,7 @@
 {
     "data":{
         "progress-view1":{
-            "value": "'20'",
+            "value": "'0.2'",
             "extend": {
                 "stroke-color": "'#00FFAA'",
                 "trail-color": "'#AAAAAA'",
@@ -10,7 +10,7 @@
             }
         },
         "progress-view2":{
-            "value": "'60'"
+            "value": "'0.6'"
         }
     }
 }

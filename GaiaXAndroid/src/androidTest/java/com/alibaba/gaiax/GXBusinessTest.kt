@@ -63,8 +63,6 @@ class GXBusinessTest : GXBaseTest() {
         val titleView = GXTemplateEngine.instance.getGXViewById(rootView, "titleView")
         Assert.assertEquals(375F.dpToPx() - 48F.dpToPx() - 36F.dpToPx(), titleView?.width())
         Assert.assertEquals(66F.dpToPx(), titleView?.height())
-
-
     }
 
     @Test

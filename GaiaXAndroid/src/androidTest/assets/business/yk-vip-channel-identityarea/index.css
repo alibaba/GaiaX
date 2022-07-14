@@ -53,6 +53,7 @@
 }
 #button {
   height: 30px;
+  width:48px;
   align-items: center;
   padding-left: 12px;
   padding-right: 12px;
@@ -60,8 +61,7 @@
 }
 #buttonText {
   text-overflow: ellipsis;
-  height: 20px;
+  width:48px;
   color: #222222;
   font-size: 12px;
-  fit-content: true;
 }

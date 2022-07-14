@@ -1,30 +1,43 @@
 #yk-vip-channel-identityarea {
-  width: 100%;
+  width: 375px;
   height: 66px;
   align-items: center;
-  background-color:#00ff00;
+  background-color: #00ff00;
   justify-content: flex-start;
 }
+
 #avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 18px;
   align-self: center;
 }
+
+#button {
+  height: 35px;
+  width: 35px;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 16px;
+}
+
 #titleView {
   height: 100%;
-  background-color:#00ff00;
+  background-color: #00ff00;
   flex-direction: column;
   justify-content: center;
   flex-grow: 1;
   flex-shrink: 1;
 }
+
 #nameView {
-  background-color:#00ff00;
+  background-color: #00ff00;
   height: 20px;
   align-items: center;
   flex-shrink: 1;
 }
+
 #title {
   text-overflow: ellipsis;
   height: 20px;
@@ -33,12 +46,4 @@
   fit-content: true;
   font-weight: 500;
   flex-shrink: 1;
-}
-#button {
-  height: 30px;
-  width:48px;
-  align-items: center;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 16px;
 }

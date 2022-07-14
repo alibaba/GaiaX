@@ -53,15 +53,15 @@ class GXBusinessTest : GXBaseTest() {
         Assert.assertEquals(66F.dpToPx(), rootView.height())
 
         val avatar = GXTemplateEngine.instance.getGXViewById(rootView, "avatar")
-        Assert.assertEquals(36F.dpToPx(), avatar?.width())
-        Assert.assertEquals(36F.dpToPx(), avatar?.height())
+        Assert.assertEquals(40F.dpToPx(), avatar?.width())
+        Assert.assertEquals(40F.dpToPx(), avatar?.height())
 
         val button = GXTemplateEngine.instance.getGXViewById(rootView, "button")
-        Assert.assertEquals(48F.dpToPx(), button?.width())
-        Assert.assertEquals(30F.dpToPx(), button?.height())
+        Assert.assertEquals(35F.dpToPx(), button?.width())
+        Assert.assertEquals(35F.dpToPx(), button?.height())
 
         val titleView = GXTemplateEngine.instance.getGXViewById(rootView, "titleView")
-        Assert.assertEquals(375F.dpToPx() - 48F.dpToPx() - 36F.dpToPx(), titleView?.width())
+        Assert.assertEquals(375F.dpToPx() - 40F.dpToPx() - 35F.dpToPx(), titleView?.width())
         Assert.assertEquals(66F.dpToPx(), titleView?.height())
     }
 

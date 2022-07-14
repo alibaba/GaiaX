@@ -1,4 +1,4 @@
-mod yk {
+mod gaiax_flex_grow_and_flex_shrink {
     use stretch::Stretch;
     use stretch::style::*;
     use stretch::geometry::*;

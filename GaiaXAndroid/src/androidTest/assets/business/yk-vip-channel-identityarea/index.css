@@ -2,25 +2,25 @@
   width: 100%;
   height: 66px;
   align-items: center;
-    justify-content: flex-start;
+  background-color:#00ff00;
+  justify-content: flex-start;
 }
 #avatar {
   width: 36px;
   height: 36px;
   border-radius: 18px;
-  background-color: primaryFillColor;
   align-self: center;
 }
 #titleView {
   height: 100%;
+  background-color:#00ff00;
   flex-direction: column;
   justify-content: center;
-  padding-left: 6px;
-  padding-right: 6px;
   flex-grow: 1;
   flex-shrink: 1;
 }
 #nameView {
+  background-color:#00ff00;
   height: 20px;
   align-items: center;
   flex-shrink: 1;
@@ -33,11 +33,6 @@
   fit-content: true;
   font-weight: 500;
   flex-shrink: 1;
-}
-#iconImage {
-  width: 12px;
-  height: 12px;
-  border-radius: 0px;
 }
 #button {
   height: 30px;

@@ -231,6 +231,26 @@ mod gaiax_flex_grow_and_flex_shrink {
         assert_eq!(container_2_1_2_size.height, 100.0);
     }
 
+    /// 
+    /// Input hierarchy:
+    ///    - root 375
+    ///         - group0 36 36
+    ///         - group1 flex_grow:1 flex_shrink:0
+    ///             - group1_group0 width:200 flex_shrink:1
+    ///             - group1_group1 width:200 flex_shrink:1
+    ///         - group2 48 30
+    /// 
+    /// Output hierarchy:
+    ///     - root 400
+    ///         - group0 100
+    ///         - group1 400
+    ///             - group1_group0 width:200
+    ///             - group1_group1 width:200
+    #[test]
+    fn flex_grow_and_flex_shrink2(){
+
+    }
+
     // #[test]
     fn flex_grow_and_flex_shrink2() {
         let mut stretch = Stretch::new();

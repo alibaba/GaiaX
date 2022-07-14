@@ -253,8 +253,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let root = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Points(375.0), height: Dimension::Points(100.0) },
                     flex_direction: FlexDirection::Row,
+                    flex_basis: Dimension::Auto,
+                    flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    size: Size { width: Dimension::Points(375.0), height: Dimension::Points(100.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],
@@ -264,9 +269,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let group0 = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Points(40.0), height: Dimension::Points(40.0) },
-                    flex_shrink: 0.0,
+                    flex_direction: FlexDirection::Row,
+                    flex_basis: Dimension::Auto,
                     flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    size: Size { width: Dimension::Points(40.0), height: Dimension::Points(40.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],
@@ -276,9 +285,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let group2 = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Points(35.0), height: Dimension::Points(35.0) },
-                    flex_shrink: 0.0,
+                    flex_direction: FlexDirection::Row,
+                    flex_basis: Dimension::Auto,
                     flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    size: Size { width: Dimension::Points(35.0), height: Dimension::Points(35.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],
@@ -288,11 +301,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let group1 = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Auto, height: Dimension::Percent(1.0) },
+                    flex_direction: FlexDirection::Column,
+                    flex_basis: Dimension::Auto,
                     flex_grow: 1.0,
                     flex_shrink: 1.0,
-                    flex_basis: Dimension::Auto,
-                    flex_direction: FlexDirection::Column,
+                    size: Size { width: Dimension::Auto, height: Dimension::Percent(1.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],
@@ -302,11 +317,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let group1_group0 = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Auto, height: Dimension::Points(20.0) },
+                    flex_direction: FlexDirection::Row,
+                    flex_basis: Dimension::Auto,
                     flex_grow: 0.0,
                     flex_shrink: 1.0,
-                    flex_basis: Dimension::Auto,
-                    flex_direction: FlexDirection::Row,
+                    size: Size { width: Dimension::Auto, height: Dimension::Points(20.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],
@@ -316,11 +333,13 @@ mod gaiax_flex_grow_and_flex_shrink {
         let group1_group0_group0 = stretch
             .new_node(
                 Style {
-                    size: Size { width: Dimension::Points(500.0), height: Dimension::Points(20.0) },
+                    flex_direction: FlexDirection::Row,
+                    flex_basis: Dimension::Auto,
                     flex_grow: 0.0,
                     flex_shrink: 1.0,
-                    flex_basis: Dimension::Auto,
-                    flex_direction: FlexDirection::Row,
+                    size: Size { width: Dimension::Points(500.0), height: Dimension::Points(20.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     ..Default::default()
                 },
                 &[],

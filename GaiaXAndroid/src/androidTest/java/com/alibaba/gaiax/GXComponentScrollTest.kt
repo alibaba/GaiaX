@@ -27,6 +27,43 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXComponentScrollTest : GXBaseTest() {
 
+    @Test
+    fun template_scroll_different_item_width() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_different_item_width"
+        )
+        val data = JSONObject.parseObject(
+            "{\n" +
+                    "  \"nodes\":[\n" +
+                    "    {\n" +
+                    "      \"left\":\"15px\"\n" +
+                    "    },{\n" +
+                    "      \"left\": \"12px\"\n" +
+                    "    },{\n" +
+                    "      \"left\": \"12px\"\n" +
+                    "    },{\n" +
+                    "      \"left\": \"12px\"\n" +
+                    "    },{\n" +
+                    "      \"left\": \"12px\"\n" +
+                    "    },{\"left\": \"12px\"\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(data)
+        val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(100F.dpToPx() + 15F.dpToPx(), rootView.child(0).width())
+
+        Assert.assertEquals(100F.dpToPx() + 12F.dpToPx(), rootView.child(1).width())
+    }
+
 //    @Test
 //    fun template_scroll_binding_scroll_index() {
 //        val templateItem = GXTemplateEngine.GXTemplateItem(

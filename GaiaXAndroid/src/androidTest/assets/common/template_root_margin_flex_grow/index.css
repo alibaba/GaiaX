@@ -1,0 +1,9 @@
+#template_root_margin_flex_grow {
+  height: 100px;
+  background-color: #00ff00;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-grow: 1;
+}

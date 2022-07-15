@@ -115,9 +115,11 @@ class GXContainerViewAdapter(
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
 
+        // FIX:预计算的宽度可能和实际宽度不相符
         val containerWidthLP = childContainerSize?.width?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
+        // FIX:预计算的高度可能和实际高度不相符
         val containerHeightLP = childContainerSize?.height?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
@@ -233,6 +235,10 @@ class GXContainerViewAdapter(
                 }
             }
             GXTemplateEngine.instance.bindData(childView, childTemplateData)
+
+            // FIX: 重置容器的宽度为自适应，防止预计算和实际的宽度不相符
+            childItemContainer.layoutParams.width = childView.layoutParams.width
+            childItemContainer.layoutParams.height = childView.layoutParams.height
         }
     }
 

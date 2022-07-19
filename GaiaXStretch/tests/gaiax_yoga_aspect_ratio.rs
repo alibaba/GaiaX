@@ -1,6 +1,6 @@
 #[cfg(test)]
 #[allow(dead_code)]
-mod yoga {
+mod gaiax_yoga_aspect_ratio {
     use stretch::Stretch;
     use stretch::style::*;
     use stretch::geometry::*;

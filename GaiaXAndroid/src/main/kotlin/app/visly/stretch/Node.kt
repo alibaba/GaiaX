@@ -156,6 +156,8 @@ open class Node {
     ): FloatArray
 
     override fun toString(): String {
-        return "Node(id='$id', idPath='$idPath', rustptr=$rustptr, style=$style, children=${children.size})"
+        return "Node(id='$id', style=$style, children=$children)"
     }
+
+
 }

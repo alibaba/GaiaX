@@ -21,7 +21,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
-import java.lang.IllegalArgumentException
 
 /**
  * @suppress
@@ -107,6 +106,8 @@ data class GXTemplateNode(
 
     var finalSliderConfig: GXSliderConfig? = null
 
+    var finalProgressConfig: GXProgressConfig? = null
+
     var finalCss: GXCss? = null
 
     /**
@@ -143,6 +144,10 @@ data class GXTemplateNode(
                 finalSliderConfig = GXSliderConfig.create(it, extendCssData)
             }
 
+            layer.progressConfig?.let {
+                finalProgressConfig = GXProgressConfig.create(it, extendCssData)
+            }
+
             // 合并原有CSS和扩展属性的CSS
             GXCss.create(css, extendCss)
         } else {
@@ -157,6 +162,10 @@ data class GXTemplateNode(
 
             layer.sliderConfig?.let {
                 finalSliderConfig = it
+            }
+
+            layer.progressConfig?.let {
+                finalProgressConfig = it
             }
 
             css
@@ -193,6 +202,8 @@ data class GXTemplateNode(
     fun isGridType(): Boolean = layer.isGridType()
 
     fun isSliderType(): Boolean = layer.isSliderType()
+
+    fun isProgressType(): Boolean = layer.isProgressType()
 
     fun isGaiaTemplateType(): Boolean = layer.isGaiaTemplate()
 

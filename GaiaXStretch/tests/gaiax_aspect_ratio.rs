@@ -1,4 +1,4 @@
-mod yk {
+mod gaiax_aspect_ratio {
     use stretch::Stretch;
     use stretch::style::*;
     use stretch::geometry::*;

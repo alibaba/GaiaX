@@ -1,0 +1,22 @@
+#template_text_fitcontent_lines_1_width_fixed_height_fixed {
+  width: 100%;
+  height: 100px;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+}
+#text_container {
+  height: 25px;
+  background-color: #e4e4e4;
+  justify-content: center;
+  align-items: center;
+}
+
+#text {
+  text-overflow: ellipsis;
+  height: 25px;
+  color: #000000;
+  font-size: 15px;
+  fit-content: true;
+  width: 35px;
+}

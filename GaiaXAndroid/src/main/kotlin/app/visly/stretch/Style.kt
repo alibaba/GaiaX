@@ -133,7 +133,12 @@ sealed class Dimension {
         }
 
     override fun toString(): String {
-        return "Dimension(type=$type, value=$value)"
+        return when (this) {
+            is Points -> "Dimension.Points"
+            is Percent -> "Dimension.Percent(value=$value)"
+            is Undefined -> "Dimension.Undefined"
+            is Auto -> "Dimension.Auto"
+        }
     }
 
 }

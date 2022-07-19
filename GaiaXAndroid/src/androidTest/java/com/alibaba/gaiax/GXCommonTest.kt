@@ -17,6 +17,29 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXCommonTest : GXBaseTest() {
 
+    /**
+     * https://github.com/alibaba/GaiaX/issues/131
+     */
+    @Test
+    fun template_root_margin_flex_grow() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "common",
+            "template_root_margin_flex_grow"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject())
+        )
+
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+        Assert.assertEquals(375F.dpToPx() - 20F.dpToPx(), rootView.width())
+    }
+
     @Test
     fun template_position_relative_left() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
@@ -35,7 +58,6 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(0F.dpToPx(), rootView.child(0).x())
     }
-
 
     @Test
     fun template_position_relative_databinding_left() {

@@ -33,6 +33,39 @@ class GXBusinessTest : GXBaseTest() {
     }
 
     @Test
+    fun yk_vip_channel_identityarea() {
+        GXRegisterCenter.instance
+            .registerExtensionExpression(GXExtensionExpression())
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "business",
+            "yk-vip-channel-identityarea"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(66F.dpToPx(), rootView.height())
+
+        val avatar = GXTemplateEngine.instance.getGXViewById(rootView, "avatar")
+        Assert.assertEquals(40F.dpToPx(), avatar?.width())
+        Assert.assertEquals(40F.dpToPx(), avatar?.height())
+
+        val button = GXTemplateEngine.instance.getGXViewById(rootView, "button")
+        Assert.assertEquals(35F.dpToPx(), button?.width())
+        Assert.assertEquals(35F.dpToPx(), button?.height())
+
+        val titleView = GXTemplateEngine.instance.getGXViewById(rootView, "titleView")
+        Assert.assertEquals(375F.dpToPx() - 40F.dpToPx() - 35F.dpToPx(), titleView?.width())
+        Assert.assertEquals(66F.dpToPx(), titleView?.height())
+    }
+
+    @Test
     fun yk_vip_ad_task_item() {
         GXRegisterCenter.instance
             .registerExtensionExpression(GXExtensionExpression())
@@ -98,28 +131,6 @@ class GXBusinessTest : GXBaseTest() {
         Assert.assertEquals(93F.dpToPx(), subTitle?.width())
         Assert.assertEquals(16F.dpToPx(), subTitle?.height())
     }
-
-    // yk-rec-hot-image-text-card
-//    @Test
-//    fun yk_rec_hot_image_text_card() {
-//        GXRegisterCenter.instance
-//            .registerProcessExpression(GXProcessExpression())
-//
-//        val templateItem = GXTemplateEngine.GXTemplateItem(
-//            GXMockUtils.context,
-//            "business",
-//            "yk-rec-hot-image-text-card"
-//        )
-//        val rootView = GXTemplateEngine.instance.createView(
-//            templateItem,
-//            GXTemplateEngine.GXMeasureSize(1080F, null)
-//        )
-//        val path = "business/yk-rec-hot-image-text-card.json"
-//        val templateData = GXTemplateEngine.GXTemplateData(readJsonFromAssets(path))
-//        GXTemplateEngine.instance.bindData(rootView, templateData)
-//
-//        Assert.assertEquals(1080F, rootView.width())
-//    }
 
     @Test
     fun search_component_1011() {

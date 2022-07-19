@@ -1,0 +1,16 @@
+{
+    "data":{
+        "progress-view1":{
+            "value": "'0.2'",
+            "extend": {
+                "stroke-color": "'#00FFAA'",
+                "trail-color": "'#AAAAAA'",
+                "progress-type": "'line'",
+                "animated": false
+            }
+        },
+        "progress-view2":{
+            "value": "'0.6'"
+        }
+    }
+}

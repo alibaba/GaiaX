@@ -25,6 +25,11 @@ import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
 object GXMockUtils {
+
+    fun isSpecialDevice(): Boolean {
+        return Build.BRAND == "Xiaomi" && Build.MODEL == "Mi 10"
+    }
+
     fun deviceGap(): Float {
         if (Build.BRAND == "Xiaomi" && Build.MODEL == "Mi 10") {
             return 0.5F

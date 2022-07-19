@@ -1324,4 +1324,100 @@ class GXComponentTextTest : GXBaseTest() {
             }
         })
     }
+
+    @Test
+    fun template_text_fitcontent_lines_1_min_width_fixed_height_fixed_more_min_width() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_min_width_fixed_height_fixed"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["title"] = "HelloWorld"
+            }
+        })
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(15F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
+        Assert.assertEquals(25F.dpToPx(), rootView.child(0).child(0).height())
+    }
+
+    @Test
+    fun template_text_fitcontent_lines_1_min_width_fixed_height_fixed_more_less_width() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_min_width_fixed_height_fixed"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["title"] = "Hello"
+            }
+        })
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "Hello"
+        textView.setFontSize(15F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(35F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(25F.dpToPx(), rootView.child(0).child(0).height())
+    }
+
+    @Test
+    fun template_text_fitcontent_lines_1_width_fixed_height_fixed_more_width() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_width_fixed_height_fixed"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["title"] = "HelloWorld"
+            }
+        })
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        textView.setFontSize(15F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(35F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(25F.dpToPx(), rootView.child(0).child(0).height())
+    }
+
+    @Test
+    fun template_text_fitcontent_lines_1_width_fixed_height_fixed_less_with() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_1_width_fixed_height_fixed"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["title"] = "Hello"
+            }
+        })
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "Hello"
+        textView.setFontSize(15F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
+        Assert.assertEquals(25F.dpToPx(), rootView.child(0).child(0).height())
+    }
 }

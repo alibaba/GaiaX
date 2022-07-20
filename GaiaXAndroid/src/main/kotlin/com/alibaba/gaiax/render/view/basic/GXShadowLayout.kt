@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
@@ -117,7 +118,20 @@ open class GXShadowLayout @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         // Tell parent don't clip me. Otherwise the shadow will be erase.
-        (parent as? ViewGroup)?.clipChildren = false
+        disableClipOnParents(this)
+    }
+
+    private fun disableClipOnParents(v: View) {
+        if (v.parent == null) {
+            return
+        }
+        if (v is ViewGroup) {
+            v.clipChildren = false
+            v.clipToPadding = false
+        }
+        if (v.parent is View) {
+            disableClipOnParents(v.parent as View)
+        }
     }
 
     override fun draw(canvas: Canvas) {

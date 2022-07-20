@@ -143,8 +143,21 @@ fun View.setOpacity(opacity: Float?) {
  * @suppress
  */
 fun View.setOverflow(overflow: Boolean?) {
-    if (this is ViewGroup) {
-        overflow?.let { this.clipChildren = it }
+    overflow?.let {
+        disableClipOnParents(this, overflow)
+    }
+}
+
+private fun disableClipOnParents(v: View, target: Boolean) {
+    if (v.parent == null) {
+        return
+    }
+    if (v is ViewGroup) {
+        v.clipChildren = false
+        v.clipToPadding = false
+    }
+    if (v.parent is View) {
+        disableClipOnParents(v.parent as View, target)
     }
 }
 

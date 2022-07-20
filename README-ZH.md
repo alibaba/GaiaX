@@ -187,6 +187,10 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 [self.view addSubview:view];
 ```
 
+## 路线图
+
+![image](https://user-images.githubusercontent.com/6761107/179889459-883d296e-26e0-44a2-8d02-59b2cdd59c21.png)
+
 ## 如何贡献代码
 
 我们非常欢迎您为项目贡献代码。在您编写代码之前，请先创建一个issue或者pull request以便我们能够讨论方案的细节与方案的合理性。您可以针对以下领域贡献代码：

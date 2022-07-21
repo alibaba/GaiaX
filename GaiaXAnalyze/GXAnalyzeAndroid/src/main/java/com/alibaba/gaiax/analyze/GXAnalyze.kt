@@ -82,6 +82,8 @@ class GXAnalyze {
             is String -> {
                 if (expression.trim() == "\$\$") {
                     return data
+                }else if(expression.trim() == ""){
+                    return null
                 }
                 val result = this.getResultNative(this, expression, data);
                 return wrapAsGXValue(result)?.getValue();

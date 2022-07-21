@@ -253,6 +253,7 @@ class GXAnalyzeTest {
     fun ternary() {
         Assert.assertEquals(null, instance.getResult("false ? \$data : null", testData))
         Assert.assertEquals(0f, instance.getResult("false ? 1 : 0", testData))
+        Assert.assertEquals(1f, instance.getResult("\$data ? 1 : 0", testData))
         Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
         Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
         Assert.assertEquals(true, instance.getResult("true ?: 1", testData))

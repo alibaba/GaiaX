@@ -24,7 +24,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXProgressConfig

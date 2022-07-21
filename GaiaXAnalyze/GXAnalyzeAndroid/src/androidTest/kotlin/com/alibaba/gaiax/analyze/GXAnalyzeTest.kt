@@ -72,6 +72,9 @@ class GXAnalyzeTest {
     fun empty_test(){
         Assert.assertEquals("", instance.getResult("\$data.stringEmpty", testData))
         Assert.assertEquals("test", instance.getResult("\$data.stringEmpty + 'test'", testData))
+        Assert.assertEquals("", instance.getResult("''", testData))
+        Assert.assertEquals(null, instance.getResult("", testData))
+        Assert.assertEquals(null, instance.getResult("null", testData))
     }
 
     @Test
@@ -253,6 +256,7 @@ class GXAnalyzeTest {
     fun ternary() {
         Assert.assertEquals(null, instance.getResult("false ? \$data : null", testData))
         Assert.assertEquals(0f, instance.getResult("false ? 1 : 0", testData))
+        Assert.assertEquals(1f, instance.getResult("\$data ? 1 : 0", testData))
         Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
         Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
         Assert.assertEquals(true, instance.getResult("true ?: 1", testData))

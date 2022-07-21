@@ -664,7 +664,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     } else if (op == "?") {
-        if (left.name == "true") {
+        if (left.name == "true" || ((left.name != "false" && left.token != "null"))) {
             result.name = right.name;
             result.token = right.token;
         } else if (left.token == "num" && stof(left.name) != 0.0F) {

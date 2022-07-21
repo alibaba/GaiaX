@@ -72,6 +72,9 @@ class GXAnalyzeTest {
     fun empty_test(){
         Assert.assertEquals("", instance.getResult("\$data.stringEmpty", testData))
         Assert.assertEquals("test", instance.getResult("\$data.stringEmpty + 'test'", testData))
+        Assert.assertEquals("", instance.getResult("''", testData))
+        Assert.assertEquals(null, instance.getResult("", testData))
+        Assert.assertEquals(null, instance.getResult("null", testData))
     }
 
     @Test

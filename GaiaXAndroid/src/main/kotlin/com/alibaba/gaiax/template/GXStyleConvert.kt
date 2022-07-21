@@ -153,6 +153,7 @@ class GXStyleConvert {
                 null
             }
             "ellipsis" -> TextUtils.TruncateAt.END
+            "middle" -> TextUtils.TruncateAt.MIDDLE
             else -> TextUtils.TruncateAt.END
         }
 

@@ -222,12 +222,6 @@ WeChat：
 Email:
 biezhihua@gmail.com
 
-## Supporters
-
-[![Forkers repo roster for @alibaba/GaiaX](https://reporoster.com/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/network/members)
-
-[![Stargazers repo roster for @alibaba/GaiaX](https://reporoster.com/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
-
 # LICENSE
 ```
 Ali-GaiaX-Project is a template dynamic develop solutions developed by Alibaba and licensed under the Apache License (Version 2.0)

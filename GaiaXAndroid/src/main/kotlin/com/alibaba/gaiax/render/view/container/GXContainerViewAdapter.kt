@@ -103,7 +103,16 @@ class GXContainerViewAdapter(
                 containerData
             )
         } else {
-            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
+            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout?.let { it }
+                ?: kotlin.run {
+                    // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
+                    GXNodeUtils.computeContainerSizeByItemTemplate(
+                        gxTemplateContext,
+                        gxNode,
+                        containerData
+                    )
+                    gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
+                }
         }
 
         // 构建坑位的容器
@@ -113,7 +122,6 @@ class GXContainerViewAdapter(
         val containerWidthLP = childContainerSize?.width?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        // FIX:预计算的高度可能和实际高度不相符
         val containerHeightLP = childContainerSize?.height?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
@@ -229,10 +237,6 @@ class GXContainerViewAdapter(
                 }
             }
             GXTemplateEngine.instance.bindData(childView, childTemplateData)
-
-            // FIX: 重置容器的宽度为自适应，防止预计算和实际的宽度不相符
-            childItemContainer.layoutParams.width = childView.layoutParams.width
-            childItemContainer.layoutParams.height = childView.layoutParams.height
         }
     }
 

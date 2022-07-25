@@ -18,6 +18,8 @@ package com.alibaba.gaiax.render.node
 
 import android.animation.AnimatorSet
 import android.view.View
+import app.visly.stretch.Dimension
+import app.visly.stretch.Size
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXLayer
@@ -26,6 +28,11 @@ import com.alibaba.gaiax.template.GXLayer
  * @suppress
  */
 class GXNode {
+
+    /**
+     * cache
+     */
+    internal var cacheComputeContainerHeightByItemTemplate: Size<Dimension?>? = null
 
     /**
      * 属性动画

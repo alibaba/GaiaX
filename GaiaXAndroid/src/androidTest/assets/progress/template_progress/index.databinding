@@ -3,9 +3,9 @@
         "progress-view":{
             "value": "'20'",
             "extend": {
-                "stroke-color": "#00FFAA",
-                "trail-color": "#AAAAAA",
-                "progress-type": "line",
+                "stroke-color": "'#00FFAA'",
+                "trail-color": "'#AAAAAA'",
+                "progress-type": "'line'",
                 "animated": false
             }
         }

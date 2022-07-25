@@ -168,6 +168,7 @@ object GXNodeUtils {
     ): Layout? {
         when {
             gxNode.isScrollType() -> {
+                // TODO: 直接使用第一个数据计算模板的布局可能会存在不准确的情况
                 val itemData = containerData.firstOrNull() as? JSONObject ?: return null
                 val itemMeasureSize =
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
@@ -184,6 +185,7 @@ object GXNodeUtils {
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
+                // TODO: 直接使用第一个数据计算模板的布局可能会存在不准确的情况
                 val itemData = containerData.firstOrNull() as? JSONObject ?: return null
                 val itemMeasureSize =
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)

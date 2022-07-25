@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.template
 
 import android.graphics.Rect
+import android.view.Gravity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSONObject
 
@@ -27,7 +28,8 @@ data class GXScrollConfig(
     val data: JSONObject,
     val direction: Int = LinearLayoutManager.VERTICAL,
     val itemSpacing: Int = 0,
-    val edgeInsets: Rect = Rect(0, 0, 0, 0)
+    val edgeInsets: Rect = Rect(0, 0, 0, 0),
+    var gravity: Int = Gravity.CENTER
 ) {
     companion object {
 
@@ -35,13 +37,15 @@ data class GXScrollConfig(
             data: JSONObject,
             direction: String?,
             edgeInsets: String?,
-            itemSpacing: String?
+            itemSpacing: String?,
+            gravity: Int?
         ): GXScrollConfig {
             return GXScrollConfig(
                 data,
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
-                GXContainerConvert.edgeInsets(edgeInsets) ?: Rect(0, 0, 0, 0)
+                GXContainerConvert.edgeInsets(edgeInsets) ?: Rect(0, 0, 0, 0),
+                gravity ?: Gravity.CENTER
             )
         }
 
@@ -56,7 +60,8 @@ data class GXScrollConfig(
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
-                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets
+                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
+                srcConfig.gravity
             )
         }
     }

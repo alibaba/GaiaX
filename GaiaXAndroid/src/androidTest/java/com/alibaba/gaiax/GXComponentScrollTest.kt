@@ -59,9 +59,9 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(100F.dpToPx() + 15F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(100F.dpToPx() + 15F.dpToPx(), rootView.child(0).child(0).width())
 
-        Assert.assertEquals(100F.dpToPx() + 12F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(100F.dpToPx() + 12F.dpToPx(), rootView.child(1).child(0).width())
     }
 
     @Test
@@ -248,7 +248,7 @@ class GXComponentScrollTest : GXBaseTest() {
             GXScreenUtils.getScreenWidthPx(GXMockUtils.context) / 2.5F,
             rootView.child(0).width()
         )
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
     }
 
     @Test
@@ -795,13 +795,13 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
         Assert.assertEquals(0F, rootView.child(0).x)
         Assert.assertEquals(0F, rootView.child(0).y)
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
         Assert.assertEquals(9F.dpToPx() + 100F.dpToPx(), rootView.child(1).x)
         Assert.assertEquals(0F, rootView.child(1).y)
     }
@@ -1173,11 +1173,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(2, rootView.childCount())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
     }
 
     @Test
@@ -1205,14 +1205,14 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(3, rootView.childCount())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
 
-        Assert.assertEquals(200F.dpToPx(), rootView.child(2).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(2).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).child(0).height())
     }
 
     @Test
@@ -1295,11 +1295,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(2, rootView.childCount())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
     }
 
     /**
@@ -1334,11 +1334,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(2, rootView.childCount())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        Assert.assertEquals(200F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(120F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(120F.dpToPx(), rootView.child(1).child(0).height())
     }
 
     /**
@@ -1373,11 +1373,11 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(2, rootView.childCount())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
     }
 
     @Test
@@ -1403,15 +1403,96 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
         Assert.assertEquals(9F.dpToPx(), rootView.child(0).x)
         Assert.assertEquals(9F.dpToPx(), rootView.child(0).y)
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(1).child(0).height())
         Assert.assertEquals(9F.dpToPx() + 100F.dpToPx(), rootView.child(1).x)
         Assert.assertEquals(9F.dpToPx(), rootView.child(1).y)
+    }
+
+    @Test
+    fun template_scroll_multi_type_two_gravity_center() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_two_gravity_center"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals((120F.dpToPx() - 100F.dpToPx())/2, rootView.child(0).child(0).top.toFloat())
+        Assert.assertEquals((120F.dpToPx() - 100F.dpToPx())/2+100F.dpToPx(), rootView.child(0).child(0).bottom.toFloat())
+    }
+
+    @Test
+    fun template_scroll_multi_type_two_gravity_top() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_two_gravity_top"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(0F, rootView.child(0).child(0).top.toFloat())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).bottom.toFloat())
+    }
+
+    @Test
+    fun template_scroll_multi_type_two_gravity_bottom() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_two_gravity_bottom"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(120F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(0).top.toFloat())
+        Assert.assertEquals(120F.dpToPx(), rootView.child(0).child(0).bottom.toFloat())
     }
 
     @Test

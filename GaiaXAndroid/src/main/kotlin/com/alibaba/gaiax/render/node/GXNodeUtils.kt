@@ -62,7 +62,7 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerHeightByItemTemplate(
+    fun computeContainerSizeByItemTemplate(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         containerData: JSONArray
@@ -94,7 +94,7 @@ object GXNodeUtils {
                 val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
                 val itemTemplateItem = itemTemplatePair.first
                 val itemVisualTemplateNode = itemTemplatePair.second
-                val itemLayout: Layout? = computeContainerItemSize(
+                val itemLayout: Layout? = computeContainerItemLayout(
                     gxTemplateContext,
                     gxNode,
                     itemViewPort,
@@ -137,7 +137,7 @@ object GXNodeUtils {
                                             ?.containsKey(itemTemplateItem) == false
                                     ) {
 
-                                        val itemLayout: Layout? = computeContainerItemSize(
+                                        val itemLayout: Layout? = computeContainerItemLayout(
                                             gxTemplateContext,
                                             gxNode,
                                             itemViewPort,
@@ -233,7 +233,7 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerItemSize(
+    internal fun computeContainerItemLayout(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         gxItemViewPort: Size<Float?>,
@@ -421,7 +421,7 @@ object GXNodeUtils {
             // 容器的尺寸计算需要氛围Scroll和Grid
             if (gxNode.isScrollType()) {
                 val finalScrollConfig = gxNode.templateNode.finalScrollConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerSize, but finalScrollConfig is null")
+                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalScrollConfig is null")
 
                 // 如果是横向，那么高度就是坑位高度
                 if (finalScrollConfig.isHorizontal) {
@@ -443,7 +443,7 @@ object GXNodeUtils {
                 }
             } else if (gxNode.isGridType()) {
                 val finalGridConfig = gxNode.templateNode.finalGridConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerSize, but finalGridConfig is null")
+                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalGridConfig is null")
 
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
                 if (finalGridConfig.isVertical) {

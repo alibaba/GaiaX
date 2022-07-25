@@ -2,11 +2,11 @@ package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.AbsoluteLayout
+import android.widget.LinearLayout
 import androidx.annotation.Keep
 
 @Keep
-open class GXItemContainer : AbsoluteLayout {
+open class GXItemContainer : LinearLayout {
 
     constructor(context: Context) : super(context)
 

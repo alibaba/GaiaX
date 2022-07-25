@@ -309,6 +309,8 @@ object GXTemplateKey {
 
     const val GAIAX_LAYER_SCROLL_ENABLE = "scroll-enable"
 
+    const val GAIAX_LAYER_GRAVITY = "gravity"
+
     const val GAIAX_LAYER_ID = "id"
 
     const val GAIAX_LAYERS = "layers"

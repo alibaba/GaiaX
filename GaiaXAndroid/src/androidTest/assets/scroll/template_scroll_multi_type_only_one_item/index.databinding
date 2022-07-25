@@ -1,6 +1,6 @@
 {
     "data":{
-        "template_scroll_multi_type_item_one":{
+        "template_scroll_multi_type_only_one_item":{
             "value":"$nodes"
         }
     }

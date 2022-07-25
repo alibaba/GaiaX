@@ -31,6 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GXBizHelper (DesignToken)
 
+
+//处理本地图片 - 抹平差异
++ (UIImage *)imageFromToken:(NSString *)token;
+
+//处理fontFamily - 抹平差异
++ (NSString *)fontFamilyFromToken:(NSString *)token;
+
 //用于加载间距DesignToken
 + (CGFloat)dimFromDesignToken:(NSString *)token;
 

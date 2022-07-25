@@ -98,6 +98,10 @@
             //custom,自定义节点类型
             nodeClass = NSClassFromString(@"GXCustomNode");
             
+        }  else if ([type isEqualToString:@"progress"]) {
+            //custom,自定义节点类型
+            nodeClass = NSClassFromString(@"GXProgressNode");
+            
         } else if ([type isEqualToString:@"gaia-template"]) {
             //根节点类型
             nodeClass = NSClassFromString(@"GXRootViewNode");

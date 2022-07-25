@@ -73,6 +73,10 @@
 		8DDF3BBF2761E9350014E4D8 /* GXAnimationModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DDF3BBD2761E9350014E4D8 /* GXAnimationModel.h */; };
 		8DDF3BC02761E9350014E4D8 /* GXAnimationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDF3BBE2761E9350014E4D8 /* GXAnimationModel.m */; };
 		8DDF3BD8276225A50014E4D8 /* GXTemplateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8DDF3BD7276225A50014E4D8 /* GXTemplateTest.mm */; };
+		8DE14A18288E338100FCF226 /* GXProgressNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DE14A16288E338000FCF226 /* GXProgressNode.h */; };
+		8DE14A19288E338100FCF226 /* GXProgressNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE14A17288E338100FCF226 /* GXProgressNode.m */; };
+		8DE14A1C288E339300FCF226 /* GXProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DE14A1A288E339300FCF226 /* GXProgressView.h */; };
+		8DE14A1D288E339300FCF226 /* GXProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE14A1B288E339300FCF226 /* GXProgressView.m */; };
 		8DE5E37227424CFD00C9FA02 /* GXTemplateContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DE5E37027424CFD00C9FA02 /* GXTemplateContext.h */; };
 		8DE5E37327424CFD00C9FA02 /* GXTemplateContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE5E37127424CFD00C9FA02 /* GXTemplateContext.m */; };
 		8DE5E3762743820A00C9FA02 /* GXTemplateParser.c in Sources */ = {isa = PBXBuildFile; fileRef = 8DE5E3742743820A00C9FA02 /* GXTemplateParser.c */; };
@@ -261,6 +265,10 @@
 		8DDF3BBD2761E9350014E4D8 /* GXAnimationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXAnimationModel.h; sourceTree = "<group>"; };
 		8DDF3BBE2761E9350014E4D8 /* GXAnimationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXAnimationModel.m; sourceTree = "<group>"; };
 		8DDF3BD7276225A50014E4D8 /* GXTemplateTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GXTemplateTest.mm; sourceTree = "<group>"; };
+		8DE14A16288E338000FCF226 /* GXProgressNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXProgressNode.h; sourceTree = "<group>"; };
+		8DE14A17288E338100FCF226 /* GXProgressNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXProgressNode.m; sourceTree = "<group>"; };
+		8DE14A1A288E339300FCF226 /* GXProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXProgressView.h; sourceTree = "<group>"; };
+		8DE14A1B288E339300FCF226 /* GXProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXProgressView.m; sourceTree = "<group>"; };
 		8DE5E37027424CFD00C9FA02 /* GXTemplateContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXTemplateContext.h; sourceTree = "<group>"; };
 		8DE5E37127424CFD00C9FA02 /* GXTemplateContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXTemplateContext.m; sourceTree = "<group>"; };
 		8DE5E3742743820A00C9FA02 /* GXTemplateParser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GXTemplateParser.c; sourceTree = "<group>"; };
@@ -770,6 +778,8 @@
 				8D9FC9D7273A222B00912EE6 /* GXScrollNode.m */,
 				8D9FC9DA273A223A00912EE6 /* GXCustomNode.h */,
 				8D9FC9DB273A223A00912EE6 /* GXCustomNode.m */,
+				8DE14A16288E338000FCF226 /* GXProgressNode.h */,
+				8DE14A17288E338100FCF226 /* GXProgressNode.m */,
 				8D9FC9E6273A227800912EE6 /* GXRootViewNode.h */,
 				8D9FC9E7273A227800912EE6 /* GXRootViewNode.m */,
 			);
@@ -797,6 +807,8 @@
 				8DE5E3B32747AF9600C9FA02 /* GXRichText.m */,
 				8DFEC2DA27351966001F3B74 /* GXImageView.h */,
 				8DFEC2DB27351966001F3B74 /* GXImageView.m */,
+				8DE14A1A288E339300FCF226 /* GXProgressView.h */,
+				8DE14A1B288E339300FCF226 /* GXProgressView.m */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -903,6 +915,7 @@
 				8DFEC2702734DDBE001F3B74 /* NSDictionary+GX.h in Headers */,
 				8DE5E3A32745FD9400C9FA02 /* GXExpression.h in Headers */,
 				8DE5E3862743A3F800C9FA02 /* GXRegisterCenter.h in Headers */,
+				8DE14A18288E338100FCF226 /* GXProgressNode.h in Headers */,
 				8A962CCA282A9DD100335552 /* GXSliderNode.h in Headers */,
 				8DB521692759C7C900EB8126 /* GXTrack.h in Headers */,
 				8D1CBCED275770F700EC2B4D /* GXEvent.h in Headers */,
@@ -943,6 +956,7 @@
 				8D9FC9DC273A223A00912EE6 /* GXCustomNode.h in Headers */,
 				8DE5E3772743820A00C9FA02 /* GXTemplateParser.h in Headers */,
 				8DB60A1927F4764E0038BE13 /* GXValue.h in Headers */,
+				8DE14A1C288E339300FCF226 /* GXProgressView.h in Headers */,
 				8D9FC9CC273A21F600912EE6 /* GXViewNode.h in Headers */,
 				8D1CBCE727560A5F00EC2B4D /* GXBizHelper.h in Headers */,
 				8D9FC9D8273A222B00912EE6 /* GXScrollNode.h in Headers */,
@@ -1182,6 +1196,7 @@
 				8DE5E39C2745F94E00C9FA02 /* GXLayoutManager.m in Sources */,
 				8DFEC2EF27351BB6001F3B74 /* GXBaseNode.m in Sources */,
 				8DE5E38F2744B20200C9FA02 /* GXNodeHelper.m in Sources */,
+				8DE14A19288E338100FCF226 /* GXProgressNode.m in Sources */,
 				8DE5E3A82746794300C9FA02 /* GXImageNode.m in Sources */,
 				8DE5E3B52747AF9600C9FA02 /* GXRichText.m in Sources */,
 				8D1D6300274F360600B94B1E /* GXDataManager.m in Sources */,
@@ -1204,6 +1219,7 @@
 				8DFEC2752734DDC8001F3B74 /* NSArray+GX.m in Sources */,
 				8DFEC2F72735286B001F3B74 /* GXCache.m in Sources */,
 				8DB60A1327F4764E0038BE13 /* GXNativeAnalyze.mm in Sources */,
+				8DE14A1D288E339300FCF226 /* GXProgressView.m in Sources */,
 				8DFEC2DD27351966001F3B74 /* GXImageView.m in Sources */,
 				8DFEC2812734FF3D001F3B74 /* GXTemplateData.m in Sources */,
 				8DFEC2692734DC6D001F3B74 /* GXCssParser.m in Sources */,

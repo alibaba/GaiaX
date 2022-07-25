@@ -584,6 +584,8 @@ static NSArray *GXLinesRefArray(UIFont *font,
     NSString *textOverflow = [styleJson gx_stringForKey:@"text-overflow"];
     if ([textOverflow isEqualToString:@"clip"]) {
         self.lineBreakMode = NSLineBreakByClipping;
+    } else  if ([textOverflow isEqualToString:@"middle"]) {
+        self.lineBreakMode = NSLineBreakByTruncatingMiddle;
     } else {
         self.lineBreakMode = NSLineBreakByTruncatingTail;
     }

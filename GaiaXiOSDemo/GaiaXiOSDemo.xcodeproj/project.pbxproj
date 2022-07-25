@@ -620,7 +620,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
@@ -688,7 +688,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";

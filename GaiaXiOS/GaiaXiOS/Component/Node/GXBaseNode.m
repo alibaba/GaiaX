@@ -383,6 +383,18 @@
         self.associatedView.accessibilityLabel = nil;
     }
     
+    //accessibilityTraits
+    NSString *accessibilityTraits = [info gx_stringForKey:@"accessibilityTraits"];
+    if (accessibilityTraits.length) {//none/text/image/button
+        if ([accessibilityTraits isEqualToString:@"button"]) {
+            self.associatedView.accessibilityTraits = UIAccessibilityTraitButton;
+        } else if ([accessibilityTraits isEqualToString:@"image"]){
+            self.associatedView.accessibilityTraits = UIAccessibilityTraitImage;
+        } else if ([accessibilityTraits isEqualToString:@"none"]){
+            self.associatedView.accessibilityTraits = UIAccessibilityTraitNone;
+        }
+    }
+    
     //是否开启无障碍
     NSString *accessibilityEnableStr = [info gx_stringForKey:@"accessibilityEnable"];
     if (accessibilityEnableStr.length) {

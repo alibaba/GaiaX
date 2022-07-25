@@ -21,6 +21,7 @@
 #import "GXImageView.h"
 #import "GXFunctionDef.h"
 #import "GXCommonDef.h"
+#import "GXBizHelper.h"
 #import "GXUIhelper.h"
 #import "UIImage+GX.h"
 #import "UIColor+GX.h"
@@ -202,7 +203,7 @@
             if ([placeholder hasPrefix:kGXComDef_Prefix_Local]) {
                 tmpImg = [placeholder stringByReplacingOccurrencesOfString:kGXComDef_Prefix_Local withString:@""];
             }
-            placeholderImage = [UIImage imageNamed:tmpImg];
+            placeholderImage = [GXBizHelper imageFromToken:tmpImg];
         }
     }
     

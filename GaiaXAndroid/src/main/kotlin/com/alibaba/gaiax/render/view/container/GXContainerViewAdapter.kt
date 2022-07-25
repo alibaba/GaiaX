@@ -103,16 +103,15 @@ class GXContainerViewAdapter(
                 containerData
             )
         } else {
-            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout?.let { it }
-                ?: kotlin.run {
-                    // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
-                    GXNodeUtils.computeContainerSizeByItemTemplate(
-                        gxTemplateContext,
-                        gxNode,
-                        containerData
-                    )
-                    gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
-                }
+            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout ?: run {
+                // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
+                GXNodeUtils.computeContainerSizeByItemTemplate(
+                    gxTemplateContext,
+                    gxNode,
+                    containerData
+                )
+                gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
+            }
         }
 
         // 构建坑位的容器
@@ -122,8 +121,12 @@ class GXContainerViewAdapter(
         val containerWidthLP = childContainerSize?.width?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        val containerHeightLP = childContainerSize?.height?.toInt()
-            ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        val containerHeightLP = gxNode.templateNode.finalScrollConfig?.let {
+            // 如果是scroll，那么可以设定gravity，需要让自己撑满容器
+            FrameLayout.LayoutParams.MATCH_PARENT
+        } ?: run {
+            childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        }
 
         childItemContainer.layoutParams = FrameLayout.LayoutParams(
             containerWidthLP, containerHeightLP

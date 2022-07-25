@@ -18,7 +18,7 @@ class GXComponentProgressTest : GXBaseTest() {
     fun template_progress_test() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
-            "view",
+            "progress",
             "template_progress"
         )
 

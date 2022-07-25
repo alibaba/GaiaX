@@ -65,6 +65,11 @@ object GXNodeUtils {
         gxNode: GXNode,
         containerData: JSONArray
     ): Size<Dimension?>? {
+
+        gxNode.cacheComputeContainerHeightByItemTemplate?.let {
+            return it
+        }
+
         if (gxNode.childTemplateItems?.isEmpty() == true) {
             return null
         }
@@ -72,23 +77,39 @@ object GXNodeUtils {
         // 1. 获取坑位的ViewPort信息
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
-        // 2. 计算坑位实际宽高结果
-        val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
-        val itemTemplateItem = itemTemplatePair.first
-        val itemVisualTemplateNode = itemTemplatePair.second
-        val itemSize: Layout? = computeContainerItemSize(
-            gxTemplateContext,
-            gxNode,
-            itemViewPort,
-            itemTemplateItem,
-            itemVisualTemplateNode,
-            containerData
-        )
+        var result: Size<Dimension?>? = null
+        gxNode.childTemplateItems?.forEach {
 
-        // 如果是Scroll容器，那么需要计算所有数据的高度，作为Item的高度
-        // TODO: 待处理
-        // 3. 计算容器期望的宽高结果
-        return computeContainerSize(gxTemplateContext, gxNode, itemSize, containerData)
+            // 2. 计算坑位实际宽高结果
+            val itemTemplatePair = it
+            val itemTemplateItem = itemTemplatePair.first
+            val itemVisualTemplateNode = itemTemplatePair.second
+            val itemSize: Layout? = computeContainerItemSize(
+                gxTemplateContext,
+                gxNode,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                containerData
+            )
+
+            // 3. 计算容器期望的宽高结果
+            val containerSize =
+                computeContainerSize(gxTemplateContext, gxNode, itemSize, containerData)
+            if (result == null) {
+                result = containerSize
+            } else {
+                val old = result?.height?.value
+                val new = containerSize?.height?.value
+                if (old != null && new != null && new > old) {
+                    result = containerSize
+                }
+            }
+        }
+
+        gxNode.cacheComputeContainerHeightByItemTemplate = result
+
+        return result
     }
 
     fun computeContainerFooterItemSize(

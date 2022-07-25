@@ -32,6 +32,9 @@ class GXBusinessTest : GXBaseTest() {
 
     }
 
+    /**
+     * TODO: bad case
+     */
     @Test
     fun yk_vip_channel_identityarea() {
         GXRegisterCenter.instance

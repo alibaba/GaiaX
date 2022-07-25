@@ -18,6 +18,7 @@ import org.junit.runner.RunWith
 class GXCommonTest : GXBaseTest() {
 
     /**
+     * TODO: bad case
      * https://github.com/alibaba/GaiaX/issues/131
      */
     @Test

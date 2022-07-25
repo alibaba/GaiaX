@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.template
 
+import android.view.Gravity
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.GXViewKey
@@ -115,6 +116,12 @@ data class GXLayer constructor(
             }
             val column = data.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN) ?: 1
             val scrollable = data.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE) ?: false
+            val gravity = when (data.getString(GXTemplateKey.GAIAX_LAYER_GRAVITY)) {
+                "top" -> Gravity.TOP
+                "bottom" -> Gravity.BOTTOM
+                "center" -> Gravity.CENTER
+                else -> null
+            }
             return when {
                 isScrollType(type, subType) -> GXLayer(
                     id = id,
@@ -122,7 +129,13 @@ data class GXLayer constructor(
                     type = type,
                     subType = subType,
                     customNodeClass = viewClass,
-                    scrollConfig = GXScrollConfig.create(data, direction, edgeInsets, itemSpacing),
+                    scrollConfig = GXScrollConfig.create(
+                        data,
+                        direction,
+                        edgeInsets,
+                        itemSpacing,
+                        gravity
+                    ),
                     gridConfig = null
                 )
                 isGridType(type, subType) -> GXLayer(

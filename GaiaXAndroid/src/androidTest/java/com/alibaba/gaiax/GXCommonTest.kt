@@ -213,8 +213,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
     }
 
     @Test
@@ -253,8 +253,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(object :
             GXRegisterCenter.GXIExtensionCompatibility {
@@ -303,8 +303,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(object :
             GXRegisterCenter.GXIExtensionCompatibility {
@@ -382,8 +382,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
     }
 
     @Test

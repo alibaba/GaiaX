@@ -1,0 +1,16 @@
+{
+    "data":{
+        "template_scroll_multi_type_two_gravity_top":{
+            "value":"$nodes",
+            "extend":{
+                "item-type":{
+                    "path":"$type == 0 ? 'type0' : 'type1'",
+                    "config":{
+                        "type0":"'template_scroll_multi_type_item_0'",
+                        "type1":"'template_scroll_multi_type_item_1'"
+                    }
+                }
+            }
+        }
+    }
+}

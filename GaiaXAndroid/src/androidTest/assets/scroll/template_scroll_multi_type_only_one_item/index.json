@@ -1,5 +1,5 @@
 {
-  "id": "template_scroll_multi_type_item_one",
+  "id": "template_scroll_multi_type_only_one_item",
   "type": "gaia-template",
   "sub-type": "scroll",
   "direction": "horizontal",

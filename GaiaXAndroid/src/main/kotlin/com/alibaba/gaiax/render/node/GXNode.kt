@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.node
 import android.animation.AnimatorSet
 import android.view.View
 import app.visly.stretch.Dimension
+import app.visly.stretch.Layout
 import app.visly.stretch.Size
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
@@ -29,10 +30,10 @@ import com.alibaba.gaiax.template.GXLayer
  */
 class GXNode {
 
-    /**
-     * cache
-     */
-    internal var cacheComputeContainerHeightByItemTemplate: Size<Dimension?>? = null
+    data class GXMultiTypeItemComputeCache(val containerSize: Size<Dimension?>?, val itemLayout: Layout?)
+
+    var multiTypeItemComputeCache: MutableMap<GXTemplateEngine.GXTemplateItem, GXMultiTypeItemComputeCache>? =
+        null
 
     /**
      * 属性动画

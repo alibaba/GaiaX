@@ -93,8 +93,8 @@ class GXContainerViewAdapter(
             childVisualNestTemplateNode
         )
 
-        // TODO: 此处可能有耗时问题，可以进行优化
-        val childContainerSize = if (isChildFooterItem)
+        val childContainerSize = if (isChildFooterItem) {
+            // TODO: 此处可能有耗时问题，可以进行优化
             GXNodeUtils.computeContainerFooterItemSize(
                 childTemplateContext,
                 gxNode,
@@ -103,15 +103,9 @@ class GXContainerViewAdapter(
                 childVisualNestTemplateNode,
                 containerData
             )
-        else
-            GXNodeUtils.computeContainerItemSize(
-                childTemplateContext,
-                gxNode,
-                childItemViewPort,
-                childTemplateItem,
-                childVisualNestTemplateNode,
-                containerData
-            )
+        } else {
+            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
+        }
 
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)

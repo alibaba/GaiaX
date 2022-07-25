@@ -19,6 +19,7 @@
 #import "GXUIHelper.h"
 #import "NSDictionary+GX.h"
 #import "GXStyleHelper.h"
+#import "GXBizHelper.h"
 #import "GXUtils.h"
 
 @implementation GXUIHelper
@@ -37,6 +38,7 @@
     if (fontFamily.length) {
         //① 使用fontFamily + fontSize来获取字体
         CGFloat size = [GXStyleHelper converSimpletValue:fontSize] ?: 14.f;
+        fontFamily = [GXBizHelper fontFamilyFromToken:fontFamily];
         font = [UIFont fontWithName:fontFamily size:size];
     } else {
         //② 处理普通字体和DesignToken
@@ -93,17 +95,33 @@
     if ([GXUtils isValidString:fontWeight]) {
         NSInteger weight = [fontWeight integerValue];
         switch (weight) {
-            case 100:
-            case 200:
-            case 300:
+            case 100:{
+                fw = UIFontWeightUltraLight;
+                break;
+            }
+            case 200:{
+                fw = UIFontWeightThin;
+                break;
+            }
+            case 300:{
+                fw = UIFontWeightLight;
+                break;
+            }
             case 400:{
                 fw = UIFontWeightRegular;
                 break;
             }
-            case 500:
-            case 600:
-            case 700:{
+            case 500:{
+                fw = UIFontWeightMedium;
+                break;
+            }
+            case 600:{
                 fw = UIFontWeightSemibold;
+                break;
+            }
+                break;
+            case 700:{
+                fw = UIFontWeightBold;
                 break;
             }
             default:{

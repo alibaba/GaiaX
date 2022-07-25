@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - DesignToken
 
+//处理image
++ (UIImage * _Nullable)imageFromToken:(NSString *)token;
+
+//处理font-faimly
++ (NSString * _Nullable)fontFamilyFromToken:(NSString *)token;
+
 //get color by DesignToken
 + (UIColor *)colorFromDesignToken:(NSString *)token;
 

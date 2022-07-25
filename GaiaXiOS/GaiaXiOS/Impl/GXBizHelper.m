@@ -42,6 +42,30 @@
 
 @implementation GXBizHelper(DesignToken)
 
+//处理本地图片 - 抹平差异
++ (UIImage *)imageFromToken:(NSString *)token{
+    UIImage *image = nil;
+    
+    Class bizServiceClass = TheGXRegisterCenter.bizServiceImpl;
+    if (bizServiceClass && [bizServiceClass respondsToSelector:@selector(imageFromToken:)]) {
+        image = [bizServiceClass imageFromToken:token];
+    }
+    
+    return image ?: [UIImage imageNamed:token];
+}
+
+//处理字体
++ (NSString *)fontFamilyFromToken:(NSString *)token{
+    NSString *fontFamily = nil;
+    
+    Class bizServiceClass = TheGXRegisterCenter.bizServiceImpl;
+    if (bizServiceClass && [bizServiceClass respondsToSelector:@selector(fontFamilyFromToken:)]) {
+        fontFamily = [bizServiceClass fontFamilyFromToken:token];
+    }
+    
+    return fontFamily ?: token;
+}
+
 //用于加载间距DesignToken
 + (CGFloat)dimFromDesignToken:(NSString *)token{
     CGFloat dimValue = GX_INVALID_DIM;

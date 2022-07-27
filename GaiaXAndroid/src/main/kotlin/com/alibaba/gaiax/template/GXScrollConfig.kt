@@ -29,7 +29,7 @@ data class GXScrollConfig(
     val direction: Int = LinearLayoutManager.VERTICAL,
     val itemSpacing: Int = 0,
     val edgeInsets: Rect = Rect(0, 0, 0, 0),
-    var gravity: Int = Gravity.CENTER
+    var gravity: Int = Gravity.TOP
 ) {
     companion object {
 
@@ -45,7 +45,7 @@ data class GXScrollConfig(
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
                 GXContainerConvert.edgeInsets(edgeInsets) ?: Rect(0, 0, 0, 0),
-                gravity ?: Gravity.CENTER
+                gravity ?: Gravity.TOP
             )
         }
 

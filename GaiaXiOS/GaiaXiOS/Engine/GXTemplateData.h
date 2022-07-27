@@ -26,11 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GXTemplateData : NSObject
 
 //Data listener
-@property (nonatomic, strong) id <GXDataProtocal> dataListener;
+@property (nonatomic, weak) id <GXDataProtocal> dataListener;
 //Event listener
-@property (nonatomic, strong) id <GXEventProtocal> eventListener;
+@property (nonatomic, weak) id <GXEventProtocal> eventListener;
 //Track listener
-@property (nonatomic, strong) id <GXTrackProtocal> trackListener;
+@property (nonatomic, weak) id <GXTrackProtocal> trackListener;
 
 //Raw data
 @property (nonatomic, strong) NSDictionary *data;

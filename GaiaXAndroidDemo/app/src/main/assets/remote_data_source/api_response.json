@@ -1,0 +1,8 @@
+{
+  "templates": [
+    {
+      "templateBiz": "remote",
+      "templateId": "gx-vertical-item"
+    }
+  ]
+}

@@ -13,10 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol GXTemplateSourceProtocal <NSObject>
 
 @required
+
 // priority
 - (NSInteger)priority;
 
-//get template
+/// get template
+/// @param templateItem 模板相关信息
+/// 注意：
+/// 1. 如需缓存逻辑，需要在协议方法内自行添加
+/// 2. 配合 GXUtils (Template) 中的方法，可以解析文件夹和二进制模板
 - (NSDictionary *)getTemplateInfoWithTemplateItem:(GXTemplateItem *)templateItem;
 
 @optional

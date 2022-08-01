@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
+    <img src="https://gw.alicdn.com/imgextra/i2/O1CN0140Ny0n1kYMIeGmeyp_!!6000000004695-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
 </h1>
 <p align="center">
     GaiaX动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案

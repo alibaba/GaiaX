@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://img.alicdn.com/imgextra/i2/O1CN01DvZYVD1hLaOVqNlkK_!!6000000004261-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
+    <img src="https://gw.alicdn.com/imgextra/i2/O1CN0140Ny0n1kYMIeGmeyp_!!6000000004695-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
 </h1>
 <p align="center">
     GaiaX dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".ApiTemplateActivity"
+            android:name=".RemoteDataSourceTemplateActivity"
             android:exported="false" />
         <activity
             android:name=".EventTemplateActivity"

@@ -6,5 +6,5 @@
     <string name="container_template">容器模板</string>
     <string name="data">数据绑定</string>
     <string name="event">事件绑定</string>
-    <string name="api">Api</string>
+    <string name="remote_data_source">远程数据源</string>
 </resources>

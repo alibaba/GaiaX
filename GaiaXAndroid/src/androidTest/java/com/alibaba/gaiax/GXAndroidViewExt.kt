@@ -16,7 +16,8 @@
 
 package com.alibaba.gaiax
 
-import android.graphics.Rect
+import android.graphics.Paint
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsoluteLayout
@@ -88,4 +89,10 @@ fun Any.getSuperFieldAny(name: String): Any {
     val declaredField = this.javaClass.superclass.getDeclaredField(name)
     declaredField.isAccessible = true
     return declaredField.get(this)
+}
+
+fun GradientDrawable.getStrokePaint(): Paint {
+    val declaredField = this.javaClass.superclass.getDeclaredField("mStrokePaint")
+    declaredField.isAccessible = true
+    return declaredField.get(this) as Paint
 }

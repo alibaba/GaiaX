@@ -4,8 +4,6 @@ import android.view.View
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
-import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -88,11 +86,6 @@ class GXBusinessTest : GXBaseTest() {
 
         Assert.assertEquals(363F.dpToPx(), rootView.width())
         Assert.assertEquals(64F.dpToPx(), rootView.height())
-        Assert.assertEquals(true, rootView.child(2).background is GXLinearColorGradientDrawable)
-        Assert.assertEquals(
-            true,
-            rootView.child(2).foreground is GXRoundCornerBorderGradientDrawable
-        )
     }
 
     @Test

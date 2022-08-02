@@ -432,7 +432,8 @@ object GXNodeUtils {
                 }
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
                 else if (finalScrollConfig.isVertical) {
-                    val lines = ceil((containerTemplateData.size * 1.0F).toDouble()).toInt()
+                    val lines =
+                        Math.max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
                     var containerHeight = itemSize.height
                     containerHeight *= lines
                     containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
@@ -450,7 +451,10 @@ object GXNodeUtils {
 
                     // 获取行数
                     val lines =
-                        ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
+                        Math.max(
+                            1,
+                            ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
+                        )
 
                     var containerHeight = itemSize.height
 

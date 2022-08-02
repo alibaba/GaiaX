@@ -1,0 +1,13 @@
+{
+  "id": "template_grid_height_auto_no_data",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "column": 2,
+  "layers": [
+    {
+      "id": "template_grid_height_auto_item_no_data",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

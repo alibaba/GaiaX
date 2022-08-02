@@ -89,8 +89,14 @@ class GXComponentGridTest : GXBaseTest() {
 
         val rect = rootView.child(0).layoutParams.getSuperFieldAny("mDecorInsets") as Rect
         // 275/2=137.5 四舍五入 138
-        Assert.assertEquals(50F.dpToPx(), rect.top.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0)
-        Assert.assertEquals(50F.dpToPx(), rect.bottom.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0)
+        Assert.assertEquals(
+            50F.dpToPx(),
+            rect.top.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0
+        )
+        Assert.assertEquals(
+            50F.dpToPx(),
+            rect.bottom.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0
+        )
     }
 
     @Test
@@ -644,6 +650,37 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx() * 3, rootView.height())
+    }
+
+    @Test
+    fun template_grid_height_auto_no_data() {
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(object :
+            GXRegisterCenter.GXIExtensionCompatibility {
+            override fun isPreventContainerDataSourceThrowException(): Boolean {
+                return true
+            }
+        })
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_auto_no_data"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
     }
 
     @Test

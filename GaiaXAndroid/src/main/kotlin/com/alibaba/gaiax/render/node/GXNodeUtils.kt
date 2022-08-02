@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.util.Log
 import app.visly.stretch.Dimension
 import app.visly.stretch.Layout
 import app.visly.stretch.Size
@@ -35,6 +36,7 @@ import kotlin.math.ceil
 object GXNodeUtils {
 
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
+        Log.d("[GaiaX][Node]", "computeNodeTreeByBindData() called with: size = $size")
         val layout = gxNode.stretchNode.node.computeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
     }
@@ -43,6 +45,8 @@ object GXNodeUtils {
         layout.id = gxNode.stretchNode.node.id
         layout.idPath = gxNode.stretchNode.node.idPath
         gxNode.stretchNode.layoutByBind = layout
+        Log.d("[GaiaX][Node]", "composeStretchNodeByBindData() called with: id = ${layout.id}, layout = $layout")
+        Log.d("[GaiaX][Node]", "composeStretchNodeByBindData() called with: id = ${layout.id}, style = ${gxNode.stretchNode.node.getStyle()}")
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
         }

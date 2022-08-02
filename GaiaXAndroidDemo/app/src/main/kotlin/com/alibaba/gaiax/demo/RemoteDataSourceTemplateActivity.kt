@@ -58,7 +58,7 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(
             AssetsUtils.parseAssets(
                 this,
-                "data/vertical-item.json"
+                "assets_data_source/data/vertical-item.json"
             )
         )
 
@@ -93,7 +93,7 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
                 )
 
                 // parse data
-                response.getJSONArray("templates")?.forEach {
+                response.getJSONArray("assets_data_source/templates")?.forEach {
                     val template = (it as JSONObject)
                     val templateBiz = template.getString("templateBiz")
                     val templateId = template.getString("templateId")

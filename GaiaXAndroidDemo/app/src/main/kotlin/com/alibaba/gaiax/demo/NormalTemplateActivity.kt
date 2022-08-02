@@ -24,7 +24,7 @@ class NormalTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-vertical-item")
+        val params = GXTemplateEngine.GXTemplateItem(activity, "assets_data_source/templates", "gx-vertical-item")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(100F.dpToPx(), null)
@@ -33,7 +33,7 @@ class NormalTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(
             AssetsUtils.parseAssets(
                 activity,
-                "data/vertical-item.json"
+                "assets_data_source/data/vertical-item.json"
             )
         )
 
@@ -52,7 +52,7 @@ class NormalTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-horizontal-item")
+        val params = GXTemplateEngine.GXTemplateItem(activity, "assets_data_source/templates", "gx-horizontal-item")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
@@ -61,7 +61,7 @@ class NormalTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(
             AssetsUtils.parseAssets(
                 activity,
-                "data/horizontal-item.json"
+                "assets_data_source/data/horizontal-item.json"
             )
         )
 
@@ -80,7 +80,7 @@ class NormalTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.init(activity)
 
         // 模板参数
-        val params = GXTemplateEngine.GXTemplateItem(activity, "templates", "gx-progress")
+        val params = GXTemplateEngine.GXTemplateItem(activity, "assets_data_source/templates", "gx-progress")
 
         // 模板绘制尺寸
         val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)

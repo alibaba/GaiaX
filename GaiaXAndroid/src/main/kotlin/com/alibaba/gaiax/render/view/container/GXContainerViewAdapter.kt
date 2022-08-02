@@ -241,6 +241,9 @@ class GXContainerViewAdapter(
                 }
             }
             GXTemplateEngine.instance.bindData(childView, childTemplateData)
+
+            // FIX: 重置容器的宽度为自适应，防止预计算和实际的宽度不相符
+            childItemContainer.layoutParams.width = childView.layoutParams.width
         }
     }
 

@@ -7,4 +7,5 @@
     <string name="data">数据绑定</string>
     <string name="event">事件绑定</string>
     <string name="remote_data_source">远程数据源</string>
+    <string name="business">业务</string>
 </resources>

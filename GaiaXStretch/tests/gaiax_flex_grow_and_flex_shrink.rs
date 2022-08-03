@@ -247,119 +247,466 @@ mod gaiax_flex_grow_and_flex_shrink {
     ///             - group1_group0 width:200
     ///             - group1_group1 width:200
     #[test]
-    fn flex_grow_and_flex_shrink2() {
+    fn flex_grow_and_flex_shrink_yk_vip_channel_identity_area() {
         let mut stretch = Stretch::new();
 
-        let root = stretch
+        /*
+        style = Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Center,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0,
+            flexShrink=0.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Points(points=1313.0),
+            height=Points(points=231.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null,
+            rustptr=3857449456)
+         */
+        let yk_vip_channel_identity_area = stretch
             .new_node(
                 Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
                     flex_direction: FlexDirection::Row,
-                    flex_basis: Dimension::Auto,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Center,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
                     flex_grow: 0.0,
                     flex_shrink: 0.0,
-                    size: Size { width: Dimension::Points(375.0), height: Dimension::Points(100.0) },
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Points(1313.0), height: Dimension::Points(231.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
             .unwrap();
 
-        let group0 = stretch
+        /*
+        style = Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Stretch,
+            alignSelf=Center,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0,
+            flexShrink=0.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Points(points=140.0), height=Points(points=140.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+             aspectRatio=null, rustptr=3857470096)
+         */
+        let avatar = stretch
             .new_node(
                 Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
                     flex_direction: FlexDirection::Row,
-                    flex_basis: Dimension::Auto,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Stretch,
+                    align_self: AlignSelf::Center,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
                     flex_grow: 0.0,
                     flex_shrink: 0.0,
-                    size: Size { width: Dimension::Points(40.0), height: Dimension::Points(40.0) },
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Points(140.0), height: Dimension::Points(140.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
             .unwrap();
 
-        let group2 = stretch
+        /*
+        style = Style(
+            display=Flex, 
+            positionType=Relative, 
+            direction=Inherit, 
+            flexDirection=Row, 
+            flexWrap=NoWrap, 
+            overflow=Hidden, 
+            alignItems=Center, 
+            alignSelf=Auto, 
+            alignContent=FlexStart, 
+            justifyContent=FlexStart, 
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
+            padding=Rect(start=Points(points=42.0), end=Points(points=42.0), top=Dimension.Undefined, bottom=Dimension.Undefined), 
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
+            flexGrow=0.0, flexShrink=0.0, flexBasis=Dimension.Auto, 
+            size=Size(width=Points(points=123.0), height=Points(points=123.0)), 
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto), 
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto), 
+            aspectRatio=null, rustptr=3857474416)
+         */
+        let button = stretch
             .new_node(
                 Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
                     flex_direction: FlexDirection::Row,
-                    flex_basis: Dimension::Auto,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Center,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
                     flex_grow: 0.0,
                     flex_shrink: 0.0,
-                    size: Size { width: Dimension::Points(35.0), height: Dimension::Points(35.0) },
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Points(123.0), height: Dimension::Points(123.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
             .unwrap();
 
-        let group1 = stretch
+        /*
+        style = Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Column,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Stretch,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=Center,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=1.0,
+            flexShrink=1.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Dimension.Auto, height=Percent(percentage=1.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null, rustptr=3857466976)
+        */
+        let title_view = stretch
             .new_node(
                 Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
                     flex_direction: FlexDirection::Column,
-                    flex_basis: Dimension::Auto,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Stretch,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
                     flex_grow: 1.0,
                     flex_shrink: 1.0,
+                    flex_basis: Dimension::Auto,
                     size: Size { width: Dimension::Auto, height: Dimension::Percent(1.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
             .unwrap();
 
-        let group1_group0 = stretch
+        /*
+        style = Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Center,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0,
+            flexShrink=1.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Dimension.Auto, height=Points(points=70.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null, rustptr=3857462656)
+        */
+        let name_view = stretch
             .new_node(
                 Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
                     flex_direction: FlexDirection::Row,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Center,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    flex_grow: 0.0,
+                    flex_shrink: 1.0,
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Auto, height: Dimension::Points(70.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    aspect_ratio: Number::Undefined
+                },
+                &[],
+            )
+            .unwrap();
+
+        /*
+        style = Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Stretch,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0,
+            flexShrink=1.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Points(points=1370.0), height=Points(points=70.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null, rustptr=3857473936)
+         */
+        let title = stretch
+            .new_node(
+                Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
+                    flex_direction: FlexDirection::Row,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Center,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
                     flex_basis: Dimension::Auto,
                     flex_grow: 0.0,
                     flex_shrink: 1.0,
-                    size: Size { width: Dimension::Auto, height: Dimension::Points(20.0) },
+                    size: Size { width: Dimension::Points(1370.0), height: Dimension::Points(70.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
+                    aspect_ratio: Number::Undefined
                 },
                 &[],
             )
             .unwrap();
 
-        let group1_group0_group0 = stretch
-            .new_node(
-                Style {
-                    flex_direction: FlexDirection::Row,
-                    flex_basis: Dimension::Auto,
-                    flex_grow: 0.0,
-                    flex_shrink: 1.0,
-                    size: Size { width: Dimension::Points(500.0), height: Dimension::Points(20.0) },
-                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    ..Default::default()
-                },
-                &[],
+        stretch.add_child(yk_vip_channel_identity_area, avatar).unwrap();
+        stretch.add_child(yk_vip_channel_identity_area, title_view).unwrap();
+        stretch.add_child(title_view, name_view).unwrap();
+        stretch.add_child(name_view, title).unwrap();
+        stretch.add_child(yk_vip_channel_identity_area, button).unwrap();
+
+        stretch
+            .compute_layout(
+                yk_vip_channel_identity_area,
+                Size { width: Number::Defined(1313.0), height: Number::Undefined },
             )
             .unwrap();
 
-        stretch.add_child(root, group0).unwrap();
-        stretch.add_child(root, group1).unwrap();
-        stretch.add_child(group1, group1_group0).unwrap();
-        stretch.add_child(group1_group0, group1_group0_group0).unwrap();
-        stretch.add_child(root, group2).unwrap();
-
-        stretch.compute_layout(root, Size { width: Number::Defined(375.0), height: Number::Defined(100.0) }).unwrap();
-
-        assert_eq!(stretch.layout(root).unwrap().size.width, 375.0);
-        assert_eq!(stretch.layout(group0).unwrap().size.width, 40.0);
-        assert_eq!(stretch.layout(group1).unwrap().size.width, 300.0);
-        assert_eq!(stretch.layout(group1_group0).unwrap().size.width, 300.0);
-        assert_eq!(stretch.layout(group1_group0_group0).unwrap().size.width, 300.0);
-        assert_eq!(stretch.layout(group2).unwrap().size.width, 35.0);
+        assert_eq!(stretch.layout(yk_vip_channel_identity_area).unwrap().size.width, 1313.0);
+        assert_eq!(stretch.layout(avatar).unwrap().size.width, 140.0);
+        assert_eq!(stretch.layout(title_view).unwrap().size.width, 1313.0 - 140.0 - 123.0);
+        assert_eq!(stretch.layout(name_view).unwrap().size.width, 1313.0 - 140.0 - 123.0);
+        assert_eq!(stretch.layout(title).unwrap().size.width, 1313.0 - 140.0 - 123.0);
+        assert_eq!(stretch.layout(button).unwrap().size.width, 123.0);
     }
 
     // #[test]

@@ -21,6 +21,7 @@ import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.AbsoluteLayout
@@ -31,7 +32,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXTemplateKey
 import kotlin.math.roundToInt
@@ -114,24 +114,21 @@ open class GXView : AbsoluteLayout,
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val shape = GXRoundCornerBorderGradientDrawable()
-            shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = radius
-            shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
-            foreground = shape
-        } else {
-            if (background == null) {
+        when (background) {
+            null -> {
                 val shape = GXRoundCornerBorderGradientDrawable()
                 shape.shape = GradientDrawable.RECTANGLE
                 shape.cornerRadii = radius
                 shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
                 background = shape
-            } else if (background is GXColorGradientDrawable) {
-                (background as GXColorGradientDrawable).setStroke(
+            }
+            is GradientDrawable -> {
+                (background as GradientDrawable).setStroke(
                     borderWidth.toDouble().roundToInt(), borderColor
                 )
+            }
+            else -> {
+                Log.e("[GaiaX]", "setRoundCornerBorder: not support current case")
             }
         }
     }

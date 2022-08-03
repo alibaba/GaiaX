@@ -1,6 +1,5 @@
 package app.visly.stretch
 
-import android.util.Log
 import androidx.annotation.Keep
 import java.lang.ref.WeakReference
 

@@ -12,6 +12,7 @@ class GXFastPreview {
 
         Taro.connectSocket({
             // gaiax-opensource://preview?url=ws://30.78.147.247:9001&id=test2&type=auto
+            // port = 9296 or 9001
             url: 'ws://' + this.studioIpAddress + ':9001',
             success: () => {
                 console.log('GXFastPreview connect success')

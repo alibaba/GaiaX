@@ -30,7 +30,6 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXNodeById
 import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -464,14 +463,14 @@ class GXTemplateEngine {
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
-    ): View {
+    ): View? {
         return try {
             internalCreateView(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
                 extensionException.exception(e)
-                GXView(gxTemplateItem.context)
+                null
             } else {
                 throw e
             }
@@ -544,7 +543,7 @@ class GXTemplateEngine {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
                 extensionException.exception(e)
-                return null
+                null
             } else {
                 throw e
             }
@@ -580,7 +579,7 @@ class GXTemplateEngine {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
                 extensionException.exception(e)
-                return null
+                null
             } else {
                 throw e
             }

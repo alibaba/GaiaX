@@ -37,7 +37,7 @@ class EventTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(data)
 
         // 创建模板View
-        val view = GXTemplateEngine.instance.createView(params, size)
+        val view = GXTemplateEngine.instance.createView(params, size)!!
 
         templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
 

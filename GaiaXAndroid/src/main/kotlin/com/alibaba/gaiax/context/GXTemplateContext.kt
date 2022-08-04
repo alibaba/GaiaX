@@ -32,6 +32,9 @@ import java.util.concurrent.CopyOnWriteArraySet
  * @suppress
  */
 class GXTemplateContext private constructor(
+    /**
+     * context
+     */
     val context: Context,
     /**
      * ViewPort size

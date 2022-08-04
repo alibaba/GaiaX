@@ -573,14 +573,14 @@ class GXTemplateEngine {
      */
     fun createViewOnlyViewTree(
         gxTemplateContext: GXTemplateContext
-    ): View {
+    ): View? {
         return try {
             internalCreateViewOnlyViewTree(gxTemplateContext)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
                 extensionException.exception(e)
-                GXView(gxTemplateContext.context)
+                return null
             } else {
                 throw e
             }

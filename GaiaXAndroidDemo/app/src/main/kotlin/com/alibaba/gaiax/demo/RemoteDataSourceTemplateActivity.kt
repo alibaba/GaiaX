@@ -63,7 +63,7 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
         )
 
         // 创建模板View
-        val view = GXTemplateEngine.instance.createView(params, size)
+        val view = GXTemplateEngine.instance.createView(params, size)!!
 
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)

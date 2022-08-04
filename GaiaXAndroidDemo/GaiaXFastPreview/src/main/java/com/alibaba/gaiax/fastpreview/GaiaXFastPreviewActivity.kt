@@ -138,9 +138,11 @@ class GaiaXFastPreviewActivity : AppCompatActivity(), GaiaXFastPreview.Listener 
     private fun forceCreate() {
         try {
             val view = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
-            GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
-            fastPreviewRoot.removeAllViews()
-            fastPreviewRoot.addView(view, 0)
+            if (view != null) {
+                GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
+                fastPreviewRoot.removeAllViews()
+                fastPreviewRoot.addView(view, 0)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

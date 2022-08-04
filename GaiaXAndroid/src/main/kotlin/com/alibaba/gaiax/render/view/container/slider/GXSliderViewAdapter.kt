@@ -24,6 +24,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.template.GXSliderConfig
 
 /**
@@ -71,9 +72,11 @@ class GXSliderViewAdapter(
                 nodeLayout?.height
             )
         )
-        GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData))
-        container.addView(itemView)
-        return itemView
+        if (itemView != null) {
+            GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData))
+            container.addView(itemView)
+        }
+        return itemView ?: GXView(container.context)
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {

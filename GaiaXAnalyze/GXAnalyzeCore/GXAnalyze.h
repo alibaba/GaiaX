@@ -41,9 +41,8 @@ private:
     GXATSNode singleCalculate(GXATSNode value1, string op);
 
 
-    string grammarScanner(vector<GXATSNode> array);
 
-    long check(string s, vector<GXATSNode> array, void *p_analyze, void* source);
+    long check(string s, vector<GXATSNode> array, void *p_analyze, void* source,string expression);
 };
 
 #endif /*include _GXAnalyze__H_*/

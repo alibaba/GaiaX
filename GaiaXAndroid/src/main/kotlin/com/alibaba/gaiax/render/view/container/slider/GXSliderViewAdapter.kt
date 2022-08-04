@@ -76,7 +76,7 @@ class GXSliderViewAdapter(
             GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData))
             container.addView(itemView)
         }
-        return itemView ?: GXView(container.context)
+        return itemView ?: throw IllegalArgumentException("Create Item View error")
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {

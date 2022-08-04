@@ -31,7 +31,30 @@ import java.util.concurrent.CopyOnWriteArraySet
 /**
  * @suppress
  */
-class GXTemplateContext(val context: Context) {
+class GXTemplateContext private constructor(
+    /**
+     * context
+     */
+    val context: Context,
+    /**
+     * ViewPort size
+     */
+    var size: GXTemplateEngine.GXMeasureSize,
+
+    /**
+     * Template information
+     */
+    val templateItem: GXTemplateEngine.GXTemplateItem,
+
+    /**
+     * Raw data of the template associated with the current view: root template, nested template, and child template
+     */
+    val templateInfo: GXTemplateInfo,
+    /**
+     * A virtual node for nested templates
+     */
+    var visualTemplateNode: GXTemplateNode? = null
+) {
 
     var dirtyText: MutableMap<GXStretchNode, GXDirtyText>? = null
 
@@ -44,21 +67,6 @@ class GXTemplateContext(val context: Context) {
      * Is exist flexGrow logic
      */
     var isFlexGrowLayout: Boolean = false
-
-    /**
-     * ViewPort size
-     */
-    lateinit var size: GXTemplateEngine.GXMeasureSize
-
-    /**
-     * Template information
-     */
-    lateinit var templateItem: GXTemplateEngine.GXTemplateItem
-
-    /**
-     * Raw data of the template associated with the current view: root template, nested template, and child template
-     */
-    lateinit var templateInfo: GXTemplateInfo
 
     /**
      * A soft or weak reference to a view
@@ -77,11 +85,6 @@ class GXTemplateContext(val context: Context) {
      * Container-indexed position
      */
     var indexPosition: Int = -1
-
-    /**
-     * A virtual node for nested templates
-     */
-    var visualTemplateNode: GXTemplateNode? = null
 
     val containers: CopyOnWriteArraySet<GXContainer> by lazy {
         CopyOnWriteArraySet<GXContainer>()
@@ -111,12 +114,13 @@ class GXTemplateContext(val context: Context) {
             gxTemplateInfo: GXTemplateInfo,
             gxVisualTemplateNode: GXTemplateNode? = null
         ): GXTemplateContext {
-            val context = GXTemplateContext(gxTemplateItem.context)
-            context.size = gxMeasureSize
-            context.templateItem = gxTemplateItem
-            context.templateInfo = gxTemplateInfo
-            context.visualTemplateNode = gxVisualTemplateNode
-            return context
+            return GXTemplateContext(
+                gxTemplateItem.context,
+                gxMeasureSize,
+                gxTemplateItem,
+                gxTemplateInfo,
+                gxVisualTemplateNode
+            )
         }
 
         fun getContext(targetView: View): GXTemplateContext? {

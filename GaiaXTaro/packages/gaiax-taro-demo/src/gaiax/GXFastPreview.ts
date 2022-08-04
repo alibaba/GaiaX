@@ -4,14 +4,15 @@ import Taro, { SocketTask } from "@tarojs/taro";
 class GXFastPreview {
 
 
-    private studioIpAddress = "30.77.74.80"
+    private studioIpAddress = "30.78.147.247"
     private listener: IGXFastPreviewListener;
     private socketTask: SocketTask;
 
     startFastPreview() {
 
         Taro.connectSocket({
-            url: 'ws://' + this.studioIpAddress + ':9296',
+            // gaiax-opensource://preview?url=ws://30.78.147.247:9001&id=test2&type=auto
+            url: 'ws://' + this.studioIpAddress + ':9001',
             success: () => {
                 console.log('GXFastPreview connect success')
             }

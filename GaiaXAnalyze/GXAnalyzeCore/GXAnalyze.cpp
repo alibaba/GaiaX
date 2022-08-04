@@ -409,13 +409,13 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         (op == ":") || (op == "?:")) {
         //可以返回map和array
     } else if (left.token == "map" || left.token == "array") {
-        result.name =
-                "\'" + op + "\'" + ": illegal,left operand has type of \'" + left.token + "\'";
+        result.name = "expressionError: illegal operator '" + op + "',left operand has type of '" +
+                      left.token + "'";
         result.token = "error";
         return result;
     } else if (op != "?:" && (right.token == "map" || right.token == "array")) {
-        result.name =
-                "\'" + op + "\'" + ": illegal,right operand has type of \'" + left.token + "\'";
+        result.name = "expressionError: illegal operator '" + op + "',right operand has type of '" +
+                      right.token + "'";
         result.token = "error";
         return result;
     }
@@ -719,9 +719,16 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.token = "string";
             } else {
                 result.token = "error";
-                result.name =
-                        "\'" + left.name + "\'" + ": expected num value,not : " +
-                        left.token;
+                if (left.token == "string" || left.token == "num") {
+                    result.name = "expressionError: '" + right.name +
+                                  "' expected num or string value,not '" + right.token + "'";
+                } else if (right.token == "string" || right.token == "num") {
+                    result.name = "expressionError: '" + left.name +
+                                  "' expected num or string value,not '" + left.token + "'";
+                } else {
+                    result.name = "expressionError: '" + left.name +
+                                  "' expected num or string value,not '" + left.token + "'";
+                }
             }
         }
     } else if (op == "-") {
@@ -733,15 +740,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "error";
             if (left.token == "num") {
                 result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
+                        "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (right.token == "num") {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             } else {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected num value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             }
         }
@@ -754,15 +761,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "error";
             if (left.token == "num") {
                 result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
+                        "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (right.token == "num") {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             } else {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected num value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             }
         }
@@ -770,7 +777,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         if (left.token == "num" && right.token == "num") {
             if (stof(right.name) == 0) {
                 result.token = "error";
-                result.name = "divide or mod by zero";
+                result.name = "expressionError: divide or mod by zero";
             } else {
                 float temp = stof(left.name) / stof(right.name);
                 result.name = to_string(temp);
@@ -780,15 +787,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "error";
             if (left.token == "num") {
                 result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
+                        "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (right.token == "num") {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             } else {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected num value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             }
         }
@@ -796,7 +803,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         if (left.token == "num" && right.token == "num") {
             if (stof(right.name) == 0) {
                 result.token = "error";
-                result.name = "divide or mod by zero";
+                result.name = "expressionError: divide or mod by zero";
             } else {
                 float temp = stoi(left.name) % stoi(right.name);
                 result.name = to_string(temp);
@@ -806,15 +813,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "error";
             if (left.token == "num") {
                 result.name =
-                        "\'" + right.name + "\'" + ": expected " + left.token + " value,not : " +
+                        "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (right.token == "num") {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected " + right.token + " value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             } else {
                 result.name =
-                        "\'" + left.name + "\'" + ": expected num value,not : " +
+                        "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
             }
         }
@@ -836,7 +843,7 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
         } else {
             result.token = "error";
             result.name =
-                    "\'" + left.name + "\'" + ": expected num value,not : " +
+                    "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                     left.token;
         }
     } else if (op == "+") {
@@ -846,7 +853,7 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
         } else {
             result.token = "error";
             result.name =
-                    "\'" + left.name + "\'" + ": expected num value,not : " +
+                    "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                     left.token;
         }
     } else if (op == "!") {
@@ -858,13 +865,13 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
             } else {
                 result.token = "error";
                 result.name =
-                        "\'" + left.name + "\'" + ": unknown identifier ";
+                        "expressionError: unknown identifier '" + left.name  + "'";
             }
         } else {
             result.token = "error";
             result.name =
-                    "\'" + left.name + "\'" + ": expected bool value,not : " +
-                    left.token;
+                    "expressionError: '" + left.name +"' expected bool value,not '" +
+                    left.token + "'";
         }
     }
     return result;
@@ -896,12 +903,13 @@ long GXAnalyze::getValue(string expression, void *source) {
     //释放s的内存空间
     delete[]input;
     result = result + "#";
-    long Res = check(result, array, this, source);
+    long Res = check(result, array, this, source, expression);
     array.clear();
     return Res;
 }
 
-long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source) {
+long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source,
+                      string expression) {
     GXValue *pointer;
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     string temp = "\0"; //需要分析的语句
@@ -1071,7 +1079,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             delete[] symbolStack;
                             delete[] valueStack;
                             delete[] paramsStack;
-                            analyze->throwError("expression error");
+                            analyze->throwError("expressionError: expression '"+expression+"' missing calculation element");
                             return 0L;
                         }
                         t2 = valueStack[valueSize - 1];
@@ -1170,7 +1178,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                 delete[] symbolStack;
                                 delete[] valueStack;
                                 delete[] paramsStack;
-                                analyze->throwError("expression error");
+                                analyze->throwError("expressionError: wrong function expression");
                                 return 0L;
                             }
                         } else {
@@ -1191,7 +1199,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             delete[] symbolStack;
                             delete[] valueStack;
                             delete[] paramsStack;
-                            analyze->throwError("expression error");
+                            analyze->throwError("expressionError: expression has 0 value after operator, but must have 1 value");
                             return 0L;
                         }
                         t1 = valueStack[valueSize - 1];
@@ -1219,11 +1227,17 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 ++symbolSize;
             }
         } else {
+            if (valueStep <= 0) {
+                valueStep = 1;
+            }
+            string value = array[valueStep - 1].name;
             delete[] statusStack;
             delete[] symbolStack;
             delete[] valueStack;
             delete[] paramsStack;
-            analyze->throwError("expression error");
+            analyze->throwError(
+                    "expressionError: unexpected identifier '" + value + "' in expression '" +
+                    expression + "'");
             return 0L;
         }
     }

@@ -700,7 +700,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = left.name + right.name;
         } else {
             if (left.token == "num" && right.token == "string") {
-                if (left.name.find('.')) {
+                if (left.name.find('.') != -1) {
                     regex e("0+?$");
                     regex e2("[.]$");
                     left.name = regex_replace(left.name, e, "");
@@ -709,7 +709,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = left.name + right.name;
                 result.token = "string";
             } else if (right.token == "num" && left.token == "string") {
-                if (right.name.find('.')) {
+                if (right.name.find('.') != -1) {
                     regex e("0+?$");
                     regex e2("[.]$");
                     right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
@@ -941,7 +941,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (valueStack[0].token == "num") {
-                if (valueStack[0].name.find('.')) {
+                if (valueStack[0].name.find('.') != -1) {
                     regex e("0+?$");
                     regex e2("[.]$");
                     valueStack[0].name = regex_replace(valueStack[0].name, e, "");

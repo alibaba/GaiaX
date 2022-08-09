@@ -684,6 +684,63 @@ class GXComponentGridTest : GXBaseTest() {
     }
 
     @Test
+    fun template_grid_height_auto_different_data_youku_version() {
+
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
+
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT) {
+                    if (params.value == false) {
+                        return true
+                    }
+                }
+                return null
+            }
+        })
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_height_auto_different_data"
+        )
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject())
+                }
+            })
+        )
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                    this.add(JSONObject())
+                }
+            })
+        )
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(200F.dpToPx(), rootView.height())
+    }
+
+    @Test
     fun template_grid_width_100px() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -1195,7 +1252,7 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(
             Color.parseColor("#e4e4e4"),
-            (rootView.background as? GradientDrawable)?.colors?.get(0)
+            (rootView?.background as? GradientDrawable)?.colors?.get(0)
         )
     }
 

@@ -123,7 +123,7 @@ class GXTemplateContext private constructor(
             )
         }
 
-        fun getContext(targetView: View): GXTemplateContext? {
+        fun getContext(targetView: View?): GXTemplateContext? {
             if (targetView is GXIRootView) {
                 return targetView.getTemplateContext()
             }

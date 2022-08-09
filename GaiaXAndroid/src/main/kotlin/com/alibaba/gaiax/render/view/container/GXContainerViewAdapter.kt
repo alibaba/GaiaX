@@ -104,14 +104,14 @@ class GXContainerViewAdapter(
                 containerData
             )
         } else {
-            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout ?: run {
+            gxNode.multiTypeItemComputeCache?.get(childTemplateItem) ?: run {
                 // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
                 GXNodeUtils.computeContainerSizeByItemTemplate(
                     gxTemplateContext,
                     gxNode,
                     containerData
                 )
-                gxNode.multiTypeItemComputeCache?.get(childTemplateItem)?.itemLayout
+                gxNode.multiTypeItemComputeCache?.get(childTemplateItem)
             }
         }
 

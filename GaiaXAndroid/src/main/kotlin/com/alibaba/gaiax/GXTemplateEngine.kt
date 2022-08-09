@@ -495,14 +495,21 @@ class GXTemplateEngine {
     /**
      * To bind template data
      *
-     * @param view The root view
+     * @param gxView The root view
      * @param gxTemplateData The template data
      * @param gxMeasureSize The template measure size, it look like a viewport of draw system, use to sure a size of template' view.
      * @throws IllegalArgumentException
      */
-    fun bindData(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
+    fun bindData(
+        gxView: View?,
+        gxTemplateData: GXTemplateData,
+        gxMeasureSize: GXMeasureSize? = null
+    ) {
         try {
-            internalBindData(view, gxTemplateData, gxMeasureSize)
+            if (gxView == null) {
+                throw IllegalArgumentException("view is null")
+            }
+            internalBindData(gxView, gxTemplateData, gxMeasureSize)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
@@ -673,7 +680,7 @@ class GXTemplateEngine {
      * Get template View
      * @suppress
      */
-    fun getGXViewById(targetView: View, id: String): View? {
+    fun getGXViewById(targetView: View?, id: String): View? {
         GXTemplateContext.getContext(targetView)?.let { context ->
             return context.rootNode?.getGXViewById(id)
         }
@@ -685,7 +692,7 @@ class GXTemplateEngine {
      * @suppress
      * @hide
      */
-    fun getGXNodeById(targetView: View, id: String): GXNode? {
+    fun getGXNodeById(targetView: View?, id: String): GXNode? {
         GXTemplateContext.getContext(targetView)?.let { context ->
             return context.rootNode?.getGXNodeById(id)
         }

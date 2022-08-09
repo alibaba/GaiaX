@@ -124,8 +124,8 @@ data class GXStretchNode(
             val finalGridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalGridConfig is null")
 
-            var isComputeContainerHeight =
-                finalGridConfig.isVertical && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+            var isComputeContainerHeight = finalGridConfig.isVertical &&
+                    flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
             // 对计算结果进行处理
             GXRegisterCenter

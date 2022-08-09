@@ -1437,8 +1437,14 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals((120F.dpToPx() - 100F.dpToPx())/2, rootView.child(0).child(0).top.toFloat())
-        Assert.assertEquals((120F.dpToPx() - 100F.dpToPx())/2+100F.dpToPx(), rootView.child(0).child(0).bottom.toFloat())
+        Assert.assertEquals(
+            (120F.dpToPx() - 100F.dpToPx()) / 2,
+            rootView.child(0).child(0).top.toFloat()
+        )
+        Assert.assertEquals(
+            (120F.dpToPx() - 100F.dpToPx()) / 2 + 100F.dpToPx(),
+            rootView.child(0).child(0).bottom.toFloat()
+        )
     }
 
     @Test
@@ -1517,7 +1523,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             Color.parseColor("#e4e4e4"),
-            (rootView.background as? GradientDrawable)?.colors?.get(0)
+            (rootView?.background as? GradientDrawable)?.colors?.get(0)
         )
     }
 

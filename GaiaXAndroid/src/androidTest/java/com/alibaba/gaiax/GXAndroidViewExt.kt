@@ -25,48 +25,48 @@ import android.widget.TextView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
-fun View.x(): Float {
-    return (this.layoutParams as? AbsoluteLayout.LayoutParams)?.x?.toFloat() ?: 0F
+fun View?.x(): Float {
+    return (this?.layoutParams as? AbsoluteLayout.LayoutParams)?.x?.toFloat() ?: 0F
 }
 
-fun View.y(): Float {
-    return (this.layoutParams as? AbsoluteLayout.LayoutParams)?.y?.toFloat() ?: 0F
+fun View?.y(): Float {
+    return (this?.layoutParams as? AbsoluteLayout.LayoutParams)?.y?.toFloat() ?: 0F
 }
 
-fun View.width(): Float {
-    return this.layoutParams.width.toFloat()
+fun View?.width(): Float {
+    return this?.layoutParams?.width?.toFloat() ?: 0F
 }
 
-fun View.height(): Float {
-    return this.layoutParams.height.toFloat()
+fun View?.height(): Float {
+    return this?.layoutParams?.height?.toFloat() ?: 0F
 }
 
-fun View.lineHeight(): Float {
+fun View?.lineHeight(): Float {
     return (this as TextView).lineHeight.toFloat()
 }
 
-fun View.child(index: Int): View {
+fun View?.child(index: Int): View {
     if (this is ViewGroup) {
         return getChildAt(index)
     }
     throw IllegalArgumentException("Not ViewGroup")
 }
 
-fun <T> View.child(index: Int): T {
+fun <T> View?.child(index: Int): T {
     if (this is ViewGroup) {
         return this.getChildAt(index) as T
     }
     throw IllegalArgumentException("Not ViewGroup")
 }
 
-fun View.childCount(): Int {
+fun View?.childCount(): Int {
     if (this is ViewGroup) {
         return this.childCount
     }
     return 0
 }
 
-fun View.executeRecyclerView() {
+fun View?.executeRecyclerView() {
     if (this is GXContainer) {
         this.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.AT_MOST)
         this.layout(0, 0, 1080F.dpToPx().toInt(), 1080F.dpToPx().toInt())

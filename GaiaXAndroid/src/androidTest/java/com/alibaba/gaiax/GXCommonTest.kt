@@ -114,8 +114,8 @@ class GXCommonTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(true, rootView.background is GradientDrawable)
-        Assert.assertEquals(Color.RED, (rootView.background as GradientDrawable).colors?.get(0))
+        Assert.assertEquals(true, rootView?.background is GradientDrawable)
+        Assert.assertEquals(Color.RED, (rootView?.background as GradientDrawable).colors?.get(0))
     }
 
     @Test

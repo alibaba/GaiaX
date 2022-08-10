@@ -41,6 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GXFlowLayout : UICollectionViewFlowLayout
 
+@property (nonatomic, strong) NSString *gravity;
+
+@property (nonatomic, assign) CGFloat containerHeight;
+
 @property (nonatomic, weak) id <GXFlowLayoutDelegate> delegate;
 
 @end

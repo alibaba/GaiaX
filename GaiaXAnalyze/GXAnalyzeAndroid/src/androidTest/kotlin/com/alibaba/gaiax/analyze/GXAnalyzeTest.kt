@@ -78,6 +78,18 @@ class GXAnalyzeTest {
     }
 
     @Test
+    fun num_test(){
+        Assert.assertEquals(10000f, instance.getResult("10000", testData))
+        Assert.assertEquals(10f, instance.getResult("10.000", testData))
+        Assert.assertEquals(100f, instance.getResult("100.00", testData))
+        Assert.assertEquals(1000f, instance.getResult("1000.0", testData))
+        Assert.assertEquals(1001f, instance.getResult("1001.0", testData))
+        Assert.assertEquals(1111f, instance.getResult("1111", testData))
+        Assert.assertEquals(11110f, instance.getResult("11110", testData))
+        Assert.assertEquals(20000f, instance.getResult("10000+10000", testData))
+    }
+
+    @Test
     fun function_test() {
         Assert.assertEquals(4f, instance.getResult("size('1234')", testData))
         Assert.assertEquals(0f, instance.getResult("size(\$data.map)", testData))

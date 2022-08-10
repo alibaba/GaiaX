@@ -58,6 +58,7 @@
         self.associatedView = view;
         //支持渐变背景
         self.isSupportGradientBgColor = YES;
+        self.isSupportShadow = YES;
         //设置通知
         if (self.animation) {
             view.userInteractionEnabled = _userEnable;
@@ -87,7 +88,7 @@
     [self setupCornerRadius:view];
     
     //设置阴影
-    [self setupShadow:view];
+//    [self setupShadow:view];
 }
 
 

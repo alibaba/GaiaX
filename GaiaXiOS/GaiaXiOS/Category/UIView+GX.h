@@ -55,9 +55,6 @@ NS_ASSUME_NONNULL_BEGIN
 //获取view对应的vc
 - (UIViewController *)gx_viewController;
 
-//简单设置阴影
-- (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius;
-
 //处理手势
 - (void)gx_handleGesture:(UIGestureRecognizer *)gesture;
 
@@ -96,6 +93,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @end
+
+
+@interface UIView (GXShadow)
+
+//阴影
+@property(nonatomic, strong, nullable) CAShapeLayer *shadowLayer;
+
+//简单设置阴影
+- (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius;
+
+
+@end
+
+
 
 
 NS_ASSUME_NONNULL_END

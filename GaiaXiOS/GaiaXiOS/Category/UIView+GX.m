@@ -41,6 +41,8 @@ static const void *kGXGradientImageKey = &kGXGradientImageKey;
 static const void *kGXGradientLayerKey = &kGXGradientLayerKey;
 //渐变string
 static const void *kGXLinearGradientKey = &kGXLinearGradientKey;
+//阴影
+static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
 
 
 @implementation UIView (GX)
@@ -136,17 +138,6 @@ static const void *kGXLinearGradientKey = &kGXLinearGradientKey;
         }
     }
     return nil;
-}
-
-- (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius{
-    //设置阴影path
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.bounds];
-    self.layer.shadowPath = path.CGPath;
-    //设置阴影属性
-    self.layer.shadowColor = color.CGColor;
-    self.layer.shadowRadius = radius;
-    self.layer.shadowOffset = offset;
-    self.layer.shadowOpacity = 1;
 }
 
 //处理手势
@@ -259,5 +250,57 @@ static const void *kGXLinearGradientKey = &kGXLinearGradientKey;
     [GXCornerRadiusHelper setCornerRadius:radius borderWidth:borderWidth borderColor:borderColor targetView:self];
 }
 
+@end
+
+
+#pragma mark - GaiaXShadow
+
+@implementation UIView (GXShadow)
+
+//阴影
+- (void)setShadowLayer:(CAShapeLayer *)shadowLayer{
+    objc_setAssociatedObject(self, &kGaiaShadowLayerKey, shadowLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CAShapeLayer *)shadowLayer{
+    CAShapeLayer *layer = objc_getAssociatedObject(self, &kGaiaShadowLayerKey);
+    return layer;
+}
+
+//简单设置阴影
+- (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius{
+    //内部阴影
+    if (self.superview != nil) {
+        //shadowLayer
+        CAShapeLayer *shadowLayer = self.shadowLayer;
+        if (shadowLayer == nil) {
+            shadowLayer = [CAShapeLayer layer];
+            shadowLayer.fillRule = kCAFillRuleEvenOdd;
+            shadowLayer.shadowOpacity = 1;
+            self.shadowLayer = shadowLayer;
+        }
+        
+        //获取path
+        CGPathRef path = nil;
+        if (self.layer.mask) {
+            path = [((CAShapeLayer *)self.layer.mask) path];
+        } else {
+            path = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:self.layer.cornerRadius].CGPath;
+        }
+        shadowLayer.fillColor = color.CGColor;
+        shadowLayer.frame = self.frame;
+        shadowLayer.path = path;
+        shadowLayer.shadowRadius = radius;
+        shadowLayer.shadowColor = color.CGColor;
+        shadowLayer.shadowOffset = offset;
+        
+        //添加阴影
+        [self.layer.superlayer insertSublayer:shadowLayer below:self.layer];
+    }
+}
 
 @end
+
+
+
+

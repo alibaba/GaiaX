@@ -42,6 +42,8 @@
 //数据源
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *items;
+//横向模式下坑位位置
+@property (nonatomic, strong) NSString *gravity;
 //坑位Size数组
 @property (nonatomic, strong) NSMutableArray *sizeValues;
 //坑位的复用标识
@@ -142,6 +144,12 @@
     
     //刷新数据
     GXScrollView *scrollView = (GXScrollView *)self.associatedView;
+    //处理坑位居中模式
+    if (self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+        GXFlowLayout *flowLayout = (GXFlowLayout *)scrollView.collectionViewLayout;
+        flowLayout.gravity = self.gravity;
+        flowLayout.containerHeight = _containerHeight;
+    }
     [scrollView reloadData];
 }
 
@@ -152,6 +160,12 @@
     
     //更新普通属性
     if (!isCalculate) {
+        //gravity
+        NSString *gravity = [extend gx_stringForKey:@"gravity"];
+        if (gravity.length) {
+            self.gravity = gravity;
+        }
+        //style
         [self updateNormalStyle:extend isMark:isMark];
     }
     
@@ -473,6 +487,9 @@
     //item-spacing
     NSString *itemSpacing = [viewInfo gx_stringForKey:@"item-spacing"];
     self.itemSpacing = [GXStyleHelper converSimpletValue:itemSpacing];
+    
+    //gravity
+    self.gravity = [viewInfo gx_stringForKey:@"gravity"];
     
     //edge-insets
     //self.contentInset = UIEdgeInsetsFromString(edgeInsets);(为了支持DesignToken)

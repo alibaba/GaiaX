@@ -55,6 +55,8 @@ open class GXView : AbsoluteLayout,
         defStyleAttr
     )
 
+    private var overflow: Boolean = false
+
     private var gxTemplateContext: GXTemplateContext? = null
 
     override fun setTemplateContext(gxContext: GXTemplateContext) {
@@ -97,7 +99,7 @@ open class GXView : AbsoluteLayout,
             val tr = radius[2]
             val bl = radius[4]
             val br = radius[6]
-            if (tl == tr && tr == bl && bl == br) {
+            if (tl == tr && tr == bl && bl == br && tl > 0) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {

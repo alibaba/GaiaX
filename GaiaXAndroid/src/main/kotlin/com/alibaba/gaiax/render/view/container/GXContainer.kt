@@ -69,14 +69,16 @@ open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
             val tr = radius[2]
             val bl = radius[4]
             val br = radius[6]
-            if (tl == tr && tr == bl && bl == br) {
-                this.clipToOutline = true
-                this.outlineProvider = object : ViewOutlineProvider() {
-                    override fun getOutline(view: View, outline: Outline) {
-                        if (alpha >= 0.0f) {
-                            outline.alpha = alpha
+            if (tl == tr && tr == bl && bl == br && tl > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    this.clipToOutline = true
+                    this.outlineProvider = object : ViewOutlineProvider() {
+                        override fun getOutline(view: View, outline: Outline) {
+                            if (alpha >= 0.0f) {
+                                outline.alpha = alpha
+                            }
+                            outline.setRoundRect(0, 0, view.width, view.height, tl)
                         }
-                        outline.setRoundRect(0, 0, view.width, view.height, tl)
                     }
                 }
             }

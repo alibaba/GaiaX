@@ -77,7 +77,14 @@
         
         if (self.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
             //给cell赋值新的frame
-            attributes.frame = CGRectMake(tmpOffsetX + self.minimumInteritemSpacing * i, tmpOffsetY, itemSize.width, itemSize.height);
+            CGFloat originalY = tmpOffsetY;
+            CGFloat itemHeight = itemSize.height;
+            if ([self.gravity isEqualToString:@"center"]) {
+                originalY = ((self.containerHeight - (tmpOffsetY + sectionInset.bottom)) - itemHeight) / 2.0 + tmpOffsetY;
+            } else if ([self.gravity isEqualToString:@"bottom"]){
+                originalY = self.containerHeight - (itemHeight + sectionInset.bottom);
+            }
+            attributes.frame = CGRectMake(tmpOffsetX + self.minimumInteritemSpacing * i, originalY, itemSize.width, itemHeight);
             tmpOffsetX += itemSize.width;
             //计算offsetX
             if (i == count - 1) {

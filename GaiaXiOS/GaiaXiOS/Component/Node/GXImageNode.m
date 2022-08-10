@@ -61,6 +61,7 @@
         self.associatedView = view;
         //支持渐变背景
         self.isSupportGradientBgColor = YES;
+        self.isSupportShadow = YES;
     }
     return view;
 }
@@ -86,13 +87,13 @@
     imageView.alpha = self.opacity;
     imageView.contentMode = self.contentMode;
     imageView.clipsToBounds = self.clipsToBounds;
-    
-    //设置阴影
-    [self setupShadow:imageView];
-    
+        
     //设置圆角
     [self setupCornerRadius:imageView];
     
+    //设置阴影
+//    [self setupShadow:imageView];
+
     //创建渐变背景
     if (self.linearGradient) {
         [self setupGradientBackground:imageView];

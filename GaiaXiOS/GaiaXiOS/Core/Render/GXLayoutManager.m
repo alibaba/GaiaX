@@ -56,28 +56,22 @@
             rootNode = [self.creator creatNodeTreeWithTemplateItem:templateItem context:ctx];
             if (rootNode) {
                 [self.templateCache gx_setObject:rootNode forKey:templateKey];
+                //减少遍历赋值次数，只取最外层,进行返回
+                GXLayout *layout = [self computeLayout:ctx];
+                rootNode.frame = CGRectMake(layout.x, layout.y, layout.width, layout.height);
+                size = CGSizeMake(layout.width, layout.height);
+                return size;
             }
         }
         
         //通过节点计算size
         if (rootNode) {
             GXTemplateContext *ctx = rootNode.templateContext;
-            NSString *preMeasureSizeStr = NSStringFromCGSize(ctx.measureSize);
-            NSString *measureSizeStr = NSStringFromCGSize(measureSize);
             //判断measureSize是否一致
-            if ([preMeasureSizeStr isEqualToString:measureSizeStr]) {
+            if (CGSizeEqualToSize(measureSize, ctx.measureSize)) {
                 //获取layout，如果已经存在直接读取，否则计算
-                if (CGSizeEqualToSize(rootNode.frame.size, CGSizeZero)) {
-                    //计算size
-                    GXLayout *layout = [self computeLayout:ctx];
-                    rootNode.frame = CGRectMake(layout.x, layout.y, layout.width, layout.height);
-                    size = CGSizeMake(layout.width, layout.height);
-                    
-                } else {
-                    //读取size
-                    size = rootNode.frame.size;
-                }
-                
+                size = rootNode.frame.size;
+
             } else {
                 //更新measureSize
                 ctx.measureSize = measureSize;
@@ -129,7 +123,7 @@
             
             //文字二次更新
             if (ctx.textNodes.count) {
-                [ctx.renderManager computeAndApplyLayout:ctx];
+                [self computeAndApplyLayout:ctx];
                 for (GXTextNode *textNode in ctx.textNodes) {
                     [textNode updateFitContentLayout];
                 }

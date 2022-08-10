@@ -30,10 +30,7 @@ import android.support.v7.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.basic.GXIImageView
-import com.alibaba.gaiax.render.view.basic.GXIconFont
-import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.basic.GXView
+import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
@@ -143,10 +140,43 @@ fun View.setOpacity(opacity: Float?) {
  * @suppress
  */
 fun View.setOverflow(overflow: Boolean?) {
-    if (this is ViewGroup) {
-        overflow?.let { this.clipChildren = it }
+    overflow?.let {
+        val view = this
+        if (view is ViewGroup) {
+            view.clipChildren = false
+            view.post {
+
+                // 给父节点设置属性
+                (view.parent as? ViewGroup)?.clipChildren = overflow
+
+                // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
+                if (view is GXIRootView && isContainShadowLayout(view)) {
+                    overflowOnParents(view, overflow)
+                }
+            }
+        }
     }
 }
+
+private fun overflowOnParents(v: View, overflow: Boolean) {
+    val viewParent = v.parent ?: return
+    if (viewParent is ViewGroup) {
+        viewParent.clipChildren = overflow
+    }
+    if (viewParent is View) {
+        overflowOnParents(viewParent as View, overflow)
+    }
+}
+
+private fun isContainShadowLayout(view: ViewGroup): Boolean {
+    for (index in 0..view.childCount) {
+        if (view.getChildAt(index) is GXShadowLayout) {
+            return true
+        }
+    }
+    return false
+}
+
 
 /**
  * @suppress

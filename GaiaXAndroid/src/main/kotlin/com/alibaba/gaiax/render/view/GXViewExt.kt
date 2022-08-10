@@ -143,17 +143,16 @@ fun View.setOverflow(overflow: Boolean?) {
     overflow?.let {
         val view = this
         if (view is ViewGroup) {
-            // 如果包含了阴影，那么当前层级需要始终设置不裁剪，overflow的目标应该是父层级
-            // 和iOS效果一致
-            if (isContainShadowLayout(view)) {
-                view.clipChildren = false
-                view.post {
+            view.clipChildren = false
+            view.post {
+
+                // 给父节点设置属性
+                (view.parent as? ViewGroup)?.clipChildren = overflow
+
+                // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
+                if (view is GXIRootView && isContainShadowLayout(view)) {
                     overflowOnParents(view, overflow)
                 }
-            }
-            // 如果不包含阴影，那么overflow的目标就是自己
-            else {
-                view.clipChildren = overflow
             }
         }
     }
@@ -163,7 +162,6 @@ private fun overflowOnParents(v: View, overflow: Boolean) {
     val viewParent = v.parent ?: return
     if (viewParent is ViewGroup) {
         viewParent.clipChildren = overflow
-        viewParent.clipToPadding = overflow
     }
     if (viewParent is View) {
         overflowOnParents(viewParent as View, overflow)

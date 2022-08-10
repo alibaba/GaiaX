@@ -5,9 +5,10 @@ import GXTemplate from "./GXTemplate";
 
 class GXTemplateInfoSource implements GXIExtensionTemplateInfoSource {
 
-    // private dataCache = new Map<string, Map<string, GXTemplateInfo>>();
+    private dataCache = new Map<string, Map<string, GXTemplateInfo>>();
 
     getTemplateInfo(templateItem: GXTemplateItem): GXTemplateInfo {
+        // TODO: GXTemplateInfo缓存逻辑
         return GXTemplateInfo.createByGXTemplateItem(templateItem);
     }
 

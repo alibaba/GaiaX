@@ -10,6 +10,7 @@ export class GXMeasureSize {
 }
 
 export class GXTemplateData {
+    // JSON Data
     templateData: any;
 }
 

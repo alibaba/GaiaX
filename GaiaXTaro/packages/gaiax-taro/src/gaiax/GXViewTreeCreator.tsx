@@ -272,7 +272,7 @@ export default class GXViewTreeCreator {
             }
         }
 
-        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propChildArray={childArray} />;
+        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} >{childArray}</GXView>;
     }
 
     private createOtherNode(

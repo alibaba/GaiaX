@@ -8,6 +8,7 @@ import GXTemplateInfo from "./GXTemplateInfo";
 import { GXJSONArray, GXJSONObject } from "./GXJson";
 import { GXTemplateItem } from "./GXTemplateEngine";
 import GXView from "./components/view/GXView";
+import GXImage from "./components/image/GXImage";
 
 export default class GXViewTreeCreator {
 
@@ -239,7 +240,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <View style={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} />;
+        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} />;
     }
 
     private createImageNode(
@@ -250,7 +251,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <Image style={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} src={data.value} />;
+        gxNode.gxView = <GXImage propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
     }
 
     private createIconFontNode(

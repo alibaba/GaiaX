@@ -34,14 +34,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL clipsToBounds;
 // 边框颜色, 默认nil
 @property (nonatomic, strong) UIColor *borderColor;
-// 是否支持渐变背景
-@property (nonatomic) BOOL isSupportGradientBgColor;
 // 背景颜色, 默认nil
 @property (nonatomic, strong) UIColor *backgroundColor;
-//阴影的属性
-@property (nonatomic, strong, nullable) NSString *boxShadow;
+
+// 是否支持渐变背景
+@property (nonatomic) BOOL isSupportGradientBgColor;
 // 渐变背景, 优先级高于backgroundColor
 @property (nonatomic, strong, nullable) NSString *linearGradient;
+
+// 是否阴影
+@property (nonatomic) BOOL isSupportShadow;
+//阴影的属性
+@property (nonatomic, strong, nullable) NSString *boxShadow;
 
 
 //更新样式属性，不影响布局

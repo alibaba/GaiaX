@@ -38,6 +38,7 @@
         self.associatedView = view;
         //支持渐变背景
         self.isSupportGradientBgColor = YES;
+        self.isSupportShadow = YES;
     }
     return view;
 }
@@ -73,7 +74,7 @@
     [self setupCornerRadius:view];
     
     //设置阴影
-    [self setupShadow:view];
+//    [self setupShadow:view];
 }
 
 

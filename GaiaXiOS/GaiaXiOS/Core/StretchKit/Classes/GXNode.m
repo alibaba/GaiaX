@@ -21,9 +21,10 @@
 #import "GXUtils.h"
 #import "UIView+GX.h"
 #import "GXStretch.h"
-#import "GXFunctionDef.h"
+#import "GXBaseNode.h"
 #import "GXCommonDef.h"
 #import "GXDataParser.h"
+#import "GXFunctionDef.h"
 #import <YYText/YYText.h>
 #import "GXTemplateItem.h"
 #import "NSDictionary+GX.h"
@@ -236,16 +237,11 @@
     //默认为nil
     UIView *view = nil;
     //扁平化处理
-    if (TheGXTemplateEngine.isNeedFlat) {
-        if (!self.isFlat) {
-            //如果当前节点未被拍平，则创建
-            view = [self creatView];
-            [self renderView:view];
-        } else {
-            //如果当前节点被拍平，则获取父节点的view
-            view = [self superView];
-        }
+    if (TheGXTemplateEngine.isNeedFlat && self.isFlat) {
+        //如果当前节点被拍平，则获取父节点的view
+        view = [self superView];
     } else {
+        //如果当前节点未被拍平，则创建
         view = [self creatView];
         [self renderView:view];
     }
@@ -257,6 +253,9 @@
         UIView *childView = [childNode applyView];
         if (childView && ![childView isDescendantOfView:view]) {
             [view addSubview:childView];
+            if ([(GXBaseNode *)childNode isSupportShadow]) {
+                [(GXBaseNode *)childNode setupShadow:childView];
+            }
         }
     }
     
@@ -285,17 +284,11 @@
             height = 0.5;
         }
         
-        if (TheGXTemplateEngine.isNeedFlat) {
+        if (TheGXTemplateEngine.isNeedFlat && self.parent.isFlat) {
             //如果有父节点 || 父节点被拍平
-            if (self.parent.isFlat) {
-                //父节点拍平
-                CGFloat x = layout.x + self.parent.frame.origin.x;
-                CGFloat y = layout.y + self.parent.frame.origin.y;
-                self.frame = CGRectMake(x, y, layout.width, height);
-            } else {
-                //父节点未拍平
-                self.frame = CGRectMake(layout.x, layout.y, layout.width, height);
-            }
+            CGFloat x = layout.x + self.parent.frame.origin.x;
+            CGFloat y = layout.y + self.parent.frame.origin.y;
+            self.frame = CGRectMake(x, y, layout.width, height);
         } else {
             //非拍平的情况
             self.frame = CGRectMake(layout.x, layout.y, layout.width, height);

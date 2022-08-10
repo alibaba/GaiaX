@@ -272,7 +272,7 @@ export default class GXViewTreeCreator {
             }
         }
 
-        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} >{childArray}</GXView>;
+        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} >{childArray}</GXView>;
     }
 
     private createOtherNode(
@@ -283,7 +283,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} />;
+        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} />;
     }
 
     private createImageNode(
@@ -294,7 +294,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXImage propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
+        gxNode.gxView = <GXImage propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} />;
     }
 
     private createIconFontNode(
@@ -305,7 +305,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXIconFontText propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
+        gxNode.gxView = <GXIconFontText propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} />;
     }
 
     private createRichTextNode(
@@ -316,7 +316,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXRichText propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
+        gxNode.gxView = <GXRichText propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} />;
     }
 
     private createTextNode(
@@ -327,6 +327,6 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXText propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
+        gxNode.gxView = <GXText propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} />;
     }
 }

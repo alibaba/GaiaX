@@ -7,13 +7,12 @@ export interface GXViewState {
 
 export interface GXViewProps {
   propStyle?: string | CSSProperties
-  propKey?: string | number
 }
 
 export default class GXView extends React.Component<GXViewProps, GXViewState> {
   render() {
-    const { propStyle, propKey } = this.props
-    return <View style={propStyle} key={propKey} >
+    const { propStyle } = this.props
+    return <View style={propStyle} >
       {this.props.children}
     </View>;
   }

@@ -29,13 +29,16 @@ export default class GXViewTreeCreator {
 
         const gxVisualTemplateNode = gxTemplateContext.gxVisualTemplateNode;
 
+        const gxVisualTemplateNodeData = null
+
         const gxRootNode = this.createNode(
             gxTemplateContext,
-            gxTemplateData,
             gxTemplateInfo,
             gxLayer,
+            gxTemplateData,
             gxParentNode,
-            gxVisualTemplateNode
+            gxVisualTemplateNode,
+            gxVisualTemplateNodeData
         );
 
         return <View style={gxRootStyle}>{gxRootNode.gxView}</View>;
@@ -43,11 +46,13 @@ export default class GXViewTreeCreator {
 
     private createNode(
         gxTemplateContext: GXTemplateContext,
-        gxTemplateData: GXJSONObject,
         gxTemplateInfo: GXTemplateInfo,
         gxLayer: GXJSONObject,
+        gxTemplateData: GXJSONObject,
         gxParentNode?: GXNode,
-        gxVisualTemplateNode?: GXTemplateNode
+        gxVisualTemplateNode?: GXTemplateNode,
+        gxVisualTemplateNodeData?: GXJSONObject,
+
     ): GXNode {
 
         const gxNode = GXNode.create();
@@ -75,7 +80,8 @@ export default class GXViewTreeCreator {
                 gxTemplateData,
                 gxLayer,
                 gxTemplateInfo,
-                gxParentNode
+                gxParentNode,
+                gxVisualTemplateNodeData
             );
         }
         // Text
@@ -135,12 +141,32 @@ export default class GXViewTreeCreator {
         gxTemplateInfo: GXTemplateInfo,
         gxParentNode: GXNode
     ) {
-        // gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, gxVisualTemplateNode, gxNode);
+        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
 
-        // case 'grid':
-        // return <View style={finalNodeStyle} key={gxLayer.id} />;
-        // case 'scroll':
-        // return <View style={finalNodeStyle} key={gxLayer.id} />;
+        if (gxNode.gxTemplateNode.isScrollType()) {
+            this.createScrollNode(
+                gxTemplateContext,
+                gxNode,
+                gxTemplateData,
+                gxParentNode
+            );
+        }
+        else if (gxNode.gxTemplateNode.isGridType()) {
+            this.createGridNode(
+                gxTemplateContext,
+                gxNode,
+                gxTemplateData,
+                gxParentNode
+            );
+        }
+    }
+
+    private createGridNode(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject, gxParentNode: GXNode) {
+        throw new Error("Method not implemented.");
+    }
+
+    private createScrollNode(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject, gxParentNode: GXNode) {
+        throw new Error("Method not implemented.");
     }
 
     private createViewOrTemplateNode(
@@ -149,9 +175,10 @@ export default class GXViewTreeCreator {
         gxTemplateData: GXJSONObject,
         gxLayer: GXJSONObject,
         gxTemplateInfo: GXTemplateInfo,
-        gxParentNode: GXNode
+        gxParentNode: GXNode,
+        gxVisualTemplateNodeData?: GXJSONObject,
     ) {
-        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, gxVisualTemplateNodeData, gxParentNode);
 
         const childArray: ReactNode[] = [];
         const layers = gxLayer['layers'] as GXJSONArray;
@@ -197,16 +224,20 @@ export default class GXViewTreeCreator {
                     // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                     else {
 
-                        // 嵌套子模板的数据
+                        // 获取嵌套子模板的数据，会传给下一级模板当做数据源
                         const gxChildTemplateData = gxChildVisualTemplateNode.getDataValue(gxTemplateData);
+
+                        // 使用原有数据源作为虚拟节点的数据源
+                        const gxChildVisualTemplateNodeData = gxTemplateData;
 
                         const childNode = this.createNode(
                             gxTemplateContext,
-                            gxChildTemplateData,
                             gxChildTemplateInfo,
                             gxChildLayer,
+                            gxChildTemplateData,
                             gxNode,
-                            gxChildVisualTemplateNode
+                            gxChildVisualTemplateNode,
+                            gxChildVisualTemplateNodeData
                         );
 
                         gxNode?.gxChildren?.push(childNode);
@@ -218,9 +249,9 @@ export default class GXViewTreeCreator {
                 else {
                     const childNode = this.createNode(
                         gxTemplateContext,
-                        gxTemplateData,
                         gxTemplateInfo,
                         childLayer,
+                        gxTemplateData,
                         gxNode,
                         null
                     );

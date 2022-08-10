@@ -69,7 +69,8 @@ export default class GXViewTreeCreator {
                 gxTemplateData,
                 gxLayer,
                 gxTemplateInfo,
-                gxParentNode
+                gxParentNode,
+                gxVisualTemplateNodeData
             );
         }
         // View or Template
@@ -139,33 +140,41 @@ export default class GXViewTreeCreator {
         gxTemplateData: GXJSONObject,
         gxLayer: GXJSONObject,
         gxTemplateInfo: GXTemplateInfo,
-        gxParentNode: GXNode
+        gxParentNode: GXNode,
+        gxVisualTemplateNodeData?: GXJSONObject,
     ) {
-        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
+        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, gxVisualTemplateNodeData, gxParentNode);
 
         if (gxNode.gxTemplateNode.isScrollType()) {
             this.createScrollNode(
                 gxTemplateContext,
                 gxNode,
-                gxTemplateData,
-                gxParentNode
+                gxTemplateData
             );
         }
         else if (gxNode.gxTemplateNode.isGridType()) {
             this.createGridNode(
                 gxTemplateContext,
                 gxNode,
-                gxTemplateData,
-                gxParentNode
+                gxTemplateData
             );
         }
     }
 
-    private createGridNode(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject, gxParentNode: GXNode) {
+    private createGridNode(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxTemplateData: GXJSONObject
+    ) {
         throw new Error("Method not implemented.");
     }
 
-    private createScrollNode(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject, gxParentNode: GXNode) {
+    private createScrollNode(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxTemplateData: GXJSONObject
+    ) {
         throw new Error("Method not implemented.");
     }
 

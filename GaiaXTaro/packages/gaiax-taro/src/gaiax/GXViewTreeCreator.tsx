@@ -10,6 +10,7 @@ import { GXTemplateItem } from "./GXTemplateEngine";
 import GXView from "./components/view/GXView";
 import GXImage from "./components/image/GXImage";
 import GXText from "./components/text/GXText";
+import GXRichText from "./components/richtext/GXRichText";
 
 export default class GXViewTreeCreator {
 
@@ -274,7 +275,7 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <Text style={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId}> {data.value} </Text>;
+        gxNode.gxView = <GXRichText propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propDataValue={data.value} />;
     }
 
     private createTextNode(

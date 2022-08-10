@@ -295,7 +295,6 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
         shadowLayer.shadowOffset = offset;
         
         //添加阴影
-        self.layer.superlayer.masksToBounds = NO;
         [self.layer.superlayer insertSublayer:shadowLayer below:self.layer];
     }
 }

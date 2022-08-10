@@ -7,6 +7,7 @@ import GXCssConvertStyle from "./GXCssConvertStyle";
 import GXTemplateInfo from "./GXTemplateInfo";
 import { GXJSONArray, GXJSONObject } from "./GXJson";
 import { GXTemplateItem } from "./GXTemplateEngine";
+import GXView from "./components/view/GXView";
 
 export default class GXViewTreeCreator {
 
@@ -56,7 +57,10 @@ export default class GXViewTreeCreator {
             this.createContainerNode(
                 gxTemplateContext,
                 gxNode,
-                gxTemplateData
+                gxTemplateData,
+                gxLayer,
+                gxTemplateInfo,
+                gxParentNode
             );
         }
         // View or Template
@@ -122,7 +126,10 @@ export default class GXViewTreeCreator {
     private createContainerNode(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxTemplateData: GXJSONObject
+        gxTemplateData: GXJSONObject,
+        gxLayer: GXJSONObject,
+        gxTemplateInfo: GXTemplateInfo,
+        gxParentNode: GXNode
     ) {
         // gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, gxVisualTemplateNode, gxNode);
 
@@ -221,9 +228,7 @@ export default class GXViewTreeCreator {
             }
         }
 
-        gxNode.gxView = <View style={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId}>
-            {childArray}
-        </View>;
+        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} propKey={gxNode.gxId} propChildArray={childArray} />;
     }
 
     private createOtherNode(

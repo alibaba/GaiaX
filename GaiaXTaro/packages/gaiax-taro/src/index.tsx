@@ -1,7 +1,7 @@
 import { GXRegisterCenter } from './gaiax/GXRegisterCenter';
 import GXTemplateEngine from './gaiax/GXTemplateEngine';
 
-export { default as GXTemplateComponent } from './component/GXTemplateComponent';
+export { default as GXTemplateComponent } from './gaiax/components/root/GXTemplateComponent';
 export { default as GXTemplateEngine, GXTemplateData, GXMeasureSize, GXTemplateItem } from './gaiax/GXTemplateEngine';
 export { default as GXTemplateInfo } from './gaiax/GXTemplateInfo';
 export { GXIExtensionTemplateInfoSource, GXIExtensionTemplateSource } from './gaiax/GXRegisterCenter'

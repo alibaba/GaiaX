@@ -30,10 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.basic.GXIImageView
-import com.alibaba.gaiax.render.view.basic.GXIconFont
-import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.basic.GXView
+import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
@@ -143,10 +140,45 @@ fun View.setOpacity(opacity: Float?) {
  * @suppress
  */
 fun View.setOverflow(overflow: Boolean?) {
-    if (this is ViewGroup) {
-        overflow?.let { this.clipChildren = it }
+    overflow?.let {
+        val view = this
+        if (view is ViewGroup) {
+            // 如果包含了阴影，那么当前层级需要始终设置不裁剪，overflow的目标应该是父层级
+            // 和iOS效果一致
+            if (isContainShadowLayout(view)) {
+                view.clipChildren = false
+                view.post {
+                    overflowOnParents(view, overflow)
+                }
+            }
+            // 如果不包含阴影，那么overflow的目标就是自己
+            else {
+                view.clipChildren = overflow
+            }
+        }
     }
 }
+
+private fun overflowOnParents(v: View, overflow: Boolean) {
+    val viewParent = v.parent ?: return
+    if (viewParent is ViewGroup) {
+        viewParent.clipChildren = overflow
+        viewParent.clipToPadding = overflow
+    }
+    if (viewParent is View) {
+        overflowOnParents(viewParent as View, overflow)
+    }
+}
+
+private fun isContainShadowLayout(view: ViewGroup): Boolean {
+    for (index in 0..view.childCount) {
+        if (view.getChildAt(index) is GXShadowLayout) {
+            return true
+        }
+    }
+    return false
+}
+
 
 /**
  * @suppress

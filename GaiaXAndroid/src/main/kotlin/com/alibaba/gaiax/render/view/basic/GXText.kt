@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -135,13 +136,17 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
     override fun setRoundCornerRadius(radiusArray: FloatArray) {
         if (radiusArray[0] == radiusArray[2] && radiusArray[2] == radiusArray[4] && radiusArray[4] == radiusArray[6]) {
             val radius = radiusArray[0]
-            this.clipToOutline = radius > 0
-            this.outlineProvider = object : ViewOutlineProvider() {
-                override fun getOutline(view: View, outline: Outline) {
-                    if (alpha >= 0.0f) {
-                        outline.alpha = alpha
+            if (radius > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    this.clipToOutline = true
+                    this.outlineProvider = object : ViewOutlineProvider() {
+                        override fun getOutline(view: View, outline: Outline) {
+                            if (alpha >= 0.0f) {
+                                outline.alpha = alpha
+                            }
+                            outline.setRoundRect(0, 0, view.width, view.height, radius)
+                        }
                     }
-                    outline.setRoundRect(0, 0, view.width, view.height, radius)
                 }
             }
         }

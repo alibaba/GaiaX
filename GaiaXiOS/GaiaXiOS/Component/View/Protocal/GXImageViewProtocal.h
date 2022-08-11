@@ -43,7 +43,9 @@ typedef void(^GXImageCompletionBlock)(UIImage * _Nullable image, NSError * _Null
 - (void)gx_setLocalImage:(NSString *)name;
 
 //Load web image
-- (void)gx_setImageWithURL:(NSURL *)url placeholderImage:(nullable UIImage *)placeholder completed:(GXImageCompletionBlock)completedBlock;
+- (void)gx_setImageWithURLString:(NSString *)urlString
+                placeholderImage:(nullable UIImage *)placeholder
+                       completed:(GXImageCompletionBlock)completedBlock;
 
 @end
 

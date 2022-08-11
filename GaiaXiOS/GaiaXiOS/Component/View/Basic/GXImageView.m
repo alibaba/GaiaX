@@ -41,8 +41,11 @@
 }
 
 //网络图片
-- (void)gx_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder completed:(GXImageCompletionBlock)completedBlock{
-    [self sd_setImageWithURL:url
+- (void)gx_setImageWithURLString:(NSString *)urlString
+                placeholderImage:(UIImage *)placeholder
+                       completed:(GXImageCompletionBlock)completedBlock{
+    //urlstring是否需要encode
+    [self sd_setImageWithURL:[NSURL URLWithString:urlString]
             placeholderImage:placeholder
                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         //结果回调

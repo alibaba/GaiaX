@@ -65,7 +65,7 @@ struct FlexItem {
     /// 主轴方向上的初始大小减去内边距和边框尺寸
     inner_flex_basis: f32,
 
-    ///
+    /// 违规数量
     violation: f32,
 
     /// 不需要增长（grow）或压缩（shrink）
@@ -1530,27 +1530,29 @@ impl Forest {
 
                     let max_main = child.max_size.main(parent_node_dir);
 
-                    let clamped = child.target_size.main(parent_node_dir)
-                            .maybe_min(max_main)
-                            .maybe_max(min_main).max(0.0);
-                            
+                    let clamped =
+                        child.target_size.main(parent_node_dir).maybe_min(max_main).maybe_max(min_main).max(0.0);
+
                     child.violation = clamped - child.target_size.main(parent_node_dir);
 
-                    if (child_style.flex_direction == FlexDirection::Column
-                        || child_style.flex_direction == FlexDirection::ColumnReverse)
-                        && !child_style.flex_basis.is_defined()
-                        && !child_style.aspect_ratio.is_defined()
-                        && child_style.flex_shrink == 1.0
-                        && child_style.flex_grow == 1.0
-                    {
-                        // 在Column和Row相互嵌套且有复杂的自适应和压缩状态时
-                        // 需要特殊处理一些情况
-                        
-                    } else {
-                        child.target_size.set_main(parent_node_dir, clamped);
-                        let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
-                        child.outer_target_size.set_main(parent_node_dir, outer_main);
-                    }
+                    // if (child_style.flex_direction == FlexDirection::Column
+                    //     || child_style.flex_direction == FlexDirection::ColumnReverse)
+                    //     && !child_style.flex_basis.is_defined()
+                    //     && !child_style.aspect_ratio.is_defined()
+                    //     && child_style.flex_shrink == 1.0
+                    //     && child_style.flex_grow == 1.0
+                    // {
+                    //     // 在Column和Row相互嵌套且有复杂的自适应和压缩状态时
+                    //     // 需要特殊处理一些情况
+                    // } else {
+                    //     child.target_size.set_main(parent_node_dir, clamped);
+                    //     let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
+                    //     child.outer_target_size.set_main(parent_node_dir, outer_main);
+                    // }
+
+                    child.target_size.set_main(parent_node_dir, clamped);
+                    let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
+                    child.outer_target_size.set_main(parent_node_dir, outer_main);
 
                     acc + child.violation
                 });

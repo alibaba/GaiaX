@@ -19,6 +19,13 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fastpreview_emulator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fastpreview_emulator"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/normal_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

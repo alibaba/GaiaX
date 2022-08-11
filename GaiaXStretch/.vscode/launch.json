@@ -1,0 +1,310 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'gentest'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=gentest",
+                    "--package=gentest"
+                ],
+                "filter": {
+                    "name": "gentest",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'gentest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=gentest",
+                    "--package=gentest"
+                ],
+                "filter": {
+                    "name": "gentest",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'stretch'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "stretch",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'basic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=basic",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'basic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=basic",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "basic",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'gaiax_aspect_ratio'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=gaiax_aspect_ratio",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "gaiax_aspect_ratio",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'flex_direction_row_aspect_ratio'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=flex_direction_row_aspect_ratio",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "flex_direction_row_aspect_ratio",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'measure'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=measure",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "measure",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'root_constraints'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=root_constraints",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "root_constraints",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'fixtures'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=fixtures",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "fixtures",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'node'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=node",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "node",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'flex_direction_column_aspect_ratio'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=flex_direction_column_aspect_ratio",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "flex_direction_column_aspect_ratio",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'gaiax_flex_grow_and_flex_shrink'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=gaiax_flex_grow_and_flex_shrink",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "gaiax_flex_grow_and_flex_shrink",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'gaiax_yoga_aspect_ratio'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=gaiax_yoga_aspect_ratio",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "gaiax_yoga_aspect_ratio",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'generated'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=generated",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "generated",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug benchmark 'complex'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bench=complex",
+                    "--package=stretch"
+                ],
+                "filter": {
+                    "name": "complex",
+                    "kind": "bench"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

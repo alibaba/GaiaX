@@ -47,6 +47,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, GaiaXQRCodeActivity::class.java)
             launcher.launch(intent)
         }
+
+        findViewById<AppCompatButton>(R.id.fastpreview_emulator)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
+            intent.putExtra("GAIA_STUDIO_URL", "gaiax://gaiax/preview?url=ws://192.168.10.29:9001&id=yk-vip-peng-card-single&type=auto")
+            launcher.launch(intent)
+        }
+
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, NormalTemplateActivity::class.java)
             startActivity(intent)

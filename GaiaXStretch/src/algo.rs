@@ -1527,6 +1527,9 @@ impl Forest {
                     let child_node_target_size = child.target_size.map(|s| s.into());
 
                     let min_main = if parent_node_is_row && self.nodes[child_node].measure.is_none() {
+                       
+                        // 在Column和Row相互嵌套且有复杂的自适应和压缩状态时
+                        // 需要特殊处理一些情况
                         if (child_style.flex_direction == FlexDirection::Column
                             || child_style.flex_direction == FlexDirection::ColumnReverse)
                             && !child_style.flex_basis.is_defined()
@@ -1561,22 +1564,6 @@ impl Forest {
                         child.target_size.main(parent_node_dir).maybe_min(max_main).maybe_max(min_main).max(0.0);
 
                     child.violation = clamped - child.target_size.main(parent_node_dir);
-
-                    // TODO: 此处不能这么处理，会影响outer_target_size的计算逻辑，最终导致偏移量计算错误
-                    // if (child_style.flex_direction == FlexDirection::Column
-                    //     || child_style.flex_direction == FlexDirection::ColumnReverse)
-                    //     && !child_style.flex_basis.is_defined()
-                    //     && !child_style.aspect_ratio.is_defined()
-                    //     && child_style.flex_shrink == 1.0
-                    //     && child_style.flex_grow == 1.0
-                    // {
-                    //     // 在Column和Row相互嵌套且有复杂的自适应和压缩状态时
-                    //     // 需要特殊处理一些情况
-                    // } else {
-                    //     child.target_size.set_main(parent_node_dir, clamped);
-                    //     let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
-                    //     child.outer_target_size.set_main(parent_node_dir, outer_main);
-                    // }
 
                     child.target_size.set_main(parent_node_dir, clamped);
                     let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);

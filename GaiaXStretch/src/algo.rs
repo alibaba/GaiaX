@@ -83,6 +83,7 @@ struct FlexItem {
     target_size: Size<f32>,
 
     /// 结果外宽高
+    /// 使用flex项目的尺寸加上外边距，作为flex项目的外部尺寸
     outer_target_size: Size<f32>,
 
     ///
@@ -1259,12 +1260,16 @@ impl Forest {
                 _ => size,
             }
         });
+
+        //
         current_node_container_size.set_main(current_node_dir, container_size_value);
+
+        //
+        let container_inner_size =
+            current_node_container_size.main(current_node_dir) - current_node_padding_border.main(current_node_dir);
+
         // 设置flex项目行容器的主轴内部尺寸
-        current_node_inner_container_size.set_main(
-            current_node_dir,
-            current_node_container_size.main(current_node_dir) - current_node_padding_border.main(current_node_dir),
-        );
+        current_node_inner_container_size.set_main(current_node_dir, container_inner_size);
     }
 
     fn flex_lines_main_size(
@@ -1505,9 +1510,9 @@ impl Forest {
                     }
                 }
 
-                // d. Fix min/max violations. Clamp each non-frozen item’s target main size by its
-                //    used min and max main sizes and floor its content-box size at zero. If the
-                //    item’s target main size was made smaller by this, it’s a max violation.
+                // d. Fix min/max violations.
+                //    Clamp each non-frozen item’s target main size by its used min and max main sizes and floor its content-box size at zero.
+                //    If the item’s target main size was made smaller by this, it’s a max violation.
                 //    If the item’s target main size was made larger by this, it’s a min violation.
 
                 let total_violation = unfrozen.iter_mut().fold(0.0, |acc: f32, child: &mut &mut FlexItem| -> f32 {
@@ -1519,11 +1524,33 @@ impl Forest {
                     let child_node = child.node;
                     let child_style: Style = self.nodes[child_node].style;
 
+                    let child_node_target_size = child.target_size.map(|s| s.into());
+
                     let min_main = if parent_node_is_row && self.nodes[child_node].measure.is_none() {
-                        let child_size = self
-                            .compute_internal(child_node, Size::undefined(), parent_node_available_space, false)
-                            .size;
-                        child_size.width.maybe_min(child.size.width).maybe_max(child.min_size.width).into()
+                        if (child_style.flex_direction == FlexDirection::Column
+                            || child_style.flex_direction == FlexDirection::ColumnReverse)
+                            && !child_style.flex_basis.is_defined()
+                            && !child_style.aspect_ratio.is_defined()
+                            && child_style.flex_shrink == 1.0
+                            && child_style.flex_grow == 1.0
+                        {
+                            let child_size = self
+                                .compute_internal(
+                                    child_node,
+                                    child_node_target_size,
+                                    parent_node_available_space,
+                                    false,
+                                )
+                                .size;
+
+                            child_size.width.maybe_min(child.size.width).maybe_max(child.min_size.width).into()
+                        } else {
+                            let child_size = self
+                                .compute_internal(child_node, Size::undefined(), parent_node_available_space, false)
+                                .size;
+
+                            child_size.width.maybe_min(child.size.width).maybe_max(child.min_size.width).into()
+                        }
                     } else {
                         child.min_size.main(parent_node_dir)
                     };
@@ -1535,6 +1562,7 @@ impl Forest {
 
                     child.violation = clamped - child.target_size.main(parent_node_dir);
 
+                    // TODO: 此处不能这么处理，会影响outer_target_size的计算逻辑，最终导致偏移量计算错误
                     // if (child_style.flex_direction == FlexDirection::Column
                     //     || child_style.flex_direction == FlexDirection::ColumnReverse)
                     //     && !child_style.flex_basis.is_defined()
@@ -1607,14 +1635,16 @@ impl Forest {
                 .maybe_min(flex_item.size.main(parent_node_direction))
                 .into();
 
+            // flex项目经过最小尺寸和最大尺寸约束过后，就是猜测的内宽高
             let child_inner_main_size =
                 flex_item.flex_basis.maybe_max(min_main).maybe_min(flex_item.max_size.main(parent_node_direction));
-            // flex项目经过最小尺寸和最大尺寸约束过后，就是猜测的内宽高
+
             flex_item.hypothetical_inner_size.set_main(parent_node_direction, child_inner_main_size);
 
+            // flex项目的假定内宽高加上flex项目的外边距，就是猜测的外宽高
             let child_outer_main_size = flex_item.hypothetical_inner_size.main(parent_node_direction)
                 + flex_item.margin.main(parent_node_direction);
-            // flex项目的假定内宽高加上flex项目的外边距，就是猜测的外宽高
+
             flex_item.hypothetical_outer_size.set_main(parent_node_direction, child_outer_main_size);
         }
     }
@@ -1706,7 +1736,7 @@ impl Forest {
                     && child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Stretch {
                     parent_node_available_space.width
                 }
-                // 如果孩子宽度未定义 && 如果孩子的宽度已经定义 && 父布局是横向 && 孩子的样式alignSelf是Stretch && 孩子定义了比例系数
+                // 如果孩子宽度未定义 && 如果孩子的高度已经定义 && 父布局是横向 && 孩子的样式alignSelf是Stretch && 孩子定义了比例系数
                 // 需要使用高度和比例系数计算出宽度
                 // fix: aspect_ratio_multi_aspect_1
                 // fix: aspect_ratio_multi_aspect
@@ -1758,6 +1788,8 @@ impl Forest {
             // 准备好孩子节点的尺寸和孩子的可用空间之后，需要再进行一次计算，以便获取更准确的值。
             let child_size =
                 self.compute_internal(child.node, child_node_size, parent_node_available_space, false).size;
+
+            // 孩子的宽高结果值
             let child_flex_basis_result = child_size
                 .main(parent_node_direction)
                 .maybe_max(child.min_size.main(parent_node_direction))
@@ -1775,7 +1807,7 @@ impl Forest {
         current_node: NodeId,
         current_node_inner_size: Size<Number>,
     ) -> sys::Vec<FlexItem> {
-        let mut flex_items: sys::Vec<FlexItem> = self.children[current_node]
+        let flex_items: sys::Vec<FlexItem> = self.children[current_node]
             .iter()
             .map(|child| (child, &self.nodes[*child].style))
             .filter(|(_, style)| style.position_type != PositionType::Absolute)

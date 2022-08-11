@@ -144,16 +144,21 @@ fun View.setOverflow(overflow: Boolean?) {
         val view = this
         // 当前逻辑是为了保证双端的逻辑和效果一致性
         if (view is ViewGroup) {
-            view.clipChildren = false
-            view.post {
+            if (!overflow) {
+                view.clipChildren = false
+                view.post {
 
-                // 给父节点设置属性
-                (view.parent as? ViewGroup)?.clipChildren = overflow
+                    // 给父节点设置属性
+                    val viewGroup = view.parent as? ViewGroup
+                    viewGroup?.clipChildren = overflow
 
-                // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
-                if (view is GXIRootView && isContainShadowLayout(view)) {
-                    overflowOnParents(view, overflow)
+                    // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
+                    if (view is GXIRootView && isContainShadowLayout(view)) {
+                        overflowOnParents(view, overflow)
+                    }
                 }
+            } else {
+                view.clipChildren = overflow
             }
         }
     }
@@ -177,7 +182,6 @@ private fun isContainShadowLayout(view: ViewGroup): Boolean {
     }
     return false
 }
-
 
 /**
  * @suppress

@@ -106,7 +106,7 @@
     
     //更新display
     NSString *displayStr = [styleInfo gx_stringForKey:@"display"];
-    if (displayStr.length) {
+    if (displayStr) {
         // display发生变化，才更改布局
         Display display = [displayStr isEqualToString:@"none"] ? DisplayNone : DisplayFlex;
         if (display != self.style.styleModel.display) {
@@ -117,7 +117,7 @@
     
     //更新flex-grow
     NSString *flexGrowStr = [styleInfo gx_stringForKey:@"flex-grow"];
-    if (flexGrowStr.length) {
+    if (flexGrowStr) {
         CGFloat flexGrow = [flexGrowStr floatValue];
         if (flexGrow != self.style.styleModel.flexGrow) {
             self.style.styleModel.flexGrow = flexGrow;
@@ -127,7 +127,7 @@
     
     //更新justify-content
     NSString *justifyContent = [styleInfo gx_stringForKey:@"justify-content"];
-    if (justifyContent.length) {
+    if (justifyContent) {
         JustifyContent jc = [GXStyleHelper convertJustifyContent:justifyContent];
         if (self.style.styleModel.justifyContent != jc) {
             self.style.styleModel.justifyContent = jc;
@@ -137,7 +137,7 @@
     
     //更新aspect-ratio
     NSString *aspectRatioStr = [styleInfo gx_stringForKey:@"aspect-ratio"];
-    if (aspectRatioStr.length) {
+    if (aspectRatioStr) {
         CGFloat aspectRatio = [aspectRatioStr isEqualToString:@"null"] ? NAN : [aspectRatioStr floatValue];
         if (aspectRatio != self.style.styleModel.aspectRatio) {
             self.style.styleModel.aspectRatio = aspectRatio;
@@ -147,7 +147,7 @@
     
     //更新width
     NSString *widthStr = [styleInfo gx_stringForKey:@"width"];
-    if (widthStr.length) {
+    if (widthStr) {
         StretchStyleDimension width = [GXStyleHelper convertAutoValue:widthStr];
         StretchStyleDimension height = self.style.styleModel.size.height;
         StretchStyleSize newSize = (StretchStyleSize){
@@ -160,7 +160,7 @@
     
     //更新height
     NSString *heightStr = [styleInfo gx_stringForKey:@"height"];
-    if (heightStr.length) {
+    if (heightStr) {
         StretchStyleDimension height = [GXStyleHelper convertAutoValue:heightStr];
         StretchStyleDimension width = self.style.styleModel.size.width;
         StretchStyleSize newSize = (StretchStyleSize){
@@ -174,13 +174,13 @@
     //更新max-width/max-height
     NSString *maxWidthStr = [styleInfo gx_stringForKey:@"max-width"];
     NSString *maxHeightStr = [styleInfo gx_stringForKey:@"max-height"];
-    if (maxWidthStr.length || maxHeightStr.length) {
+    if (maxWidthStr || maxHeightStr) {
         StretchStyleDimension maxwidth = self.style.styleModel.maxSize.width;
-        if (maxWidthStr.length) {
+        if (maxWidthStr) {
             maxwidth = [GXStyleHelper convertAutoValue:maxWidthStr];
         }
         StretchStyleDimension maxHeight = self.style.styleModel.maxSize.height;
-        if (maxHeightStr.length) {
+        if (maxHeightStr) {
             maxHeight = [GXStyleHelper convertAutoValue:maxHeightStr];
         }
         StretchStyleSize newSize = (StretchStyleSize){
@@ -194,13 +194,13 @@
     //更新min-width/min-height
     NSString *minWidthStr = [styleInfo gx_stringForKey:@"min-width"];
     NSString *minHeightStr = [styleInfo gx_stringForKey:@"min-height"];
-    if (minWidthStr.length || minHeightStr.length) {
+    if (minWidthStr || minHeightStr) {
         StretchStyleDimension minwidth = self.style.styleModel.minSize.width;
-        if (minWidthStr.length) {
+        if (minWidthStr) {
             minwidth = [GXStyleHelper convertAutoValue:minWidthStr];
         }
         StretchStyleDimension minHeight = self.style.styleModel.minSize.height;
-        if (minHeightStr.length) {
+        if (minHeightStr) {
             minHeight = [GXStyleHelper convertAutoValue:minHeightStr];
         }
         StretchStyleSize newSize = (StretchStyleSize){
@@ -220,19 +220,19 @@
     if (leftStr || topStr || rightStr || bottomStr) {
         //返回margin
         StretchStyleRect position = self.style.styleModel.position;
-        if (topStr.length){
+        if (topStr){
             StretchStyleDimension top = [GXStyleHelper convertValue:topStr];
             position.top = top;
         }
-        if (leftStr.length){
+        if (leftStr){
             StretchStyleDimension left = [GXStyleHelper convertValue:leftStr];
             position.left = left;
         }
-        if (rightStr.length){
+        if (rightStr){
             StretchStyleDimension right = [GXStyleHelper convertValue:rightStr];
             position.right = right;
         }
-        if (bottomStr.length){
+        if (bottomStr){
             StretchStyleDimension bottom = [GXStyleHelper convertValue:bottomStr];
             position.bottom = bottom;
         }
@@ -250,19 +250,19 @@
     if (marginTopStr || marginLeftStr || marginRightStr || marginBottomStr) {
         //返回margin
         StretchStyleRect margin = self.style.styleModel.margin;
-        if (marginTopStr.length){
+        if (marginTopStr){
             StretchStyleDimension marginTop = [GXStyleHelper convertValue:marginTopStr];
             margin.top = marginTop;
         }
-        if (marginLeftStr.length){
+        if (marginLeftStr){
             StretchStyleDimension marginLeft = [GXStyleHelper convertValue:marginLeftStr];
             margin.left = marginLeft;
         }
-        if (marginRightStr.length){
+        if (marginRightStr){
             StretchStyleDimension marginRight = [GXStyleHelper convertValue:marginRightStr];
             margin.right = marginRight;
         }
-        if (marginBottomStr.length){
+        if (marginBottomStr){
             StretchStyleDimension marginBottom = [GXStyleHelper convertValue:marginBottomStr];
             margin.bottom = marginBottom;
         }
@@ -280,19 +280,19 @@
     if (paddingTopStr || paddingLeftStr || paddingRightStr || paddingBottomStr) {
         //返回padding
         StretchStyleRect padding = self.style.styleModel.padding;
-        if (paddingTopStr.length){
+        if (paddingTopStr){
             StretchStyleDimension paddingTop = [GXStyleHelper convertValue:paddingTopStr];
             padding.top = paddingTop;
         }
-        if (paddingLeftStr.length){
+        if (paddingLeftStr){
             StretchStyleDimension paddingLeft = [GXStyleHelper convertValue:paddingLeftStr];
             padding.left = paddingLeft;
         }
-        if (paddingRightStr.length){
+        if (paddingRightStr){
             StretchStyleDimension paddingRight = [GXStyleHelper convertValue:paddingRightStr];
             padding.right = paddingRight;
         }
-        if (paddingBottomStr.length){
+        if (paddingBottomStr){
             StretchStyleDimension paddingBottom = [GXStyleHelper convertValue:paddingBottomStr];
             padding.bottom = paddingBottom;
         }
@@ -306,13 +306,13 @@
     BOOL isBorderChanged = NO;
     //边框颜色
     NSString *borderColor = [styleInfo gx_stringForKey:@"border-color"];
-    if (borderColor.length) {
+    if (borderColor) {
         isBorderChanged = YES;
         self.borderColor = [UIColor gx_colorWithString:borderColor];
     }
     //边框宽度
     NSString *borderWidth = [styleInfo gx_stringForKey:@"border-width"];
-    if (borderWidth.length) {
+    if (borderWidth) {
         isBorderChanged = YES;
         self.borderWidth = [GXStyleHelper converSimpletValue:borderWidth];
     }
@@ -327,16 +327,16 @@
     NSString *bottomLeft = [styleInfo gx_stringForKey:@"border-bottom-left-radius"];
     NSString *bottomRight = [styleInfo gx_stringForKey:@"border-bottom-right-radius"];
     if (topLeft || topRight || bottomLeft || bottomRight) {
-        if (topLeft.length) {
+        if (topLeft) {
             self.topLeftRadius = [GXStyleHelper converSimpletValue:topLeft];
         }
-        if (topRight.length) {
+        if (topRight) {
             self.topRightRadius = [GXStyleHelper converSimpletValue:topRight];
         }
-        if (bottomLeft.length) {
+        if (bottomLeft) {
             self.bottomLeftRadius = [GXStyleHelper converSimpletValue:bottomLeft];
         }
-        if (bottomRight.length) {
+        if (bottomRight) {
             self.bottomRightRadius = [GXStyleHelper converSimpletValue:bottomRight];
         }
         self.cornerRadius = 0.f;
@@ -346,7 +346,7 @@
             [self setupCornerRadius:view];
         }
         
-    } else if (cornerRadius.length) {
+    } else if (cornerRadius) {
         //设置全圆角属性
         self.cornerRadius = [GXStyleHelper converSimpletValue:cornerRadius];
         self.topLeftRadius = 0.f;

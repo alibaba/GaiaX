@@ -400,24 +400,24 @@ mod gaiax_flex_grow_and_flex_shrink {
 
         /*
         style = Style(
-            display=Flex, 
-            positionType=Relative, 
-            direction=Inherit, 
-            flexDirection=Row, 
-            flexWrap=NoWrap, 
-            overflow=Hidden, 
-            alignItems=Center, 
-            alignSelf=Auto, 
-            alignContent=FlexStart, 
-            justifyContent=FlexStart, 
-            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
-            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
-            padding=Rect(start=Points(points=42.0), end=Points(points=42.0), top=Dimension.Undefined, bottom=Dimension.Undefined), 
-            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined), 
-            flexGrow=0.0, flexShrink=0.0, flexBasis=Dimension.Auto, 
-            size=Size(width=Points(points=123.0), height=Points(points=123.0)), 
-            minSize=Size(width=Dimension.Auto, height=Dimension.Auto), 
-            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto), 
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Center,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Points(points=42.0), end=Points(points=42.0), top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0, flexShrink=0.0, flexBasis=Dimension.Auto,
+            size=Size(width=Points(points=123.0), height=Points(points=123.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
             aspectRatio=null, rustptr=3857474416)
          */
         let button = stretch
@@ -609,7 +609,7 @@ mod gaiax_flex_grow_and_flex_shrink {
                     size: Size { width: Dimension::Auto, height: Dimension::Points(70.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    aspect_ratio: Number::Undefined
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
@@ -682,7 +682,7 @@ mod gaiax_flex_grow_and_flex_shrink {
                     size: Size { width: Dimension::Points(1370.0), height: Dimension::Points(70.0) },
                     min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
                     max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
-                    aspect_ratio: Number::Undefined
+                    aspect_ratio: Number::Undefined,
                 },
                 &[],
             )
@@ -707,6 +707,332 @@ mod gaiax_flex_grow_and_flex_shrink {
         assert_eq!(stretch.layout(name_view).unwrap().size.width, 1313.0 - 140.0 - 123.0);
         assert_eq!(stretch.layout(title).unwrap().size.width, 1313.0 - 140.0 - 123.0);
         assert_eq!(stretch.layout(button).unwrap().size.width, 123.0);
+    }
+
+    #[test]
+    fn flex_grow_and_flex_shrink_justify_content_yk_vip_peng_card_single() {
+        let mut stretch = Stretch::new();
+        /*Style(
+           display=Flex,
+           positionType=Relative,
+           direction=Inherit,
+           flexDirection=Row,
+           flexWrap=NoWrap,
+           overflow=Hidden,
+           alignItems=Center,
+           alignSelf=Auto,
+           alignContent=FlexStart,
+           justifyContent=FlexEnd,
+           position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           flexGrow=0.0,
+           flexShrink=0.0,
+           flexBasis=Dimension.Auto,
+           size=Size(width=Percent(percentage=1.0), height=Points(points=275.0)),
+           minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+           maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+           aspectRatio=null,
+           rustptr=-5476376622320209280)
+        */
+        let root = stretch
+            .new_node(
+                Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
+                    flex_direction: FlexDirection::Row,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Center,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexEnd,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Percent(1.0), height: Dimension::Points(275.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    aspect_ratio: Number::Undefined,
+                },
+                &[],
+            )
+            .unwrap();
+
+        /*Node(id='left', style=Style(
+           display=Flex,
+           positionType=Relative,
+           direction=Inherit,
+           flexDirection=Row,
+           flexWrap=NoWrap,
+           overflow=Hidden,
+           alignItems=Stretch,
+           alignSelf=Auto,
+           alignContent=FlexStart,
+           justifyContent=FlexStart,
+           position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+           flexGrow=0.0,
+           flexShrink=0.0,
+           flexBasis=Dimension.Auto,
+           size=Size(width=Points(points=138.0), height=Points(points=138.0)),
+           minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+           maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+           aspectRatio=null, rustptr=-5476376622320208832), children=[])
+        */
+        let left = stretch
+            .new_node(
+                Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
+                    flex_direction: FlexDirection::Row,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Stretch,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Points(138.0), height: Dimension::Points(138.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    aspect_ratio: Number::Undefined,
+                },
+                &[],
+            )
+            .unwrap();
+
+        /*
+        Node(id='mid', style=Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Column,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Stretch,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=1.0,
+            flexShrink=1.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Dimension.Auto, height=Points(points=138.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null, rustptr=-5476376622320209952), children=[])
+         */
+        let mid = stretch
+            .new_node(
+                Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
+                    flex_direction: FlexDirection::Column,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Stretch,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    flex_grow: 1.0,
+                    flex_shrink: 1.0,
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Auto, height: Dimension::Points(138.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    aspect_ratio: Number::Undefined,
+                },
+                &[],
+            )
+            .unwrap();
+
+        /*
+        Node(id='right', style=Style(
+            display=Flex,
+            positionType=Relative,
+            direction=Inherit,
+            flexDirection=Row,
+            flexWrap=NoWrap,
+            overflow=Hidden,
+            alignItems=Stretch,
+            alignSelf=Auto,
+            alignContent=FlexStart,
+            justifyContent=FlexStart,
+            position=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            margin=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            padding=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            border=Rect(start=Dimension.Undefined, end=Dimension.Undefined, top=Dimension.Undefined, bottom=Dimension.Undefined),
+            flexGrow=0.0,
+            flexShrink=0.0,
+            flexBasis=Dimension.Auto,
+            size=Size(width=Points(points=138.0), height=Points(points=138.0)),
+            minSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            maxSize=Size(width=Dimension.Auto, height=Dimension.Auto),
+            aspectRatio=null, rustptr=-5476376619115538848), children=[])
+         */
+        let right = stretch
+            .new_node(
+                Style {
+                    display: Display::Flex,
+                    position_type: PositionType::Relative,
+                    direction: Direction::Inherit,
+                    flex_direction: FlexDirection::Column,
+                    flex_wrap: FlexWrap::NoWrap,
+                    overflow: Overflow::Hidden,
+                    align_items: AlignItems::Stretch,
+                    align_self: AlignSelf::Auto,
+                    align_content: AlignContent::FlexStart,
+                    justify_content: JustifyContent::FlexStart,
+                    position: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    margin: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    padding: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    border: Rect {
+                        start: Dimension::Undefined,
+                        top: Dimension::Undefined,
+                        end: Dimension::Undefined,
+                        bottom: Dimension::Undefined,
+                    },
+                    flex_grow: 0.0,
+                    flex_shrink: 0.0,
+                    flex_basis: Dimension::Auto,
+                    size: Size { width: Dimension::Points(138.0), height: Dimension::Points(138.0) },
+                    min_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    max_size: Size { width: Dimension::Auto, height: Dimension::Auto },
+                    aspect_ratio: Number::Undefined,
+                },
+                &[],
+            )
+            .unwrap();
+
+        stretch.add_child(root, left).unwrap();
+        stretch.add_child(root, mid).unwrap();
+        stretch.add_child(root, right).unwrap();
+
+        stretch.compute_layout(root, Size { width: Number::Defined(1080.0), height: Number::Defined(275.0) }).unwrap();
+
+        // Layout(x=0.0, y=0.0, width=1080.0, height=275.0, id='' idPath='')
+        // Layout(x=0.0, y=0.0, width=1080.0, height=275.0, id='' idPath='')
+        assert_eq!(stretch.layout(root).unwrap().size.width, 1080.0);
+
+        // Layout(x=0.0, y=69.0, width=138.0, height=138.0, id='' idPath='')
+        // Layout(x=804.0, y=69.0, width=138.0, height=138.0, id='' idPath='')
+        assert_eq!(stretch.layout(left).unwrap().size.width, 138.0);
+        assert_eq!(stretch.layout(left).unwrap().size.height, 138.0);
+        assert_eq!(stretch.layout(left).unwrap().location.x, 0.0);
+        assert_eq!(stretch.layout(left).unwrap().location.y, 69.0);
+
+        // Layout(x=138.0, y=69.0, width=804.0, height=138.0, id='' idPath='')
+        // Layout(x=942.0, y=69.0, width=804.0, height=138.0, id='' idPath='')
+        assert_eq!(stretch.layout(mid).unwrap().size.width, 804.0);
+        assert_eq!(stretch.layout(mid).unwrap().size.height, 138.0);
+        assert_eq!(stretch.layout(mid).unwrap().location.x, 138.0);
+        assert_eq!(stretch.layout(mid).unwrap().location.y, 69.0);
+
+        // Layout(x=942.0, y=69.0, width=138.0, height=138.0, id='' idPath='')
+        // Layout(x=1746.0, y=69.0, width=138.0, height=138.0, id='' idPath='')
+        assert_eq!(stretch.layout(right).unwrap().size.width, 138.0);
+        assert_eq!(stretch.layout(right).unwrap().size.height, 138.0);
+        assert_eq!(stretch.layout(right).unwrap().location.x, 942.0);
+        assert_eq!(stretch.layout(right).unwrap().location.y, 69.0);
     }
 
     // #[test]

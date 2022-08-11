@@ -6,18 +6,20 @@ mod gaiax_flex_grow_and_flex_shrink {
 
     ///
     /// Input hierarchy:
-    ///    - root 400
-    ///         - group0 100
-    ///         - group1 flex_grow:1 flex_shrink:1
-    ///             - group1_group0 width:200 flex_shrink:1
-    ///             - group1_group1 width:200 flex_shrink:1
+    ///    - root 400 direction:row
+    ///         - container_1 100
+    ///         - container_2 flex_grow:1 flex_shrink:1 direction:column
+    ///             - container_2_1 flex_grow:1 flex_shrink:1 direction:row
+    ///                 - container_2_1_1 width:200 flex_shrink:1
+    ///                 - container_2_1_2 width:200 flex_shrink:1
     ///
     /// Output hierarchy:
-    ///     - root 400
-    ///         - group0 100
-    ///         - group1 300
-    ///             - group1_group0 width:150
-    ///             - group1_group1 width:150
+    ///     - root width:400
+    ///         - container_1 width:100
+    ///         - container_2 width:300
+    ///             - container_2_1 width:300
+    ///                 - container_2_1_1 width:150
+    ///                 - container_2_1_2 width:150
     #[test]
     fn flex_grow_and_flex_shrink() {
         let mut stretch = Stretch::new();

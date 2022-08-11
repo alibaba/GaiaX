@@ -203,15 +203,18 @@ impl Forest {
         // 定义一些常用的变量，方便后边算法的使用
 
         let current_node_style: &Style = &self.nodes[current_node].style;
-        let current_node_dir: FlexDirection = current_node_style.flex_direction;
-        let current_node_is_row: bool = current_node_dir.is_row();
-        let current_node_is_column: bool = current_node_dir.is_column();
+        let current_node_direction: FlexDirection = current_node_style.flex_direction;
+        let current_node_is_row: bool = current_node_direction.is_row();
+        let current_node_is_column: bool = current_node_direction.is_column();
         let current_node_is_wrap_reverse: bool = current_node_style.flex_wrap == FlexWrap::WrapReverse;
         let current_node_is_flex_grow: bool = current_node_style.flex_grow != 0.0;
 
-        let current_node_margin: Rect<f32> = current_node_style.margin.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
-        let current_node_padding: Rect<f32> = current_node_style.padding.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
-        let current_node_border: Rect<f32> = current_node_style.border.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
+        let current_node_margin: Rect<f32> =
+            current_node_style.margin.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
+        let current_node_padding: Rect<f32> =
+            current_node_style.padding.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
+        let current_node_border: Rect<f32> =
+            current_node_style.border.map(|n: Dimension| n.resolve(parent_node_size.width).or_else(0.0));
 
         // 内边距+边框尺寸
         let current_node_padding_border = Rect {
@@ -237,7 +240,6 @@ impl Forest {
         // If this is a leaf node we can skip a lot of this function in some cases
         // 如果是个叶子节点，可以省略许多逻辑处理
         if self.children[current_node].is_empty() {
-
             // 如果叶子节点宽高已经定义了，那么直接返回结果
             if current_node_size.width.is_defined() && current_node_size.height.is_defined() {
                 return ComputeResult { size: current_node_size.map(|s| s.or_else(0.0)) };
@@ -250,8 +252,12 @@ impl Forest {
                     #[cfg(any(feature = "std", feature = "alloc"))]
                     MeasureFunc::Boxed(measure) => ComputeResult { size: measure(current_node_size) },
                 };
-                self.nodes[current_node].layout_cache =
-                    Some(result::Cache { node_size: current_node_size, parent_size: parent_node_size, perform_layout, result: result.clone() });
+                self.nodes[current_node].layout_cache = Some(result::Cache {
+                    node_size: current_node_size,
+                    parent_size: parent_node_size,
+                    perform_layout,
+                    result: result.clone(),
+                });
                 return result;
             }
 
@@ -261,7 +267,7 @@ impl Forest {
                 size: Size {
                     width: current_node_size.width.or_else(0.0) + current_node_padding_border.horizontal(),
                     height: current_node_size.height.or_else(0.0) + current_node_padding_border.vertical(),
-                }
+                },
             };
         }
 
@@ -271,7 +277,8 @@ impl Forest {
         // 1. Generate anonymous flex items as described in §4 Flex Items.
         // 1. 根据孩子节点生成匿名的flex项目。
 
-        let mut current_node_child_flex_items: sys::Vec<FlexItem> = self.get_current_node_flex_items(current_node, current_node_inner_size);
+        let mut current_node_child_flex_items: sys::Vec<FlexItem> =
+            self.get_current_node_flex_items(current_node, current_node_inner_size);
 
         // 2. Determine the available main and cross space for the flex items.
         //    For each dimension, if that dimension of the flex container’s content box is a definite size, use that;
@@ -287,31 +294,42 @@ impl Forest {
 
         // 当前父节点下所有伸缩项的可用空间
         let current_node_available_space = Size {
-            width: current_node_size.width.or_else(parent_node_size.width - current_node_margin.horizontal()) - current_node_padding_border.horizontal(),
-            height: current_node_size.height.or_else(parent_node_size.height - current_node_margin.vertical()) - current_node_padding_border.vertical(),
+            width: current_node_size.width.or_else(parent_node_size.width - current_node_margin.horizontal())
+                - current_node_padding_border.horizontal(),
+            height: current_node_size.height.or_else(parent_node_size.height - current_node_margin.vertical())
+                - current_node_padding_border.vertical(),
         };
 
         // 当前父节点下是否存在有基线对齐样式的flex项目
-        let has_baseline_child = current_node_child_flex_items.iter().any(|child| self.nodes[child.node].style.align_self(&self.nodes[current_node].style) == AlignSelf::Baseline);
+        let has_baseline_child = current_node_child_flex_items.iter().any(|child| {
+            self.nodes[child.node].style.align_self(&self.nodes[current_node].style) == AlignSelf::Baseline
+        });
 
         // TODO - this does not follow spec. See commented out code below
         // 3. Determine the flex base size and hypothetical main size of each item:
 
         // flex_basis: 主轴方向上的初始大小 https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-basis
         // 3.1 确定每个flex项目的flex基准值。
-        self.flex_items_flex_basis(current_node, current_node_dir,
-                                   current_node_is_row,
-                                   current_node_is_column,
-                                   current_node_inner_size,
-                                   &mut current_node_child_flex_items,
-                                   current_node_available_space);
+        self.flex_items_flex_basis(
+            current_node,
+            current_node_direction,
+            current_node_is_row,
+            current_node_is_column,
+            current_node_inner_size,
+            &mut current_node_child_flex_items,
+            current_node_available_space,
+        );
 
         // The hypothetical main size is the item’s flex base size clamped according to its
         // used min and max main sizes (and flooring the content box size at zero).
         // 假设的主轴尺寸是一个被最小主轴尺寸和最大主轴尺寸裁剪过的。
 
         // 3.2 确定每个flex项目假设的主轴尺寸。
-        self.flex_items_hypothetical_main_size(current_node_dir, &mut current_node_child_flex_items, current_node_available_space);
+        self.flex_items_hypothetical_main_size(
+            current_node_direction,
+            &mut current_node_child_flex_items,
+            current_node_available_space,
+        );
 
         // 9.3. Main Size Determination
         // 9.3  确定flex项目的主轴尺寸
@@ -330,7 +348,7 @@ impl Forest {
         //
         //      Note that the "collect as many" line will collect zero-sized flex items onto
         //      the end of the previous line even if the last non-zero item exactly "filled up" the line.
-        // 5. 将flexy元素收集到flex项目行中:
+        // 5. 将flex元素收集到flex项目行中:
         //    - 如果flex容器是单行的，则将所有flex项目项到一个flex项目行中。
 
         let mut flex_lines: sys::Vec<_> = {
@@ -338,7 +356,11 @@ impl Forest {
 
             let style: Style = self.nodes[current_node].style;
             if style.flex_wrap == FlexWrap::NoWrap {
-                lines.push(FlexLine { items: current_node_child_flex_items.as_mut_slice(), cross_size: 0.0, offset_cross: 0.0 });
+                lines.push(FlexLine {
+                    items: current_node_child_flex_items.as_mut_slice(),
+                    cross_size: 0.0,
+                    offset_cross: 0.0,
+                });
             } else {
                 let mut flex_items = &mut current_node_child_flex_items[..];
 
@@ -348,8 +370,8 @@ impl Forest {
                         .iter()
                         .enumerate()
                         .find(|&(idx, ref child)| {
-                            line_length += child.hypothetical_outer_size.main(current_node_dir);
-                            if let Defined(main) = current_node_available_space.main(current_node_dir) {
+                            line_length += child.hypothetical_outer_size.main(current_node_direction);
+                            if let Defined(main) = current_node_available_space.main(current_node_direction) {
                                 line_length > main && idx != 0
                             } else {
                                 false
@@ -374,23 +396,27 @@ impl Forest {
         // 9.7 Resolving Flexible Lengths
         // 9.7 解析确定flex项目的长度
 
-        self.flex_lines_main_size(parent_node_size,
-                                  current_node_dir,
-                                  current_node_is_row,
-                                  current_node_is_column,
-                                  current_node_inner_size,
-                                  current_node_available_space,
-                                  &mut flex_lines);
+        self.flex_lines_main_size(
+            parent_node_size,
+            current_node_direction,
+            current_node_is_row,
+            current_node_is_column,
+            current_node_inner_size,
+            current_node_available_space,
+            &mut flex_lines,
+        );
 
         // Not part of the spec from what i can see but seems correct
         // 设置flex项目行容器的主轴尺寸
-        Forest::container_main_size(current_node_size,
-                                    current_node_dir,
-                                    current_node_padding_border,
-                                    &mut current_node_container_size,
-                                    &mut current_node_inner_container_size,
-                                    current_node_available_space,
-                                    &mut flex_lines);
+        Forest::container_main_size(
+            current_node_size,
+            current_node_direction,
+            current_node_padding_border,
+            &mut current_node_container_size,
+            &mut current_node_inner_container_size,
+            current_node_available_space,
+            &mut flex_lines,
+        );
 
         // 9.4. Cross Size Determination
         // 确定交叉轴尺寸
@@ -399,13 +425,15 @@ impl Forest {
         //    used main size and the available space, treating auto as fit-content.
         // 执行布局测量结合主轴尺寸和可用空间确定猜测的交叉轴尺寸
 
-        self.flex_items_hypothetical_cross(current_node,
-                                           current_node_size,
-                                           current_node_dir,
-                                           current_node_is_row,
-                                           current_node_container_size,
-                                           current_node_available_space,
-                                           &mut flex_lines);
+        self.flex_items_hypothetical_cross(
+            current_node,
+            current_node_size,
+            current_node_direction,
+            current_node_is_row,
+            current_node_container_size,
+            current_node_available_space,
+            &mut flex_lines,
+        );
 
         // TODO - probably should move this somewhere else as it doesn't make a ton of sense here but we need it below
         // TODO - This is expensive and should only be done if we really require a baseline. aka, make it lazy
@@ -427,12 +455,28 @@ impl Forest {
                     let result = self.compute_internal(
                         child.node,
                         Size {
-                            width: if current_node_is_row { child.target_size.width.into() } else { child.hypothetical_inner_size.width.into() },
-                            height: if current_node_is_row { child.hypothetical_inner_size.height.into() } else { child.target_size.height.into() },
+                            width: if current_node_is_row {
+                                child.target_size.width.into()
+                            } else {
+                                child.hypothetical_inner_size.width.into()
+                            },
+                            height: if current_node_is_row {
+                                child.hypothetical_inner_size.height.into()
+                            } else {
+                                child.target_size.height.into()
+                            },
                         },
                         Size {
-                            width: if current_node_is_row { current_node_container_size.width.into() } else { current_node_size.width },
-                            height: if current_node_is_row { current_node_size.height } else { current_node_container_size.height.into() },
+                            width: if current_node_is_row {
+                                current_node_container_size.width.into()
+                            } else {
+                                current_node_size.width
+                            },
+                            height: if current_node_is_row {
+                                current_node_size.height
+                            } else {
+                                current_node_container_size.height.into()
+                            },
                         },
                         true,
                     );
@@ -461,9 +505,9 @@ impl Forest {
         //    如果flex项目行容器是个单行的，并且有确定的交叉轴尺寸，这个尺寸就是flex项目行容器的内部交叉轴尺寸。
         //
 
-        if flex_lines.len() == 1 && current_node_size.cross(current_node_dir).is_defined() {
-            let size_cross = current_node_size.cross(current_node_dir);
-            let padding_border_cross = current_node_padding_border.cross(current_node_dir);
+        if flex_lines.len() == 1 && current_node_size.cross(current_node_direction).is_defined() {
+            let size_cross = current_node_size.cross(current_node_direction);
+            let padding_border_cross = current_node_padding_border.cross(current_node_direction);
             flex_lines[0].cross_size = (size_cross - padding_border_cross).or_else(0.0);
         } else {
             for line in &mut flex_lines {
@@ -482,7 +526,9 @@ impl Forest {
                 let max_baseline: f32 = line.items.iter().map(|child| child.baseline).fold(0.0, |acc, x| acc.max(x));
                 let mut is_have_aspect_ratio_item: bool = false;
                 let mut is_have_point_size_item: bool = false;
-                let final_cross_size: f64 = line.items.iter()
+                let final_cross_size: f64 = line
+                    .items
+                    .iter()
                     .map(|child: &FlexItem| {
                         let child_style: &Style = &self.nodes[child.node].style;
                         if child_style.aspect_ratio.is_defined() {
@@ -492,20 +538,24 @@ impl Forest {
                             is_have_point_size_item = true;
                         }
                         if child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Baseline
-                            && child_style.cross_margin_start(current_node_dir) != Dimension::Auto
-                            && child_style.cross_margin_end(current_node_dir) != Dimension::Auto
-                            && child_style.cross_size(current_node_dir) == Dimension::Auto
+                            && child_style.cross_margin_start(current_node_direction) != Dimension::Auto
+                            && child_style.cross_margin_end(current_node_direction) != Dimension::Auto
+                            && child_style.cross_size(current_node_direction) == Dimension::Auto
                         {
-                            max_baseline - child.baseline + child.hypothetical_outer_size.cross(current_node_dir)
+                            max_baseline - child.baseline + child.hypothetical_outer_size.cross(current_node_direction)
                         } else {
-                            child.hypothetical_outer_size.cross(current_node_dir)
+                            child.hypothetical_outer_size.cross(current_node_direction)
                         }
                     })
                     .fold(0.0, |acc: f64, x: f32| acc.max(x as f64));
 
                 // fix: aspect_ratio_multi_4_aspect_ratio_flex_grow_point_width
                 // 修复：flex-grow与aspect-ratio嵌套组合使用时，cross-size受到同级孩子的固定宽度影响，导致flex-grow计算错误的问题。
-                if current_node_is_column && current_node_is_flex_grow && is_have_aspect_ratio_item && is_have_point_size_item {
+                if current_node_is_column
+                    && current_node_is_flex_grow
+                    && is_have_aspect_ratio_item
+                    && is_have_point_size_item
+                {
                     line.cross_size = 0.0
                 } else {
                     line.cross_size = final_cross_size as f32;
@@ -523,9 +573,13 @@ impl Forest {
         //    处理'align-content:stretch'
         //    align-content: stretch; 均匀分布项目 拉伸‘自动’-大小的项目以充满容器
 
-        if self.nodes[current_node].style.align_content == AlignContent::Stretch && current_node_size.cross(current_node_dir).is_defined() {
+        if self.nodes[current_node].style.align_content == AlignContent::Stretch
+            && current_node_size.cross(current_node_direction).is_defined()
+        {
             let total_cross: f32 = flex_lines.iter().map(|line| line.cross_size).sum();
-            let inner_cross = (current_node_size.cross(current_node_dir) - current_node_padding_border.cross(current_node_dir)).or_else(0.0);
+            let inner_cross = (current_node_size.cross(current_node_direction)
+                - current_node_padding_border.cross(current_node_direction))
+            .or_else(0.0);
 
             if total_cross < inner_cross {
                 let remaining = inner_cross - total_cross;
@@ -569,12 +623,22 @@ impl Forest {
                 let parent_style: &Style = &self.nodes[current_node].style;
                 let child_style: &Style = &self.nodes[child.node].style;
 
-                let child_cross_size = Forest::get_cross_size(current_node_size, parent_node_size, current_node_dir, current_node_is_row, line_cross_size, child, parent_style, child_style);
+                let child_cross_size = Forest::get_cross_size(
+                    current_node_size,
+                    parent_node_size,
+                    current_node_direction,
+                    current_node_is_row,
+                    line_cross_size,
+                    child,
+                    parent_style,
+                    child_style,
+                );
 
-                child.target_size.set_cross(current_node_dir, child_cross_size);
+                child.target_size.set_cross(current_node_direction, child_cross_size);
 
-                let outer_size_cross = child.target_size.cross(current_node_dir) + child.margin.cross(current_node_dir);
-                child.outer_target_size.set_cross(current_node_dir, outer_size_cross);
+                let outer_size_cross =
+                    child.target_size.cross(current_node_direction) + child.margin.cross(current_node_direction);
+                child.outer_target_size.set_cross(current_node_direction, outer_size_cross);
             }
         }
 
@@ -587,16 +651,17 @@ impl Forest {
         //     2. Align the items along the main-axis per justify-content.
 
         for line in &mut flex_lines {
-            let used_space: f32 = line.items.iter().map(|child| child.outer_target_size.main(current_node_dir)).sum();
-            let free_space = current_node_inner_container_size.main(current_node_dir) - used_space;
+            let used_space: f32 =
+                line.items.iter().map(|child| child.outer_target_size.main(current_node_direction)).sum();
+            let free_space = current_node_inner_container_size.main(current_node_direction) - used_space;
             let mut num_auto_margins = 0;
 
             for child in line.items.iter_mut() {
                 let child_style = &self.nodes[child.node].style;
-                if child_style.main_margin_start(current_node_dir) == Dimension::Auto {
+                if child_style.main_margin_start(current_node_direction) == Dimension::Auto {
                     num_auto_margins += 1;
                 }
-                if child_style.main_margin_end(current_node_dir) == Dimension::Auto {
+                if child_style.main_margin_end(current_node_direction) == Dimension::Auto {
                     num_auto_margins += 1;
                 }
             }
@@ -606,14 +671,14 @@ impl Forest {
 
                 for child in line.items.iter_mut() {
                     let child_style: &Style = &self.nodes[child.node].style;
-                    if child_style.main_margin_start(current_node_dir) == Dimension::Auto {
+                    if child_style.main_margin_start(current_node_direction) == Dimension::Auto {
                         if current_node_is_row {
                             child.margin.start = margin;
                         } else {
                             child.margin.top = margin;
                         }
                     }
-                    if child_style.main_margin_end(current_node_dir) == Dimension::Auto {
+                    if child_style.main_margin_end(current_node_direction) == Dimension::Auto {
                         if current_node_is_row {
                             child.margin.end = margin;
                         } else {
@@ -623,7 +688,7 @@ impl Forest {
                 }
             } else {
                 let num_items = line.items.len();
-                let layout_reverse = current_node_dir.is_reverse();
+                let layout_reverse = current_node_direction.is_reverse();
 
                 let justify_item = |(i, child): (usize, &mut FlexItem)| {
                     let is_first = i == 0;
@@ -691,11 +756,11 @@ impl Forest {
             let max_baseline: f32 = line.items.iter_mut().map(|child| child.baseline).fold(0.0, |acc, x| acc.max(x));
 
             for child in line.items.iter_mut() {
-                let free_space = line_cross_size - child.outer_target_size.cross(current_node_dir);
+                let free_space = line_cross_size - child.outer_target_size.cross(current_node_direction);
                 let child_style = &self.nodes[child.node].style;
 
-                if child_style.cross_margin_start(current_node_dir) == Dimension::Auto
-                    && child_style.cross_margin_end(current_node_dir) == Dimension::Auto
+                if child_style.cross_margin_start(current_node_direction) == Dimension::Auto
+                    && child_style.cross_margin_end(current_node_direction) == Dimension::Auto
                 {
                     if current_node_is_row {
                         child.margin.top = free_space / 2.0;
@@ -704,13 +769,13 @@ impl Forest {
                         child.margin.start = free_space / 2.0;
                         child.margin.end = free_space / 2.0;
                     }
-                } else if child_style.cross_margin_start(current_node_dir) == Dimension::Auto {
+                } else if child_style.cross_margin_start(current_node_direction) == Dimension::Auto {
                     if current_node_is_row {
                         child.margin.top = free_space;
                     } else {
                         child.margin.start = free_space;
                     }
-                } else if child_style.cross_margin_end(current_node_dir) == Dimension::Auto {
+                } else if child_style.cross_margin_end(current_node_direction) == Dimension::Auto {
                     if current_node_is_row {
                         child.margin.bottom = free_space;
                     } else {
@@ -772,20 +837,34 @@ impl Forest {
         //     - 否则，使用flex项目行的交叉轴尺寸，同是该值需要被交叉轴最小值和交叉轴最大值约束。
 
         let total_cross_size: f32 = flex_lines.iter().map(|line| line.cross_size).sum();
-        current_node_container_size.set_cross(current_node_dir, current_node_size.cross(current_node_dir).or_else(total_cross_size + current_node_padding_border.cross(current_node_dir)));
-        current_node_inner_container_size.set_cross(current_node_dir, current_node_container_size.cross(current_node_dir) - current_node_padding_border.cross(current_node_dir));
+        current_node_container_size.set_cross(
+            current_node_direction,
+            current_node_size
+                .cross(current_node_direction)
+                .or_else(total_cross_size + current_node_padding_border.cross(current_node_direction)),
+        );
+        current_node_inner_container_size.set_cross(
+            current_node_direction,
+            current_node_container_size.cross(current_node_direction)
+                - current_node_padding_border.cross(current_node_direction),
+        );
 
         // We have the container size. If our caller does not care about performing
         // layout we are done now.
         if !perform_layout {
             let result = ComputeResult { size: current_node_container_size };
-            self.nodes[current_node].layout_cache = Some(result::Cache { node_size: current_node_size, parent_size: parent_node_size, perform_layout, result: result.clone() });
+            self.nodes[current_node].layout_cache = Some(result::Cache {
+                node_size: current_node_size,
+                parent_size: parent_node_size,
+                perform_layout,
+                result: result.clone(),
+            });
             return result;
         }
 
         // 16. Align all flex lines per align-content.
 
-        let free_space = current_node_inner_container_size.cross(current_node_dir) - total_cross_size;
+        let free_space = current_node_inner_container_size.cross(current_node_direction) - total_cross_size;
         let num_lines = flex_lines.len();
 
         let align_line = |(i, line): (usize, &mut FlexLine)| {
@@ -839,10 +918,10 @@ impl Forest {
 
         // Do a final layout pass and gather the resulting layouts
         {
-            let mut total_offset_cross = current_node_padding_border.cross_start(current_node_dir);
+            let mut total_offset_cross = current_node_padding_border.cross_start(current_node_direction);
 
             let layout_line = |line: &mut FlexLine| {
-                let mut total_offset_main = current_node_padding_border.main_start(current_node_dir);
+                let mut total_offset_main = current_node_padding_border.main_start(current_node_direction);
                 let line_offset_cross = line.offset_cross;
 
                 let layout_item = |child: &mut FlexItem| {
@@ -855,14 +934,16 @@ impl Forest {
 
                     let offset_main = total_offset_main
                         + child.offset_main
-                        + child.margin.main_start(current_node_dir)
-                        + (child.position.main_start(current_node_dir).or_else(0.0) - child.position.main_end(current_node_dir).or_else(0.0));
+                        + child.margin.main_start(current_node_direction)
+                        + (child.position.main_start(current_node_direction).or_else(0.0)
+                            - child.position.main_end(current_node_direction).or_else(0.0));
 
                     let offset_cross = total_offset_cross
                         + child.offset_cross
                         + line_offset_cross
-                        + child.margin.cross_start(current_node_dir)
-                        + (child.position.cross_start(current_node_dir).or_else(0.0) - child.position.cross_end(current_node_dir).or_else(0.0));
+                        + child.margin.cross_start(current_node_direction)
+                        + (child.position.cross_start(current_node_direction).or_else(0.0)
+                            - child.position.cross_end(current_node_direction).or_else(0.0));
 
                     self.nodes[child.node].layout = result::Layout {
                         order: self.children[current_node].iter().position(|n| *n == child.node).unwrap() as u32,
@@ -873,10 +954,12 @@ impl Forest {
                         },
                     };
 
-                    total_offset_main += child.offset_main + child.margin.main(current_node_dir) + result.size.main(current_node_dir);
+                    total_offset_main += child.offset_main
+                        + child.margin.main(current_node_direction)
+                        + result.size.main(current_node_direction);
                 };
 
-                if current_node_dir.is_reverse() {
+                if current_node_direction.is_reverse() {
                     line.items.iter_mut().rev().for_each(layout_item);
                 } else {
                     line.items.iter_mut().for_each(layout_item);
@@ -908,15 +991,22 @@ impl Forest {
 
                 let child_style: Style = self.nodes[child].style;
 
-                let start = child_style.position.start.resolve(container_width) + child_style.margin.start.resolve(container_width);
-                let end = child_style.position.end.resolve(container_width) + child_style.margin.end.resolve(container_width);
-                let top = child_style.position.top.resolve(container_height) + child_style.margin.top.resolve(container_height);
-                let bottom = child_style.position.bottom.resolve(container_height) + child_style.margin.bottom.resolve(container_height);
+                let start = child_style.position.start.resolve(container_width)
+                    + child_style.margin.start.resolve(container_width);
+                let end =
+                    child_style.position.end.resolve(container_width) + child_style.margin.end.resolve(container_width);
+                let top = child_style.position.top.resolve(container_height)
+                    + child_style.margin.top.resolve(container_height);
+                let bottom = child_style.position.bottom.resolve(container_height)
+                    + child_style.margin.bottom.resolve(container_height);
 
                 let (start_main, end_main) = if current_node_is_row { (start, end) } else { (top, bottom) };
                 let (start_cross, end_cross) = if current_node_is_row { (top, bottom) } else { (start, end) };
 
-                let mut width = child_style.size.width.resolve(container_width)
+                let mut width = child_style
+                    .size
+                    .width
+                    .resolve(container_width)
                     .maybe_max(child_style.min_size.width.resolve(container_width))
                     .maybe_min(child_style.max_size.width.resolve(container_width))
                     .or_else(if start.is_defined() && end.is_defined() {
@@ -925,7 +1015,10 @@ impl Forest {
                         Undefined
                     });
 
-                let mut height = child_style.size.height.resolve(container_height)
+                let mut height = child_style
+                    .size
+                    .height
+                    .resolve(container_height)
                     .maybe_max(child_style.min_size.height.resolve(container_height))
                     .maybe_min(child_style.max_size.height.resolve(container_height))
                     .or_else(if top.is_defined() && bottom.is_defined() {
@@ -950,24 +1043,48 @@ impl Forest {
                     true,
                 );
 
-                let free_main_space = current_node_container_size.main(current_node_dir) - result.size
-                    .main(current_node_dir)
-                    .maybe_max(child_style.min_main_size(current_node_dir).resolve(current_node_inner_size.main(current_node_dir)))
-                    .maybe_min(child_style.max_main_size(current_node_dir).resolve(current_node_inner_size.main(current_node_dir)));
+                let free_main_space = current_node_container_size.main(current_node_direction)
+                    - result
+                        .size
+                        .main(current_node_direction)
+                        .maybe_max(
+                            child_style
+                                .min_main_size(current_node_direction)
+                                .resolve(current_node_inner_size.main(current_node_direction)),
+                        )
+                        .maybe_min(
+                            child_style
+                                .max_main_size(current_node_direction)
+                                .resolve(current_node_inner_size.main(current_node_direction)),
+                        );
 
-                let free_cross_space = current_node_container_size.cross(current_node_dir) - result.size
-                    .cross(current_node_dir)
-                    .maybe_max(child_style.min_cross_size(current_node_dir).resolve(current_node_inner_size.cross(current_node_dir)))
-                    .maybe_min(child_style.max_cross_size(current_node_dir).resolve(current_node_inner_size.cross(current_node_dir)));
+                let free_cross_space = current_node_container_size.cross(current_node_direction)
+                    - result
+                        .size
+                        .cross(current_node_direction)
+                        .maybe_max(
+                            child_style
+                                .min_cross_size(current_node_direction)
+                                .resolve(current_node_inner_size.cross(current_node_direction)),
+                        )
+                        .maybe_min(
+                            child_style
+                                .max_cross_size(current_node_direction)
+                                .resolve(current_node_inner_size.cross(current_node_direction)),
+                        );
 
                 let offset_main = if start_main.is_defined() {
-                    start_main.or_else(0.0) + current_node_border.main_start(current_node_dir)
+                    start_main.or_else(0.0) + current_node_border.main_start(current_node_direction)
                 } else if end_main.is_defined() {
-                    free_main_space - end_main.or_else(0.0) - current_node_border.main_end(current_node_dir)
+                    free_main_space - end_main.or_else(0.0) - current_node_border.main_end(current_node_direction)
                 } else {
                     match self.nodes[current_node].style.justify_content {
-                        JustifyContent::SpaceBetween | JustifyContent::FlexStart => current_node_padding_border.main_start(current_node_dir),
-                        JustifyContent::FlexEnd => free_main_space - current_node_padding_border.main_end(current_node_dir),
+                        JustifyContent::SpaceBetween | JustifyContent::FlexStart => {
+                            current_node_padding_border.main_start(current_node_direction)
+                        }
+                        JustifyContent::FlexEnd => {
+                            free_main_space - current_node_padding_border.main_end(current_node_direction)
+                        }
                         JustifyContent::SpaceEvenly | JustifyContent::SpaceAround | JustifyContent::Center => {
                             free_main_space / 2.0
                         }
@@ -975,33 +1092,33 @@ impl Forest {
                 };
 
                 let offset_cross = if start_cross.is_defined() {
-                    start_cross.or_else(0.0) + current_node_border.cross_start(current_node_dir)
+                    start_cross.or_else(0.0) + current_node_border.cross_start(current_node_direction)
                 } else if end_cross.is_defined() {
-                    free_cross_space - end_cross.or_else(0.0) - current_node_border.cross_end(current_node_dir)
+                    free_cross_space - end_cross.or_else(0.0) - current_node_border.cross_end(current_node_direction)
                 } else {
                     match child_style.align_self(&self.nodes[current_node].style) {
                         AlignSelf::Auto => 0.0, // Should never happen
                         AlignSelf::FlexStart => {
                             if current_node_is_wrap_reverse {
-                                free_cross_space - current_node_padding_border.cross_end(current_node_dir)
+                                free_cross_space - current_node_padding_border.cross_end(current_node_direction)
                             } else {
-                                current_node_padding_border.cross_start(current_node_dir)
+                                current_node_padding_border.cross_start(current_node_direction)
                             }
                         }
                         AlignSelf::FlexEnd => {
                             if current_node_is_wrap_reverse {
-                                current_node_padding_border.cross_start(current_node_dir)
+                                current_node_padding_border.cross_start(current_node_direction)
                             } else {
-                                free_cross_space - current_node_padding_border.cross_end(current_node_dir)
+                                free_cross_space - current_node_padding_border.cross_end(current_node_direction)
                             }
                         }
                         AlignSelf::Center => free_cross_space / 2.0,
                         AlignSelf::Baseline => free_cross_space / 2.0, // Treat as center for now until we have baseline support
                         AlignSelf::Stretch => {
                             if current_node_is_wrap_reverse {
-                                free_cross_space - current_node_padding_border.cross_end(current_node_dir)
+                                free_cross_space - current_node_padding_border.cross_end(current_node_direction)
                             } else {
-                                current_node_padding_border.cross_start(current_node_dir)
+                                current_node_padding_border.cross_start(current_node_direction)
                             }
                         }
                     }
@@ -1033,19 +1150,25 @@ impl Forest {
         }
 
         let result = ComputeResult { size: current_node_container_size };
-        self.nodes[current_node].layout_cache = Some(result::Cache { node_size: current_node_size, parent_size: parent_node_size, perform_layout, result: result.clone() });
+        self.nodes[current_node].layout_cache = Some(result::Cache {
+            node_size: current_node_size,
+            parent_size: parent_node_size,
+            perform_layout,
+            result: result.clone(),
+        });
 
         result
     }
 
-    fn flex_items_hypothetical_cross(&mut self,
-                                     current_node: NodeId,
-                                     current_node_size: Size<Number>,
-                                     current_node_dir: FlexDirection,
-                                     current_node_is_row: bool,
-                                     current_node_container_size: Size<f32>,
-                                     current_node_available_space: Size<Number>,
-                                     flex_lines: &mut sys::Vec<FlexLine>,
+    fn flex_items_hypothetical_cross(
+        &mut self,
+        parent_node: NodeId,
+        parent_node_size: Size<Number>,
+        parent_node_direction: FlexDirection,
+        parent_node_is_row: bool,
+        parent_node_container_size: Size<f32>,
+        current_node_available_space: Size<Number>,
+        flex_lines: &mut sys::Vec<FlexLine>,
     ) {
         for line in &mut flex_lines[..] {
             let line_cross_size = line.cross_size;
@@ -1054,53 +1177,75 @@ impl Forest {
                 let child: &mut FlexItem = target;
 
                 // 交叉轴数值
-                let child_cross = child.size.cross(current_node_dir)
-                    .maybe_max(child.min_size.cross(current_node_dir))
-                    .maybe_min(child.max_size.cross(current_node_dir));
+                let child_cross = child
+                    .size
+                    .cross(parent_node_direction)
+                    .maybe_max(child.min_size.cross(parent_node_direction))
+                    .maybe_min(child.max_size.cross(parent_node_direction));
 
                 // 孩子节点尺寸
                 let child_node_size: Size<Number> = Size {
-                    width: if current_node_is_row { child.target_size.width.into() } else { child_cross },
-                    height: if current_node_is_row { child_cross } else { child.target_size.height.into() },
+                    width: if parent_node_is_row { child.target_size.width.into() } else { child_cross },
+                    height: if parent_node_is_row { child_cross } else { child.target_size.height.into() },
                 };
 
                 // 父节点尺寸
                 let parent_node_size = Size {
-                    width: if current_node_is_row { current_node_container_size.main(current_node_dir).into() } else { current_node_available_space.width },
-                    height: if current_node_is_row { current_node_available_space.height } else { current_node_container_size.main(current_node_dir).into() },
+                    width: if parent_node_is_row {
+                        parent_node_container_size.main(parent_node_direction).into()
+                    } else {
+                        current_node_available_space.width
+                    },
+                    height: if parent_node_is_row {
+                        current_node_available_space.height
+                    } else {
+                        parent_node_container_size.main(parent_node_direction).into()
+                    },
                 };
 
                 // 执行布局测量获得孩子节点的交叉轴尺寸
-                let mut child_cross_size = self.compute_internal(child.node, child_node_size, parent_node_size, false)
+                let mut child_cross_size = self
+                    .compute_internal(child.node, child_node_size, parent_node_size, false)
                     .size
-                    .cross(current_node_dir)
-                    .maybe_max(child.min_size.cross(current_node_dir))
-                    .maybe_min(child.max_size.cross(current_node_dir));
+                    .cross(parent_node_direction)
+                    .maybe_max(child.min_size.cross(parent_node_direction))
+                    .maybe_min(child.max_size.cross(parent_node_direction));
 
                 // 如果交叉轴尺寸为0，那么手动尝试计算一下
                 if child_cross_size == 0.0 {
-                    let parent_style: &Style = &self.nodes[current_node].style;
+                    let parent_style: &Style = &self.nodes[parent_node].style;
                     let child_style: &Style = &self.nodes[child.node].style;
-                    child_cross_size = Forest::get_cross_size(current_node_size, parent_node_size, current_node_dir, current_node_is_row, line_cross_size, child, parent_style, child_style);
+                    child_cross_size = Forest::get_cross_size(
+                        parent_node_size,
+                        parent_node_size,
+                        parent_node_direction,
+                        parent_node_is_row,
+                        line_cross_size,
+                        child,
+                        parent_style,
+                        child_style,
+                    );
                 }
 
                 // 设置孩子节点的猜测的内部交叉轴尺寸
-                child.hypothetical_inner_size.set_cross(current_node_dir, child_cross_size);
+                child.hypothetical_inner_size.set_cross(parent_node_direction, child_cross_size);
 
                 // 设置孩子节点的猜测的外部交叉轴尺寸
-                let outer_size_cross = child.hypothetical_inner_size.cross(current_node_dir) + child.margin.cross(current_node_dir);
-                child.hypothetical_outer_size.set_cross(current_node_dir, outer_size_cross);
+                let outer_size_cross = child.hypothetical_inner_size.cross(parent_node_direction)
+                    + child.margin.cross(parent_node_direction);
+                child.hypothetical_outer_size.set_cross(parent_node_direction, outer_size_cross);
             }
         }
     }
 
-    fn container_main_size(current_node_size: Size<Number>,
-                           current_node_dir: FlexDirection,
-                           current_node_padding_border: Rect<f32>,
-                           mut current_node_container_size: &mut Size<f32>,
-                           mut current_node_inner_container_size: &mut Size<f32>,
-                           current_node_available_space: Size<Number>,
-                           mut flex_lines: &mut sys::Vec<FlexLine>,
+    fn container_main_size(
+        current_node_size: Size<Number>,
+        current_node_dir: FlexDirection,
+        current_node_padding_border: Rect<f32>,
+        current_node_container_size: &mut Size<f32>,
+        current_node_inner_container_size: &mut Size<f32>,
+        current_node_available_space: Size<Number>,
+        flex_lines: &mut sys::Vec<FlexLine>,
     ) {
         let container_size_value = current_node_size.main(current_node_dir).or_else({
             let longest_line = flex_lines.iter().fold(f32::MIN, |acc, line| {
@@ -1116,19 +1261,23 @@ impl Forest {
         });
         current_node_container_size.set_main(current_node_dir, container_size_value);
         // 设置flex项目行容器的主轴内部尺寸
-        current_node_inner_container_size.set_main(current_node_dir, current_node_container_size.main(current_node_dir) - current_node_padding_border.main(current_node_dir));
+        current_node_inner_container_size.set_main(
+            current_node_dir,
+            current_node_container_size.main(current_node_dir) - current_node_padding_border.main(current_node_dir),
+        );
     }
 
-    fn flex_lines_main_size(&mut self, parent_node_size: Size<Number>,
-                            current_node_dir: FlexDirection,
-                            current_node_is_row: bool,
-                            current_node_is_column: bool,
-                            current_node_inner_size: Size<Number>,
-                            current_node_available_space: Size<Number>,
-                            flex_lines: &mut sys::Vec<FlexLine>,
+    fn flex_lines_main_size(
+        &mut self,
+        parent_node_size: Size<Number>,
+        parent_node_dir: FlexDirection,
+        parent_node_is_row: bool,
+        parent_node_is_column: bool,
+        parent_node_inner_size: Size<Number>,
+        parent_node_available_space: Size<Number>,
+        flex_lines: &mut sys::Vec<FlexLine>,
     ) {
         for line in &mut flex_lines[..] {
-
             // 1. Determine the used flex factor. Sum the outer hypothetical main sizes of all
             //    items on the line. If the sum is less than the flex container’s inner main size,
             //    use the flex grow factor for the rest of this algorithm; otherwise, use the
@@ -1137,9 +1286,10 @@ impl Forest {
             //    将所有当前行的flex项目猜测的外部主轴尺寸相加。
             //    如果之和小于父节点flex容器的内部主轴尺寸大小，使用flex增长因子算法;否则，使用flex收缩因子算法。
 
-            let line_used_flex_factor: f32 = line.items.iter().map(|child: &FlexItem| child.hypothetical_outer_size.main(current_node_dir)).sum();
-            let current_node_inner_size_main = current_node_inner_size.main(current_node_dir).or_else(0.0);
-            let line_of_growing = line_used_flex_factor < current_node_inner_size_main;
+            let line_used_flex_factor: f32 =
+                line.items.iter().map(|child: &FlexItem| child.hypothetical_outer_size.main(parent_node_dir)).sum();
+            let parent_node_inner_size_main = parent_node_inner_size.main(parent_node_dir).or_else(0.0);
+            let line_of_growing = line_used_flex_factor < parent_node_inner_size_main;
             let line_of_shrinking = !line_of_growing;
 
             // 2. Size inflexible items. Freeze, setting its target main size to its hypothetical main size
@@ -1159,38 +1309,42 @@ impl Forest {
                 // instead. This was found by trail and error fixing tests to align with webkit output.
                 // 如果父节点是横向排列 && 父节点的主轴尺寸未定义
                 // 需要根据孩子节点的尺寸计算的结果当做flex项目的主轴尺寸
-                if current_node_is_row && current_node_inner_size.main(current_node_dir).is_undefined() {
+                if parent_node_is_row && parent_node_inner_size.main(parent_node_dir).is_undefined() {
                     let child_target_node_size = Size {
                         width: child.size.width.maybe_max(child.min_size.width).maybe_min(child.max_size.width),
                         height: child.size.height.maybe_max(child.min_size.height).maybe_min(child.max_size.height),
                     };
-                    let child_target_main_size = self.compute_internal(child.node, child_target_node_size, current_node_available_space, false)
+                    let child_target_main_size = self
+                        .compute_internal(child.node, child_target_node_size, parent_node_available_space, false)
                         .size
-                        .main(current_node_dir)
-                        .maybe_max(child.min_size.main(current_node_dir))
-                        .maybe_min(child.max_size.main(current_node_dir));
-                    child.target_size.set_main(current_node_dir, child_target_main_size);
+                        .main(parent_node_dir)
+                        .maybe_max(child.min_size.main(parent_node_dir))
+                        .maybe_min(child.max_size.main(parent_node_dir));
+                    child.target_size.set_main(parent_node_dir, child_target_main_size);
                 }
                 // 使用猜测的内部主轴尺寸作为flex项目的主轴尺寸
                 else {
-                    let target_size_main = child.hypothetical_inner_size.main(current_node_dir);
-                    child.target_size.set_main(current_node_dir, target_size_main);
+                    let target_size_main = child.hypothetical_inner_size.main(parent_node_dir);
+                    child.target_size.set_main(parent_node_dir, target_size_main);
                 }
 
                 // TODO this should really only be set inside the if-statement below but
                 // that causes the target_main_size to never be set for some items
 
                 // 使用flex项目的主轴尺寸加上外边距，作为flex项目的外部主轴尺寸
-                let out_target_size_main = child.target_size.main(current_node_dir) + child.margin.main(current_node_dir);
-                child.outer_target_size.set_main(current_node_dir, out_target_size_main);
+                let child_out_target_size_main =
+                    child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
+                child.outer_target_size.set_main(parent_node_dir, child_out_target_size_main);
 
                 // 判定是否需要冻结孩子节点
                 let child_style: &Style = &self.nodes[child.node].style;
-                let child_is_no_grow_shrink = child_style.flex_grow == 0.0 && child_style.flex_shrink == 0.0;
-                let child_is_no_grow = line_of_growing && child.flex_basis > child.hypothetical_inner_size.main(current_node_dir);
-                let child_is_no_shrink = line_of_shrinking && child.flex_basis < child.hypothetical_inner_size.main(current_node_dir);
+                let child_is_no_grow_and_no_shrink = child_style.flex_grow == 0.0 && child_style.flex_shrink == 0.0;
+                let child_is_no_grow =
+                    line_of_growing && child.flex_basis > child.hypothetical_inner_size.main(parent_node_dir);
+                let child_is_no_shrink =
+                    line_of_shrinking && child.flex_basis < child.hypothetical_inner_size.main(parent_node_dir);
 
-                if child_is_no_grow_shrink || child_is_no_grow || child_is_no_shrink {
+                if child_is_no_grow_and_no_shrink || child_is_no_grow || child_is_no_shrink {
                     child.frozen = true;
                 }
             }
@@ -1204,12 +1358,14 @@ impl Forest {
                 .items
                 .iter()
                 .map(|child: &FlexItem| {
-                    child.margin.main(current_node_dir) + if child.frozen { child.target_size.main(current_node_dir) } else { child.flex_basis }
+                    child.margin.main(parent_node_dir)
+                        + if child.frozen { child.target_size.main(parent_node_dir) } else { child.flex_basis }
                 })
                 .sum();
 
             // 计算初始可用空间。将这一行所有的flex项目外部主轴尺寸相加，并从父节点flex容器的内部主轴大小中减去这个值。
-            let line_of_initial_free_space = (current_node_inner_size.main(current_node_dir) - line_of_used_space).or_else(0.0);
+            let line_of_initial_free_space =
+                (parent_node_inner_size.main(parent_node_dir) - line_of_used_space).or_else(0.0);
 
             // 4. Loop
 
@@ -1237,33 +1393,36 @@ impl Forest {
                     .items
                     .iter()
                     .map(|child: &FlexItem| {
-                        child.margin.main(current_node_dir) + if child.frozen { child.target_size.main(current_node_dir) } else { child.flex_basis }
+                        child.margin.main(parent_node_dir)
+                            + if child.frozen { child.target_size.main(parent_node_dir) } else { child.flex_basis }
                     })
                     .sum();
 
                 // 收集所有未冻结的flex项目
-                let mut unfrozen: sys::Vec<&mut FlexItem> = line.items.iter_mut().filter(|child| !child.frozen).collect();
+                let mut unfrozen: sys::Vec<&mut FlexItem> =
+                    line.items.iter_mut().filter(|child| !child.frozen).collect();
 
                 // 计算所有的增长因子之和和所有收缩因子之和
-                let (sum_flex_grow, sum_flex_shrink): (f32, f32) = unfrozen.iter().fold((0.0, 0.0), |(flex_grow, flex_shrink), item| {
-                    let style: &Style = &self.nodes[item.node].style;
-                    (flex_grow + style.flex_grow, flex_shrink + style.flex_shrink)
-                });
+                let (sum_flex_grow, sum_flex_shrink): (f32, f32) =
+                    unfrozen.iter().fold((0.0, 0.0), |(flex_grow, flex_shrink), item| {
+                        let style: &Style = &self.nodes[item.node].style;
+                        (flex_grow + style.flex_grow, flex_shrink + style.flex_shrink)
+                    });
 
                 // 剩余空间
                 let free_space: f32 =
                     // 使用增长因子，如果当前行的元素增长只和小于1.0
                     //
                     if line_of_growing && sum_flex_grow < 1.0 {
-                        (line_of_initial_free_space * sum_flex_grow).maybe_min(current_node_inner_size.main(current_node_dir) - used_space)
+                        (line_of_initial_free_space * sum_flex_grow).maybe_min(parent_node_inner_size.main(parent_node_dir) - used_space)
                     }
                     // 使用收缩银子，如果当前行的元素收缩只和小于1.0
                     else if line_of_shrinking && sum_flex_shrink < 1.0 {
-                        (line_of_initial_free_space * sum_flex_shrink).maybe_max(current_node_inner_size.main(current_node_dir) - used_space)
+                        (line_of_initial_free_space * sum_flex_shrink).maybe_max(parent_node_inner_size.main(parent_node_dir) - used_space)
                     }
                     // 使用父节点的内部主轴尺寸减去当前行已使用空间，作为剩余空间
                     else {
-                        (current_node_inner_size.main(current_node_dir) - used_space).or_else(0.0)
+                        (parent_node_inner_size.main(parent_node_dir) - used_space).or_else(0.0)
                     };
 
                 // c. Distribute free space proportional to the flex factors.
@@ -1298,39 +1457,48 @@ impl Forest {
                     for target in &mut unfrozen {
                         let child: &mut FlexItem = target;
                         if free_space.is_normal() && sum_flex_grow > 0.0 {
-                            let grow_after = child.flex_basis + free_space * (self.nodes[child.node].style.flex_grow / sum_flex_grow);
-                            child.target_size.set_main(current_node_dir, grow_after);
+                            let grow_after = child.flex_basis
+                                + free_space * (self.nodes[child.node].style.flex_grow / sum_flex_grow);
+                            child.target_size.set_main(parent_node_dir, grow_after);
                         }
                     }
                 } else if line_of_shrinking && sum_flex_shrink > 0.0 {
-                    let sum_scaled_shrink_factor: f32 = unfrozen.iter().map(|child: &&mut FlexItem| {
-                        let child_style: Style = self.nodes[child.node].style;
-                        child.inner_flex_basis * child_style.flex_shrink
-                    }).sum();
+                    let sum_scaled_shrink_factor: f32 = unfrozen
+                        .iter()
+                        .map(|child: &&mut FlexItem| {
+                            let child_style: Style = self.nodes[child.node].style;
+                            child.inner_flex_basis * child_style.flex_shrink
+                        })
+                        .sum();
 
                     for target in &mut unfrozen {
                         let child: &mut FlexItem = target;
                         let scaled_shrink_factor = child.inner_flex_basis * self.nodes[child.node].style.flex_shrink;
 
                         if free_space.is_normal() && sum_scaled_shrink_factor > 0.0 {
-                            let shrink_after = child.flex_basis + free_space * (scaled_shrink_factor / sum_scaled_shrink_factor);
-                            child.target_size.set_main(current_node_dir, shrink_after);
+                            let shrink_after =
+                                child.flex_basis + free_space * (scaled_shrink_factor / sum_scaled_shrink_factor);
+                            child.target_size.set_main(parent_node_dir, shrink_after);
                         } else {
                             let child_style: &Style = &self.nodes[child.node].style;
-                            if current_node_is_column && child_style.aspect_ratio.is_defined() {
+                            if parent_node_is_column && child_style.aspect_ratio.is_defined() {
                                 // fix: aspect_ratio_nest_flex_grow_flex_direction_column
                                 // 这种情况下，在纵轴撑满剩余空间，实际上要从宽度的角度计算高度
-                                if current_node_inner_size.cross(current_node_dir).is_defined() && !child_style.size.width.is_defined() && child_style.flex_grow > 0.0 {
-
+                                if parent_node_inner_size.cross(parent_node_dir).is_defined()
+                                    && !child_style.size.width.is_defined()
+                                    && child_style.flex_grow > 0.0
+                                {
                                     // fix: aspect_ratio_nest_flex_grow_flex_direction_column_multi_with_margin
                                     // 处理margin情况
-                                    let margin: Rect<f32> = child_style.margin.map(|n| n.resolve(parent_node_size.width).or_else(0.0));
+                                    let margin: Rect<f32> =
+                                        child_style.margin.map(|n| n.resolve(parent_node_size.width).or_else(0.0));
 
                                     // fix: aspect_ratio_nest_flex_grow_flex_direction_column_multi
                                     // 将整个宽度作为剩余空间计算
-                                    let free_space = current_node_inner_size.cross(current_node_dir).or_else(0.0) - margin.horizontal();
+                                    let free_space = parent_node_inner_size.cross(parent_node_dir).or_else(0.0)
+                                        - margin.horizontal();
                                     let height = free_space / child_style.aspect_ratio.or_else(0.0);
-                                    child.target_size.set_main(current_node_dir, height);
+                                    child.target_size.set_main(parent_node_dir, height);
                                 }
                             }
                         }
@@ -1351,32 +1519,37 @@ impl Forest {
                     let child_node = child.node;
                     let child_style: Style = self.nodes[child_node].style;
 
-                    let min_main = if current_node_is_row && self.nodes[child_node].measure.is_none() {
-                        let child_size = self.compute_internal(child_node, Size::undefined(), current_node_available_space, false).size;
-                        child_size.width
-                            .maybe_min(child.size.width)
-                            .maybe_max(child.min_size.width)
-                            .into()
+                    let min_main = if parent_node_is_row && self.nodes[child_node].measure.is_none() {
+                        let child_size = self
+                            .compute_internal(child_node, Size::undefined(), parent_node_available_space, false)
+                            .size;
+                        child_size.width.maybe_min(child.size.width).maybe_max(child.min_size.width).into()
                     } else {
-                        child.min_size.main(current_node_dir)
+                        child.min_size.main(parent_node_dir)
                     };
 
-                    let max_main = child.max_size.main(current_node_dir);
-                    let clamped = child.target_size.main(current_node_dir).maybe_min(max_main).maybe_max(min_main).max(0.0);
-                    child.violation = clamped - child.target_size.main(current_node_dir);
+                    let max_main = child.max_size.main(parent_node_dir);
 
-                    if (child_style.flex_direction == FlexDirection::Column || child_style.flex_direction == FlexDirection::ColumnReverse) &&
-                        !child_style.flex_basis.is_defined() &&
-                        !child_style.aspect_ratio.is_defined() &&
-                        child_style.flex_shrink == 1.0 &&
-                        child_style.flex_grow == 1.0
+                    let clamped = child.target_size.main(parent_node_dir)
+                            .maybe_min(max_main)
+                            .maybe_max(min_main).max(0.0);
+                            
+                    child.violation = clamped - child.target_size.main(parent_node_dir);
+
+                    if (child_style.flex_direction == FlexDirection::Column
+                        || child_style.flex_direction == FlexDirection::ColumnReverse)
+                        && !child_style.flex_basis.is_defined()
+                        && !child_style.aspect_ratio.is_defined()
+                        && child_style.flex_shrink == 1.0
+                        && child_style.flex_grow == 1.0
                     {
                         // 在Column和Row相互嵌套且有复杂的自适应和压缩状态时
                         // 需要特殊处理一些情况
+                        
                     } else {
-                        child.target_size.set_main(current_node_dir, clamped);
-                        let outer_main = child.target_size.main(current_node_dir) + child.margin.main(current_node_dir);
-                        child.outer_target_size.set_main(current_node_dir, outer_main);
+                        child.target_size.set_main(parent_node_dir, clamped);
+                        let outer_main = child.target_size.main(parent_node_dir) + child.margin.main(parent_node_dir);
+                        child.outer_target_size.set_main(parent_node_dir, outer_main);
                     }
 
                     acc + child.violation
@@ -1405,45 +1578,56 @@ impl Forest {
         }
     }
 
-    fn flex_items_hypothetical_main_size(&mut self, current_node_dir: FlexDirection, current_node_child_flex_items: &mut sys::Vec<FlexItem>, current_node_available_space: Size<Number>) {
-        for child in &mut current_node_child_flex_items[..] {
+    fn flex_items_hypothetical_main_size(
+        &mut self,
+        parent_node_direction: FlexDirection,
+        parent_node_child_flex_items: &mut sys::Vec<FlexItem>,
+        parent_node_available_space: Size<Number>,
+    ) {
+        for child in &mut parent_node_child_flex_items[..] {
             //
             let flex_item: &mut FlexItem = child;
 
             // 计算内部flex项目基准值 = flex项目基准值减去内部边距和边框尺寸
-            flex_item.inner_flex_basis = flex_item.flex_basis - flex_item.padding.main(current_node_dir) - flex_item.border.main(current_node_dir);
+            flex_item.inner_flex_basis = flex_item.flex_basis
+                - flex_item.padding.main(parent_node_direction)
+                - flex_item.border.main(parent_node_direction);
 
             // TODO - not really spec abiding but needs to be done somewhere. probably somewhere else though.
             // The following logic was developed not from the spec but by trail and error looking into how
             // webkit handled various scenarios. Can probably be solved better by passing in
             // min-content max-content constraints from the top
             let min_main = self
-                .compute_internal(flex_item.node, Size::undefined(), current_node_available_space, false)
+                .compute_internal(flex_item.node, Size::undefined(), parent_node_available_space, false)
                 .size
-                .main(current_node_dir)
-                .maybe_max(flex_item.min_size.main(current_node_dir))
-                .maybe_min(flex_item.size.main(current_node_dir))
+                .main(parent_node_direction)
+                .maybe_max(flex_item.min_size.main(parent_node_direction))
+                .maybe_min(flex_item.size.main(parent_node_direction))
                 .into();
 
-            let child_inner_main_size = flex_item.flex_basis.maybe_max(min_main).maybe_min(flex_item.max_size.main(current_node_dir));
+            let child_inner_main_size =
+                flex_item.flex_basis.maybe_max(min_main).maybe_min(flex_item.max_size.main(parent_node_direction));
             // flex项目经过最小尺寸和最大尺寸约束过后，就是猜测的内宽高
-            flex_item.hypothetical_inner_size.set_main(current_node_dir, child_inner_main_size);
+            flex_item.hypothetical_inner_size.set_main(parent_node_direction, child_inner_main_size);
 
-            let child_outer_main_size = flex_item.hypothetical_inner_size.main(current_node_dir) + flex_item.margin.main(current_node_dir);
+            let child_outer_main_size = flex_item.hypothetical_inner_size.main(parent_node_direction)
+                + flex_item.margin.main(parent_node_direction);
             // flex项目的假定内宽高加上flex项目的外边距，就是猜测的外宽高
-            flex_item.hypothetical_outer_size.set_main(current_node_dir, child_outer_main_size);
+            flex_item.hypothetical_outer_size.set_main(parent_node_direction, child_outer_main_size);
         }
     }
 
-    fn flex_items_flex_basis(&mut self, current_node: NodeId,
-                             current_node_dir: FlexDirection,
-                             current_node_is_row: bool,
-                             current_node_is_column: bool,
-                             current_node_inner_size: Size<Number>,
-                             current_node_child_flex_items: &mut sys::Vec<FlexItem>,
-                             current_node_available_space: Size<Number>,
+    fn flex_items_flex_basis(
+        &mut self,
+        current_node: NodeId,
+        parent_node_direction: FlexDirection,
+        parent_node_is_row: bool,
+        parent_node_is_column: bool,
+        parent_node_inner_size: Size<Number>,
+        parent_node_child_flex_items: &mut sys::Vec<FlexItem>,
+        parent_node_available_space: Size<Number>,
     ) {
-        for flex_item in &mut current_node_child_flex_items[..] {
+        for flex_item in &mut parent_node_child_flex_items[..] {
             let child: &mut FlexItem = flex_item;
 
             let child_style: Style = self.nodes[child.node].style;
@@ -1453,7 +1637,7 @@ impl Forest {
             // A. If the item has a definite used flex basis, that’s the flex base size.
             // A. 如果flex项目有一个明确的flex基准值，那么就直接使用这个值。
 
-            let flex_basis: Number = child_style.flex_basis.resolve(current_node_inner_size.main(current_node_dir));
+            let flex_basis: Number = child_style.flex_basis.resolve(parent_node_inner_size.main(parent_node_direction));
             if flex_basis.is_defined() {
                 child.flex_basis = flex_basis.or_else(0.0);
                 continue;
@@ -1516,9 +1700,9 @@ impl Forest {
                 // 如果孩子的宽度未定义 && 父布局是纵向 && 孩子的样式alignSelf是Stretch
                 // 需要按照规则，直接使用剩余空间宽度，当做节点宽度
                 if !child_size.width.is_defined()
-                    && current_node_is_column
+                    && parent_node_is_column
                     && child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Stretch {
-                    current_node_available_space.width
+                    parent_node_available_space.width
                 }
                 // 如果孩子宽度未定义 && 如果孩子的宽度已经定义 && 父布局是横向 && 孩子的样式alignSelf是Stretch && 孩子定义了比例系数
                 // 需要使用高度和比例系数计算出宽度
@@ -1526,10 +1710,10 @@ impl Forest {
                 // fix: aspect_ratio_multi_aspect
                 else if !child_size.width.is_defined()
                     && child_size.height.is_defined()
-                    && current_node_is_row
+                    && parent_node_is_row
                     && child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Stretch
                     && child_style.aspect_ratio.is_defined() {
-                    current_node_available_space.height * child_style.aspect_ratio
+                    parent_node_available_space.height * child_style.aspect_ratio
                 }
                 // 如果孩子宽度未定义 && 如果孩子的高度未定义 && 父布局是横向 && 孩子没有设置撑满剩余空间 && 孩子的样式alignSelf是Stretch && 孩子定义了比例系数
                 // 直接使用剩余空间宽度当做宽度
@@ -1537,11 +1721,11 @@ impl Forest {
                 // fix: aspect_ratio_align_stretch
                 else if !child_size.width.is_defined()
                     && !child_size.height.is_defined()
-                    && current_node_is_row
+                    && parent_node_is_row
                     && child_style.flex_grow == 0.0
                     && child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Stretch
                     && child_style.aspect_ratio.is_defined() {
-                    current_node_available_space.width
+                    parent_node_available_space.width
                 }
                 // 使用孩子的宽度当做节点宽度
                 else {
@@ -1554,9 +1738,9 @@ impl Forest {
                 // 直接使用剩余空间高度当做高度
                 if !child_size.height.is_defined()
                     && child_style.align_self(&self.nodes[current_node].style) == AlignSelf::Stretch
-                    && current_node_is_row
+                    && parent_node_is_row
                 {
-                    current_node_available_space.height
+                    parent_node_available_space.height
                 }
                 // 使用孩子高度当做节点高度
                 else {
@@ -1570,11 +1754,12 @@ impl Forest {
             };
 
             // 准备好孩子节点的尺寸和孩子的可用空间之后，需要再进行一次计算，以便获取更准确的值。
-            let child_size = self.compute_internal(child.node, child_node_size, current_node_available_space, false).size;
+            let child_size =
+                self.compute_internal(child.node, child_node_size, parent_node_available_space, false).size;
             let child_flex_basis_result = child_size
-                .main(current_node_dir)
-                .maybe_max(child.min_size.main(current_node_dir))
-                .maybe_min(child.max_size.main(current_node_dir));
+                .main(parent_node_direction)
+                .maybe_max(child.min_size.main(parent_node_direction))
+                .maybe_min(child.max_size.main(parent_node_direction));
 
             // 使用计算结果当做flex基准值
             child.flex_basis = child_flex_basis_result;
@@ -1583,7 +1768,11 @@ impl Forest {
         }
     }
 
-    fn get_current_node_flex_items(&mut self, current_node: NodeId, current_node_inner_size: Size<Number>) -> sys::Vec<FlexItem> {
+    fn get_current_node_flex_items(
+        &mut self,
+        current_node: NodeId,
+        current_node_inner_size: Size<Number>,
+    ) -> sys::Vec<FlexItem> {
         let mut flex_items: sys::Vec<FlexItem> = self.children[current_node]
             .iter()
             .map(|child| (child, &self.nodes[*child].style))
@@ -1606,11 +1795,11 @@ impl Forest {
 
                 let target_border = style.border.map(|b| b.resolve(current_node_inner_size.width).or_else(0.0));
 
-                let result_size = Forest::get_aspect_ratio_size(&style, target_size);
+                let target_size = Forest::get_aspect_ratio_size(&style, target_size);
 
                 FlexItem {
                     node: *child,
-                    size: result_size,
+                    size: target_size,
                     min_size: target_min_size,
                     max_size: target_max_size,
 
@@ -1639,79 +1828,105 @@ impl Forest {
         flex_items
     }
 
-    fn get_cross_size(node_size: Size<Number>, parent_size: Size<Number>, dir: FlexDirection, is_row: bool, line_cross_size: f32, child: &mut FlexItem, parent_style: &Style, child_style: &Style) -> f32 {
+    fn get_cross_size(
+        node_size: Size<Number>,
+        parent_size: Size<Number>,
+        dir: FlexDirection,
+        is_row: bool,
+        line_cross_size: f32,
+        child: &mut FlexItem,
+        parent_style: &Style,
+        child_style: &Style,
+    ) -> f32 {
         let is_stretch = child_style.align_self(parent_style) == AlignSelf::Stretch;
         let is_cross_margin_start_no_auto = child_style.cross_margin_start(dir) != Dimension::Auto;
         let is_cross_margin_end_no_auto = child_style.cross_margin_end(dir) != Dimension::Auto;
         let is_cross_size_auto = child_style.cross_size(dir) == Dimension::Auto;
 
-        let child_cross_size: f32 = if is_stretch
-            && is_cross_margin_start_no_auto
-            && is_cross_margin_end_no_auto
-            && is_cross_size_auto {
-            if is_row {
-                // fix: aspect_ratio_basis
-                if child_style.aspect_ratio.is_defined() && child_style.flex_basis.is_defined() {
-                    child_style.flex_basis.resolve(parent_size.width).or_else(0.0) * child_style.aspect_ratio.or_else(0.0)
-                }
-                // fix: aspect_ratio_width_as_flex_basis
-                // fix: aspect_ratio_flex_grow_multi
-                else if child_style.aspect_ratio.is_defined() && child_style.flex_grow > 0.0 {
-                    let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
-                    desire_height
-                }
-                //
-                else if child_style.aspect_ratio.is_defined() {
-                    let line_cross = (line_cross_size - child.margin.cross(dir)).maybe_max(child.min_size.cross(dir)).maybe_min(child.max_size.cross(dir));
-                    line_cross.maybe_min(child.size.cross(dir))
-                }
-                //
-                else {
-                    (line_cross_size - child.margin.cross(dir)).maybe_max(child.min_size.cross(dir)).maybe_min(child.max_size.cross(dir))
+        let child_cross_size: f32 =
+            if is_stretch && is_cross_margin_start_no_auto && is_cross_margin_end_no_auto && is_cross_size_auto {
+                if is_row {
+                    // fix: aspect_ratio_basis
+                    if child_style.aspect_ratio.is_defined() && child_style.flex_basis.is_defined() {
+                        child_style.flex_basis.resolve(parent_size.width).or_else(0.0)
+                            * child_style.aspect_ratio.or_else(0.0)
+                    }
+                    // fix: aspect_ratio_width_as_flex_basis
+                    // fix: aspect_ratio_flex_grow_multi
+                    else if child_style.aspect_ratio.is_defined() && child_style.flex_grow > 0.0 {
+                        let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
+                        desire_height
+                    }
+                    //
+                    else if child_style.aspect_ratio.is_defined() {
+                        let line_cross = (line_cross_size - child.margin.cross(dir))
+                            .maybe_max(child.min_size.cross(dir))
+                            .maybe_min(child.max_size.cross(dir));
+                        line_cross.maybe_min(child.size.cross(dir))
+                    }
+                    //
+                    else {
+                        (line_cross_size - child.margin.cross(dir))
+                            .maybe_max(child.min_size.cross(dir))
+                            .maybe_min(child.max_size.cross(dir))
+                    }
+                } else {
+                    // fix: aspect_ratio_nest_flex_grow_flex_direction_column
+                    if child_style.aspect_ratio.is_defined() && child_style.flex_grow > 0.0 {
+                        let desire_width = child.target_size.height * child_style.aspect_ratio.or_else(0.0);
+                        desire_width
+                    }
+                    //
+                    else if child_style.aspect_ratio.is_defined() {
+                        let line_cross = (line_cross_size - child.margin.cross(dir))
+                            .maybe_max(child.min_size.cross(dir))
+                            .maybe_min(child.max_size.cross(dir));
+                        line_cross.maybe_min(child.size.cross(dir))
+                    }
+                    //
+                    else {
+                        (line_cross_size - child.margin.cross(dir))
+                            .maybe_max(child.min_size.cross(dir))
+                            .maybe_min(child.max_size.cross(dir))
+                    }
                 }
             } else {
-                // fix: aspect_ratio_nest_flex_grow_flex_direction_column
-                if child_style.aspect_ratio.is_defined() && child_style.flex_grow > 0.0 {
-                    let desire_width = child.target_size.height * child_style.aspect_ratio.or_else(0.0);
-                    desire_width
-                }
-                //
-                else if child_style.aspect_ratio.is_defined() {
-                    let line_cross = (line_cross_size - child.margin.cross(dir)).maybe_max(child.min_size.cross(dir)).maybe_min(child.max_size.cross(dir));
-                    line_cross.maybe_min(child.size.cross(dir))
-                }
-                //
-                else {
-                    (line_cross_size - child.margin.cross(dir)).maybe_max(child.min_size.cross(dir)).maybe_min(child.max_size.cross(dir))
-                }
-            }
-        } else {
-            if is_row && child_style.aspect_ratio.is_defined() && node_size.height.is_defined() && child_style.flex_shrink > 0.0 {
-                let final_cross = child.hypothetical_inner_size.cross(dir).maybe_min(node_size.height);
+                if is_row
+                    && child_style.aspect_ratio.is_defined()
+                    && node_size.height.is_defined()
+                    && child_style.flex_shrink > 0.0
+                {
+                    let final_cross = child.hypothetical_inner_size.cross(dir).maybe_min(node_size.height);
 
-                // fix: aspect_ratio_height_as_flex_basis
-                // fix: aspect_ratio_flex_shrink
-                if !child_style.size.width.is_defined() && !child_style.min_size.width.is_defined() && !child_style.max_size.width.is_defined() {
-                    let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
-                    desire_height
-                }
-                // fix: aspect_ratio_flex_shrink_2
-                else if !child_style.size.width.is_defined() && child_style.min_size.width.is_defined() && !child_style.max_size.width.is_defined() {
-                    let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
-                    final_cross.maybe_min(Number::Defined(desire_height))
-                }
-                // fix: aspect_ratio_width_height_flex_grow_row
-                else if child_style.size.width.is_defined() {
-                    let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
-                    desire_height
+                    // fix: aspect_ratio_height_as_flex_basis
+                    // fix: aspect_ratio_flex_shrink
+                    if !child_style.size.width.is_defined()
+                        && !child_style.min_size.width.is_defined()
+                        && !child_style.max_size.width.is_defined()
+                    {
+                        let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
+                        desire_height
+                    }
+                    // fix: aspect_ratio_flex_shrink_2
+                    else if !child_style.size.width.is_defined()
+                        && child_style.min_size.width.is_defined()
+                        && !child_style.max_size.width.is_defined()
+                    {
+                        let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
+                        final_cross.maybe_min(Number::Defined(desire_height))
+                    }
+                    // fix: aspect_ratio_width_height_flex_grow_row
+                    else if child_style.size.width.is_defined() {
+                        let desire_height = child.target_size.width / child_style.aspect_ratio.or_else(0.0);
+                        desire_height
+                    } else {
+                        final_cross
+                    }
                 } else {
+                    let final_cross = child.hypothetical_inner_size.cross(dir);
                     final_cross
                 }
-            } else {
-                let final_cross = child.hypothetical_inner_size.cross(dir);
-                final_cross
-            }
-        };
+            };
         child_cross_size
     }
 
@@ -1725,7 +1940,6 @@ impl Forest {
 
     // fix: aspect_ratio_both_dimensions_defined_column
     fn get_aspect_ratio_height(child_style: &Style, target_size: Size<Number>) -> Number {
-
         // 若有定义宽度，且存在比例关系，那么使用高度计算宽度
         if target_size.width.is_defined() && child_style.aspect_ratio.is_defined() {
             let width = target_size.width.or_else(0.0);
@@ -1737,7 +1951,6 @@ impl Forest {
     }
 
     fn get_aspect_ratio_width(child_style: &Style, target_size: Size<Number>) -> Number {
-
         // 若没有定义宽度，并且有定义高度，且存在比例关系，那么使用高度计算宽度
         if !target_size.width.is_defined() && target_size.height.is_defined() && child_style.aspect_ratio.is_defined() {
             let height = target_size.height.or_else(0.0);

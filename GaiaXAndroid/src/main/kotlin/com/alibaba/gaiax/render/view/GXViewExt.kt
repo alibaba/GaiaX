@@ -142,6 +142,7 @@ fun View.setOpacity(opacity: Float?) {
 fun View.setOverflow(overflow: Boolean?) {
     overflow?.let {
         val view = this
+        // 当前逻辑是为了保证双端的逻辑和效果一致性
         if (view is ViewGroup) {
             view.clipChildren = false
             view.post {

@@ -230,9 +230,9 @@
             //图片url
             GXWeakSelf(self)
             GXWeakSelf(imgView)
-            [imgView gx_setImageWithURL:[NSURL URLWithString:imgData]
-                       placeholderImage:placeholderImage
-                              completed:^(UIImage * _Nullable image, NSError * _Nullable error, NSURL * _Nullable imageURL) {
+            [imgView gx_setImageWithURLString:imgData
+                             placeholderImage:placeholderImage
+                                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, NSURL * _Nullable imageURL) {
                 //加载完成回调
                 GXStrongSelf(self)
                 if (image && self.modeType.length) {

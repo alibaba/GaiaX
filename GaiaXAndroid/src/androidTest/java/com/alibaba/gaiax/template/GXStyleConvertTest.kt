@@ -133,7 +133,8 @@ class GXStyleConvertTest {
 
     @Test
     fun overflow() {
-        Assert.assertEquals(null, convert.overflow(JSONObject()))
+        // 20220823调整overflow的默认值为true
+        Assert.assertEquals(true, convert.overflow(JSONObject()))
         Assert.assertEquals(
             false,
             convert.overflow(JSONObject().apply {

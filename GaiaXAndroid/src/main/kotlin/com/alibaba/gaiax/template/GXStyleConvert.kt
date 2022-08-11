@@ -106,6 +106,7 @@ class GXStyleConvert {
     fun overflow(css: JSONObject): Boolean? = when (css.getString(GXTemplateKey.FLEXBOX_OVERFLOW)) {
         "visible" -> false
         "hidden" -> true
+        // 20220823调整overflow的默认值为true
         else -> true
     }
 

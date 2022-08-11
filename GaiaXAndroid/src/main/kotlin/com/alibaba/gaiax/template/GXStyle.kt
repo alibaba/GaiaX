@@ -82,7 +82,8 @@ data class GXStyle(
                 backgroundColor == null &&
                 backgroundImage == null &&
                 opacity == null &&
-                overflow == null &&
+                // 20220823调整overflow的默认值为true
+                (overflow == null || overflow == true) &&
                 display == null &&
                 hidden == null &&
                 borderWidth == null &&

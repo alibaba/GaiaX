@@ -1,11 +1,12 @@
 import { View } from '@tarojs/components';
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { ComponentType, CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import VirtualList from '@tarojs/components/virtual-list'
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import GXUtils from '../../gaiax/GXUtils';
 import { GXEngineInstance, GXTemplateInfo } from '../..';
+import { logDOM } from '@testing-library/react';
 
 export interface GXScrollState {
 
@@ -18,35 +19,22 @@ export interface GXScrollProps {
     propGXNode: GXNode
 }
 
-const Row = React.memo(() => {
+
+type GXScrollViewHolderProps = {
+    id: string
+    style?: CSSProperties
+    data: any
+    index: number
+}
+
+const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewHolderProps> = ({ id, style, data, index }) => {
+    console.log(`id=${id} style=${style} data=${data} index=${index}`)
     return (
         <View style="width:100px;height:100px;background-color:black;" />
     );
-})
+};
 
-export interface GXScrollViewHolderState {
-
-}
-
-export interface GXScrollViewHolderProps {
-     /** 组件 ID */
- id: string
- /** 单项的样式，样式必须传入组件的 style 中 */
- style?: CSSProperties
- /** 组件渲染的数据 */
- data: any
- /** 组件渲染数据的索引 */
- index: number
- /** 组件是否正在滚动，当 useIsScrolling 值为 true 时返回布尔值，否则返回 undefined */
- isScrolling?: boolean
-
-}
-
-
-class GXScrollViewHolder extends React.PureComponent<GXScrollViewHolderProps, GXScrollViewHolderState> {
-
-}
-
+const MemoGXScrollViewHolderFunctionComponent = React.memo(GXScrollViewHolderFunctionComponent);
 
 export default class GXScroll extends React.Component<GXScrollProps, GXScrollState> {
     render() {
@@ -85,7 +73,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 itemCount={propDataValue.length}
                 itemSize={virtualListItemWidth}
             >
-                {Row}
+                {MemoGXScrollViewHolderFunctionComponent}
             </VirtualList>;
         } else {
             let childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
@@ -99,7 +87,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 itemCount={propDataValue.length}
                 itemSize={virtualListItemHeight}
             >
-                {Row}
+                {MemoGXScrollViewHolderFunctionComponent}
             </VirtualList>;
         }
     }

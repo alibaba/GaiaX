@@ -1,10 +1,71 @@
 import GXCssConvertStyle from "./GXCssConvertStyle";
 import GXDataBinding from "./GXDatabinding";
-import GXExpression from "./GXExpression";
 import { GXJSONObject } from "./GXJson";
 import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXTemplateInfo from "./GXTemplateInfo";
+
+export class GXScrollConfig {
+    direction: string = 'horizontal';
+    itemSpacing: string;
+    rowSpacing: string;
+
+    static createByExtend(src: GXScrollConfig, extend: GXJSONObject) {
+        // ScrollConfig
+        const gxScrollConfig = new GXScrollConfig();
+
+        // direction
+        gxScrollConfig.direction = src.direction;
+        const newDirection = extend['direction']
+        if (newDirection != null) {
+            gxScrollConfig.direction = newDirection
+        }
+
+        // item spacing
+        const itemSpacing = src.itemSpacing;
+        if (itemSpacing != null) {
+            gxScrollConfig.itemSpacing = src.itemSpacing;
+        }
+        const newItemSpacing = extend['item-spacing'];
+        if (newItemSpacing != null) {
+            gxScrollConfig.itemSpacing = newItemSpacing;
+        }
+
+        // row spacing
+        const rowSpacing = src.rowSpacing;
+        if (rowSpacing != null) {
+            gxScrollConfig.rowSpacing = src.rowSpacing;
+        }
+        const newRowSpacing = extend['row-spacing'];
+        if (newRowSpacing != null) {
+            gxScrollConfig.rowSpacing = newRowSpacing;
+        }
+
+        return gxScrollConfig;
+    }
+
+    static create(gxLayer: GXJSONObject) {
+        // ScrollConfig
+        const gxScrollConfig = new GXScrollConfig();
+
+        // direction
+        gxScrollConfig.direction = gxLayer['direction'];
+
+        // item spacing
+        const itemSpacing = gxLayer['item-spacing'];
+        if (itemSpacing != null) {
+            gxScrollConfig.itemSpacing = itemSpacing + "px";
+        }
+
+        // row spacing
+        const rowSpacing = gxLayer['row-spacing'];
+        if (rowSpacing != null) {
+            gxScrollConfig.rowSpacing = rowSpacing + "px";
+        }
+
+        return gxScrollConfig;
+    }
+}
 
 /**
  * 节点的原始样式
@@ -35,9 +96,18 @@ export default class GXTemplateNode {
 
         let selfFinalCss = {};
         if (extendCssData != null) {
+
             selfFinalCss = Object.assign({}, this.css, extendCssData);
+
+            if (this.gxScrollConfig != null) {
+                this.finalGXScrollConfig = GXScrollConfig.createByExtend(this.gxScrollConfig, extendCssData);
+            }
+
         } else {
+            
             selfFinalCss = this.css;
+
+            this.finalGXScrollConfig = this.gxScrollConfig;
         }
 
         // 初始化虚拟节点样式
@@ -61,6 +131,10 @@ export default class GXTemplateNode {
     animation?: GXJSONObject;
 
     gxVisualTemplateNode?: GXTemplateNode;
+
+    gxScrollConfig: GXScrollConfig = null;
+
+    finalGXScrollConfig: GXScrollConfig = null;
 
     finalStyle: React.CSSProperties;
 
@@ -182,19 +256,29 @@ export default class GXTemplateNode {
         const gxTemplateNode = new GXTemplateNode()
 
         const layerId = gxLayer['id'];
-        
+
         // 获取原始节点的层级
         gxTemplateNode.layer = gxLayer;
+
         // 获取原始节点的样式
         gxTemplateNode.css = gxTemplateInfo.css['#' + layerId] || gxTemplateInfo.css['.' + layerId];
+
         // 获取原始节点的数据
         gxTemplateNode.data = gxTemplateInfo.data['data']?.[layerId];
+
         // 获取原始节点的事件
         gxTemplateNode.event = gxTemplateInfo.data['event']?.[layerId];
+
         // 获取原始节点的动画
         gxTemplateNode.animation = gxTemplateInfo.data['animation']?.[layerId];
+
         // 设置虚拟节点
         gxTemplateNode.gxVisualTemplateNode = gxVisualTemplateNode;
+
+        // 设置Scroll配置
+        if (GXTemplateNode.isScrollType(gxLayer)) {
+            gxTemplateNode.gxScrollConfig = GXScrollConfig.create(gxLayer);
+        }
 
         return gxTemplateNode;
     }

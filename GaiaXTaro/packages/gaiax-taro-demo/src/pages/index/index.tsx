@@ -70,7 +70,7 @@ export default class Index extends Component<IParams> {
     if (templateId != '') {
 
       let templateItem = new GXTemplateItem();
-      templateItem.templateBiz = '';
+      templateItem.templateBiz = 'fastpreview';
       templateItem.templateId = templateId;
 
       let templateData = new GXTemplateData();

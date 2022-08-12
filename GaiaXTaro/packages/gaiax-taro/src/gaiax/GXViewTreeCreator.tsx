@@ -7,11 +7,12 @@ import GXCssConvertStyle from "./GXCssConvertStyle";
 import GXTemplateInfo from "./GXTemplateInfo";
 import { GXJSONArray, GXJSONObject } from "./GXJson";
 import { GXTemplateItem } from "./GXTemplateEngine";
-import GXView from "./components/view/GXView";
-import GXImage from "./components/image/GXImage";
-import GXText from "./components/text/GXText";
-import GXRichText from "./components/richtext/GXRichText";
-import GXIconFontText from "./components/iconfonttext/GXRichText";
+import GXView from "../components/view/GXView";
+import GXImage from "../components/image/GXImage";
+import GXText from "../components/text/GXText";
+import GXRichText from "../components/richtext/GXRichText";
+import GXIconFontText from "../components/iconfonttext/GXRichText";
+import GXScroll from "../components/scroll/GXScroll";
 
 export default class GXViewTreeCreator {
 
@@ -146,6 +147,50 @@ export default class GXViewTreeCreator {
 
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, gxVisualTemplateNodeData, gxParentNode);
 
+        const layers = gxLayer['layers'] as GXJSONArray;
+
+        if (layers != null) {
+
+            if (gxNode != null && gxNode.gxChildren == null) {
+                gxNode.gxChildren = new Array<GXNode>();
+            }
+
+            for (const target of layers) {
+
+                const childLayer = target as GXJSONObject;
+
+                // 嵌套子模板类型，是个虚拟节点
+                if (GXTemplateNode.isNestChildTemplateType(childLayer)) {
+
+                    // 获取子模板信息
+                    const gxChildTemplateInfo = gxTemplateInfo.getChildTemplate(childLayer.id);
+
+                    // 创建一个虚拟节点
+                    const gxChildVisualTemplateNode = GXTemplateNode.create(childLayer, gxTemplateInfo, null);
+
+                    // 获取子模板的根节点
+                    const gxChildLayer = gxChildTemplateInfo.layer;
+
+                    // 容器模板下的子模板
+                    if (gxNode.gxTemplateNode.isContainerType()) {
+
+                        // 初始化
+                        if (gxNode != null && gxNode.gxChildTemplateItems == null) {
+                            gxNode.gxChildTemplateItems = new Array<GXTemplateItem>();
+                        }
+
+                        // 容器下的子模板
+                        const childTemplateItems = GXTemplateItem.create(
+                            gxTemplateContext.gxTemplateItem.templateBiz,
+                            gxChildLayer.id
+                        );
+
+                        gxNode?.gxChildTemplateItems?.push(childTemplateItems);
+                    }
+                }
+            }
+        }
+
         if (gxNode.gxTemplateNode.isScrollType()) {
             this.createScrollNode(
                 gxTemplateContext,
@@ -175,7 +220,14 @@ export default class GXViewTreeCreator {
         gxNode: GXNode,
         gxTemplateData: GXJSONObject
     ) {
-        throw new Error("Method not implemented.");
+        const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+        gxNode.gxView = <GXScroll
+            key={gxNode.gxId}
+            propGXTemplateContext={gxTemplateContext}
+            propGXNode={gxNode}
+            propStyle={gxNode.gxTemplateNode.finalStyle}
+            propDataValue={data.value}
+        />;
     }
 
     private createViewOrTemplateNode(

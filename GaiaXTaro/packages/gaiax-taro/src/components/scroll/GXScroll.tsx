@@ -24,6 +24,29 @@ const Row = React.memo(() => {
     );
 })
 
+export interface GXScrollViewHolderState {
+
+}
+
+export interface GXScrollViewHolderProps {
+     /** 组件 ID */
+ id: string
+ /** 单项的样式，样式必须传入组件的 style 中 */
+ style?: CSSProperties
+ /** 组件渲染的数据 */
+ data: any
+ /** 组件渲染数据的索引 */
+ index: number
+ /** 组件是否正在滚动，当 useIsScrolling 值为 true 时返回布尔值，否则返回 undefined */
+ isScrolling?: boolean
+
+}
+
+
+class GXScrollViewHolder extends React.PureComponent<GXScrollViewHolderProps, GXScrollViewHolderState> {
+
+}
+
 
 export default class GXScroll extends React.Component<GXScrollProps, GXScrollState> {
     render() {

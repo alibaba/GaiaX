@@ -5,7 +5,7 @@ import VirtualList from '@tarojs/components/virtual-list'
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import GXUtils from '../../gaiax/GXUtils';
-import { GXEngineInstance, GXTemplateInfo } from '../..';
+import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
 
 export interface GXScrollState {
 
@@ -28,12 +28,25 @@ type GXScrollViewHolderProps = {
 
 const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewHolderProps> = ({ id, style, data, index }) => {
     const itemData = data[index];
-    console.log(id)
-    console.log(style)
+    
     console.log(itemData)
-    console.log(index)
+
+    const gaiaxItemParams = itemData["gaiaxItemParams"];
+
+    const childTemplateItem: GXTemplateItem = gaiaxItemParams["childTemplateItem"];
+    let templateItem = new GXTemplateItem();
+    templateItem.templateBiz = childTemplateItem.templateBiz;
+    templateItem.templateId = childTemplateItem.templateId;
+
+    let templateData = new GXTemplateData();
+    templateData.templateData = itemData;
+
+    let measureSize = new GXMeasureSize();
+    measureSize.templateWidth = gaiaxItemParams["childItemWidth"];
+    measureSize.templateHeight = gaiaxItemParams["childItemHeight"];
+
     return (
-        <View style="width:100px;height:100px;background-color:black;" />
+        <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
     );
 };
 
@@ -68,6 +81,13 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             let childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
             let virtualListItemWidth = GXUtils.convertWidthToNumber(childItemWidth);
 
+            propDataValue.forEach(itemData => {
+                itemData["gaiaxItemParams"] = {
+                    "childItemWidth": virtualListItemWidth,
+                    "childTemplateItem": gxChildTemplateItem,
+                };
+            });
+
             return <VirtualList
                 height={virtualListHeight}
                 width={virtualListWidth}
@@ -81,6 +101,13 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         } else {
             let childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
             let virtualListItemHeight = GXUtils.convertHeightToNumber(childItemHeight);
+
+            propDataValue.forEach(itemData => {
+                itemData["gaiaxItemParams"] = {
+                    "childItemHeight": virtualListItemHeight,
+                    "childTemplateItem": gxChildTemplateItem,
+                };
+            });
 
             return <VirtualList
                 height={virtualListHeight}

@@ -28,10 +28,12 @@ type GXScrollViewHolderProps = {
 
 const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewHolderProps> = ({ id, style, data, index }) => {
     const itemData = data[index];
-    
+
     console.log(itemData)
 
     const gaiaxItemParams = itemData["gaiaxItemParams"];
+
+    const childItemSpacing = `${(gaiaxItemParams["childItemSpacing"] || 0)}px`;
 
     const childTemplateItem: GXTemplateItem = gaiaxItemParams["childTemplateItem"];
     let templateItem = new GXTemplateItem();
@@ -80,11 +82,13 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
             let childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
             let virtualListItemWidth = GXUtils.convertWidthToNumber(childItemWidth);
+            let virtualListItemRealWidth = virtualListItemWidth + Number.parseInt(gxScrollConfig.itemSpacing);
 
             propDataValue.forEach(itemData => {
                 itemData["gaiaxItemParams"] = {
                     "childItemWidth": virtualListItemWidth,
                     "childTemplateItem": gxChildTemplateItem,
+                    "childItemSpacing": gxScrollConfig.itemSpacing,
                 };
             });
 
@@ -94,18 +98,20 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 layout='horizontal'
                 itemData={propDataValue}
                 itemCount={propDataValue.length}
-                itemSize={virtualListItemWidth}
+                itemSize={virtualListItemRealWidth}
             >
                 {MemoGXScrollViewHolderFunctionComponent}
             </VirtualList>;
         } else {
             let childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
             let virtualListItemHeight = GXUtils.convertHeightToNumber(childItemHeight);
+            let virtualListItemRealHeight = virtualListItemHeight + Number.parseInt(gxScrollConfig.itemSpacing);
 
             propDataValue.forEach(itemData => {
                 itemData["gaiaxItemParams"] = {
                     "childItemHeight": virtualListItemHeight,
                     "childTemplateItem": gxChildTemplateItem,
+                    "childItemSpacing": gxScrollConfig.itemSpacing,
                 };
             });
 
@@ -115,7 +121,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 layout='vertical'
                 itemData={propDataValue}
                 itemCount={propDataValue.length}
-                itemSize={virtualListItemHeight}
+                itemSize={virtualListItemRealHeight}
             >
                 {MemoGXScrollViewHolderFunctionComponent}
             </VirtualList>;

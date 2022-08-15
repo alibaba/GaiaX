@@ -73,5 +73,28 @@
             android:layout_height="wrap_content"
             android:text="@string/business"
             android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/youku_expression"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="youku_expression"
+                android:textColor="@color/black" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/opensource_expression"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="opensource_expression"
+                android:textColor="@color/black" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

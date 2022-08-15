@@ -1,8 +1,8 @@
 {
-  "id": "template_scroll_multi_type_two_gravity_bottom",
+  "id": "template_scroll_multi_type_two_gravity_top_horizontal",
   "type": "gaia-template",
   "sub-type": "scroll",
-  "gravity": "bottom",
+  "gravity": "top",
   "direction": "horizontal",
   "edge-insets": "{0,0,0,0}",
   "layers": [

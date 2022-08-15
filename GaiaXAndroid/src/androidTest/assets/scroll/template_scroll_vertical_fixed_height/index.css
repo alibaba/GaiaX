@@ -1,4 +1,5 @@
-#template_scroll_multi_type_two_gravity_bottom {
+#template_scroll_vertical {
   width: 100%;
+  height:200px;
   background-color: primaryBackground;
 }

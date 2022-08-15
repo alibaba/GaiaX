@@ -122,9 +122,13 @@ class GXContainerViewAdapter(
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
         val containerHeightLP = gxNode.templateNode.finalScrollConfig?.let {
-            // 如果是scroll，那么可以设定gravity，需要让自己撑满容器
-            childItemContainer.gravity = it.gravity
-            gxContainer.layoutParams.height
+            if (it.isHorizontal) {
+                // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
+                childItemContainer.gravity = it.gravity
+                gxContainer.layoutParams.height
+            } else {
+                childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+            }
         } ?: run {
             childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }

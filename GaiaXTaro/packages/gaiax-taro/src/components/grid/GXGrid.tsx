@@ -5,18 +5,18 @@ import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
 
-export interface GXScrollState {
+export interface GXGridState {
 
 }
 
-export interface GXScrollProps {
+export interface GXGridProps {
     propStyle?: string | CSSProperties
     propDataValue?: GXJSONArray
     propGXTemplateContext: GXTemplateContext
     propGXNode: GXNode
 }
 
-export default class GXScroll extends React.Component<GXScrollProps, GXScrollState> {
+export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
     render() {
         const {
             propStyle,
@@ -39,21 +39,12 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
         const scrollStyle = {
             height: gxStyle.height,
-            width: gxStyle.width,
-            display: ''
+            width: gxStyle.width
         }
 
         const isHorizontal = gxScrollConfig.direction == 'horizontal'
         const isVertical = gxScrollConfig.direction == 'vertical'
         const itemSpacing = gxScrollConfig.itemSpacing
-
-        // 此处可能要根据多平台适配
-        if (isHorizontal) {
-            // scrollStyle.display = '-webkit-inline-box';
-            scrollStyle.display = 'inline-flex';
-        } else {
-            scrollStyle.display = '';
-        }
 
         const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
         const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
@@ -75,20 +66,15 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             measureSize.templateHeight = childItemHeight;
 
             let itemWrapStyle = {
-                marginRight: '0px',
-                marginBottom: '0px'
+                marginRight: '0px'
             }
 
             if (itemIndex != dataSize - 1) {
-                if (isHorizontal) {
-                    itemWrapStyle.marginRight = itemSpacing;
-                } else if (isVertical) {
-                    itemWrapStyle.marginBottom = itemSpacing;
-                }
+                itemWrapStyle.marginRight = itemSpacing;
             }
 
             childArray.push(
-                <View style={itemWrapStyle} id={`${templateItem.templateId}-${itemIndex}`}>
+                <View style={itemWrapStyle}>
                     <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
                 </View>
             );

@@ -1,4 +1,4 @@
-import { View } from '@tarojs/components';
+import { ScrollView, View } from '@tarojs/components';
 import React, { ComponentType, CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import VirtualList from '@tarojs/components/virtual-list'
@@ -18,44 +18,6 @@ export interface GXScrollProps {
     propGXNode: GXNode
 }
 
-
-type GXScrollViewHolderProps = {
-    id: string
-    style?: CSSProperties
-    data: any
-    index: number
-}
-
-const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewHolderProps> = ({ id, style, data, index }) => {
-    const itemData = data[index];
-
-    console.log(itemData)
-
-    const gaiaxItemParams = itemData["gaiaxItemParams"];
-
-    const childItemSpacing = `${(gaiaxItemParams["childItemSpacing"] || 0)}px`;
-
-    const childTemplateItem: GXTemplateItem = gaiaxItemParams["childTemplateItem"];
-    let templateItem = new GXTemplateItem();
-    templateItem.templateBiz = childTemplateItem.templateBiz;
-    templateItem.templateId = childTemplateItem.templateId;
-
-    let templateData = new GXTemplateData();
-    templateData.templateData = itemData;
-
-    let measureSize = new GXMeasureSize();
-    measureSize.templateWidth = gaiaxItemParams["childItemWidth"];
-    measureSize.templateHeight = gaiaxItemParams["childItemHeight"];
-
-    return (
-        <View style="margin-right:15px;">
-            <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
-        </View>
-    );
-};
-
-const MemoGXScrollViewHolderFunctionComponent = React.memo(GXScrollViewHolderFunctionComponent);
-
 export default class GXScroll extends React.Component<GXScrollProps, GXScrollState> {
     render() {
         const {
@@ -71,62 +33,64 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
         const gxStyle = gxTemplateNode.finalStyle;
 
-        let virtualListWidth = GXUtils.convertWidthToNumber(gxStyle.width + '');
-        let virtualListHeight = GXUtils.convertHeightToNumber(gxStyle.height + '');
-
         // 容器的子坑位，目前只支持一个
         const gxChildTemplateItem = propGXNode.gxChildTemplateItems[0];
 
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
-        if (gxScrollConfig.direction == 'horizontal') {
-
-            let childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
-            let virtualListItemWidth = GXUtils.convertWidthToNumber(childItemWidth);
-            let virtualListItemRealWidth = virtualListItemWidth + Number.parseInt(gxScrollConfig.itemSpacing);
-
-            propDataValue.forEach(itemData => {
-                itemData["gaiaxItemParams"] = {
-                    "childItemWidth": virtualListItemWidth,
-                    "childTemplateItem": gxChildTemplateItem,
-                    "childItemSpacing": gxScrollConfig.itemSpacing,
-                };
-            });
-
-            return <VirtualList
-                height={virtualListHeight}
-                width={virtualListWidth}
-                layout='horizontal'
-                itemData={propDataValue}
-                itemCount={propDataValue.length}
-                itemSize={virtualListItemRealWidth}
-            >
-                {MemoGXScrollViewHolderFunctionComponent}
-            </VirtualList>;
-        } else {
-            let childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
-            let virtualListItemHeight = GXUtils.convertHeightToNumber(childItemHeight);
-            let virtualListItemRealHeight = virtualListItemHeight + Number.parseInt(gxScrollConfig.itemSpacing);
-
-            propDataValue.forEach(itemData => {
-                itemData["gaiaxItemParams"] = {
-                    "childItemHeight": virtualListItemHeight,
-                    "childTemplateItem": gxChildTemplateItem,
-                    "childItemSpacing": gxScrollConfig.itemSpacing,
-                };
-            });
-
-            return <VirtualList
-                height={virtualListHeight}
-                width={virtualListWidth}
-                layout='vertical'
-                itemData={propDataValue}
-                itemCount={propDataValue.length}
-                itemSize={virtualListItemRealHeight}
-            >
-                {MemoGXScrollViewHolderFunctionComponent}
-            </VirtualList>;
+        const scrollStyle = {
+            height: gxStyle.height,
+            width: gxStyle.width,
+            display: '-webkit-inline-box'
         }
+
+        const isHorizontal = gxScrollConfig.direction == 'horizontal'
+        const isVertical = gxScrollConfig.direction == 'vertical'
+        const itemSpacing = gxScrollConfig.itemSpacing
+
+        const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
+        const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
+
+        const childArray: ReactNode[] = [];
+
+        const dataSize = propDataValue.length
+        propDataValue.forEach((itemData, itemIndex) => {
+
+            const templateItem = new GXTemplateItem();
+            templateItem.templateBiz = gxChildTemplateItem.templateBiz;
+            templateItem.templateId = gxChildTemplateItem.templateId;
+
+            const templateData = new GXTemplateData();
+            templateData.templateData = itemData;
+
+            const measureSize = new GXMeasureSize();
+            measureSize.templateWidth = childItemWidth;
+            measureSize.templateHeight = childItemHeight;
+
+            let itemWrapStyle = {
+                marginRight: '0px'
+            }
+
+            if (itemIndex != dataSize - 1) {
+                itemWrapStyle.marginRight = itemSpacing;
+            }
+
+            childArray.push(
+                <View style={itemWrapStyle}>
+                    <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+                </View>
+            );
+        });
+
+        return (
+            <ScrollView
+                scrollX={isHorizontal}
+                scrollY={isVertical}
+                style={scrollStyle}
+            >
+                {childArray}
+            </ScrollView>
+        )
     }
 }

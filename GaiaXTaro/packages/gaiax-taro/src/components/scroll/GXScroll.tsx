@@ -6,7 +6,6 @@ import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import GXUtils from '../../gaiax/GXUtils';
 import { GXEngineInstance, GXTemplateInfo } from '../..';
-import { logDOM } from '@testing-library/react';
 
 export interface GXScrollState {
 
@@ -28,7 +27,11 @@ type GXScrollViewHolderProps = {
 }
 
 const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewHolderProps> = ({ id, style, data, index }) => {
-    console.log(`id=${id} style=${style} data=${data} index=${index}`)
+    const itemData = data[index];
+    console.log(id)
+    console.log(style)
+    console.log(itemData)
+    console.log(index)
     return (
         <View style="width:100px;height:100px;background-color:black;" />
     );

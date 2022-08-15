@@ -42,11 +42,16 @@ export default class Index extends Component<IParams> {
   componentWillMount() {
 
     const gxFastPreviewListener: IGXFastPreviewListener = {
-      onUpdate: (templateId: string, template: any) => {
-        gxTemplateSource.addData(templateId, template)
+      onUpdate: (templateId: string) => {
+        console.log(`onUpdate templateId = ${templateId} `);
         this.setState({
           templateId: templateId
         });
+      },
+      onAddData: function (templateId: string, template: any) {
+        console.log(`onAddData templateId = ${templateId} `);
+        console.log(template);
+        gxTemplateSource.addData(templateId, template);
       }
     }
 

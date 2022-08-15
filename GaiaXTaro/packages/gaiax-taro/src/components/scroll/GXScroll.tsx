@@ -48,7 +48,9 @@ const GXScrollViewHolderFunctionComponent: React.FunctionComponent<GXScrollViewH
     measureSize.templateHeight = gaiaxItemParams["childItemHeight"];
 
     return (
-        <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+        <View style="margin-right:15px;">
+            <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+        </View>
     );
 };
 

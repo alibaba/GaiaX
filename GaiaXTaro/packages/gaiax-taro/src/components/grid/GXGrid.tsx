@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components';
 import _chunk from 'lodash/chunk'
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
@@ -38,83 +38,74 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
-        // if (Array.isArray(propDataValue) && propDataValue.length === 0) {
+        const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
+        const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
+
+        if (Array.isArray(propDataValue) && propDataValue.length === 0) {
             return null;
-        // }
+        }
 
-        // const gridColumn = gxGridConfig.column;
+        const gridColumn = gxGridConfig.column;
 
-        // const gridGroup = _chunk(propDataValue, gridColumn);
+        const gridGroup = _chunk(propDataValue, gridColumn);
 
-        // const gaiaxGridStyle = {
-        //     height: gxStyle.height,
-        //     width: gxStyle.width,
-        //     backgroundColor: '#00ff00'
-        // }
+        const gaiaxGridStyle = {
+            height: gxStyle.height,
+            width: gxStyle.width,
+            backgroundColor: '#00ff00',
+            overflow: 'hidden'
+        }
 
-        // const gaiaxGridGroupStyle = {
-        //     display: 'flex'
-        // }
+        const gaiaxGridGroupStyle = {
+            display: 'flex'
+        }
 
-        // const gaiaxGridGroupItemStyle = {
-        //     flex: `0 0 ${100 / gridColumn}%`,
-        //     display: 'block',
-        //     backgroundColor: '#ff00ff'
-        // }
+        const gaiaxGridGroupItemStyle = {
+            flex: `0 0 ${100 / gridColumn}%`,
+            display: 'block',
+        }
 
-        // // const isHorizontal = gxScrollConfig.direction == 'horizontal'
-        // // const isVertical = gxScrollConfig.direction == 'vertical'
-        // // const itemSpacing = gxScrollConfig.itemSpacing
+        const templateItem = new GXTemplateItem();
+        templateItem.templateBiz = gxChildTemplateItem.templateBiz;
+        templateItem.templateId = gxChildTemplateItem.templateId;
 
-        // // const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
-        // // const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
+        const groupViewsArray: ReactNode[] = [];
+        gridGroup.map((groupItem, groupItemIndex) => {
 
-        // // const childArray: ReactNode[] = [];
+            const groupItemViewsArray: ReactNode[] = [];
+            groupItem.map((childItem, childItemIndex) => {
 
-        // // const dataSize = propDataValue.length
-        // // propDataValue.forEach((itemData, itemIndex) => {
+                const templateItem = new GXTemplateItem();
+                templateItem.templateBiz = gxChildTemplateItem.templateBiz;
+                templateItem.templateId = gxChildTemplateItem.templateId;
 
-        // //     const templateItem = new GXTemplateItem();
-        // //     templateItem.templateBiz = gxChildTemplateItem.templateBiz;
-        // //     templateItem.templateId = gxChildTemplateItem.templateId;
+                const templateData = new GXTemplateData();
+                templateData.templateData = childItem;
 
-        // //     const templateData = new GXTemplateData();
-        // //     templateData.templateData = itemData;
+                const measureSize = new GXMeasureSize();
+                measureSize.templateWidth = childItemWidth;
+                measureSize.templateHeight = childItemHeight;
 
-        // //     const measureSize = new GXMeasureSize();
-        // //     measureSize.templateWidth = childItemWidth;
-        // //     measureSize.templateHeight = childItemHeight;
+                // item
+                const groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gaiaxGridGroupItemStyle} >
+                    <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+                </View>;
 
-        // //     let itemWrapStyle = {
-        // //         marginRight: '0px'
-        // //     }
+                groupItemViewsArray.push(groupItemView);
+            });
 
-        // //     if (itemIndex != dataSize - 1) {
-        // //         itemWrapStyle.marginRight = itemSpacing;
-        // //     }
+            // group 
+            const groupItemViews: ReactNode = <View style={gaiaxGridGroupStyle} key={`gaiax-grid-group-${groupItemIndex}`}>
+                {groupItemViewsArray}
+            </View>
 
-        // //     childArray.push(
-        // //         <View style={itemWrapStyle}>
-        // //             <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
-        // //         </View>
-        // //     );
-        // // });
+            groupViewsArray.push(groupItemViews);
+        });
 
-        // return (
-        //     <View style={gaiaxGridStyle} key={`gaiax-grid`}>
-        //         {gridGroup.map((item, i) => (
-        //             <View style={gaiaxGridGroupStyle} key={`gaiax-grid-group-${i}`}>
-        //                 {item.map((childItem, index) => (
-        //                     <View
-        //                         key={`gaiax-grid-group-item-${index}`}
-        //                         style={gaiaxGridGroupItemStyle}
-        //                     >
-
-        //                     </View>
-        //                 ))}
-        //             </View>
-        //         ))}
-        //     </View>
-        // )
+        return (
+            <View style={gaiaxGridStyle} key={`gaiax-grid`}>
+                {groupViewsArray}
+            </View>
+        );
     }
 }

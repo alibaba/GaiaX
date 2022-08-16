@@ -15,7 +15,7 @@ export class GXNode {
 
     gxView?: ReactNode = null;
 
-    gxChildTemplateItems?: Array<GXTemplateItem>;
+    gxChildTemplateItems?: Map<GXTemplateItem, GXTemplateNode>;
 
     setIdPath(gxLayer: GXJSONObject, gxParentNode?: GXNode) {
         this.gxId = gxLayer['id'];

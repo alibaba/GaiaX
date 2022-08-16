@@ -20,10 +20,17 @@ export default class GXTemplateContext {
     rootView: ReactNode;
 
 
-    constructor(gxTemplateItem: GXTemplateItem, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize, gxTemplateInfo: GXTemplateInfo) {
+    constructor(
+        gxTemplateItem: GXTemplateItem,
+        gxTemplateData: GXTemplateData,
+        gxMeasureSize: GXMeasureSize,
+        gxTemplateInfo: GXTemplateInfo,
+        gxVisualTemplateNode?: GXTemplateNode
+    ) {
         this.gxTemplateItem = gxTemplateItem;
         this.gxTemplateInfo = gxTemplateInfo;
         this.gxTemplateData = gxTemplateData;
         this.gxMeasureSize = gxMeasureSize;
+        this.gxVisualTemplateNode =gxVisualTemplateNode;
     }
 }

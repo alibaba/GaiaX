@@ -4,6 +4,7 @@ import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
+import GXTemplateNode from '../../gaiax/GXTemplateNode';
 
 export interface GXScrollState {
 
@@ -32,7 +33,15 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         const gxStyle = gxTemplateNode.finalStyle;
 
         // 容器的子坑位，目前只支持一个
-        const gxChildTemplateItem = propGXNode.gxChildTemplateItems[0];
+        let gxChildTemplateItem: GXTemplateItem = null;
+        let gxChildVisualTemplateNode: GXTemplateNode = null;
+
+        propGXNode.gxChildTemplateItems?.forEach((value, key) => {
+            if (gxChildTemplateItem == null && gxChildVisualTemplateNode == null) {
+                gxChildTemplateItem = key;
+                gxChildVisualTemplateNode = value;
+            }
+        });
 
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
@@ -81,16 +90,16 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         const dataSize = propDataValue.length
         propDataValue.forEach((itemData, itemIndex) => {
 
-            const templateItem = new GXTemplateItem();
-            templateItem.templateBiz = gxChildTemplateItem.templateBiz;
-            templateItem.templateId = gxChildTemplateItem.templateId;
+            const gxTemplateItem = new GXTemplateItem();
+            gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
+            gxTemplateItem.templateId = gxChildTemplateItem.templateId;
 
-            const templateData = new GXTemplateData();
-            templateData.templateData = itemData;
+            const gxTemplateData = new GXTemplateData();
+            gxTemplateData.templateData = itemData;
 
-            const measureSize = new GXMeasureSize();
-            measureSize.templateWidth = childItemWidth;
-            measureSize.templateHeight = childItemHeight;
+            const gxMeasureSize = new GXMeasureSize();
+            gxMeasureSize.templateWidth = childItemWidth;
+            gxMeasureSize.templateHeight = childItemHeight;
 
             let itemWrapStyle = {
                 marginRight: '0px',
@@ -111,8 +120,12 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             }
 
             childArray.push(
-                <View style={itemWrapStyle} id={`${templateItem.templateId}-${itemIndex}`}>
-                    <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+                <View style={itemWrapStyle} id={`${gxTemplateItem.templateId}-${itemIndex}`}>
+                    <GXTemplateComponent
+                        gxTemplateData={gxTemplateData}
+                        gxTemplateItem={gxTemplateItem}
+                        gxMeasureSize={gxMeasureSize}
+                        gxVisualTemplateNode={gxChildVisualTemplateNode} />
                 </View>
             );
         });

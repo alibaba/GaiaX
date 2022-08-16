@@ -5,6 +5,7 @@ import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
+import GXTemplateNode from '../../gaiax/GXTemplateNode';
 
 export interface GXGridState {
 
@@ -33,7 +34,15 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         const gxStyle = gxTemplateNode.finalStyle;
 
         // 容器的子坑位，目前只支持一个
-        const gxChildTemplateItem = propGXNode.gxChildTemplateItems[0];
+        let gxChildTemplateItem: GXTemplateItem = null;
+        let gxChildVisualTemplateNode: GXTemplateNode = null;
+
+        propGXNode.gxChildTemplateItems?.forEach((value, key) => {
+            if (gxChildTemplateItem == null && gxChildVisualTemplateNode == null) {
+                gxChildTemplateItem = key;
+                gxChildVisualTemplateNode = value;
+            }
+        });
 
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
@@ -85,7 +94,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                     display: 'block',
                     marginRight: '0px'
                 }
-                
+
                 if (childItemIndex != groupItemSize - 1) {
                     if (isVertical) {
                         if (gxGridConfig.itemSpacing != null) {
@@ -94,20 +103,24 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                     }
                 }
 
-                const templateItem = new GXTemplateItem();
-                templateItem.templateBiz = gxChildTemplateItem.templateBiz;
-                templateItem.templateId = gxChildTemplateItem.templateId;
+                const gxTemplateItem = new GXTemplateItem();
+                gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
+                gxTemplateItem.templateId = gxChildTemplateItem.templateId;
 
-                const templateData = new GXTemplateData();
-                templateData.templateData = childItem;
+                const gxTemplateData = new GXTemplateData();
+                gxTemplateData.templateData = childItem;
 
-                const measureSize = new GXMeasureSize();
-                measureSize.templateWidth = childItemWidth;
-                measureSize.templateHeight = childItemHeight;
+                const gxMeasureSize = new GXMeasureSize();
+                gxMeasureSize.templateWidth = childItemWidth;
+                gxMeasureSize.templateHeight = childItemHeight;
 
                 // item
                 const groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gaiaxGridGroupItemStyle} >
-                    <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+                    <GXTemplateComponent
+                        gxTemplateData={gxTemplateData}
+                        gxTemplateItem={gxTemplateItem}
+                        gxMeasureSize={gxMeasureSize}
+                        gxVisualTemplateNode={gxChildVisualTemplateNode} />
                 </View>;
 
                 groupItemViewsArray.push(groupItemView);

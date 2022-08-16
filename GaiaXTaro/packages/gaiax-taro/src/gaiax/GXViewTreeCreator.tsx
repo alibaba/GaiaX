@@ -177,16 +177,16 @@ export default class GXViewTreeCreator {
 
                         // 初始化
                         if (gxNode != null && gxNode.gxChildTemplateItems == null) {
-                            gxNode.gxChildTemplateItems = new Array<GXTemplateItem>();
+                            gxNode.gxChildTemplateItems = new Map<GXTemplateItem, GXTemplateNode>();
                         }
 
                         // 容器下的子模板
-                        const childTemplateItems = GXTemplateItem.create(
+                        const childTemplateItem = GXTemplateItem.create(
                             gxTemplateContext.gxTemplateItem.templateBiz,
                             gxChildLayer.id
                         );
 
-                        gxNode?.gxChildTemplateItems?.push(childTemplateItems);
+                        gxNode?.gxChildTemplateItems?.set(childTemplateItem, gxChildVisualTemplateNode);
                     }
                 }
             }
@@ -279,16 +279,16 @@ export default class GXViewTreeCreator {
 
                         // 初始化
                         if (gxNode != null && gxNode.gxChildTemplateItems == null) {
-                            gxNode.gxChildTemplateItems = new Array<GXTemplateItem>();
+                            gxNode.gxChildTemplateItems = new Map<GXTemplateItem, GXTemplateNode>();
                         }
 
                         // 容器下的子模板
-                        const childTemplateItems = GXTemplateItem.create(
+                        const childTemplateItem = GXTemplateItem.create(
                             gxTemplateContext.gxTemplateItem.templateBiz,
                             gxChildLayer.id
                         );
 
-                        gxNode?.gxChildTemplateItems?.push(childTemplateItems);
+                        gxNode?.gxChildTemplateItems?.set(childTemplateItem, gxChildVisualTemplateNode);
                     }
                     // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                     else {

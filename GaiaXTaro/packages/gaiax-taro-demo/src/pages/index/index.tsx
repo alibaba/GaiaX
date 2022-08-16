@@ -92,8 +92,12 @@ export default class Index extends Component<IParams> {
       measureSize.templateHeight = constraintSize?.['height']
 
       return (
-        <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
-        );
+        <GXTemplateComponent
+          gxTemplateData={templateData}
+          gxTemplateItem={templateItem}
+          gxMeasureSize={measureSize}
+        />
+      );
     } else {
       return (
         <View></View>

@@ -58,7 +58,7 @@ export class GXGridConfig {
         gxConfig.column = Number.parseInt(gxLayer['column']) || 1;
 
         // direction
-        gxConfig.direction = gxLayer['direction'];
+        gxConfig.direction = gxLayer['direction'] || 'vertical';
 
         // item spacing
         const itemSpacing = gxLayer['item-spacing'];
@@ -135,7 +135,7 @@ export class GXScrollConfig {
         const gxConfig = new GXScrollConfig();
 
         // direction
-        gxConfig.direction = gxLayer['direction'];
+        gxConfig.direction = gxLayer['direction'] || 'horizontal';
 
         // item spacing
         const itemSpacing = gxLayer['item-spacing'];

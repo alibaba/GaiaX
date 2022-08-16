@@ -41,6 +41,9 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
         const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
 
+        const isHorizontal = gxGridConfig.direction == 'horizontal'
+        const isVertical = gxGridConfig.direction == 'vertical'
+
         if (Array.isArray(propDataValue) && propDataValue.length === 0) {
             return null;
         }
@@ -56,24 +59,40 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             overflow: 'hidden'
         }
 
-        const gaiaxGridGroupStyle = {
-            display: 'flex'
-        }
-
-        const gaiaxGridGroupItemStyle = {
-            flex: `0 0 ${100 / gridColumn}%`,
-            display: 'block',
-        }
-
-        const templateItem = new GXTemplateItem();
-        templateItem.templateBiz = gxChildTemplateItem.templateBiz;
-        templateItem.templateId = gxChildTemplateItem.templateId;
-
         const groupViewsArray: ReactNode[] = [];
+        const gridGroupSize = gridGroup.length;
         gridGroup.map((groupItem, groupItemIndex) => {
 
+            const gaiaxGridGroupStyle = {
+                display: 'flex',
+                marginBottom: '0px'
+            }
+
+            if (groupItemIndex != gridGroupSize - 1) {
+                if (isVertical) {
+                    if (gxGridConfig.rowSpacing != null) {
+                        gaiaxGridGroupStyle.marginBottom = gxGridConfig.rowSpacing;
+                    }
+                }
+            }
+
             const groupItemViewsArray: ReactNode[] = [];
+            const groupItemSize = groupItem.length;
             groupItem.map((childItem, childItemIndex) => {
+
+                const gaiaxGridGroupItemStyle = {
+                    flex: `1 1 0`,
+                    display: 'block',
+                    marginRight: '0px'
+                }
+                
+                if (childItemIndex != groupItemSize - 1) {
+                    if (isVertical) {
+                        if (gxGridConfig.itemSpacing != null) {
+                            gaiaxGridGroupItemStyle.marginRight = gxGridConfig.itemSpacing;
+                        }
+                    }
+                }
 
                 const templateItem = new GXTemplateItem();
                 templateItem.templateBiz = gxChildTemplateItem.templateBiz;

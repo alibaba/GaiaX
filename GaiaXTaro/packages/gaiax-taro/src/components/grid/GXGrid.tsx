@@ -61,18 +61,36 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
 
         const gridGroup = _chunk(propDataValue, gridColumn);
 
-        const gaiaxGridStyle = {
+        const gxGridStyle = {
             height: gxStyle.height,
             width: gxStyle.width,
-            backgroundColor: '#00ff00',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            marginTop: '',
+            marginLeft: '',
+            marginRight: '',
+            marginBottom: '',
+        }
+
+        // 和native保持一致
+        // edge-insets
+        if (gxGridConfig.edgeInsetsTop != null) {
+            gxGridStyle.marginTop = gxGridConfig.edgeInsetsTop;
+        }
+        if (gxGridConfig.edgeInsetsLeft != null) {
+            gxGridStyle.marginLeft = gxGridConfig.edgeInsetsLeft;
+        }
+        if (gxGridConfig.edgeInsetsRight != null) {
+            gxGridStyle.marginRight = gxGridConfig.edgeInsetsRight;
+        }
+        if (gxGridConfig.edgeInsetsBottom != null) {
+            gxGridStyle.marginBottom = gxGridConfig.edgeInsetsBottom;
         }
 
         const groupViewsArray: ReactNode[] = [];
         const gridGroupSize = gridGroup.length;
         gridGroup.map((groupItem, groupItemIndex) => {
 
-            const gaiaxGridGroupStyle = {
+            const gxGridGroupStyle = {
                 display: 'flex',
                 marginBottom: '0px'
             }
@@ -80,7 +98,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             if (groupItemIndex != gridGroupSize - 1) {
                 if (isVertical) {
                     if (gxGridConfig.rowSpacing != null) {
-                        gaiaxGridGroupStyle.marginBottom = gxGridConfig.rowSpacing;
+                        gxGridGroupStyle.marginBottom = gxGridConfig.rowSpacing;
                     }
                 }
             }
@@ -89,7 +107,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             const groupItemSize = groupItem.length;
             groupItem.map((childItem, childItemIndex) => {
 
-                const gaiaxGridGroupItemStyle = {
+                const gxGridGroupItemStyle = {
                     flex: `1 1 0`,
                     display: 'block',
                     marginRight: '0px'
@@ -98,7 +116,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 if (childItemIndex != groupItemSize - 1) {
                     if (isVertical) {
                         if (gxGridConfig.itemSpacing != null) {
-                            gaiaxGridGroupItemStyle.marginRight = gxGridConfig.itemSpacing;
+                            gxGridGroupItemStyle.marginRight = gxGridConfig.itemSpacing;
                         }
                     }
                 }
@@ -115,7 +133,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 gxMeasureSize.templateHeight = childItemHeight;
 
                 // item
-                const groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gaiaxGridGroupItemStyle} >
+                const groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
                     <GXTemplateComponent
                         gxTemplateData={gxTemplateData}
                         gxTemplateItem={gxTemplateItem}
@@ -127,7 +145,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             });
 
             // group 
-            const groupItemViews: ReactNode = <View style={gaiaxGridGroupStyle} key={`gaiax-grid-group-${groupItemIndex}`}>
+            const groupItemViews: ReactNode = <View style={gxGridGroupStyle} key={`gaiax-grid-group-${groupItemIndex}`}>
                 {groupItemViewsArray}
             </View>
 
@@ -135,7 +153,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         });
 
         return (
-            <View style={gaiaxGridStyle} key={`gaiax-grid`}>
+            <View style={gxGridStyle} key={`gaiax-grid`}>
                 {groupViewsArray}
             </View>
         );

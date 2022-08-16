@@ -1,4 +1,4 @@
-import { View, Text, Image } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import React, { ReactNode } from "react";
 import GXTemplateContext from "./GXTemplateContext";
 import { GXNode } from "./GXNode";
@@ -13,6 +13,7 @@ import GXText from "../components/text/GXText";
 import GXRichText from "../components/richtext/GXRichText";
 import GXIconFontText from "../components/iconfonttext/GXRichText";
 import GXScroll from "../components/scroll/GXScroll";
+import GXGrid from "../components/grid/GXGrid";
 
 export default class GXViewTreeCreator {
 
@@ -212,7 +213,14 @@ export default class GXViewTreeCreator {
         gxNode: GXNode,
         gxTemplateData: GXJSONObject
     ) {
-        throw new Error("Method not implemented.");
+        const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+        gxNode.gxView = <GXGrid
+            key={gxNode.gxId}
+            propGXTemplateContext={gxTemplateContext}
+            propGXNode={gxNode}
+            propStyle={gxNode.gxTemplateNode.finalStyle}
+            propDataValue={data.value}
+        />;
     }
 
     private createScrollNode(

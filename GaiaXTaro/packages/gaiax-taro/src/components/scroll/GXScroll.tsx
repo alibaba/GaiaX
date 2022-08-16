@@ -40,12 +40,30 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         const scrollStyle = {
             height: gxStyle.height,
             width: gxStyle.width,
+            marginTop: '',
+            marginLeft: '',
+            marginRight: '',
+            marginBottom: '',
             display: ''
+        }
+
+        // 和native保持一致
+        // edge-insets
+        if (gxScrollConfig.edgeInsetsTop != null) {
+            scrollStyle.marginTop = gxScrollConfig.edgeInsetsTop;
+        }
+        if (gxScrollConfig.edgeInsetsLeft != null) {
+            scrollStyle.marginLeft = gxScrollConfig.edgeInsetsLeft;
+        }
+        if (gxScrollConfig.edgeInsetsRight != null) {
+            scrollStyle.marginRight = gxScrollConfig.edgeInsetsRight;
+        }
+        if (gxScrollConfig.edgeInsetsBottom != null) {
+            scrollStyle.marginBottom = gxScrollConfig.edgeInsetsBottom;
         }
 
         const isHorizontal = gxScrollConfig.direction == 'horizontal'
         const isVertical = gxScrollConfig.direction == 'vertical'
-        const itemSpacing = gxScrollConfig.itemSpacing
 
         // 此处可能要根据多平台适配
         if (isHorizontal) {
@@ -81,9 +99,14 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
             if (itemIndex != dataSize - 1) {
                 if (isHorizontal) {
-                    itemWrapStyle.marginRight = itemSpacing;
+                    if (gxScrollConfig.itemSpacing != null) {
+                        itemWrapStyle.marginRight = gxScrollConfig.itemSpacing;
+                    }
+
                 } else if (isVertical) {
-                    itemWrapStyle.marginBottom = itemSpacing;
+                    if (gxScrollConfig.itemSpacing != null) {
+                        itemWrapStyle.marginBottom = gxScrollConfig.itemSpacing;
+                    }
                 }
             }
 

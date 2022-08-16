@@ -5,65 +5,163 @@ import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXTemplateInfo from "./GXTemplateInfo";
 
-export class GXScrollConfig {
-    direction: string = 'horizontal';
-    itemSpacing: string;
-    rowSpacing: string;
+export class GXGridConfig {
+    direction: string = 'vertical';
+    itemSpacing: string = null;
+    rowSpacing: string = null;
+    column: number = 1;
 
-    static createByExtend(src: GXScrollConfig, extend: GXJSONObject) {
+    edgeInsetsLeft: string = null;
+    edgeInsetsTop: string = null;
+    edgeInsetsRight: string = null;
+    edgeInsetsBottom: string = null;
+
+    static createByExtend(src: GXGridConfig, extend: GXJSONObject) {
         // ScrollConfig
-        const gxScrollConfig = new GXScrollConfig();
+        const gxConfig = new GXGridConfig();
 
         // direction
-        gxScrollConfig.direction = src.direction;
+        gxConfig.direction = src.direction;
         const newDirection = extend['direction']
         if (newDirection != null) {
-            gxScrollConfig.direction = newDirection
+            gxConfig.direction = newDirection
         }
 
         // item spacing
         const itemSpacing = src.itemSpacing;
         if (itemSpacing != null) {
-            gxScrollConfig.itemSpacing = src.itemSpacing;
+            gxConfig.itemSpacing = src.itemSpacing;
         }
         const newItemSpacing = extend['item-spacing'];
         if (newItemSpacing != null) {
-            gxScrollConfig.itemSpacing = newItemSpacing;
+            gxConfig.itemSpacing = newItemSpacing;
         }
 
         // row spacing
         const rowSpacing = src.rowSpacing;
         if (rowSpacing != null) {
-            gxScrollConfig.rowSpacing = src.rowSpacing;
+            gxConfig.rowSpacing = src.rowSpacing;
         }
         const newRowSpacing = extend['row-spacing'];
         if (newRowSpacing != null) {
-            gxScrollConfig.rowSpacing = newRowSpacing;
+            gxConfig.rowSpacing = newRowSpacing;
         }
 
-        return gxScrollConfig;
+        return gxConfig;
     }
 
     static create(gxLayer: GXJSONObject) {
         // ScrollConfig
-        const gxScrollConfig = new GXScrollConfig();
+        const gxConfig = new GXGridConfig();
+
+        // column
+        gxConfig.column = Number.parseInt(gxLayer['column']) || 1;
 
         // direction
-        gxScrollConfig.direction = gxLayer['direction'];
+        gxConfig.direction = gxLayer['direction'];
 
         // item spacing
         const itemSpacing = gxLayer['item-spacing'];
         if (itemSpacing != null) {
-            gxScrollConfig.itemSpacing = itemSpacing + "px";
+            gxConfig.itemSpacing = itemSpacing + "px";
         }
 
         // row spacing
         const rowSpacing = gxLayer['row-spacing'];
         if (rowSpacing != null) {
-            gxScrollConfig.rowSpacing = rowSpacing + "px";
+            gxConfig.rowSpacing = rowSpacing + "px";
         }
 
-        return gxScrollConfig;
+        // top left bottom right
+        // "edge-insets": "{2,1,4,3}",
+        const edgeInsets: string = gxLayer['edge-insets'];
+        if (edgeInsets != null) {
+            const edges = edgeInsets.substring(1, edgeInsets.length - 1).split(',');
+            gxConfig.edgeInsetsTop = edges[0] + 'px';
+            gxConfig.edgeInsetsLeft = edges[1] + 'px';
+            gxConfig.edgeInsetsBottom = edges[2] + 'px';
+            gxConfig.edgeInsetsRight = edges[3] + 'px';
+        }
+
+        return gxConfig;
+    }
+}
+
+export class GXScrollConfig {
+    direction: string = 'horizontal';
+    itemSpacing: string = null;
+    rowSpacing: string = null;
+    edgeInsetsLeft: string = null;
+    edgeInsetsTop: string = null;
+    edgeInsetsRight: string = null;
+    edgeInsetsBottom: string = null;
+
+    static createByExtend(src: GXScrollConfig, extend: GXJSONObject) {
+        // ScrollConfig
+        const gxConfig = new GXScrollConfig();
+
+        // direction
+        gxConfig.direction = src.direction;
+        const newDirection = extend['direction']
+        if (newDirection != null) {
+            gxConfig.direction = newDirection
+        }
+
+        // item spacing
+        const itemSpacing = src.itemSpacing;
+        if (itemSpacing != null) {
+            gxConfig.itemSpacing = src.itemSpacing;
+        }
+        const newItemSpacing = extend['item-spacing'];
+        if (newItemSpacing != null) {
+            gxConfig.itemSpacing = newItemSpacing;
+        }
+
+        // row spacing
+        const rowSpacing = src.rowSpacing;
+        if (rowSpacing != null) {
+            gxConfig.rowSpacing = src.rowSpacing;
+        }
+        const newRowSpacing = extend['row-spacing'];
+        if (newRowSpacing != null) {
+            gxConfig.rowSpacing = newRowSpacing;
+        }
+
+        return gxConfig;
+    }
+
+    static create(gxLayer: GXJSONObject) {
+        // ScrollConfig
+        const gxConfig = new GXScrollConfig();
+
+        // direction
+        gxConfig.direction = gxLayer['direction'];
+
+        // item spacing
+        const itemSpacing = gxLayer['item-spacing'];
+        if (itemSpacing != null) {
+            gxConfig.itemSpacing = itemSpacing + "px";
+        }
+
+        // row spacing
+        const rowSpacing = gxLayer['row-spacing'];
+        if (rowSpacing != null) {
+            gxConfig.rowSpacing = rowSpacing + "px";
+        }
+
+        // top left bottom right
+        // "edge-insets": "{2,1,4,3}",
+        const edgeInsets: string = gxLayer['edge-insets'];
+        if (edgeInsets != null) {
+            const edges = edgeInsets.substring(1, edgeInsets.length - 1).split(',');
+            gxConfig.edgeInsetsTop = edges[0] + 'px';
+            gxConfig.edgeInsetsLeft = edges[1] + 'px';
+            gxConfig.edgeInsetsBottom = edges[2] + 'px';
+            gxConfig.edgeInsetsRight = edges[3] + 'px';
+        }
+
+
+        return gxConfig;
     }
 }
 
@@ -103,11 +201,17 @@ export default class GXTemplateNode {
                 this.finalGXScrollConfig = GXScrollConfig.createByExtend(this.gxScrollConfig, extendCssData);
             }
 
+            if (this.gxGridConfig != null) {
+                this.finalGXGridConfig = GXGridConfig.createByExtend(this.gxGridConfig, extendCssData);
+            }
+
         } else {
-            
+
             selfFinalCss = this.css;
 
             this.finalGXScrollConfig = this.gxScrollConfig;
+
+            this.finalGXGridConfig = this.gxGridConfig;
         }
 
         // 初始化虚拟节点样式
@@ -134,7 +238,11 @@ export default class GXTemplateNode {
 
     gxScrollConfig: GXScrollConfig = null;
 
+    gxGridConfig: GXGridConfig = null;
+
     finalGXScrollConfig: GXScrollConfig = null;
+
+    finalGXGridConfig: GXGridConfig = null;
 
     finalStyle: React.CSSProperties;
 
@@ -278,6 +386,11 @@ export default class GXTemplateNode {
         // 设置Scroll配置
         if (GXTemplateNode.isScrollType(gxLayer)) {
             gxTemplateNode.gxScrollConfig = GXScrollConfig.create(gxLayer);
+        }
+
+        // 设置Grid配置
+        if (GXTemplateNode.isGridType(gxLayer)) {
+            gxTemplateNode.gxGridConfig = GXGridConfig.create(gxLayer);
         }
 
         return gxTemplateNode;

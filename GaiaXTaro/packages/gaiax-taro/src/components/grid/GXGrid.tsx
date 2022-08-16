@@ -1,5 +1,6 @@
-import { ScrollView, View } from '@tarojs/components';
-import React, { ComponentType, CSSProperties, ReactNode } from 'react';
+import { View } from '@tarojs/components';
+import _chunk from 'lodash/chunk'
+import React, { CSSProperties } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
@@ -27,7 +28,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
 
         const gxTemplateNode = propGXNode.gxTemplateNode;
 
-        const gxScrollConfig = gxTemplateNode.finalGXScrollConfig;
+        const gxGridConfig = gxTemplateNode.finalGXGridConfig;
 
         const gxStyle = gxTemplateNode.finalStyle;
 
@@ -37,57 +38,83 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
-        const scrollStyle = {
-            height: gxStyle.height,
-            width: gxStyle.width
-        }
+        // if (Array.isArray(propDataValue) && propDataValue.length === 0) {
+            return null;
+        // }
 
-        const isHorizontal = gxScrollConfig.direction == 'horizontal'
-        const isVertical = gxScrollConfig.direction == 'vertical'
-        const itemSpacing = gxScrollConfig.itemSpacing
+        // const gridColumn = gxGridConfig.column;
 
-        const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
-        const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
+        // const gridGroup = _chunk(propDataValue, gridColumn);
 
-        const childArray: ReactNode[] = [];
+        // const gaiaxGridStyle = {
+        //     height: gxStyle.height,
+        //     width: gxStyle.width,
+        //     backgroundColor: '#00ff00'
+        // }
 
-        const dataSize = propDataValue.length
-        propDataValue.forEach((itemData, itemIndex) => {
+        // const gaiaxGridGroupStyle = {
+        //     display: 'flex'
+        // }
 
-            const templateItem = new GXTemplateItem();
-            templateItem.templateBiz = gxChildTemplateItem.templateBiz;
-            templateItem.templateId = gxChildTemplateItem.templateId;
+        // const gaiaxGridGroupItemStyle = {
+        //     flex: `0 0 ${100 / gridColumn}%`,
+        //     display: 'block',
+        //     backgroundColor: '#ff00ff'
+        // }
 
-            const templateData = new GXTemplateData();
-            templateData.templateData = itemData;
+        // // const isHorizontal = gxScrollConfig.direction == 'horizontal'
+        // // const isVertical = gxScrollConfig.direction == 'vertical'
+        // // const itemSpacing = gxScrollConfig.itemSpacing
 
-            const measureSize = new GXMeasureSize();
-            measureSize.templateWidth = childItemWidth;
-            measureSize.templateHeight = childItemHeight;
+        // // const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
+        // // const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
 
-            let itemWrapStyle = {
-                marginRight: '0px'
-            }
+        // // const childArray: ReactNode[] = [];
 
-            if (itemIndex != dataSize - 1) {
-                itemWrapStyle.marginRight = itemSpacing;
-            }
+        // // const dataSize = propDataValue.length
+        // // propDataValue.forEach((itemData, itemIndex) => {
 
-            childArray.push(
-                <View style={itemWrapStyle}>
-                    <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
-                </View>
-            );
-        });
+        // //     const templateItem = new GXTemplateItem();
+        // //     templateItem.templateBiz = gxChildTemplateItem.templateBiz;
+        // //     templateItem.templateId = gxChildTemplateItem.templateId;
 
-        return (
-            <ScrollView
-                scrollX={isHorizontal}
-                scrollY={isVertical}
-                style={scrollStyle}
-            >
-                {childArray}
-            </ScrollView>
-        )
+        // //     const templateData = new GXTemplateData();
+        // //     templateData.templateData = itemData;
+
+        // //     const measureSize = new GXMeasureSize();
+        // //     measureSize.templateWidth = childItemWidth;
+        // //     measureSize.templateHeight = childItemHeight;
+
+        // //     let itemWrapStyle = {
+        // //         marginRight: '0px'
+        // //     }
+
+        // //     if (itemIndex != dataSize - 1) {
+        // //         itemWrapStyle.marginRight = itemSpacing;
+        // //     }
+
+        // //     childArray.push(
+        // //         <View style={itemWrapStyle}>
+        // //             <GXTemplateComponent templateData={templateData} templateItem={templateItem} measureSize={measureSize} />
+        // //         </View>
+        // //     );
+        // // });
+
+        // return (
+        //     <View style={gaiaxGridStyle} key={`gaiax-grid`}>
+        //         {gridGroup.map((item, i) => (
+        //             <View style={gaiaxGridGroupStyle} key={`gaiax-grid-group-${i}`}>
+        //                 {item.map((childItem, index) => (
+        //                     <View
+        //                         key={`gaiax-grid-group-item-${index}`}
+        //                         style={gaiaxGridGroupItemStyle}
+        //                     >
+
+        //                     </View>
+        //                 ))}
+        //             </View>
+        //         ))}
+        //     </View>
+        // )
     }
 }

@@ -2,10 +2,10 @@
   "name": "@gaiax/taro",
   "version": "0.0.0",
   "main": "dist/index.js",
+  "source": "src/index.ts",
   "scripts": {
     "build": "rm -rf dist && rollup --config",
-    "build:watch": "yarn build -- --watch",
-    "test": "jest"
+    "build:watch": "yarn build -- --watch"
   },
   "dependencies":{
     "classnames": "^2.3.1",

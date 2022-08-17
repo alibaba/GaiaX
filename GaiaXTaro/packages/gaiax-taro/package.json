@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "source": "src/index.ts",
   "scripts": {
-    "build": "rm -rf dist && rollup --config",
+    "build": "rm -rf dist && rollup --config ./config/rollup.config.js",
     "build:watch": "yarn build -- --watch"
   },
   "dependencies":{

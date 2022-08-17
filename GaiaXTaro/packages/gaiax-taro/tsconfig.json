@@ -16,7 +16,7 @@
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.lib.json"
+      "path": "./config/tsconfig.lib.json"
     }
   ]
 }

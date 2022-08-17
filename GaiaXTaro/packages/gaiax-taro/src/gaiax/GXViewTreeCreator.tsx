@@ -11,7 +11,7 @@ import GXView from "../components/view/GXView";
 import GXImage from "../components/image/GXImage";
 import GXText from "../components/text/GXText";
 import GXRichText from "../components/richtext/GXRichText";
-import GXIconFontText from "../components/iconfonttext/GXRichText";
+import GXIconFontText from "../components/iconfonttext/GXIconFontText";
 import GXScroll from "../components/scroll/GXScroll";
 import GXGrid from "../components/grid/GXGrid";
 

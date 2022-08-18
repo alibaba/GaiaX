@@ -7,7 +7,7 @@
     "build": "rm -rf dist && rollup --config ./config/rollup.config.js",
     "build:watch": "yarn build -- --watch"
   },
-  "dependencies":{
+  "dependencies": {
     "classnames": "^2.3.1",
     "lodash": "^4.14.149",
     "prop-types": "^15.8.1"

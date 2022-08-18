@@ -6,8 +6,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
-import com.alibaba.gaiax.demo.utils.GaiaXExpression
-import com.alibaba.gaiax.template.GXIExpression
+import com.alibaba.gaiax.demo.utils.GXExtensionYouKuExpression
 import com.alibaba.gaiax.utils.GXScreenUtils
 
 class BusinessActivity : AppCompatActivity() {
@@ -17,24 +16,9 @@ class BusinessActivity : AppCompatActivity() {
         renderTemplate()
     }
 
-    class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
-
-        override fun create(value: Any): GXIExpression {
-            return GaiaXExpression.create(value)
-        }
-
-        override fun isTrue(value: Any?): Boolean {
-            return GaiaXExpression.isCondition(value)
-        }
-
-    }
-
     private fun renderTemplate() {
-        // 初始化
-        GXTemplateEngine.instance.init(this)
-
         GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
+            .registerExtensionExpression(GXExtensionYouKuExpression())
 
         // 模板参数
         val params = GXTemplateEngine.GXTemplateItem(

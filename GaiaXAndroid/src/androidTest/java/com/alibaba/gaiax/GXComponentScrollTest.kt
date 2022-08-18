@@ -1415,11 +1415,11 @@ class GXComponentScrollTest : GXBaseTest() {
     }
 
     @Test
-    fun template_scroll_multi_type_two_gravity_center() {
+    fun template_scroll_multi_type_two_gravity_center_horizontal() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "scroll",
-            "template_scroll_multi_type_two_gravity_center"
+            "template_scroll_multi_type_two_gravity_center_horizontal"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -1448,11 +1448,33 @@ class GXComponentScrollTest : GXBaseTest() {
     }
 
     @Test
-    fun template_scroll_multi_type_two_gravity_top() {
+    fun template_scroll_vertical_fixed_height() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "scroll",
-            "template_scroll_multi_type_two_gravity_top"
+            "template_scroll_vertical_fixed_height"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height.toFloat())
+    }
+
+    @Test
+    fun template_scroll_multi_type_two_gravity_top_horizontal() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_two_gravity_top_horizontal"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {
@@ -1475,11 +1497,11 @@ class GXComponentScrollTest : GXBaseTest() {
     }
 
     @Test
-    fun template_scroll_multi_type_two_gravity_bottom() {
+    fun template_scroll_multi_type_two_gravity_bottom_horizontal() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "scroll",
-            "template_scroll_multi_type_two_gravity_bottom"
+            "template_scroll_multi_type_two_gravity_bottom_horizontal"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
             this["nodes"] = JSONArray().apply {

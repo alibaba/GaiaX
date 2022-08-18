@@ -1,6 +1,6 @@
 {
     "data":{
-        "template_scroll_multi_type_two_gravity_center":{
+        "template_scroll_multi_type_two_gravity_bottom_horizontal":{
             "value":"$nodes",
             "extend":{
                 "item-type":{

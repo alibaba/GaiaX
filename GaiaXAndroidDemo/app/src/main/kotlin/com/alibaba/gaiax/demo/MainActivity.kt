@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.adapter.GXExtensionExpression
+import com.alibaba.gaiax.demo.utils.GXExtensionYouKuExpression
 import com.alibaba.gaiax.fastpreview.GaiaXFastPreviewActivity
 import com.alibaba.gaiax.fastpreview.GaiaXQRCodeActivity
 
@@ -50,7 +52,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<AppCompatButton>(R.id.fastpreview_emulator)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
-            intent.putExtra("GAIA_STUDIO_URL", "gaiax://gaiax/preview?url=ws://192.168.10.29:9001&id=yk-vip-peng-card-single&type=auto")
+            intent.putExtra(
+                "GAIA_STUDIO_URL",
+                "gaiax://gaiax/preview?url=ws://30.78.146.192:9001&id=test-template&type=auto"
+            )
             launcher.launch(intent)
         }
 
@@ -87,6 +92,16 @@ class MainActivity : AppCompatActivity() {
         findViewById<AppCompatButton>(R.id.business)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, BusinessActivity::class.java)
             startActivity(intent)
+        }
+
+        findViewById<AppCompatButton>(R.id.youku_expression)?.setOnClickListener {
+            GXRegisterCenter.instance
+                .registerExtensionExpression(GXExtensionYouKuExpression())
+        }
+
+        findViewById<AppCompatButton>(R.id.opensource_expression)?.setOnClickListener {
+            GXRegisterCenter.instance
+                .registerExtensionExpression(GXExtensionExpression())
         }
     }
 }

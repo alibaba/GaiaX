@@ -523,8 +523,8 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                 val left: Float
                 val right: Float
 
-                val totalSpace: Float =
-                    itemSpacing * (spanCount - 1) + (padding.left.toFloat() + padding.right.toFloat()) // 总共的padding值
+                val totalSpace: Float = itemSpacing * (spanCount - 1) +
+                        (padding.left.toFloat() + padding.right.toFloat()) // 总共的padding值
                 val eachSpace = totalSpace / spanCount // 分配给每个item的padding值
                 val column = childPosition % spanCount // 列数
 
@@ -535,9 +535,14 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                     left = column * eachSpace / (spanCount - 1)
                     right = eachSpace - left
                 } else {
-                    left =
-                        column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
-                    right = eachSpace - left
+                    if (spanCount == 1) {
+                        left = padding.left.toFloat()
+                        right = padding.right.toFloat()
+                    } else {
+                        left = column * (eachSpace - padding.left - padding.right) /
+                                (spanCount - 1) + (padding.left + padding.right) / 2
+                        right = eachSpace - left
+                    }
                 }
 
                 outRect.left = left.toInt()

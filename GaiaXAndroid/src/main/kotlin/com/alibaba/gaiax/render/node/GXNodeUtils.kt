@@ -471,8 +471,10 @@ object GXNodeUtils {
                     val edgeInsets = finalGridConfig.edgeInsets
                     containerHeight += edgeInsets.top + edgeInsets.bottom
 
+                    val containerWidth = itemSize.width - edgeInsets.left - edgeInsets.right
+
                     return Size(
-                        Dimension.Points(itemSize.width),
+                        Dimension.Points(containerWidth),
                         Dimension.Points(containerHeight)
                     )
                 } else if (finalGridConfig.isHorizontal) {

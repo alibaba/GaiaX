@@ -1,0 +1,12 @@
+{
+  "id": "template_grid_one_column_padding_left_and_right",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "row-spacing": 9,
+  "item-spacing": 12,
+  "edge-insets": "{0,32,0,32}",
+  "column": 1,
+  "layers": [
+    { "id": "template_grid_one_column_padding_left_and_right_item", "type": "gaia-template", "sub-type": "custom" }
+  ]
+}

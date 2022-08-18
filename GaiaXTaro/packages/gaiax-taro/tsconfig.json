@@ -16,7 +16,6 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "node_modules",
-    "node_modules/*",
     "packages/dist/*"
   ],
   "include": [

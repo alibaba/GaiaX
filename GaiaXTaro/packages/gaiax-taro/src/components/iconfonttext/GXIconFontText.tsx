@@ -15,18 +15,11 @@ export default class GXIconFontText extends React.Component<GXIconFontTextProps,
   render() {
     const { propStyle, propDataValue } = this.props
 
-    const rootStyle = {
-      width:'100px',
-      height:'50px',
-      backgroundColor:'#ff00ff',
-      fontSize: '16px',
-      color: '#00ff00'
-    }
-
-
-    return <Text
-      className={classNames('at-icon', 'at-icon-bell')}
-      style={rootStyle}
-    ></Text>
+    // 需要转义：https://blog.csdn.net/qq_26834399/article/details/105865440
+    // const test = "\ue606"
+    return <View
+      className={classNames('iconfont')}
+      style={propStyle}
+    >{propDataValue}</View>
   }
 }

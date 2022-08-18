@@ -12,11 +12,15 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./config/tsconfig.lib.json"
-    }
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "node_modules",
+    "node_modules/*",
+    "packages/dist/*"
+  ],
+  "include": [
+    "**/*.tsx",
+    "**/*.ts"
   ]
 }

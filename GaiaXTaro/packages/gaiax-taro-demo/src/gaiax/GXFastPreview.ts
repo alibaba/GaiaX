@@ -261,4 +261,4 @@ export interface IGXFastPreviewListener {
     onAddData(templateId: string, template: any)
 }
 
-export const GXFastPreviewInstance = new GXFastPreview()
+export const GXFastPreviewInstance = new GXFastPreview();

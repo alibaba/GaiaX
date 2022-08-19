@@ -1,7 +1,7 @@
 import React from 'react';
-import { GXEngineInstance } from '../..';
-import { GXMeasureSize, GXTemplateData, GXTemplateItem } from '../../gaiax/GXTemplateEngine';
-import GXTemplateNode from '../../gaiax/GXTemplateNode';
+import { GXEngineInstance } from '..';
+import { GXMeasureSize, GXTemplateData, GXTemplateItem } from '../gaiax/GXTemplateEngine';
+import GXTemplateNode from '../gaiax/GXTemplateNode';
 
 export interface GXTemplateComponentState {
 

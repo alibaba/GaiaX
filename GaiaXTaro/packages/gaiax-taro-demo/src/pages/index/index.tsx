@@ -1,7 +1,16 @@
 
 import { View } from "@tarojs/components";
 import { Component } from "react";
-import { GXEngineInstance, GXTemplate, GXRegisterCenterInstance, GXTemplateComponent, GXTemplateItem, GXMeasureSize, GXTemplateData, GXTemplateInfo, GXIExtensionTemplateSource } from "@gaiax/taro";
+import {
+  GXTemplate,
+  GXRegisterCenter,
+  GXRegisterCenterInstance,
+  GXTemplateComponent,
+  GXTemplateItem,
+  GXMeasureSize,
+  GXTemplateData,
+  GXIExtensionTemplateSource
+} from "@gaiax/taro";
 import "./index.scss";
 import { GXFastPreviewInstance, IGXFastPreviewListener } from "../../gaiax/GXFastPreview";
 
@@ -48,6 +57,7 @@ export default class Index extends Component<IParams> {
           templateId: templateId
         });
       },
+
       onAddData: function (templateId: string, template: any) {
         console.log(`onAddData templateId = ${templateId} `);
         console.log(template);
@@ -55,7 +65,11 @@ export default class Index extends Component<IParams> {
       }
     }
 
-    GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
+    if (GXRegisterCenterInstance != null && GXRegisterCenterInstance != undefined) {
+      GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
+    } else {
+      console.error("GXRegisterCenterInstance=" + GXRegisterCenterInstance)
+    }
     GXFastPreviewInstance.startFastPreview();
     GXFastPreviewInstance.setListener(gxFastPreviewListener);
   }

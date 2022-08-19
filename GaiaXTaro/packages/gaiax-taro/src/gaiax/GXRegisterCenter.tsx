@@ -11,7 +11,7 @@ export interface GXIExtensionTemplateSource {
     getTemplate(gxTemplateItem: GXTemplateItem): GXTemplate;
 }
 
-export class GXRegisterCenter {
+export default class GXRegisterCenter {
 
     registerExtensionTemplateSource(gxTemplateSource: GXIExtensionTemplateSource) {
         GXEngineInstance.gxData.gxTemplateSource.register(gxTemplateSource);

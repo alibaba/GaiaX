@@ -4,6 +4,26 @@ import GXTemplateContext from "./GXTemplateContext";
 import GXData from "./GXData";
 import GXTemplateInfo from "./GXTemplateInfo";
 import GXTemplateNode from "./GXTemplateNode";
+import GXGesture from "./GXGesture";
+import GXTrack from "./GXTrack";
+
+
+export interface GXIEventListener {
+
+    /**
+     * Gesture event
+     */
+    onGestureEvent(gxGesture: GXGesture)
+
+}
+
+export interface GXITrackListener {
+
+    /**
+     * Track event
+     */
+    onTrackEvent(gxTrack: GXTrack)
+}
 
 export class GXMeasureSize {
     templateWidth: number;
@@ -13,6 +33,21 @@ export class GXMeasureSize {
 export class GXTemplateData {
     // JSON Data
     templateData: any;
+
+    /**
+         * @suppress
+         */
+    scrollIndex: number = -1
+
+    /**
+     * Event listener
+     */
+    eventListener: GXIEventListener = null
+
+    /**
+     * Track listener
+     */
+    trackListener: GXITrackListener = null
 }
 
 export class GXTemplateItem {

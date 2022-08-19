@@ -607,9 +607,14 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                                 bottom = padding.bottom.toFloat()
                             }
                         }
-                        left =
-                            column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
-                        right = eachSpace - left
+                        if (spanCount == 1) {
+                            left = padding.left.toFloat()
+                            right = padding.right.toFloat()
+                        } else {
+                            left =
+                                column * (eachSpace - padding.left - padding.right) / (spanCount - 1) + (padding.left + padding.right) / 2
+                            right = eachSpace - left
+                        }
                     }
                 } else {
                     val totalSpace: Float =

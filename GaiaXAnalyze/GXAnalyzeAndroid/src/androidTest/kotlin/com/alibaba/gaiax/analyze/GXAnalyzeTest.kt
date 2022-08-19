@@ -16,6 +16,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class GXAnalyzeTest {
     val testData = JSONObject()
+    val testDataNull = JSONObject()
 
     lateinit var instance: GXAnalyze
 
@@ -63,6 +64,8 @@ class GXAnalyzeTest {
                         (value.getValue() as? JSONArray)?.let {
                             return GXAnalyze.createValueFloat64(it.size.toFloat())
                         }
+                    }else{
+                        return GXAnalyze.createValueFloat64(0f)
                     }
                 }
                 return 0L
@@ -80,6 +83,8 @@ class GXAnalyzeTest {
         Assert.assertEquals("", instance.getResult("''", testData))
         Assert.assertEquals(null, instance.getResult("", testData))
         Assert.assertEquals(null, instance.getResult("null", testData))
+        Assert.assertEquals(0f, instance.getResult("size(null)", testDataNull))
+
     }
 
     @Test

@@ -294,82 +294,82 @@ class GXAnalyzeTest {
         Assert.assertEquals(2f, instance.getResult("($$!=null)?size($$):0", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_null_add_true() {
         Assert.assertEquals(null, instance.getResult("null + true", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_true_add_1() {
         Assert.assertEquals(null, instance.getResult("true + 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_1_add_abc() {
         Assert.assertEquals(null, instance.getResult("1 + abc", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_abc_add_1() {
         Assert.assertEquals(null, instance.getResult("abc + 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_abc_add_string_123() {
         Assert.assertEquals(null, instance.getResult("abc + '123'", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_null_add_1() {
         Assert.assertEquals(null, instance.getResult("null + 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_null_add_string_abc() {
         Assert.assertEquals(null, instance.getResult("null + 'abc'", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_null_add_self() {
         Assert.assertEquals(null, instance.getResult("null + \$\$", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_null_add_id() {
         Assert.assertEquals(null, instance.getResult("null + id", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_true_add_string_123() {
         Assert.assertEquals(null, instance.getResult("true + '123'", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_1_divide_0() {
         Assert.assertEquals(null, instance.getResult("1/0", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_self_add_1() {
         Assert.assertEquals(null, instance.getResult("\$\$ + 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_self_subtract_1() {
         Assert.assertEquals(null, instance.getResult("\$\$ - 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_self_multiply_1() {
         Assert.assertEquals(null, instance.getResult("\$\$ * 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_self_divide_1() {
         Assert.assertEquals(null, instance.getResult("\$\$ / 1", testData))
     }
 
-    @Test(expected = RuntimeException::class)
+    @Test
     fun error_ternary_self_1_0() {
         Assert.assertEquals(null, instance.getResult("\$\$ ? 1 : 0", testData))
     }

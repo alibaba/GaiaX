@@ -376,7 +376,8 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXRichText propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} />;
+        const extend = gxNode.gxTemplateNode.getExtend(gxTemplateData);
+        gxNode.gxView = <GXRichText propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} propDataValue={data.value} propExtend={extend} />;
     }
 
     private createTextNode(

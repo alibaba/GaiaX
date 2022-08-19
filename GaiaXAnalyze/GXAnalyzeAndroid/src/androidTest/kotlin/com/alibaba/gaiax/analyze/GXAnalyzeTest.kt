@@ -35,6 +35,10 @@ class GXAnalyzeTest {
                     GXAnalyze.createValueNull()
                 }  else if (valuePath == "data.stringEmpty") {
                     GXAnalyze.createValueString("");
+                }  else if (valuePath == "data.true") {
+                    GXAnalyze.createValueBool(true);
+                }  else if (valuePath == "data.false") {
+                    GXAnalyze.createValueBool(false);
                 } else {
                     GXAnalyze.createValueFloat64(8F)
                 }
@@ -66,6 +70,7 @@ class GXAnalyzeTest {
         })
         // 初始化数据
         testData.put("test", 11)
+        testData.put("test2", 11)
     }
 
     @Test
@@ -94,8 +99,7 @@ class GXAnalyzeTest {
         Assert.assertEquals(4f, instance.getResult("size('1234')", testData))
         Assert.assertEquals(0f, instance.getResult("size(\$data.map)", testData))
         Assert.assertEquals(0f, instance.getResult("size(\$data.array)", testData))
-        Assert.assertEquals(1f, instance.getResult("size(\$\$)", testData))
-
+        Assert.assertEquals(2f, instance.getResult("size(\$\$)", testData))
     }
 
     @Test
@@ -280,6 +284,9 @@ class GXAnalyzeTest {
         Assert.assertEquals(1f, instance.getResult("false ? \$\$ : 1", testData))
         Assert.assertEquals(testData, instance.getResult("true ? \$\$ : 1", testData))
         Assert.assertEquals(testData, instance.getResult("\$\$ ?: 0", testData))
+        Assert.assertEquals(1f, instance.getResult("\$data.true?1:2", testData))
+        Assert.assertEquals(2f, instance.getResult("\$data.false?1:2", testData))
+        Assert.assertEquals(2f, instance.getResult("($$!=null)?size($$):0", testData))
     }
 
     @Test(expected = RuntimeException::class)

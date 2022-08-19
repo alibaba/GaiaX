@@ -11,8 +11,6 @@ export { GXIExtensionTemplateInfoSource, GXIExtensionTemplateSource } from './ga
 export { GXJSONValue, GXJSONArray, GXJSONObject } from './gaiax/GXJson'
 export { default as GXTemplate } from './gaiax/GXTemplate'
 
-// 
+// 变量
 export const GXEngineInstance = new GXTemplateEngine();
-
-// 
 export const GXRegisterCenterInstance = new GXRegisterCenter();

@@ -3,16 +3,18 @@ import { View } from "@tarojs/components";
 import { Component } from "react";
 import {
   GXTemplate,
-  GXRegisterCenter,
+  GXEngineInstance,
   GXRegisterCenterInstance,
   GXTemplateComponent,
   GXTemplateItem,
   GXMeasureSize,
   GXTemplateData,
-  GXIExtensionTemplateSource
+  GXIExtensionTemplateSource,
+  GXIEventListener,
+  GXGesture
 } from "@gaiax/taro";
 import "./index.scss";
-import { GXFastPreviewInstance, IGXFastPreviewListener } from "../../gaiax/GXFastPreview";
+import { GXFastPreviewInstance, IGXFastPreviewListener as GXIFastPreviewListener } from "../../gaiax/GXFastPreview";
 
 
 class GXFastPreviewTemplateSource implements GXIExtensionTemplateSource {
@@ -50,7 +52,7 @@ export default class Index extends Component<IParams> {
 
   componentWillMount() {
 
-    const gxFastPreviewListener: IGXFastPreviewListener = {
+    const gxFastPreviewListener: GXIFastPreviewListener = {
       onUpdate: (templateId: string) => {
         console.log(`onUpdate templateId = ${templateId} `);
         this.setState({
@@ -65,11 +67,7 @@ export default class Index extends Component<IParams> {
       }
     }
 
-    if (GXRegisterCenterInstance != null && GXRegisterCenterInstance != undefined) {
-      GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
-    } else {
-      console.error("GXRegisterCenterInstance=" + GXRegisterCenterInstance)
-    }
+    GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
     GXFastPreviewInstance.startFastPreview();
     GXFastPreviewInstance.setListener(gxFastPreviewListener);
   }
@@ -99,6 +97,14 @@ export default class Index extends Component<IParams> {
       } else {
         templateData.templateData = {};
       }
+
+      const gxEventListener: GXIEventListener = {
+        onGestureEvent: function (gxGesture: GXGesture) {
+          console.log(gxGesture);
+        }
+      }
+
+      templateData.eventListener = gxEventListener
 
       const constraintSize = JSON.parse(template["index.json"])?.["package"]?.["constraint-size"]
       let measureSize = new GXMeasureSize();

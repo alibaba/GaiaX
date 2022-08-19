@@ -125,6 +125,9 @@ class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
                                         return GXAnalyze.createValueFloat64(it.size.toFloat())
                                     }
                                 }
+                                else -> {
+                                    return GXAnalyze.createValueFloat64(0f)
+                                }
                             }
                         } else if (functionName == "env") {
                         }

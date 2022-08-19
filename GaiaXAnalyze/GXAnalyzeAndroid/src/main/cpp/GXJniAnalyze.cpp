@@ -99,7 +99,8 @@ public:
     }
 
     void throwError(string message) override {
-        jniThrowRuntimeException(getJNIEnv(), message.c_str());
+        __android_log_print(ANDROID_LOG_ERROR, "[GaiaX]",
+                            "%s", message.c_str());
     }
 };
 

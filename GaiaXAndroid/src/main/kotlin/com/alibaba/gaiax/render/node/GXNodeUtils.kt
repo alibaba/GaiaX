@@ -149,8 +149,7 @@ object GXNodeUtils {
                                             itemViewPort,
                                             itemTemplateItem,
                                             itemVisualTemplateNode,
-                                            containerData.firstOrNull() as? JSONObject
-                                                ?: JSONObject()
+                                            itemData
                                         )?.apply {
                                             gxNode.multiTypeItemComputeCache?.put(
                                                 itemTemplateItem,

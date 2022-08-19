@@ -89,11 +89,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        findViewById<AppCompatButton>(R.id.business)?.setOnClickListener {
-            val intent = Intent(MainActivity@ this, BusinessActivity::class.java)
-            startActivity(intent)
-        }
-
         findViewById<AppCompatButton>(R.id.youku_expression)?.setOnClickListener {
             GXRegisterCenter.instance
                 .registerExtensionExpression(GXExtensionYouKuExpression())

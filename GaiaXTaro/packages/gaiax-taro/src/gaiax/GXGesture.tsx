@@ -1,5 +1,7 @@
 import { ReactNode } from "react"
 import { GXJSONObject } from "./GXJson"
+import { GXNode } from "./GXNode"
+import GXTemplateContext from "./GXTemplateContext"
 import { GXTemplateItem } from "./GXTemplateEngine"
 import GXTemplateKey from "./GXTemplateKey"
 
@@ -34,5 +36,18 @@ export default class GXGesture {
      * Event data
      */
     eventParams: GXJSONObject = null
+
+    static create(
+        gxTemplateContext: GXTemplateContext,
+        gxTemplateData: GXJSONObject,
+        gxNode: GXNode
+    ): GXGesture {
+        const gxGesture = new GXGesture()
+        gxGesture.nodeId = gxNode.gxId;
+        gxGesture.templateItem = gxTemplateContext.gxTemplateItem;
+        gxGesture.eventParams = gxNode.gxTemplateNode.getEventData(gxTemplateData);
+        gxGesture.view = gxNode.gxView;
+        return gxGesture;
+    }
 
 }

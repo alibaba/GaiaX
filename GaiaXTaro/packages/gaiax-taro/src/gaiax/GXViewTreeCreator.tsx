@@ -1,4 +1,4 @@
-import { View } from "@tarojs/components";
+import { CommonEvent, View } from "@tarojs/components";
 import React, { ReactNode } from "react";
 import GXTemplateContext from "./GXTemplateContext";
 import { GXNode } from "./GXNode";
@@ -14,6 +14,7 @@ import GXRichText from "../components/richtext/GXRichText";
 import GXIconFontText from "../components/iconfonttext/GXIconFontText";
 import GXScroll from "../components/scroll/GXScroll";
 import GXGrid from "../components/grid/GXGrid";
+import GXGesture from "./GXGesture";
 
 export default class GXViewTreeCreator {
 
@@ -332,7 +333,29 @@ export default class GXViewTreeCreator {
             }
         }
 
-        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} >{childArray}</GXView>;
+        gxNode.gxView = <GXView
+            onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
+            propStyle={gxNode.gxTemplateNode.finalStyle}
+            key={gxNode.gxId}>
+            {childArray}
+        </GXView>;
+    }
+
+    private createEvent(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject) {
+        const gxEventListener = gxTemplateContext.gxTemplateData?.eventListener;
+        const gxEvent = gxNode.gxTemplateNode?.event;
+        let gxEventClick = null;
+        if (gxEventListener != null && gxEvent != null) {
+            gxEventClick = (args) => {
+                const gxGesture = GXGesture.create(
+                    gxTemplateContext,
+                    gxTemplateData,
+                    gxNode
+                );
+                gxEventListener.onGestureEvent(gxGesture);
+            };
+        }
+        return gxEventClick;
     }
 
     private createOtherNode(
@@ -343,7 +366,11 @@ export default class GXViewTreeCreator {
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
-        gxNode.gxView = <GXView propStyle={gxNode.gxTemplateNode.finalStyle} key={gxNode.gxId} />;
+        gxNode.gxView = <GXView
+            onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
+            propStyle={gxNode.gxTemplateNode.finalStyle}
+            key={gxNode.gxId}
+        />;
     }
 
     private createImageNode(

@@ -1,4 +1,4 @@
-import { Text, View } from '@tarojs/components';
+import { CommonEventFunction, Text, View } from '@tarojs/components';
 import React, { CSSProperties } from 'react';
 import classNames from 'classnames'
 
@@ -7,11 +7,17 @@ export interface GXIconFontTextState {
 }
 
 export interface GXIconFontTextProps {
+  onClick?: CommonEventFunction
   propStyle?: string | CSSProperties
   propDataValue?: string
 }
 
 export default class GXIconFontText extends React.Component<GXIconFontTextProps, GXIconFontTextState> {
+
+  private handleClick(): void {
+    this.props.onClick && this.props.onClick(arguments as any)
+  }
+
   render() {
     const { propStyle, propDataValue } = this.props
 
@@ -20,6 +26,7 @@ export default class GXIconFontText extends React.Component<GXIconFontTextProps,
     return <View
       className={classNames('iconfont')}
       style={propStyle}
+      onClick={this.handleClick.bind(this)}
     >{propDataValue}</View>
   }
 }

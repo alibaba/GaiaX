@@ -1,5 +1,6 @@
 import GXCssConvertStyle from "./GXCssConvertStyle";
 import GXDataBinding from "./GXDatabinding";
+import GXExpression from "./GXExpression";
 import { GXJSONObject } from "./GXJson";
 import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
@@ -180,6 +181,10 @@ export default class GXTemplateNode {
 
     getDataValue(gxTemplateData?: GXJSONObject): GXJSONObject {
         return GXDataBinding.getData(this.data, gxTemplateData)['value'] as GXJSONObject;
+    }
+
+    getEventData(gxTemplateData?: GXJSONObject): GXJSONObject {
+        return GXExpression.desireData(this.event, gxTemplateData) as GXJSONObject;
     }
 
     initFinal(

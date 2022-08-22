@@ -7,12 +7,18 @@ export interface GXRichTextState {
 }
 
 export interface GXRichTextProps {
+  onClick?: CommonEventFunction
   propStyle?: string | CSSProperties
   propDataValue?: string
   propExtend?: GXJSONObject
 }
 
 export default class GXRichText extends React.Component<GXRichTextProps, GXRichTextState> {
+
+  private handleClick(): void {
+    this.props.onClick && this.props.onClick(arguments as any)
+  }
+
   render() {
     const { propStyle, propDataValue, propExtend } = this.props
 
@@ -45,8 +51,17 @@ export default class GXRichText extends React.Component<GXRichTextProps, GXRichT
         tagIndex = remainContent.indexOf(hightLightTag);
       }
 
-      return <Text style={propStyle}  >{childArray}</Text>;
+      return <Text
+        style={propStyle}
+        onClick={this.handleClick.bind(this)}  >
+        {childArray}
+      </Text>;
     }
-    return <Text style={propStyle}  >{propDataValue}</Text>;
+    return <Text
+      style={propStyle}
+      onClick={this.handleClick.bind(this)}
+    >
+      {propDataValue}
+    </Text>;
   }
 }

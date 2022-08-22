@@ -2,6 +2,7 @@ import { GXJSONObject } from "./GXJson";
 import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
+import GXTemplateNode from "./GXTemplateNode";
 
 export default class GXCssConvertStyle {
 
@@ -40,7 +41,13 @@ export default class GXCssConvertStyle {
         return rootStyle as React.CSSProperties;
     }
 
-    static createViewStyleByCss(gxTemplateContext: GXTemplateContext, layer: GXJSONObject, css: GXJSONObject, gxParentNode?: GXNode): React.CSSProperties {
+    static createViewStyleByCss(
+        gxTemplateContext: GXTemplateContext,
+        layer: GXJSONObject,
+        css: GXJSONObject,
+        gxTemplateNode: GXTemplateNode,
+        gxParentNode?: GXNode
+    ): React.CSSProperties {
         let style = {
             display: 'flex',
             position: "relative",
@@ -95,11 +102,18 @@ export default class GXCssConvertStyle {
             // textDecoration: '',
             // mode: '',
         };
-        this.updateViewStyleByCss(gxTemplateContext, style, layer, css, gxParentNode);
+        this.updateViewStyleByCss(gxTemplateContext, style, layer, css, gxTemplateNode, gxParentNode);
         return style as React.CSSProperties;
     }
 
-    static updateViewStyleByCss(gxTemplateContext: GXTemplateContext, targetStyle: any, srcLayer: GXJSONObject, srcCss: GXJSONObject, gxParentNode?: GXNode) {
+    static updateViewStyleByCss(
+        gxTemplateContext: GXTemplateContext,
+        targetStyle: any,
+        srcLayer: GXJSONObject,
+        srcCss: GXJSONObject,
+        gxTemplateNode: GXTemplateNode,
+        gxParentNode?: GXNode
+    ) {
 
         // Layout
 
@@ -259,37 +273,51 @@ export default class GXCssConvertStyle {
             targetStyle.maxHeight = maxHeight;
         }
 
-        // 特殊处理：图片不允许被压缩
-        if (srcLayer.type == 'image') {
-            targetStyle.flexShrink = '0';
-        }
-
-        // 特殊处理：在微信小程序上不生效;在H5上生效
+         // 特殊处理：在微信小程序上不生效;在H5上生效
         // 小程序不支持
         let aspectRatio = srcCss['aspect-ratio'];
         if (aspectRatio != undefined) {
             targetStyle.aspectRatio = aspectRatio;
         }
 
-        // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
-        if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' && width != undefined) {
+        // 对图片进行特殊处理
+        if (gxTemplateNode.isImageType()) {
+            // 特殊处理：图片不允许被压缩
             targetStyle.flexShrink = '0';
         }
 
-        // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
-        if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' && height != undefined) {
-            targetStyle.flexShrink = '0';
+        // 对View的特殊处理
+        if (gxTemplateNode.isViewType() || gxTemplateNode.isGaiaTemplate()) {
+            // 特殊处理：如果是嵌套节点，并且自身有内边距，并且width100%，那么需要处理一下
+            if ((paddingLeft != null || paddingRight != null) && targetStyle.width == '100%' && gxParentNode != null) {
+                targetStyle.width = 'auto';
+                targetStyle.flexGrow = '1';
+            }
         }
 
         // 特殊处理：对文字自适应的处理
         let fitContent = srcCss['fit-content'];
-        // 如果宽度是auto并且设置的自增长，那么fitcontent之后，需要按照实际的宽度设置
-        if ((width == 'auto' || width == undefined) && flexGrow == '1' && (fitContent == 'true' || fitContent == true)) {
-            targetStyle.flexGrow = '0';
-        }
-        // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
-        else if (width != undefined && width.endsWith('px') && (fitContent == 'true' || fitContent == true)) {
-            targetStyle.width = 'auto';
+        // 对文字进行特殊处理
+        if (gxTemplateNode.isTextType() && fitContent != null && fitContent != undefined) {
+            // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
+            if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' && width != undefined) {
+                targetStyle.flexShrink = '0';
+            }
+
+            // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
+            if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' && height != undefined) {
+                targetStyle.flexShrink = '0';
+            }
+
+
+            // 如果宽度是auto并且设置的自增长，那么fitcontent之后，需要按照实际的宽度设置
+            if ((width == 'auto' || width == undefined) && flexGrow == '1' && (fitContent == 'true' || fitContent == true)) {
+                targetStyle.flexGrow = '0';
+            }
+            // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
+            else if (width != undefined && width.endsWith('px') && (fitContent == 'true' || fitContent == true)) {
+                targetStyle.width = 'auto';
+            }
         }
 
         // Style 

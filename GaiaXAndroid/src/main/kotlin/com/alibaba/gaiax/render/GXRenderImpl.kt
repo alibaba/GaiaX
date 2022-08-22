@@ -84,38 +84,11 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
-        processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
-
         // Resetting the Template Status
         gxTemplateContext.isDirty = false
 
         // Update the node tree
         GXNodeTreeUpdater(gxTemplateContext).buildNodeLayout()
-    }
-
-    private fun processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext: GXTemplateContext) {
-        val eventListener = gxTemplateContext.templateData?.eventListener
-        if (gxTemplateContext.containers.isNotEmpty() && eventListener !is GXIManualExposureEventListener) {
-            gxTemplateContext.templateData?.eventListener =
-                object : GXIManualExposureEventListener {
-                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
-                        eventListener?.onGestureEvent(gxGesture)
-                    }
-
-                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
-                        eventListener?.onScrollEvent(gxScroll)
-                        if (gxTemplateContext.isAppear) {
-                            if (GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED == gxScroll.type && gxScroll.state == RecyclerView.SCROLL_STATE_IDLE) {
-                                GXContainerUtils.notifyOnAppear(gxTemplateContext)
-                            }
-                        }
-                    }
-
-                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
-                        eventListener?.onAnimationEvent(gxAnimation)
-                    }
-                }
-        }
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {

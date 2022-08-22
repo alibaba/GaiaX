@@ -2,7 +2,13 @@ export default function computeValuePath(valuePath: string, targetObject: any): 
     try {
         const keyIndex = valuePath.indexOf('.')
         if (keyIndex <= 0) {
-            return targetObject[valuePath];
+            if (targetObject != null && targetObject != undefined) {
+                return targetObject[valuePath];
+            } else {
+                console.error(`computeValuePath: ${valuePath} is not exist`);
+                return '';
+            }
+
         }
         const firstKey = valuePath.substring(0, keyIndex).trim();
         const restKey = valuePath.substring(keyIndex + 1, valuePath.length).trim();

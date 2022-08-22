@@ -5,6 +5,7 @@ import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance, GXGesture, GXIEventListener, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
 import GXTemplateNode from '../../gaiax/GXTemplateNode';
+import { isArray } from 'lodash';
 
 export interface GXScrollState {
 
@@ -26,7 +27,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             propDataValue
         } = this.props
 
-        if (propDataValue == null || propDataValue == undefined) {
+        if (propDataValue == null || propDataValue == undefined || !isArray(propDataValue)) {
             console.error("GXScroll propDataValue is null")
             return null
         }

@@ -623,7 +623,7 @@
     NSString *className = NSStringFromClass(self.class);
     if ([className isEqualToString:@"GXViewNode"]) {
         // 无属性图层，并且不需要动态绑定数据，也不需要动画, 则认为是可以优化的图层
-        self.isFlat = (isNeedFlat && !self.data && !self.event && !self.animation);
+        self.isFlat = (isNeedFlat && ![self shouldBind]);
     }
     
 }

@@ -24,8 +24,16 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol GXTrackProtocal <NSObject>
 
 @optional
-//process track
+//process track & 处理埋点数据
 - (void)gx_onTrackEvent:(GXTrack *)track;
+
+
+//manual method
+//点击
+- (void)gx_onManualClickTrackEvent:(GXTrack *)track;
+//曝光
+- (void)gx_onManualExposureTrackEvent:(GXTrack *)track;
+
 
 @end
 

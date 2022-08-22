@@ -145,12 +145,15 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
     //基础信息
     GXNode *node = self.gxNode;
     GXEvent *event = self.gxEvent;
+    
     //事件分发
     id <GXEventProtocal> eventListener = node.templateContext.templateData.eventListener;
     if (eventListener && [eventListener respondsToSelector:@selector(gx_onGestureEvent:)]) {
         [eventListener gx_onGestureEvent:event];
     }
     
+    //点击埋点分发
+    [node manualClickTrackEvent];
 }
 
 

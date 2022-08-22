@@ -479,6 +479,9 @@
         _scrollEvent.contentOffset = scrollView.contentOffset;
         [eventListener gx_onScrollEndEvent:_scrollEvent];
     }
+    
+    //处理埋点
+    [self handleVisibleCells];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -493,13 +496,45 @@
             _scrollEvent.contentOffset = scrollView.contentOffset;
             [eventListener gx_onScrollEndEvent:_scrollEvent];
         }
+        
+        //处理埋点
+        [self handleVisibleCells];
     }
+    
     if (self.autoScroll) {
         [self setupTimer];
     }
 }
 
+
+#pragma mark - appear
+
+- (void)onAppear{
+    [super onAppear];
+    [self handleVisibleCells];
+}
+
+- (void)onDisappear{
+    [super onDisappear];
+}
+
+- (void)handleVisibleCells{
+    if (self.isAppear) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UICollectionView *collectionView = (UICollectionView *)self.associatedView;
+                NSArray *cells = [collectionView visibleCells];
+                for (GXScrollViewCell *cell in cells) {
+                    [cell.rootView onAppear];
+                }
+            });
+        });
+    }
+}
+
+
 #pragma mark - 轮播
+
 - (void)handleSlider {
     _pageControl.numberOfPages = self.items.count;
     self.totalItems = self.infiniteLoop ? self.items.count * 100 : self.items.count;
@@ -526,7 +561,6 @@
 }
 
 - (void)setAutoScroll:(BOOL)autoScroll {
-    
     _autoScroll = autoScroll;
     
     //创建之前，停止定时器
@@ -541,6 +575,7 @@
     if (0 == _totalItems) {
         return;
     }
+    
     NSInteger currentIndex = [self currentIndex];
     NSInteger targetIndex = currentIndex + 1;
     [self scrollToIndex:targetIndex];
@@ -593,7 +628,10 @@
     pageControl.frame = frame;
     pageControl.currentPage = indexOnPageControl;
 }
+
+
 #pragma mark 定时器
+
 - (void)setupTimer{
     [self invalidateTimer];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:self.interval target:self selector:@selector(automaticScroll) userInfo:nil repeats:YES];
@@ -618,6 +656,7 @@
         });
     }
 }
+
 
 #pragma mark - 属性设置
 

@@ -1,6 +1,6 @@
-import { GXEngineInstance } from "..";
+import { GXEngineInstance } from './GXTemplateEngineInstance';
 import GXTemplate from "./GXTemplate";
-import { GXTemplateItem } from "./GXTemplateEngine";
+import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateInfo from "./GXTemplateInfo";
 
 export interface GXIExtensionTemplateInfoSource {

@@ -2,7 +2,7 @@ import { GXEngineInstance } from "..";
 import { toJSON } from "./GXCssParser";
 import { GXJSONArray, GXJSONObject } from "./GXJson";
 import GXTemplate from "./GXTemplate";
-import { GXTemplateItem } from "./GXTemplateEngine";
+import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateNode from "./GXTemplateNode";
 
 export default class GXTemplateInfo {

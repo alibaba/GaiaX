@@ -1,4 +1,4 @@
-import { GXTemplateItem } from "./GXTemplateEngine";
+import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateInfo from "./GXTemplateInfo";
 import { GXIExtensionTemplateInfoSource, GXIExtensionTemplateSource } from "./GXRegisterCenter";
 import GXTemplate from "./GXTemplate";

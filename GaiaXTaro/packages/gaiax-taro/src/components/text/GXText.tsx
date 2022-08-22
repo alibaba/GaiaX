@@ -1,5 +1,5 @@
 import { CommonEventFunction, Text } from '@tarojs/components';
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties } from 'react';
 
 export interface GXTextState {
 

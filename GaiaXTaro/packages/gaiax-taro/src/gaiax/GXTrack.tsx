@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import { GXJSONObject } from "./GXJson"
-import { GXTemplateItem } from "./GXTemplateEngine"
+import GXTemplateItem from "./GXTemplateItem"
 
 export default class GXTrack {
     /**

@@ -6,6 +6,7 @@ import GXTemplateInfo from "./GXTemplateInfo";
 import GXTemplateNode from "./GXTemplateNode";
 import GXGesture from "./GXGesture";
 import GXTrack from "./GXTrack";
+import GXTemplateItem from "./GXTemplateItem";
 
 
 export interface GXIEventListener {
@@ -48,17 +49,6 @@ export class GXTemplateData {
      * Track listener
      */
     trackListener: GXITrackListener = null
-}
-
-export class GXTemplateItem {
-    static create(templateBiz: string, templateId: string) {
-        const gxTemplateItem = new GXTemplateItem();
-        gxTemplateItem.templateBiz = templateBiz;
-        gxTemplateItem.templateId = templateId;
-        return gxTemplateItem;
-    }
-    templateBiz: string;
-    templateId: string;
 }
 
 export default class GXTemplateEngine {

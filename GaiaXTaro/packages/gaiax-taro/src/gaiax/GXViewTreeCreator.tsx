@@ -1,4 +1,4 @@
-import { CommonEvent, View } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import React, { ReactNode } from "react";
 import GXTemplateContext from "./GXTemplateContext";
 import { GXNode } from "./GXNode";
@@ -6,7 +6,7 @@ import GXTemplateNode from "./GXTemplateNode";
 import GXCssConvertStyle from "./GXCssConvertStyle";
 import GXTemplateInfo from "./GXTemplateInfo";
 import { GXJSONArray, GXJSONObject } from "./GXJson";
-import { GXTemplateItem } from "./GXTemplateEngine";
+import GXTemplateItem from "./GXTemplateItem";
 import GXView from "../components/view/GXView";
 import GXImage from "../components/image/GXImage";
 import GXText from "../components/text/GXText";

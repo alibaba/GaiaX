@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { GXJSONObject } from "./GXJson"
 import { GXNode } from "./GXNode"
 import GXTemplateContext from "./GXTemplateContext"
-import { GXTemplateItem } from "./GXTemplateEngine"
+import GXTemplateItem from "./GXTemplateItem"
 import GXTemplateKey from "./GXTemplateKey"
 
 export default class GXGesture {

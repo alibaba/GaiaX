@@ -1,6 +1,5 @@
 import { CommonEventFunction, View } from '@tarojs/components';
-import React, { CSSProperties, ReactNode } from 'react';
-import GXTemplateContext from '../../gaiax/GXTemplateContext';
+import React, { CSSProperties } from 'react';
 
 export interface GXViewState {
 

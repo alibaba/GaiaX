@@ -1,9 +1,10 @@
 import { ScrollView, View } from '@tarojs/components';
-import React, { ComponentType, CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
-import { GXEngineInstance, GXGesture, GXIEventListener, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
+import { GXEngineInstance } from '../../gaiax/GXTemplateEngineInstance';
+import { GXGesture, GXIEventListener, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
 import GXTemplateNode from '../../gaiax/GXTemplateNode';
 import { isArray } from 'lodash';
 

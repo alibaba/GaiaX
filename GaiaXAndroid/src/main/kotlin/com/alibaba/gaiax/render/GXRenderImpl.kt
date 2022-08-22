@@ -84,7 +84,7 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
-        processContainerScrollManualExposure(gxTemplateContext)
+        processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
 
         // Resetting the Template Status
         gxTemplateContext.isDirty = false
@@ -93,7 +93,7 @@ class GXRenderImpl {
         GXNodeTreeUpdater(gxTemplateContext).buildNodeLayout()
     }
 
-    private fun processContainerScrollManualExposure(gxTemplateContext: GXTemplateContext) {
+    private fun processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext: GXTemplateContext) {
         val eventListener = gxTemplateContext.templateData?.eventListener
         if (gxTemplateContext.containers.isNotEmpty() && eventListener !is GXIManualExposureEventListener) {
             gxTemplateContext.templateData?.eventListener =

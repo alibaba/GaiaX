@@ -56,6 +56,8 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var isAppear: Boolean = false
+
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
 
     var dirtyText: MutableMap<GXStretchNode, GXDirtyText>? = null

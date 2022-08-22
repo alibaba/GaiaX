@@ -459,25 +459,25 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                         dx: Int,
                         dy: Int
                     ) {
-                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
-                                this.view = recyclerView
-                                this.dx = dx
-                                this.dy = dy
-                            })
+                        val gxScroll = GXTemplateEngine.GXScroll().apply {
+                            this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
+                            this.view = recyclerView
+                            this.dx = dx
+                            this.dy = dy
+                        }
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                     }
 
                     override fun onScrollStateChanged(
                         recyclerView: RecyclerView,
                         newState: Int
                     ) {
-                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
-                                this.view = recyclerView
-                                this.state = newState
-                            })
+                        val gxScroll = GXTemplateEngine.GXScroll().apply {
+                            this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
+                            this.view = recyclerView
+                            this.state = newState
+                        }
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                     }
                 })
             }

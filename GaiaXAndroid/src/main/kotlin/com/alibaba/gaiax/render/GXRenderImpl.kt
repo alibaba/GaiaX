@@ -17,10 +17,14 @@
 package com.alibaba.gaiax.render
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeTreeCreator
 import com.alibaba.gaiax.render.node.GXNodeTreeUpdater
+import com.alibaba.gaiax.render.utils.GXContainerUtils
+import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdater
@@ -80,11 +84,38 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
+        processContainerScrollManualExposure(gxTemplateContext)
+
         // Resetting the Template Status
         gxTemplateContext.isDirty = false
 
         // Update the node tree
         GXNodeTreeUpdater(gxTemplateContext).buildNodeLayout()
+    }
+
+    private fun processContainerScrollManualExposure(gxTemplateContext: GXTemplateContext) {
+        val eventListener = gxTemplateContext.templateData?.eventListener
+        if (gxTemplateContext.containers.isNotEmpty() && eventListener !is GXIManualExposureEventListener) {
+            gxTemplateContext.templateData?.eventListener =
+                object : GXIManualExposureEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        eventListener?.onGestureEvent(gxGesture)
+                    }
+
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        eventListener?.onScrollEvent(gxScroll)
+                        if (gxTemplateContext.isAppear) {
+                            if (GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED == gxScroll.type && gxScroll.state == RecyclerView.SCROLL_STATE_IDLE) {
+                                GXContainerUtils.notifyOnAppear(gxTemplateContext)
+                            }
+                        }
+                    }
+
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        eventListener?.onAnimationEvent(gxAnimation)
+                    }
+                }
+        }
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {

@@ -18,6 +18,7 @@ package com.alibaba.gaiax
 
 import android.content.Context
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl
@@ -563,7 +564,7 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode?
     ): GXTemplateContext? {
         return try {
-            internalCreateGXTemplateContext(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
+            internalCreateViewOnlyNodeTree(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
@@ -575,7 +576,7 @@ class GXTemplateEngine {
         }
     }
 
-    private fun internalCreateGXTemplateContext(
+    private fun internalCreateViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode?
@@ -716,6 +717,7 @@ class GXTemplateEngine {
      */
     fun onAppear(targetView: View) {
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            gxTemplateContext.isAppear = true
             gxTemplateContext.manualExposure()
             GXContainerUtils.notifyOnAppear(gxTemplateContext)
         }
@@ -726,6 +728,7 @@ class GXTemplateEngine {
      */
     fun onDisappear(targetView: View) {
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            gxTemplateContext.isAppear = false
             GXContainerUtils.notifyOnDisappear(gxTemplateContext)
         }
     }

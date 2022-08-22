@@ -43,6 +43,10 @@ data class GXTemplateNode(
      */
     val eventBinding: GXEventBinding? = null,
     /**
+     * 节点的埋点绑定信息
+     */
+    val trackBinding: GXTrackBinding? = null,
+    /**
      * 节点的动画绑定信息
      */
     val animationBinding: GXAnimationBinding? = null,
@@ -234,12 +238,14 @@ data class GXTemplateNode(
             val css = template.findCss(viewId) ?: GXCss.create()
             val dataBinding = template.findData(viewId)
             val eventBinding = template.findEvent(viewId)
+            val trackBinding = template.findTrack(viewId)
             val animationBinding = template.findAnimation(viewId)
             return GXTemplateNode(
                 layer,
                 css,
                 dataBinding,
                 eventBinding,
+                trackBinding,
                 animationBinding,
                 visualTemplateNode
             )

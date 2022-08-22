@@ -84,6 +84,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        findViewById<AppCompatButton>(R.id.track)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, TrackTemplateActivity::class.java)
+            startActivity(intent)
+        }
+
         findViewById<AppCompatButton>(R.id.remote)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, RemoteDataSourceTemplateActivity::class.java)
             startActivity(intent)

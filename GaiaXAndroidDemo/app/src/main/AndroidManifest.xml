@@ -18,6 +18,9 @@
             android:name=".EventTemplateActivity"
             android:exported="true" />
         <activity
+            android:name=".TrackTemplateActivity"
+            android:exported="true" />
+        <activity
             android:name=".DataTemplateActivity"
             android:exported="true" />
         <activity

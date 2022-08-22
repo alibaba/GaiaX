@@ -3,7 +3,7 @@ import React, { ComponentType, CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
-import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
+import { GXEngineInstance, GXGesture, GXIEventListener, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
 import GXTemplateNode from '../../gaiax/GXTemplateNode';
 
 export interface GXScrollState {
@@ -25,6 +25,11 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             propGXNode,
             propDataValue
         } = this.props
+
+        if (propDataValue == null || propDataValue == undefined) {
+            console.error("GXScroll propDataValue is null")
+            return null
+        }
 
         const gxTemplateNode = propGXNode.gxTemplateNode;
 
@@ -96,6 +101,17 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
             const gxTemplateData = new GXTemplateData();
             gxTemplateData.templateData = itemData;
+
+            const gxEventListener = propGXTemplateContext.gxTemplateData.eventListener
+            if (gxEventListener != null) {
+                const gxChildItemEventListener: GXIEventListener = {
+                    onGestureEvent: function (gxGesture: GXGesture) {
+                        gxGesture.index = itemIndex;
+                        gxEventListener.onGestureEvent(gxGesture);
+                    }
+                }
+                gxTemplateData.eventListener = gxChildItemEventListener;
+            }
 
             const gxMeasureSize = new GXMeasureSize();
             gxMeasureSize.templateWidth = childItemWidth;

@@ -1,4 +1,4 @@
-import { Text } from '@tarojs/components';
+import { CommonEventFunction, Text } from '@tarojs/components';
 import React, { CSSProperties, ReactNode } from 'react';
 import { GXJSONObject } from '../../gaiax/GXJson';
 

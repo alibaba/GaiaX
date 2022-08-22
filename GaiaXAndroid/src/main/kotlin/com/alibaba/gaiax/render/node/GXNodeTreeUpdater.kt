@@ -519,7 +519,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         if (gxTrackBinding != null) {
             // 如果track域存在，那么不在走之前的埋点逻辑
             // https://www.yuque.com/biezhihua/gaiax/ld6iie
-            val trackData = gxTrackBinding.track.value(templateData) as? JSONObject ?: return
+            val trackData = gxTrackBinding.value.value(templateData) as? JSONObject ?: return
             val gxTrack = GXTemplateEngine.GXTrack().apply {
                 this.view = view
                 this.trackParams = trackData
@@ -533,7 +533,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId(), gxTrack)
         } else {
             val gxEventBinding = gxTemplateNode.eventBinding ?: return
-            val trackData = gxEventBinding.event.value(templateData) as? JSONObject ?: return
+            val trackData = gxEventBinding.value.value(templateData) as? JSONObject ?: return
             val gxTrack = GXTemplateEngine.GXTrack().apply {
                 this.view = view
                 this.trackParams = trackData

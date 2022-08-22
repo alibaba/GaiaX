@@ -19,4 +19,4 @@ package com.alibaba.gaiax.template
 /**
  * @suppress
  */
-data class GXTrackBinding(val track: GXIExpression)
+data class GXTrackBinding(val value: GXIExpression)

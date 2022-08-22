@@ -74,7 +74,7 @@ class GXComponentEventTest : GXBaseTest() {
         ) {
             this.gxTemplateContext = gxTemplateContext
             val eventBinding = gxNode.templateNode.eventBinding ?: return
-            val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
+            val eventData = eventBinding.value.value(templateData) as? JSONObject ?: return
             val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
                 eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
                     ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP

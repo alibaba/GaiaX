@@ -406,7 +406,7 @@ fun View.setGridContainerDirection(
                 ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
-            val target = object : GridLayoutManager(this.context, column, direction, false) {
+            val target = object : GridLayoutManager(this.context, Math.max(column,1), direction, false) {
                 override fun canScrollHorizontally(): Boolean {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     return false
@@ -418,7 +418,7 @@ fun View.setGridContainerDirection(
             }
             this.layoutManager = target
         } else {
-            (this.layoutManager as GridLayoutManager).spanCount = column
+            (this.layoutManager as GridLayoutManager).spanCount =  Math.max(column,1)
         }
     }
 }

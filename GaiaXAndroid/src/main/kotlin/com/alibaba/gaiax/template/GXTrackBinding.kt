@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.render.view
-
-import com.alibaba.gaiax.context.GXTemplateContext
+package com.alibaba.gaiax.template
 
 /**
  * @suppress
  */
-interface GXIRootView {
-
-    fun setTemplateContext(gxContext: GXTemplateContext?)
-
-    fun getTemplateContext(): GXTemplateContext?
-}
+data class GXTrackBinding(val track: GXIExpression)

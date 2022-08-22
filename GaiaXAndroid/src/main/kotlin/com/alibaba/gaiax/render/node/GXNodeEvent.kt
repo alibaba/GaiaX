@@ -23,6 +23,8 @@ class GXNodeEvent : GXINodeEvent {
         when (eventType) {
             GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
                 gxNode.view?.setOnClickListener {
+
+                    // 发送点击事件
                     gxTemplateContext.templateData?.eventListener?.onGestureEvent(
                         GXTemplateEngine.GXGesture().apply {
                             this.gestureType = eventType
@@ -32,10 +34,23 @@ class GXNodeEvent : GXINodeEvent {
                             this.templateItem = gxTemplateContext.templateItem
                             this.index = -1
                         })
+
+                    // 发送点击埋点事件
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            GXTemplateEngine.GXTrack().apply {
+                                this.view = gxNode.view
+                                this.trackParams = trackData
+                                this.nodeId = gxNode.templateNode.layer.id
+                                this.templateItem = gxTemplateContext.templateItem
+                                this.index = -1
+                            })
+                    }
                 }
             }
             GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
                 gxNode.view?.setOnLongClickListener {
+                    // 发送点击事件
                     gxTemplateContext.templateData?.eventListener?.onGestureEvent(
                         GXTemplateEngine.GXGesture().apply {
                             this.gestureType = eventType
@@ -45,6 +60,18 @@ class GXNodeEvent : GXINodeEvent {
                             this.templateItem = gxTemplateContext.templateItem
                             this.index = -1
                         })
+
+                    // 发送点击埋点事件
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            GXTemplateEngine.GXTrack().apply {
+                                this.view = gxNode.view
+                                this.trackParams = trackData
+                                this.nodeId = gxNode.templateNode.layer.id
+                                this.templateItem = gxTemplateContext.templateItem
+                                this.index = -1
+                            })
+                    }
                     true
                 }
             }

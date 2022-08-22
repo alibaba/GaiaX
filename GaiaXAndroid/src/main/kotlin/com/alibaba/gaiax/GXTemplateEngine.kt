@@ -29,6 +29,7 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXNodeById
 import com.alibaba.gaiax.render.node.getGXViewById
+import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
@@ -314,6 +315,18 @@ class GXTemplateEngine {
          * Track event
          */
         fun onTrackEvent(gxTrack: GXTrack) {}
+
+        /**
+         * 会在事件执行时，SDK内部会回调手动点击事件。
+         * https://www.yuque.com/biezhihua/gaiax/ld6iie
+         */
+        fun onManualClickTrackEvent(gxTrack: GXTrack) {}
+
+        /**
+         * 会在业务手动调用onAppear后，SDK内部会回调手动曝光事件
+         * https://www.yuque.com/biezhihua/gaiax/ld6iie
+         */
+        fun onManualExposureTrackEvent(gxTrack: GXTrack) {}
     }
 
     /**
@@ -449,6 +462,11 @@ class GXTemplateEngine {
             templateInfo,
             gxVisualTemplateNode
         )
+    }
+
+    fun destroyView(targetView: View?) {
+        GXTemplateContext.getContext(targetView)?.release()
+        GXTemplateContext.setContext(null)
     }
 
     /**
@@ -681,10 +699,7 @@ class GXTemplateEngine {
      * @suppress
      */
     fun getGXViewById(targetView: View?, id: String): View? {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            return context.rootNode?.getGXViewById(id)
-        }
-        return null
+        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXViewById(id)
     }
 
     /**
@@ -693,10 +708,26 @@ class GXTemplateEngine {
      * @hide
      */
     fun getGXNodeById(targetView: View?, id: String): GXNode? {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            return context.rootNode?.getGXNodeById(id)
+        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXNodeById(id)
+    }
+
+    /**
+     * 当View可见时
+     */
+    fun onAppear(targetView: View) {
+        GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            gxTemplateContext.manualExposure()
+            GXContainerUtils.notifyOnAppear(gxTemplateContext)
         }
-        return null
+    }
+
+    /**
+     * 当View不可见时
+     */
+    fun onDisappear(targetView: View) {
+        GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            GXContainerUtils.notifyOnDisappear(gxTemplateContext)
+        }
     }
 
     /**

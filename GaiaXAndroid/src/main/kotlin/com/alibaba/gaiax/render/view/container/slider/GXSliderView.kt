@@ -256,7 +256,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         return drawable
     }
 
-    override fun setTemplateContext(gxContext: GXTemplateContext) {
+    override fun setTemplateContext(gxContext: GXTemplateContext?) {
         this.gxTemplateContext = gxContext
     }
 

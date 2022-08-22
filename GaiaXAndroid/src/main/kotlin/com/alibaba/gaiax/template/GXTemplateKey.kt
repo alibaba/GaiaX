@@ -289,6 +289,8 @@ object GXTemplateKey {
 
     const val GAIAX_EVENT = "event"
 
+    const val GAIAX_TRACK = "track"
+
     const val GAIAX_CONFIG = "config"
 
     const val GAIAX_ANIMATION = "animation"

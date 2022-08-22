@@ -701,7 +701,7 @@ class GXComponentEventTest : GXBaseTest() {
 
         Assert.assertEquals(true, gesture != null)
         Assert.assertEquals("tap", gesture?.gestureType)
-        Assert.assertEquals(-1, gesture?.index)
+        Assert.assertEquals(0, gesture?.index)
         Assert.assertEquals("template_event_scroll_item", gesture?.nodeId)
         Assert.assertEquals(JSONObject().apply {
             this["type"] = "tap"

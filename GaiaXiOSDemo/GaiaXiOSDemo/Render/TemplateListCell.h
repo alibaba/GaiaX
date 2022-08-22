@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TemplateListCell : UITableViewCell
 
+@property (nonatomic, strong) UIView *templateView;
+
 - (void)setupData:(NSDictionary *)data;
 
 @end

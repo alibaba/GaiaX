@@ -22,7 +22,6 @@
 @interface TemplateListCell ()
 
 @property (nonatomic, strong) UILabel *label;
-@property (nonatomic, strong) UIView *templateView;
 
 @end
 

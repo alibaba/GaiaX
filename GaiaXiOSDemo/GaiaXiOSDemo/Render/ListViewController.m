@@ -69,7 +69,15 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    UIView *gxView = [(TemplateListCell *)cell templateView];
+    [(UIView <GXRootViewProtocal> *)gxView onAppear];
+}
 
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    UIView *gxView = [(TemplateListCell *)cell templateView];
+    [(UIView <GXRootViewProtocal> *)gxView onDisappear];
+}
 
 #pragma mark - data
 

@@ -438,6 +438,9 @@
         _scrollEvent.contentOffset = scrollView.contentOffset;
         [eventListener gx_onScrollEndEvent:_scrollEvent];
     }
+    
+    //埋点处理
+    [self handleVisibleCells];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -452,9 +455,37 @@
             _scrollEvent.contentOffset = scrollView.contentOffset;
             [eventListener gx_onScrollEndEvent:_scrollEvent];
         }
+        
+        //埋点处理
+        [self handleVisibleCells];
     }
 }
 
+
+#pragma mark - appear
+
+- (void)onAppear{
+    [super onAppear];
+    [self handleVisibleCells];
+}
+
+- (void)onDisappear{
+    [super onDisappear];
+}
+
+- (void)handleVisibleCells{
+    if (self.isAppear) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UICollectionView *collectionView = (UICollectionView *)self.associatedView;
+                NSArray *cells = [collectionView visibleCells];
+                for (GXScrollViewCell *cell in cells) {
+                    [cell.rootView onAppear];
+                }
+            });
+        });
+    }
+}
 
 #pragma mark - 属性设置
 

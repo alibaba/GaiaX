@@ -17,15 +17,21 @@
 //  limitations under the License.
 
 #import "GXScrollView.h"
+#import "UIView+GX.h"
+#import "GXNode.h"
 
 @implementation GXScrollView
 
 - (void)onAppear{
-    
+    if (self.gxNode) {
+        [self.gxNode onAppear];
+    }
 }
 
 - (void)onDisappear{
-    
+    if (self.gxNode) {
+        [self.gxNode onDisappear];
+    }
 }
 
 @end

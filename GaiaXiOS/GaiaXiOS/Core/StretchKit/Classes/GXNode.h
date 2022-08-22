@@ -108,6 +108,7 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 //databinding中的内容
 @property (nonatomic, strong) id data;
 @property (nonatomic, strong) id event;
+@property (nonatomic, strong) id track;
 @property (nonatomic, strong) NSDictionary *animation;
 
 //嵌套模板中的数据
@@ -155,6 +156,18 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 - (void)configureViewInfo:(NSDictionary *)viewInfo;
 //读取css中的属性
 - (void)configureStyleInfo:(NSDictionary *)styleInfo;
+
+
+//是否正在显示
+@property (nonatomic, assign) BOOL isAppear;
+
+//视图出现/消失
+- (void)onAppear;
+- (void)onDisappear;
+
+//埋点处理
+- (void)manualClickTrackEvent;
+- (void)manualExposureTrackEvent;
 
 @end
 

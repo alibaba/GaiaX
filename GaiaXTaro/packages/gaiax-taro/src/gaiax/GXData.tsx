@@ -1,6 +1,7 @@
 import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateInfo from "./GXTemplateInfo";
-import { GXIExtensionTemplateInfoSource, GXIExtensionTemplateSource } from "./GXRegisterCenter";
+import GXIExtensionTemplateSource from "./GXIExtensionTemplateSource";
+import GXIExtensionTemplateInfoSource from "./GXIExtensionTemplateInfoSource";
 import GXTemplate from "./GXTemplate";
 
 class GXTemplateInfoSource implements GXIExtensionTemplateInfoSource {

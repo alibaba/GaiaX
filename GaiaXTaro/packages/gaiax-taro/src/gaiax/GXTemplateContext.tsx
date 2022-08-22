@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import { GXMeasureSize, GXTemplateData } from "./GXTemplateEngine";
+import GXTemplateData from "./GXTemplateData";
+import GXMeasureSize from "./GXMeasureSize";
 import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateInfo from "./GXTemplateInfo";
 import GXTemplateNode from "./GXTemplateNode";

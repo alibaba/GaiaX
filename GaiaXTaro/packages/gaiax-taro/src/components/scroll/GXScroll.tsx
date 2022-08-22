@@ -3,10 +3,16 @@ import React, { CSSProperties, ReactNode } from 'react';
 import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
-import { GXEngineInstance } from '../../gaiax/GXTemplateEngineInstance';
-import { GXGesture, GXIEventListener, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
+import { GXEngineInstance } from '../../gaiax/GXEngineInstance';
 import GXTemplateNode from '../../gaiax/GXTemplateNode';
 import { isArray } from 'lodash';
+import GXTemplateItem from '../../gaiax/GXTemplateItem';
+import GXTemplateInfo from '../../gaiax/GXTemplateInfo';
+import GXTemplateData from '../../gaiax/GXTemplateData';
+import GXIEventListener from '../../gaiax/GXIEventListener';
+import GXGesture from '../../gaiax/GXGesture';
+import GXTemplateComponent from '../GXTemplateComponent';
+import GXMeasureSize from '../../gaiax/GXMeasureSize';
 
 export interface GXScrollState {
 

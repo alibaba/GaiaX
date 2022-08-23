@@ -432,6 +432,20 @@ export default class GXCssConvertStyle {
                 targetStyle.lineHeight = gxParentNode.gxTemplateNode.finalStyle.height;
             }
 
+            // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
+            if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' &&
+                endsWith(width, 'px')
+            ) {
+                targetStyle.flexShrink = '0';
+            }
+
+            // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
+            if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' &&
+                endsWith(height, 'px')
+            ) {
+                targetStyle.flexShrink = '0';
+            }
+
             // 特殊处理：对文字自适应的处理
             let fitContent = srcCss['fit-content'];
 
@@ -459,20 +473,6 @@ export default class GXCssConvertStyle {
                         targetStyle.width = '0px';
                     }
                 }
-
-                // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
-                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' &&
-                    endsWith(width, 'px')
-                ) {
-                    targetStyle.flexShrink = '0';
-                }
-
-                // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
-                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' &&
-                    endsWith(height, 'px')
-                ) {
-                    targetStyle.flexShrink = '0';
-                }
             }
 
             // 特殊处理：处理多行文字...逻辑
@@ -480,6 +480,7 @@ export default class GXCssConvertStyle {
             if (maxLines != undefined && maxLines > 1) {
                 targetStyle['-webkit-box-orient'] = 'vertical';
                 targetStyle['-webkit-line-clamp'] = maxLines;
+                targetStyle['line-clamp'] = maxLines;
                 targetStyle.display = '-webkit-box';
                 targetStyle.overflow = 'hidden';
                 targetStyle.lineHeight = '';

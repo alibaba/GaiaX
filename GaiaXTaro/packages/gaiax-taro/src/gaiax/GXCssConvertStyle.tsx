@@ -404,7 +404,7 @@ export default class GXCssConvertStyle {
             // 特殊处理：对文字自适应的处理
             let fitContent = srcCss['fit-content'];
 
-            // 对文字进行特殊处理
+            // 对文字自适应进行特殊处理
             if (fitContent != null && fitContent != undefined) {
 
                 // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
@@ -425,6 +425,12 @@ export default class GXCssConvertStyle {
                 else if (width != undefined && width.endsWith('px') && (fitContent == 'true' || fitContent == true)) {
                     targetStyle.width = 'auto';
                 }
+            }
+
+            // 对文字渐变色进行处理
+            if (backgroundImage != null){
+                targetStyle['-webkit-background-clip'] = 'text';
+                targetStyle.color = 'transparent';
             }
         }
 

@@ -62,26 +62,33 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         const scrollStyle = {
             height: gxStyle.height,
             width: gxStyle.width,
-            marginTop: '',
-            marginLeft: '',
-            marginRight: '',
-            marginBottom: '',
+            flexShrink: 1,
+            flexGrow: 1,
+            paddingTop: '',
+            paddingLeft: '',
+            paddingRight: '',
+            paddingBottom: '',
             display: ''
         }
 
         // 和native保持一致
         // edge-insets
         if (gxScrollConfig.edgeInsetsTop != null) {
-            scrollStyle.marginTop = gxScrollConfig.edgeInsetsTop;
+            scrollStyle.paddingTop = gxScrollConfig.edgeInsetsTop;
         }
         if (gxScrollConfig.edgeInsetsLeft != null) {
-            scrollStyle.marginLeft = gxScrollConfig.edgeInsetsLeft;
+            scrollStyle.paddingLeft = gxScrollConfig.edgeInsetsLeft;
         }
         if (gxScrollConfig.edgeInsetsRight != null) {
-            scrollStyle.marginRight = gxScrollConfig.edgeInsetsRight;
+            scrollStyle.paddingRight = gxScrollConfig.edgeInsetsRight;
         }
         if (gxScrollConfig.edgeInsetsBottom != null) {
-            scrollStyle.marginBottom = gxScrollConfig.edgeInsetsBottom;
+            scrollStyle.paddingBottom = gxScrollConfig.edgeInsetsBottom;
+        }
+
+        // 处理Scroll的左右内边距的情况
+        if ((scrollStyle.paddingLeft != '' || scrollStyle.paddingRight != '') && scrollStyle.width == '100%') {
+            scrollStyle.width = 'auto'
         }
 
         const isHorizontal = gxScrollConfig.direction == 'horizontal'

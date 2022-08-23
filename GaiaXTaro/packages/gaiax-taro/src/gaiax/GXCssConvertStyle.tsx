@@ -431,8 +431,15 @@ export default class GXCssConvertStyle {
                         targetStyle.flexGrow = '0';
                     }
                     // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
-                    else if (width != undefined && width.endsWith('px')) {
+                    else if (endsWith(width, 'px')) {
+                        // 特殊处理：如果未设定maxWidth或者maxWidth为auto，那么需要设置maxWidth=width，来限定自适应的结果
+                        if (targetStyle.maxWidth == undefined || targetStyle.maxWidth == null || targetStyle.maxWidth == 'auto') {
+                            targetStyle.maxWidth = targetStyle.width;
+                        }
                         targetStyle.width = 'auto';
+                    } else if (width == undefined) {
+                        // 特殊处理：如果宽度没设置，并且是自适应，那么自适应的文字不应该被压缩
+                        targetStyle.flexShrink = '0';
                     }
                 } else {
                     // 特殊处理：如果没有设置文字自适应，并且width没有设置，那么宽度设置为0px

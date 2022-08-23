@@ -34,7 +34,7 @@
     "packages/dist/*"
   ],
   "include": [
-    "**/*.tsx",
-    "**/*.ts"
+    "src/*.tsx",
+    "src/*.ts"
   ]
 }

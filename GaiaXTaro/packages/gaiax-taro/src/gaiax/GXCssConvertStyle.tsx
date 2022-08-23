@@ -288,10 +288,10 @@ export default class GXCssConvertStyle {
         //
 
         let boxShadow = srcCss['box-shadow'];
-        if (boxShadow != undefined) {
+        if (boxShadow != undefined && overflow == 'visible') {
             targetStyle.boxShadow = boxShadow;
-        }  
-        
+        }
+
         let backgroundColor = srcCss['background-color'];
         if (backgroundColor != undefined) {
             targetStyle.backgroundColor = backgroundColor;

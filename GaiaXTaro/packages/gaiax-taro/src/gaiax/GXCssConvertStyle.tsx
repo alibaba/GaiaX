@@ -288,7 +288,7 @@ export default class GXCssConvertStyle {
         //
 
         let boxShadow = srcCss['box-shadow'];
-        if (boxShadow != undefined && overflow == 'visible') {
+        if (boxShadow != undefined) {
             targetStyle.boxShadow = boxShadow;
         }
 
@@ -402,6 +402,14 @@ export default class GXCssConvertStyle {
             if ((paddingLeft != null || paddingRight != null) && targetStyle.width == '100%' && gxParentNode != null) {
                 targetStyle.width = 'auto';
                 targetStyle.flexGrow = '1';
+            }
+
+            // 特殊处理：只有溢出不裁剪，才能显示阴影
+            if (boxShadow != null) {
+                targetStyle.boxShadow = '';
+                if (overflow == 'visible') {
+                    targetStyle.boxShadow = boxShadow;
+                }
             }
         }
 

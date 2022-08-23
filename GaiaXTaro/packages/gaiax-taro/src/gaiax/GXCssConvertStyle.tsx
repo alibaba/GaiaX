@@ -3,6 +3,7 @@ import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
 import GXTemplateNode from "./GXTemplateNode";
+import { endsWith, isNull, isUndefined } from "lodash";
 
 export default class GXCssConvertStyle {
 
@@ -400,48 +401,59 @@ export default class GXCssConvertStyle {
         }
 
         // 对Text进行处理
-        if (gxTemplateNode.isTextType()) {
+        if (gxTemplateNode.isTextType() || gxTemplateNode.isRichTextType() || gxTemplateNode.isIconFontType()) {
+
+            // 特殊处理：对文字渐变色进行处理
+            if (backgroundImage != null) {
+                targetStyle['-webkit-background-clip'] = 'text';
+                targetStyle.color = 'transparent';
+            }
+
+            // 特殊处理：文字默认居中
+            if (endsWith(height, 'px')) {
+                targetStyle.lineHeight = height;
+            }
+
+            // 特殊处理：如果height没有设置，那么高度是stretch撑满父空间的，此时文字应该居中
+            if (height == undefined && gxParentNode != null) {
+                targetStyle.lineHeight = gxParentNode.gxTemplateNode.finalStyle.height;
+            }
+
             // 特殊处理：对文字自适应的处理
             let fitContent = srcCss['fit-content'];
 
             // 对文字自适应进行特殊处理
             if (fitContent != null && fitContent != undefined) {
 
+                if (fitContent == true) {
+                    // 如果宽度是auto并且设置的自增长，那么fitcontent之后，需要按照实际的宽度设置
+                    if ((width == 'auto' || width == undefined) && flexGrow == '1') {
+                        targetStyle.flexGrow = '0';
+                    }
+                    // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
+                    else if (width != undefined && width.endsWith('px')) {
+                        targetStyle.width = 'auto';
+                    }
+                } else {
+                    // 特殊处理：如果没有设置文字自适应，并且width没有设置，那么宽度设置为0px
+                    if (width == undefined) {
+                        targetStyle.width = '0px';
+                    }
+                }
+
                 // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
-                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' && width != undefined) {
+                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' &&
+                    endsWith(width, 'px')
+                ) {
                     targetStyle.flexShrink = '0';
                 }
 
                 // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
-                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' && height != undefined) {
+                if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' &&
+                    endsWith(height, 'px')
+                ) {
                     targetStyle.flexShrink = '0';
                 }
-
-                // 如果宽度是auto并且设置的自增长，那么fitcontent之后，需要按照实际的宽度设置
-                if ((width == 'auto' || width == undefined) && flexGrow == '1' && (fitContent == 'true' || fitContent == true)) {
-                    targetStyle.flexGrow = '0';
-                }
-                // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
-                else if (width != undefined && width.endsWith('px') && (fitContent == 'true' || fitContent == true)) {
-                    targetStyle.width = 'auto';
-                }
-            }
-
-            // 对文字渐变色进行处理
-            if (backgroundImage != null){
-                targetStyle['-webkit-background-clip'] = 'text';
-                targetStyle.color = 'transparent';
-            }
-        }
-
-        if (gxTemplateNode.isTextType() || gxTemplateNode.isRichTextType() || gxTemplateNode.isIconFontType()) {
-            
-            // 特殊处理：对文字自适应的处理
-            let fitContent = srcCss['fit-content'];
-
-            // 特殊处理：文字默认居中
-            if (height != undefined && height.endsWith('px')) {
-                targetStyle.lineHeight = height;
             }
 
             // 特殊处理：处理多行文字...逻辑

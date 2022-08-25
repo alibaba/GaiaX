@@ -1453,6 +1453,52 @@ class GXComponentScrollTest : GXBaseTest() {
     }
 
     @Test
+    fun template_scroll_multi_type_dynamic_change_item_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_multi_type_dynamic_change_item_height"
+        )
+        val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                })
+            }
+        }))
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(120F.dpToPx(), rootView.height())
+
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["type"] = 0
+                    this["smallItemHeight"] = "150px"
+                })
+                this.add(JSONObject().apply {
+                    this["type"] = 1
+                    this["largeItemHeight"] = "200px"
+                })
+            }
+        }))
+
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(200F.dpToPx(), rootView.height())
+    }
+
+    @Test
     fun template_scroll_multi_type_two_gravity_center_horizontal() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

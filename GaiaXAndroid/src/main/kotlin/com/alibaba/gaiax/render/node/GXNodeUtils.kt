@@ -28,10 +28,12 @@ import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 import kotlin.math.ceil
+import kotlin.math.max
 
 /**
  * @suppress
  */
+@Suppress("UNUSED_PARAMETER")
 object GXNodeUtils {
 
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
@@ -78,9 +80,15 @@ object GXNodeUtils {
         //  2.1 显示一个坑位
         //  2.2 显示两个坑位
 
-        if (gxNode.multiTypeItemComputeCache == null) {
-            gxNode.multiTypeItemComputeCache = mutableMapOf()
+        var multiTypeItemComputeCache = gxNode.multiTypeItemComputeCache
+
+        if (multiTypeItemComputeCache == null) {
+            multiTypeItemComputeCache = mutableMapOf()
+            gxNode.multiTypeItemComputeCache = multiTypeItemComputeCache
         }
+
+        // TODO:https://github.com/alibaba/GaiaX/issues/193
+        multiTypeItemComputeCache.clear()
 
         // 1. 获取坑位的ViewPort信息
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
@@ -94,7 +102,7 @@ object GXNodeUtils {
             val itemVisualTemplateNode = itemTemplatePair.second
 
             val itemLayout: Layout? =
-                if (gxNode.multiTypeItemComputeCache?.containsKey(itemTemplateItem) == false) {
+                if (!multiTypeItemComputeCache.containsKey(itemTemplateItem)) {
                     computeContainerItemLayout(
                         gxTemplateContext,
                         gxNode,
@@ -103,13 +111,10 @@ object GXNodeUtils {
                         itemVisualTemplateNode,
                         containerData.firstOrNull() as? JSONObject ?: JSONObject()
                     )?.apply {
-                        gxNode.multiTypeItemComputeCache?.put(
-                            itemTemplateItem,
-                            this
-                        )
+                        multiTypeItemComputeCache[itemTemplateItem] = this
                     }
                 } else {
-                    gxNode.multiTypeItemComputeCache?.get(itemTemplateItem)
+                    multiTypeItemComputeCache[itemTemplateItem]
                 }
 
             // 3. 计算容器期望的宽高结果
@@ -121,7 +126,7 @@ object GXNodeUtils {
             val containerSizeList = mutableListOf<Size<Dimension?>>()
 
             // init multi type item
-            containerData.forEach {
+            containerData.forEach { it ->
                 val itemData = it as JSONObject
                 gxNode.templateNode.resetData()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
@@ -139,10 +144,7 @@ object GXNodeUtils {
                                 val itemVisualTemplateNode = itemTemplatePair.second
 
                                 val itemLayout: Layout? =
-                                    if (gxNode.multiTypeItemComputeCache?.containsKey(
-                                            itemTemplateItem
-                                        ) == false
-                                    ) {
+                                    if (!multiTypeItemComputeCache.containsKey(itemTemplateItem)) {
                                         computeContainerItemLayout(
                                             gxTemplateContext,
                                             gxNode,
@@ -151,13 +153,10 @@ object GXNodeUtils {
                                             itemVisualTemplateNode,
                                             itemData
                                         )?.apply {
-                                            gxNode.multiTypeItemComputeCache?.put(
-                                                itemTemplateItem,
-                                                this
-                                            )
+                                            multiTypeItemComputeCache[itemTemplateItem] = this
                                         }
                                     } else {
-                                        gxNode.multiTypeItemComputeCache?.get(itemTemplateItem)
+                                        multiTypeItemComputeCache[itemTemplateItem]
                                     }
 
                                 // 3. 计算容器期望的宽高结果
@@ -212,8 +211,8 @@ object GXNodeUtils {
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode
-                return stretchNode?.layoutByBind
+                ).stretchNode
+                return stretchNode.layoutByBind
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -228,8 +227,8 @@ object GXNodeUtils {
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode
-                return stretchNode?.layoutByBind
+                ).stretchNode
+                return stretchNode.layoutByBind
             }
             else -> {
                 return null
@@ -237,7 +236,7 @@ object GXNodeUtils {
         }
     }
 
-    internal fun computeContainerItemLayout(
+    private fun computeContainerItemLayout(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         gxItemViewPort: Size<Float?>,
@@ -258,8 +257,8 @@ object GXNodeUtils {
                     gxMeasureSize,
                     gxTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode
-                return stretchNode?.layoutByBind
+                ).stretchNode
+                return stretchNode.layoutByBind
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -273,8 +272,8 @@ object GXNodeUtils {
                     gxMeasureSize,
                     gxTemplateData,
                     gxItemVisualTemplateNode
-                )?.stretchNode
-                return stretchNode?.layoutByBind
+                ).stretchNode
+                return stretchNode.layoutByBind
             }
             else -> {
                 return null
@@ -399,7 +398,7 @@ object GXNodeUtils {
         measureSize: GXTemplateEngine.GXMeasureSize,
         templateData: GXTemplateEngine.GXTemplateData,
         visualTemplateNode: GXTemplateNode?
-    ): GXNode? {
+    ): GXNode {
 
         // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
         val templateInfo = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
@@ -436,8 +435,7 @@ object GXNodeUtils {
                 }
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
                 else if (finalScrollConfig.isVertical) {
-                    val lines =
-                        Math.max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
+                    val lines = max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
                     var containerHeight = itemSize.height
                     containerHeight *= lines
                     containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
@@ -454,11 +452,10 @@ object GXNodeUtils {
                 if (finalGridConfig.isVertical) {
 
                     // 获取行数
-                    val lines =
-                        Math.max(
-                            1,
-                            ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
-                        )
+                    val lines = max(
+                        1,
+                        ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
+                    )
 
                     var containerHeight = itemSize.height
 

@@ -138,6 +138,3 @@ sealed class GXSize {
 
     object Undefined : GXSize()
 }
-
-
-

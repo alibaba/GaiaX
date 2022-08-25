@@ -26,7 +26,6 @@ data class GXCss(
     val flexBox: GXFlexBox
 ) {
 
-
     companion object {
         fun create(lowPriorityCss: GXCss, highPriorityCss: GXCss?): GXCss {
             if (highPriorityCss == null) {

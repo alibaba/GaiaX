@@ -17,7 +17,7 @@
 //  limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <GaiaxiOS/GXRootViewProtocal.h>
+#import <GaiaXiOS/GXRootViewProtocal.h>
 #import <UIKit/UIKit.h>
 
 @class GXTemplateItem;

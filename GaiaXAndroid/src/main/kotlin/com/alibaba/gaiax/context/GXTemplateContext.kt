@@ -56,6 +56,10 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var isAppear: Boolean = false
+
+    var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
+
     var dirtyText: MutableMap<GXStretchNode, GXDirtyText>? = null
 
     /**
@@ -78,7 +82,9 @@ class GXTemplateContext private constructor(
      */
     var rootNode: GXNode? = null
 
-
+    /**
+     * Template Data
+     */
     var templateData: GXTemplateEngine.GXTemplateData? = null
 
     /**
@@ -106,6 +112,12 @@ class GXTemplateContext private constructor(
         rootNode = null
     }
 
+    fun manualExposure() {
+        manualTrackMap?.forEach {
+            templateData?.trackListener?.onManualExposureTrackEvent(it.value)
+        }
+    }
+
     companion object {
 
         fun createContext(
@@ -128,6 +140,12 @@ class GXTemplateContext private constructor(
                 return targetView.getTemplateContext()
             }
             return null
+        }
+
+        fun setContext(targetView: View?) {
+            if (targetView is GXIRootView) {
+                targetView.setTemplateContext(null)
+            }
         }
     }
 }

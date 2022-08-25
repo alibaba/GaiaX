@@ -130,6 +130,7 @@
         nodes = [NSMutableArray array];
         NSDictionary *dataDict = [dbInfo gx_dictionaryForKey:@"data"];
         NSDictionary *eventDict = [dbInfo gx_dictionaryForKey:@"event"];
+        NSDictionary *trackDict = [dbInfo gx_dictionaryForKey:@"track"];
         NSDictionary *animationDict = [dbInfo gx_dictionaryForKey:@"animation"];
         
         //获取view层级
@@ -175,6 +176,7 @@
                 //节点databinding属性设置
                 node.data = [dataDict objectForKey:nodeId];
                 node.event = [eventDict objectForKey:nodeId];
+                node.track = [trackDict objectForKey:nodeId];
                 node.animation = [animationDict gx_dictionaryForKey:nodeId];
                 
                 //容器中所有属性

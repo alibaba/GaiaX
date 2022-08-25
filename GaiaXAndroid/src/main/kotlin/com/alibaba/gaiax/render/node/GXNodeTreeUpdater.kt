@@ -459,25 +459,25 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                         dx: Int,
                         dy: Int
                     ) {
-                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
-                                this.view = recyclerView
-                                this.dx = dx
-                                this.dy = dy
-                            })
+                        val gxScroll = GXTemplateEngine.GXScroll().apply {
+                            this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
+                            this.view = recyclerView
+                            this.dx = dx
+                            this.dy = dy
+                        }
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                     }
 
                     override fun onScrollStateChanged(
                         recyclerView: RecyclerView,
                         newState: Int
                     ) {
-                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(
-                            GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
-                                this.view = recyclerView
-                                this.state = newState
-                            })
+                        val gxScroll = GXTemplateEngine.GXScroll().apply {
+                            this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
+                            this.view = recyclerView
+                            this.state = newState
+                        }
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                     }
                 })
             }
@@ -506,22 +506,43 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         gxNode: GXNode,
         templateData: JSONObject
     ) {
+
         val view = gxNode.view ?: return
-        val templateNode = gxNode.templateNode
-        val eventBinding = templateNode.eventBinding ?: return
-        val invisible = templateNode.finalCss?.style?.isInvisible() ?: false
+        val gxTemplateNode = gxNode.templateNode
+
+        val invisible = gxTemplateNode.finalCss?.style?.isInvisible() ?: false
         if (invisible) {
             return
         }
-        val trackData = eventBinding.event.value(templateData) as? JSONObject ?: return
-        gxTemplateContext.templateData?.trackListener?.onTrackEvent(
-            GXTemplateEngine.GXTrack().apply {
+
+        val gxTrackBinding = gxTemplateNode.trackBinding
+        if (gxTrackBinding != null) {
+            // 如果track域存在，那么不在走之前的埋点逻辑
+            // https://www.yuque.com/biezhihua/gaiax/ld6iie
+            val trackData = gxTrackBinding.value.value(templateData) as? JSONObject ?: return
+            val gxTrack = GXTemplateEngine.GXTrack().apply {
                 this.view = view
                 this.trackParams = trackData
-                this.nodeId = templateNode.layer.id
+                this.nodeId = gxTemplateNode.layer.id
                 this.templateItem = gxTemplateContext.templateItem
                 this.index = -1
-            })
+            }
+            if (gxTemplateContext.manualTrackMap == null) {
+                gxTemplateContext.manualTrackMap = mutableMapOf()
+            }
+            gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId(), gxTrack)
+        } else {
+            val gxEventBinding = gxTemplateNode.eventBinding ?: return
+            val trackData = gxEventBinding.value.value(templateData) as? JSONObject ?: return
+            val gxTrack = GXTemplateEngine.GXTrack().apply {
+                this.view = view
+                this.trackParams = trackData
+                this.nodeId = gxTemplateNode.layer.id
+                this.templateItem = gxTemplateContext.templateItem
+                this.index = -1
+            }
+            gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+        }
     }
 
     private fun nodeViewData(

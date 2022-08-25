@@ -46,5 +46,10 @@
             "type": "'tap'",
             "value": "$uploader"
         }
+    },
+    "track": {
+        "follow":{
+            "value": "$uploader"
+        }
     }
 }

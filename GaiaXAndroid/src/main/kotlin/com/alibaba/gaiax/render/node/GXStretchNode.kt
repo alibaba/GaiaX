@@ -31,6 +31,7 @@ import com.alibaba.gaiax.template.utils.GXTemplateUtils
 /**
  * @suppress
  */
+@Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
     val node: Node,
     var layoutByCreate: Layout? = null,
@@ -81,8 +82,12 @@ data class GXStretchNode(
 
         var isDirty = false
 
-        val height = finalFlexBox.size?.height
-        val flexGrow = finalFlexBox.flexGrow
+        val finalHeight = finalFlexBox.size?.height
+        val finalFlexGrow = finalFlexBox.flexGrow
+
+        // 这里需要做一个copy，是否直接修改finalFlexBox会导致二次计算时发生错误
+        val finalFlexBoxSize: Size<Dimension>? =
+            finalFlexBox.size?.copy(finalFlexBox.size.width, finalFlexBox.size.height)
 
         if (gxNode.isScrollType()) {
             val finalScrollConfig = gxNode.templateNode.finalScrollConfig
@@ -90,7 +95,7 @@ data class GXStretchNode(
 
             // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
             var isComputeContainerHeight =
-                finalScrollConfig.isHorizontal && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+                finalScrollConfig.isHorizontal && finalFlexGrow == null && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
 
             // 对计算结果进行处理
             GXRegisterCenter
@@ -114,7 +119,7 @@ data class GXStretchNode(
                     containerTemplateData
                 )
                 containerSize?.height?.let {
-                    finalFlexBox.size?.height = it
+                    finalFlexBoxSize?.height = it
                     isDirty = true
                 }
             }
@@ -125,7 +130,7 @@ data class GXStretchNode(
                 ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalGridConfig is null")
 
             var isComputeContainerHeight = finalGridConfig.isVertical &&
-                    flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+                    finalFlexGrow == null && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
 
             // 对计算结果进行处理
             GXRegisterCenter
@@ -151,13 +156,19 @@ data class GXStretchNode(
                     containerTemplateData
                 )
                 containerSize?.height?.let {
-                    finalFlexBox.size?.height = it
+                    finalFlexBoxSize?.height = it
                     isDirty = true
                 }
             }
         }
 
-        updateLayoutByFlexBox(gxTemplateContext, finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(
+            gxTemplateContext,
+            finalCssStyle,
+            finalFlexBox,
+            finalFlexBoxSize,
+            style
+        )?.let {
             isDirty = it
         }
 
@@ -195,7 +206,13 @@ data class GXStretchNode(
             throw IllegalArgumentException("final css style is null, please check!")
         }
 
-        updateLayoutByFlexBox(gxTemplateContext, finalCssStyle, finalFlexBox, style)?.let {
+        updateLayoutByFlexBox(
+            gxTemplateContext,
+            finalCssStyle,
+            finalFlexBox,
+            finalFlexBox.size,
+            style
+        )?.let {
             isDirty = it
         }
 
@@ -225,6 +242,7 @@ data class GXStretchNode(
         gxTemplateContext: GXTemplateContext,
         gxCssStyle: GXStyle,
         gxFlexBox: GXFlexBox,
+        flexBoxSize: Size<Dimension>?,
         style: Style
     ): Boolean? {
         var isDirty: Boolean? = null
@@ -317,7 +335,7 @@ data class GXStretchNode(
             isDirty = true
         }
 
-        gxFlexBox.size?.let {
+        flexBoxSize?.let {
             GXTemplateUtils.updateSize(it, style.size)
             GXRegisterCenter.instance
                 .extensionDynamicProperty

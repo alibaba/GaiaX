@@ -8,11 +8,16 @@
         }
     },
     "event":{
-     "gx-content-uper-scroll-item":{
-        "type":"'tap'",
-        "params": {
-            "value": "'我是event'"
-        }
-     }
+         "gx-content-uper-scroll-item":{
+            "type":"'tap'",
+            "params": {
+                "value": "'我是event'"
+            }
+         }
+    },
+    "track":{
+         "gx-content-uper-scroll-item":{
+            "value": "$data"
+         }
     }
 }

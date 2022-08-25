@@ -74,7 +74,7 @@ class GXComponentEventTest : GXBaseTest() {
         ) {
             this.gxTemplateContext = gxTemplateContext
             val eventBinding = gxNode.templateNode.eventBinding ?: return
-            val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
+            val eventData = eventBinding.value.value(templateData) as? JSONObject ?: return
             val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
                 eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
                     ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
@@ -701,7 +701,7 @@ class GXComponentEventTest : GXBaseTest() {
 
         Assert.assertEquals(true, gesture != null)
         Assert.assertEquals("tap", gesture?.gestureType)
-        Assert.assertEquals(-1, gesture?.index)
+        Assert.assertEquals(0, gesture?.index)
         Assert.assertEquals("template_event_scroll_item", gesture?.nodeId)
         Assert.assertEquals(JSONObject().apply {
             this["type"] = "tap"

@@ -18,6 +18,7 @@ package com.alibaba.gaiax
 
 import android.content.Context
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl
@@ -29,6 +30,8 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXNodeById
 import com.alibaba.gaiax.render.node.getGXViewById
+import com.alibaba.gaiax.render.utils.GXContainerUtils
+import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
@@ -314,6 +317,18 @@ class GXTemplateEngine {
          * Track event
          */
         fun onTrackEvent(gxTrack: GXTrack) {}
+
+        /**
+         * 会在事件执行时，SDK内部会回调手动点击事件。
+         * https://www.yuque.com/biezhihua/gaiax/ld6iie
+         */
+        fun onManualClickTrackEvent(gxTrack: GXTrack) {}
+
+        /**
+         * 会在业务手动调用onAppear后，SDK内部会回调手动曝光事件
+         * https://www.yuque.com/biezhihua/gaiax/ld6iie
+         */
+        fun onManualExposureTrackEvent(gxTrack: GXTrack) {}
     }
 
     /**
@@ -451,6 +466,11 @@ class GXTemplateEngine {
         )
     }
 
+    fun destroyView(targetView: View?) {
+        GXTemplateContext.getContext(targetView)?.release()
+        GXTemplateContext.setContext(null)
+    }
+
     /**
      * To create template's view with template information and template measure size.
      *
@@ -527,10 +547,15 @@ class GXTemplateEngine {
     ) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
-        gxTemplateContext.templateData = gxTemplateData
+
         if (gxMeasureSize != null) {
             gxTemplateContext.size = gxMeasureSize
         }
+
+        gxTemplateContext.templateData = gxTemplateData
+
+        processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
+
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
         render.bindViewDataOnlyViewTree(gxTemplateContext)
     }
@@ -545,7 +570,7 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode?
     ): GXTemplateContext? {
         return try {
-            internalCreateGXTemplateContext(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
+            internalCreateViewOnlyNodeTree(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
@@ -557,7 +582,7 @@ class GXTemplateEngine {
         }
     }
 
-    private fun internalCreateGXTemplateContext(
+    private fun internalCreateViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode?
@@ -625,10 +650,15 @@ class GXTemplateEngine {
     ) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
+
         if (gxMeasureSize != null) {
             gxTemplateContext.size = gxMeasureSize
         }
+
         gxTemplateContext.templateData = gxTemplateData
+
+        processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
+
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
     }
 
@@ -660,10 +690,13 @@ class GXTemplateEngine {
     ) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
+
         if (gxMeasureSize != null) {
             gxTemplateContext.size = gxMeasureSize
         }
+
         gxTemplateContext.templateData = gxTemplateData
+
         render.bindViewDataOnlyViewTree(gxTemplateContext)
     }
 
@@ -681,10 +714,7 @@ class GXTemplateEngine {
      * @suppress
      */
     fun getGXViewById(targetView: View?, id: String): View? {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            return context.rootNode?.getGXViewById(id)
-        }
-        return null
+        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXViewById(id)
     }
 
     /**
@@ -693,10 +723,28 @@ class GXTemplateEngine {
      * @hide
      */
     fun getGXNodeById(targetView: View?, id: String): GXNode? {
-        GXTemplateContext.getContext(targetView)?.let { context ->
-            return context.rootNode?.getGXNodeById(id)
+        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXNodeById(id)
+    }
+
+    /**
+     * 当View可见时
+     */
+    fun onAppear(targetView: View) {
+        GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            gxTemplateContext.isAppear = true
+            gxTemplateContext.manualExposure()
+            GXContainerUtils.notifyOnAppear(gxTemplateContext)
         }
-        return null
+    }
+
+    /**
+     * 当View不可见时
+     */
+    fun onDisappear(targetView: View) {
+        GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
+            gxTemplateContext.isAppear = false
+            GXContainerUtils.notifyOnDisappear(gxTemplateContext)
+        }
     }
 
     /**
@@ -724,6 +772,31 @@ class GXTemplateEngine {
             clazz.newInstance() as GXIAdapter
         } catch (e: Exception) {
             null
+        }
+    }
+
+    private fun processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext: GXTemplateContext) {
+        val eventListener = gxTemplateContext.templateData?.eventListener
+        if (gxTemplateContext.containers.isNotEmpty() && eventListener !is GXIManualExposureEventListener) {
+            gxTemplateContext.templateData?.eventListener =
+                object : GXIManualExposureEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        eventListener?.onGestureEvent(gxGesture)
+                    }
+
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        eventListener?.onScrollEvent(gxScroll)
+                        if (gxTemplateContext.isAppear) {
+                            if (GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED == gxScroll.type && gxScroll.state == RecyclerView.SCROLL_STATE_IDLE) {
+                                GXContainerUtils.notifyOnAppear(gxTemplateContext)
+                            }
+                        }
+                    }
+
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        eventListener?.onAnimationEvent(gxAnimation)
+                    }
+                }
         }
     }
 

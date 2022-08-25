@@ -62,8 +62,8 @@ object GXFitContentUtils {
         val nodeId = gxTemplateNode.getNodeId()
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
         val finalCss = gxTemplateNode.finalCss ?: return null
-        val nodeFlexBox = finalCss.flexBox
-        val nodeStyle = finalCss.style
+        val finalFlexBox = finalCss.flexBox
+        val finalStyle = finalCss.style
         val nodeLayout = gxStretchNode.layoutByBind
             ?: gxStretchNode.layoutByCreate
             ?: return null
@@ -88,7 +88,7 @@ object GXFitContentUtils {
 
         textView.text = textContent
 
-        val fontLines: Int? = nodeStyle.fontLines
+        val fontLines: Int? = finalStyle.fontLines
 
         var result: Size<Dimension>? = null
 
@@ -138,7 +138,7 @@ object GXFitContentUtils {
 
             // 修复template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
-                (nodeFlexBox.padding?.start?.value ?: 0F) + (nodeFlexBox.padding?.end?.value ?: 0F)
+                (finalFlexBox.padding?.start?.value ?: 0F) + (finalFlexBox.padding?.end?.value ?: 0F)
 
             result = when {
                 // 没有设置宽度

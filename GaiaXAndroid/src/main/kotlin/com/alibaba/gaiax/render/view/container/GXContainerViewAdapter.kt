@@ -75,7 +75,6 @@ class GXContainerViewAdapter(
 
         val isChildFooterItem = childTemplateItem == footerTemplateItem
 
-
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
 
         val childItemViewPort = if (isChildFooterItem)
@@ -217,6 +216,7 @@ class GXContainerViewAdapter(
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
                     override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
                         super.onGestureEvent(gxGesture)
+                        gxGesture.index = childItemPosition
                         gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
                     }
 
@@ -233,8 +233,18 @@ class GXContainerViewAdapter(
 
                 this.trackListener = object : GXTemplateEngine.GXITrackListener {
                     override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        super.onTrackEvent(gxTrack)
+                        gxTrack.index = childItemPosition
                         gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                    }
+
+                    override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = childItemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(gxTrack)
+                    }
+
+                    override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = childItemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(gxTrack)
                     }
                 }
 

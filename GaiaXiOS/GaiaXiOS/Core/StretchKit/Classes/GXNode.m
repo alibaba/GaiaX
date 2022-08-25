@@ -58,6 +58,7 @@
 
 @property (nonatomic, strong) id data;
 @property (nonatomic, strong) id event;
+@property (nonatomic, strong) id track;
 @property (nonatomic, strong) NSDictionary *animation;
 
 @property (nonatomic, strong) id virtualData; //嵌套模板中的数据
@@ -73,6 +74,10 @@
 
 //扁平化节点键值对, 只有根节点会赋值
 @property (nonatomic, strong) NSMapTable *flatNodes;
+
+//节点是否正在展示
+@property (nonatomic, assign) BOOL isAppear;
+
 
 @end
 
@@ -326,7 +331,14 @@
             if (self.event) {
                 NSDictionary *resultEvent = [GXDataParser parseData:self.event withSource:data];
                 [self bindEvent:resultEvent];
-                [self bindTrack:resultEvent];
+                if (self.track == nil) {
+                    [self bindTrack:resultEvent];
+                }
+            }
+            //绑定埋点
+            if (self.track) {
+                NSDictionary *trackEvent = [GXDataParser parseData:self.track withSource:data];
+                [self bindTrack:trackEvent];
             }
             //绑定动画
             if (self.animation) {
@@ -400,7 +412,7 @@
 
 //是否需要绑定
 - (BOOL)shouldBind{
-    BOOL should = self.data || self.virtualData || self.event || self.animation;
+    BOOL should = self.data || self.virtualData || self.event || self.track || self.animation;
     return should;
 }
 
@@ -517,5 +529,45 @@
 - (void)configureStyleInfo:(NSDictionary *)styleInfo{
     self.styleJson = styleInfo;
 }
+
+
+
+
+#pragma mark -视图出现/消失 & 埋点
+- (void)onAppear{
+    self.isAppear = YES;
+    [self manualExposureTrackEvent];
+    for (GXNode *node in self.children) {
+        [node onAppear];
+    }
+}
+
+- (void)onDisappear{
+    self.isAppear = NO;
+    for (GXNode *node in self.children) {
+        [node onDisappear];
+    }
+}
+
+- (void)manualClickTrackEvent{
+    GXTrack *track = self.associatedView.gxTrack;
+    if (track) {
+        id <GXTrackProtocal> trackListener = self.templateContext.templateData.trackListener;
+        if (trackListener && [trackListener respondsToSelector:@selector(gx_onManualClickTrackEvent:)] ) {
+            [trackListener gx_onManualClickTrackEvent:track];
+        }
+    }
+}
+
+- (void)manualExposureTrackEvent{
+    GXTrack *track = self.associatedView.gxTrack;
+    if (track) {
+        id <GXTrackProtocal> trackListener = self.templateContext.templateData.trackListener;
+        if (trackListener && [trackListener respondsToSelector:@selector(gx_onManualExposureTrackEvent:)] ) {
+            [trackListener gx_onManualExposureTrackEvent:track];
+        }
+    }
+}
+
 
 @end

@@ -17,17 +17,21 @@
 //  limitations under the License.
 
 #import "GXRootView.h"
+#import "UIView+GX.h"
+#import "GXNode.h"
 
 @implementation GXRootView
 
-
 - (void)onAppear{
-    
+    if (self.gxNode) {
+        [self.gxNode onAppear];
+    }
 }
 
 - (void)onDisappear{
-    
+    if (self.gxNode) {
+        [self.gxNode onDisappear];
+    }
 }
-
 
 @end

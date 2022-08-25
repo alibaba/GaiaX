@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
             intent.putExtra(
                 "GAIA_STUDIO_URL",
-                "gaiax://gaiax/preview?url=ws://30.78.146.192:9001&id=test-template&type=auto"
+                "gaiax://gaiax/preview?url=ws://192.168.10.29:9001&id=test-template&type=auto"
             )
             launcher.launch(intent)
         }
@@ -81,6 +81,11 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<AppCompatButton>(R.id.event)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, EventTemplateActivity::class.java)
+            startActivity(intent)
+        }
+
+        findViewById<AppCompatButton>(R.id.track)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, TrackTemplateActivity::class.java)
             startActivity(intent)
         }
 

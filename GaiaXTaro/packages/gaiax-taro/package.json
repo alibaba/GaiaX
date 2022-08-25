@@ -13,6 +13,9 @@
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "@tarojs/components": "3.4.12",
     "@tarojs/plugin-framework-react": "3.4.12",
     "@tarojs/react": "3.4.12",

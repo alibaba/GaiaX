@@ -1,5 +1,9 @@
 import typescript from 'rollup-plugin-typescript2';
 import RollupCopy from 'rollup-plugin-copy'
+import RollupJson from '@rollup/plugin-json'
+import RollupNodeResolve from '@rollup/plugin-node-resolve'
+import RollupCommonjs from '@rollup/plugin-commonjs'
+import RollupTypescript from 'rollup-plugin-typescript2'
 import NodePath from 'path'
 import Package from '../package.json'
 
@@ -15,7 +19,16 @@ export default {
         }
     ],
     plugins: [
-        typescript(),
+        RollupNodeResolve({
+            customResolveOptions: {
+                moduleDirectory: 'node_modules'
+            }
+        }),
+        RollupCommonjs({
+            include: /\/node_modules\//
+        }),
+        RollupJson(),
+        RollupTypescript(),
         RollupCopy({
             targets: [
                 {

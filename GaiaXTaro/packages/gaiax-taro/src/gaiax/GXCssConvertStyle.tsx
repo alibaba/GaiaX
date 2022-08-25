@@ -3,7 +3,7 @@ import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
 import GXTemplateNode from "./GXTemplateNode";
-import { endsWith, isNull, isUndefined } from "lodash";
+import _endsWith from "lodash/endsWith";
 
 export default class GXCssConvertStyle {
 
@@ -448,7 +448,7 @@ export default class GXCssConvertStyle {
             }
 
             // 特殊处理：文字默认居中
-            if (endsWith(height, 'px')) {
+            if (_endsWith(height, 'px')) {
                 targetStyle.lineHeight = height;
             }
 
@@ -459,14 +459,14 @@ export default class GXCssConvertStyle {
 
             // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
             if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' &&
-                endsWith(width, 'px')
+                _endsWith(width, 'px')
             ) {
                 targetStyle.flexShrink = '0';
             }
 
             // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
             if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' &&
-                endsWith(height, 'px')
+                _endsWith(height, 'px')
             ) {
                 targetStyle.flexShrink = '0';
             }
@@ -482,7 +482,7 @@ export default class GXCssConvertStyle {
                         targetStyle.flexGrow = '0';
                     }
                     // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
-                    else if (endsWith(width, 'px')) {
+                    else if (_endsWith(width, 'px')) {
                         // 特殊处理：如果未设定maxWidth或者maxWidth为auto，那么需要设置maxWidth=width，来限定自适应的结果
                         if (targetStyle.maxWidth == undefined || targetStyle.maxWidth == null || targetStyle.maxWidth == 'auto') {
                             targetStyle.maxWidth = targetStyle.width;

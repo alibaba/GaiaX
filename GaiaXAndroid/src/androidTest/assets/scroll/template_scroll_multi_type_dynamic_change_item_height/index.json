@@ -1,0 +1,18 @@
+{
+  "id": "template_scroll_multi_type_dynamic_change_item_height",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "direction": "horizontal",
+  "layers": [
+    {
+      "id": "template_scroll_multi_type_dynamic_change_item_height_item_0",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "template_scroll_multi_type_dynamic_change_item_height_item_1",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

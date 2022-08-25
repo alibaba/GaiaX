@@ -56,15 +56,37 @@ object GXTemplateUtils {
     ): Rect<GXSize>? {
         return if (lowPriority != null && heightPriority != null) {
             Rect(
-                start = if (heightPriority.start !is GXSize.Undefined && heightPriority.start !is GXSize.Auto) heightPriority.start else lowPriority.start,
-                end = if (heightPriority.end !is GXSize.Undefined && heightPriority.end !is GXSize.Auto) heightPriority.end else lowPriority.end,
-                top = if (heightPriority.top !is GXSize.Undefined && heightPriority.top !is GXSize.Auto) heightPriority.top else lowPriority.top,
-                bottom = if (heightPriority.bottom !is GXSize.Undefined && heightPriority.bottom !is GXSize.Auto) heightPriority.bottom else lowPriority.bottom
+                start = if (heightPriority.start !is GXSize.Undefined && heightPriority.start !is GXSize.Auto)
+                    heightPriority.start.copy()
+                else
+                    lowPriority.start.copy(),
+                end = if (heightPriority.end !is GXSize.Undefined && heightPriority.end !is GXSize.Auto)
+                    heightPriority.end.copy()
+                else
+                    lowPriority.end.copy(),
+                top = if (heightPriority.top !is GXSize.Undefined && heightPriority.top !is GXSize.Auto)
+                    heightPriority.top.copy()
+                else
+                    lowPriority.top.copy(),
+                bottom = if (heightPriority.bottom !is GXSize.Undefined && heightPriority.bottom !is GXSize.Auto)
+                    heightPriority.bottom.copy()
+                else
+                    lowPriority.bottom.copy()
             )
-        } else if (heightPriority == null) {
-            lowPriority
-        } else if (lowPriority == null) {
-            heightPriority
+        } else if (heightPriority == null && lowPriority != null) {
+            Rect(
+                lowPriority.start.copy(),
+                lowPriority.end.copy(),
+                lowPriority.top.copy(),
+                lowPriority.bottom.copy()
+            )
+        } else if (lowPriority == null && heightPriority != null) {
+            Rect(
+                heightPriority.start.copy(),
+                heightPriority.end.copy(),
+                heightPriority.top.copy(),
+                heightPriority.bottom.copy()
+            )
         } else {
             null
         }
@@ -76,15 +98,37 @@ object GXTemplateUtils {
     ): Rect<Dimension>? {
         return if (lowPriority != null && heightPriority != null) {
             Rect(
-                start = if (heightPriority.start !is Dimension.Undefined && heightPriority.start !is Dimension.Auto) heightPriority.start else lowPriority.start,
-                end = if (heightPriority.end !is Dimension.Undefined && heightPriority.end !is Dimension.Auto) heightPriority.end else lowPriority.end,
-                top = if (heightPriority.top !is Dimension.Undefined && heightPriority.top !is Dimension.Auto) heightPriority.top else lowPriority.top,
-                bottom = if (heightPriority.bottom !is Dimension.Undefined && heightPriority.bottom !is Dimension.Auto) heightPriority.bottom else lowPriority.bottom
+                start = if (heightPriority.start !is Dimension.Undefined && heightPriority.start !is Dimension.Auto)
+                    heightPriority.start.copy()
+                else
+                    lowPriority.start.copy(),
+                end = if (heightPriority.end !is Dimension.Undefined && heightPriority.end !is Dimension.Auto)
+                    heightPriority.end.copy()
+                else
+                    lowPriority.end.copy(),
+                top = if (heightPriority.top !is Dimension.Undefined && heightPriority.top !is Dimension.Auto)
+                    heightPriority.top.copy()
+                else
+                    lowPriority.top.copy(),
+                bottom = if (heightPriority.bottom !is Dimension.Undefined && heightPriority.bottom !is Dimension.Auto)
+                    heightPriority.bottom.copy()
+                else
+                    lowPriority.bottom.copy()
             )
-        } else if (heightPriority == null) {
-            lowPriority
-        } else if (lowPriority == null) {
-            heightPriority
+        } else if (heightPriority == null && lowPriority != null) {
+            Rect(
+                lowPriority.start.copy(),
+                lowPriority.end.copy(),
+                lowPriority.top.copy(),
+                lowPriority.bottom.copy()
+            )
+        } else if (lowPriority == null && heightPriority != null) {
+            Rect(
+                heightPriority.start.copy(),
+                heightPriority.end.copy(),
+                heightPriority.top.copy(),
+                heightPriority.bottom.copy()
+            )
         } else {
             null
         }
@@ -96,15 +140,50 @@ object GXTemplateUtils {
     ): Size<Dimension>? {
         return if (lowPriority != null && heightPriority != null) {
             Size(
-                width = if (heightPriority.width !is Dimension.Undefined && heightPriority.width !is Dimension.Auto) heightPriority.width else lowPriority.width,
-                height = if (heightPriority.height !is Dimension.Undefined && heightPriority.height !is Dimension.Auto) heightPriority.height else lowPriority.height
+                width = if (heightPriority.width !is Dimension.Undefined && heightPriority.width !is Dimension.Auto)
+                    heightPriority.width.copy()
+                else
+                    lowPriority.width.copy(),
+                height = if (heightPriority.height !is Dimension.Undefined && heightPriority.height !is Dimension.Auto)
+                    heightPriority.height.copy()
+                else
+                    lowPriority.height.copy()
             )
-        } else if (heightPriority == null) {
-            lowPriority
-        } else if (lowPriority == null) {
-            heightPriority
+        } else if (heightPriority == null && lowPriority != null) {
+            Size(
+                width = lowPriority.width.copy(),
+                height = lowPriority.height.copy()
+            )
+        } else if (lowPriority == null && heightPriority != null) {
+            Size(
+                width = heightPriority.width.copy(),
+                height = heightPriority.height.copy()
+            )
         } else {
             null
         }
     }
 }
+
+internal fun Dimension?.copy(): Dimension {
+    return when (this) {
+        is Dimension.Points -> Dimension.Points(this.points)
+        is Dimension.Percent -> Dimension.Percent(this.percentage)
+        is Dimension.Undefined -> Dimension.Undefined
+        is Dimension.Auto -> Dimension.Auto
+        else -> Dimension.Undefined
+    }
+}
+
+internal fun GXSize?.copy(): GXSize {
+    return when (this) {
+        is GXSize.PX -> GXSize.PX(this.targetName, this.targetValue)
+        is GXSize.PT -> GXSize.PT(this.targetName, this.targetValue)
+        is GXSize.PE -> GXSize.PE(this.targetName, this.targetValue)
+        is GXSize.Auto -> GXSize.Auto
+        is GXSize.Undefined -> GXSize.Undefined
+        else -> GXSize.Undefined
+    }
+}
+
+

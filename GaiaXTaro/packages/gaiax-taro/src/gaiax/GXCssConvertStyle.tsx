@@ -287,6 +287,11 @@ export default class GXCssConvertStyle {
         // Style 
         //
 
+        let opacity = srcCss['opacity'];
+        if (opacity != undefined) {
+            targetStyle.opacity = opacity;
+        }
+
         let boxShadow = srcCss['box-shadow'];
         if (boxShadow != undefined) {
             targetStyle.boxShadow = boxShadow;
@@ -305,6 +310,11 @@ export default class GXCssConvertStyle {
         let borderColor = srcCss['border-color'];
         if (borderColor != undefined) {
             targetStyle.borderColor = borderColor;
+        }
+
+        let borderStyle = srcCss['border-style'];
+        if (borderStyle != undefined) {
+            targetStyle.borderStyle = borderStyle;
         }
 
         let borderWidth = srcCss['border-width'];
@@ -397,12 +407,7 @@ export default class GXCssConvertStyle {
         }
 
         // 对View进行处理
-        if (gxTemplateNode.isViewType() || gxTemplateNode.isGaiaTemplate()) {
-            // 特殊处理：如果是嵌套节点，并且自身有内边距，并且width100%，那么需要处理一下
-            if ((paddingLeft != null || paddingRight != null) && targetStyle.width == '100%' && gxParentNode != null) {
-                targetStyle.width = 'auto';
-                targetStyle.flexGrow = '1';
-            }
+        if (gxTemplateNode.isViewType()) {
 
             // 特殊处理：只有溢出不裁剪，才能显示阴影
             if (boxShadow != null) {
@@ -411,6 +416,26 @@ export default class GXCssConvertStyle {
                     targetStyle.boxShadow = boxShadow;
                 }
             }
+        }
+
+        // 对嵌套节点进行处理
+        if (gxTemplateNode.isGaiaTemplate()) {
+            // 特殊处理：如果是嵌套节点，并且自身有内边距，并且width100%，那么需要处理一下
+            if ((paddingLeft != null || paddingRight != null) && targetStyle.width == '100%' && gxParentNode != null) {
+                targetStyle.width = 'auto';
+                targetStyle.flexGrow = '1';
+            }
+
+            // 如果是嵌套模板的根节点，并且宽度100%，有左右padding信息，那么需要可以被压缩
+            // if (gxTemplateContext.isNestChildTemplate && srcLayer['sub-type'] == undefined) {
+            //     if (width == '100%' && (paddingLeft != undefined || paddingRight != undefined)) {
+            //         targetStyle.flexShrink = '1';
+            //         // 若还是垂直布局，那么宽度需要auto
+            //         if (gxParentNode?.gxTemplateNode.finalStyle?.flexDirection == 'column') {
+            //             targetStyle.width = 'auto';
+            //         }
+            //     }
+            // }
         }
 
         // 对Text进行处理

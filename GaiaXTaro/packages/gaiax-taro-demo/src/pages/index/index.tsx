@@ -18,7 +18,9 @@ import { GXFastPreviewInstance, IGXFastPreviewListener as GXIFastPreviewListener
 
 // Debug Outline
 if (process.env.TARO_ENV === 'h5') {
-  require('./index_debug.scss')
+  require('./index_h5_debug.scss')
+} else if (process.env.TARO_ENV === 'weapp') {
+  require('./index_weapp_debug.scss')
 }
 
 class GXFastPreviewTemplateSource implements GXIExtensionTemplateSource {

@@ -416,6 +416,10 @@ export default class GXCssConvertStyle {
                     targetStyle.boxShadow = boxShadow;
                 }
             }
+
+            if (overflow != null && overflow == "visible") {
+                targetStyle.display = 'inline';
+            }
         }
 
         // 对嵌套节点进行处理

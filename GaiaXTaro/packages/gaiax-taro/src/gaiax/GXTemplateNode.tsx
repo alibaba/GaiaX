@@ -170,6 +170,8 @@ export class GXScrollConfig {
  * 节点的原始样式
  */
 export default class GXTemplateNode {
+    
+    forceWidthChange: boolean;
 
     getExtend(gxTemplateData?: GXJSONObject): GXJSONObject {
         return GXDataBinding.getExtend(this.data, gxTemplateData);

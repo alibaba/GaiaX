@@ -3,7 +3,8 @@ import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
 import GXTemplateNode from "./GXTemplateNode";
-import _endsWith from "lodash/endsWith";
+import endsWith from "lodash/endsWith";
+import parseInt from "lodash/parseInt";
 
 export default class GXCssConvertStyle {
 
@@ -417,8 +418,20 @@ export default class GXCssConvertStyle {
                 }
             }
 
+            // 特殊处理：如果不需要溢出裁剪，那么需要将display改成inline
             if (overflow != null && overflow == "visible") {
                 targetStyle.display = 'inline';
+            }
+
+            // 特殊处理：因为下面的因素，对于view，将其position改为absolute，达到视觉效果一致的目的，不过可能会有衍生问题出现。
+            // H5:元素实际的width = padding + width
+            // Native：元素实际的width = padding + (width-padding)
+            if (endsWith(width, 'px') && paddingLeft != null) {
+                targetStyle.width = parseInt(width) - parseInt(paddingLeft) + 'px'
+                gxTemplateNode.forceWidthChange = true
+            }
+            if (gxParentNode?.gxTemplateNode?.forceWidthChange == true) {
+                targetStyle.position = 'absolute';
             }
         }
 
@@ -452,7 +465,7 @@ export default class GXCssConvertStyle {
             }
 
             // 特殊处理：文字默认居中
-            if (_endsWith(height, 'px')) {
+            if (endsWith(height, 'px')) {
                 targetStyle.lineHeight = height;
             }
 
@@ -463,14 +476,14 @@ export default class GXCssConvertStyle {
 
             // 特殊处理：如果横向，文字是固定宽度，那么不能被压缩
             if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'row' &&
-                _endsWith(width, 'px')
+                endsWith(width, 'px')
             ) {
                 targetStyle.flexShrink = '0';
             }
 
             // 特殊处理：如果竖向, 文字是固定高度，那么不能被压缩
             if (gxParentNode?.gxTemplateNode?.finalStyle?.flexDirection == 'column' &&
-                _endsWith(height, 'px')
+                endsWith(height, 'px')
             ) {
                 targetStyle.flexShrink = '0';
             }
@@ -486,7 +499,7 @@ export default class GXCssConvertStyle {
                         targetStyle.flexGrow = '0';
                     }
                     // 特殊处理：如果宽度是具体的像素值，并且设置了fitcontent，那么需要宽度auto
-                    else if (_endsWith(width, 'px')) {
+                    else if (endsWith(width, 'px')) {
                         // 特殊处理：如果未设定maxWidth或者maxWidth为auto，那么需要设置maxWidth=width，来限定自适应的结果
                         if (targetStyle.maxWidth == undefined || targetStyle.maxWidth == null || targetStyle.maxWidth == 'auto') {
                             targetStyle.maxWidth = targetStyle.width;

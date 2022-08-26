@@ -47,6 +47,7 @@ class GXProgressView : View, GXIViewBindData {
                 0f
             } else field.coerceAtMost(1f)
         }
+    private var currentProgressWidth: Float = 0f
 
     private val mPaint = Paint()
     private val bgPath = Path()
@@ -124,7 +125,7 @@ class GXProgressView : View, GXIViewBindData {
             animator = ValueAnimator().apply {
                 setValues(
                     PropertyValuesHolder.ofFloat(
-                        PROGRESS_WIDTH_VALUE_HOLDER, 0f, progressWidth
+                        PROGRESS_WIDTH_VALUE_HOLDER, currentProgressWidth, progressWidth
                     )
                 )
                 duration = 300
@@ -144,6 +145,7 @@ class GXProgressView : View, GXIViewBindData {
                 start()
             }
         }
+        currentProgressWidth = progressWidth
     }
 
     fun getConfig(): GXProgressConfig? {

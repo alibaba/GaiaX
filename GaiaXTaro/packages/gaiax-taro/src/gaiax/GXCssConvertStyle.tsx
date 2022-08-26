@@ -2,9 +2,10 @@ import { GXJSONObject } from "./GXJson";
 import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
-import GXTemplateNode from "./GXTemplateNode";
+import GXTemplateNode, { GXScrollConfig } from "./GXTemplateNode";
 import endsWith from "lodash/endsWith";
 import parseInt from "lodash/parseInt";
+import kebabCase from 'lodash/kebabcase';
 
 export default class GXCssConvertStyle {
 
@@ -565,5 +566,96 @@ export default class GXCssConvertStyle {
             }
         }
 
+    }
+
+    static createScrollStyleByConfig(gxStyle: React.CSSProperties, gxScrollConfig: GXScrollConfig) {
+        const scrollStyle = {
+            height: gxStyle.height + '',
+            width: gxStyle.width + '',
+            flexShrink: '1',
+            flexGrow: '1',
+            paddingTop: '',
+            paddingLeft: '',
+            paddingRight: '',
+            paddingBottom: '',
+            display: '',
+            "white-space": ""
+        };
+
+        // 和native保持一致
+        // edge-insets
+        if (gxScrollConfig.edgeInsetsTop != null) {
+            scrollStyle.paddingTop = gxScrollConfig.edgeInsetsTop;
+        }
+        if (gxScrollConfig.edgeInsetsLeft != null) {
+            scrollStyle.paddingLeft = gxScrollConfig.edgeInsetsLeft;
+        }
+        if (gxScrollConfig.edgeInsetsRight != null) {
+            scrollStyle.paddingRight = gxScrollConfig.edgeInsetsRight;
+        }
+        if (gxScrollConfig.edgeInsetsBottom != null) {
+            scrollStyle.paddingBottom = gxScrollConfig.edgeInsetsBottom;
+        }
+
+        // 处理Scroll的左右内边距的情况
+        if ((scrollStyle.paddingLeft != '' || scrollStyle.paddingRight != '') && scrollStyle.width == '100%') {
+            scrollStyle.width = 'auto';
+            // 特殊处理：微信：将display处理成grid，否则内边距会不生效
+            if (process.env.TARO_ENV === 'weapp') {
+                scrollStyle.display = 'grid';
+            }
+        }
+
+        const isHorizontal = gxScrollConfig.direction == 'horizontal';
+        const isVertical = gxScrollConfig.direction == 'vertical';
+
+        // 此处可能要根据多平台适配
+        if (isHorizontal) {
+            // https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view
+            if (process.env.TARO_ENV === 'h5') {
+                scrollStyle.display = 'inline-flex';
+            } else if (process.env.TARO_ENV === 'weapp') {
+                scrollStyle["white-space"] = "nowrap";
+            }
+        } else {
+            scrollStyle.display = '';
+        }
+
+        const finalScrollStyle = Object.keys(scrollStyle).reduce((accumulator, key) => {
+            const cssKey = kebabCase(key);
+            const cssValue = scrollStyle[key].replace("'", "");
+            return `${accumulator}${cssKey}:${cssValue};`;
+        }, '');
+
+        return finalScrollStyle;
+    }
+
+
+    static createScrollItemWrapStyleByConfig(isHorizontal: boolean, itemIndex: number, dataSize: number, gxScrollConfig: GXScrollConfig, isVertical: boolean) {
+        let itemWrapStyle = {
+            marginRight: '0px',
+            marginBottom: '0px',
+            display: ''
+        };
+
+        if (isHorizontal) {
+            if (process.env.TARO_ENV === 'weapp') {
+                itemWrapStyle.display = 'inline-block';
+            }
+        }
+
+        if (itemIndex != dataSize - 1) {
+            if (isHorizontal) {
+                if (gxScrollConfig.itemSpacing != null) {
+                    itemWrapStyle.marginRight = gxScrollConfig.itemSpacing;
+                }
+
+            } else if (isVertical) {
+                if (gxScrollConfig.itemSpacing != null) {
+                    itemWrapStyle.marginBottom = gxScrollConfig.itemSpacing;
+                }
+            }
+        }
+        return itemWrapStyle;
     }
 }

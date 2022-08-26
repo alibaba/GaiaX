@@ -4,7 +4,7 @@ import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance } from '../../gaiax/GXEngineInstance';
-import GXTemplateNode from '../../gaiax/GXTemplateNode';
+import GXTemplateNode, { GXScrollConfig } from '../../gaiax/GXTemplateNode';
 import _isArray from 'lodash/isArray';
 import GXTemplateItem from '../../gaiax/GXTemplateItem';
 import GXTemplateInfo from '../../gaiax/GXTemplateInfo';
@@ -13,7 +13,8 @@ import GXIEventListener from '../../gaiax/GXIEventListener';
 import GXGesture from '../../gaiax/GXGesture';
 import GXTemplateComponent from '../GXTemplateComponent';
 import GXMeasureSize from '../../gaiax/GXMeasureSize';
-import kebabCase from 'lodash/kebabcase';
+
+import GXCssConvertStyle from '../../gaiax/GXCssConvertStyle';
 
 export interface GXScrollState {
 
@@ -60,62 +61,21 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         // 获取数据
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
-        const scrollStyle = {
-            height: gxStyle.height + '',
-            width: gxStyle.width + '',
-            flexShrink: '1',
-            flexGrow: '1',
-            paddingTop: '',
-            paddingLeft: '',
-            paddingRight: '',
-            paddingBottom: '',
-            display: '',
-            "white-space": ""
-        }
+        const isHorizontal = gxScrollConfig.direction == 'horizontal';
+        const isVertical = gxScrollConfig.direction == 'vertical';
 
-        // 和native保持一致
-        // edge-insets
-        if (gxScrollConfig.edgeInsetsTop != null) {
-            scrollStyle.paddingTop = gxScrollConfig.edgeInsetsTop;
-        }
-        if (gxScrollConfig.edgeInsetsLeft != null) {
-            scrollStyle.paddingLeft = gxScrollConfig.edgeInsetsLeft;
-        }
-        if (gxScrollConfig.edgeInsetsRight != null) {
-            scrollStyle.paddingRight = gxScrollConfig.edgeInsetsRight;
-        }
-        if (gxScrollConfig.edgeInsetsBottom != null) {
-            scrollStyle.paddingBottom = gxScrollConfig.edgeInsetsBottom;
-        }
+        const finalScrollStyle = GXCssConvertStyle.createScrollStyleByConfig(gxStyle, gxScrollConfig);
 
-        // 处理Scroll的左右内边距的情况
-        if ((scrollStyle.paddingLeft != '' || scrollStyle.paddingRight != '') && scrollStyle.width == '100%') {
-            scrollStyle.width = 'auto'
-        }
 
-        const isHorizontal = gxScrollConfig.direction == 'horizontal'
-        const isVertical = gxScrollConfig.direction == 'vertical'
-
-        // 此处可能要根据多平台适配
-        if (isHorizontal) {
-            // https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view
-            if (process.env.TARO_ENV === 'h5') {
-                scrollStyle.display = 'inline-flex';
-            } else if (process.env.TARO_ENV === 'weapp') {
-                scrollStyle["white-space"] = "nowrap";
-            }
-        } else {
-            scrollStyle.display = '';
-        }
-
-        const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
-        const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
 
         const childArray: ReactNode[] = [];
 
         const dataSize = propDataValue.length
         propDataValue.forEach((itemData, itemIndex) => {
 
+            const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
+            const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
+            
             const gxTemplateItem = new GXTemplateItem();
             gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
             gxTemplateItem.templateId = gxChildTemplateItem.templateId;
@@ -134,34 +94,13 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 gxTemplateData.eventListener = gxChildItemEventListener;
             }
 
+            
+
             const gxMeasureSize = new GXMeasureSize();
             gxMeasureSize.templateWidth = childItemWidth;
             gxMeasureSize.templateHeight = childItemHeight;
 
-            let itemWrapStyle = {
-                marginRight: '0px',
-                marginBottom: '0px',
-                display: ''
-            }
-
-            if (isHorizontal) {
-                if (process.env.TARO_ENV === 'weapp') {
-                    itemWrapStyle.display = 'inline-block';
-                }
-            }
-
-            if (itemIndex != dataSize - 1) {
-                if (isHorizontal) {
-                    if (gxScrollConfig.itemSpacing != null) {
-                        itemWrapStyle.marginRight = gxScrollConfig.itemSpacing;
-                    }
-
-                } else if (isVertical) {
-                    if (gxScrollConfig.itemSpacing != null) {
-                        itemWrapStyle.marginBottom = gxScrollConfig.itemSpacing;
-                    }
-                }
-            }
+            let itemWrapStyle = GXCssConvertStyle.createScrollItemWrapStyleByConfig(isHorizontal, itemIndex, dataSize, gxScrollConfig, isVertical);
 
             childArray.push(
                 <View style={itemWrapStyle} id={`${gxTemplateItem.templateId}-${itemIndex}`}>
@@ -173,12 +112,6 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 </View>
             );
         });
-
-        const finalScrollStyle = Object.keys(scrollStyle).reduce((accumulator, key) => {
-            const cssKey = kebabCase(key)
-            const cssValue = scrollStyle[key].replace("'", "")
-            return `${accumulator}${cssKey}:${cssValue};`
-        }, '')
 
         return (
             <ScrollView

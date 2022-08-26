@@ -31,13 +31,23 @@ export default class GXCssConvertStyle {
         };
 
         // 处理外部期望的宽度
-        if (gxMeasureSize.templateWidth != undefined && gxMeasureSize.templateWidth != null) {
-            rootStyle.width = gxMeasureSize.templateWidth + 'px';
+        const width = gxMeasureSize.templateWidth + '';
+        if (width != undefined && width != null) {
+            if (endsWith(width, 'px')) {
+                rootStyle.width = width;
+            } else {
+                rootStyle.width = width + 'px';
+            }
         }
 
         // 处理外部期望的高度
-        if (gxMeasureSize.templateHeight != undefined && gxMeasureSize.templateHeight != null) {
-            rootStyle.height = gxMeasureSize.templateHeight + 'px';
+        const height = gxMeasureSize.templateHeight + '';
+        if (height != undefined && height != null) {
+            if (endsWith(height, 'px')) {
+                rootStyle.height = height;
+            } else {
+                rootStyle.height = height + 'px';
+            }
         }
 
         return rootStyle as React.CSSProperties;

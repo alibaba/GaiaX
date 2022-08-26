@@ -60,15 +60,15 @@ export default class Index extends Component<IParams> {
 
     const gxFastPreviewListener: GXIFastPreviewListener = {
       onUpdate: (templateId: string) => {
-        console.log(`onUpdate templateId = ${templateId} `);
+        // console.log(`onUpdate templateId = ${templateId} `);
         this.setState({
           templateId: templateId
         });
       },
 
       onAddData: function (templateId: string, template: any) {
-        console.log(`onAddData templateId = ${templateId} `);
-        console.log(template);
+        // console.log(`onAddData templateId = ${templateId} `);
+        // console.log(template);
         gxTemplateSource.addData(templateId, template);
       }
     }
@@ -114,8 +114,8 @@ export default class Index extends Component<IParams> {
 
       const constraintSize = JSON.parse(template["index.json"])?.["package"]?.["constraint-size"]
       let measureSize = new GXMeasureSize();
-      measureSize.templateWidth = constraintSize?.['width'] || 375
-      measureSize.templateHeight = constraintSize?.['height']
+      measureSize.templateWidth = constraintSize?.['width'] + 'px' || (375 + 'px')
+      measureSize.templateHeight = constraintSize?.['height'] + 'px'
 
       return (
         <GXTemplateComponent

@@ -5,7 +5,7 @@ export default function computeValuePath(valuePath: string, targetObject: any): 
             if (targetObject != null && targetObject != undefined) {
                 return targetObject[valuePath];
             } else {
-                console.error(`computeValuePath: ${valuePath} is not exist`);
+                console.log(`computeValuePath: ${valuePath} is not exist`);
                 return '';
             }
 
@@ -22,7 +22,7 @@ export default function computeValuePath(valuePath: string, targetObject: any): 
             return computeValuePath(restKey, targetObject[firstKey]);
         }
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return '';
     }
 };

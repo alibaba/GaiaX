@@ -1,6 +1,6 @@
 
 
 export default class GXMeasureSize {
-    templateWidth: number;
-    templateHeight: number;
+    templateWidth: string;
+    templateHeight: string;
 }

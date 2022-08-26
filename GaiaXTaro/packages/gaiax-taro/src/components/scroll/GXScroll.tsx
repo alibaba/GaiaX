@@ -13,6 +13,7 @@ import GXIEventListener from '../../gaiax/GXIEventListener';
 import GXGesture from '../../gaiax/GXGesture';
 import GXTemplateComponent from '../GXTemplateComponent';
 import GXMeasureSize from '../../gaiax/GXMeasureSize';
+import kebabCase from 'lodash/kebabcase';
 
 export interface GXScrollState {
 
@@ -60,15 +61,16 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
         const scrollStyle = {
-            height: gxStyle.height,
-            width: gxStyle.width,
-            flexShrink: 1,
-            flexGrow: 1,
+            height: gxStyle.height + '',
+            width: gxStyle.width + '',
+            flexShrink: '1',
+            flexGrow: '1',
             paddingTop: '',
             paddingLeft: '',
             paddingRight: '',
             paddingBottom: '',
-            display: ''
+            display: '',
+            "white-space": ""
         }
 
         // 和native保持一致
@@ -96,8 +98,12 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
         // 此处可能要根据多平台适配
         if (isHorizontal) {
-            // scrollStyle.display = '-webkit-inline-box';
-            scrollStyle.display = 'inline-flex';
+            // https://taro-docs.jd.com/taro/docs/components/viewContainer/scroll-view
+            if (process.env.TARO_ENV === 'h5') {
+                scrollStyle.display = 'inline-flex';
+            } else if (process.env.TARO_ENV === 'weapp') {
+                scrollStyle["white-space"] = "nowrap";
+            }
         } else {
             scrollStyle.display = '';
         }
@@ -134,7 +140,14 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
             let itemWrapStyle = {
                 marginRight: '0px',
-                marginBottom: '0px'
+                marginBottom: '0px',
+                display: ''
+            }
+
+            if (isHorizontal) {
+                if (process.env.TARO_ENV === 'weapp') {
+                    itemWrapStyle.display = 'inline-block';
+                }
             }
 
             if (itemIndex != dataSize - 1) {
@@ -161,11 +174,17 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             );
         });
 
+        const finalScrollStyle = Object.keys(scrollStyle).reduce((accumulator, key) => {
+            const cssKey = kebabCase(key)
+            const cssValue = scrollStyle[key].replace("'", "")
+            return `${accumulator}${cssKey}:${cssValue};`
+        }, '')
+
         return (
             <ScrollView
                 scrollX={isHorizontal}
                 scrollY={isVertical}
-                style={scrollStyle}
+                style={finalScrollStyle}
             >
                 {childArray}
             </ScrollView>

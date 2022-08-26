@@ -533,7 +533,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId(), gxTrack)
         } else {
             val gxEventBinding = gxTemplateNode.eventBinding ?: return
-            val trackData = gxEventBinding.value.value(templateData) as? JSONObject ?: return
+            val trackData = gxEventBinding.event.value(templateData) as? JSONObject ?: return
             val gxTrack = GXTemplateEngine.GXTrack().apply {
                 this.view = view
                 this.trackParams = trackData

@@ -19,4 +19,4 @@ package com.alibaba.gaiax.template
 /**
  * @suppress
  */
-data class GXEventBinding(val value: GXIExpression)
+data class GXEventBinding(val event: GXIExpression)

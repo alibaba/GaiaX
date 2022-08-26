@@ -172,6 +172,8 @@ export class GXScrollConfig {
 export default class GXTemplateNode {
     
     forceWidthChange: boolean;
+    
+    imageMode: string;
 
     getExtend(gxTemplateData?: GXJSONObject): GXJSONObject {
         return GXDataBinding.getExtend(this.data, gxTemplateData);

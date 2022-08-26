@@ -102,7 +102,7 @@ export default class GXCssConvertStyle {
             // borderBottomRightRadius: '0px',
             // lineHeight: '',
             // textDecoration: '',
-            // mode: '',
+            mode: 'scaleToFill',
         };
         this.updateViewStyleByCss(gxTemplateContext, style, layer, css, gxTemplateNode, gxParentNode);
         return style as React.CSSProperties;
@@ -390,10 +390,11 @@ export default class GXCssConvertStyle {
                 targetStyle.textDecoration = textDecoration;
             }
         }
+
         if (gxTemplateNode.isImageType()) {
             let mode = srcCss['mode'];
             if (mode != undefined) {
-                targetStyle.mode = mode;
+                gxTemplateNode.imageMode = mode;
             }
         }
 
@@ -405,6 +406,8 @@ export default class GXCssConvertStyle {
         if (gxTemplateNode.isImageType()) {
             // 特殊处理：图片不允许被压缩
             targetStyle.flexShrink = '0';
+
+            // 特殊处理：只有溢出不裁剪，才能显示阴影
         }
 
         // 对View进行处理

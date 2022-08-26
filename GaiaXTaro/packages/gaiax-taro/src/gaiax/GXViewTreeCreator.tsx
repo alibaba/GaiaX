@@ -382,6 +382,7 @@ export default class GXViewTreeCreator {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
         gxNode.gxView = <GXImage
+            propMode={gxNode.gxTemplateNode.imageMode}
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
             key={gxNode.gxId}

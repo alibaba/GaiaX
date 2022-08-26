@@ -17,8 +17,8 @@
 package com.alibaba.gaiax
 
 import android.content.Context
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl

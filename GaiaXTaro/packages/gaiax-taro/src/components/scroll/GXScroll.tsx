@@ -1,6 +1,6 @@
 import { ScrollView, View } from '@tarojs/components';
 import React, { CSSProperties, ReactNode } from 'react';
-import { GXJSONArray } from '../../gaiax/GXJson';
+import { GXJSONArray, GXJSONObject } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance } from '../../gaiax/GXEngineInstance';
@@ -33,7 +33,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             propStyle,
             propGXTemplateContext,
             propGXNode,
-            propDataValue
+            propDataValue,
         } = this.props
 
         if (propDataValue == null || propDataValue == undefined || !_isArray(propDataValue)) {
@@ -47,35 +47,48 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
         const gxStyle = gxTemplateNode.finalStyle;
 
-        // 容器的子坑位，目前只支持一个
-        let gxChildTemplateItem: GXTemplateItem = null;
-        let gxChildVisualTemplateNode: GXTemplateNode = null;
-
-        propGXNode.gxChildTemplateItems?.forEach((value, key) => {
-            if (gxChildTemplateItem == null && gxChildVisualTemplateNode == null) {
-                gxChildTemplateItem = key;
-                gxChildVisualTemplateNode = value;
-            }
-        });
-
-        // 获取数据
-        let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
-
         const isHorizontal = gxScrollConfig.direction == 'horizontal';
         const isVertical = gxScrollConfig.direction == 'vertical';
 
         const finalScrollStyle = GXCssConvertStyle.createScrollStyleByConfig(gxStyle, gxScrollConfig);
-
-
 
         const childArray: ReactNode[] = [];
 
         const dataSize = propDataValue.length
         propDataValue.forEach((itemData, itemIndex) => {
 
+            let gxChildTemplateItem: GXTemplateItem = null;
+            let gxChildVisualTemplateNode: GXTemplateNode = null;
+
+            if (propGXNode.gxChildTemplateItems?.size > 1) {
+                const typeData = gxTemplateNode.getExtend(itemData as GXJSONObject)['item-type'];
+                const targetTemplateId: string = typeData['config'][typeData['path']];
+                console.log(typeData)
+                propGXNode.gxChildTemplateItems?.forEach((value, key) => {
+                    if (key.templateId == targetTemplateId) {
+                        gxChildTemplateItem = key;
+                        gxChildVisualTemplateNode = value;
+                    }
+
+                });
+            }
+
+            if (gxChildTemplateItem == null && gxChildVisualTemplateNode == null) {
+                propGXNode.gxChildTemplateItems?.forEach((value, key) => {
+                    if (gxChildTemplateItem == null && gxChildVisualTemplateNode == null) {
+                        gxChildTemplateItem = key;
+                        gxChildVisualTemplateNode = value;
+                    }
+                });
+            }
+
+            console.log(gxChildTemplateItem)
+            // 获取数据
+            let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
+
             const childItemWidth = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['width'];
             const childItemHeight = gxTemplateInfo.css[`#${gxTemplateInfo.layer['id']}`]['height'];
-            
+
             const gxTemplateItem = new GXTemplateItem();
             gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
             gxTemplateItem.templateId = gxChildTemplateItem.templateId;
@@ -93,8 +106,6 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 }
                 gxTemplateData.eventListener = gxChildItemEventListener;
             }
-
-            
 
             const gxMeasureSize = new GXMeasureSize();
             gxMeasureSize.templateWidth = childItemWidth;

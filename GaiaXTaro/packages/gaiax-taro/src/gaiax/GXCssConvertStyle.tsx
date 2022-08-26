@@ -574,12 +574,12 @@ export default class GXCssConvertStyle {
             width: gxStyle.width + '',
             flexShrink: '1',
             flexGrow: '1',
-            paddingTop: '',
-            paddingLeft: '',
-            paddingRight: '',
-            paddingBottom: '',
-            display: '',
-            "white-space": ""
+            paddingTop: '0px',
+            paddingLeft: '0px',
+            paddingRight: '0px',
+            paddingBottom: '0px',
+            display: 'flex',
+            "white-space": "normal"
         };
 
         // 和native保持一致

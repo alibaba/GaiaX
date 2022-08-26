@@ -257,9 +257,11 @@ class GXExpression {
     private ternaryValueRegex = /\@\{/g;
 
     private isValue(expression: string) {
-        let result = expression.match(this.valueRegex)
-        if (result != null && result.length == 1) {
-            return true;
+        if (expression.startsWith("${") && expression.endsWith("}")) {
+            let result = expression.match(this.valueRegex)
+            if (result != null && result.length == 1) {
+                return true;
+            }
         }
         return false;
     }

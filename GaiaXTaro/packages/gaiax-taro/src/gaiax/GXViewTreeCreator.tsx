@@ -20,8 +20,6 @@ export default class GXViewTreeCreator {
 
     build(gxTemplateContext: GXTemplateContext): ReactNode {
 
-        const gxRootStyle = GXCssConvertStyle.createRootStyle(gxTemplateContext.gxMeasureSize);
-
         const gxTemplateData = gxTemplateContext.gxTemplateData.templateData as GXJSONObject;
 
         const gxTemplateInfo = gxTemplateContext.gxTemplateInfo;
@@ -43,6 +41,10 @@ export default class GXViewTreeCreator {
             gxVisualTemplateNode,
             gxVisualTemplateNodeData
         );
+
+        const gxRootStyle = GXCssConvertStyle.createRootStyle(gxTemplateContext.gxMeasureSize, gxRootNode, gxTemplateData);
+
+        gxTemplateContext.gxRootStyle = gxRootStyle;
 
         return <View style={gxRootStyle}>{gxRootNode.gxView}</View>;
     }

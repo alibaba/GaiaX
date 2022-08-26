@@ -9,7 +9,11 @@ import kebabCase from 'lodash/kebabcase';
 
 export default class GXCssConvertStyle {
 
-    static createRootStyle(gxMeasureSize: GXMeasureSize): React.CSSProperties {
+    static createRootStyle(
+        gxMeasureSize: GXMeasureSize,
+        gxRootNode: GXNode,
+        gxTemplateData: GXJSONObject,
+    ): React.CSSProperties {
         const rootStyle = {
             display: 'flex',
             position: 'relative',
@@ -48,6 +52,20 @@ export default class GXCssConvertStyle {
                 rootStyle.height = height;
             } else {
                 rootStyle.height = height + 'px';
+            }
+        }
+
+        // 如果动态更新的根节点高度，那么需要更新根节点的封装节点的样式为自适应
+        const rootExtend = gxRootNode.gxTemplateNode.getExtend(gxTemplateData)
+        if (rootExtend != null) {
+            const extendHeight = rootExtend['height']
+            if (extendHeight != null) {
+                rootStyle.height = 'auto';
+            }
+
+            const extendWidth = rootExtend['width']
+            if (extendWidth != null) {
+                rootStyle.width = 'auto';
             }
         }
 

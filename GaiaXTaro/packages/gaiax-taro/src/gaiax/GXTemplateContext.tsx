@@ -21,6 +21,7 @@ export default class GXTemplateContext {
 
     rootView: ReactNode;
 
+    gxRootStyle: React.CSSProperties ;
 
     constructor(
         gxTemplateItem: GXTemplateItem,

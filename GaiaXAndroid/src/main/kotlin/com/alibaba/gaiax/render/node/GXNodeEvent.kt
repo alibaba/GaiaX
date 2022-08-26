@@ -36,7 +36,7 @@ class GXNodeEvent : GXINodeEvent {
                         })
 
                     // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.value?.value(templateData) as? JSONObject)?.let { trackData ->
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             GXTemplateEngine.GXTrack().apply {
                                 this.view = gxNode.view
@@ -62,7 +62,7 @@ class GXNodeEvent : GXINodeEvent {
                         })
 
                     // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.value?.value(templateData) as? JSONObject)?.let { trackData ->
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             GXTemplateEngine.GXTrack().apply {
                                 this.view = gxNode.view

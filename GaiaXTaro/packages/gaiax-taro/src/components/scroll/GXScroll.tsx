@@ -62,7 +62,8 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
             if (propGXNode.gxChildTemplateItems?.size > 1) {
                 const typeData = gxTemplateNode.getExtend(itemData as GXJSONObject)['item-type'];
-                const targetTemplateId: string = typeData['config'][typeData['path']];
+                const path = typeData['path'];
+                const targetTemplateId: string = typeData['config'][path];
                 console.log(typeData)
                 propGXNode.gxChildTemplateItems?.forEach((value, key) => {
                     if (key.templateId == targetTemplateId) {

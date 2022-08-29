@@ -586,17 +586,12 @@ export default class GXCssConvertStyle {
 
     }
 
-    static createGridStyleByConfig(gxStyle: React.CSSProperties, propStyle: string | React.CSSProperties, gxGridConfig: GXGridConfig) {
-        const gxGridStyle = {
-            height: gxStyle.height,
-            width: gxStyle.width,
-            overflow: 'hidden',
-            marginTop: '',
-            marginLeft: '',
-            marginRight: '',
-            marginBottom: '',
-            backgroundColor: propStyle['backgroundColor']
-        };
+    static createGridStyleByConfig(gxStyle: React.CSSProperties, gxGridConfig: GXGridConfig) {
+        const gxGridStyle = gxStyle;
+
+        // 特殊处理
+        gxGridStyle.display = 'inline-block';
+        gxGridStyle.overflow = 'hidden';
 
         // 和native保持一致
         // edge-insets
@@ -616,19 +611,11 @@ export default class GXCssConvertStyle {
     }
 
     static createScrollStyleByConfig(gxStyle: React.CSSProperties, gxScrollConfig: GXScrollConfig) {
-        const scrollStyle = {
-            height: gxStyle.height + '',
-            width: gxStyle.width + '',
-            flexShrink: '1',
-            flexGrow: '1',
-            paddingTop: '0px',
-            paddingLeft: '0px',
-            paddingRight: '0px',
-            paddingBottom: '0px',
-            display: 'flex',
-            "white-space": "normal",
-            backgroundColor: gxStyle['backgroundColor']
-        };
+        const scrollStyle = gxStyle;
+
+        // 特殊处理，否则无法滑动
+        scrollStyle.display = 'inline-block';
+        scrollStyle.overflow = 'visible';
 
         // 和native保持一致
         // edge-insets

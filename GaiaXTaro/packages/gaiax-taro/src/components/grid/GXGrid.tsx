@@ -13,7 +13,7 @@ export interface GXGridState {
 }
 
 export interface GXGridProps {
-    propStyle?: string | CSSProperties
+    propStyle?: CSSProperties
     propDataValue?: GXJSONArray
     propGXTemplateContext: GXTemplateContext
     propGXNode: GXNode
@@ -22,7 +22,6 @@ export interface GXGridProps {
 export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
     render() {
         const {
-            propStyle,
             propGXTemplateContext,
             propGXNode,
             propDataValue
@@ -73,7 +72,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
 
         const gridGroup = _chunk(propDataValue, gridColumn);
 
-        const gxGridStyle = GXCssConvertStyle.createGridStyleByConfig(gxStyle, propStyle, gxGridConfig);
+        const gxGridStyle = GXCssConvertStyle.createGridStyleByConfig(gxStyle, gxGridConfig);
 
         const groupViewsArray: ReactNode[] = [];
         const gridGroupSize = gridGroup.length;

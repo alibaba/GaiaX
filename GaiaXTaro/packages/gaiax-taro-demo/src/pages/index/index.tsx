@@ -54,6 +54,7 @@ export default class Index extends Component<IParams> {
 
   state = {
     templateId: '',
+    isFollowed: false
   };
 
   componentWillMount() {
@@ -66,7 +67,7 @@ export default class Index extends Component<IParams> {
         });
       },
 
-      onAddData: function (templateId: string, template: any) {
+      onAddData: (templateId: string, template: any) => {
         // console.log(`onAddData templateId = ${templateId} `);
         // console.log(template);
         gxTemplateSource.addData(templateId, template);
@@ -89,7 +90,7 @@ export default class Index extends Component<IParams> {
   componentDidHide() { }
 
   render() {
-    const { templateId } = this.state;
+    const { templateId, isFollowed } = this.state;
     if (templateId != '') {
 
       let templateItem = new GXTemplateItem();
@@ -105,8 +106,20 @@ export default class Index extends Component<IParams> {
       }
 
       const gxEventListener: GXIEventListener = {
-        onGestureEvent: function (gxGesture: GXGesture) {
-          console.log(gxGesture);
+        onGestureEvent: (gxGesture: GXGesture) => {
+          if (gxGesture.nodeId == "follow") {
+            if (isFollowed) {
+              templateData.templateData.data.isFollowed = false;
+              this.setState({
+                isFollowed: false
+              });
+            } else {
+              templateData.templateData.data.isFollowed = true;
+              this.setState({
+                isFollowed: true
+              });
+            }
+          }
         }
       }
 

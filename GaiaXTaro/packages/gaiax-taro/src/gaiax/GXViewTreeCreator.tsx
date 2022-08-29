@@ -221,7 +221,6 @@ export default class GXViewTreeCreator {
             key={gxNode.gxId}
             propGXTemplateContext={gxTemplateContext}
             propGXNode={gxNode}
-            propStyle={gxNode.gxTemplateNode.finalStyle}
             propDataValue={data.value}
         />;
     }

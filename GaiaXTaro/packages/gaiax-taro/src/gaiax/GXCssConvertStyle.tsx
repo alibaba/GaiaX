@@ -2,7 +2,7 @@ import { GXJSONObject } from "./GXJson";
 import { GXNode } from "./GXNode";
 import GXTemplateContext from "./GXTemplateContext";
 import GXMeasureSize from "./GXMeasureSize";
-import GXTemplateNode, { GXScrollConfig } from "./GXTemplateNode";
+import GXTemplateNode, { GXGridConfig, GXScrollConfig } from "./GXTemplateNode";
 import endsWith from "lodash/endsWith";
 import parseInt from "lodash/parseInt";
 import kebabCase from 'lodash/kebabcase';
@@ -586,6 +586,35 @@ export default class GXCssConvertStyle {
 
     }
 
+    static createGridStyleByConfig(gxStyle: React.CSSProperties, propStyle: string | React.CSSProperties, gxGridConfig: GXGridConfig) {
+        const gxGridStyle = {
+            height: gxStyle.height,
+            width: gxStyle.width,
+            overflow: 'hidden',
+            marginTop: '',
+            marginLeft: '',
+            marginRight: '',
+            marginBottom: '',
+            backgroundColor: propStyle['backgroundColor']
+        };
+
+        // 和native保持一致
+        // edge-insets
+        if (gxGridConfig.edgeInsetsTop != null) {
+            gxGridStyle.marginTop = gxGridConfig.edgeInsetsTop;
+        }
+        if (gxGridConfig.edgeInsetsLeft != null) {
+            gxGridStyle.marginLeft = gxGridConfig.edgeInsetsLeft;
+        }
+        if (gxGridConfig.edgeInsetsRight != null) {
+            gxGridStyle.marginRight = gxGridConfig.edgeInsetsRight;
+        }
+        if (gxGridConfig.edgeInsetsBottom != null) {
+            gxGridStyle.marginBottom = gxGridConfig.edgeInsetsBottom;
+        }
+        return gxGridStyle;
+    }
+
     static createScrollStyleByConfig(gxStyle: React.CSSProperties, gxScrollConfig: GXScrollConfig) {
         const scrollStyle = {
             height: gxStyle.height + '',
@@ -597,7 +626,8 @@ export default class GXCssConvertStyle {
             paddingRight: '0px',
             paddingBottom: '0px',
             display: 'flex',
-            "white-space": "normal"
+            "white-space": "normal",
+            backgroundColor: gxStyle['backgroundColor']
         };
 
         // 和native保持一致
@@ -647,7 +677,6 @@ export default class GXCssConvertStyle {
 
         return finalScrollStyle;
     }
-
 
     static createScrollItemWrapStyleByConfig(isHorizontal: boolean, itemIndex: number, dataSize: number, gxScrollConfig: GXScrollConfig, isVertical: boolean) {
         let itemWrapStyle = {

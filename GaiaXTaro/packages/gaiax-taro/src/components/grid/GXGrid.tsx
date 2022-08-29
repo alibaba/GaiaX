@@ -5,7 +5,8 @@ import { GXJSONArray } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance, GXMeasureSize, GXTemplateComponent, GXTemplateData, GXTemplateInfo, GXTemplateItem } from '../..';
-import GXTemplateNode from '../../gaiax/GXTemplateNode';
+import GXTemplateNode, { GXGridConfig } from '../../gaiax/GXTemplateNode';
+import GXCssConvertStyle from '../../gaiax/GXCssConvertStyle';
 
 export interface GXGridState {
 
@@ -72,30 +73,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
 
         const gridGroup = _chunk(propDataValue, gridColumn);
 
-        const gxGridStyle = {
-            height: gxStyle.height,
-            width: gxStyle.width,
-            overflow: 'hidden',
-            marginTop: '',
-            marginLeft: '',
-            marginRight: '',
-            marginBottom: '',
-        }
-
-        // 和native保持一致
-        // edge-insets
-        if (gxGridConfig.edgeInsetsTop != null) {
-            gxGridStyle.marginTop = gxGridConfig.edgeInsetsTop;
-        }
-        if (gxGridConfig.edgeInsetsLeft != null) {
-            gxGridStyle.marginLeft = gxGridConfig.edgeInsetsLeft;
-        }
-        if (gxGridConfig.edgeInsetsRight != null) {
-            gxGridStyle.marginRight = gxGridConfig.edgeInsetsRight;
-        }
-        if (gxGridConfig.edgeInsetsBottom != null) {
-            gxGridStyle.marginBottom = gxGridConfig.edgeInsetsBottom;
-        }
+        const gxGridStyle = GXCssConvertStyle.createGridStyleByConfig(gxStyle, propStyle, gxGridConfig);
 
         const groupViewsArray: ReactNode[] = [];
         const gridGroupSize = gridGroup.length;
@@ -174,4 +152,6 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             </View>
         );
     }
+
+
 }

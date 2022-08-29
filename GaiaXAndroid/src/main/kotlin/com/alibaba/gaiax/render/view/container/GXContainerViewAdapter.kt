@@ -114,17 +114,12 @@ class GXContainerViewAdapter(
             }
         }
 
-        // 构建坑位的容器
-        val childItemContainer = GXItemContainer(parent.context)
-
-        // FIX:预计算的宽度可能和实际宽度不相符
-        val containerWidthLP = childContainerSize?.width?.toInt()
+        val itemContainerWidth = childContainerSize?.width?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        val containerHeightLP = gxNode.templateNode.finalScrollConfig?.let {
+        val itemContainerHeight = gxNode.templateNode.finalScrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
                 gxContainer.layoutParams.height
             } else {
                 childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
@@ -133,8 +128,18 @@ class GXContainerViewAdapter(
             childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }
 
+        // 构建坑位的容器
+        val childItemContainer = GXItemContainer(parent.context)
+
+        gxNode.templateNode.finalScrollConfig?.let {
+            if (it.isHorizontal) {
+                // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
+                childItemContainer.gravity = it.gravity
+            }
+        }
+
         childItemContainer.layoutParams = FrameLayout.LayoutParams(
-            containerWidthLP, containerHeightLP
+            itemContainerWidth, itemContainerHeight
         )
 
         // 返回ViewHolder
@@ -177,6 +182,14 @@ class GXContainerViewAdapter(
             ?: throw IllegalArgumentException("childMeasureSize is null")
 
         val childItemContainer = holder.itemView as ViewGroup
+
+        // FIX: 重置容器的的高度，防止动态计算时坑位容器高度与容器高度不一致
+        gxNode.templateNode.finalScrollConfig?.let {
+            if (it.isHorizontal) {
+                // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
+                childItemContainer.layoutParams.height = gxContainer.layoutParams.height
+            }
+        }
 
         val childItemPosition = holder.adapterPosition
 
@@ -239,12 +252,16 @@ class GXContainerViewAdapter(
 
                     override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
                         gxTrack.index = childItemPosition
-                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(gxTrack)
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            gxTrack
+                        )
                     }
 
                     override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
                         gxTrack.index = childItemPosition
-                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(gxTrack)
+                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
+                            gxTrack
+                        )
                     }
                 }
 
@@ -258,7 +275,7 @@ class GXContainerViewAdapter(
             if (childView != null) {
                 GXTemplateEngine.instance.bindData(childView, childTemplateData)
 
-                // FIX: 重置容器的宽度为自适应，防止预计算和实际的宽度不相符
+                // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 childItemContainer.layoutParams.width = childView.layoutParams.width
             }
         }

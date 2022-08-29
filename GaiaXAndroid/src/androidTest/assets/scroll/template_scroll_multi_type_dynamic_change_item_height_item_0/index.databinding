@@ -2,7 +2,8 @@
   "data": {
     "template_scroll_multi_type_dynamic_change_item_height_item_0": {
       "extend": {
-        "height": "$smallItemHeight"
+        "height": "$smallItemHeight",
+        "width": "$smallItemWidth"
       }
     }
   }

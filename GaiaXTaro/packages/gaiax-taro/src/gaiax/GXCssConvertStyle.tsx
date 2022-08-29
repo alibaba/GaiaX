@@ -615,7 +615,6 @@ export default class GXCssConvertStyle {
 
         // 特殊处理，否则无法滑动
         scrollStyle.display = 'inline-block';
-        scrollStyle.overflow = 'visible';
 
         // 和native保持一致
         // edge-insets

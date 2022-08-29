@@ -79,36 +79,13 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         const gridGroupSize = gridGroup.length;
         gridGroup.map((groupItem, groupItemIndex) => {
 
-            const gxGridGroupStyle = {
-                display: 'flex',
-                marginBottom: '0px'
-            }
-
-            if (groupItemIndex != gridGroupSize - 1) {
-                if (isVertical) {
-                    if (gxGridConfig.rowSpacing != null) {
-                        gxGridGroupStyle.marginBottom = gxGridConfig.rowSpacing;
-                    }
-                }
-            }
+            const gxGridGroupStyle = GXCssConvertStyle.createGridGroupStyle(groupItemIndex, gridGroupSize, isVertical, gxGridConfig);
 
             const groupItemViewsArray: ReactNode[] = [];
             const groupItemSize = groupItem.length;
             groupItem.map((childItem, childItemIndex) => {
 
-                const gxGridGroupItemStyle = {
-                    flex: `1 1 0`,
-                    display: 'block',
-                    marginRight: '0px'
-                }
-
-                if (childItemIndex != groupItemSize - 1) {
-                    if (isVertical) {
-                        if (gxGridConfig.itemSpacing != null) {
-                            gxGridGroupItemStyle.marginRight = gxGridConfig.itemSpacing;
-                        }
-                    }
-                }
+                const gxGridGroupItemStyle = GXCssConvertStyle.createGridGroupItemStyle(childItemIndex, groupItemSize, isVertical, gxGridConfig);
 
                 const gxTemplateItem = new GXTemplateItem();
                 gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
@@ -152,6 +129,5 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             </View>
         );
     }
-
 
 }

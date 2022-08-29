@@ -705,4 +705,37 @@ export default class GXCssConvertStyle {
         }
         return itemWrapStyle;
     }
+
+    static createGridGroupStyle(groupItemIndex: number, gridGroupSize: number, isVertical: boolean, gxGridConfig: GXGridConfig) {
+        const gxGridGroupStyle = {
+            display: 'flex',
+            marginBottom: '0px'
+        };
+
+        if (groupItemIndex != gridGroupSize - 1) {
+            if (isVertical) {
+                if (gxGridConfig.rowSpacing != null) {
+                    gxGridGroupStyle.marginBottom = gxGridConfig.rowSpacing;
+                }
+            }
+        }
+        return gxGridGroupStyle;
+    }
+
+    static createGridGroupItemStyle(childItemIndex: number, groupItemSize: number, isVertical: boolean, gxGridConfig: GXGridConfig) {
+        const gxGridGroupItemStyle = {
+            flex: `1 1 0`,
+            display: 'block',
+            marginRight: '0px'
+        };
+
+        if (childItemIndex != groupItemSize - 1) {
+            if (isVertical) {
+                if (gxGridConfig.itemSpacing != null) {
+                    gxGridGroupItemStyle.marginRight = gxGridConfig.itemSpacing;
+                }
+            }
+        }
+        return gxGridGroupItemStyle;
+    }
 }

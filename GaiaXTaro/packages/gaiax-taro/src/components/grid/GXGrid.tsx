@@ -57,7 +57,18 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             return null;
         }
 
+        const dataSize = propDataValue.length;
+
         const gridColumn = gxGridConfig.column;
+
+        const appendDataSize = gridColumn % dataSize;
+
+        for (var i = 0; i < appendDataSize; i++) {
+            const emptyData = {
+                'gaiaxEmptyData': true
+            };
+            propDataValue.push(emptyData);
+        }
 
         const gridGroup = _chunk(propDataValue, gridColumn);
 
@@ -132,14 +143,19 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 gxMeasureSize.templateWidth = childItemWidth;
                 gxMeasureSize.templateHeight = childItemHeight;
 
-                // item
-                const groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
-                    <GXTemplateComponent
-                        gxTemplateData={gxTemplateData}
-                        gxTemplateItem={gxTemplateItem}
-                        gxMeasureSize={gxMeasureSize}
-                        gxVisualTemplateNode={gxChildVisualTemplateNode} />
-                </View>;
+                let groupItemView = null;
+                if (childItem['gaiaxEmptyData'] != true) {
+                    groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
+                        <GXTemplateComponent
+                            gxTemplateData={gxTemplateData}
+                            gxTemplateItem={gxTemplateItem}
+                            gxMeasureSize={gxMeasureSize}
+                            gxVisualTemplateNode={gxChildVisualTemplateNode} />
+                    </View>;
+                } else {
+                    groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
+                    </View>;
+                }
 
                 groupItemViewsArray.push(groupItemView);
             });

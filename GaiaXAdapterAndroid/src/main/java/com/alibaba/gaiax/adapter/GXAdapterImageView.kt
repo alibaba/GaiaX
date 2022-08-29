@@ -21,6 +21,8 @@ import android.support.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 
 @Keep
 class GXAdapterImageView(context: Context) : GXImageView(context) {
@@ -30,7 +32,6 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
         placeholder?.let { resUri ->
             bindRes(resUri)
         }
-        // Net
         Glide.with(context).load(uri).into(this)
     }
 }

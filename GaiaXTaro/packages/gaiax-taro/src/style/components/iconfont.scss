@@ -1,0 +1,16 @@
+@import "../variables/default.scss";
+@import "../mixins/index.scss";
+
+// @font-face {
+//   font-family: "iconfont";
+//   src: url('gaiax_iconfont.ttf') format('truetype');
+// }
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

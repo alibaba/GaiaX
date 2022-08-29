@@ -1,0 +1,66 @@
+{
+  "name": "gaiax-taro-demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "templateInfo": {
+    "name": "default",
+    "typescript": true,
+    "css": "sass"
+  },
+  "scripts": {
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type h5",
+    "build:weapp": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type weapp",
+    "build:swan": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type swan",
+    "build:alipay": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type alipay",
+    "build:tt": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type tt",
+    "build:h5": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type h5",
+    "build:rn": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type rn",
+    "build:qq": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type qq",
+    "build:jd": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type jd",
+    "build:quickapp": "export NODE_OPTIONS=--openssl-legacy-provider; taro build --type quickapp",
+    "dev:weapp": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:weapp -- --watch",
+    "dev:swan": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:swan -- --watch",
+    "dev:alipay": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:alipay -- --watch",
+    "dev:tt": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:tt -- --watch",
+    "dev:h5": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:h5 -- --watch",
+    "dev:rn": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:rn -- --watch",
+    "dev:qq": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:qq -- --watch",
+    "dev:jd": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:jd -- --watch",
+    "dev:quickapp": "export NODE_OPTIONS=--openssl-legacy-provider; npm run build:quickapp -- --watch"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "Android >= 4.1",
+    "ios >= 8"
+  ],
+  "author": "",
+  "dependencies": {
+    "@babel/runtime": "^7.7.7",
+    "@tarojs/components": "3.4.12",
+    "@tarojs/runtime": "3.4.12",
+    "@tarojs/taro": "3.4.12",
+    "@tarojs/plugin-framework-react": "3.4.12",
+    "@tarojs/react": "3.4.12",
+    "react-dom": "^17.0.0",
+    "react": "^17.0.0",
+    "@gaiax/taro": "*"
+  },
+  "devDependencies": {
+    "@types/webpack-env": "^1.13.6",
+    "@types/react": "^17.0.2",
+    "@tarojs/mini-runner": "3.4.12",
+    "@babel/core": "^7.8.0",
+    "@tarojs/webpack-runner": "3.4.12",
+    "babel-preset-taro": "3.4.12",
+    "eslint-config-taro": "3.4.12",
+    "eslint": "^8.12.0",
+    "eslint-plugin-react": "^7.8.2",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "stylelint": "^14.4.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "typescript": "^4.1.0"
+  }
+}

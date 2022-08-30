@@ -43,6 +43,8 @@ private:
 
 
     long check(string s, vector<GXATSNode> array, void *p_analyze, void* source,string expression);
+
+    long calculateCache(string cache,vector<GXATSNode> array,void *p_analyze, void* source);
 };
 
 #endif /*include _GXAnalyze__H_*/

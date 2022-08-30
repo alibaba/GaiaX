@@ -955,7 +955,6 @@ long GXAnalyze::getValue(string expression, void *source) {
     } else {
         Res = check(result, array, this, source, expression);
     }
-    auto count = fp_ms.count();
     array.clear();
     return Res;
 }

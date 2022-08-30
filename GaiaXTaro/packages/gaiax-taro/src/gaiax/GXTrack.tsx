@@ -1,5 +1,7 @@
 import { ReactNode } from "react"
 import { GXJSONObject } from "./GXJson"
+import { GXNode } from "./GXNode"
+import GXTemplateContext from "./GXTemplateContext"
 import GXTemplateItem from "./GXTemplateItem"
 
 export default class GXTrack {
@@ -27,4 +29,17 @@ export default class GXTrack {
      * Buried data
      */
     trackParams: GXJSONObject = null
+
+    static create(
+        gxTemplateContext: GXTemplateContext,
+        gxTemplateData: GXJSONObject,
+        gxNode: GXNode
+    ): GXTrack {
+        const gxTrack = new GXTrack()
+        gxTrack.nodeId = gxNode.gxId;
+        gxTrack.templateItem = gxTemplateContext.gxTemplateItem;
+        gxTrack.trackParams = gxNode.gxTemplateNode.getEventData(gxTemplateData);
+        gxTrack.view = gxNode.gxView;
+        return gxTrack;
+    }
 }

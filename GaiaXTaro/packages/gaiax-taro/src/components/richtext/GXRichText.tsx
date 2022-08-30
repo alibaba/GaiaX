@@ -1,6 +1,7 @@
 import { CommonEventFunction, Text } from '@tarojs/components';
 import React, { CSSProperties, ReactNode } from 'react';
 import { GXJSONObject } from '../../gaiax/GXJson';
+import { GXNode } from '../../gaiax/GXNode';
 
 export interface GXRichTextState {
 
@@ -11,6 +12,7 @@ export interface GXRichTextProps {
   propStyle?: string | CSSProperties
   propDataValue?: string
   propExtend?: GXJSONObject
+  propGXNode: GXNode
 }
 
 export default class GXRichText extends React.Component<GXRichTextProps, GXRichTextState> {
@@ -20,7 +22,7 @@ export default class GXRichText extends React.Component<GXRichTextProps, GXRichT
   }
 
   render() {
-    const { propStyle, propDataValue, propExtend } = this.props
+    const { propStyle, propDataValue, propExtend, propGXNode } = this.props
 
     let hightLightTag: string = null;
     let hightLightColor: string = null;
@@ -53,12 +55,14 @@ export default class GXRichText extends React.Component<GXRichTextProps, GXRichT
 
       return <Text
         style={propStyle}
+        id={propGXNode.gxIdPath}
         onClick={this.handleClick.bind(this)}  >
         {childArray}
       </Text>;
     }
     return <Text
       style={propStyle}
+      id={propGXNode.gxIdPath}
       onClick={this.handleClick.bind(this)}
     >
       {propDataValue}

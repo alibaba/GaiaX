@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { GXJSONObject } from "./GXJson";
+import GXTemplateContext from "./GXTemplateContext";
 import GXTemplateItem from "./GXTemplateItem";
 import GXTemplateNode from "./GXTemplateNode";
 
@@ -17,7 +18,11 @@ export class GXNode {
 
     gxChildTemplateItems?: Map<GXTemplateItem, GXTemplateNode>;
 
-    setIdPath(gxLayer: GXJSONObject, gxParentNode?: GXNode) {
+    setIdPath(
+        gxTemplateContext: GXTemplateContext,
+        gxLayer: GXJSONObject,
+        gxParentNode?: GXNode
+    ) {
         this.gxId = gxLayer['id'];
         if (gxParentNode != null) {
             if (this.gxIdPath.length != 0) {
@@ -29,7 +34,12 @@ export class GXNode {
             if (this.gxIdPath.length != 0) {
                 this.gxIdPath = `${this.gxIdPath}@${this.gxId}`
             } else {
-                this.gxIdPath = this.gxId
+                if (gxTemplateContext.gxTemplateItem.templatePrefixId != null) {
+                    this.gxIdPath = `${gxTemplateContext.gxTemplateItem.templatePrefixId}-${this.gxId}`
+                } else {
+                    this.gxIdPath = this.gxId
+                }
+
             }
         }
     }

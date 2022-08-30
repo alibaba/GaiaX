@@ -882,6 +882,21 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
+    fun template_text_fitcontent_lines_0_width_100px_height_null_parent_display_none() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_0_width_100px_height_null_parent_display_none"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(0F, rootView.child(0).width())
+        Assert.assertEquals(0F, rootView.child(0).height())
+    }
+
+    @Test
     fun template_text_fitcontent_lines_1_width_null_height_100px() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

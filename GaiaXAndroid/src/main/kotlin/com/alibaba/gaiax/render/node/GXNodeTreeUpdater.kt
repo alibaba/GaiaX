@@ -103,9 +103,9 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
     }
 
     private fun updateNodeTreeLayoutByDirtyText(rootNode: GXNode, size: Size<Float?>) {
-        if (context.dirtyText?.isNotEmpty() == true) {
+        if (context.dirtyTexts?.isNotEmpty() == true) {
             var isTextDirty = false
-            context.dirtyText?.forEach {
+            context.dirtyTexts?.forEach {
                 val isDirty = updateTextLayoutByFitContentByDirtyText(
                     it.gxTemplateContext,
                     it.gxNode,
@@ -115,7 +115,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
                     isTextDirty = true
                 }
             }
-            context.dirtyText?.clear()
+            context.dirtyTexts?.clear()
             if (isTextDirty) {
                 GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
             }
@@ -724,17 +724,17 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
             // 如果提前计算，会导致结果不正确
             if (gxTemplateContext.isFlexGrowLayout) {
-                if (gxTemplateContext.dirtyText == null) {
-                    gxTemplateContext.dirtyText = mutableSetOf()
+                if (gxTemplateContext.dirtyTexts == null) {
+                    gxTemplateContext.dirtyTexts = mutableSetOf()
                 }
-                gxTemplateContext.dirtyText?.add(
+                gxTemplateContext.dirtyTexts?.add(
                     GXDirtyText(
                         gxTemplateContext,
                         gxNode,
                         templateData
                     )
                 )
-                return false
+                return null
             }
 
             // 处理普通的fitContent逻辑

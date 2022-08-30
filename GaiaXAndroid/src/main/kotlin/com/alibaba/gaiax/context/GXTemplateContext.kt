@@ -20,7 +20,6 @@ import android.content.Context
 import android.view.View
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIRootView
@@ -60,7 +59,7 @@ class GXTemplateContext private constructor(
 
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
 
-    var dirtyText: MutableSet<GXDirtyText>? = null
+    var dirtyTexts: MutableSet<GXDirtyText>? = null
 
     /**
      * Is dirty
@@ -103,8 +102,8 @@ class GXTemplateContext private constructor(
     fun release() {
         containers.clear()
         isDirty = false
-        dirtyText?.clear()
-        dirtyText = null
+        dirtyTexts?.clear()
+        dirtyTexts = null
         templateData = null
         rootView = null
         visualTemplateNode = null

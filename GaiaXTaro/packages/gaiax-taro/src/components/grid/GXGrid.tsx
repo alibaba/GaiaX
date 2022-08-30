@@ -101,8 +101,8 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 let groupItemView = null;
                 if (childItem['gaiaxEmptyData'] != true) {
                     groupItemView = <View
-                        key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
-                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
+                        key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
+                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
                         style={gxGridGroupItemStyle}
                     >
                         <GXTemplateComponent

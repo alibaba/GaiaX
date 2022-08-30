@@ -56,7 +56,6 @@ data class GXStretchNode(
 
     fun updateContainerLayout(
         gxTemplateContext: GXTemplateContext,
-        gxTemplateNode: GXTemplateNode,
         gxNode: GXNode,
         templateData: JSONObject
     ): Boolean {
@@ -164,10 +163,10 @@ data class GXStretchNode(
 
         updateLayoutByFlexBox(
             gxTemplateContext,
+            this,
             finalCssStyle,
             finalFlexBox,
-            finalFlexBoxSize,
-            style
+            finalFlexBoxSize
         )?.let {
             isDirty = it
         }
@@ -185,16 +184,14 @@ data class GXStretchNode(
 
     fun updateNormalLayout(
         gxTemplateContext: GXTemplateContext,
-        gxTemplateNode: GXTemplateNode,
+        gxNode: GXNode,
         templateData: JSONObject
     ): Boolean {
-
-        val style = this.node.getStyle()
 
         var result = false
         var isDirty = false
 
-        val finalCss = gxTemplateNode.finalCss
+        val finalCss = gxNode.templateNode.finalCss
         val finalFlexBox = finalCss?.flexBox
         val finalCssStyle = finalCss?.style
 
@@ -208,29 +205,30 @@ data class GXStretchNode(
 
         updateLayoutByFlexBox(
             gxTemplateContext,
+            gxNode.stretchNode,
             finalCssStyle,
             finalFlexBox,
             finalFlexBox.size,
-            style
         )?.let {
             isDirty = it
         }
 
         updateLayoutByCssStyle(
             gxTemplateContext,
+            gxNode,
             finalCssStyle,
-            style,
-            gxTemplateNode,
-            this,
+            gxNode.stretchNode,
             templateData
         )?.let {
             isDirty = it
         }
 
+        val stretchStyle = this.node.getStyle()
+
         if (isDirty) {
-            style.free()
-            style.init()
-            this.node.setStyle(style)
+            stretchStyle.free()
+            stretchStyle.init()
+            this.node.setStyle(stretchStyle)
             this.node.markDirty()
             result = true
         }
@@ -240,109 +238,113 @@ data class GXStretchNode(
 
     private fun updateLayoutByFlexBox(
         gxTemplateContext: GXTemplateContext,
+        gxStretchNode: GXStretchNode,
         gxCssStyle: GXStyle,
         gxFlexBox: GXFlexBox,
-        flexBoxSize: Size<Dimension>?,
-        style: Style
+        flexBoxSize: Size<Dimension>?
     ): Boolean? {
+
+        val stretchNode: Node = gxStretchNode.node
+        val stretchStyle: Style = stretchNode.getStyle()
+
         var isDirty: Boolean? = null
         gxFlexBox.display?.let {
-            style.display = it
+            stretchStyle.display = it
             isDirty = true
         }
 
         gxFlexBox.aspectRatio?.let {
-            style.aspectRatio = it
+            stretchStyle.aspectRatio = it
             isDirty = true
         }
 
         gxFlexBox.direction?.let {
-            style.direction = it
+            stretchStyle.direction = it
             isDirty = true
         }
 
         gxFlexBox.flexDirection?.let {
-            style.flexDirection = it
+            stretchStyle.flexDirection = it
             isDirty = true
         }
 
         gxFlexBox.flexWrap?.let {
-            style.flexWrap = it
+            stretchStyle.flexWrap = it
             isDirty = true
         }
 
         gxFlexBox.overflow?.let {
-            style.overflow = it
+            stretchStyle.overflow = it
             isDirty = true
         }
 
         gxFlexBox.alignItems?.let {
-            style.alignItems = it
+            stretchStyle.alignItems = it
             isDirty = true
         }
 
         gxFlexBox.alignSelf?.let {
-            style.alignSelf = it
+            stretchStyle.alignSelf = it
             isDirty = true
         }
 
         gxFlexBox.alignContent?.let {
-            style.alignContent = it
+            stretchStyle.alignContent = it
             isDirty = true
         }
 
         gxFlexBox.justifyContent?.let {
-            style.justifyContent = it
+            stretchStyle.justifyContent = it
             isDirty = true
         }
 
         gxFlexBox.positionType?.let {
-            style.positionType = it
+            stretchStyle.positionType = it
             isDirty = true
         }
 
         // 仅在绝对布局下，才能更新position的数据
-        if (style.positionType == PositionType.Absolute) {
+        if (stretchStyle.positionType == PositionType.Absolute) {
             gxFlexBox.position?.let {
-                GXTemplateUtils.updateDimension(it, style.position)
+                GXTemplateUtils.updateDimension(it, stretchStyle.position)
                 isDirty = true
             }
         }
 
         gxFlexBox.margin?.let {
-            GXTemplateUtils.updateDimension(it, style.margin)
+            GXTemplateUtils.updateDimension(it, stretchStyle.margin)
             isDirty = true
         }
 
         gxFlexBox.padding?.let {
-            GXTemplateUtils.updateDimension(it, style.padding)
+            GXTemplateUtils.updateDimension(it, stretchStyle.padding)
             isDirty = true
         }
 
         gxFlexBox.border?.let {
-            GXTemplateUtils.updateDimension(it, style.border)
+            GXTemplateUtils.updateDimension(it, stretchStyle.border)
             isDirty = true
         }
 
         gxFlexBox.flexGrow?.let {
-            style.flexGrow = it
+            stretchStyle.flexGrow = it
             gxTemplateContext.isFlexGrowLayout = true
             isDirty = true
         }
 
         gxFlexBox.flexShrink?.let {
-            style.flexShrink = it
+            stretchStyle.flexShrink = it
             isDirty = true
         }
 
         flexBoxSize?.let {
-            GXTemplateUtils.updateSize(it, style.size)
+            GXTemplateUtils.updateSize(it, stretchStyle.size)
             GXRegisterCenter.instance
                 .extensionDynamicProperty
                 ?.convert(
                     GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_SIZE,
-                        style.size
+                        stretchStyle.size
                     ).apply {
                         this.cssStyle = gxCssStyle
                     })
@@ -350,13 +352,13 @@ data class GXStretchNode(
         }
 
         gxFlexBox.minSize?.let {
-            GXTemplateUtils.updateSize(it, style.minSize)
+            GXTemplateUtils.updateSize(it, stretchStyle.minSize)
             GXRegisterCenter.instance
                 .extensionDynamicProperty
                 ?.convert(
                     GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_MIN_SIZE,
-                        style.minSize
+                        stretchStyle.minSize
                     ).apply {
                         this.cssStyle = gxCssStyle
                     })
@@ -364,13 +366,13 @@ data class GXStretchNode(
         }
 
         gxFlexBox.maxSize?.let {
-            GXTemplateUtils.updateSize(it, style.maxSize)
+            GXTemplateUtils.updateSize(it, stretchStyle.maxSize)
             GXRegisterCenter.instance
                 .extensionDynamicProperty
                 ?.convert(
                     GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                         GXTemplateKey.FLEXBOX_MAX_SIZE,
-                        style.maxSize
+                        stretchStyle.maxSize
                     ).apply {
                         this.cssStyle = gxCssStyle
                     })
@@ -382,13 +384,15 @@ data class GXStretchNode(
 
     private fun updateLayoutByCssStyle(
         gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
         gxCssStyle: GXStyle,
-        stretchStyle: Style,
-        gxTemplateNode: GXTemplateNode,
         gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Boolean? {
-        if (gxCssStyle.fitContent == true && stretchStyle.display == Display.Flex) {
+
+        val stretchStyle: Style = gxStretchNode.node.getStyle()
+
+        if (gxCssStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
 
             // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
             // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
@@ -401,7 +405,7 @@ data class GXStretchNode(
                     this,
                     GXDirtyText(
                         gxTemplateContext,
-                        gxTemplateNode,
+                        gxNode.templateNode,
                         gxStretchNode,
                         gxCssStyle,
                         templateData,
@@ -414,7 +418,7 @@ data class GXStretchNode(
             // 处理普通的fitContent逻辑
             return updateLayoutByFitContent(
                 gxTemplateContext,
-                gxTemplateNode,
+                gxNode.templateNode,
                 gxStretchNode,
                 gxCssStyle,
                 templateData,
@@ -425,6 +429,15 @@ data class GXStretchNode(
         return null
     }
 
+    private fun isSelfAndParentNodeTreeFlex(gxNode: GXNode?): Boolean {
+        // 根节点的父节点
+        if (gxNode == null) {
+            return true
+        }
+        val selfIsFlex = gxNode.stretchNode.node.getStyle().display == Display.Flex
+        return selfIsFlex && isSelfAndParentNodeTreeFlex(gxNode.parentNode)
+    }
+
     private fun updateLayoutByFitContent(
         templateContext: GXTemplateContext,
         gxTemplateNode: GXTemplateNode,
@@ -433,6 +446,11 @@ data class GXStretchNode(
         templateData: JSONObject,
         style: Style
     ): Boolean? {
+
+        if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
+            return null
+        }
+
         GXFitContentUtils.fitContent(
             templateContext,
             gxTemplateNode,

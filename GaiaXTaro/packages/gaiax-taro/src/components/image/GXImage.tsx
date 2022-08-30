@@ -1,5 +1,6 @@
 import { CommonEventFunction, Image, ImageProps } from '@tarojs/components';
 import React, { CSSProperties } from 'react';
+import { GXNode } from '../../gaiax/GXNode';
 
 export interface GXImageState {
 
@@ -10,6 +11,7 @@ export interface GXImageProps {
   propStyle?: string | CSSProperties
   propDataValue?: string
   propMode?: string
+  propGXNode: GXNode
 }
 
 export default class GXImage extends React.Component<GXImageProps, GXImageState> {
@@ -55,8 +57,9 @@ export default class GXImage extends React.Component<GXImageProps, GXImageState>
   }
 
   render() {
-    const { propStyle, propDataValue, propMode } = this.props;
+    const { propStyle, propDataValue, propMode, propGXNode } = this.props;
     return <Image style={propStyle}
+      id={propGXNode.gxIdPath}
       mode={this.getMode((propMode || 'scaleToFill'))}
       onClick={this.handleClick.bind(this)}
       src={propDataValue} />;

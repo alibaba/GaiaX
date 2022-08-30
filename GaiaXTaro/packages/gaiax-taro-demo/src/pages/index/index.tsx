@@ -11,10 +11,12 @@ import {
   GXTemplateData,
   GXIExtensionTemplateSource,
   GXIEventListener,
-  GXGesture
+  GXGesture,
+  GXITrackListener,
+  GXTrack
 } from "@gaiax/taro";
 import "./index.scss";
-import { GXFastPreviewInstance, IGXFastPreviewListener as GXIFastPreviewListener } from "../../gaiax/GXFastPreview";
+import * as GXFastPreview from "../../gaiax/GXFastPreview";
 
 // Debug Outline
 if (process.env.TARO_ENV === 'h5') {
@@ -59,7 +61,7 @@ export default class Index extends Component<IParams> {
 
   componentWillMount() {
 
-    const gxFastPreviewListener: GXIFastPreviewListener = {
+    const gxFastPreviewListener: GXFastPreview.IGXFastPreviewListener = {
       onUpdate: (templateId: string) => {
         // console.log(`onUpdate templateId = ${templateId} `);
         this.setState({
@@ -75,14 +77,14 @@ export default class Index extends Component<IParams> {
     }
 
     GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
-    GXFastPreviewInstance.startFastPreview();
-    GXFastPreviewInstance.setListener(gxFastPreviewListener);
+    GXFastPreview.GXFastPreviewInstance.startFastPreview();
+    GXFastPreview.GXFastPreviewInstance.setListener(gxFastPreviewListener);
   }
 
   componentDidMount() { }
 
   componentWillUnmount() {
-    GXFastPreviewInstance.stopFastPreview();
+    GXFastPreview.GXFastPreviewInstance.stopFastPreview();
   }
 
   componentDidShow() { }
@@ -124,6 +126,14 @@ export default class Index extends Component<IParams> {
       }
 
       templateData.eventListener = gxEventListener
+
+      const gxTrackListener: GXITrackListener = {
+        onTrackEvent: (gxTrack: GXTrack) => {
+          console.log(gxTrack);
+        }
+      };
+
+      templateData.trackListener = gxTrackListener;
 
       const constraintSize = JSON.parse(template["index.json"])?.["package"]?.["constraint-size"]
       let measureSize = new GXMeasureSize();

@@ -15,6 +15,8 @@ export default class GXTrack {
      */
     nodeId: string = null
 
+    nodeIdPath: string = null
+
     /**
      * View index
      */
@@ -37,6 +39,7 @@ export default class GXTrack {
     ): GXTrack {
         const gxTrack = new GXTrack()
         gxTrack.nodeId = gxNode.gxId;
+        gxTrack.nodeIdPath = gxNode.gxIdPath;
         gxTrack.templateItem = gxTemplateContext.gxTemplateItem;
         gxTrack.trackParams = gxNode.gxTemplateNode.getEventData(gxTemplateData);
         gxTrack.view = gxNode.gxView;

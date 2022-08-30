@@ -60,7 +60,7 @@ class GXTemplateContext private constructor(
 
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
 
-    var dirtyText: MutableMap<GXStretchNode, GXDirtyText>? = null
+    var dirtyText: MutableSet<GXDirtyText>? = null
 
     /**
      * Is dirty

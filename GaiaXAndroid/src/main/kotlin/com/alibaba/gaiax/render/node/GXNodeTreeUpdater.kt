@@ -106,13 +106,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         if (context.dirtyText?.isNotEmpty() == true) {
             var isTextDirty = false
             context.dirtyText?.forEach {
-                val isDirty = updateTextLayoutByFitContent(
-                    it.value.gxTemplateContext,
-                    it.value.gxTemplateNode,
-                    it.value.gxStretchNode,
-                    it.value.gxCssStyle,
-                    it.value.templateData,
-                    it.value.stretchStyle
+                val isDirty = updateTextLayoutByFitContentByDirtyText(
+                    it.gxTemplateContext,
+                    it.gxNode,
+                    it.templateData,
                 )
                 if (isDirty) {
                     isTextDirty = true
@@ -720,9 +717,6 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
     ): Boolean? {
 
         val gxStyle = gxNode.templateNode.finalCss?.style
-        val gxStretchNode = gxNode.stretchNode
-
-        val stretchStyle: Style = gxStretchNode.node.getStyle()
 
         if (gxStyle != null && gxStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
 
@@ -731,17 +725,13 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             // 如果提前计算，会导致结果不正确
             if (gxTemplateContext.isFlexGrowLayout) {
                 if (gxTemplateContext.dirtyText == null) {
-                    gxTemplateContext.dirtyText = mutableMapOf()
+                    gxTemplateContext.dirtyText = mutableSetOf()
                 }
-                gxTemplateContext.dirtyText?.put(
-                    gxStretchNode,
+                gxTemplateContext.dirtyText?.add(
                     GXDirtyText(
                         gxTemplateContext,
-                        gxNode.templateNode,
-                        gxStretchNode,
-                        gxStyle,
-                        templateData,
-                        stretchStyle
+                        gxNode,
+                        templateData
                     )
                 )
                 return false
@@ -751,10 +741,10 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
             return updateLayoutByFitContent(
                 gxTemplateContext,
                 gxNode.templateNode,
-                gxStretchNode,
+                gxNode.stretchNode,
                 gxStyle,
                 templateData,
-                stretchStyle
+                gxNode.stretchNode.node.getStyle()
             )
         }
 
@@ -815,21 +805,23 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         return null
     }
 
-    private fun updateTextLayoutByFitContent(
+    private fun updateTextLayoutByFitContentByDirtyText(
         gxTemplateContext: GXTemplateContext,
-        gxTemplateNode: GXTemplateNode,
-        gxStretchNode: GXStretchNode,
-        gxCssStyle: GXStyle,
+        gxNode: GXNode,
         templateData: JSONObject,
-        stretchStyle: Style
     ): Boolean {
+
+        val gxTemplateNode = gxNode.templateNode
+        val gxStretchNode = gxNode.stretchNode
+        val stretchStyle = gxStretchNode.node.getStyle()
+        val gxStyle = gxNode.templateNode.finalCss?.style ?: return false
 
         // 处理fitContent逻辑
         val isDirty = updateLayoutByFitContent(
             gxTemplateContext,
             gxTemplateNode,
             gxStretchNode,
-            gxCssStyle,
+            gxStyle,
             templateData,
             stretchStyle
         )

@@ -89,6 +89,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 const gxTemplateItem = new GXTemplateItem();
                 gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
                 gxTemplateItem.templateId = gxChildTemplateItem.templateId;
+                gxTemplateItem.templatePrefixId = `${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`
 
                 const gxTemplateData = new GXTemplateData();
                 gxTemplateData.templateData = childItem;
@@ -99,7 +100,11 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
 
                 let groupItemView = null;
                 if (childItem['gaiaxEmptyData'] != true) {
-                    groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
+                    groupItemView = <View
+                        key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
+                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
+                        style={gxGridGroupItemStyle}
+                    >
                         <GXTemplateComponent
                             gxTemplateData={gxTemplateData}
                             gxTemplateItem={gxTemplateItem}
@@ -107,7 +112,11 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                             gxVisualTemplateNode={gxChildVisualTemplateNode} />
                     </View>;
                 } else {
-                    groupItemView = <View key={`gaiax-grid-group-item-${childItemIndex}`} style={gxGridGroupItemStyle} >
+                    groupItemView = <View
+                        key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
+                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
+                        style={gxGridGroupItemStyle}
+                    >
                     </View>;
                 }
 
@@ -115,7 +124,11 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             });
 
             // group 
-            const groupItemViews: ReactNode = <View style={gxGridGroupStyle} key={`gaiax-grid-group-${groupItemIndex}`}>
+            const groupItemViews: ReactNode = <View
+                style={gxGridGroupStyle}
+                key={`${propGXNode.gxIdPath}-group-${groupItemIndex}`}
+                id={`${propGXNode.gxIdPath}-group-${groupItemIndex}`}
+            >
                 {groupItemViewsArray}
             </View>
 
@@ -123,7 +136,10 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         });
 
         return (
-            <View style={gxGridStyle} key={`gaiax-grid`}>
+            <View
+                style={gxGridStyle}
+                id={propGXNode.gxIdPath}
+            >
                 {groupViewsArray}
             </View>
         );

@@ -6,6 +6,7 @@ export default class GXTemplateItem {
         gxTemplateItem.templateId = templateId;
         return gxTemplateItem;
     }
-    templateBiz: string;
-    templateId: string;
+    templateBiz: string = null;
+    templateId: string = null;
+    templatePrefixId: string = null;
 }

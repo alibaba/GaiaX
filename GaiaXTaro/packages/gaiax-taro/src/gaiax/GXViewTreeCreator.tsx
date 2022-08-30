@@ -15,6 +15,7 @@ import GXIconFontText from "../components/iconfonttext/GXIconFontText";
 import GXScroll from "../components/scroll/GXScroll";
 import GXGrid from "../components/grid/GXGrid";
 import GXGesture from "./GXGesture";
+import GXTrack from "./GXTrack";
 
 export default class GXViewTreeCreator {
 
@@ -46,7 +47,17 @@ export default class GXViewTreeCreator {
 
         gxTemplateContext.gxRootStyle = gxRootStyle;
 
-        return <View style={gxRootStyle}>{gxRootNode.gxView}</View>;
+        let id = null;
+        if (gxTemplateContext.gxTemplateItem.templatePrefixId == null) {
+            id = `GXRoot-${gxTemplateContext.gxTemplateItem.templateId}`
+        } else {
+            id = `GXRoot-${gxTemplateContext.gxTemplateItem.templatePrefixId}-${gxTemplateContext.gxTemplateItem.templateId}`
+        }
+
+        return <View
+            id={id}
+            key={id}
+            style={gxRootStyle}>{gxRootNode.gxView}</View>;
     }
 
     private createNode(
@@ -62,7 +73,7 @@ export default class GXViewTreeCreator {
 
         const gxNode = GXNode.create();
 
-        gxNode.setIdPath(gxLayer, gxParentNode);
+        gxNode.setIdPath(gxTemplateContext, gxLayer, gxParentNode);
 
         gxNode.gxTemplateNode = GXTemplateNode.create(gxLayer, gxTemplateInfo, gxVisualTemplateNode);
 
@@ -337,9 +348,25 @@ export default class GXViewTreeCreator {
         gxNode.gxView = <GXView
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
+            propGXNode={gxNode}
             key={gxNode.gxId}>
             {childArray}
         </GXView>;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
+    }
+
+    private sendTrack(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject) {
+        const gxTrackListener = gxTemplateContext.gxTemplateData?.trackListener;
+        const gxEvent = gxNode.gxTemplateNode?.event;
+        if (gxTrackListener != null && gxEvent != null) {
+            const gxTrack = GXTrack.create(
+                gxTemplateContext,
+                gxTemplateData,
+                gxNode
+            );
+            gxTrackListener.onTrackEvent(gxTrack);
+        }
     }
 
     private createEvent(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: GXJSONObject) {
@@ -366,12 +393,17 @@ export default class GXViewTreeCreator {
         gxParentNode?: GXNode
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
         gxNode.gxView = <GXView
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
+            propGXNode={gxNode}
             key={gxNode.gxId}
         />;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 
     private createImageNode(
@@ -381,14 +413,19 @@ export default class GXViewTreeCreator {
         gxParentNode?: GXNode
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
         gxNode.gxView = <GXImage
             propMode={gxNode.gxTemplateNode.imageMode}
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
             key={gxNode.gxId}
+            propGXNode={gxNode}
             propDataValue={data.value}
         />;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 
     private createIconFontNode(
@@ -398,13 +435,18 @@ export default class GXViewTreeCreator {
         gxParentNode?: GXNode
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
         gxNode.gxView = <GXIconFontText
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
             key={gxNode.gxId}
+            propGXNode={gxNode}
             propDataValue={data.value}
         />;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 
     private createRichTextNode(
@@ -414,15 +456,21 @@ export default class GXViewTreeCreator {
         gxParentNode?: GXNode
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
         const extend = gxNode.gxTemplateNode.getExtend(gxTemplateData);
+
         gxNode.gxView = <GXRichText
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
             key={gxNode.gxId}
+            propGXNode={gxNode}
             propDataValue={data.value}
             propExtend={extend}
         />;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 
     private createTextNode(
@@ -432,12 +480,17 @@ export default class GXViewTreeCreator {
         gxParentNode?: GXNode
     ) {
         gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
         const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
         gxNode.gxView = <GXText
             onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
             propStyle={gxNode.gxTemplateNode.finalStyle}
+            propGXNode={gxNode}
             key={gxNode.gxId}
             propDataValue={data.value}
         />;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 }

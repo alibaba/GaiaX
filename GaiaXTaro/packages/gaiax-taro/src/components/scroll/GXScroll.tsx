@@ -4,8 +4,8 @@ import { GXJSONArray, GXJSONObject } from '../../gaiax/GXJson';
 import { GXNode } from '../../gaiax/GXNode';
 import GXTemplateContext from '../../gaiax/GXTemplateContext';
 import { GXEngineInstance } from '../../gaiax/GXEngineInstance';
-import GXTemplateNode, { GXScrollConfig } from '../../gaiax/GXTemplateNode';
-import _isArray from 'lodash/isArray';
+import GXTemplateNode from '../../gaiax/GXTemplateNode';
+import isArray from 'lodash/isArray';
 import GXTemplateItem from '../../gaiax/GXTemplateItem';
 import GXTemplateInfo from '../../gaiax/GXTemplateInfo';
 import GXTemplateData from '../../gaiax/GXTemplateData';
@@ -13,8 +13,9 @@ import GXIEventListener from '../../gaiax/GXIEventListener';
 import GXGesture from '../../gaiax/GXGesture';
 import GXTemplateComponent from '../GXTemplateComponent';
 import GXMeasureSize from '../../gaiax/GXMeasureSize';
-
 import GXCssConvertStyle from '../../gaiax/GXCssConvertStyle';
+import GXITrackListener from '../../gaiax/GXITrackListener';
+import GXTrack from '../../gaiax/GXTrack';
 
 export interface GXScrollState {
 
@@ -36,7 +37,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             propDataValue,
         } = this.props
 
-        if (propDataValue == null || propDataValue == undefined || !_isArray(propDataValue)) {
+        if (propDataValue == null || propDataValue == undefined || !isArray(propDataValue)) {
             console.error("GXScroll propDataValue is null")
             return null
         }
@@ -64,7 +65,6 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 const typeData = gxTemplateNode.getExtend(itemData as GXJSONObject)['item-type'];
                 const path = typeData['path'];
                 const targetTemplateId: string = typeData['config'][path];
-                console.log(typeData)
                 propGXNode.gxChildTemplateItems?.forEach((value, key) => {
                     if (key.templateId == targetTemplateId) {
                         gxChildTemplateItem = key;
@@ -83,7 +83,6 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
                 });
             }
 
-            console.log(gxChildTemplateItem)
             // 获取数据
             let gxTemplateInfo: GXTemplateInfo = GXEngineInstance.gxData.getTemplateInfo(gxChildTemplateItem);
 
@@ -93,19 +92,31 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             const gxTemplateItem = new GXTemplateItem();
             gxTemplateItem.templateBiz = gxChildTemplateItem.templateBiz;
             gxTemplateItem.templateId = gxChildTemplateItem.templateId;
+            gxTemplateItem.templatePrefixId = `${propGXNode.gxIdPath}-item-${itemIndex}`
 
             const gxTemplateData = new GXTemplateData();
             gxTemplateData.templateData = itemData;
 
-            const gxEventListener = propGXTemplateContext.gxTemplateData.eventListener
+            const gxEventListener = propGXTemplateContext.gxTemplateData.eventListener;
             if (gxEventListener != null) {
                 const gxChildItemEventListener: GXIEventListener = {
-                    onGestureEvent: function (gxGesture: GXGesture) {
+                    onGestureEvent: (gxGesture: GXGesture) => {
                         gxGesture.index = itemIndex;
                         gxEventListener.onGestureEvent(gxGesture);
                     }
                 }
                 gxTemplateData.eventListener = gxChildItemEventListener;
+            }
+
+            const gxTrackListener = propGXTemplateContext.gxTemplateData.trackListener;
+            if (gxTrackListener != null) {
+                const gxChildItemTrackListener: GXITrackListener = {
+                    onTrackEvent: (gxTrack: GXTrack) => {
+                        gxTrack.index = itemIndex;
+                        gxTrackListener.onTrackEvent(gxTrack);
+                    }
+                }
+                gxTemplateData.trackListener = gxChildItemTrackListener;
             }
 
             const gxMeasureSize = new GXMeasureSize();
@@ -115,7 +126,11 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             let itemWrapStyle = GXCssConvertStyle.createScrollItemWrapStyleByConfig(isHorizontal, itemIndex, dataSize, gxScrollConfig, isVertical);
 
             childArray.push(
-                <View style={itemWrapStyle} id={`${gxTemplateItem.templateId}-${itemIndex}`}>
+                <View
+                    style={itemWrapStyle}
+                    id={`${propGXNode.gxIdPath}-item-container-${itemIndex}`}
+                    key={`${propGXNode.gxIdPath}-item-container-${itemIndex}`}
+                >
                     <GXTemplateComponent
                         gxTemplateData={gxTemplateData}
                         gxTemplateItem={gxTemplateItem}
@@ -127,6 +142,8 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
 
         return (
             <ScrollView
+                key={propGXNode.gxIdPath}
+                id={propGXNode.gxIdPath}
                 scrollX={isHorizontal}
                 scrollY={isVertical}
                 style={finalScrollStyle}

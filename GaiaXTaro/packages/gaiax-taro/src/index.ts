@@ -1,6 +1,7 @@
 
 export { GXJSONValue, GXJSONArray, GXJSONObject } from './gaiax/GXJson'
 export { default as GXGesture } from './gaiax/GXGesture';
+export { default as GXTrack } from './gaiax/GXTrack';
 export { default as GXTemplateKey } from './gaiax/GXTemplateKey';
 export { default as GXTemplateComponent } from './components/GXTemplateComponent';
 export { default as GXTemplateEngine } from './gaiax/GXTemplateEngine';

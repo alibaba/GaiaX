@@ -64,6 +64,8 @@ object GXNodeTreeCreator {
         // 创建新节点
         val gxNode = GXNode()
 
+        gxNode.parentNode = gxParentNode
+
         // 设置ID与ID路径
         gxNode.setIdPath(gxParentNode, gxLayer)
 

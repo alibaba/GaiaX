@@ -188,15 +188,6 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         }
     }
 
-    private fun updateNodeLayout(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        templateData: JSONObject
-    ) {
-        // 更新节点布局
-        nodeNodeLayout(gxTemplateContext, gxNode, templateData)
-    }
-
     private fun updateNestContainerNodeLayout(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
@@ -388,7 +379,7 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         )
     }
 
-    private fun nodeNodeLayout(
+    private fun updateNodeLayout(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         templateData: JSONObject
@@ -397,7 +388,6 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         if (gxNode.isContainerType()) {
             val isDirty = gxNode.stretchNode.updateContainerLayout(
                 gxTemplateContext,
-                gxNode.templateNode,
                 gxNode,
                 templateData
             )
@@ -407,12 +397,11 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
         }
         // 普通节点
         else {
-            val isDirty =
-                gxNode.stretchNode.updateNormalLayout(
-                    gxTemplateContext,
-                    gxNode.templateNode,
-                    templateData
-                )
+            val isDirty = gxNode.stretchNode.updateNormalLayout(
+                gxTemplateContext,
+                gxNode,
+                templateData
+            )
             if (isDirty) {
                 gxTemplateContext.isDirty = isDirty
             }

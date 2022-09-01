@@ -10,6 +10,7 @@ class GXFastPreview {
     private lastTemplateId: string = "";
     private mainTemplateId: string = "";
     private subTemplateCount = 0;
+    private timeoutId: NodeJS.Timeout;
 
     startFastPreview() {
 
@@ -49,9 +50,14 @@ class GXFastPreview {
                     const templateJson = this.createTemplateData(params);
 
                     this.listener.onAddData(templateId, templateJson);
-                    this.listener.onUpdate(templateId);
 
                     this.lastTemplateId = templateId;
+
+                    clearTimeout(this.timeoutId);
+
+                    this.timeoutId = setTimeout(() => {
+                        this.listener.onUpdate(templateId);
+                    }, 150);
                 }
                 // 手动拉去单个模板
                 // {

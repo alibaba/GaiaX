@@ -22,6 +22,8 @@ export default class GXGesture {
      */
     nodeId: string = null
 
+    nodeIdPath: string = null
+
     /**
      * Template information
      */
@@ -44,6 +46,7 @@ export default class GXGesture {
     ): GXGesture {
         const gxGesture = new GXGesture()
         gxGesture.nodeId = gxNode.gxId;
+        gxGesture.nodeIdPath = gxNode.gxIdPath;
         gxGesture.templateItem = gxTemplateContext.gxTemplateItem;
         gxGesture.eventParams = gxNode.gxTemplateNode.getEventData(gxTemplateData);
         gxGesture.view = gxNode.gxView;

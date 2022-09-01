@@ -21,10 +21,10 @@ public:
 
     ~GXAnalyze();
 
-    long getValue(string expression, void* source);
+    long getValue(string expression, void *source);
 
     //获取数据 $
-    virtual long getSourceValue(string valuePath, void* source) = 0;
+    virtual long getSourceValue(string valuePath, void *source) = 0;
 
     //获取方法 Function
     virtual long
@@ -41,8 +41,7 @@ private:
     GXATSNode singleCalculate(GXATSNode value1, string op);
 
 
-
-    long check(string s, vector<GXATSNode> array, void *p_analyze, void* source,string expression);
+    long check(string s, vector<GXATSNode> array, void *p_analyze, void *source, string expression);
 };
 
 #endif /*include _GXAnalyze__H_*/

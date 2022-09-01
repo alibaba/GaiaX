@@ -698,6 +698,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         } else if (left.token == "string" && right.token == "string") {
             result.token = "string";
             result.name = left.name + right.name;
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             if (left.token == "num" && right.token == "string") {
                 if (left.name.find('.') != -1) {
@@ -736,6 +739,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             float temp = stof(left.name) - stof(right.name);
             result.name = to_string(temp);
             result.token = "num";
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -757,6 +763,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             float temp = stof(left.name) * stof(right.name);
             result.name = to_string(temp);
             result.token = "num";
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -783,6 +792,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = to_string(temp);
                 result.token = "num";
             }
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -809,6 +821,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = to_string(temp);
                 result.token = "num";
             }
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -865,12 +880,12 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
             } else {
                 result.token = "error";
                 result.name =
-                        "expressionError: unknown identifier '" + left.name  + "'";
+                        "expressionError: unknown identifier '" + left.name + "'";
             }
         } else {
             result.token = "error";
             result.name =
-                    "expressionError: '" + left.name +"' expected bool value,not '" +
+                    "expressionError: '" + left.name + "' expected bool value,not '" +
                     left.token + "'";
         }
     }
@@ -1079,7 +1094,8 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             delete[] symbolStack;
                             delete[] valueStack;
                             delete[] paramsStack;
-                            analyze->throwError("expressionError: expression '"+expression+"' missing calculation element");
+                            analyze->throwError("expressionError: expression '" + expression +
+                                                "' missing calculation element");
                             return 0L;
                         }
                         t2 = valueStack[valueSize - 1];
@@ -1199,7 +1215,8 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             delete[] symbolStack;
                             delete[] valueStack;
                             delete[] paramsStack;
-                            analyze->throwError("expressionError: expression has 0 value after operator, but must have 1 value");
+                            analyze->throwError(
+                                    "expressionError: expression has 0 value after operator, but must have 1 value");
                             return 0L;
                         }
                         t1 = valueStack[valueSize - 1];

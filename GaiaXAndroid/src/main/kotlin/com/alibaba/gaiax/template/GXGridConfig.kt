@@ -79,7 +79,7 @@ data class GXGridConfig(
         ): GXGridConfig {
             return GXGridConfig(
                 data,
-                column,
+                Math.max(column, 1),
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
                 GXContainerConvert.spacing(rowSpacing),
@@ -104,7 +104,7 @@ data class GXGridConfig(
 
             return GXGridConfig(
                 srcConfig.data,
-                gridColumn ?: srcConfig.column,
+                if (gridColumn != null) Math.max(gridColumn, 1) else srcConfig.column,
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,

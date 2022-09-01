@@ -64,6 +64,9 @@ object GXNodeUtils {
         }
     }
 
+    /**
+     * 用于预计算容器的尺寸
+     */
     fun computeContainerSizeByItemTemplate(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,

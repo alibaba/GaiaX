@@ -21,6 +21,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import app.visly.stretch.Layout
+import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -77,43 +79,39 @@ class GXContainerViewAdapter(
 
         val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
 
-        val childItemViewPort = if (isChildFooterItem)
-            GXNodeUtils.computeFooterItemViewPort(gxTemplateContext, gxNode)
-        else
-            GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
+        val childItemViewPort = getChildItemViewPort(isChildFooterItem)
 
-        val childMeasureSize = GXTemplateEngine.GXMeasureSize(
-            childItemViewPort.width, childItemViewPort.height
-        )
+        val childItemMeasureSize = getMeasureSize(childItemViewPort)
 
-        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
+        val childItemContainerSize = getChildContainerSize(
+            isChildFooterItem,
             childTemplateItem,
-            childMeasureSize,
-            childVisualNestTemplateNode
+            childItemMeasureSize,
+            childVisualNestTemplateNode,
+            childItemViewPort
         )
 
-        val childContainerSize = if (isChildFooterItem) {
-            // TODO: 此处可能有耗时问题，可以进行优化
-            GXNodeUtils.computeContainerFooterItemSize(
-                childTemplateContext,
-                gxNode,
-                childItemViewPort,
-                childTemplateItem,
-                childVisualNestTemplateNode,
-                containerData
-            )
-        } else {
-            gxNode.multiTypeItemComputeCache?.get(childTemplateItem) ?: run {
-                // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
-                GXNodeUtils.computeContainerSizeByItemTemplate(
-                    gxTemplateContext,
-                    gxNode,
-                    containerData
-                )
-                gxNode.multiTypeItemComputeCache?.get(childTemplateItem)
+        val childItemContainerLayoutParams = getChildItemContainerSize(childItemContainerSize)
+
+        // 构建坑位的容器
+        val childItemContainer = GXItemContainer(parent.context)
+
+        gxNode.templateNode.finalScrollConfig?.let {
+            if (it.isHorizontal) {
+                // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
+                childItemContainer.gravity = it.gravity
             }
         }
 
+        childItemContainer.layoutParams = childItemContainerLayoutParams
+
+        // 返回ViewHolder
+        return GXViewHolder(childItemContainer).apply {
+            this.childTemplateItem = childTemplateItem
+        }
+    }
+
+    private fun getChildItemContainerSize(childContainerSize: Layout?): FrameLayout.LayoutParams {
         val itemContainerWidth = childContainerSize?.width?.toInt()
             ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
@@ -128,26 +126,9 @@ class GXContainerViewAdapter(
             childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }
 
-        // 构建坑位的容器
-        val childItemContainer = GXItemContainer(parent.context)
-
-        gxNode.templateNode.finalScrollConfig?.let {
-            if (it.isHorizontal) {
-                // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
-            }
-        }
-
-        childItemContainer.layoutParams = FrameLayout.LayoutParams(
+        return FrameLayout.LayoutParams(
             itemContainerWidth, itemContainerHeight
         )
-
-        // 返回ViewHolder
-        return GXViewHolder(childItemContainer).apply {
-            this.childTemplateItem = childTemplateItem
-            this.childVisualNestTemplateNode = childVisualNestTemplateNode
-            this.childMeasureSize = childMeasureSize
-        }
     }
 
     private fun getVisualNestTemplateNode(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateNode? {
@@ -173,23 +154,38 @@ class GXContainerViewAdapter(
     }
 
     private fun bindGXViewHolder(holder: GXViewHolder) {
+
         val childTemplateItem = holder.childTemplateItem
             ?: throw IllegalArgumentException("childTemplateItem is null")
 
-        val childVisualNestTemplateNode = holder.childVisualNestTemplateNode
+        val isChildFooterItem = childTemplateItem == footerTemplateItem
 
-        val childMeasureSize = holder.childMeasureSize
-            ?: throw IllegalArgumentException("childMeasureSize is null")
+        val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
 
-        val childItemContainer = holder.itemView as ViewGroup
+        val childItemViewPort = getChildItemViewPort(isChildFooterItem)
 
-        // FIX: 重置容器的的高度，防止动态计算时坑位容器高度与容器高度不一致
+        val childItemMeasureSize = getMeasureSize(childItemViewPort)
+
+        val childItemContainerSize = getChildContainerSize(
+            isChildFooterItem,
+            childTemplateItem,
+            childItemMeasureSize,
+            childVisualNestTemplateNode,
+            childItemViewPort
+        )
+
+        val childItemContainerLayoutParams = getChildItemContainerSize(childItemContainerSize)
+
+        val childItemContainer = holder.itemView as GXItemContainer
+
         gxNode.templateNode.finalScrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.layoutParams.height = gxContainer.layoutParams.height
+                childItemContainer.gravity = it.gravity
             }
         }
+
+        childItemContainer.layoutParams = childItemContainerLayoutParams
 
         val childItemPosition = holder.adapterPosition
 
@@ -203,7 +199,7 @@ class GXContainerViewAdapter(
             holder.childTag = processContainerItemBind.bindViewHolder(
                 gxTemplateContext.templateData?.tag,
                 childItemContainer,
-                childMeasureSize,
+                childItemMeasureSize,
                 childTemplateItem,
                 childItemPosition,
                 childVisualNestTemplateNode,
@@ -217,7 +213,7 @@ class GXContainerViewAdapter(
             } else {
                 val childView = GXTemplateEngine.instance.createView(
                     childTemplateItem,
-                    childMeasureSize,
+                    childItemMeasureSize,
                     childVisualNestTemplateNode
                 )
                 childItemContainer.addView(childView)
@@ -273,13 +269,60 @@ class GXContainerViewAdapter(
                 }
             }
             if (childView != null) {
-                GXTemplateEngine.instance.bindData(childView, childTemplateData)
+                GXTemplateEngine.instance.bindData(
+                    childView,
+                    childTemplateData,
+                    childItemMeasureSize
+                )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 childItemContainer.layoutParams.width = childView.layoutParams.width
             }
         }
     }
+
+    private fun getChildContainerSize(
+        isChildFooterItem: Boolean,
+        childTemplateItem: GXTemplateEngine.GXTemplateItem,
+        childMeasureSize: GXTemplateEngine.GXMeasureSize,
+        childVisualNestTemplateNode: GXTemplateNode?,
+        childItemViewPort: Size<Float?>
+    ) = if (isChildFooterItem) {
+        // TODO: 此处可能有耗时问题，可以进行优化
+        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
+            childTemplateItem,
+            childMeasureSize,
+            childVisualNestTemplateNode
+        )
+        GXNodeUtils.computeContainerFooterItemSize(
+            childTemplateContext,
+            gxNode,
+            childItemViewPort,
+            childTemplateItem,
+            childVisualNestTemplateNode,
+            containerData
+        )
+    } else {
+        gxNode.multiTypeItemComputeCache?.get(childTemplateItem) ?: kotlin.run {
+            // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
+            GXNodeUtils.computeContainerSizeByItemTemplate(
+                gxTemplateContext,
+                gxNode,
+                containerData
+            )
+            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)
+        }
+    }
+
+    private fun getMeasureSize(childItemViewPort: Size<Float?>) =
+        GXTemplateEngine.GXMeasureSize(
+            childItemViewPort.width, childItemViewPort.height
+        )
+
+    private fun getChildItemViewPort(isChildFooterItem: Boolean) = if (isChildFooterItem)
+        GXNodeUtils.computeFooterItemViewPort(gxTemplateContext, gxNode)
+    else
+        GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
 
     /**
      * key: viewType

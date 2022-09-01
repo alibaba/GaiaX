@@ -28,6 +28,4 @@ class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var childTag: Any? = null
     var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
-    var childMeasureSize: GXTemplateEngine.GXMeasureSize? = null
-    var childVisualNestTemplateNode: GXTemplateNode? = null
 }

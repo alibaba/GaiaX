@@ -1,0 +1,11 @@
+{
+    "data": {
+        "template_grid_dynamic_column_and_padding": {
+            "value":"$nodes",
+            "extend":{
+                "column": "$column",
+                "edge-insets": "$isEdge ? '{0,0,0,0}' : '{0,32,0,32}'"
+            }
+        }
+    }
+}

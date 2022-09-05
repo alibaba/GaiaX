@@ -287,6 +287,24 @@ const NSUInteger GXTextMaxWidth = 1080;
     //是否刷新布局标志位 & fitContent属性
     BOOL isMark = [super updateLayoutStyle:styleInfo];
     
+    //动态更新内部padding
+    if (styleInfo[@"padding"]) {
+        //设置四周边距
+        CGFloat padding = [GXStyleHelper converSimpletValue:styleInfo[@"padding"]];
+        self.gxPadding = UIEdgeInsetsMake(padding, padding, padding, padding);
+    } else if (styleInfo[@"padding-top"] ||
+               styleInfo[@"padding-left"] ||
+               styleInfo[@"padding-right"] ||
+               styleInfo[@"padding-bottom"]) {
+        //有哪个设置哪个边距
+        CGFloat top = [GXStyleHelper converSimpletValue:styleInfo[@"padding-top"]];
+        CGFloat left = [GXStyleHelper converSimpletValue:styleInfo[@"padding-left"]];
+        CGFloat right= [GXStyleHelper converSimpletValue:styleInfo[@"padding-right"]];
+        CGFloat bottom = [GXStyleHelper converSimpletValue:styleInfo[@"padding-bottom"]];
+        self.gxPadding = UIEdgeInsetsMake(top, left, bottom, right);
+    }
+    
+    
     //lines
     NSString *lines = [styleInfo gx_stringForKey:@"lines"];
     if (lines.length) {

@@ -169,7 +169,7 @@ private fun overflowOnParents(v: View, overflow: Boolean) {
     if (viewParent is ViewGroup) {
         viewParent.clipChildren = overflow
     }
-    if (viewParent is View) {
+    if (viewParent is View && viewParent !is RecyclerView) {
         overflowOnParents(viewParent as View, overflow)
     }
 }

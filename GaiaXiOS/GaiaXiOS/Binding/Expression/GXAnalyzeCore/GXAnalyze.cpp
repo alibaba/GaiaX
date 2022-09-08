@@ -1143,6 +1143,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         }
                                         --valueSize;
                                         isFunction = false;
+                                        paramsSize = 0;
                                         if (fun->tag == GX_TAG_STRING && fun->str != NULL) {
                                             delete[] fun->str;
                                             fun->str = NULL;

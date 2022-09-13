@@ -57,7 +57,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
 
     // 2022/09/13
     // Fix a ui  bug
-    // Remove logic of radius increase because it will caused corner dim
+    // Remove logic of radius increase because it will cause corner dim
 //    if (cornerRadius != null && cornerRadius.size == 8 &&
 //        borderRadius != null && borderWidth != null && borderColor != null
 //    ) {

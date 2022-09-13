@@ -23,6 +23,8 @@
 		8D5D29AE276AD6A1005FD699 /* recommend.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29A9276AD6A1005FD699 /* recommend.json */; };
 		8D5D29AF276AD6A1005FD699 /* uper-top.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29AA276AD6A1005FD699 /* uper-top.json */; };
 		8D5D29B0276AD6A1005FD699 /* uper.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29AB276AD6A1005FD699 /* uper.json */; };
+		8D7570F828D0AF2A004AF92D /* RecycleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */; };
+		8D7570F928D0AF2A004AF92D /* RecycleTemplateListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */; };
 		8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */; };
 		8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */; };
 		8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */; };
@@ -72,6 +74,10 @@
 		8D5D29AA276AD6A1005FD699 /* uper-top.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "uper-top.json"; sourceTree = "<group>"; };
 		8D5D29AB276AD6A1005FD699 /* uper.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uper.json; sourceTree = "<group>"; };
 		8D678A4628066EC40036A7D0 /* GaiaXiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = GaiaXiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D7570F428D0AF29004AF92D /* RecycleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecycleListViewController.h; sourceTree = "<group>"; };
+		8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecycleListViewController.m; sourceTree = "<group>"; };
+		8D7570F628D0AF2A004AF92D /* RecycleTemplateListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecycleTemplateListCell.h; sourceTree = "<group>"; };
+		8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecycleTemplateListCell.m; sourceTree = "<group>"; };
 		8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSONRPCConstants.h; sourceTree = "<group>"; };
 		8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSONRPCConstants.m; sourceTree = "<group>"; };
 		8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketRequest.m; sourceTree = "<group>"; };
@@ -141,6 +147,10 @@
 				8D57F1D627733F0B00FF8CC3 /* ListViewController.m */,
 				8D57F1D82773412700FF8CC3 /* TemplateListCell.h */,
 				8D57F1D92773412700FF8CC3 /* TemplateListCell.m */,
+				8D7570F428D0AF29004AF92D /* RecycleListViewController.h */,
+				8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */,
+				8D7570F628D0AF2A004AF92D /* RecycleTemplateListCell.h */,
+				8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -384,6 +394,8 @@
 			files = (
 				8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */,
 				8D2180E12771AAA5001401C8 /* NestViewController.m in Sources */,
+				8D7570F828D0AF2A004AF92D /* RecycleListViewController.m in Sources */,
+				8D7570F928D0AF2A004AF92D /* RecycleTemplateListCell.m in Sources */,
 				8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */,
 				8DB52186275A0DCF00EB8126 /* ViewController.m in Sources */,
 				8D57F1DA2773412700FF8CC3 /* TemplateListCell.m in Sources */,
@@ -620,7 +632,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
@@ -688,7 +700,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";

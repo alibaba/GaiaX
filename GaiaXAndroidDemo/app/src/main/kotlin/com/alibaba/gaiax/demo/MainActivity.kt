@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
             intent.putExtra(
                 "GAIA_STUDIO_URL",
-                "gaiax://gaiax/preview?url=ws://30.78.149.204:9001&id=test-template&type=auto"
+                "gaiax://gaiax/preview?url=ws://30.78.147.194:9001&id=test-template&type=auto"
             )
             launcher.launch(intent)
         }

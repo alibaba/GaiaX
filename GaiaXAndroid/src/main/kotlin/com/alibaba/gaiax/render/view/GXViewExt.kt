@@ -50,20 +50,25 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
     val borderColor = style?.borderColor?.value(this.context)
     var cornerRadius = style?.borderRadius?.value
 
+    // 2022/06/21
     // Fix a ui bug,
     // if we set corner radius and border radius in the same time, it will produce some defects at the view corner.
     // we need make a special process in order fix the defects.
-    if (cornerRadius != null && cornerRadius.size == 8 &&
-        borderRadius != null && borderWidth != null && borderColor != null
-    ) {
-        val tl = cornerRadius[0]
-        val tr = cornerRadius[2]
-        val bl = cornerRadius[4]
-        val br = cornerRadius[6]
-        if (tl == tr && tr == bl && bl == br) {
-            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
-        }
-    }
+
+    // 2022/09/13
+    // Fix a ui  bug
+    // Remove logic of radius increase because it will caused corner dim
+//    if (cornerRadius != null && cornerRadius.size == 8 &&
+//        borderRadius != null && borderWidth != null && borderColor != null
+//    ) {
+//        val tl = cornerRadius[0]
+//        val tr = cornerRadius[2]
+//        val bl = cornerRadius[4]
+//        val br = cornerRadius[6]
+//        if (tl == tr && tr == bl && bl == br) {
+//            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
+//        }
+//    }
 
     if (this is GXIRoundCorner) {
         if (this is GXView) {

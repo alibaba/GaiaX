@@ -198,7 +198,7 @@ const NSUInteger GXTextMaxWidth = 1080;
         //读取扩展属性
         extend = [data gx_dictionaryForKey:@"extend"];
         //处理扩展属性
-        if (extend.count) {
+        if (extend || self.fitContent) {
             [self handleExtend:extend isCalculate:YES];
         }
     } else {

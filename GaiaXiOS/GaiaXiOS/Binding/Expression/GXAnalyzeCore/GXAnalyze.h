@@ -40,8 +40,9 @@ private:
     //获取单个数值计算的结果
     GXATSNode singleCalculate(GXATSNode value1, string op);
 
+    long check(string s, vector<GXATSNode> array, void *p_analyze, void* source,string expression);
 
-    long check(string s, vector<GXATSNode> array, void *p_analyze, void *source, string expression);
+    long calculateCache(string cache,vector<GXATSNode> array,void *p_analyze, void* source);
 };
 
 #endif /*include _GXAnalyze__H_*/

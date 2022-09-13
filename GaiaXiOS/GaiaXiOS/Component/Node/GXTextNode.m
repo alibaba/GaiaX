@@ -184,7 +184,34 @@ const NSUInteger GXTextMaxWidth = 1080;
     
 }
 
-//处理扩展属性
+
+#pragma mark - 计算Size
+
+- (void)calculateWithData:(NSDictionary *)data{
+    NSString *text = nil;
+    NSDictionary *extend = nil;
+    
+    // 读取属性赋值
+    if ([GXUtils isValidDictionary:data]) {
+        //读取text
+        text = [data gx_stringForKey:@"value"];
+        //读取扩展属性
+        extend = [data gx_dictionaryForKey:@"extend"];
+        //处理扩展属性
+        if (extend.count) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    } else {
+        text = nil;
+    }
+    
+    //最终赋值
+    self.text = text;
+}
+
+
+#pragma mark - 处理扩展属性
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //是否刷新布局标志位 & fitContent属性
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -481,31 +508,6 @@ static NSArray *GXLinesRefArray(UIFont *font,
     CGPathRelease(pathRef);
     
     return linesArray;
-}
-
-
-#pragma mark - 计算Size
-
-- (void)calculateWithData:(NSDictionary *)data{
-    NSString *text = nil;
-    NSDictionary *extend = nil;
-    
-    // 读取属性赋值
-    if ([GXUtils isValidDictionary:data]) {
-        //读取text
-        text = [data gx_stringForKey:@"value"];
-        //读取扩展属性
-        extend = [data gx_dictionaryForKey:@"extend"];
-        //处理扩展属性
-        if (extend.count) {
-            [self handleExtend:extend isCalculate:YES];
-        }
-    } else {
-        text = nil;
-    }
-    
-    //最终赋值
-    self.text = text;
 }
 
 

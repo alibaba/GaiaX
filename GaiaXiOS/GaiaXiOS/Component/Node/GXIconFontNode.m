@@ -126,6 +126,20 @@ NSString * const GX_ICON_FONT_NAME = @"iconfont";
     
 }
 
+
+#pragma mark - 计算
+
+- (void)calculateWithData:(NSDictionary *)data{
+    //用于计算 & 避免走到父类计算
+    if ([GXUtils isValidDictionary:data]) {
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
+        if (extend.count) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    }
+}
+
+
 #pragma mark - 处理extend
 
 //处理扩展属性
@@ -225,18 +239,6 @@ NSString * const GX_ICON_FONT_NAME = @"iconfont";
     return iconFontStr;
 }
 
-
-#pragma mark - 计算
-
-- (void)calculateWithData:(NSDictionary *)data{
-    //用于计算 & 避免走到父类计算
-    if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
-        if (extend.count) {
-            [self handleExtend:extend isCalculate:YES];
-        }
-    }
-}
 
 #pragma mark - 读取属性
 //读取属性

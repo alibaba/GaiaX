@@ -1,0 +1,14 @@
+{
+  "id": "template_grid_dynamic_column_and_padding",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "edge-insets": "{0,32,0,32}",
+  "column": 1,
+  "layers": [
+    {
+      "id": "template_grid_dynamic_column_and_padding_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

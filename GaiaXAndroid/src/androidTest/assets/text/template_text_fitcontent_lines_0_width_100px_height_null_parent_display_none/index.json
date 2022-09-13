@@ -1,0 +1,16 @@
+{
+  "id": "template_text_fitcontent_lines_0_width_100px_height_null_parent_display_none",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container",
+      "type": "view",
+      "layers": [
+        {
+          "id": "text",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

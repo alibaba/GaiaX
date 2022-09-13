@@ -1482,10 +1482,12 @@ class GXComponentScrollTest : GXBaseTest() {
             this["nodes"] = JSONArray().apply {
                 this.add(JSONObject().apply {
                     this["type"] = 0
+                    this["smallItemWidth"] = "150px"
                     this["smallItemHeight"] = "150px"
                 })
                 this.add(JSONObject().apply {
                     this["type"] = 1
+                    this["largeItemWidth"] = "200px"
                     this["largeItemHeight"] = "200px"
                 })
             }
@@ -1496,6 +1498,18 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(375F.dpToPx(), rootView.width())
         Assert.assertEquals(200F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(150F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(0).height())
+
+        Assert.assertEquals(150F.dpToPx(), rootView.child(0).child(0).width())
+        Assert.assertEquals(150F.dpToPx(), rootView.child(0).child(0).height())
+
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).width())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).height())
+
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).child(0).width())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).child(0).height())
     }
 
     @Test

@@ -13,7 +13,7 @@ class GXNodeEvent : GXINodeEvent {
         templateData: JSONObject
     ) {
         val eventBinding = gxNode.templateNode.eventBinding ?: return
-        val eventData = eventBinding.value.value(templateData) as? JSONObject ?: return
+        val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
         val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
             eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
                 ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
@@ -36,7 +36,7 @@ class GXNodeEvent : GXINodeEvent {
                         })
 
                     // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.value?.value(templateData) as? JSONObject)?.let { trackData ->
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             GXTemplateEngine.GXTrack().apply {
                                 this.view = gxNode.view
@@ -62,7 +62,7 @@ class GXNodeEvent : GXINodeEvent {
                         })
 
                     // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.value?.value(templateData) as? JSONObject)?.let { trackData ->
+                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             GXTemplateEngine.GXTrack().apply {
                                 this.view = gxNode.view

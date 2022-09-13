@@ -741,6 +741,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             float temp = stof(left.name) - stof(right.name);
             result.name = to_string(temp);
             result.token = "num";
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -765,6 +768,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             float temp = stof(left.name) * stof(right.name);
             result.name = to_string(temp);
             result.token = "num";
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -794,6 +800,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = to_string(temp);
                 result.token = "num";
             }
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {
@@ -823,6 +832,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = to_string(temp);
                 result.token = "num";
             }
+        } else if (left.token == "null" || right.token == "null") {
+            result.name = "null";
+            result.token = "null";
         } else {
             result.token = "error";
             if (left.token == "num") {

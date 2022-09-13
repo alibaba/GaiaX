@@ -54,9 +54,6 @@ object GXFitContentUtils {
         gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Size<Dimension>? {
-        if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
-            return null
-        }
 
         val androidContext = templateContext.context
         val nodeId = gxTemplateNode.getNodeId()

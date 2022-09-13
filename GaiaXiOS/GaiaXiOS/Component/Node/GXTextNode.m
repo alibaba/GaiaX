@@ -184,7 +184,34 @@ const NSUInteger GXTextMaxWidth = 1080;
     
 }
 
-//处理扩展属性
+
+#pragma mark - 计算Size
+
+- (void)calculateWithData:(NSDictionary *)data{
+    NSString *text = nil;
+    NSDictionary *extend = nil;
+    
+    // 读取属性赋值
+    if ([GXUtils isValidDictionary:data]) {
+        //读取text
+        text = [data gx_stringForKey:@"value"];
+        //读取扩展属性
+        extend = [data gx_dictionaryForKey:@"extend"];
+        //处理扩展属性
+        if (extend.count) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    } else {
+        text = nil;
+    }
+    
+    //最终赋值
+    self.text = text;
+}
+
+
+#pragma mark - 处理扩展属性
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //是否刷新布局标志位 & fitContent属性
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -286,6 +313,24 @@ const NSUInteger GXTextMaxWidth = 1080;
 - (BOOL)updateLayoutStyle:(NSDictionary *)styleInfo{
     //是否刷新布局标志位 & fitContent属性
     BOOL isMark = [super updateLayoutStyle:styleInfo];
+    
+    //动态更新内部padding
+    if (styleInfo[@"padding"]) {
+        //设置四周边距
+        CGFloat padding = [GXStyleHelper converSimpletValue:styleInfo[@"padding"]];
+        self.gxPadding = UIEdgeInsetsMake(padding, padding, padding, padding);
+    } else if (styleInfo[@"padding-top"] ||
+               styleInfo[@"padding-left"] ||
+               styleInfo[@"padding-right"] ||
+               styleInfo[@"padding-bottom"]) {
+        //有哪个设置哪个边距
+        CGFloat top = [GXStyleHelper converSimpletValue:styleInfo[@"padding-top"]];
+        CGFloat left = [GXStyleHelper converSimpletValue:styleInfo[@"padding-left"]];
+        CGFloat right= [GXStyleHelper converSimpletValue:styleInfo[@"padding-right"]];
+        CGFloat bottom = [GXStyleHelper converSimpletValue:styleInfo[@"padding-bottom"]];
+        self.gxPadding = UIEdgeInsetsMake(top, left, bottom, right);
+    }
+    
     
     //lines
     NSString *lines = [styleInfo gx_stringForKey:@"lines"];
@@ -463,31 +508,6 @@ static NSArray *GXLinesRefArray(UIFont *font,
     CGPathRelease(pathRef);
     
     return linesArray;
-}
-
-
-#pragma mark - 计算Size
-
-- (void)calculateWithData:(NSDictionary *)data{
-    NSString *text = nil;
-    NSDictionary *extend = nil;
-    
-    // 读取属性赋值
-    if ([GXUtils isValidDictionary:data]) {
-        //读取text
-        text = [data gx_stringForKey:@"value"];
-        //读取扩展属性
-        extend = [data gx_dictionaryForKey:@"extend"];
-        //处理扩展属性
-        if (extend.count) {
-            [self handleExtend:extend isCalculate:YES];
-        }
-    } else {
-        text = nil;
-    }
-    
-    //最终赋值
-    self.text = text;
 }
 
 

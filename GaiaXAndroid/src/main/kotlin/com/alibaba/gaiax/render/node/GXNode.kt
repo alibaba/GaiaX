@@ -88,6 +88,11 @@ class GXNode {
     lateinit var stretchNode: GXStretchNode
 
     /**
+     * 父节点
+     */
+    var parentNode: GXNode? = null
+
+    /**
      * 子节点
      */
     var children: MutableList<GXNode>? = null
@@ -123,6 +128,7 @@ class GXNode {
             it.release()
         }
         children?.clear()
+        parentNode = null
     }
 
     fun getType() = templateNode.getNodeType()

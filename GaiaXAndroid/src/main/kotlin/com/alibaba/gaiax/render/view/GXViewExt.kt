@@ -50,20 +50,25 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
     val borderColor = style?.borderColor?.value(this.context)
     var cornerRadius = style?.borderRadius?.value
 
+    // 2022/06/21
     // Fix a ui bug,
     // if we set corner radius and border radius in the same time, it will produce some defects at the view corner.
     // we need make a special process in order fix the defects.
-    if (cornerRadius != null && cornerRadius.size == 8 &&
-        borderRadius != null && borderWidth != null && borderColor != null
-    ) {
-        val tl = cornerRadius[0]
-        val tr = cornerRadius[2]
-        val bl = cornerRadius[4]
-        val br = cornerRadius[6]
-        if (tl == tr && tr == bl && bl == br) {
-            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
-        }
-    }
+
+    // 2022/09/13
+    // Fix a ui  bug
+    // Remove logic of radius increase because it will cause corner dim
+//    if (cornerRadius != null && cornerRadius.size == 8 &&
+//        borderRadius != null && borderWidth != null && borderColor != null
+//    ) {
+//        val tl = cornerRadius[0]
+//        val tr = cornerRadius[2]
+//        val bl = cornerRadius[4]
+//        val br = cornerRadius[6]
+//        if (tl == tr && tr == bl && bl == br) {
+//            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
+//        }
+//    }
 
     if (this is GXIRoundCorner) {
         if (this is GXView) {
@@ -140,26 +145,26 @@ fun View.setOpacity(opacity: Float?) {
  * @suppress
  */
 fun View.setOverflow(overflow: Boolean?) {
-    overflow?.let {
-        val view = this
-        // 当前逻辑是为了保证双端的逻辑和效果一致性
-        if (view is ViewGroup) {
-            if (!overflow) {
-                view.clipChildren = false
-                view.post {
+    // 20220823调整overflow的默认值为true
+    val targetOverflow = overflow ?: true
+    val view = this
+    // 当前逻辑是为了保证双端的逻辑和效果一致性
+    if (view is ViewGroup) {
+        if (!targetOverflow) {
+            view.clipChildren = false
+            view.post {
 
-                    // 给父节点设置属性
-                    val viewGroup = view.parent as? ViewGroup
-                    viewGroup?.clipChildren = overflow
+                // 给父节点设置属性
+                val viewGroup = view.parent as? ViewGroup
+                viewGroup?.clipChildren = targetOverflow
 
-                    // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
-                    if (view is GXIRootView && isContainShadowLayout(view)) {
-                        overflowOnParents(view, overflow)
-                    }
+                // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
+                if (view is GXIRootView && isContainShadowLayout(view)) {
+                    overflowOnParents(view, targetOverflow)
                 }
-            } else {
-                view.clipChildren = overflow
             }
+        } else {
+            view.clipChildren = targetOverflow
         }
     }
 }
@@ -169,7 +174,7 @@ private fun overflowOnParents(v: View, overflow: Boolean) {
     if (viewParent is ViewGroup) {
         viewParent.clipChildren = overflow
     }
-    if (viewParent is View) {
+    if (viewParent is View && viewParent !is RecyclerView) {
         overflowOnParents(viewParent as View, overflow)
     }
 }
@@ -406,19 +411,20 @@ fun View.setGridContainerDirection(
                 ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
-            val target = object : GridLayoutManager(this.context, Math.max(column,1), direction, false) {
-                override fun canScrollHorizontally(): Boolean {
-                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                    return false
-                }
+            val target =
+                object : GridLayoutManager(this.context, column, direction, false) {
+                    override fun canScrollHorizontally(): Boolean {
+                        // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                        return false
+                    }
 
-                override fun canScrollVertically(): Boolean {
-                    return direction == LinearLayoutManager.VERTICAL && scrollEnable
+                    override fun canScrollVertically(): Boolean {
+                        return direction == LinearLayoutManager.VERTICAL && scrollEnable
+                    }
                 }
-            }
             this.layoutManager = target
         } else {
-            (this.layoutManager as GridLayoutManager).spanCount =  Math.max(column,1)
+            (this.layoutManager as GridLayoutManager).spanCount = column
         }
     }
 }
@@ -462,7 +468,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
 ) {
     if (this is RecyclerView) {
         if (this.itemDecorationCount > 0) {
-            return
+            this.removeItemDecorationAt(0)
         }
         val decoration = object : RecyclerView.ItemDecoration() {
 

@@ -63,7 +63,7 @@ bool isNum(char ch) {
 GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     int lengthC = strlen(s);
-    char *token = new char[lengthC+1];
+    char *token = new char[lengthC + 1];
     string sign;
     int count = 0;
     bool err = false;
@@ -363,7 +363,7 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
                 token[count] = '\0';
                 sign = "error";
                 string errorMsg = token;
-                delete []token;
+                delete[]token;
                 analyze->throwError("unknown identifier: " + errorMsg);
                 break;
             }
@@ -373,11 +373,11 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
     }
     string str1 = token;
     GXATSNode temp;
-    if(sign == "bool" || sign == "op"){
+    if (sign == "bool" || sign == "op") {
         temp = GXATSNode(str1, str1, sign);
-    }else{
+    } else {
         temp = GXATSNode(str1, sign, sign);
     }
-    delete []token;
+    delete[]token;
     return temp;
 }

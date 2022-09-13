@@ -258,9 +258,10 @@
         UIView *childView = [childNode applyView];
         if (childView && ![childView isDescendantOfView:view]) {
             [view addSubview:childView];
-            if ([(GXBaseNode *)childNode isSupportShadow]) {
-                [(GXBaseNode *)childNode setupShadow:childView];
-            }
+        }
+        //阴影处理
+        if ([(GXBaseNode *)childNode isSupportShadow]) {
+            [(GXBaseNode *)childNode setupShadow:childView];
         }
     }
     

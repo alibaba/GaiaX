@@ -108,7 +108,21 @@
     }
 }
 
-// 处理扩展处理
+#pragma mark - 计算高度
+
+- (void)calculateWithData:(NSDictionary *)data{
+    //赋值
+    if ([GXUtils isValidDictionary:data]) {
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
+        if (extend) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    }
+}
+
+
+#pragma mark - 扩展处理
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //更新布局属性 & 标记
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -131,20 +145,6 @@
         self.templateContext.isNeedLayout = YES;
     }
 }
-
-
-#pragma mark - 计算高度
-
-- (void)calculateWithData:(NSDictionary *)data{
-    //赋值
-    if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
-        if (extend) {
-            [self handleExtend:extend isCalculate:YES];
-        }
-    }
-}
-
 
 
 #pragma mark - 属性解析

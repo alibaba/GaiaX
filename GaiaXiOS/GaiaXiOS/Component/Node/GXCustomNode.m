@@ -103,7 +103,23 @@
 }
 
 
-//处理extend属性
+#pragma mark - 计算
+
+//计算布局
+- (void)calculateWithData:(NSDictionary *)data{
+    //赋值
+    if ([GXUtils isDictionary:data]) {
+        //处理extend
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
+        if (extend) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    }
+}
+
+
+#pragma mark - 处理extend属性
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //更新布局属性 & 标记
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -124,21 +140,6 @@
         
         //重新刷新布局标识
         self.templateContext.isNeedLayout = YES;
-    }
-}
-
-
-#pragma mark - 计算
-
-//计算布局
-- (void)calculateWithData:(NSDictionary *)data{
-    //赋值
-    if ([GXUtils isDictionary:data]) {
-        //处理extend
-        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
-        if (extend) {
-            [self handleExtend:extend isCalculate:YES];
-        }
     }
 }
 

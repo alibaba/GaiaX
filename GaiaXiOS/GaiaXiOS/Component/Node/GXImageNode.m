@@ -149,7 +149,22 @@
     
 }
 
-//处理扩展属性
+
+#pragma mark - 计算Size
+
+- (void)calculateWithData:(NSDictionary *)data{
+    //用于计算 & 避免走到父类计算
+    if ([GXUtils isValidDictionary:data]) {
+        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
+        if (extend.count) {
+            [self handleExtend:extend isCalculate:YES];
+        }
+    }
+}
+
+
+#pragma mark - 处理扩展属性
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //更新布局属性
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -265,19 +280,6 @@
         
     }
     
-}
-
-
-#pragma mark - 计算Size
-
-- (void)calculateWithData:(NSDictionary *)data{
-    //用于计算 & 避免走到父类计算
-    if ([GXUtils isValidDictionary:data]) {
-        NSDictionary *extend = [data gx_dictionaryForKey:@"extend"];
-        if (extend.count) {
-            [self handleExtend:extend isCalculate:YES];
-        }
-    }
 }
 
 

@@ -6,8 +6,10 @@ import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import app.visly.stretch.Dimension
 import app.visly.stretch.Size
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
+import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -54,6 +56,32 @@ open class GXBaseTest {
     }
 
     class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
+
+        override fun scrollIndex(
+            gxTemplateContext: GXTemplateContext,
+            container: GXContainer,
+            extend: JSONObject?
+        ) {
+            // scroll item to position
+            gxTemplateContext.templateData?.scrollIndex?.let { scrollPosition ->
+                if (scrollPosition <= 0) {
+                    val holdingOffset =
+                        extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET)
+                            ?: false
+                    if (holdingOffset) {
+                        // no process
+                    } else {
+                        // when again bind data, should be scroll to position 0
+                        container.layoutManager?.scrollToPosition(0)
+                    }
+                }
+                // if (scrollPosition > 0)
+                else {
+                    container.layoutManager?.scrollToPosition(scrollPosition)
+                }
+            }
+        }
+
         override fun convert(
             propertyName: String,
             gxTemplateContext: GXTemplateContext,

@@ -1,7 +1,10 @@
 {
     "data": {
         "gx-content-uper-scroll":{
-            "value":"$nodes"
+            "value":"$nodes",
+            "extend": {
+                "holding-offset":true
+            }
         }
     },
     "event": {}

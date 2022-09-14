@@ -1059,24 +1059,11 @@ class GXNodeTreeUpdater(val context: GXTemplateContext) {
 
         adapter.gxNode = gxNode
 
-        // scroll item to position
-        gxTemplateContext.templateData?.scrollIndex?.let { scrollPosition ->
-            if (scrollPosition <= 0) {
-                val holdingOffset =
-                    extendData?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET)
-                        ?: false
-                if (holdingOffset) {
-                    // no process
-                } else {
-                    // when again bind data, should be scroll to position 0
-                    container.layoutManager?.scrollToPosition(0)
-                }
-            }
-            // if (scrollPosition > 0)
-            else {
-                container.layoutManager?.scrollToPosition(scrollPosition)
-            }
-        }
+        GXRegisterCenter.instance.extensionScroll?.scrollIndex(
+            gxTemplateContext,
+            container,
+            extendData
+        )
 
         // forbid item animator
         container.itemAnimator = null

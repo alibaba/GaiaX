@@ -153,7 +153,29 @@
     [scrollView reloadData];
 }
 
-// 处理extend
+
+#pragma mark - 计算高度
+
+- (void)calculateWithData:(NSDictionary *)data{
+    //数据
+    NSArray *dataArray = nil;
+    NSDictionary *extend = nil;
+    if ([GXUtils isValidDictionary:data]) {
+        //获取为{"value":[]}类型 & extend
+        dataArray = [data gx_arrayForKey:@"value"];
+        extend = [data gx_dictionaryForKey:@"extend"];
+    }
+    
+    //赋值items
+    [self processListData:dataArray];
+    
+    //计算extend
+    [self handleExtend:extend isCalculate:YES];
+}
+
+
+#pragma mark - 处理extend
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
     //更新布局属性 & 标记
     BOOL isMark = [self updateLayoutStyle:extend];
@@ -325,26 +347,6 @@
         [self.sizeValues gx_addObject:[NSValue valueWithCGSize:itemSize]];
     }
     
-}
-
-
-#pragma mark - 计算高度
-
-- (void)calculateWithData:(NSDictionary *)data{
-    //数据
-    NSArray *dataArray = nil;
-    NSDictionary *extend = nil;
-    if ([GXUtils isValidDictionary:data]) {
-        //获取为{"value":[]}类型 & extend
-        dataArray = [data gx_arrayForKey:@"value"];
-        extend = [data gx_dictionaryForKey:@"extend"];
-    }
-    
-    //赋值items
-    [self processListData:dataArray];
-    
-    //计算extend
-    [self handleExtend:extend isCalculate:YES];
 }
 
 

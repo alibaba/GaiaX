@@ -153,7 +153,31 @@
 
 }
 
-// 处理extend
+
+#pragma mark - 计算高度
+
+- (void)calculateWithData:(NSDictionary *)data{
+    //处理数据
+    NSArray *dataArray = nil;
+    NSDictionary *extend = nil;
+
+    if ([GXUtils isValidDictionary:data]) {
+        //获取为{"value":[]}类型
+        dataArray = [data gx_arrayForKey:@"value"];
+        //处理extend
+        extend = [data gx_dictionaryForKey:@"extend"];
+    }
+    
+    //赋值
+    [self processListData:dataArray];
+
+    //处理extend属性
+    [self handleExtend:extend isCalculate:YES];
+}
+
+
+#pragma mark - 处理extend
+
 - (void)handleExtend:(NSDictionary *)extend isCalculate:(BOOL)isCalculate{
 
     //更新布局属性 & 标记
@@ -271,27 +295,6 @@
     CGFloat measureHeight = NAN;
     //计算
     _itemSize = [TheGXTemplateEngine sizeWithTemplateItem:self.subTemplateItem measureSize:CGSizeMake(measureWidth, measureHeight)];
-}
-
-#pragma mark - 计算高度
-
-- (void)calculateWithData:(NSDictionary *)data{
-    //处理数据
-    NSArray *dataArray = nil;
-    NSDictionary *extend = nil;
-
-    if ([GXUtils isValidDictionary:data]) {
-        //获取为{"value":[]}类型
-        dataArray = [data gx_arrayForKey:@"value"];
-        //处理extend
-        extend = [data gx_dictionaryForKey:@"extend"];
-    }
-    
-    //赋值
-    [self processListData:dataArray];
-
-    //处理extend属性
-    [self handleExtend:extend isCalculate:YES];
 }
 
 

@@ -47,7 +47,6 @@
     
     //模板有效性
     if ([templateItem isAvailable]) {
-        
         //获取节点
         NSString *templateKey = [NSString stringWithFormat:@"%@-%f",templateItem.identifier, measureSize.width];
         GXNode *rootNode = (GXNode *)[self.templateCache objectForKey:templateKey];
@@ -98,7 +97,6 @@
     
     //模板有效性
     if ([templateItem isAvailable]) {
-        
         //获取节点
         NSString *templateKey = [NSString stringWithFormat:@"%@-%f",templateItem.identifier, measureSize.width];
         GXNode *rootNode = (GXNode *)[self.templateCache objectForKey:templateKey];

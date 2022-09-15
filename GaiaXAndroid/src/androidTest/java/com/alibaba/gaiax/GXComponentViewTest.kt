@@ -22,6 +22,25 @@ import org.junit.runner.RunWith
 class GXComponentViewTest : GXBaseTest() {
 
     @Test
+    fun template_merge_empty_node_with_padding() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "view",
+            "template_merge_empty_node_with_padding"
+        )
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        Assert.assertEquals(true, rootView is GXView)
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx(), rootView.height())
+
+        Assert.assertEquals(true, rootView.child(0) is GXText)
+        Assert.assertEquals(1080F.dpToPx() - 10F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(20F.dpToPx(), rootView.child(0).height())
+    }
+
+    @Test
     fun template_merge_empty_nodes() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

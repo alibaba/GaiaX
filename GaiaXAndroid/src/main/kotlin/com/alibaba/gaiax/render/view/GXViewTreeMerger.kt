@@ -78,8 +78,10 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     && childTemplateNode.animationBinding == null
                     // No event
                     && childTemplateNode.eventBinding == null
-                    // No databinding
+                    // No dataBinding
                     && childTemplateNode.dataBinding == null
+                    // No track
+                    && childTemplateNode.trackBinding == null
 
             if (isCanMergeNode) {
                 // This hierarchy needs to be merged

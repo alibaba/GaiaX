@@ -78,13 +78,10 @@ data class GXStyle(
     }
 
     fun isEmptyStyle(): Boolean {
-        return padding == null &&
-                backgroundColor == null &&
+        return backgroundColor == null &&
                 backgroundImage == null &&
                 opacity == null &&
                 overflow == null &&
-                display == null &&
-                hidden == null &&
                 borderWidth == null &&
                 borderColor == null &&
                 borderRadius == null &&

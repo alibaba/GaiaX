@@ -525,6 +525,7 @@
     //clickToBounds
     NSString *clickToBounds = [styleJson gx_stringForKey:@"overflow"];
     if (!clickToBounds || (clickToBounds && [clickToBounds isEqualToString:@"hidden"])) {
+        isNeedFlat = NO;
         self.clipsToBounds = YES;
     } else {
         self.clipsToBounds = NO;
@@ -571,6 +572,7 @@
     //boxShadow
     NSString *boxShadow = [styleJson gx_stringForKey:@"box-shadow"];
     if (boxShadow.length) {
+        isNeedFlat = NO;
         self.boxShadow = boxShadow;
     }
     

@@ -1,0 +1,8 @@
+{
+  "data": {
+    "text": {
+      "value": "$text",
+      "extend": { "fit-content": "true" }
+    }
+  }
+}

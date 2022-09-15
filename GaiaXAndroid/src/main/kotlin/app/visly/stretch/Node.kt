@@ -158,4 +158,11 @@ open class Node {
     override fun toString(): String {
         return "Node(id='$id', style=$style, children=$children)"
     }
+
+    fun markDirtyAll() {
+        markDirty()
+        children.forEach {
+            it.markDirtyAll()
+        }
+    }
 }

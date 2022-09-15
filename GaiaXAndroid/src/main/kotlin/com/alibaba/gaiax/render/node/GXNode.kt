@@ -21,6 +21,7 @@ import android.view.View
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXLayer
 
 /**
@@ -187,6 +188,14 @@ class GXNode {
     fun initEventByRegisterCenter() {
         if (event == null) {
             event = GXRegisterCenter.instance.extensionNodeEvent?.create()
+        }
+    }
+
+    fun resetTree(gxTemplateContext: GXTemplateContext) {
+        templateNode.reset()
+        stretchNode.reset(gxTemplateContext, this.templateNode)
+        children?.forEach {
+            it.resetTree(gxTemplateContext)
         }
     }
 }

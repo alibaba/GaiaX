@@ -1,0 +1,13 @@
+#template_text_fitcontent_lines_2_width_100_percent_height_auto_repeat_bind_data_change_measure_size {
+  width: 100%;
+  background-color: #00ff00;
+  flex-direction: row;
+}
+#text {
+  width: 100%;
+  text-overflow: ellipsis;
+  color: #ff2869;
+  lines:2;
+  font-size: 14px;
+  fit-content: true;
+}

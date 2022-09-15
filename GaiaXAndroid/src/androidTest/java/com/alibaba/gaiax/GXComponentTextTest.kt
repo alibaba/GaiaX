@@ -1232,6 +1232,40 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
+    fun template_text_fitcontent_lines_2_width_100_percent_height_auto_repeat_bind_data_change_measure_size() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_2_width_100_percent_height_auto_repeat_bind_data_change_measure_size"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+            })
+        )
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(375F.dpToPx(), rootView.child(0).width())
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["text"] = "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+            }),
+            GXTemplateEngine.GXMeasureSize(500F.dpToPx(), null)
+        )
+
+        Assert.assertEquals(500F.dpToPx(), rootView.width())
+        Assert.assertEquals(500F.dpToPx(), rootView.child(0).width())
+    }
+
+    @Test
     fun template_text_fitcontent_lines_null_width_flex_grow_height_fixed_repeat_bind_data() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

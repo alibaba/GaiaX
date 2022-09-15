@@ -19,6 +19,7 @@ package com.alibaba.gaiax
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.GXDataImpl
@@ -26,10 +27,7 @@ import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.GXRenderImpl
-import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.render.node.getGXNodeById
-import com.alibaba.gaiax.render.node.getGXViewById
+import com.alibaba.gaiax.render.node.*
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -548,16 +546,37 @@ class GXTemplateEngine {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
 
+        var isMeasureSizeChanged = false
         if (gxMeasureSize != null) {
+            val oldMeasureSize = gxTemplateContext.size
             gxTemplateContext.size = gxMeasureSize
+            isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width ||
+                    oldMeasureSize.height != gxMeasureSize.height
         }
 
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
 
+        recomputeWhenMeasureSizeChanged(gxTemplateContext, isMeasureSizeChanged)
+
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
         render.bindViewDataOnlyViewTree(gxTemplateContext)
+    }
+
+    /**
+     * 当measure size发生变化的时候需要重新计算节点树，否则会导致bindData的传入数据不准确，引发布局错误
+     */
+    private fun recomputeWhenMeasureSizeChanged(
+        gxTemplateContext: GXTemplateContext,
+        isMeasureSizeChanged: Boolean
+    ) {
+        val gxRootNode = gxTemplateContext.rootNode
+        if (gxRootNode != null && isMeasureSizeChanged) {
+            gxRootNode.resetTree(gxTemplateContext)
+            val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
+            GXNodeUtils.computeNodeTreeByCreateView(gxRootNode, size)
+        }
     }
 
     /**

@@ -248,47 +248,7 @@ const NSUInteger GXTextMaxWidth = 1080;
         self.textAlignment = [GXUIHelper convertTextAlignment:textAlign];
         paragraphStyle.alignment = self.textAlignment;
     }
-    
-    //是否更新lineHeight标志位
-    BOOL isUpdateLineHeight = NO;
-    
-    //更新font
-    NSString *fontSize = [styleInfo gx_stringForKey:@"font-size"];
-    NSString *fontWeight = [styleInfo gx_stringForKey:@"font-weight"];
-    NSString *fontfamily = [styleInfo gx_stringForKey:@"font-family"];
-    if (fontSize.length || fontWeight.length || fontfamily.length) {
-        NSMutableDictionary *styleJson = [NSMutableDictionary dictionaryWithDictionary:self.styleJson];
-        [styleJson gx_setValue:fontSize forKey:@"font-size"];
-        [styleJson gx_setValue:fontWeight forKey:@"font-weight"];
-        [styleJson gx_setValue:fontfamily forKey:@"font-family"];
-        self.font = [GXUIHelper fontFromStyle:styleJson];
-        [self.attributes setObject:self.font forKey:NSFontAttributeName];
         
-        //更新line-height
-        self.lineHeight = MAX(self.lineHeight, (self.font.lineHeight + 1));
-        isUpdateLineHeight = YES;
-    }
-    
-    //更新lineHeight
-    NSString *lineHeight = [styleInfo gx_stringForKey:@"line-height"];
-    if (lineHeight.length) {
-        CGFloat fontLineHeight = self.font.lineHeight + 1;
-        CGFloat tmpLineHeight = [GXStyleHelper converSimpletValue:lineHeight];
-        self.lineHeight = MAX(tmpLineHeight, fontLineHeight);
-        isUpdateLineHeight = YES;
-    }
-    
-    //更新段落信息
-    if (isUpdateLineHeight) {
-        if (paragraphStyle && self.numberOfLines != 1) {
-            paragraphStyle.minimumLineHeight = self.lineHeight;
-            paragraphStyle.maximumLineHeight = self.lineHeight;
-            //baseline
-            CGFloat baselineOffset = (self.lineHeight - self.font.lineHeight) / 4;
-            [self.attributes setObject:@(baselineOffset) forKey:NSBaselineOffsetAttributeName];
-        }
-    }
-    
     //更新text-color
     NSString *color = [styleInfo gx_stringForKey:@"background-image"] ?: [styleInfo gx_stringForKey:@"color"];
     if (color.length) {
@@ -313,7 +273,7 @@ const NSUInteger GXTextMaxWidth = 1080;
 - (BOOL)updateLayoutStyle:(NSDictionary *)styleInfo{
     //是否刷新布局标志位 & fitContent属性
     BOOL isMark = [super updateLayoutStyle:styleInfo];
-    
+        
     //动态更新内部padding
     if (styleInfo[@"padding"]) {
         //设置四周边距
@@ -331,11 +291,10 @@ const NSUInteger GXTextMaxWidth = 1080;
         self.gxPadding = UIEdgeInsetsMake(top, left, bottom, right);
     }
     
-    
-    //lines
-    NSString *lines = [styleInfo gx_stringForKey:@"lines"];
-    if (lines.length) {
-        self.numberOfLines = [lines integerValue];
+    //文字相关行高，字体等影响布局属性的更新
+    BOOL shouldUpdate = [self updateTextLayoutIfNeed:styleInfo];
+    if (!isMark) {
+        isMark = shouldUpdate;
     }
     
     //fit-content
@@ -347,6 +306,60 @@ const NSUInteger GXTextMaxWidth = 1080;
     }
     
     return isMark;
+}
+
+
+- (BOOL)updateTextLayoutIfNeed:(NSDictionary *)styleInfo{
+    //是否更新lineHeight标志位
+    BOOL shouldUpdate = NO;
+    
+    NSMutableParagraphStyle *paragraphStyle = [self.attributes objectForKey:NSParagraphStyleAttributeName];
+
+    //更新font
+    NSString *fontSize = [styleInfo gx_stringForKey:@"font-size"];
+    NSString *fontWeight = [styleInfo gx_stringForKey:@"font-weight"];
+    NSString *fontfamily = [styleInfo gx_stringForKey:@"font-family"];
+    if (fontSize.length || fontWeight.length || fontfamily.length) {
+        NSMutableDictionary *styleJson = [NSMutableDictionary dictionaryWithDictionary:self.styleJson];
+        [styleJson gx_setValue:fontSize forKey:@"font-size"];
+        [styleJson gx_setValue:fontWeight forKey:@"font-weight"];
+        [styleJson gx_setValue:fontfamily forKey:@"font-family"];
+        self.font = [GXUIHelper fontFromStyle:styleJson];
+        [self.attributes setObject:self.font forKey:NSFontAttributeName];
+        
+        //更新line-height
+        self.lineHeight = MAX(self.lineHeight, (self.font.lineHeight + 1));
+        shouldUpdate = YES;
+    }
+    
+    //更新lineHeight
+    NSString *lineHeight = [styleInfo gx_stringForKey:@"line-height"];
+    if (lineHeight.length) {
+        CGFloat fontLineHeight = self.font.lineHeight + 1;
+        CGFloat tmpLineHeight = [GXStyleHelper converSimpletValue:lineHeight];
+        self.lineHeight = MAX(tmpLineHeight, fontLineHeight);
+        shouldUpdate = YES;
+    }
+    
+    //更新段落信息
+    if (shouldUpdate) {
+        if (paragraphStyle && self.numberOfLines != 1) {
+            paragraphStyle.minimumLineHeight = self.lineHeight;
+            paragraphStyle.maximumLineHeight = self.lineHeight;
+            //baseline
+            CGFloat baselineOffset = (self.lineHeight - self.font.lineHeight) / 4;
+            [self.attributes setObject:@(baselineOffset) forKey:NSBaselineOffsetAttributeName];
+        }
+    }
+    
+    //lines
+    NSString *lines = [styleInfo gx_stringForKey:@"lines"];
+    if (lines.length) {
+        self.numberOfLines = [lines integerValue];
+        shouldUpdate = YES;
+    }
+    
+    return shouldUpdate;
 }
 
 //更新fit-content方法

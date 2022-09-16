@@ -525,7 +525,6 @@
     //clickToBounds
     NSString *clickToBounds = [styleJson gx_stringForKey:@"overflow"];
     if (!clickToBounds || (clickToBounds && [clickToBounds isEqualToString:@"hidden"])) {
-        isNeedFlat = NO;
         self.clipsToBounds = YES;
     } else {
         self.clipsToBounds = NO;

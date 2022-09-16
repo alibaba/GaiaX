@@ -83,7 +83,7 @@
                 if ([backgroundImage isEqualToString:@"null"]) {
                     _currentBgColor = self.backgroundColor;
                 } else {
-                    _currentBgColor = [UIColor gx_colorWithString:backgroundColor];
+                    _currentBgColor = [UIColor gx_colorWithString:backgroundImage];
                 }
                 //清除layer
                 [view gx_clearGradientBackground];

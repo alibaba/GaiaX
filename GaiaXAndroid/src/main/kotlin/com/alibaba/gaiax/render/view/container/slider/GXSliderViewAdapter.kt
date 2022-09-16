@@ -24,7 +24,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.template.GXSliderConfig
 
 /**
@@ -73,7 +72,53 @@ class GXSliderViewAdapter(
             )
         )
         if (itemView != null) {
-            GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData))
+            GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData).apply {
+                this.eventListener = object : GXTemplateEngine.GXIEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        super.onGestureEvent(gxGesture)
+                        gxGesture.index = realPosition
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
+                    }
+
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        super.onScrollEvent(gxScroll)
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
+                    }
+
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        super.onAnimationEvent(gxAnimation)
+                        gxTemplateContext.templateData?.eventListener?.onAnimationEvent(gxAnimation)
+                    }
+                }
+
+                this.trackListener = object : GXTemplateEngine.GXITrackListener {
+                    override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = realPosition
+                        gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                    }
+
+                    override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = realPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            gxTrack
+                        )
+                    }
+
+                    override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = realPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
+                            gxTrack
+                        )
+                    }
+                }
+
+                this.dataListener = object : GXTemplateEngine.GXIDataListener {
+                    override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
+                        return gxTemplateContext.templateData?.dataListener
+                            ?.onTextProcess(gxTextData)
+                    }
+                }
+            })
             container.addView(itemView)
         }
         return itemView ?: throw IllegalArgumentException("Create Item View error")

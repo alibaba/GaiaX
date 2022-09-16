@@ -63,7 +63,17 @@ open class GXImageView : AppCompatImageView, GXIImageView {
 
     private fun getResIdByUri(imageView: ImageView, uri: String): Int {
         try {
-            return imageView.resources.getIdentifier(uri, "drawable", imageView.context.packageName)
+            // drawable resource
+            imageView.resources.getIdentifier(uri, "drawable", imageView.context.packageName)
+                .takeIf { it != 0 }?.let {
+                    return it
+                }
+
+            // mipmap resource
+            imageView.resources.getIdentifier(uri, "mipmap", imageView.context.packageName)
+                .takeIf { it != 0 }?.let {
+                    return it
+                }
         } catch (e: Exception) {
             e.printStackTrace()
         }

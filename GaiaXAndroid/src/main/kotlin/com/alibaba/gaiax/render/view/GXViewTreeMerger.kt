@@ -111,6 +111,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     mergeX,
                     mergeY
                 ) ?: throw IllegalArgumentException("Create child view error")
+
                 // Recurse to their own children
                 if (childNode.children?.isNotEmpty() == true) {
                     // If you are of type View, you need to pass yourself in as the root View

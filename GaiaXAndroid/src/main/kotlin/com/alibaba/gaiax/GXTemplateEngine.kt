@@ -781,6 +781,8 @@ class GXTemplateEngine {
             .registerExtensionTemplateSource(GXAssetsTemplate(this.context), 1)
 
         // init adapter
+        // 无实际的依赖关系，仅仅是帮助GXAdapter进行初始化
+        // GXAdapter内的逻辑可以写在任意地方
         initGXAdapter()?.init(context)
         return this
     }

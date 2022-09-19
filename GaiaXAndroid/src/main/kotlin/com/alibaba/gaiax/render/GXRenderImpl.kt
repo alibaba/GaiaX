@@ -47,21 +47,6 @@ class GXRenderImpl {
         GXNodeTreeUpdater(gxTemplateContext).buildLayoutAndStyle()
     }
 
-    fun createView(gxTemplateContext: GXTemplateContext): View {
-        // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
-        gxTemplateContext.rootNode = rootNode
-
-        // Create a view based on the virtual node tree
-        val rootView = GXViewTreeCreator(gxTemplateContext, rootNode).build().apply {
-            (this as GXIRootView).setTemplateContext(gxTemplateContext)
-        }
-        gxTemplateContext.rootView = rootView
-
-        return gxTemplateContext.rootView
-            ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
-    }
-
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
         // Create a virtual node tree
         val rootNode = GXNodeTreeCreator.create(gxTemplateContext)

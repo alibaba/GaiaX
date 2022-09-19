@@ -70,7 +70,7 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
             ?: throw IllegalArgumentException("RootNode is null(buildViewStyle)")
         val templateData = gxTemplateContext.templateData?.data
             ?: throw IllegalArgumentException("Data is null")
-        
+
         // 更新样式
         Style.updateNodeTreeStyle(gxTemplateContext, rootNode, templateData)
     }
@@ -633,6 +633,7 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
                 // 处理普通的fitContent逻辑
                 return updateLayoutByFitContent(
                     gxTemplateContext,
+                    gxNode,
                     gxNode.templateNode,
                     gxNode.stretchNode,
                     gxStyle,
@@ -654,7 +655,8 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun updateLayoutByFitContent(
-            templateContext: GXTemplateContext,
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
             gxTemplateNode: GXTemplateNode,
             gxStretchNode: GXStretchNode,
             gxCssStyle: GXStyle,
@@ -667,7 +669,8 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
             }
 
             GXFitContentUtils.fitContent(
-                templateContext,
+                gxTemplateContext,
+                gxNode,
                 gxTemplateNode,
                 gxStretchNode,
                 templateData
@@ -712,6 +715,7 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
             // 处理fitContent逻辑
             val isDirty = updateLayoutByFitContent(
                 gxTemplateContext,
+                gxNode,
                 gxTemplateNode,
                 gxStretchNode,
                 gxStyle,

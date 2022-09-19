@@ -23,12 +23,13 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
-import java.lang.ref.SoftReference
 
 /**
  * @suppress
@@ -49,13 +50,14 @@ object GXFitContentUtils {
      *     2. 在处理文字自适应时，应先计算过一次布局
      */
     fun fitContent(
-        templateContext: GXTemplateContext,
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
         gxTemplateNode: GXTemplateNode,
         gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Size<Dimension>? {
 
-        val androidContext = templateContext.context
+        val androidContext = gxTemplateContext.context
         val nodeId = gxTemplateNode.getNodeId()
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
         val finalCss = gxTemplateNode.finalCss ?: return null
@@ -65,25 +67,29 @@ object GXFitContentUtils {
             ?: gxStretchNode.layoutByCreate
             ?: return null
 
-        val textView = GXMeasureViewPool.obtain(androidContext)
+        // 默认使用原生创建的Text计算
+        val gxText = gxNode.view as? GXText
+        val gxCacheText = gxText ?: GXMeasureViewPool.obtain(androidContext)
 
-        textView.setTextStyle(finalCss)
+        gxCacheText.setTextStyle(finalCss)
 
         val textContent = getMeasureContent(
-            templateContext,
+            gxTemplateContext,
             nodeId,
-            textView,
+            gxCacheText,
             finalCss,
             gxTemplateNode,
             templateData
         )
 
         if (textContent == null) {
-            GXMeasureViewPool.release(textView)
+            if (gxText == null) {
+                GXMeasureViewPool.release(gxCacheText)
+            }
             return null
         }
 
-        textView.text = textContent
+        gxCacheText.text = textContent
 
         val fontLines: Int? = finalStyle.fontLines
 
@@ -93,13 +99,13 @@ object GXFitContentUtils {
             // 单行状态下，需要定高求宽
 
             // 在某些机型上使用maxLine=1时，会导致中英混合、中英数字混合等一些文字无法显示
-            textView.setSingleLine(true)
+            gxCacheText.setSingleLine(true)
 
             // 计算宽高
-            textView.measure(0, 0)
+            gxCacheText.measure(0, 0)
 
-            var measuredWidth = textView.measuredWidth.toFloat()
-            val measuredHeight = textView.measuredHeight.toFloat()
+            var measuredWidth = gxCacheText.measuredWidth.toFloat()
+            val measuredHeight = gxCacheText.measuredHeight.toFloat()
 
             // 会对后续的计算结果起到拦截作用
             var nodeWidth = nodeLayout.width
@@ -135,7 +141,8 @@ object GXFitContentUtils {
 
             // 修复template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
-                (finalFlexBox.padding?.start?.value ?: 0F) + (finalFlexBox.padding?.end?.value ?: 0F)
+                (finalFlexBox.padding?.start?.value ?: 0F) + (finalFlexBox.padding?.end?.value
+                    ?: 0F)
 
             result = when {
                 // 没有设置宽度
@@ -156,7 +163,7 @@ object GXFitContentUtils {
         } else if (fontLines == 0) {
             // 多行状态下，需要定宽求高
 
-            textView.setFontLines(fontLines)
+            gxCacheText.setFontLines(fontLines)
 
             val nodeWidth = nodeLayout.width
 
@@ -171,16 +178,16 @@ object GXFitContentUtils {
                     nodeWidth.toInt(),
                     View.MeasureSpec.AT_MOST
                 )
-                textView.measure(widthSpec, 0)
+                gxCacheText.measure(widthSpec, 0)
                 result = Size(
                     Dimension.Points(nodeWidth),
-                    Dimension.Points(textView.measuredHeight.toFloat())
+                    Dimension.Points(gxCacheText.measuredHeight.toFloat())
                 )
             }
         } else if (fontLines > 1) {
             // 多行状态下，需要定宽求高
 
-            textView.setFontLines(fontLines)
+            gxCacheText.setFontLines(fontLines)
 
             val nodeWidth = nodeLayout.width
 
@@ -195,15 +202,17 @@ object GXFitContentUtils {
                     nodeWidth.toInt(),
                     View.MeasureSpec.AT_MOST
                 )
-                textView.measure(widthSpec, 0)
+                gxCacheText.measure(widthSpec, 0)
                 result = Size(
-                    Dimension.Points(textView.measuredWidth.toFloat()),
-                    Dimension.Points(textView.measuredHeight.toFloat())
+                    Dimension.Points(gxCacheText.measuredWidth.toFloat()),
+                    Dimension.Points(gxCacheText.measuredHeight.toFloat())
                 )
             }
         }
 
-        GXMeasureViewPool.release(textView)
+        if (gxText == null) {
+            GXMeasureViewPool.release(gxCacheText)
+        }
 
         return result
     }

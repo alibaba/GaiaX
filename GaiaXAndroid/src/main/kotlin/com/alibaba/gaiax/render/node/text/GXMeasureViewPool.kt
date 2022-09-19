@@ -16,8 +16,10 @@
 
 package com.alibaba.gaiax.render.node.text
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Typeface
+import android.os.Build
 import android.view.ViewGroup
 import androidx.core.util.Pools
 import com.alibaba.gaiax.render.view.GXViewFactory
@@ -58,19 +60,28 @@ object GXMeasureViewPool {
     private fun obtainInner(context: Context): GXText {
         val acquire = pool.acquire()
         if (acquire != null) {
-            val view = acquire.get()
-            return view ?: createTv(context)
+            val oldText = acquire.get()
+
+            // 如果缓存池中的GXText的宿主（activity）已经被销毁，那么应该创建新的GXText
+            // https://github.com/alibaba/GaiaX/issues/220
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (oldText != null && oldText.context is Activity && (oldText.context as Activity).isDestroyed) {
+                    return createTv(context)
+                }
+            }
+
+            return oldText ?: createTv(context)
         }
         return createTv(context)
     }
 
     private fun createTv(context: Context): GXText {
-        val txt = GXViewFactory.createView<GXText>(context, GXViewKey.VIEW_TYPE_TEXT)
-        txt.layoutParams = ViewGroup.LayoutParams(
+        val gxText = GXViewFactory.createView<GXText>(context, GXViewKey.VIEW_TYPE_TEXT)
+        gxText.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        return txt
+        return gxText
     }
 
     fun release(tvRef: SoftReference<GXText>) {

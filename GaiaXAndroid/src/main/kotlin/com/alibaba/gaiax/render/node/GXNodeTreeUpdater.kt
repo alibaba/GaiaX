@@ -65,14 +65,14 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
     }
 
-    fun buildViewStyle() {
+    fun buildViewStyleAndData() {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildViewStyle)")
         val templateData = gxTemplateContext.templateData?.data
             ?: throw IllegalArgumentException("Data is null")
 
         // 更新样式
-        Style.updateNodeTreeStyle(gxTemplateContext, rootNode, templateData)
+        Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
     }
 
     fun buildLayoutAndStyle() {
@@ -89,7 +89,7 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
 
         // 更新样式
-        Style.updateNodeTreeStyle(gxTemplateContext, rootNode, templateData)
+        Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
     }
 
     object Layout {
@@ -737,21 +737,21 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
     }
 
     object Style {
-        internal fun updateNodeTreeStyle(
+        internal fun updateNodeTreeStyleAndData(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject
         ) {
             if (gxNode.isNestRoot) {
-                updateNestNodeStyle(gxTemplateContext, gxNode, templateData)
+                updateNestNodeStyleAndData(gxTemplateContext, gxNode, templateData)
             } else if (gxNode.isContainerType()) {
-                updateContainerNodeStyle(gxTemplateContext, gxNode, templateData)
+                updateContainerNodeStyleAndData(gxTemplateContext, gxNode, templateData)
             } else {
-                updateNormalNodeStyle(gxTemplateContext, gxNode, templateData)
+                updateNormalNodeStyleAndData(gxTemplateContext, gxNode, templateData)
             }
         }
 
-        private fun updateNestNodeStyle(
+        private fun updateNestNodeStyleAndData(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject
@@ -766,12 +766,12 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
             }
         }
 
-        private fun updateContainerNodeStyle(
+        private fun updateContainerNodeStyleAndData(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject
         ) {
-            updateNodeStyle(gxTemplateContext, gxNode, templateData)
+            updateNodeStyleAndData(gxTemplateContext, gxNode, templateData)
         }
 
         private fun updateNestContainerNodeStyle(
@@ -788,7 +788,7 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
             val valueData = gxNode.templateNode.visualTemplateNode?.getDataValue(templateData)
             val childTemplateData = (valueData as? JSONObject) ?: JSONObject()
 
-            updateNodeStyle(gxTemplateContext, gxNode, childTemplateData)
+            updateNodeStyleAndData(gxTemplateContext, gxNode, childTemplateData)
         }
 
         private fun updateNestNormalNodeStyle(
@@ -802,28 +802,28 @@ class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
                 (gxNode.templateNode.visualTemplateNode?.getDataValue(templateData) as? JSONObject)
                     ?: JSONObject()
 
-            updateNodeStyle(gxTemplateContext, gxNode, childTemplateData)
+            updateNodeStyleAndData(gxTemplateContext, gxNode, childTemplateData)
 
             gxNode.children?.forEach { childNode ->
                 // 使用原有数据为数据源
-                updateNodeTreeStyle(gxTemplateContext, childNode, childTemplateData)
+                updateNodeTreeStyleAndData(gxTemplateContext, childNode, childTemplateData)
             }
         }
 
-        private fun updateNormalNodeStyle(
+        private fun updateNormalNodeStyleAndData(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject
         ) {
-            updateNodeStyle(gxTemplateContext, gxNode, templateData)
+            updateNodeStyleAndData(gxTemplateContext, gxNode, templateData)
 
             gxNode.children?.forEach { childNode ->
                 // 使用原有数据为数据源
-                updateNodeTreeStyle(gxTemplateContext, childNode, templateData)
+                updateNodeTreeStyleAndData(gxTemplateContext, childNode, templateData)
             }
         }
 
-        private fun updateNodeStyle(
+        private fun updateNodeStyleAndData(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject

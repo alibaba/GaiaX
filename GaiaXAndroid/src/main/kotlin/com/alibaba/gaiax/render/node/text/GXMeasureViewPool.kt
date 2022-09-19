@@ -27,7 +27,7 @@ import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.render.view.setTextFontFamily
-import java.lang.ref.SoftReference
+import java.lang.ref.WeakReference
 
 /**
  * @suppress
@@ -37,7 +37,7 @@ object GXMeasureViewPool {
     private val CPU_COUNT = Runtime.getRuntime().availableProcessors()
     private val MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1
 
-    private val pool = Pools.SynchronizedPool<SoftReference<GXText>>(MAXIMUM_POOL_SIZE)
+    private val pool = Pools.SynchronizedPool<WeakReference<GXText>>(MAXIMUM_POOL_SIZE)
 
     private var cacheInit = false
     private var cacheTypeFace: Typeface? = null
@@ -62,16 +62,29 @@ object GXMeasureViewPool {
         if (acquire != null) {
             val oldText = acquire.get()
 
-            // 如果缓存池中的GXText的宿主（activity）已经被销毁，那么应该创建新的GXText
-            // https://github.com/alibaba/GaiaX/issues/220
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (oldText != null && oldText.context is Activity && (oldText.context as Activity).isDestroyed) {
+            if (oldText != null && oldText.context is Activity) {
+
+                // 如果不是同一个activity，那么应该释放之前的GXText，以免造成activity的内存泄漏
+                // pool.acquire会导致oldText退出缓存，不再使用时等在GC回收
+                if (oldText.context != context) {
                     return createTv(context)
                 }
+
+                // 如果缓存池中的GXText的宿主（activity）已经被销毁，那么应该创建新的GXText
+                // https://github.com/alibaba/GaiaX/issues/220
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if ((oldText.context as Activity).isDestroyed) {
+                        return createTv(context)
+                    }
+                }
+
+                // 使用旧的GXText缓存，用于计算FitContent
+                return oldText
             }
 
-            return oldText ?: createTv(context)
+            return createTv(context)
         }
+
         return createTv(context)
     }
 
@@ -84,14 +97,11 @@ object GXMeasureViewPool {
         return gxText
     }
 
-    fun release(tvRef: SoftReference<GXText>) {
-        val view = tvRef.get()
-        if (view != null) {
-            try {
-                resetTv(view)
-                pool.release(tvRef)
-            } catch (e: Exception) {
-            }
+    fun release(gxText: GXText) {
+        try {
+            resetTv(gxText)
+            pool.release(WeakReference(gxText))
+        } catch (e: Exception) {
         }
     }
 

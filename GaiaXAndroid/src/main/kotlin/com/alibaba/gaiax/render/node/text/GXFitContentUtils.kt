@@ -79,7 +79,7 @@ object GXFitContentUtils {
         )
 
         if (textContent == null) {
-            GXMeasureViewPool.release(SoftReference(textView))
+            GXMeasureViewPool.release(textView)
             return null
         }
 
@@ -203,7 +203,7 @@ object GXFitContentUtils {
             }
         }
 
-        GXMeasureViewPool.release(SoftReference(textView))
+        GXMeasureViewPool.release(textView)
 
         return result
     }

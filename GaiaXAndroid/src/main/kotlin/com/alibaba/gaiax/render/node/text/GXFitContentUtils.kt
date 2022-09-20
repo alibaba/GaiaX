@@ -26,7 +26,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -67,9 +66,7 @@ object GXFitContentUtils {
             ?: gxStretchNode.layoutByCreate
             ?: return null
 
-        // 默认使用原生创建的Text计算
-        val gxText = gxNode.view as? GXText
-        val gxCacheText = gxText ?: GXMeasureViewPool.obtain(androidContext)
+        val gxCacheText = GXMeasureViewPool.obtain(androidContext)
 
         gxCacheText.setTextStyle(finalCss)
 
@@ -83,9 +80,7 @@ object GXFitContentUtils {
         )
 
         if (textContent == null) {
-            if (gxText == null) {
-                GXMeasureViewPool.release(gxCacheText)
-            }
+            GXMeasureViewPool.release(gxCacheText)
             return null
         }
 
@@ -210,9 +205,7 @@ object GXFitContentUtils {
             }
         }
 
-        if (gxText == null) {
-            GXMeasureViewPool.release(gxCacheText)
-        }
+        GXMeasureViewPool.release(gxCacheText)
 
         return result
     }

@@ -21,7 +21,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface GXGradientView : UIView
+
+- (void)setupGradientWithStartPoint:(CGPoint)startPoint
+                           endPoint:(CGPoint)endPoint
+                          locations:(NSArray *)locations
+                             colors:(NSArray<UIColor *> *)colors;
+
+@end
+
+
 @interface GXGradientHelper : NSObject
+
+/// 生成渐变View
+/// @param params 渐变参数
+/// @param bounds 对应的bounds
++ (UIView *)creatGradientViewWithParams:(NSDictionary *)params bounds:(CGRect)bounds;
 
 /// 生成渐变layer
 /// @param params 渐变参数
@@ -38,5 +53,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary *)parserLinearGradient:(NSString *)linearGradient;
 
 @end
+
+
+
+
+
 
 NS_ASSUME_NONNULL_END

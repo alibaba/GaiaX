@@ -22,9 +22,129 @@
 #import "UIColor+GX.h"
 #import "GXUtils.h"
 
+@interface GXGradientView () {
+    BOOL _isDynamic;
+}
+
+@property (nonatomic, strong) NSArray *colors;
+
+@end
+
+@implementation GXGradientView
+
++ (Class)layerClass {
+    return [CAGradientLayer class];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (@available(iOS 13.0, *)) {
+        // trait发生了改变
+        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection]) {
+//            BOOL isDarkMode = self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
+            if (self.colors.count > 0) {
+                CAGradientLayer *layer = (CAGradientLayer *)self.layer;
+                layer.colors = [self colorRefs];
+            }
+        }
+    }
+}
+
+- (void)setupGradientWithStartPoint:(CGPoint)startPoint
+                           endPoint:(CGPoint)endPoint
+                          locations:(NSArray *)locations
+                             colors:(NSArray<UIColor *> *)colors {
+    //设置colors
+    self.colors = colors;
+    
+    //生成渐变
+    CAGradientLayer *layer = (CAGradientLayer *)self.layer;
+    layer.colors = [self colorRefs];
+    layer.startPoint = startPoint;
+    layer.endPoint = endPoint;
+    
+    //locations
+    if (locations) {
+        layer.locations = locations;
+    }
+}
+
+- (NSArray *)colorRefs{
+    NSMutableArray *colorRefArray = [NSMutableArray array];
+    for (int i = 0; i < self.colors.count; i++) {
+        NSString *colorStr = [self.colors gx_objectAtIndex:i];
+        UIColor *tmpColor = [UIColor gx_colorWithString:colorStr];
+        [colorRefArray gx_addObject:(id)tmpColor.CGColor];
+    }
+    return  colorRefArray;
+}
+
+- (void)dealloc{
+    
+}
+
+
+@end
+
+
 @implementation GXGradientHelper
 
 #pragma mark - 渐变图片
+
++ (UIView *)creatGradientViewWithParams:(NSDictionary *)params bounds:(CGRect)bounds{
+    if (![GXUtils isValidDictionary:params]) {
+        return nil;
+    }
+    
+    //direction
+    NSString *direction = [params gx_stringForKey:@"direction"];
+    CGPoint startPoint = CGPointZero;
+    CGPoint endPoint = CGPointZero;
+    if ([direction isEqualToString:@"toright"]) {
+        startPoint = CGPointMake(0.0, 0.0);
+        endPoint = CGPointMake(1.0, 0.0);
+    } else if ([direction isEqualToString:@"toleft"]) {
+        startPoint = CGPointMake(1.0, 0.0);
+        endPoint = CGPointMake(0.0, 0.0);
+    } else if ([direction isEqualToString:@"tobottom"]) {
+        startPoint = CGPointMake(0.0, 0.0);
+        endPoint = CGPointMake(0.0, 1.0);
+    } else if ([direction isEqualToString:@"totop"]) {
+        startPoint = CGPointMake(0.0, 1.0);
+        endPoint = CGPointMake(0.0, 0.0);
+    } else if ([direction isEqualToString:@"tobottomright"]) {
+        startPoint = CGPointMake(0, 0);
+        endPoint = CGPointMake(1, 1);
+    } else if ([direction isEqualToString:@"tobottomleft"]) {
+        startPoint = CGPointMake(1.0, 0.0);
+        endPoint = CGPointMake(0.0, 1.0);
+    } else if ([direction isEqualToString:@"totopright"]) {
+        startPoint = CGPointMake(0.0, 1.0);
+        endPoint = CGPointMake(1.0, 0.0);
+    } else if ([direction isEqualToString:@"totopleft"]) {
+        startPoint = CGPointMake(1.0, 1.0);
+        endPoint = CGPointMake(0, 0);
+    } else {
+        startPoint = CGPointMake(0, 0.0);
+        endPoint = CGPointMake(1.0, 0.0);
+    }
+    
+    //colors
+    NSArray *colors = [params gx_arrayForKey:@"colors"];
+    if (colors == nil || ![colors isKindOfClass:NSArray.class]) {
+        return nil;
+    }
+     
+    //locations
+    NSArray *locations = [params gx_arrayForKey:@"locations"];
+
+    //创建layer
+    GXGradientView *gradientView = [[GXGradientView alloc] initWithFrame:bounds];
+    [gradientView setupGradientWithStartPoint:startPoint endPoint:endPoint locations:locations colors:colors];
+        
+    return gradientView;
+
+}
 
 + (UIImage *)creatGradientImageWithParams:(NSDictionary *)params bounds:(CGRect)bounds{
     //生成layer
@@ -94,7 +214,7 @@
     gradientLayer.startPoint = startPoint;
     gradientLayer.endPoint = endPoint;
     gradientLayer.frame = bounds;
-    
+
     //locations
     NSArray *locations = [params gx_arrayForKey:@"locations"];
     if (locations) {
@@ -187,3 +307,4 @@
 
 
 @end
+

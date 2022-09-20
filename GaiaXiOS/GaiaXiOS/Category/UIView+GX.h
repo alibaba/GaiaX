@@ -64,12 +64,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (GXGradient)
 
-//渐变的图片 + text
-@property(nonatomic, strong, nullable) UIImage *gxGradientImage;
 //渐变原始值
 @property(nonatomic, strong, nullable) NSString *gxLinearGradient;
+
+//渐变的view
+@property(nonatomic, strong, nullable) UIView *gxGradientView;
+//渐变的图片 + text
+@property(nonatomic, strong, nullable) UIImage *gxGradientImage;
 //渐变的layer + image/view
 @property(nonatomic, strong, nullable) CAGradientLayer *gxGradientLayer;
+
 
 //设置渐变背景色
 - (void)gx_setBackgroundGradient:(NSDictionary *)backgroundGradient;
@@ -105,8 +109,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @end
-
-
 
 
 NS_ASSUME_NONNULL_END

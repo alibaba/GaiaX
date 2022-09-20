@@ -35,6 +35,9 @@ static const void *kGXTemplateVersionKey = &kGXTemplateVersionKey;
 //圆角
 static const void *kGXBorderLayerKey = &kGXBorderLayerKey;
 static const void *kGXCornerRadiusKey = &kGXCornerRadiusKey;
+
+//渐变View
+static const void *kGXGradientViewKey = &kGXGradientViewKey;
 //渐变Image
 static const void *kGXGradientImageKey = &kGXGradientImageKey;
 //渐变Layer
@@ -171,6 +174,16 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
     objc_setAssociatedObject(self, &kGXLinearGradientKey, gxLinearGradient, OBJC_ASSOCIATION_RETAIN);
 }
 
+
+//gradientView
+- (UIView *)gxGradientView{
+    return objc_getAssociatedObject(self, &kGXGradientViewKey);
+}
+
+- (void)setGxGradientView:(UIView *)gxGradientView{
+    objc_setAssociatedObject(self, &kGXGradientViewKey, gxGradientView, OBJC_ASSOCIATION_RETAIN);
+}
+
 //gradientImage
 - (UIImage *)gxGradientImage{
     return objc_getAssociatedObject(self, &kGXGradientImageKey);
@@ -196,8 +209,17 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
     
     //设置渐变layer
     CGRect bounds = self.bounds;
-    CAGradientLayer *layer = [GXGradientHelper creatGradientLayerWithParams:backgroundGradient bounds:bounds];
-    if (layer) {
+//    CAGradientLayer *layer = [GXGradientHelper creatGradientLayerWithParams:backgroundGradient bounds:bounds];
+//    if (layer) {
+//        self.gxGradientLayer = layer;
+//        [self.layer insertSublayer:layer atIndex:0];
+//    }
+    
+    UIView *view = [GXGradientHelper creatGradientViewWithParams:backgroundGradient bounds:bounds];
+    if (view) {
+        self.gxGradientView = view;
+        //添加背景
+        CAGradientLayer *layer = (CAGradientLayer *)view.layer;
         self.gxGradientLayer = layer;
         [self.layer insertSublayer:layer atIndex:0];
     }

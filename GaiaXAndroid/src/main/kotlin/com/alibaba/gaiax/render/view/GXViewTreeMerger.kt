@@ -39,15 +39,15 @@ import com.alibaba.gaiax.render.node.GXNode
 abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val rootNode: GXNode) {
 
     fun build(): View {
-        val layout = rootNode.stretchNode.layoutByBind
+        val rootLayout = rootNode.stretchNode.layoutByBind
             ?: rootNode.stretchNode.layoutByCreate
             ?: throw IllegalArgumentException("Stretch layout info is null gxTemplateContext = $gxTemplateContext")
-        val parentMerges = mutableListOf<Layout>().apply {
-            this.add(layout)
-        }
-        val root = withRootView(gxTemplateContext, rootNode, layout)
+        val rootView = withRootView(gxTemplateContext, rootNode, rootLayout)
             ?: throw IllegalArgumentException("Create root view error gxTemplateContext = $gxTemplateContext")
-        createMergeViewChildTree(gxTemplateContext, rootNode, root, parentMerges)
+        val rootMerges = mutableListOf<Layout>().apply {
+            this.add(rootLayout)
+        }
+        createMergeViewChildTree(gxTemplateContext, rootNode, rootView, rootMerges)
         return rootNode.view
             ?: throw IllegalArgumentException("Create root view error, not found root view gxTemplateContext = $gxTemplateContext")
     }

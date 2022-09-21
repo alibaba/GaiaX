@@ -93,12 +93,12 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
             } else {
 
                 // Merge XY
-                var mergeX = 0.0F
-                var mergeY = 0.0F
+                var mergedX = 0.0F
+                var mergedY = 0.0F
 
                 parentMerges.forEach {
-                    mergeX += it.x
-                    mergeY += it.y
+                    mergedX += it.x
+                    mergedY += it.y
                 }
 
                 val childView = withChildView(
@@ -108,8 +108,8 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     parentView,
                     childNode,
                     childStretchLayout,
-                    mergeX,
-                    mergeY
+                    mergedX,
+                    mergedY
                 ) ?: throw IllegalArgumentException("Create child view error")
 
                 // Recurse to their own children

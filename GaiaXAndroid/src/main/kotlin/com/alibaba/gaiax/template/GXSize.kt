@@ -73,8 +73,9 @@ sealed class GXSize {
 
         fun Float.ptToPx(): Float {
             val screenWidthDP = GXScreenUtils.getScreenWidthDP(GXTemplateEngine.instance.context)
+            val screenHeightDp = GXScreenUtils.getScreenHeightDP(GXTemplateEngine.instance.context)
             val dpToPx = 375F.dpToPx()
-            var ratio = screenWidthDP / dpToPx
+            var ratio = (Math.min(screenWidthDP, screenHeightDp)) / dpToPx
             GXRegisterCenter.instance.extensionSize?.convert(ratio)?.let {
                 ratio = it
             }

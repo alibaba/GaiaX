@@ -52,9 +52,11 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<AppCompatButton>(R.id.fastpreview_emulator)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, GaiaXFastPreviewActivity::class.java)
+            // 9001
+            // 9292
             intent.putExtra(
                 "GAIA_STUDIO_URL",
-                "gaiax://gaiax/preview?url=ws://30.78.147.194:9001&id=test-template&type=auto"
+                "gaiax://gaiax/preview?url=ws://30.78.147.17:9292&id=test-template&type=auto"
             )
             launcher.launch(intent)
         }

@@ -67,9 +67,9 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
 
             val childNodeType = childTemplateNode.layer.getNodeType()
             val childCustomViewType = childTemplateNode.layer.customNodeClass
-            val isChildCanMergeType = childTemplateNode.isCanMergeType()
+            val isChildCanBeMergedType = childTemplateNode.isCanBeMergedType()
 
-            val isCanMergeNode = isChildCanMergeType
+            val isCanBeMergedNode = isChildCanBeMergedType
                     // No style
                     && childTemplateNode.css.style.isEmptyStyle()
                     // No nested
@@ -83,7 +83,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     // No track
                     && childTemplateNode.trackBinding == null
 
-            if (isCanMergeNode) {
+            if (isCanBeMergedNode) {
                 // This hierarchy needs to be merged
                 val nextMerges = mutableListOf<Layout>().apply {
                     this.addAll(parentMerges)
@@ -115,7 +115,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                 // Recurse to their own children
                 if (childNode.children?.isNotEmpty() == true) {
                     // If you are of type View, you need to pass yourself in as the root View
-                    if (isChildCanMergeType) {
+                    if (isChildCanBeMergedType) {
                         val nextMerges = mutableListOf<Layout>().apply {
                             childStretchLayout.copy().let {
                                 // If you use yourself as the root layout, there is no offset

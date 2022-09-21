@@ -213,7 +213,7 @@ data class GXTemplateNode(
 
     fun isCustomType(): Boolean = layer.isCustomType()
 
-    fun isCanMergeType(): Boolean = layer.isCanMergeType()
+    fun isCanBeMergedType(): Boolean = layer.isCanMergeType()
 
     fun isNestChildTemplateType(): Boolean = layer.isNestChildTemplateType()
 

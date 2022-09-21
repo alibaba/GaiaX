@@ -47,12 +47,12 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
         val rootMerges = mutableListOf<Layout>().apply {
             this.add(rootLayout)
         }
-        createMergeViewChildTree(gxTemplateContext, rootNode, rootView, rootMerges)
+        createMergedViewTree(gxTemplateContext, rootNode, rootView, rootMerges)
         return rootNode.view
             ?: throw IllegalArgumentException("Create root view error, not found root view gxTemplateContext = $gxTemplateContext")
     }
 
-    private fun createMergeViewChildTree(
+    private fun createMergedViewTree(
         context: GXTemplateContext,
         parentNode: GXNode,
         parentView: T,
@@ -89,7 +89,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     this.addAll(parentMerges)
                     this.add(childStretchLayout)
                 }
-                createMergeViewChildTree(context, childNode, parentView, nextMerges)
+                createMergedViewTree(context, childNode, parentView, nextMerges)
             } else {
 
                 // Merge XY
@@ -103,9 +103,9 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
 
                 val childView = withChildView(
                     context,
+                    parentView,
                     childNodeType,
                     childCustomViewType,
-                    parentView,
                     childNode,
                     childStretchLayout,
                     mergedX,
@@ -114,7 +114,8 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
 
                 // Recurse to their own children
                 if (childNode.children?.isNotEmpty() == true) {
-                    // If you are of type View, you need to pass yourself in as the root View
+
+                    // If you are view type, we need to pass yourself in as the root View
                     if (isChildCanBeMergedType) {
                         val nextMerges = mutableListOf<Layout>().apply {
                             childStretchLayout.copy().let {
@@ -124,25 +125,29 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                                 this.add(it)
                             }
                         }
-                        createMergeViewChildTree(context, childNode, childView, nextMerges)
+                        createMergedViewTree(context, childNode, childView, nextMerges)
                     } else {
                         val nextMerges = mutableListOf<Layout>().apply {
                             this.addAll(parentMerges)
                         }
-                        createMergeViewChildTree(context, childNode, parentView, nextMerges)
+                        createMergedViewTree(context, childNode, parentView, nextMerges)
                     }
                 }
             }
         }
     }
 
-    internal abstract fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): T?
+    internal abstract fun withRootView(
+        context: GXTemplateContext,
+        node: GXNode,
+        layout: Layout
+    ): T?
 
     internal abstract fun withChildView(
         context: GXTemplateContext,
+        parentMergeView: T,
         childType: String,
         childViewType: String?,
-        parentMergeView: T,
         childNode: GXNode,
         childLayout: Layout,
         mergeX: Float,

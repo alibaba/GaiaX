@@ -43,9 +43,9 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
 
     override fun withChildView(
         context: GXTemplateContext,
+        parentMergeView: View,
         childType: String,
         childViewType: String?,
-        parentMergeView: View,
         childNode: GXNode,
         childLayout: Layout,
         mergeX: Float,

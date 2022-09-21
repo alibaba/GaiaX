@@ -305,7 +305,7 @@ data class GXLayer constructor(
      * 是否能够被合并
      */
     fun isCanMergeType(): Boolean =
-        !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE || type == GXViewKey.VIEW_TYPE_SHADOW_LAYOUT)
+        !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE)
 
     override fun toString(): String {
         return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, sliderConfig=$sliderConfig, layers=$layers)"

@@ -49,7 +49,7 @@ import com.alibaba.gaiax.template.utils.GXTemplateUtils
 /**
  * @suppress
  */
-class GXNodeTreeUpdater(val gxTemplateContext: GXTemplateContext) {
+class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
     fun buildNodeLayout() {
         val rootNode = gxTemplateContext.rootNode

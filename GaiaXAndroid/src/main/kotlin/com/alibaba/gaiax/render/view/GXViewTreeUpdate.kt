@@ -24,7 +24,7 @@ import com.alibaba.gaiax.render.node.GXNode
 /**
  * @suppress
  */
-open class GXViewTreeUpdater(context: GXTemplateContext, rootNode: GXNode) :
+open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(context, rootNode) {
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View? {

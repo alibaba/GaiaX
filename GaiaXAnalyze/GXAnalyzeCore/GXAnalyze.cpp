@@ -2,13 +2,13 @@
 
 using namespace std;
 
-static vector<vector<char> > grammarProduct;                        //文法G[S]产生式 ，~为空字
+static vector<vector<char> > grammarProduct;                        //文法grammarProduct[S]产生式 ，~为空字
 static unordered_map<char, set<char> > terminalSymbolMap;           //终结符(char)terminal symbol,及它的first集合(set<char>)
 static unordered_map<char, set<char> > nonTerminalSymbolMap;        //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
 static unordered_map<string, string> gotoTable;                     //初始化最终产物，可根据该表格找到规约或递进的结果
 static bool isInit = false;                                         //判断是否已经进行过初始化
-static unordered_map<string, char> Vt;                              //终结符集合
-static unordered_map<string, char> Vn;                              //非终结符集合
+static unordered_map<string, char> terminal;                        //终结符集合
+static unordered_map<string, char> nonTerminal;                     //非终结符集合
 static vector<string> grammarFormula;                               //每层文法式的集合
 struct Closure {                                                    //闭包CLOSURE
     vector<vector<char> > project;                                  //项目集
@@ -18,24 +18,29 @@ struct Closure {                                                    //闭包CLOS
 static vector<Closure> closureArray;                                //闭包集合
 static unordered_map<char, string> wordToSymbol;                    //key:word value:symbol
 static unordered_map<string, char> symbolToWord;                    //key:symbol value:word
-static unordered_map<string, string> cache;                         //缓存
+static unordered_map<string, string> cache;                         //表达式缓存
 /*
  * 存放终结符完整词汇的string集合
  */
-static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id", ",",
-                           "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==", "!=",
-                           "&&", "||", "?", ":", "?:", "error", "#", "~"};
+static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id",
+                                ",",
+                                "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==",
+                                "!=",
+                                "&&", "||", "?", ":", "?:", "error", "#", "~"};
 /*
  * 存放终结符标识符的char集合
  */
-static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-', '+', '%',
-                         '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y', 'e', '#',
-                         '~'};
+static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-',
+                                '+', '%',
+                                '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y',
+                                'e', '#',
+                                '~'};
 /*
  * 存放非终结符完整词汇的string集合
  */
-static string nonTerminalWord[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr", "Two",
-                            "P", "One"};
+static string nonTerminalWord[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr",
+                                   "Two",
+                                   "P", "One"};
 /*
  * 存放非终结符标识符的char集合
  */
@@ -47,25 +52,25 @@ static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D
                            "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
                            "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O", "O->t|f|n|v|u|s|d"};
 
-
-//初始化终结符和非终结符
-void init_SAndC() {
-    int sizeC = sizeof(terminalWord) / sizeof(terminalWord[0]);
-    int sizeU = sizeof(nonTerminalWord) / sizeof(nonTerminalWord[0]);
-    set<char> m;
-    //终结符
-    for (int i = 0; i < sizeC; i++) {
-        wordToSymbol.insert(pair<char, string>(terminalSymbol[i], terminalWord[i]));
-        symbolToWord.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
-
+/*
+ * 判断word是否为终结符
+ */
+bool isTerminalWord(const string &s) {
+    //在map中判断
+    if (terminal.count(s) > 0) {
+        return true;
     }
-    for (int i = 0; i < sizeU; i++) {
-        wordToSymbol.insert(pair<char, string>(nonTerminalSymbol[i], nonTerminalWord[i]));
-        symbolToWord.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
+    if (s == "M") {
+        return true;
     }
+    return false;
 }
 
-void read_G() {
+
+/*
+ * 初始化：获取文法grammarProduct
+ */
+void getGrammarProduct() {
     int sizeG = sizeof(grammar) / sizeof(grammar[0]);
     for (int i = 0; i < sizeG; i++) {
         grammarFormula.push_back(grammar[i]);
@@ -76,27 +81,24 @@ void read_G() {
     char chX;
     set<char> m;
     nonTerminalSymbolMap['M'] = m;
-    for (int x = 0; x < grammarFormula.size(); x++) {
-        string temp = grammarFormula[x];
+    for (auto temp : grammarFormula) {
         for (int y = 0; y < temp.length(); y++) {
             symbol = temp[y];
-            if (symbol != ' ' || symbol != '\t') {
-                if (symbol == '|') {
-                    grammarProduct.push_back(value);
-                    value.clear();
-                    i = 3;
-                    value.push_back(chX);
-                    continue;
-                }
-                i++;
-                if (i == 1) {
-                    chX = symbol;
-                    nonTerminalSymbolMap[symbol] = m;
-                } else if (i != 2 && i != 3 && symbol != '~')
-                    terminalSymbolMap[symbol] = m;
-                if (i != 2 && i != 3)
-                    value.push_back(symbol);
+            if (symbol == '|') {
+                grammarProduct.push_back(value);
+                value.clear();
+                i = 3;
+                value.push_back(chX);
+                continue;
             }
+            i++;
+            if (i == 1) {
+                chX = symbol;
+                nonTerminalSymbolMap[symbol] = m;
+            } else if (i != 2 && i != 3 && symbol != '~')
+                terminalSymbolMap[symbol] = m;
+            if (i != 2 && i != 3)
+                value.push_back(symbol);
             if (y == temp.length() - 1) {
                 if (!value.empty()) {
                     grammarProduct.push_back(value);
@@ -116,27 +118,18 @@ void read_G() {
     grammarProduct.insert(grammarProduct.begin(), value);
 
     //去掉ts中的非终结符
-    for (unordered_map<char, set<char> >::iterator it = nonTerminalSymbolMap.begin();
-         it != nonTerminalSymbolMap.end(); it++) {
+    for (auto &it : nonTerminalSymbolMap) {
         unordered_map<char, set<char> >::iterator iter;
-        iter = terminalSymbolMap.find(it->first);
+        iter = terminalSymbolMap.find(it.first);
         if (iter != terminalSymbolMap.end())
             terminalSymbolMap.erase(iter);
     }
 }
 
-bool is_terminal_char(const string &s) {
-    //在map中判断
-    if (Vt.count(s) > 0) {
-        return true;
-    }
-    if (s == "M") {
-        return true;
-    }
-    return false;
-}
-
-void get_First() { //得到First集合
+/*
+ * 初始化：获取First集
+ */
+void getFirst() { //得到First集合
     for (auto &it : terminalSymbolMap)
         it.second.insert(it.first);
 
@@ -194,7 +187,10 @@ void get_First() { //得到First集合
     }
 }
 
-void get_Closure() {
+/*
+ * 初始化：生成闭包集
+ */
+void getClosure() {
     int i = 0;
     Closure clo;
     closureArray.push_back(clo);
@@ -240,13 +236,15 @@ void get_Closure() {
                                     for (auto it : closureArray[i].outlook[j])
                                         m.insert(it);
                                 } else if (
-                                        terminalSymbolMap.find(closureArray[i].project[j][k + t + 2]) !=
+                                        terminalSymbolMap.find(
+                                                closureArray[i].project[j][k + t + 2]) !=
                                         terminalSymbolMap.end()) { //情况二
                                     m.insert(closureArray[i].project[j][k + 2 + t]);
                                 } else {
                                     set<char> m1(
                                             (nonTerminalSymbolMap.find(
-                                                    closureArray[i].project[j][k + 2 + t]))->second);
+                                                    closureArray[i].project[j][k + 2 +
+                                                                               t]))->second);
                                     for (auto it : m1) {
                                         if (it == '~') {
                                             emp = true;
@@ -285,7 +283,8 @@ void get_Closure() {
                                                  closureArray[x].project.size(); y++) {
                             dif = false;
                             if (new_closure_pro == closureArray[x].project[y]) {
-                                if (closureArray[x].outlook[0].size() != new_closure_search.size()) {
+                                if (closureArray[x].outlook[0].size() !=
+                                    new_closure_search.size()) {
                                     dif = true;
                                     continue;
                                 }
@@ -331,7 +330,10 @@ void get_Closure() {
     }
 }
 
-int get_Table() {
+/*
+ * 初始化：生成gotoTable
+ */
+int getGotoTable() {
     for (unsigned int i = 0; i < closureArray.size(); i++) {
         for (unsigned int j = 0; j < closureArray[i].project.size(); j++) {
             for (unsigned int k = 0; k < closureArray[i].project[j].size(); k++) {
@@ -367,7 +369,8 @@ int get_Table() {
                         if (terminalSymbolMap.find(next) != terminalSymbolMap.end()) {
                             string m = to_string(i) + next;
                             if (gotoTable.find(m) != gotoTable.end() &&
-                                gotoTable[m] != (string) "s" + to_string(closureArray[i].go[next])) {
+                                gotoTable[m] !=
+                                (string) "s" + to_string(closureArray[i].go[next])) {
                                 return 0;
                             } else
                                 gotoTable[m] = (string) "s" + to_string(closureArray[i].go[next]);
@@ -388,32 +391,39 @@ int get_Table() {
     return 1;
 }
 
-//初始化终结符和非终结符
-void init_Terminal() {
-    int sizeC = sizeof(terminalWord) / sizeof(terminalWord[0]);
-    int sizeU = sizeof(nonTerminalWord) / sizeof(nonTerminalWord[0]);
+/*
+ * 初始化：获取终结符和非终结符相关集合
+ */
+void initTerminal() {
+    int sizeTerminal = sizeof(terminalWord) / sizeof(terminalWord[0]);
+    int sizeNonTerminal = sizeof(nonTerminalWord) / sizeof(nonTerminalWord[0]);
     set<char> m;
-    //终结符
-    for (int i = 0; i < sizeC; i++) {
-        Vt.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
+    for (int i = 0; i < sizeTerminal; i++) {
+        wordToSymbol.insert(pair<char, string>(terminalSymbol[i], terminalWord[i]));
+        symbolToWord.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
+        terminal.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
         terminalSymbolMap[terminalSymbol[i]] = m;
     }
-    for (int i = 0; i < sizeU; i++) {
-        Vn.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
+    for (int i = 0; i < sizeNonTerminal; i++) {
+        wordToSymbol.insert(pair<char, string>(nonTerminalSymbol[i], nonTerminalWord[i]));
+        symbolToWord.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
+        nonTerminal.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
         nonTerminalSymbolMap[nonTerminalSymbol[i]] = m;
     }
 }
 
+/*
+ * 调用所有初始化函数
+ */
 void init() {
     if (!isInit) {
         cache.reserve(1024);
         isInit = true;
-        read_G();
-        get_First();
-        get_Closure();
-        init_Terminal();
-        get_Table();
-        init_SAndC();
+        getGrammarProduct();
+        getFirst();
+        getClosure();
+        initTerminal();
+        getGotoTable();
     }
 }
 
@@ -945,10 +955,10 @@ long GXAnalyze::getValue(string expression, void *source) {
             p++;
         } else {
             GXATSNode token = scanner(synCode, p, input, this);
-            if (is_terminal_char(token.detail)) {
-                result = result + Vt[token.detail];
+            if (isTerminalWord(token.detail)) {
+                result = result + terminal[token.detail];
             } else {
-                result = result + Vn[token.detail];
+                result = result + nonTerminal[token.detail];
             }
             GXATSNode tokenNum;
             if (token.token == "value" || token.token == "data") {
@@ -1346,12 +1356,12 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             symbolStack[symbolSize] = cur_symbol; //读入一个字符
             ++symbolSize;
             string temp = wordToSymbol[cur_symbol];
-            if ((is_terminal_char(temp) &&
+            if ((isTerminalWord(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
                   temp == "num" || temp == "string" || temp == "data" || temp == "id")) ||
                 (temp == "map" || temp == "array")) {
                 // push value
-                if (is_terminal_char(temp) && temp == "id") {
+                if (isTerminalWord(temp) && temp == "id") {
                     //接下来读入参数，(和)变为运算符
                     isFunction = true;
                 }
@@ -1425,7 +1435,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     --symbolSize;
                 }
                 for (int i = 0; i < len; i++) {
-                    if ((is_terminal_char(action[i]) &&
+                    if ((isTerminalWord(action[i]) &&
                          !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
                             action[i] == "value" || action[i] == "num" || action[i] == "string" ||
                             action[i] == "data" || action[i] == "id"))) ||

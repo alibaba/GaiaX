@@ -3,6 +3,7 @@
   height: 200px;
   justify-content: center;
   align-items: center;
+  border-radius: 25px;
 }
 #bg_img {
   width: 100%;

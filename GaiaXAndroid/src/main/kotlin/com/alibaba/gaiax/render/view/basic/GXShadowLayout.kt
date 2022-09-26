@@ -20,9 +20,10 @@ import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
-import androidx.annotation.RequiresApi
 import com.alibaba.gaiax.R
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskBitmapShadowDrawable
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskShadowDrawable
@@ -203,7 +204,6 @@ open class GXShadowLayout @JvmOverloads constructor(
 
     fun getRadius(): Float = this.boxRadius
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setBoxRadius(
         topLeft: Float,
         topRight: Float,
@@ -266,7 +266,6 @@ open class GXShadowLayout @JvmOverloads constructor(
 
     fun getBottomLeftRadius() = bottomLeftBoxRadius
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun Path.addRoundRect2(tL: Float, tR: Float, bL: Float, bR: Float, w: Float, h: Float) {
         val radii = floatArrayOf(tL, tL, tR, tR, bR, bR, bL, bL)
         addRoundRect(0f, 0f, w, h, radii, Path.Direction.CW)
@@ -287,9 +286,7 @@ open class GXShadowLayout @JvmOverloads constructor(
             val topRight = borderRadius.topRight?.valueFloat ?: 0F
             val bottomLeft = borderRadius.bottomLeft?.valueFloat ?: 0F
             val bottomRight = borderRadius.bottomRight?.valueFloat ?: 0F
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                this.setBoxRadius(topLeft, topRight, bottomLeft, bottomRight)
-            }
+            this.setBoxRadius(topLeft, topRight, bottomLeft, bottomRight)
         }
 
     }

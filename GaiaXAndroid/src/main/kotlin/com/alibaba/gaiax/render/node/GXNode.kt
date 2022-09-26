@@ -22,7 +22,6 @@ import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.template.GXLayer
 
 /**
@@ -123,9 +122,6 @@ class GXNode {
     fun release() {
         isAnimating = false
         idPath = ""
-        if (view is GXIRelease) {
-            (view as GXIRelease).release()
-        }
         view = null
         boxLayoutView = null
         stretchNode.free()

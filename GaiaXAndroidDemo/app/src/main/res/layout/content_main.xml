@@ -74,13 +74,6 @@
             android:text="@string/remote_data_source"
             android:textColor="@color/black" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/style"
-            android:textColor="@color/black" />
-
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,20 +84,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
                 android:text="youku_expression"
-                android:textColor="@color/black"
-                android:textSize="13dp" />
+                android:textColor="@color/black" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/opensource_expression"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
                 android:text="opensource_expression"
-                android:textColor="@color/black"
-                android:textSize="13dp" />
+                android:textColor="@color/black" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </LinearLayout>

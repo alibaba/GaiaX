@@ -1,0 +1,18 @@
+{
+  "id": "gx-style-backdrop-filter",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-style-backdrop-filter",
+    "version": "0.0.1",
+    "modify-timestamp": "Mon Sep 26 2022 11:21:34 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [
+    { "id": "bg_img", "type": "image" },
+    {
+      "id": "blur_view",
+      "type": "view",
+      "layers": [{ "id": "blur_text", "type": "text" }]
+    }
+  ]
+}

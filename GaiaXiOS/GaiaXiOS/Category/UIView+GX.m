@@ -45,7 +45,9 @@ static const void *kGXGradientLayerKey = &kGXGradientLayerKey;
 //渐变string
 static const void *kGXLinearGradientKey = &kGXLinearGradientKey;
 //阴影
-static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
+static const void *kGXShadowLayerKey = &kGXShadowLayerKey;
+//毛玻璃
+static const void *kGXEffectViewKey = &kGXEffectViewKey;
 
 
 @implementation UIView (GX)
@@ -284,11 +286,11 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
 
 //阴影
 - (void)setShadowLayer:(CAShapeLayer *)shadowLayer{
-    objc_setAssociatedObject(self, &kGaiaShadowLayerKey, shadowLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &kGXShadowLayerKey, shadowLayer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (CAShapeLayer *)shadowLayer{
-    CAShapeLayer *layer = objc_getAssociatedObject(self, &kGaiaShadowLayerKey);
+    CAShapeLayer *layer = objc_getAssociatedObject(self, &kGXShadowLayerKey);
     return layer;
 }
 
@@ -327,5 +329,17 @@ static const void *kGaiaShadowLayerKey = &kGaiaShadowLayerKey;
 @end
 
 
+#pragma mark - BlurEffect
 
+@implementation UIView (BlurEffect)
+
+- (UIVisualEffectView *)blurView{
+    return objc_getAssociatedObject(self, &kGXEffectViewKey);
+}
+
+- (void)setBlurView:(UIVisualEffectView *)blurView{
+    objc_setAssociatedObject(self, &kGXEffectViewKey, blurView, OBJC_ASSOCIATION_RETAIN);
+}
+
+@end
 

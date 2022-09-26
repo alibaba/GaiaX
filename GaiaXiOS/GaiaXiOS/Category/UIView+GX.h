@@ -107,8 +107,16 @@ NS_ASSUME_NONNULL_BEGIN
 //简单设置阴影
 - (void)gx_setShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius;
 
+@end
+
+
+@interface UIView (BlurEffect)
+
+//阴影
+@property(nonatomic, strong, nullable) UIVisualEffectView *blurView;
 
 @end
+
 
 
 NS_ASSUME_NONNULL_END

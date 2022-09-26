@@ -47,6 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 //阴影的属性
 @property (nonatomic, strong, nullable) NSString *boxShadow;
 
+//毛玻璃效果
+@property (nonatomic, strong) NSString *backdropFilter;
+
 
 //更新样式属性，不影响布局
 - (void)updateNormalStyle:(NSDictionary *)styleInfo isMark:(BOOL)isMark;
@@ -67,6 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //设置阴影
 - (void)setupShadow:(UIView *)view;
+
+// 设置毛玻璃
+- (void)setupBlur:(UIView *)view;
 
 
 @end

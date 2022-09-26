@@ -69,6 +69,12 @@
         [self setupNormalBackground:view];
     }
     
+    //毛玻璃
+    NSString *backdropFilter = [styleInfo gx_stringForKey:@"backdrop-filter"];
+    if (backdropFilter.length) {
+        self.backdropFilter = backdropFilter;
+    }
+    
     //渐变色背景
     if (self.isSupportGradientBgColor) {
         NSString *backgroundImage = [styleInfo gx_stringForKey:@"background-image"];
@@ -514,6 +520,33 @@
 }
 
 
+#pragma mark - 毛玻璃
+- (void)setupBlur:(UIView *)view{
+    //获取毛玻璃
+    UIVisualEffectView *effectView = view.blurView;
+
+    //移除
+    if(self.backdropFilter.length == 0 || [self.backdropFilter isEqualToString:@"none"]){
+        if (effectView) {
+            [effectView removeFromSuperview];
+            effectView = nil;
+        }
+        return;
+    }
+    
+    //判断是否存在
+    if(effectView == nil){
+        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        [view insertSubview:effectView atIndex:0];
+        view.blurView = effectView;
+    }
+    
+    //更新frame
+    effectView.frame = view.bounds;
+}
+
+
 #pragma mark - 属性解析
 
 - (void)configureStyleInfo:(NSDictionary *)styleJson{
@@ -580,6 +613,13 @@
     if (backgroundImage.length) {
         isNeedFlat = NO;
         self.linearGradient = [backgroundImage stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    }
+    
+    //毛玻璃
+    NSString *backdropFilter = [styleJson gx_stringForKey:@"backdrop-filter"];
+    if (backdropFilter.length) {
+        isNeedFlat = NO;
+        self.backdropFilter = backdropFilter;
     }
     
     //非全圆角 + 高优

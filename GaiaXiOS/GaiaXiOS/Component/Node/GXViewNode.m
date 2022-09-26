@@ -87,6 +87,9 @@
     //设置圆角
     [self setupCornerRadius:view];
     
+    //毛玻璃
+    [self setupBlur:view];
+    
     //设置阴影
 //    [self setupShadow:view];
 }

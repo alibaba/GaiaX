@@ -92,11 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<AppCompatButton>(R.id.remote)?.setOnClickListener {
-            val intent = Intent(this, RemoteDataSourceTemplateActivity::class.java)
-            startActivity(intent)
-        }
-        findViewById<AppCompatButton>(R.id.style)?.setOnClickListener {
-            val intent = Intent(MainActivity@ this, StyleTemplateActivity::class.java)
+            val intent = Intent(MainActivity@ this, RemoteDataSourceTemplateActivity::class.java)
             startActivity(intent)
         }
 

@@ -216,13 +216,6 @@ class GXStyleConvert {
         return null
     }
 
-    fun backdropFilter(css: JSONObject): GXBackdropFilter? {
-        css.getString(GXTemplateKey.STYLE_BACKDROP_FILTER)?.let {
-            return GXBackdropFilter.create(it)
-        }
-        return null
-    }
-
     fun fontColor(css: JSONObject): GXColor? =
         css.getString(GXTemplateKey.STYLE_FONT_COLOR)?.let { fontColor ->
             return GXColor.create(fontColor)

@@ -41,7 +41,7 @@ class Blur {
         capture.destroyDrawingCache();
         capture.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         Bitmap captureCache = capture.getDrawingCache();
-        Bitmap bitmap = of(capture.getContext(), captureCache, factor);
+        Bitmap bitmap = of(capture.getContext(), captureCache.copy(Bitmap.Config.ARGB_8888, true), factor);
         captureCache.recycle();
         return bitmap;
     }

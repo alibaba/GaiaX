@@ -48,7 +48,9 @@ class BlurTask {
         target.setDrawingCacheEnabled(true);
         target.destroyDrawingCache();
         target.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        bitmap = target.getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap captureCache = target.getDrawingCache();
+        bitmap = captureCache.copy(Bitmap.Config.ARGB_8888, true);
+        captureCache.recycle();
     }
 
     public BlurTask(Context context, Bitmap bitmap, BlurFactor factor, Callback callback) {

@@ -15,6 +15,11 @@ class StyleTemplateActivity : AppCompatActivity() {
         renderTemplate1(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        GXTemplateEngine.instance.destroyView(findViewById<LinearLayoutCompat>(R.id.template_1))
+    }
+
     private fun renderTemplate1(activity: StyleTemplateActivity) {
         // 初始化
         GXTemplateEngine.instance.init(activity)
@@ -33,7 +38,7 @@ class StyleTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(
             JSONObject().apply {
                 this["blur_text"] = "我是文本我是文本我是文本我是文本我是文本"
-                this["img"] = "https://t7.baidu.com/it/u=376303577,3502948048&fm=193&f=GIF"
+                this["img"] = "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fphoto%2F2011-10-14%2Fenterdesk.com-2E8A38D0891116035E78DD713EED9637.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666781857&t=595349c20a2e34ceddbd48b130339fbf"
             }
         )
 

@@ -775,39 +775,3 @@ fun View.setSpanSizeLookup() {
             }
     }
 }
-
-fun View.setBackdropFilter(
-    gxTemplateContext: GXTemplateContext,
-    gxBackdropFilter: GXBackdropFilter?
-) {
-    val target = this
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        if (gxBackdropFilter is GXBackdropFilter.Blur) {
-            target.postDelayed({
-                //
-                val rootView = gxTemplateContext.rootView as? ViewGroup
-                if (rootView != null) {
-                    val offsetViewBounds = Rect()
-                    target.getDrawingRect(offsetViewBounds)
-                    rootView.offsetDescendantRectToMyCoords(target, offsetViewBounds)
-
-                    //
-                    Blurry.with(target.context)
-                        .radius(25 / 2)
-                        .sampling(8)
-                        .captureAcquireRect(offsetViewBounds)
-                        .color(Color.parseColor("#80FFFFFF"))
-                        .capture(rootView)
-                        .getAsync {
-                            // TODO 有过有异形圆角会有问题
-                            if (it != null) {
-                                target.background = GXBlurBitmapDrawable(resources, it)
-                            }
-                        }
-                }
-            },
-                // TODO 图片的加载有延迟，直接处理可能会导致毛玻璃效果无效，但是此处的延迟耗时可能不适用于所有的情况。
-                300)
-        }
-    }
-}

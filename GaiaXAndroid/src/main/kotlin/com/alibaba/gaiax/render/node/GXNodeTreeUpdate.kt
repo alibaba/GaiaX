@@ -36,6 +36,7 @@ import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXProgressView
 import com.alibaba.gaiax.render.view.basic.GXText
+import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
@@ -863,7 +864,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             if (view is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
                 view.setTextStyle(gxCss)
             } else if (view is GXIImageView && gxNode.isImageType()) {
-                view.setImageStyle(gxCss)
+                view.setImageStyle(gxTemplateContext, gxCss)
             } else if (gxNode.isContainerType()) {
                 bindContainerViewCss(gxTemplateContext, gxCss, view, gxNode)
             }
@@ -1256,10 +1257,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             }
 
             if (gxNode.isViewType()) {
-                gxView.setBackdropFilter(
-                    gxTemplateContext,
-                    gxCss.style.backdropFilter
-                )
+                if (gxCss.style.backdropFilter != null) {
+                    (gxView as GXView).setBackdropFilter(
+                        gxTemplateContext,
+                        gxCss.style.backdropFilter
+                    )
+                }
             }
         }
 

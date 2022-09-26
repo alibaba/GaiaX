@@ -17,23 +17,30 @@
 package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Outline
+import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
+import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
+import com.alibaba.gaiax.template.GXBackdropFilter
 import com.alibaba.gaiax.template.GXTemplateKey
+import jp.wasabeef.blurry.Blurry
 import kotlin.math.roundToInt
 
 /**
@@ -54,6 +61,8 @@ open class GXView : AbsoluteLayout,
         attrs,
         defStyleAttr
     )
+
+    private var gxBackdropFilter: GXBackdropFilter? = null
 
     private var gxTemplateContext: GXTemplateContext? = null
 
@@ -132,4 +141,64 @@ open class GXView : AbsoluteLayout,
             }
         }
     }
+
+    fun onBlurChanged(gxTemplateContext: GXTemplateContext) {
+        val target = this
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (gxBackdropFilter != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (target.isAttachedToWindow) {
+                        blur(gxTemplateContext, target)
+                        return
+                    }
+                }
+                target.post {
+                    blur(gxTemplateContext, target)
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private fun blur(
+        gxTemplateContext: GXTemplateContext,
+        target: GXView
+    ) {
+        //
+        val rootView = gxTemplateContext.rootView as? ViewGroup
+        if (rootView != null) {
+            val offsetViewBounds = Rect()
+            target.getDrawingRect(offsetViewBounds)
+            rootView.offsetDescendantRectToMyCoords(target, offsetViewBounds)
+
+            //
+            Blurry.with(target.context)
+                .radius(25)
+                .sampling(8)
+                .captureAcquireRect(offsetViewBounds)
+                .color(Color.parseColor("#33FFFFFF"))
+                .capture(rootView)
+                .getAsync {
+                    // TODO 有过有异形圆角会有问题
+                    if (it != null) {
+                        target.background = GXBlurBitmapDrawable(resources, it)
+                    }
+                }
+        }
+    }
+
+    fun setBackdropFilter(
+        gxTemplateContext: GXTemplateContext,
+        gxBackdropFilter: GXBackdropFilter?
+    ) {
+        if (gxBackdropFilter is GXBackdropFilter.Blur) {
+            gxTemplateContext.blurViews.add(this)
+            this.gxBackdropFilter = gxBackdropFilter
+        } else if (gxBackdropFilter is GXBackdropFilter.None) {
+            gxTemplateContext.blurViews.remove(this)
+            this.background = null
+            this.gxBackdropFilter = null
+        }
+    }
+
 }

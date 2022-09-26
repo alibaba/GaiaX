@@ -195,6 +195,9 @@ open class GXView : AbsoluteLayout,
         gxTemplateContext: GXTemplateContext,
         gxBackdropFilter: GXBackdropFilter?
     ) {
+        // TODO View高斯模糊和图片渲染有直接关系
+        // 如果设置了高斯模糊，但是组件中没有图片，高斯模糊的逻辑也不会执行
+        // 该操作主要是为了提高性能
         if (gxBackdropFilter is GXBackdropFilter.Blur) {
             gxTemplateContext.blurViews.add(this)
             this.gxBackdropFilter = gxBackdropFilter

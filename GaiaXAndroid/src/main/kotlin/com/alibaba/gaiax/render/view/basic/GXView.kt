@@ -142,18 +142,30 @@ open class GXView : AbsoluteLayout,
         }
     }
 
-    fun onBlurChanged(gxTemplateContext: GXTemplateContext) {
+    fun onBlurChanged(gxTemplateContext: GXTemplateContext, gxImageView: GXImageView) {
         val target = this
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            if (gxBackdropFilter != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    if (target.isAttachedToWindow) {
-                        blur(gxTemplateContext, target)
-                        return
+            val rootView = gxTemplateContext.rootView as? ViewGroup
+            if (gxBackdropFilter != null && rootView != null) {
+
+                val targetOffsetViewBounds = Rect()
+                target.getDrawingRect(targetOffsetViewBounds)
+                rootView.offsetDescendantRectToMyCoords(target, targetOffsetViewBounds)
+
+                val imageOffsetViewBounds = Rect()
+                gxImageView.getDrawingRect(imageOffsetViewBounds)
+                rootView.offsetDescendantRectToMyCoords(gxImageView, imageOffsetViewBounds)
+
+                if (imageOffsetViewBounds.contains(targetOffsetViewBounds)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        if (target.isAttachedToWindow) {
+                            blur(rootView, targetOffsetViewBounds, target)
+                            return
+                        }
                     }
-                }
-                target.post {
-                    blur(gxTemplateContext, target)
+                    target.post {
+                        blur(rootView, targetOffsetViewBounds, target)
+                    }
                 }
             }
         }
@@ -161,30 +173,22 @@ open class GXView : AbsoluteLayout,
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun blur(
-        gxTemplateContext: GXTemplateContext,
+        rootView: ViewGroup,
+        offsetViewBounds: Rect,
         target: GXView
     ) {
-        //
-        val rootView = gxTemplateContext.rootView as? ViewGroup
-        if (rootView != null) {
-            val offsetViewBounds = Rect()
-            target.getDrawingRect(offsetViewBounds)
-            rootView.offsetDescendantRectToMyCoords(target, offsetViewBounds)
-
-            //
-            Blurry.with(target.context)
-                .radius(25)
-                .sampling(8)
-                .captureAcquireRect(offsetViewBounds)
-                .color(Color.parseColor("#33FFFFFF"))
-                .capture(rootView)
-                .getAsync {
-                    // TODO 有过有异形圆角会有问题
-                    if (it != null) {
-                        target.background = GXBlurBitmapDrawable(resources, it)
-                    }
+        Blurry.with(target.context)
+            .radius(25)
+            .sampling(8)
+            .captureAcquireRect(offsetViewBounds)
+            .color(Color.parseColor("#33FFFFFF"))
+            .capture(rootView)
+            .getAsync {
+                // TODO 有过有异形圆角会有问题
+                if (it != null) {
+                    target.background = GXBlurBitmapDrawable(resources, it)
                 }
-        }
+            }
     }
 
     fun setBackdropFilter(

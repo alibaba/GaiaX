@@ -181,7 +181,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     interface GXImageViewListener {
-        fun onDrawableChanged()
+        fun onDrawableChanged(gxImageView: GXImageView)
     }
 
     var onImageDrawableListener: GXImageViewListener? = null
@@ -190,7 +190,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         super.setImageDrawable(drawable)
         if (onImageDrawableListener != null && drawable is BitmapDrawable) {
             this.post {
-                onImageDrawableListener?.onDrawableChanged()
+                onImageDrawableListener?.onDrawableChanged(this@GXImageView)
             }
         }
     }

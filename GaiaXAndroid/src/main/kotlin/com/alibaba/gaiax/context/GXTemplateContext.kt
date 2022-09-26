@@ -64,8 +64,8 @@ class GXTemplateContext private constructor(
 
     val onImageDrawableListener = object : GXImageView.GXImageViewListener {
 
-        override fun onDrawableChanged() {
-            blurViews.forEach { it.onBlurChanged(this@GXTemplateContext) }
+        override fun onDrawableChanged(gxImageView: GXImageView) {
+            blurViews.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
         }
     }
 

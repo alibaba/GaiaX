@@ -49,6 +49,7 @@ data class GXStyle(
     val fontTextDecoration: Int? = null,
     val mode: GXMode? = null,
     val boxShadow: GXBoxShadow? = null,
+    val backdropFilter: GXBackdropFilter? = null,
     val fitContent: Boolean? = null
 ) {
 
@@ -81,6 +82,7 @@ data class GXStyle(
         return backgroundColor == null &&
                 backgroundImage == null &&
                 opacity == null &&
+                backdropFilter == null &&
                 overflow == null &&
                 borderWidth == null &&
                 borderColor == null &&
@@ -121,6 +123,7 @@ data class GXStyle(
                 fontLineHeight = convertStyle.fontLineHeight(css),
                 fontTextDecoration = convertStyle.textDecoration(css),
                 boxShadow = convertStyle.boxShadow(css),
+                backdropFilter = convertStyle.backdropFilter(css),
                 fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
                     convertStyle.fitContent(css)
                 } else {
@@ -156,6 +159,7 @@ data class GXStyle(
                 fontLineHeight = convertStyle.fontLineHeight(css),
                 fontTextDecoration = convertStyle.textDecoration(css),
                 boxShadow = convertStyle.boxShadow(css),
+                backdropFilter = convertStyle.backdropFilter(css),
                 fitContent = convertStyle.fitContent(css)
             )
         }
@@ -191,6 +195,8 @@ data class GXStyle(
                     ?: lowPriorityStyle.fontTextDecoration,
                 borderRadius = heightPriorityStyle.borderRadius ?: lowPriorityStyle.borderRadius,
                 boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
+                backdropFilter = heightPriorityStyle.backdropFilter
+                    ?: lowPriorityStyle.backdropFilter,
                 fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
                     if (lowPriorityStyle.fitContent == true && heightPriorityStyle.fitContent == false) {
                         lowPriorityStyle.fitContent

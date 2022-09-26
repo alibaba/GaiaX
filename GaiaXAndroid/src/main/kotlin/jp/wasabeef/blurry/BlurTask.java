@@ -45,11 +45,10 @@ class BlurTask {
         this.factor = factor;
         this.callback = callback;
         this.contextWeakRef = new WeakReference<>(target.getContext());
-
         target.setDrawingCacheEnabled(true);
         target.destroyDrawingCache();
         target.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-        bitmap = target.getDrawingCache();
+        bitmap = target.getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
     }
 
     public BlurTask(Context context, Bitmap bitmap, BlurFactor factor, Callback callback) {

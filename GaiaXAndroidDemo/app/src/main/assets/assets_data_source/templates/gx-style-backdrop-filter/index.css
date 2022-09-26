@@ -30,3 +30,25 @@
   padding-right: 12px;
   text-align: center;
 }
+
+#blur_view_1 {
+  backdrop-filter:blur(10px);
+  width: 200px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+   position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+#blur_text_1 {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 100%;
+  color: #000000;
+  font-size: 15px;
+  padding-left: 12px;
+  padding-right: 12px;
+  text-align: center;
+}

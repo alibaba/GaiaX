@@ -13,6 +13,11 @@
       "id": "blur_view",
       "type": "view",
       "layers": [{ "id": "blur_text", "type": "text" }]
+    },
+    {
+      "id": "blur_view_1",
+      "type": "view",
+      "layers": [{ "id": "blur_text_1", "type": "text" }]
     }
   ]
 }

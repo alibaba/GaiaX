@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".StyleTemplateActivity"
+            android:exported="false" />
+        <activity
             android:name=".RemoteDataSourceTemplateActivity"
             android:exported="false" />
         <activity

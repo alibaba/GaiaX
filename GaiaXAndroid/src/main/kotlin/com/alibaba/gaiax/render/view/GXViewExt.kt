@@ -20,6 +20,7 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -33,10 +34,11 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.template.*
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import jp.wasabeef.blurry.Blurry
 
 /**
  * @suppress
@@ -771,5 +773,41 @@ fun View.setSpanSizeLookup() {
                     }
                 }
             }
+    }
+}
+
+fun View.setBackdropFilter(
+    gxTemplateContext: GXTemplateContext,
+    gxBackdropFilter: GXBackdropFilter?
+) {
+    val target = this
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (gxBackdropFilter is GXBackdropFilter.Blur) {
+            target.postDelayed({
+                //
+                val rootView = gxTemplateContext.rootView as? ViewGroup
+                if (rootView != null) {
+                    val offsetViewBounds = Rect()
+                    target.getDrawingRect(offsetViewBounds)
+                    rootView.offsetDescendantRectToMyCoords(target, offsetViewBounds)
+
+                    //
+                    Blurry.with(target.context)
+                        .radius(25 / 2)
+                        .sampling(8)
+                        .captureAcquireRect(offsetViewBounds)
+                        .color(Color.parseColor("#80FFFFFF"))
+                        .capture(rootView)
+                        .getAsync {
+                            // TODO 有过有异形圆角会有问题
+                            if (it != null) {
+                                target.background = GXBlurBitmapDrawable(resources, it)
+                            }
+                        }
+                }
+            },
+                // TODO 图片的加载有延迟，直接处理可能会导致毛玻璃效果无效，但是此处的延迟耗时可能不适用于所有的情况。
+                300)
+        }
     }
 }

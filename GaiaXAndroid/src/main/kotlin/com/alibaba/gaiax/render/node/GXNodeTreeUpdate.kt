@@ -867,7 +867,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             } else if (gxNode.isContainerType()) {
                 bindContainerViewCss(gxTemplateContext, gxCss, view, gxNode)
             }
-            bindCommonViewCss(view, gxCss, gxNode)
+            bindCommonViewCss(gxTemplateContext, view, gxCss, gxNode)
         }
 
         private fun nodeViewEvent(
@@ -1232,21 +1232,34 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             view.onBindData(data)
         }
 
-        private fun bindCommonViewCss(view: View, gxCss: GXCss, node: GXNode) {
+        private fun bindCommonViewCss(
+            gxTemplateContext: GXTemplateContext,
+            gxView: View,
+            gxCss: GXCss,
+            gxNode: GXNode
+        ) {
 
-            view.setDisplay(gxCss.style.display)
+            gxView.setDisplay(gxCss.style.display)
 
-            if (!node.isCustomViewType()) {
+            if (!gxNode.isCustomViewType()) {
 
-                view.setHidden(gxCss.style.display, gxCss.style.hidden)
+                gxView.setHidden(gxCss.style.display, gxCss.style.hidden)
 
-                view.setOpacity(gxCss.style.opacity)
+                gxView.setOpacity(gxCss.style.opacity)
 
-                view.setOverflow(gxCss.style.overflow)
+                gxView.setOverflow(gxCss.style.overflow)
 
-                view.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
+                gxView.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
 
-                view.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
+                gxView.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
+
+            }
+
+            if (gxNode.isViewType()) {
+                gxView.setBackdropFilter(
+                    gxTemplateContext,
+                    gxCss.style.backdropFilter
+                )
             }
         }
 

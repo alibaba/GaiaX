@@ -1,0 +1,10 @@
+{
+    "data": {
+        "bg_img":{
+                "value":"$img"
+        },
+        "blur_text": {
+            "value": "$blur_text"
+        }
+    }
+}

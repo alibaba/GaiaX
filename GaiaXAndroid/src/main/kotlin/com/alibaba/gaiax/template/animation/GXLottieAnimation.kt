@@ -45,7 +45,7 @@ abstract class GXLottieAnimation : GXIAnimation {
         private const val KEY_LOOP = "loop"
         private const val KEY_LOOP_COUNT = "loopCount"
 
-        fun create(data: JSONObject?): GXLottieAnimation? {
+        fun create(expVersion: String?, data: JSONObject?): GXLottieAnimation? {
             if (data == null) {
                 return null
             }
@@ -57,10 +57,10 @@ abstract class GXLottieAnimation : GXIAnimation {
             val animator = GXRegisterCenter.instance.extensionLottieAnimation?.create()
                 ?: return null
             if (localUri != null) {
-                animator.gxLocalUri = GXExpressionFactory.create(localUri)
+                animator.gxLocalUri = GXExpressionFactory.create(expVersion, localUri)
             }
             if (remoteUri != null) {
-                animator.gxRemoteUri = GXExpressionFactory.create(remoteUri)
+                animator.gxRemoteUri = GXExpressionFactory.create(expVersion, remoteUri)
             }
             if (data.containsKey(KEY_LOOP) && data.getBoolean(KEY_LOOP)) {
                 animator.loopCount = Int.MAX_VALUE

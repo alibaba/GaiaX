@@ -8,14 +8,14 @@ import com.alibaba.gaiax.template.GXTemplateKey
 
 object GXDataBindingFactory {
 
-    fun create(data: Any): GXDataBinding? {
-        GXRegisterCenter.instance.extensionDataBinding?.create(data)?.let {
+    fun create(expVersion: String?, data: Any): GXDataBinding? {
+        GXRegisterCenter.instance.extensionDataBinding?.create(expVersion, data)?.let {
             return it
         }
-        return createDefaultDataBinding(data)
+        return createDefaultDataBinding(expVersion, data)
     }
 
-    private fun createDefaultDataBinding(data: Any): GXDataBinding? {
+    private fun createDefaultDataBinding(expVersion: String?, data: Any): GXDataBinding? {
         if (data !is JSONObject) {
             return null
         }
@@ -25,16 +25,16 @@ object GXDataBindingFactory {
         val accessibilityEnable = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
         val extend = data.getJSONObject(GXTemplateKey.GAIAX_EXTEND)
 
-        val valueExp = GXExpressionFactory.create(value)
-        val placeholderExp = GXExpressionFactory.create(placeholder)
-        val accessibilityDescExp = GXExpressionFactory.create(accessibilityDesc)
-        val accessibilityEnableExp = GXExpressionFactory.create(accessibilityEnable)
+        val valueExp = GXExpressionFactory.create(expVersion, value)
+        val placeholderExp = GXExpressionFactory.create(expVersion, placeholder)
+        val accessibilityDescExp = GXExpressionFactory.create(expVersion, accessibilityDesc)
+        val accessibilityEnableExp = GXExpressionFactory.create(expVersion, accessibilityEnable)
         val extendExp: MutableMap<String, GXIExpression>? =
             if (extend != null && extend.isNotEmpty()) {
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()
                 for (entry in extend) {
                     if (entry.key != null && entry.value != null) {
-                        GXExpressionFactory.create(entry.value)?.let {
+                        GXExpressionFactory.create(expVersion, entry.value)?.let {
                             result[entry.key] = it
                         }
                     }

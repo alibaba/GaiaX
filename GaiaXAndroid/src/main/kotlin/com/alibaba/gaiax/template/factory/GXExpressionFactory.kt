@@ -24,8 +24,8 @@ import com.alibaba.gaiax.template.GXIExpression
  */
 object GXExpressionFactory {
 
-    fun isTrue(value: Any?): Boolean? {
-        return GXRegisterCenter.instance.extensionExpression?.isTrue(value)
+    fun isTrue(expVersion: String?, value: Any?): Boolean? {
+        return GXRegisterCenter.instance.extensionExpression?.isTrue(expVersion, value)
     }
 
     fun valuePath(expression: Any?): String? {
@@ -35,11 +35,11 @@ object GXExpressionFactory {
         return null
     }
 
-    fun create(expression: Any?): GXIExpression? {
+    fun create(expVersion: String?, expression: Any?): GXIExpression? {
         return if (expression == null) {
             null
         } else {
-            GXRegisterCenter.instance.extensionExpression?.create(expression)
+            GXRegisterCenter.instance.extensionExpression?.create(expVersion, expression)
         }
     }
 }

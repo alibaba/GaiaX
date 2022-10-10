@@ -1,6 +1,7 @@
 {
   "id": "search_component_1011",
   "type": "gaia-template",
+  "exp-version": "V1",
   "layers": [
     {
       "id": "container-view",

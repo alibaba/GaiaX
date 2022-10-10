@@ -30,11 +30,11 @@ import java.math.BigDecimal
 
 class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
 
-    override fun create(value: Any): GXIExpression {
+    override fun create(expVersion: String?, value: Any): GXIExpression {
         return GXAnalyzeWrapper(value)
     }
 
-    override fun isTrue(value: Any?): Boolean {
+    override fun isTrue(expVersion: String?, value: Any?): Boolean {
         return value == true
     }
 

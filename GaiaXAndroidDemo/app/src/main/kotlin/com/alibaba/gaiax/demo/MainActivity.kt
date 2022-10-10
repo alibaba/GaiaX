@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.adapter.GXExtensionExpression
-import com.alibaba.gaiax.demo.utils.GXExtensionYouKuExpression
+import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.fastpreview.GaiaXFastPreviewActivity
 import com.alibaba.gaiax.fastpreview.GaiaXQRCodeActivity
 
@@ -33,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         GXTemplateEngine.instance.init(this)
+        GXRegisterCenter.instance
+            .registerExtensionExpression(GXExtensionMultiVersionExpression())
 
         // 注册IconFont字体的加载逻辑
         GXRegisterCenter.instance.registerExtensionFontFamily(object :
@@ -94,16 +95,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<AppCompatButton>(R.id.remote)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, RemoteDataSourceTemplateActivity::class.java)
             startActivity(intent)
-        }
-
-        findViewById<AppCompatButton>(R.id.youku_expression)?.setOnClickListener {
-            GXRegisterCenter.instance
-                .registerExtensionExpression(GXExtensionYouKuExpression())
-        }
-
-        findViewById<AppCompatButton>(R.id.opensource_expression)?.setOnClickListener {
-            GXRegisterCenter.instance
-                .registerExtensionExpression(GXExtensionExpression())
         }
     }
 }

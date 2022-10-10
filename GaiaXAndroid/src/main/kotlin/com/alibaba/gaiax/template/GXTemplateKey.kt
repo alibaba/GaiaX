@@ -325,6 +325,8 @@ object GXTemplateKey {
 
     const val GAIAX_LAYER_CLASS = "class"
 
+    const val GAIAX_LAYER_EXP_VERSION = "exp-version"
+
     const val GAIAX_PX = "px"
 
     const val GAIAX_PT = "pt"

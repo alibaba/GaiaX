@@ -10,10 +10,10 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.render.view.container.GXContainer
-import com.alibaba.gaiax.template.GXDataBinding
 import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.After
@@ -43,7 +43,7 @@ open class GXBaseTest {
         GXTemplateInfoSource.instance.clean()
 
         GXRegisterCenter.instance
-            .registerExtensionDataBinding(GXExtensionDataBinding())
+            .registerExtensionExpression(GXExtensionMultiVersionExpression())
             .registerExtensionColor(GXProcessorColor())
             .registerExtensionSize(GXExtensionSize())
             .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
@@ -105,14 +105,6 @@ open class GXBaseTest {
             return null
         }
 
-    }
-
-    class GXExtensionDataBinding : GXRegisterCenter.GXIExtensionDataBinding {
-
-        override fun create(value: Any): GXDataBinding? {
-            Log.d(TAG, "createProcessing() called with: data = $value")
-            return null
-        }
     }
 
     class GXExtensionDynamicProperty : GXRegisterCenter.GXIExtensionDynamicProperty {

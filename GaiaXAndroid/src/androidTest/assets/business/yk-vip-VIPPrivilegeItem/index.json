@@ -1,6 +1,7 @@
 {
   "id": "yk-vip-VIPPrivilegeItem",
   "type": "gaia-template",
+  "exp-version": "V1",
   "layers": [
     {
       "id": "headerView",

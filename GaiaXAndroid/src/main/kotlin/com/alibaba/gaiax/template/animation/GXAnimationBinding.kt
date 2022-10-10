@@ -53,7 +53,10 @@ class GXAnimationBinding(
         // 符合条件触发动画
         if (trigger &&
             // 这里兼容1的状态
-            GXExpressionFactory.isTrue(state) == true
+            GXExpressionFactory.isTrue(
+                gxTemplateContext.rootNode?.templateNode?.layer?.expVersion,
+                state
+            ) == true
         ) {
             gxAnimation.executeAnimation(
                 gxState,
@@ -83,18 +86,19 @@ class GXAnimationBinding(
         private const val KEY_PROP_ANIMATOR_SET = "propAnimatorSet"
         private const val KEY_LOTTIE_ANIMATOR = "lottieAnimator"
 
-        fun create(data: JSONObject): GXAnimationBinding? {
+        fun create(expVersion: String?, data: JSONObject): GXAnimationBinding? {
             val type = data.getString(KEY_TYPE) ?: return null
             val trigger = data.getBooleanValue(KEY_TRIGGER)
             val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
+                expVersion,
                 data.getString(KEY_STATE)
             ) else null
 
-            val gxExpression = GXExpressionFactory.create(data)
+            val gxExpression = GXExpressionFactory.create(expVersion, data)
 
             if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true)) {
                 val lottieData = data.getJSONObject(KEY_LOTTIE_ANIMATOR) ?: data
-                val lottieAnimator = GXLottieAnimation.create(lottieData)
+                val lottieAnimator = GXLottieAnimation.create(expVersion, lottieData)
                 if (lottieAnimator != null) {
                     return GXAnimationBinding(type, trigger, state, lottieAnimator, gxExpression)
                 }

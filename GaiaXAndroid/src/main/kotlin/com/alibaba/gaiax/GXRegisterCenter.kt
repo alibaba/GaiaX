@@ -91,12 +91,12 @@ class GXRegisterCenter {
     }
 
     interface GXIExtensionExpression {
-        fun create(value: Any): GXIExpression
-        fun isTrue(value: Any?): Boolean
+        fun create(expVersion: String?, value: Any): GXIExpression
+        fun isTrue(expVersion: String?, value: Any?): Boolean
     }
 
     interface GXIExtensionDataBinding {
-        fun create(value: Any): GXDataBinding?
+        fun create(expVersion: String?, value: Any): GXDataBinding?
     }
 
     interface GXIExtensionColor {
@@ -181,7 +181,8 @@ class GXRegisterCenter {
             gxTemplateContext: GXTemplateContext,
             container: GXContainer,
             extend: JSONObject?
-        ) {}
+        ) {
+        }
     }
 
     interface GXIExtensionLottieAnimation {

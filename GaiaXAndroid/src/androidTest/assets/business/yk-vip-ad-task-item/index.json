@@ -1,6 +1,7 @@
 {
   "id": "yk-vip-ad-task-item",
   "type": "gaia-template",
+  "exp-version": "V1",
   "layers": [
     { "id": "yk-vip-ad-task-item-line", "type": "view" },
     {

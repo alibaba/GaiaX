@@ -5,10 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize
-import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
-import com.alibaba.gaiax.utils.GaiaXExpression
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,25 +16,11 @@ import java.nio.charset.Charset
 @RunWith(AndroidJUnit4::class)
 class GXBusinessTest : GXBaseTest() {
 
-    class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
-
-        override fun create(value: Any): GXIExpression {
-            return GaiaXExpression.create(value)
-        }
-
-        override fun isTrue(value: Any?): Boolean {
-            return GaiaXExpression.isCondition(value)
-        }
-
-    }
-
     /**
      * TODO: bad case
      */
     @Test
     fun yk_vip_channel_identityarea() {
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -68,8 +52,6 @@ class GXBusinessTest : GXBaseTest() {
 
     @Test
     fun yk_vip_ad_task_item() {
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -90,8 +72,6 @@ class GXBusinessTest : GXBaseTest() {
 
     @Test
     fun yk_vip_VIPPrivilegeItem() {
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -130,8 +110,6 @@ class GXBusinessTest : GXBaseTest() {
 
     @Test
     fun search_component_1011() {
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionExpression())
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

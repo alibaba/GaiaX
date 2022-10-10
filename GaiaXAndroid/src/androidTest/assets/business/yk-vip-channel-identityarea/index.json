@@ -1,6 +1,7 @@
 {
   "id": "yk-vip-channel-identityarea",
   "type": "gaia-template",
+  "exp-version": "V1",
   "layers": [
     {
       "id": "avatar",

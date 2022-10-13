@@ -7,14 +7,14 @@ project(GXAnalyzeCore)
 
 # 指定C++版本
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -fdata-sections -ffunction-sections")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -flto -fdata-sections -ffunction-sections  -s")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -O3 -flto  -Wl,--gc-sections -Wl,-s")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 # 设置根目录
 get_filename_component(CORE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ ABSOLUTE)
-
-# 打印消息
-message("LOG ENGINE CORE_ROOT_DIR = ${CORE_ROOT_DIR}")
-message("LOG ENGINE CORE_DISTRIBUTION_DIR = ${CORE_DISTRIBUTION_DIR}")
-message("LOG ENGINE CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
 
 # 设置库
 add_library(${PROJECT_NAME} SHARED
@@ -32,16 +32,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # 链接子模块
 target_link_libraries(${PROJECT_NAME})
 
-# 链接 libdsm 模块
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Android")
+# 链接模块
+if (${CMAKE_SYSTEM_NAME} MATCHES "Android")
 
     target_link_libraries(${PROJECT_NAME}
             -landroid
             -llog
             )
-
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "iOS")
 endif ()

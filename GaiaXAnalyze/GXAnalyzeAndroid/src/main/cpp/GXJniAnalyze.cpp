@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include "GXAnalyze.h"
-#include "JniHelp.h"
+#include <android/log.h>
 
 static JavaVM *javaVM = nullptr;
 

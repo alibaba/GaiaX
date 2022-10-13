@@ -1,116 +1,63 @@
 #include "GXAnalyze.h"
-#include <time.h>
 
 using namespace std;
-static vector<vector<char> > G;              //文法G[S]产生式 ，~为空字
-static unordered_map<char, set<char> > ts;   //终结符(char)terminal symbol,及它的first集合(set<char>)
-static unordered_map<char, set<char> > nts;  //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
-static unordered_map<string, string> tableT;
-static bool isInit = false;
-static string tString[] = {"true", "false", "null", "value", "num", "string", "data", "id", ",",
-                           "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==", "!=",
-                           "&&", "||", "?", ":", "?:", "error", "#", "~"};
-static char tSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-', '+', '%',
-                         '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y', 'e', '#',
-                         '~'};
-static string ntString[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr", "Two",
-                            "P", "One"};
-static char ntSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
+
+static vector<vector<char> > grammarProduct;                        //文法grammarProduct[S]产生式 ，~为空字
+static unordered_map<char, set<char> > terminalSymbolMap;           //终结符(char)terminal symbol,及它的first集合(set<char>)
+static unordered_map<char, set<char> > nonTerminalSymbolMap;        //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
+static unordered_map<string, string> gotoTable;                     //初始化最终产物，可根据该表格找到规约或递进的结果
+static bool isInit = false;                                         //判断是否已经进行过初始化
+static unordered_map<string, char> terminal;                        //终结符集合
+static unordered_map<string, char> nonTerminal;                     //非终结符集合
+static vector<string> grammarFormula;                               //每层文法式的集合
+struct Closure {                                                    //闭包CLOSURE
+    vector<vector<char> > project;                                  //项目集
+    vector<set<char> > outlook;                                     //展望串
+    unordered_map<char, int> go;                                    // GO函数
+};
+static vector<Closure> closureArray;                                //闭包集合
+static unordered_map<char, string> wordToSymbol;                    //key:word value:symbol
+static unordered_map<string, char> symbolToWord;                    //key:symbol value:word
+static unordered_map<string, string> cache;                         //表达式缓存
+/*
+ * 存放终结符完整词汇的string集合
+ */
+static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id",
+                                ",",
+                                "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==",
+                                "!=",
+                                "&&", "||", "?", ":", "?:", "error", "#", "~"};
+/*
+ * 存放终结符标识符的char集合
+ */
+static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-',
+                                '+', '%',
+                                '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y',
+                                'e', '#',
+                                '~'};
+/*
+ * 存放非终结符完整词汇的string集合
+ */
+static string nonTerminalWord[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr",
+                                   "Two",
+                                   "P", "One"};
+/*
+ * 存放非终结符标识符的char集合
+ */
+static char nonTerminalSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
+/*
+ * 表达式语法集合
+ */
 static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
                            "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
-                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O", "O->t|f|n|v|u|s|d"};
-static unordered_map<string, char> Vt;     //终结符集合
-static unordered_map<string, char> Vn;     //非终结符集合
-static vector<string> productions;
-struct CLOSURE {                                  //闭包CLOSURE
-    vector<vector<char> > project; //项目集
-    vector<set<char> > outlook;    //展望串
-    unordered_map<char, int> go;   // GO函数
-};
-static vector<CLOSURE> cloArray;
-static unordered_map<char, string> CtoS;     //Char to String
-static unordered_map<string, char> StoC;     //String to Char
-static unordered_map<string, string> cache;
+                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~", "O->t|f|n|v|u|s|d"};
 
-//初始化终结符和非终结符
-void init_SAndC() {
-    int sizeC = sizeof(tString) / sizeof(tString[0]);
-    int sizeU = sizeof(ntString) / sizeof(ntString[0]);
-    set<char> m;
-    //终结符
-    for (int i = 0; i < sizeC; i++) {
-        CtoS.insert(pair<char, string>(tSymbol[i], tString[i]));
-        StoC.insert(pair<string, char>(tString[i], tSymbol[i]));
-
-    }
-    for (int i = 0; i < sizeU; i++) {
-        CtoS.insert(pair<char, string>(ntSymbol[i], ntString[i]));
-        StoC.insert(pair<string, char>(ntString[i], ntSymbol[i]));
-    }
-}
-
-void read_G() {
-    int sizeG = sizeof(grammar) / sizeof(grammar[0]);
-    for (int i = 0; i < sizeG; i++) {
-        productions.push_back(grammar[i]);
-    }
-    char symbol;
-    int i = 0;
-    vector<char> value;
-    char chX;
-    set<char> m;
-    nts['M'] = m;
-    for (int x = 0; x < productions.size(); x++) {
-        string temp = productions[x];
-        for (int y = 0; y < temp.length(); y++) {
-            symbol = temp[y];
-            if (symbol != ' ' || symbol != '\t') {
-                if (symbol == '|') {
-                    G.push_back(value);
-                    value.clear();
-                    i = 3;
-                    value.push_back(chX);
-                    continue;
-                }
-                i++;
-                if (i == 1) {
-                    chX = symbol;
-                    nts[symbol] = m;
-                } else if (i != 2 && i != 3 && symbol != '~')
-                    ts[symbol] = m;
-                if (i != 2 && i != 3)
-                    value.push_back(symbol);
-            }
-            if (y == temp.length() - 1) {
-                if (!value.empty()) {
-                    G.push_back(value);
-                }
-                value.clear();
-                i = 0;
-                continue;
-            }
-        }
-    }
-    if (G.empty()) {
-        exit(0);
-    }
-    value.clear();
-    value.push_back('M');
-    value.push_back(G[0][0]);
-    G.insert(G.begin(), value);
-
-    //去掉ts中的非终结符
-    for (unordered_map<char, set<char> >::iterator it = nts.begin(); it != nts.end(); it++) {
-        unordered_map<char, set<char> >::iterator iter;
-        iter = ts.find(it->first);
-        if (iter != ts.end())
-            ts.erase(iter);
-    }
-}
-
-bool is_terminal_char(const string &s) {
+/*
+ * 判断word是否为终结符
+ */
+bool isTerminalWord(const string &s) {
     //在map中判断
-    if (Vt.count(s) > 0) {
+    if (terminal.count(s) > 0) {
         return true;
     }
     if (s == "M") {
@@ -119,8 +66,80 @@ bool is_terminal_char(const string &s) {
     return false;
 }
 
-void get_First() { //得到First集合
-    for (auto &it : ts)
+/*
+ * 判断字符是否是数字类型
+ */
+bool isNumber(char ch) {
+    if (ch >= '0' && ch <= '9')
+        return true;
+    else
+        return false;
+}
+
+/*
+ * 初始化：获取文法grammarProduct
+ */
+void getGrammarProduct() {
+    int sizeG = sizeof(grammar) / sizeof(grammar[0]);
+    for (int i = 0; i < sizeG; i++) {
+        grammarFormula.push_back(grammar[i]);
+    }
+    char symbol;
+    int i = 0;
+    vector<char> value;
+    char chX;
+    set<char> m;
+    nonTerminalSymbolMap['M'] = m;
+    for (auto temp : grammarFormula) {
+        for (int y = 0; y < temp.length(); y++) {
+            symbol = temp[y];
+            if (symbol == '|') {
+                grammarProduct.push_back(value);
+                value.clear();
+                i = 3;
+                value.push_back(chX);
+                continue;
+            }
+            i++;
+            if (i == 1) {
+                chX = symbol;
+                nonTerminalSymbolMap[symbol] = m;
+            } else if (i != 2 && i != 3 && symbol != '~')
+                terminalSymbolMap[symbol] = m;
+            if (i != 2 && i != 3)
+                value.push_back(symbol);
+            if (y == temp.length() - 1) {
+                if (!value.empty()) {
+                    grammarProduct.push_back(value);
+                }
+                value.clear();
+                i = 0;
+                continue;
+            }
+        }
+    }
+    if (grammarProduct.empty()) {
+        exit(0);
+    }
+    value.clear();
+    value.push_back('M');
+    value.push_back(grammarProduct[0][0]);
+    grammarProduct.insert(grammarProduct.begin(), value);
+
+    //去掉ts中的非终结符
+    for (auto &it : nonTerminalSymbolMap) {
+        unordered_map<char, set<char> >::iterator iter;
+        iter = terminalSymbolMap.find(it.first);
+        if (iter != terminalSymbolMap.end())
+            terminalSymbolMap.erase(iter);
+    }
+}
+
+/*
+ * 初始化：获取First集
+ */
+void getFirst() { //得到First集合
+    for (auto &it : terminalSymbolMap)
         it.second.insert(it.first);
 
     //求非终结符的First集合
@@ -131,21 +150,23 @@ void get_First() { //得到First集合
             break;
         r++;
         change = 0;
-        for (auto &it : nts) {
-            for (unsigned int i = 0; i < G.size(); i++) {
-                if (G[i][0] == it.first) {
+        for (auto &it : nonTerminalSymbolMap) {
+            for (unsigned int i = 0; i < grammarProduct.size(); i++) {
+                if (grammarProduct[i][0] == it.first) {
                     unsigned int size = it.second.size();
-                    unordered_map<char, set<char> >::iterator iter = ts.find(G[i][1]);
-                    if (ts.find(G[i][1]) != ts.end() ||
-                        G[i][1] == '~') {
-                        it.second.insert(G[i][1]);
+                    unordered_map<char, set<char> >::iterator iter = terminalSymbolMap.find(
+                            grammarProduct[i][1]);
+                    if (terminalSymbolMap.find(grammarProduct[i][1]) != terminalSymbolMap.end() ||
+                        grammarProduct[i][1] == '~') {
+                        it.second.insert(grammarProduct[i][1]);
                         if (it.second.size() > size)
                             change = 1;
                     } else {
                         unsigned int col = 1;
                         while (1) {
                             int flag = 0;
-                            unordered_map<char, set<char> >::iterator itt = nts.find(G[i][col]);
+                            unordered_map<char, set<char> >::iterator itt = nonTerminalSymbolMap.find(
+                                    grammarProduct[i][col]);
                             for (auto &iter : itt->second) {
                                 if (iter == '~')
                                     flag = 1;
@@ -154,12 +175,12 @@ void get_First() { //得到First集合
                             }
                             if (flag) {
                                 col++;
-                                if (G[i].size() <= col) {
+                                if (grammarProduct[i].size() <= col) {
                                     it.second.insert('~');
                                     break;
-                                } else if (ts.find(G[i][col]) !=
-                                           ts.end()) {
-                                    it.second.insert(G[i][col]);
+                                } else if (terminalSymbolMap.find(grammarProduct[i][col]) !=
+                                           terminalSymbolMap.end()) {
+                                    it.second.insert(grammarProduct[i][col]);
                                     break;
                                 } else {
                                 }
@@ -175,57 +196,64 @@ void get_First() { //得到First集合
     }
 }
 
-void get_Closure() {
+/*
+ * 初始化：生成闭包集
+ */
+void getClosure() {
     int i = 0;
-    CLOSURE clo;
-    cloArray.push_back(clo);
+    Closure clo;
+    closureArray.push_back(clo);
     while (1) {
-        if (i == cloArray.size())
+        if (i == closureArray.size())
             break;
         if (i == 0) {
-            vector<char> vec(G[0]);
+            vector<char> vec(grammarProduct[0]);
             vec.insert(vec.begin() + 1, ' ');
-            cloArray[i].project.push_back(vec);
+            closureArray[i].project.push_back(vec);
             set<char> m;
             m.insert('#');
-            cloArray[i].outlook.push_back(m);
+            closureArray[i].outlook.push_back(m);
         }
-        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
-            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
-                if (cloArray[i].project[j][k] == ' ') {
-                    if (k == cloArray[i].project[j].size() - 1)
+        for (unsigned int j = 0; j < closureArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < closureArray[i].project[j].size(); k++) {
+                if (closureArray[i].project[j][k] == ' ') {
+                    if (k == closureArray[i].project[j].size() - 1)
                         break;
                     for (unsigned int x = 0;
-                         x < G.size(); x++) {
-                        if (G[x][0] ==
-                            cloArray[i].project[j][k + 1]) {
-                            vector<char> vec(G[x]);
+                         x < grammarProduct.size(); x++) {
+                        if (grammarProduct[x][0] ==
+                            closureArray[i].project[j][k + 1]) {
+                            vector<char> vec(grammarProduct[x]);
                             vec.insert(vec.begin() + 1, ' ');
                             int exist = 0;
                             for (unsigned int y = 0;
-                                 y < cloArray[i].project.size(); y++) {
-                                if (cloArray[i].project[y] == vec) {
+                                 y < closureArray[i].project.size(); y++) {
+                                if (closureArray[i].project[y] == vec) {
                                     exist = y;
                                     break;
                                 }
                             }
                             if (exist == 0) {
-                                cloArray[i].project.push_back(vec);
+                                closureArray[i].project.push_back(vec);
                             }
                             set<char> m;
                             bool emp = true;    //判空
                             int t = 0;
                             while (emp) {
                                 emp = false;
-                                if (k + t + 1 == cloArray[i].project[j].size() - 1) { //情况一
-                                    for (auto it : cloArray[i].outlook[j])
+                                if (k + t + 1 == closureArray[i].project[j].size() - 1) { //情况一
+                                    for (auto it : closureArray[i].outlook[j])
                                         m.insert(it);
-                                } else if (ts.find(cloArray[i].project[j][k + t + 2]) !=
-                                           ts.end()) { //情况二
-                                    m.insert(cloArray[i].project[j][k + 2 + t]);
+                                } else if (
+                                        terminalSymbolMap.find(
+                                                closureArray[i].project[j][k + t + 2]) !=
+                                        terminalSymbolMap.end()) { //情况二
+                                    m.insert(closureArray[i].project[j][k + 2 + t]);
                                 } else {
                                     set<char> m1(
-                                            (nts.find(cloArray[i].project[j][k + 2 + t]))->second);
+                                            (nonTerminalSymbolMap.find(
+                                                    closureArray[i].project[j][k + 2 +
+                                                                               t]))->second);
                                     for (auto it : m1) {
                                         if (it == '~') {
                                             emp = true;
@@ -238,37 +266,38 @@ void get_Closure() {
                             }
                             if (exist) {
                                 for (auto it : m) {
-                                    cloArray[i].outlook[exist].insert(it);
+                                    closureArray[i].outlook[exist].insert(it);
                                 }
                             } else
-                                cloArray[i].outlook.push_back(m);
+                                closureArray[i].outlook.push_back(m);
                         }
                     }
                     break;
                 }
             }
         }
-        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
-            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
-                if (cloArray[i].project[j][k] == ' ') {
-                    if (k == cloArray[i].project[j].size() - 1)
+        for (unsigned int j = 0; j < closureArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < closureArray[i].project[j].size(); k++) {
+                if (closureArray[i].project[j][k] == ' ') {
+                    if (k == closureArray[i].project[j].size() - 1)
                         break;
-                    vector<char> new_closure_pro(cloArray[i].project[j]);
+                    vector<char> new_closure_pro(closureArray[i].project[j]);
                     new_closure_pro[k] = new_closure_pro[k + 1];
                     new_closure_pro[k + 1] = ' ';
-                    set<char> new_closure_search(cloArray[i].outlook[j]);
+                    set<char> new_closure_search(closureArray[i].outlook[j]);
                     bool dif = false;
-                    for (unsigned int x = 0; x < cloArray.size(); x++) {
+                    for (unsigned int x = 0; x < closureArray.size(); x++) {
                         // dif = false;
                         for (unsigned int y = 0; y <
-                                                 cloArray[x].project.size(); y++) {
+                                                 closureArray[x].project.size(); y++) {
                             dif = false;
-                            if (new_closure_pro == cloArray[x].project[y]) {
-                                if (cloArray[x].outlook[0].size() != new_closure_search.size()) {
+                            if (new_closure_pro == closureArray[x].project[y]) {
+                                if (closureArray[x].outlook[0].size() !=
+                                    new_closure_search.size()) {
                                     dif = true;
                                     continue;
                                 }
-                                auto iter = cloArray[x].outlook[0].begin();
+                                auto iter = closureArray[x].outlook[0].begin();
                                 for (auto it : new_closure_search) {
                                     if (it != *iter) {
                                         dif = true;
@@ -277,7 +306,7 @@ void get_Closure() {
                                     iter++;
                                 }
                                 if (dif == false) {
-                                    cloArray[i].go[new_closure_pro[k]] = x;
+                                    closureArray[i].go[new_closure_pro[k]] = x;
                                     break;
                                 }
                             } else
@@ -288,20 +317,20 @@ void get_Closure() {
                         if (dif == false)
                             break;
                     }
-                    if (cloArray[i].go.count(new_closure_pro[k]) != 0 &&
+                    if (closureArray[i].go.count(new_closure_pro[k]) != 0 &&
                         dif) {
-                        cloArray[cloArray[i].go[new_closure_pro[k]]].project.push_back(
+                        closureArray[closureArray[i].go[new_closure_pro[k]]].project.push_back(
                                 new_closure_pro);
-                        cloArray[cloArray[i].go[new_closure_pro[k]]].outlook.push_back(
+                        closureArray[closureArray[i].go[new_closure_pro[k]]].outlook.push_back(
                                 new_closure_search);
                         break;
                     }
                     if (dif) {
-                        CLOSURE new_closure;
+                        Closure new_closure;
                         new_closure.project.push_back(new_closure_pro);
                         new_closure.outlook.push_back(new_closure_search);
-                        cloArray.push_back(new_closure);
-                        cloArray[i].go[new_closure_pro[k]] = cloArray.size() - 1;
+                        closureArray.push_back(new_closure);
+                        closureArray[i].go[new_closure_pro[k]] = closureArray.size() - 1;
                     }
                 }
             }
@@ -310,53 +339,57 @@ void get_Closure() {
     }
 }
 
-int get_Table() {
-    for (unsigned int i = 0; i < cloArray.size(); i++) {
-        for (unsigned int j = 0; j < cloArray[i].project.size(); j++) {
-            for (unsigned int k = 0; k < cloArray[i].project[j].size(); k++) {
-                if (cloArray[i].project[j][k] == ' ') {
-                    if (k == cloArray[i].project[j].size() - 1) {
-                        if (cloArray[i].project[j][0] == 'M') {
+/*
+ * 初始化：生成gotoTable
+ */
+int getGotoTable() {
+    for (unsigned int i = 0; i < closureArray.size(); i++) {
+        for (unsigned int j = 0; j < closureArray[i].project.size(); j++) {
+            for (unsigned int k = 0; k < closureArray[i].project[j].size(); k++) {
+                if (closureArray[i].project[j][k] == ' ') {
+                    if (k == closureArray[i].project[j].size() - 1) {
+                        if (closureArray[i].project[j][0] == 'M') {
                             string m = to_string(i) + '#';
-                            if (tableT.find(m) != tableT.end() && tableT[m] != "acc") {
+                            if (gotoTable.find(m) != gotoTable.end() && gotoTable[m] != "acc") {
                                 return 0;
                             } else
-                                tableT[m] = "acc";
+                                gotoTable[m] = "acc";
                         } else {
                             int id;
-                            for (unsigned int x = 0; x < G.size(); x++) {
-                                vector<char> vec(cloArray[i].project[j]);
+                            for (unsigned int x = 0; x < grammarProduct.size(); x++) {
+                                vector<char> vec(closureArray[i].project[j]);
                                 vec.pop_back();
-                                if (G[x] == vec) {
+                                if (grammarProduct[x] == vec) {
                                     id = x;
                                     break;
                                 }
                             }
-                            for (auto it : cloArray[i].outlook[j]) {
+                            for (auto it : closureArray[i].outlook[j]) {
                                 string m = to_string(i) + it;
-                                if (tableT.find(m) != tableT.end() &&
-                                    tableT[m] != (string) "r" + to_string(id)) {
+                                if (gotoTable.find(m) != gotoTable.end() &&
+                                    gotoTable[m] != (string) "r" + to_string(id)) {
                                     return 0;
                                 } else
-                                    tableT[m] = (string) "r" + to_string(id);
+                                    gotoTable[m] = (string) "r" + to_string(id);
                             }
                         }
                     } else {
-                        char next = cloArray[i].project[j][k + 1];
-                        if (ts.find(next) != ts.end()) {
+                        char next = closureArray[i].project[j][k + 1];
+                        if (terminalSymbolMap.find(next) != terminalSymbolMap.end()) {
                             string m = to_string(i) + next;
-                            if (tableT.find(m) != tableT.end() &&
-                                tableT[m] != (string) "s" + to_string(cloArray[i].go[next])) {
+                            if (gotoTable.find(m) != gotoTable.end() &&
+                                gotoTable[m] !=
+                                (string) "s" + to_string(closureArray[i].go[next])) {
                                 return 0;
                             } else
-                                tableT[m] = (string) "s" + to_string(cloArray[i].go[next]);
+                                gotoTable[m] = (string) "s" + to_string(closureArray[i].go[next]);
                         } else {
                             string m = to_string(i) + next;
-                            if (tableT.find(m) != tableT.end() &&
-                                tableT[m] != to_string(cloArray[i].go[next])) {
+                            if (gotoTable.find(m) != gotoTable.end() &&
+                                gotoTable[m] != to_string(closureArray[i].go[next])) {
                                 return 0;
                             } else
-                                tableT[m] = to_string(cloArray[i].go[next]);
+                                gotoTable[m] = to_string(closureArray[i].go[next]);
                         }
                     }
                     break;
@@ -367,43 +400,58 @@ int get_Table() {
     return 1;
 }
 
-//初始化终结符和非终结符
-void init_Terminal() {
-    int sizeC = sizeof(tString) / sizeof(tString[0]);
-    int sizeU = sizeof(ntString) / sizeof(ntString[0]);
+/*
+ * 初始化：获取终结符和非终结符相关集合
+ */
+void initTerminal() {
+    int sizeTerminal = sizeof(terminalWord) / sizeof(terminalWord[0]);
+    int sizeNonTerminal = sizeof(nonTerminalWord) / sizeof(nonTerminalWord[0]);
     set<char> m;
-    //终结符
-    for (int i = 0; i < sizeC; i++) {
-        Vt.insert(pair<string, char>(tString[i], tSymbol[i]));
-        ts[tSymbol[i]] = m;
+    for (int i = 0; i < sizeTerminal; i++) {
+        wordToSymbol.insert(pair<char, string>(terminalSymbol[i], terminalWord[i]));
+        symbolToWord.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
+        terminal.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
+        terminalSymbolMap[terminalSymbol[i]] = m;
     }
-    for (int i = 0; i < sizeU; i++) {
-        Vn.insert(pair<string, char>(ntString[i], ntSymbol[i]));
-        nts[ntSymbol[i]] = m;
+    for (int i = 0; i < sizeNonTerminal; i++) {
+        wordToSymbol.insert(pair<char, string>(nonTerminalSymbol[i], nonTerminalWord[i]));
+        symbolToWord.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
+        nonTerminal.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
+        nonTerminalSymbolMap[nonTerminalSymbol[i]] = m;
     }
 }
 
+/*
+ * 调用所有初始化函数
+ */
 void init() {
     if (!isInit) {
         cache.reserve(1024);
         isInit = true;
-        read_G();
-        get_First();
-        get_Closure();
-        init_Terminal();
-        get_Table();
-        init_SAndC();
+        getGrammarProduct();
+        getFirst();
+        getClosure();
+        initTerminal();
+        getGotoTable();
     }
 }
 
+/*
+ * Analyze对象初始化
+ */
 GXAnalyze::GXAnalyze() {
     init();
 }
 
+/*
+ * Analyze对象析构函数
+ */
 GXAnalyze::~GXAnalyze() {
 }
 
-//获取两个数值计算的结果
+/*
+ * 获取两个数值计算的结果
+ */
 GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     string name;
@@ -858,7 +906,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     return result;
 }
 
-//获取单个数值计算的结果
+/*
+ * 获取单个数值计算的结果
+ */
 GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     if (left.token == "map" || left.token == "array") {
@@ -906,6 +956,11 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
     return result;
 }
 
+/*
+ * @expression：需要计算的表达式
+ * @source：数据源
+ * 计算表达式结果函数
+ */
 long GXAnalyze::getValue(string expression, void *source) {
     char *input;
     int inputLength = expression.length();
@@ -924,10 +979,10 @@ long GXAnalyze::getValue(string expression, void *source) {
             p++;
         } else {
             GXATSNode token = scanner(synCode, p, input, this);
-            if (is_terminal_char(token.detail)) {
-                result = result + Vt[token.detail];
+            if (isTerminalWord(token.detail)) {
+                result = result + terminal[token.detail];
             } else {
-                result = result + Vn[token.detail];
+                result = result + nonTerminal[token.detail];
             }
             GXATSNode tokenNum;
             if (token.token == "value" || token.token == "data") {
@@ -1015,14 +1070,9 @@ long GXAnalyze::getValue(string expression, void *source) {
     return Res;
 }
 
-bool isNumber(char ch) {
-    if (ch >= '0' && ch <= '9')
-        return true;
-    else
-        return false;
-}
-
-//计算缓存格式的表达式
+/*
+ * 计算缓存格式的表达式的方法
+ */
 long
 GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze, void *source) {
     long *paramsStack;
@@ -1248,7 +1298,9 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
     return (long) pointer;
 }
 
-
+/*
+ * 语法分析并生成缓存表达式的过程
+ */
 long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source,
                       string expression) {
     string tree;
@@ -1284,7 +1336,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
         cur_symbol = sentence[0];
         string m = cur_status + cur_symbol;
         //当前new_status,下一入栈的新状态
-        new_status = tableT[m];
+        new_status = gotoTable[m];
         if (new_status == "acc") {
             if (valueStack[0].token == "string") {
                 pointer = new GXValue(GX_TAG_STRING, valueStack[0].name);
@@ -1324,13 +1376,13 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             // 1
             symbolStack[symbolSize] = cur_symbol; //读入一个字符
             ++symbolSize;
-            string temp = CtoS[cur_symbol];
-            if ((is_terminal_char(temp) &&
+            string temp = wordToSymbol[cur_symbol];
+            if ((isTerminalWord(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
                   temp == "num" || temp == "string" || temp == "data" || temp == "id")) ||
                 (temp == "map" || temp == "array")) {
                 // push value
-                if (is_terminal_char(temp) && temp == "id") {
+                if (isTerminalWord(temp) && temp == "id") {
                     //接下来读入参数，(和)变为运算符
                     isFunction = true;
                 }
@@ -1380,11 +1432,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                    'r') {
             new_status = new_status.substr(1);
             int gid = atoi(new_status.c_str());
-            int len = G[gid].size() - 1;
+            int len = grammarProduct[gid].size() - 1;
             if (len == 1) {
-                char reduced_symbol = G[gid][0];
+                char reduced_symbol = grammarProduct[gid][0];
                 string m = statusStack[statusSize - 2] + reduced_symbol;
-                new_status = tableT[m];
+                new_status = gotoTable[m];
                 statusStack[statusSize - 1] = (new_status);
                 symbolStack[symbolSize - 1] = (reduced_symbol);
             } else {
@@ -1397,14 +1449,14 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 GXATSNode tempR;
                 GXATSNode tempR2;
                 bool isChangedOp = false;
-                char reduced_symbol = G[gid][0];
+                char reduced_symbol = grammarProduct[gid][0];
                 for (int i = 0; i < len; i++) {
-                    action[i] = CtoS[symbolStack[symbolSize - 1]];
+                    action[i] = wordToSymbol[symbolStack[symbolSize - 1]];
                     --statusSize;
                     --symbolSize;
                 }
                 for (int i = 0; i < len; i++) {
-                    if ((is_terminal_char(action[i]) &&
+                    if ((isTerminalWord(action[i]) &&
                          !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
                             action[i] == "value" || action[i] == "num" || action[i] == "string" ||
                             action[i] == "data" || action[i] == "id"))) ||
@@ -1592,7 +1644,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     }
                 }
                 string m = statusStack[statusSize - 1] + reduced_symbol;
-                new_status = tableT[m];
+                new_status = gotoTable[m];
                 statusStack[statusSize] = new_status;
                 ++statusSize;
                 symbolStack[symbolSize] = reduced_symbol;

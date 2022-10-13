@@ -50,7 +50,7 @@ static char nonTerminalSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 
  */
 static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
                            "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
-                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O", "O->t|f|n|v|u|s|d"};
+                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~", "O->t|f|n|v|u|s|d"};
 
 /*
  * 判断word是否为终结符
@@ -66,6 +66,15 @@ bool isTerminalWord(const string &s) {
     return false;
 }
 
+/*
+ * 判断字符是否是数字类型
+ */
+bool isNumber(char ch) {
+    if (ch >= '0' && ch <= '9')
+        return true;
+    else
+        return false;
+}
 
 /*
  * 初始化：获取文法grammarProduct
@@ -427,14 +436,22 @@ void init() {
     }
 }
 
+/*
+ * Analyze对象初始化
+ */
 GXAnalyze::GXAnalyze() {
     init();
 }
 
+/*
+ * Analyze对象析构函数
+ */
 GXAnalyze::~GXAnalyze() {
 }
 
-//获取两个数值计算的结果
+/*
+ * 获取两个数值计算的结果
+ */
 GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     string name;
@@ -889,7 +906,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     return result;
 }
 
-//获取单个数值计算的结果
+/*
+ * 获取单个数值计算的结果
+ */
 GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     if (left.token == "map" || left.token == "array") {
@@ -937,6 +956,11 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
     return result;
 }
 
+/*
+ * @expression：需要计算的表达式
+ * @source：数据源
+ * 计算表达式结果函数
+ */
 long GXAnalyze::getValue(string expression, void *source) {
     char *input;
     int inputLength = expression.length();
@@ -1046,14 +1070,9 @@ long GXAnalyze::getValue(string expression, void *source) {
     return Res;
 }
 
-bool isNumber(char ch) {
-    if (ch >= '0' && ch <= '9')
-        return true;
-    else
-        return false;
-}
-
-//计算缓存格式的表达式
+/*
+ * 计算缓存格式的表达式的方法
+ */
 long
 GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze, void *source) {
     long *paramsStack;
@@ -1279,7 +1298,9 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
     return (long) pointer;
 }
 
-
+/*
+ * 语法分析并生成缓存表达式的过程
+ */
 long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source,
                       string expression) {
     string tree;

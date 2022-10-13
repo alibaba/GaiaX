@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 /**
  * 模板中的表达式
  */
-sealed class GaiaXExpression : GXIExpression {
+sealed class GXYKExpression : GXIExpression {
 
     override fun expression(): Any {
         return ""
@@ -60,7 +60,7 @@ sealed class GaiaXExpression : GXIExpression {
             }
         }
 
-        fun create(expression: Any): GaiaXExpression {
+        fun create(expression: Any): GXYKExpression {
             return when (expression) {
                 is JSON -> when {
                     GJsonObj.isExpression(expression) -> GJsonObj.create(expression as JSONObject)
@@ -101,7 +101,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 未定义表达式
      */
-    object Undefined : GaiaXExpression() {
+    object Undefined : GXYKExpression() {
         override fun desireData(rawJson: JSON?): Any? {
             return null
         }
@@ -114,7 +114,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 自我表达式：$$
      */
-    object Self : GaiaXExpression() {
+    object Self : GXYKExpression() {
 
         override fun toString(): String {
             return "Self()"
@@ -134,9 +134,9 @@ sealed class GaiaXExpression : GXIExpression {
      */
     data class GEval(
         val operate: String,
-        val leftValue: GaiaXExpression,
-        val rightValue: GaiaXExpression
-    ) : GaiaXExpression() {
+        val leftValue: GXYKExpression,
+        val rightValue: GXYKExpression
+    ) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val left = leftValue.desireData(rawJson)
@@ -297,8 +297,8 @@ sealed class GaiaXExpression : GXIExpression {
                         val rightValue = it[1]
                         return GEval(
                             operate,
-                            GaiaXExpression.create(leftValue),
-                            GaiaXExpression.create(rightValue)
+                            GXYKExpression.create(leftValue),
+                            GXYKExpression.create(rightValue)
                         )
                     }
                 }
@@ -310,7 +310,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 用于取环境变量
      */
-    data class GEnv(val value: String) : GaiaXExpression() {
+    data class GEnv(val value: String) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return null
@@ -336,7 +336,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 用于取容器变量
      */
-    data class GScroll(val value: String) : GaiaXExpression() {
+    data class GScroll(val value: String) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any {
             return -1
@@ -362,7 +362,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 用于计算字符串、JSONArray和JSONObject的size
      */
-    data class GSize(val value: GaiaXExpression) : GaiaXExpression() {
+    data class GSize(val value: GXYKExpression) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return when (val result = value.desireData(rawJson)) {
@@ -385,7 +385,7 @@ sealed class GaiaXExpression : GXIExpression {
 
             fun create(value: String): GSize {
                 val realValue = value.substring("size(".length, value.length - 1)
-                return GSize(GaiaXExpression.create(realValue))
+                return GSize(GXYKExpression.create(realValue))
             }
         }
     }
@@ -393,15 +393,15 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * JSON Obj
      */
-    data class GJsonObj(val value: JSONObject) : GaiaXExpression() {
+    data class GJsonObj(val value: JSONObject) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val result = JSONObject()
             if (value.isNotEmpty()) {
                 value.forEach {
                     if (it.key != null && it.value != null) {
-                        if (it.value is GaiaXExpression) {
-                            result[it.key] = (it.value as GaiaXExpression).desireData(rawJson)
+                        if (it.value is GXYKExpression) {
+                            result[it.key] = (it.value as GXYKExpression).desireData(rawJson)
                         } else {
                             result[it.key] = it.value
                         }
@@ -439,13 +439,13 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * JSON Array
      */
-    data class GJsonArrayObj(val value: JSONArray) : GaiaXExpression() {
+    data class GJsonArrayObj(val value: JSONArray) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val result = JSONArray()
             if (value.isNotEmpty()) {
                 value.forEach {
-                    if (it != null && it is GaiaXExpression) {
+                    if (it != null && it is GXYKExpression) {
                         result.add(it.desireData(rawJson))
                     }
                 }
@@ -477,7 +477,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 布尔值
      */
-    data class GBool(val value: Boolean) : GaiaXExpression() {
+    data class GBool(val value: Boolean) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return value
@@ -501,7 +501,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 字符串值
      */
-    data class GString(val value: String) : GaiaXExpression() {
+    data class GString(val value: String) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return value
@@ -525,7 +525,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 数字值: xxx
      */
-    data class GFloat(val value: Float) : GaiaXExpression() {
+    data class GFloat(val value: Float) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return value
@@ -553,7 +553,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 数字值: xxx
      */
-    data class GInt(val value: Int) : GaiaXExpression() {
+    data class GInt(val value: Int) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return value
@@ -578,7 +578,7 @@ sealed class GaiaXExpression : GXIExpression {
         }
     }
 
-    class GNull : GaiaXExpression() {
+    class GNull : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return null
@@ -602,7 +602,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 常量值: xxx
      */
-    data class GText(val value: String) : GaiaXExpression() {
+    data class GText(val value: String) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             // 处理null字符串
@@ -630,7 +630,7 @@ sealed class GaiaXExpression : GXIExpression {
     /**
      * 取值表达式: ${data}
      */
-    data class GValue(val value: String) : GaiaXExpression() {
+    data class GValue(val value: String) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             return rawJson?.getAnyExt(value)
@@ -680,10 +680,10 @@ sealed class GaiaXExpression : GXIExpression {
      * 三元组合表达式: @{ ${data} ? b : c }
      */
     data class GTernaryValue1(
-        val condition: GaiaXExpression,
-        val trueBranch: GaiaXExpression,
-        val falseBranch: GaiaXExpression
-    ) : GaiaXExpression() {
+        val condition: GXYKExpression,
+        val trueBranch: GXYKExpression,
+        val falseBranch: GXYKExpression
+    ) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val result = condition.desireData(rawJson)
@@ -774,9 +774,9 @@ sealed class GaiaXExpression : GXIExpression {
 
             fun create(expression: String): GTernaryValue1 {
                 val value = getExpressionValue(expression)
-                val condition = GaiaXExpression.create(conditionValue(value))
-                val trueBranch = GaiaXExpression.create(trueValue(value))
-                val falseBranch = GaiaXExpression.create(falseValue(value))
+                val condition = GXYKExpression.create(conditionValue(value))
+                val trueBranch = GXYKExpression.create(trueValue(value))
+                val falseBranch = GXYKExpression.create(falseValue(value))
                 return GTernaryValue1(condition, trueBranch, falseBranch)
             }
 
@@ -791,9 +791,9 @@ sealed class GaiaXExpression : GXIExpression {
      * 三元表达式: @{ ${data} ?: b }
      */
     data class GTernaryValue2(
-        val conditionAndTrueBranch: GaiaXExpression,
-        val falseBranch: GaiaXExpression
-    ) : GaiaXExpression() {
+        val conditionAndTrueBranch: GXYKExpression,
+        val falseBranch: GXYKExpression
+    ) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val condition = conditionAndTrueBranch.desireData(rawJson)
@@ -843,8 +843,8 @@ sealed class GaiaXExpression : GXIExpression {
 
             fun create(expression: String): GTernaryValue2 {
                 val value = getExpressionValue(expression)
-                val conditionAndTrueBranch = GaiaXExpression.create(trueValue(value))
-                val falseBranch = GaiaXExpression.create(falseValue(value))
+                val conditionAndTrueBranch = GXYKExpression.create(trueValue(value))
+                val falseBranch = GXYKExpression.create(falseValue(value))
                 return GTernaryValue2(conditionAndTrueBranch, falseBranch)
             }
 
@@ -869,11 +869,11 @@ sealed class GaiaXExpression : GXIExpression {
      * 嵌套三元表达式
      */
     data class GTernaryValue3(
-        val value: GaiaXExpression,
-        val trueBranch: GaiaXExpression?,
-        val falseBranch: GaiaXExpression?
+        val value: GXYKExpression,
+        val trueBranch: GXYKExpression?,
+        val falseBranch: GXYKExpression?
 
-    ) : GaiaXExpression() {
+    ) : GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
 
@@ -940,31 +940,31 @@ sealed class GaiaXExpression : GXIExpression {
                 }
             }
 
-            fun create(expression: String): GaiaXExpression {
+            fun create(expression: String): GXYKExpression {
                 val ms = regex.findAll(expression)
                 if (ms.count() > 0 && ms.first().groupValues.count() > 1) {
                     val target = ms.first().groupValues[1]
                     val askPos: Int = target.indexOf(" ? ")
                     return if (askPos != -1) {
                         val conditionStr = target.substring(0, askPos)
-                        val conditionExp = GaiaXExpression.create(conditionStr)
+                        val conditionExp = GXYKExpression.create(conditionStr)
                         val quotePos: Int = target.indexOf(" : ")
                         if (quotePos != -1) {
                             val branches = target.substring(askPos + 3)
                             val splitBranch = splitBranch(branches)
-                            val trueBranchExp: GaiaXExpression =
-                                GaiaXExpression.create(splitBranch?.first ?: "")
-                            val falseBranchExp: GaiaXExpression =
-                                GaiaXExpression.create(splitBranch?.second ?: "")
+                            val trueBranchExp: GXYKExpression =
+                                GXYKExpression.create(splitBranch?.first ?: "")
+                            val falseBranchExp: GXYKExpression =
+                                GXYKExpression.create(splitBranch?.second ?: "")
                             GTernaryValue3(conditionExp, trueBranchExp, falseBranchExp)
                         } else {
                             create(conditionExp)
                         }
                     } else {
-                        GaiaXExpression.create(target)
+                        GXYKExpression.create(target)
                     }
                 }
-                return GaiaXExpression.create(expression)
+                return GXYKExpression.create(expression)
             }
 
             private fun isExp(expression: String) =
@@ -1007,8 +1007,8 @@ sealed class GaiaXExpression : GXIExpression {
      * @{ xxx } + text
      * text + @{}
      */
-    data class GTextValue(val values: MutableList<GaiaXExpression> = mutableListOf()) :
-        GaiaXExpression() {
+    data class GTextValue(val values: MutableList<GXYKExpression> = mutableListOf()) :
+        GXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
             val result = StringBuilder()
@@ -1031,7 +1031,7 @@ sealed class GaiaXExpression : GXIExpression {
                 val textValue = GTextValue()
                 val contents = expression.split(" + ")
                 contents.forEach { content ->
-                    textValue.values.add(GaiaXExpression.create(content))
+                    textValue.values.add(GXYKExpression.create(content))
                 }
                 return textValue
             }

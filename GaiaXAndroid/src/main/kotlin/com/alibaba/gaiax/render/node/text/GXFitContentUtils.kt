@@ -90,6 +90,16 @@ object GXFitContentUtils {
 
         var result: Size<Dimension>? = null
 
+        var nodeWidth = nodeLayout.width
+
+        var nodeHeight = nodeLayout.height
+
+        // FIX: 如果databinding中引发了flex的改动，那么nodeLayout的结果可能不准确
+        val finalFlexBoxHeight = finalFlexBox.size?.height
+        if (gxStretchNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
+            nodeHeight = finalFlexBoxHeight.value
+        }
+
         if ((fontLines == null || fontLines == 1)) {
             // 单行状态下，需要定高求宽
 
@@ -101,9 +111,6 @@ object GXFitContentUtils {
 
             var measuredWidth = gxCacheText.measuredWidth.toFloat()
             val measuredHeight = gxCacheText.measuredHeight.toFloat()
-
-            // 会对后续的计算结果起到拦截作用
-            var nodeWidth = nodeLayout.width
 
             val isUndefineSize = finalCss.flexBox.size?.width == null ||
                     finalCss.flexBox.size.width is Dimension.Auto ||
@@ -126,7 +133,6 @@ object GXFitContentUtils {
                 }
             }
 
-            val nodeHeight = nodeLayout.height
 
             var textHeight = nodeHeight
             if (textHeight == 0F) {
@@ -160,8 +166,6 @@ object GXFitContentUtils {
 
             gxCacheText.setFontLines(fontLines)
 
-            val nodeWidth = nodeLayout.width
-
             if (nodeWidth == 0F) {
                 if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {
                     result = null
@@ -183,8 +187,6 @@ object GXFitContentUtils {
             // 多行状态下，需要定宽求高
 
             gxCacheText.setFontLines(fontLines)
-
-            val nodeWidth = nodeLayout.width
 
             if (nodeWidth == 0F) {
                 if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {

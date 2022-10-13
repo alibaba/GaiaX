@@ -1,0 +1,14 @@
+#template_text_fitcontent_lines_null_width_null_height_50px_dynamic_change_height {
+  width: 100%;
+  height: 200px;
+  background-color: primaryBackground;
+  flex-direction: column;
+}
+#text {
+  text-overflow: ellipsis;
+  width:200px;
+  height: 50px;
+  color: #ff2869;
+  font-size: 14px;
+  fit-content: true;
+}

@@ -48,7 +48,8 @@ android {
             cmake {
                 cppFlags "-std=c++11"
                 arguments "-DANDROID_PLATFORM_LEVEL=${platformVersion}",
-                        '-DANDROID_TOOLCHAIN=clang'
+                        '-DANDROID_TOOLCHAIN=clang',
+                        '-DANDROID_STL=c++_shared'
             }
         }
 

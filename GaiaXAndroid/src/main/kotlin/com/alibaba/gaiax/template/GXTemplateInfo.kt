@@ -40,6 +40,8 @@ data class GXTemplateInfo(
     val js: String? = null
 ) {
 
+    var expVersion: String? = null
+
     var children: MutableList<GXTemplateInfo>? = null
 
     lateinit var template: GXTemplate
@@ -186,13 +188,15 @@ data class GXTemplateInfo(
             val animationJson =
                 dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
 
+            val expVersion: String? = layerJson.getString(GXTemplateKey.GAIAX_LAYER_EXP_VERSION)
+
             val layer = GXLayer.create(layerJson)
             val css = createCss(layer, cssJson)
-            val data = createData(layer, dataExpJson)
-            val event = createEvent(layer, eventJson)
-            val track = createTrack(layer, trackJson)
-            val config = createConfig(layer, configJson)
-            val animation = createAnimation(layer, animationJson)
+            val data = createData(expVersion, dataExpJson)
+            val event = createEvent(expVersion, eventJson)
+            val track = createTrack(expVersion, trackJson)
+            val config = createConfig(expVersion, configJson)
+            val animation = createAnimation(expVersion, animationJson)
             val js = jsSrc.ifEmpty { null }
 
             return GXTemplateInfo(layer, css, data, event, track, animation, config, js).apply {
@@ -201,6 +205,7 @@ data class GXTemplateInfo(
                 this.rawDataBindingJson = dataBindFileJson
                 this.rawLayerJson = layerJson
                 this.rawConfigJson = configJson
+                this.expVersion = expVersion
             }
         }
 
@@ -236,7 +241,7 @@ data class GXTemplateInfo(
         }
 
         private fun createData(
-            layer: GXLayer,
+            expVersion: String?,
             dataJson: JSONObject
         ): MutableMap<String, GXDataBinding>? {
             return if (!dataJson.isEmpty()) {
@@ -245,7 +250,7 @@ data class GXTemplateInfo(
                     val entryId = entry.key
                     val entryValue = entry.value
                     if (entryId != null && entryValue != null) {
-                        val valueBinding = GXDataBindingFactory.create(layer.expVersion, entryValue)
+                        val valueBinding = GXDataBindingFactory.create(expVersion, entryValue)
                         if (valueBinding != null) {
                             data[entryId] = valueBinding
                         }
@@ -258,7 +263,7 @@ data class GXTemplateInfo(
         }
 
         private fun createEvent(
-            layer: GXLayer,
+            expVersion: String?,
             eventJson: JSONObject
         ): MutableMap<String, GXEventBinding>? {
             return if (!eventJson.isEmpty()) {
@@ -268,7 +273,7 @@ data class GXTemplateInfo(
                     val expression = entry.value
                     if (id != null && expression != null) {
                         if (id.isNotEmpty()) {
-                            GXExpressionFactory.create(layer.expVersion, expression)?.let {
+                            GXExpressionFactory.create(expVersion, expression)?.let {
                                 value[id] = GXEventBinding(it)
                             }
                         }
@@ -281,7 +286,7 @@ data class GXTemplateInfo(
         }
 
         private fun createTrack(
-            layer: GXLayer,
+            expVersion: String?,
             eventJson: JSONObject
         ): MutableMap<String, GXTrackBinding>? {
             return if (!eventJson.isEmpty()) {
@@ -291,7 +296,7 @@ data class GXTemplateInfo(
                     val expression = entry.value
                     if (id != null && expression != null) {
                         if (id.isNotEmpty()) {
-                            GXExpressionFactory.create(layer.expVersion, expression)?.let {
+                            GXExpressionFactory.create(expVersion, expression)?.let {
                                 value[id] = GXTrackBinding(it)
                             }
                         }
@@ -304,7 +309,7 @@ data class GXTemplateInfo(
         }
 
         private fun createAnimation(
-            layer: GXLayer,
+            expVersion: String?,
             animationJson: JSONObject
         ): MutableMap<String, GXAnimationBinding>? {
             return if (!animationJson.isEmpty()) {
@@ -314,7 +319,7 @@ data class GXTemplateInfo(
                     val id = entry.key
                     val expression = entry.value
                     if (id != null && expression != null && id.isNotEmpty() && expression is JSONObject) {
-                        GXAnimationBinding.create(layer.expVersion, expression)?.let {
+                        GXAnimationBinding.create(expVersion, expression)?.let {
                             value[id] = it
                         }
                     }
@@ -327,7 +332,7 @@ data class GXTemplateInfo(
         }
 
         private fun createConfig(
-            layer: GXLayer,
+            expVersion: String?,
             configJson: JSONObject
         ): MutableMap<String, GXIExpression>? {
             return if (!configJson.isEmpty()) {
@@ -337,7 +342,7 @@ data class GXTemplateInfo(
                     val id = entry.key
                     val expression = entry.value
                     if (id != null && expression != null && id.isNotEmpty()) {
-                        GXExpressionFactory.create(layer.expVersion, expression)
+                        GXExpressionFactory.create(expVersion, expression)
                             ?.let { value[id] = it }
                     }
                 }

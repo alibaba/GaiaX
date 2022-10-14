@@ -76,8 +76,6 @@ data class GXLayer constructor(
     val layers: MutableList<GXLayer> = mutableListOf()
 ) {
 
-    var expVersion: String? = null
-
     companion object {
 
         fun create(data: JSONObject): GXLayer {
@@ -93,10 +91,9 @@ data class GXLayer constructor(
             val css = data.getString(GXTemplateKey.GAIAX_LAYER_CLASS)
             val subType = data.getString(GXTemplateKey.GAIAX_LAYER_SUB_TYPE)
             val viewClass = data.getString(GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS)
-            val expVersion = data.getString(GXTemplateKey.GAIAX_LAYER_EXP_VERSION)
+
             val layer = initLayer(id, css, type, subType, viewClass, data)
             initChildrenLayer(data, layer)
-            layer.expVersion = expVersion;
             return layer
         }
 

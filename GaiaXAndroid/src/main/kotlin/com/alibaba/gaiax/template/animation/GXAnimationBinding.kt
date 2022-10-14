@@ -54,7 +54,7 @@ class GXAnimationBinding(
         if (trigger &&
             // 这里兼容1的状态
             GXExpressionFactory.isTrue(
-                gxTemplateContext.rootNode?.templateNode?.layer?.expVersion,
+                gxTemplateContext.templateInfo.expVersion,
                 state
             ) == true
         ) {

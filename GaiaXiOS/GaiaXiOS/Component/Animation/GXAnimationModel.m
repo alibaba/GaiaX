@@ -34,7 +34,7 @@
 @implementation GXAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [self setupAnimationInfo:info frame:frame];
+    [super setupAnimationInfo:info frame:frame];
     
     //基础属性设置
     self.animationInfo = info;
@@ -68,7 +68,7 @@
 @implementation GXLottieAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [self setupAnimationInfo:info frame:frame];
+    [super setupAnimationInfo:info frame:frame];
     
     //获取loop
     self.loop = [info gx_boolForKey:@"loop"];
@@ -136,7 +136,7 @@
 @implementation GXPropAnimationModel
 
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
-    [self setupAnimationInfo:info frame:frame];
+    [super setupAnimationInfo:info frame:frame];
     
     self.delay = [info gx_integerForKey:@"delay"] / 1000.f;
     self.loopCount = [info gx_integerForKey:@"loopCount"];

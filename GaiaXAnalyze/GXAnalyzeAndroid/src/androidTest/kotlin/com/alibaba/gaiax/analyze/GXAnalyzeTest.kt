@@ -84,6 +84,8 @@ class GXAnalyzeTest {
                     } else {
                         return GXAnalyze.createValueFloat64(0f)
                     }
+                }else{
+                    return GXAnalyze.createValueFloat64(8f)
                 }
                 return 0L
             }
@@ -154,6 +156,8 @@ class GXAnalyzeTest {
                     testData
                 )
             )
+            Assert.assertEquals(8f, instance.getResult("size()", testData))
+            Assert.assertEquals(16f, instance.getResult("size()+8", testData))
         }
     }
 

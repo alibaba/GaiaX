@@ -17,20 +17,19 @@ struct Closure {                                                    //闭包CLOS
 };
 static vector<Closure> closureArray;                                //闭包集合
 static unordered_map<char, string> wordToSymbol;                    //key:word value:symbol
-static unordered_map<string, char> symbolToWord;                    //key:symbol value:word
 static unordered_map<string, string> cache;                         //表达式缓存
 /*
  * 存放终结符完整词汇的string集合
  */
 static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id",
-                                ",",
+                                ",","function",
                                 "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==",
                                 "!=",
                                 "&&", "||", "?", ":", "?:", "error", "#", "~"};
 /*
  * 存放终结符标识符的char集合
  */
-static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-',
+static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',','a', '(', ')', '!', '-',
                                 '+', '%',
                                 '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y',
                                 'e', '#',
@@ -50,7 +49,7 @@ static char nonTerminalSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 
  */
 static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
                            "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
-                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~", "O->t|f|n|v|u|s|d"};
+                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~", "O->t|f|n|v|u|s|d|a"};
 
 /*
  * 判断word是否为终结符
@@ -409,13 +408,11 @@ void initTerminal() {
     set<char> m;
     for (int i = 0; i < sizeTerminal; i++) {
         wordToSymbol.insert(pair<char, string>(terminalSymbol[i], terminalWord[i]));
-        symbolToWord.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
         terminal.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
         terminalSymbolMap[terminalSymbol[i]] = m;
     }
     for (int i = 0; i < sizeNonTerminal; i++) {
         wordToSymbol.insert(pair<char, string>(nonTerminalSymbol[i], nonTerminalWord[i]));
-        symbolToWord.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
         nonTerminal.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
         nonTerminalSymbolMap[nonTerminalSymbol[i]] = m;
     }
@@ -1016,6 +1013,37 @@ long GXAnalyze::getValue(string expression, void *source) {
                     gxv->str = NULL;
                 }
                 delete gxv;
+            } else if(token.token == "function"){
+                long res = this->getFunctionValue(token.name, nullptr,0,"");
+                GXValue *gxv = (GXValue *) res;
+                if (gxv->tag == GX_TAG_FLOAT) {
+                    tokenNum.name = to_string(gxv->float64);
+                    tokenNum.token = "num";
+                } else if (gxv->tag == GX_TAG_STRING) {
+                    tokenNum.name = gxv->str;
+                    tokenNum.token = "string";
+                } else if (gxv->tag == GX_TAG_BOOL) {
+                    if (gxv->int32 == 1) {
+                        tokenNum.name = "true";
+                    } else {
+                        tokenNum.name = "false";
+                    }
+                    tokenNum.token = "bool";
+                } else if (gxv->tag == GX_TAG_ARRAY) {
+                    tokenNum.name = to_string((long) (gxv->ptr));
+                    tokenNum.token = "array";
+                } else if (gxv->tag == GX_TAG_MAP) {
+                    tokenNum.name = to_string((long) (gxv->ptr));
+                    tokenNum.token = "map";
+                } else if (gxv->tag == GX_TAG_NULL) {
+                    tokenNum.name = "null";
+                    tokenNum.token = "null";
+                }
+                if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                    delete[] gxv->str;
+                    gxv->str = NULL;
+                }
+                delete gxv;
             } else {
                 tokenNum = token;
             }
@@ -1066,6 +1094,7 @@ long GXAnalyze::getValue(string expression, void *source) {
     } else {
         Res = check(result, array, this, source, expression);
     }
+    arrayNum.clear();
     array.clear();
     return Res;
 }
@@ -1379,7 +1408,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             string temp = wordToSymbol[cur_symbol];
             if ((isTerminalWord(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
-                  temp == "num" || temp == "string" || temp == "data" || temp == "id")) ||
+                  temp == "num" || temp == "string" || temp == "data" || temp == "id" || temp == "function")) ||
                 (temp == "map" || temp == "array")) {
                 // push value
                 if (isTerminalWord(temp) && temp == "id") {
@@ -1389,6 +1418,40 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 GXATSNode t1;
                 if (temp == "value" || temp == "data") {
                     long res = analyze->getSourceValue(array[valueStep].name, source);
+                    GXValue *gxv = (GXValue *) res;
+                    t1.count = array[valueStep].count;
+                    if (gxv->tag == GX_TAG_FLOAT) {
+                        t1.name = to_string(gxv->float64);
+                        t1.token = "num";
+                    } else if (gxv->tag == GX_TAG_STRING) {
+                        t1.name = gxv->str;
+                        t1.token = "string";
+                    } else if (gxv->tag == GX_TAG_BOOL) {
+                        if (gxv->int32 == 1) {
+                            t1.name = "true";
+                        } else {
+                            t1.name = "false";
+                        }
+                        t1.token = "bool";
+                    } else if (gxv->tag == GX_TAG_ARRAY) {
+                        t1.name = to_string((long) (gxv->ptr));
+                        t1.token = "array";
+                    } else if (gxv->tag == GX_TAG_MAP) {
+                        t1.name = to_string((long) (gxv->ptr));
+                        t1.token = "map";
+                    } else if (gxv->tag == GX_TAG_NULL) {
+                        t1.name = "null";
+                        t1.token = "null";
+                    }
+                    valueStack[valueSize] = t1;
+                    ++valueSize;
+                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                        delete[] gxv->str;
+                        gxv->str = NULL;
+                    }
+                    delete gxv;
+                } else if(temp == "function"){
+                    long res = analyze->getFunctionValue(array[valueStep].name, nullptr,0,"");
                     GXValue *gxv = (GXValue *) res;
                     t1.count = array[valueStep].count;
                     if (gxv->tag == GX_TAG_FLOAT) {

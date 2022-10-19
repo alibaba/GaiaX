@@ -112,7 +112,7 @@
 
 // 注册Lottie动画的class
 - (void)registerLottieViewClass:(Class <GXLottieAniamtionProtocal>)aClass{
-    if (aClass && [aClass isKindOfClass:[UIView class]] && [aClass conformsToProtocol:@protocol(GXLottieAniamtionProtocal)]) {
+    if (aClass && [aClass conformsToProtocol:@protocol(GXLottieAniamtionProtocal)]) {//&& [aClass isKindOfClass:[UIView class]] 
         _lottieViewClass = aClass;
     }
 }

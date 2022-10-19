@@ -278,9 +278,9 @@
         
         //动画参数
         NSMutableDictionary *animationInfo = [NSMutableDictionary dictionary];
-        [animationInfo gx_setObject:@"isLocal" forKey:@(isLocal)];
-        [animationInfo gx_setObject:@"lottieUrl" forKey:_lottieName];
-        [animationInfo gx_setObject:@"loopCount" forKey:@((loop ? -1 : 0))];
+        [animationInfo gx_setObject:@(isLocal) forKey:@"isLocal"];
+        [animationInfo gx_setObject:_lottieName forKey:@"lottieUrl"];
+        [animationInfo gx_setObject:@((loop ? -1 : 0)) forKey:@"loopCount"];
 
         //执行动画
         GXWeakSelf(self);

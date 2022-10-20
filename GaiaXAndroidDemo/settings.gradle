@@ -2,9 +2,6 @@ rootProject.name = 'GaiaXAndroidDemo'
 
 include ':app'
 
-include ':GaiaXFastPreview'
-include ':GaiaXWebSocket'
-
 include ':GXAnalyzeAndroid'
 project(':GXAnalyzeAndroid').projectDir = file('../GaiaXAnalyze/GXAnalyzeAndroid')
 
@@ -13,3 +10,6 @@ project(':GaiaXAndroid').projectDir = file('../GaiaXAndroid')
 
 include ':GaiaXAdapterAndroid'
 project(':GaiaXAdapterAndroid').projectDir = file('../GaiaXAdapterAndroid')
+
+include ':GaiaXAndroidClientToStudio'
+project(':GaiaXAndroidClientToStudio').projectDir = file('../GaiaXAndroidClientToStudio')

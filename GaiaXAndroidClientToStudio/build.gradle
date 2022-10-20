@@ -1,0 +1,92 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+    }
+}
+
+buildscript {
+
+    ext.kotlin_version = '1.5.31'
+
+    repositories {
+        mavenLocal()
+        google()
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'com.alibaba:fastjson:1.2.76'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+
+    implementation 'org.java-websocket:Java-WebSocket:1.5.2'
+}
+
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+
+                if (project.hasProperty("version")) {
+                    version = project.getProperty("version")
+                } else {
+                    version = '0.0.0'
+                }
+                if (project.hasProperty("group")) {
+                    groupId = project.getProperty("group")
+                } else {
+                    groupId = 'com.github.alibaba.GaiaX'
+                }
+
+                artifactId = 'GaiaX-ClientToStudio'
+            }
+        }
+    }
+}

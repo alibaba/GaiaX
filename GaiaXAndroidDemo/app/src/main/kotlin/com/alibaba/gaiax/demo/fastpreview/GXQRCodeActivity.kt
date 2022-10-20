@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.fastpreview
+package com.alibaba.gaiax.demo.fastpreview
 
 import com.google.zxing.Result
 import com.king.zxing.CameraScan
@@ -8,7 +8,7 @@ import com.king.zxing.DecodeFormatManager
 import com.king.zxing.analyze.MultiFormatAnalyzer
 
 
-class GaiaXQRCodeActivity : CaptureActivity() {
+class GXQRCodeActivity : CaptureActivity() {
 
     override fun initCameraScan() {
         super.initCameraScan()

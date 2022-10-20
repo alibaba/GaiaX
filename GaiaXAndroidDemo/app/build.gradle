@@ -74,7 +74,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(path: ':GaiaXFastPreview')
+    implementation project(path: ':GaiaXAndroidClientToStudio')
     implementation project(path: ':GaiaXAdapterAndroid')
     implementation project(path: ':GaiaXAndroid')
 
@@ -89,6 +89,8 @@ dependencies {
 
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'com.google.android.material:material:1.4.0'
+
+    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

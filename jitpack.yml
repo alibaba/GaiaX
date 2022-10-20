@@ -1,6 +1,14 @@
 jdk:
   - openjdk11
 install:
+   - echo "Publish GaiaX ClientToStudio"
+   - cd /home/jitpack/build/GaiaXAndroidClientToStudio
+   - echo `pwd`
+   - ls -ll
+   - echo "GROUP=${GROUP} ARTIFACT=GaiaX-ClientToStudio VERSION=${VERSION}"
+   - ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd ~/.m2/repository/com/github/alibaba
+   - ls -ll
    - echo "Publish GaiaX Analyze"
    - cd /home/jitpack/build/GaiaXAnalyze/GXAnalyzeAndroid
    - echo `pwd`

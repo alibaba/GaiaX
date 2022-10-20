@@ -16,13 +16,16 @@
 
 package com.alibaba.gaiax.render.view
 
+import android.content.Context
 import android.view.View
 import androidx.test.platform.app.InstrumentationRegistry
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXGridView
 import com.alibaba.gaiax.render.view.container.GXScrollView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 class GXViewFactoryTest {
@@ -42,10 +45,10 @@ class GXViewFactoryTest {
             true,
             GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_TEXT) is GXText
         )
-//        Assert.assertEquals(
-//            true,
-//            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_LOTTIE) is GXLottie
-//        )
+        Assert.assertEquals(
+            true,
+            GXViewFactory.createView<View>(context, GXViewKey.VIEW_TYPE_LOTTIE) is View
+        )
         Assert.assertEquals(
             true,
             GXViewFactory.createView<View>(
@@ -86,6 +89,15 @@ class GXViewFactoryTest {
                 GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
             ) is GXSliderView
         )
+    }
+
+    @Before
+    fun registerLottie(){
+        GXRegisterCenter.instance.registerExtensionViewSupport(GXViewKey.VIEW_TYPE_LOTTIE,::buildLottieView)
+    }
+
+    fun buildLottieView(context: Context): View {
+        return View(context)
     }
 
 }

@@ -18,6 +18,7 @@ package com.alibaba.gaiax
 
 import android.content.Context
 import android.graphics.Typeface
+import android.view.View
 import android.view.ViewGroup
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -311,6 +312,11 @@ class GXRegisterCenter {
 
     fun registerExtensionViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
         GXViewFactory.viewSupport[viewType] = clazz
+        return this
+    }
+
+    fun registerExtensionViewSupport(viewType: String, viewCreater: (Context) -> View): GXRegisterCenter {
+        GXViewFactory.viewUnitSupport[viewType] = viewCreater
         return this
     }
 

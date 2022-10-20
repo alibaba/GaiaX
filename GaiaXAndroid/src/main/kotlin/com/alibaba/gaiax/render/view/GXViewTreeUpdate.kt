@@ -54,6 +54,16 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
                     )
                 }
             }
+            if (childNode.isNeedLottie()){
+                childNode.lottieView?.let { lottieView ->
+                    GXViewLayoutParamsUtils.updateLayoutParams(
+                        lottieView,
+                        childLayout,
+                        mergeX,
+                        mergeY
+                    )
+                }
+            }
             GXViewLayoutParamsUtils.updateLayoutParams(targetView, childLayout, mergeX, mergeY)
         }
     }

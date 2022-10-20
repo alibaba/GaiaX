@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.view
 import android.view.View
 import android.view.ViewGroup
 import app.visly.stretch.Layout
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
@@ -85,6 +86,22 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
                     parentMergeView.addView(this)
                 }
             }
+
+        //没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
+        if (childNode.isNeedLottie()){
+            GXRegisterCenter.instance.extensionLottieAnimation?.localCreateLottieView(context.context)?.apply {
+                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
+                    childNode,
+                    childLayout,
+                    mergeX,
+                    mergeY
+                )
+                childNode.lottieView = this
+                if (parentMergeView is ViewGroup) {
+                    parentMergeView.addView(this)
+                }
+            }
+        }
         return childView
     }
 }

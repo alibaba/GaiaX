@@ -188,11 +188,6 @@ class GXRegisterCenter {
 
     interface GXIExtensionLottieAnimation {
         fun create(): GXLottieAnimation?
-
-        /**
-         * 提供Lottie视图给Gaiax，采用注册注入的方式是避免Gaiax直接依赖lottie组件
-         * */
-        fun localCreateLottieView(context: Context): View
     }
 
     interface GXIExtensionCompatibility {
@@ -317,6 +312,11 @@ class GXRegisterCenter {
 
     fun registerExtensionViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
         GXViewFactory.viewSupport[viewType] = clazz
+        return this
+    }
+
+    fun registerExtensionViewSupport(viewType: String, viewCreater: (Context) -> View): GXRegisterCenter {
+        GXViewFactory.viewUnitSupport[viewType] = viewCreater
         return this
     }
 

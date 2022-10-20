@@ -32,6 +32,9 @@ class GXAdapter : GXTemplateEngine.GXIAdapter {
             .registerExtensionViewSupport(
                 GXViewKey.VIEW_TYPE_IMAGE,
                 GXAdapterImageView::class.java
+            ).registerExtensionViewSupport(
+                GXViewKey.VIEW_TYPE_LOTTIE,
+                GXAdapterLottieCreate::localCreateLottieView
             )
     }
 }

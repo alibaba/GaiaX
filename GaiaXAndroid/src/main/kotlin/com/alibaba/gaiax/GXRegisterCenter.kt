@@ -315,8 +315,11 @@ class GXRegisterCenter {
         return this
     }
 
-    fun registerExtensionViewSupport(viewType: String, viewCreater: (Context) -> View): GXRegisterCenter {
-        GXViewFactory.viewUnitSupport[viewType] = viewCreater
+    fun registerExtensionViewSupport(
+        viewType: String,
+        viewCreator: (Context) -> View
+    ): GXRegisterCenter {
+        GXViewFactory.viewCreatorSupport[viewType] = viewCreator
         return this
     }
 

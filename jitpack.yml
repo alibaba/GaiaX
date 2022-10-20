@@ -26,7 +26,7 @@ install:
    - cd ~/.m2/repository/com/github/alibaba
    - ls -ll
    - echo "Publish GaiaX Adapter"
-   - cd /home/jitpack/build/GaiaXAdapterAndroid
+   - cd /home/jitpack/build/GaiaXAndroidAdapter
    - echo `pwd`
    - ls -ll
    - echo "GROUP=${GROUP} ARTIFACT=GaiaX-Adapter VERSION=${VERSION}"

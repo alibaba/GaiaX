@@ -8,8 +8,8 @@ project(':GXAnalyzeAndroid').projectDir = file('../GaiaXAnalyze/GXAnalyzeAndroid
 include ':GaiaXAndroid'
 project(':GaiaXAndroid').projectDir = file('../GaiaXAndroid')
 
-include ':GaiaXAdapterAndroid'
-project(':GaiaXAdapterAndroid').projectDir = file('../GaiaXAdapterAndroid')
+include ':GaiaXAndroidAdapter'
+project(':GaiaXAndroidAdapter').projectDir = file('../GaiaXAndroidAdapter')
 
 include ':GaiaXAndroidClientToStudio'
 project(':GaiaXAndroidClientToStudio').projectDir = file('../GaiaXAndroidClientToStudio')

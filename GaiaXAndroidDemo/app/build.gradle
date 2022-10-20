@@ -75,7 +75,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(path: ':GaiaXAndroidClientToStudio')
-    implementation project(path: ':GaiaXAdapterAndroid')
+    implementation project(path: ':GaiaXAndroidAdapter')
     implementation project(path: ':GaiaXAndroid')
 
     implementation 'androidx.core:core-ktx:1.7.0'

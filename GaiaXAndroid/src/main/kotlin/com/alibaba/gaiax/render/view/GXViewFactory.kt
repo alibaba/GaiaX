@@ -30,7 +30,7 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 object GXViewFactory {
 
     internal val viewSupport: MutableMap<String, Class<*>> = mutableMapOf()
-    internal val viewUnitSupport: MutableMap<String,(Context) -> View> = mutableMapOf()
+    internal val viewCreatorSupport: MutableMap<String,(Context) -> View> = mutableMapOf()
 
     init {
         viewSupport[GXViewKey.VIEW_TYPE_GAIA_TEMPLATE] = GXView::class.java
@@ -56,7 +56,7 @@ object GXViewFactory {
         } else if (viewSupport.contains(type)){
             newInstance<T>(viewSupport[type], context)
         } else{
-            viewUnitSupport[type]?.invoke(context)
+            viewCreatorSupport[type]?.invoke(context)
         }
         return result as T
     }

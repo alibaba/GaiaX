@@ -321,9 +321,9 @@ const NSUInteger GXTextMaxWidth = 1080;
     NSString *fontfamily = [styleInfo gx_stringForKey:@"font-family"];
     if (fontSize.length || fontWeight.length || fontfamily.length) {
         NSMutableDictionary *styleJson = [NSMutableDictionary dictionaryWithDictionary:self.styleJson];
-        [styleJson gx_setValue:fontSize forKey:@"font-size"];
-        [styleJson gx_setValue:fontWeight forKey:@"font-weight"];
-        [styleJson gx_setValue:fontfamily forKey:@"font-family"];
+        [styleJson gx_setObject:fontSize forKey:@"font-size"];
+        [styleJson gx_setObject:fontWeight forKey:@"font-weight"];
+        [styleJson gx_setObject:fontfamily forKey:@"font-family"];
         self.font = [GXUIHelper fontFromStyle:styleJson];
         [self.attributes setObject:self.font forKey:NSFontAttributeName];
         

@@ -4,12 +4,9 @@ on:
   push:
     branches:
     - main
-    - androidsupport
   pull_request:
     branches:
     - main
-    - androidsupport
-
 jobs:
   build:
 

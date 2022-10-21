@@ -395,3 +395,17 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_releaseGXValue(JNIEnv *e
                                                                        jlong value) {
     releaseGXValue(value);
 }
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_getValueLong(JNIEnv *env, jobject thiz,
+                                                                     jlong value) {
+    GXValue *val = (GXValue *) value;
+    return (jlong) GX_VALUE_GET_LONG(*val);
+}
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueLong(JNIEnv *env, jobject thiz,
+                                                                        jlong value) {
+    GXValue *result = new GXValue(GX_TAG_LONG, (int64_t)value);
+    return (jlong) result;
+}

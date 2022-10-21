@@ -1,7 +1,6 @@
 #ifndef _GXANALYZE_CORE_H_
 #define _GXANALYZE_CORE_H_
 
-#include <iostream>
 #include <stdlib.h>
 #include "GXATSNode.h"
 #include "GXWordAnalyze.h"

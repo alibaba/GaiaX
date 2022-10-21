@@ -2,6 +2,7 @@
 #define _ATSNODE__H_
 
 #include <string>
+#include <iostream>
 
 using namespace std;
 

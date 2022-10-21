@@ -22,11 +22,11 @@ jobs:
         cache: gradle
     - name: Build before
       run: ls -ll
-    - name: Build GaiaXAndroidClientToStudio
+    - name: Build Setup 1 GaiaXAndroidClientToStudio
       run: cd ./GaiaXAndroidClientToStudio && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-    - name: Build GaiaXAnalyze
+    - name: Build Setup 2 GaiaXAnalyze
       run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-    - name: Build GaiaXAndroid 
+    - name: Build Setup 3 GaiaXAndroid 
       run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-    - name: Build GaiaXAndroidAdapter 
+    - name: Build Setup 4 GaiaXAndroidAdapter 
       run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal

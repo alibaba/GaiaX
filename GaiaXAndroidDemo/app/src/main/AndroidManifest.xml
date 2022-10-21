@@ -19,6 +19,9 @@
             android:name="com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".StyleTemplateActivity"
+            android:exported="false" />
+        <activity
             android:name=".RemoteDataSourceTemplateActivity"
             android:exported="false" />
         <activity

@@ -20,7 +20,6 @@ buildscript {
         mavenLocal()
         google()
         maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
-        maven { url "https://jitpack.io" }
         mavenCentral()
     }
 
@@ -62,7 +61,6 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.76'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
-
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
 }
 

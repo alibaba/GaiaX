@@ -25,11 +25,11 @@ jobs:
         cache: gradle
     - name: Build before
       run: ls -ll
-    - name: Build GaiaXAnalyze with Gradle step 1
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew build
-    - name: Build GaiaXAndroid with Gradle step 1
-      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew build
-    - name: Build GaiaXAdapterAndroid with Gradle step 1
-      run: cd ./GaiaXAdapterAndroid && chmod +x ./gradlew && ./gradlew build
-    # - name: Build run tests
-      # run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew test connectedAndroidTest --stacktrace
+    - name: Build GaiaXAndroidClientToStudio
+      run: cd ./GaiaXAndroidClientToStudio && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+    - name: Build GaiaXAnalyze
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+    - name: Build GaiaXAndroid 
+      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+    - name: Build GaiaXAndroidAdapter 
+      run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal

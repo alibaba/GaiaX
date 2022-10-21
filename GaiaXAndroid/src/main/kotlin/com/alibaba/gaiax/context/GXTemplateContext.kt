@@ -60,12 +60,7 @@ class GXTemplateContext private constructor(
 
     var blurViews: MutableSet<GXView>? = null
 
-    val onImageDrawableListener = object : GXImageView.GXImageViewListener {
-
-        override fun onDrawableChanged(gxImageView: GXImageView) {
-            blurViews?.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
-        }
-    }
+    var onImageDrawableListener: GXImageView.GXImageViewListener? = null
 
     var isAppear: Boolean = false
 
@@ -103,9 +98,7 @@ class GXTemplateContext private constructor(
      */
     var indexPosition: Int = -1
 
-    val containers: CopyOnWriteArraySet<GXContainer> by lazy {
-        CopyOnWriteArraySet<GXContainer>()
-    }
+    var containers: CopyOnWriteArraySet<GXContainer>? = null
 
     override fun toString(): String {
         return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
@@ -113,7 +106,7 @@ class GXTemplateContext private constructor(
 
     fun release() {
         blurViews?.clear()
-        containers.clear()
+        containers?.clear()
         isDirty = false
         dirtyTexts?.clear()
         dirtyTexts = null
@@ -133,6 +126,23 @@ class GXTemplateContext private constructor(
     fun initBlurViews() {
         if (blurViews == null) {
             blurViews = mutableSetOf()
+        }
+    }
+
+    fun initImageDrawableListener() {
+        if (onImageDrawableListener == null) {
+            onImageDrawableListener = object : GXImageView.GXImageViewListener {
+
+                override fun onDrawableChanged(gxImageView: GXImageView) {
+                    blurViews?.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
+                }
+            }
+        }
+    }
+
+    fun initContainers() {
+        if (containers == null) {
+            containers = CopyOnWriteArraySet()
         }
     }
 

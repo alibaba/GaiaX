@@ -210,6 +210,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         } else {
             this.scaleType = ScaleType.FIT_XY
         }
+        gxTemplateContext.initImageDrawableListener()
         this.onImageDrawableListener = gxTemplateContext.onImageDrawableListener
     }
 

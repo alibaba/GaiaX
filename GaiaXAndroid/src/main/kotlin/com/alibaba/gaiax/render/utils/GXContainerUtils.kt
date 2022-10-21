@@ -11,7 +11,7 @@ import com.alibaba.gaiax.render.view.container.GXViewHolder
 object GXContainerUtils {
 
     fun notifyOnAppear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers.forEach {
+        gxTemplateContext.containers?.forEach {
             it?.findVisibleItems {
                 onAppear(it)
             }
@@ -19,7 +19,7 @@ object GXContainerUtils {
     }
 
     fun notifyOnDisappear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers.forEach {
+        gxTemplateContext.containers?.forEach {
             it?.findVisibleItems {
                 onDisappear(it)
             }

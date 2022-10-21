@@ -858,17 +858,37 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun nodeViewCss(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-            val view = gxNode.view ?: return
+            val gxView = gxNode.view ?: return
             val gxCss = gxNode.templateNode.finalCss ?: return
 
-            if (view is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
-                view.setTextStyle(gxCss)
-            } else if (view is GXIImageView && gxNode.isImageType()) {
-                view.setImageStyle(gxTemplateContext, gxCss)
+            // 对高斯模糊前置处理
+            bindBackdropFilter(gxTemplateContext, gxNode, gxCss, gxView)
+
+            if (gxView is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
+                gxView.setTextStyle(gxCss)
+            } else if (gxView is GXIImageView && gxNode.isImageType()) {
+                gxView.setImageStyle(gxTemplateContext, gxCss)
             } else if (gxNode.isContainerType()) {
-                bindContainerViewCss(gxTemplateContext, gxCss, view, gxNode)
+                bindContainerViewCss(gxTemplateContext, gxCss, gxView, gxNode)
             }
-            bindCommonViewCss(gxTemplateContext, view, gxCss, gxNode)
+
+            bindCommonViewCss(gxTemplateContext, gxView, gxCss, gxNode)
+        }
+
+        private fun bindBackdropFilter(
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
+            gxCss: GXCss,
+            gxView: View
+        ) {
+            if (gxNode.isViewType()) {
+                if (gxCss.style.backdropFilter != null) {
+                    (gxView as GXView).setBackdropFilter(
+                        gxTemplateContext,
+                        gxCss.style.backdropFilter
+                    )
+                }
+            }
         }
 
         private fun nodeViewEvent(
@@ -1067,7 +1087,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             val container = view as GXContainer
 
-            gxTemplateContext.containers.add(container)
+            gxTemplateContext.initContainers()
+            gxTemplateContext.containers?.add(container)
 
             val adapter: GXContainerViewAdapter?
             if (container.adapter != null) {
@@ -1254,15 +1275,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 gxView.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
 
-            }
-
-            if (gxNode.isViewType()) {
-                if (gxCss.style.backdropFilter != null) {
-                    (gxView as GXView).setBackdropFilter(
-                        gxTemplateContext,
-                        gxCss.style.backdropFilter
-                    )
-                }
             }
         }
 

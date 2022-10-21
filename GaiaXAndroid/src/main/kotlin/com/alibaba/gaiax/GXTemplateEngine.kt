@@ -777,7 +777,7 @@ class GXTemplateEngine {
 
     private fun processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext: GXTemplateContext) {
         val eventListener = gxTemplateContext.templateData?.eventListener
-        if (gxTemplateContext.containers.isNotEmpty() && eventListener !is GXIManualExposureEventListener) {
+        if (gxTemplateContext.containers?.isNotEmpty() == true && eventListener !is GXIManualExposureEventListener) {
             gxTemplateContext.templateData?.eventListener =
                 object : GXIManualExposureEventListener {
                     override fun onGestureEvent(gxGesture: GXGesture) {

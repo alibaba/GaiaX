@@ -45,6 +45,11 @@
             result = [GXFloat getResultByValue:floatValue];
         }
             break;
+        case GX_TAG_LONG:{
+            int64_t longValue = GX_VALUE_GET_LONG(value);
+            result = [GXLong getResultByValue:longValue];
+        }
+            break;
         case GX_TAG_STRING:{
             NSString *stringValue = [NSString stringWithUTF8String:value.str];
             result = [GXStr getResultByValue:stringValue];

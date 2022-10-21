@@ -12,6 +12,7 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+#编译包大小优化选项 如表达式需要debug，请把以下三个编译选项注释掉
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -flto -fdata-sections -ffunction-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -flto -fdata-sections -ffunction-sections")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -O3 -flto  -Wl,--gc-sections -Wl")
@@ -25,7 +26,7 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         GXJniAnalyze.cpp
-        JniHelp.cpp)
+        )
 
 # 链接头文件
 target_include_directories(${PROJECT_NAME} PRIVATE

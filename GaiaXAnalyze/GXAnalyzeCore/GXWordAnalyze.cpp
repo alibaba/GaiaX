@@ -32,6 +32,8 @@ static char key[3][20] = {"true", "false", "null"}; //定义一个二维数组�
 //:         == 33
 //?:        == 34
 //error     == 35
+//function  == 36
+//long      == 37
 
 //判断关键字
 int isKey(char s[]) {
@@ -104,6 +106,11 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
         if (syn == -1) {
             syn = 14; //ID
             sign = "id";
+            if (s[p] == '(' && s[p + 1] == ')') {
+                sign = "function";
+                syn = 36;
+                p = p + 2;
+            }
         }
             //TOKEN关键字
         else {
@@ -125,7 +132,7 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
                 token[count++] = s[p];
                 p++;
             } else if (s[p] == '.') {
-                if (hasPoint == false) {
+                if (!hasPoint) {
                     hasPoint = true;
                     token[count++] = s[p];
                     p++;
@@ -144,8 +151,13 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
                 p++;
             }
         }
-        syn = 11; //数字digit(digit) *
-        sign = "num";
+        if(hasPoint){
+            syn = 11; //数字digit(digit) *
+            sign = "num";
+        }else{
+            syn = 37;
+            sign = "long";
+        }
         if (err) {
             syn = 0;
             sign = "error";

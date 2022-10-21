@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSNumber *)getResultByValue:(CGFloat)value;
 
 @end
+@interface GXLong : GXObject
+
++ (NSNumber *)getResultByValue:(int64_t)value;
+
+@end
+
 
 @interface GXStr : GXObject
 

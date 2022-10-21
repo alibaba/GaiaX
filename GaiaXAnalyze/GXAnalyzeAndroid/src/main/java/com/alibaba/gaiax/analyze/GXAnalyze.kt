@@ -1,10 +1,13 @@
 package com.alibaba.gaiax.analyze
 
+import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 
+@Keep
 class GXAnalyze {
 
     // 计算逻辑的扩展
+    @Keep
     interface IComputeExtend {
 
         // Computed value expression
@@ -37,12 +40,14 @@ class GXAnalyze {
         external fun getValueFloat(value: Long): Float
         external fun getValueArray(value: Long): Any?
         external fun getValueMap(value: Long): Any?
+        external fun getValueLong(value: Long):Long
         external fun createValueFloat64(value: Float): Long
         external fun createValueString(value: String): Long
         external fun createValueBool(value: Boolean): Long
         external fun createValueArray(value: Any?): Long
         external fun createValueMap(value: Any?): Long
         external fun createValueNull(): Long
+        external fun createValueLong(value: Long): Long
         external fun releaseGXValue(value: Long)
 
         val TYPE_FLOAT = 0
@@ -53,7 +58,7 @@ class GXAnalyze {
         val TYPE_OBJECT = 5
         val TYPE_ARRAY = 6
         val TYPE_MAP = 7
-        val TYPE_INT = 8
+        val TYPE_LONG = 8
         val TYPE_EXCEPTION = 9
 
         fun wrapAsGXValue(value: Long): GXValue? {
@@ -68,6 +73,7 @@ class GXAnalyze {
                     TYPE_MAP -> gxValue = GXMap(getValueMap(value))
                     TYPE_BOOLEAN -> gxValue = GXBool(getValueBoolean(value))
                     TYPE_FLOAT -> gxValue = GXFloat(getValueFloat(value))
+                    TYPE_LONG -> gxValue = GXLong(getValueLong(value))
                 }
                 releaseGXValue(value)
                 return gxValue
@@ -89,6 +95,9 @@ class GXAnalyze {
                 return wrapAsGXValue(result)?.getValue();
             }
             is Int -> {
+                return expression
+            }
+            is Long -> {
                 return expression
             }
             is Float -> {

@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <string>
 
-#define gx_force_inline       inline __attribute__((always_inline))
-
 enum {
     GX_TAG_FLOAT = 0,
     GX_TAG_BOOL = 1,
@@ -16,7 +14,7 @@ enum {
     GX_TAG_OBJECT = 5,
     GX_TAG_ARRAY = 6,
     GX_TAG_MAP = 7,
-    GX_TAG_INT = 8,
+    GX_TAG_LONG = 8,
 };
 
 class GXValue {
@@ -24,6 +22,7 @@ public:
     int64_t tag;
     int32_t int32;  //Bool 1，0
     float float64;  //Float
+    int64_t intNum;    //long
     void *ptr;      //Array,Map
     char *str;      //String
     GXValue() {}
@@ -36,6 +35,11 @@ public:
     GXValue(int tag, int32_t i) {
         this->tag = tag;
         this->int32 = i;
+    }
+
+    GXValue(int tag, int64_t i) {
+        this->tag = tag;
+        this->intNum = i;
     }
 
     GXValue(int tag, void *p) {
@@ -70,6 +74,10 @@ static int GX_VALUE_GET_TAG(GXValue v) {
     return v.tag;
 }
 
+static long GX_VALUE_GET_LONG(GXValue v) {
+    return v.intNum;
+}
+
 static int32_t GX_VALUE_GET_BOOL(GXValue v) {
     return v.int32;
 }
@@ -87,8 +95,17 @@ static void *GX_VALUE_GET_OBJECT(GXValue v) {
  * 通过该方法NewNull对象
  * @param val long值
  */
-static gx_force_inline GXValue *GX_NewNull(int val) {
+static GXValue *GX_NewNull(int val) {
     GXValue *v = new GXValue(GX_TAG_NULL, val);
+    return v;
+}
+
+/**
+ * 通过该方法NewInt对象
+ * @param val long值
+ */
+static GXValue *GX_NewLong(int64_t val) {
+    GXValue *v = new GXValue(GX_TAG_LONG, val);
     return v;
 }
 
@@ -96,7 +113,7 @@ static gx_force_inline GXValue *GX_NewNull(int val) {
  * 通过该方法NewArray对象
  * @param val long值
  */
-static gx_force_inline GXValue *GX_NewArray(void *val) {
+static GXValue *GX_NewArray(void *val) {
     GXValue *v = new GXValue(GX_TAG_ARRAY, val);
     return v;
 }
@@ -105,7 +122,7 @@ static gx_force_inline GXValue *GX_NewArray(void *val) {
  * 通过该方法NewMap对象
  * @param val long值
  */
-static gx_force_inline GXValue *GX_NewMap(void *val) {
+static GXValue *GX_NewMap(void *val) {
     GXValue *v = new GXValue(GX_TAG_MAP, val);
     return v;
 }
@@ -114,7 +131,7 @@ static gx_force_inline GXValue *GX_NewMap(void *val) {
  * 通过该方法NewBool对象
  * @param val bool对应的int值
  */
-static gx_force_inline GXValue *GX_NewBool(int val) {
+static GXValue *GX_NewBool(int val) {
     GXValue *v = new GXValue(GX_TAG_BOOL, val);
     return v;
 }
@@ -123,7 +140,7 @@ static gx_force_inline GXValue *GX_NewBool(int val) {
  * 通过该方法newFloat值
  * @param d Value值
  */
-static gx_force_inline GXValue *GX_NewFloat64(float d) {
+static GXValue *GX_NewFloat64(float d) {
     GXValue *v = new GXValue(GX_TAG_FLOAT, d);
     return v;
 }
@@ -132,7 +149,7 @@ static gx_force_inline GXValue *GX_NewFloat64(float d) {
  * 通过该方法NewString对象
  * @param str 字符串的值
  */
-static gx_force_inline GXValue *GX_NewGXString(const char *str) {
+static GXValue *GX_NewGXString(const char *str) {
     GXValue *v = new GXValue(GX_TAG_STRING, str);
     return v;
 }

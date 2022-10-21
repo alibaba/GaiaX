@@ -40,6 +40,8 @@ class GXAnalyzeTest {
                     GXAnalyze.createValueBool(true);
                 } else if (valuePath == "data.false") {
                     GXAnalyze.createValueBool(false);
+                }else if(valuePath == "data.long"){
+                    GXAnalyze.createValueLong(8L);
                 } else {
                     GXAnalyze.createValueFloat64(8F)
                 }
@@ -84,6 +86,8 @@ class GXAnalyzeTest {
                     } else {
                         return GXAnalyze.createValueFloat64(0f)
                     }
+                }else{
+                    return GXAnalyze.createValueFloat64(8f)
                 }
                 return 0L
             }
@@ -96,6 +100,7 @@ class GXAnalyzeTest {
     @Test
     fun empty_test() {
         repeat(100) {
+            Assert.assertEquals("1.0", 1.000.toString())
             Assert.assertEquals("", instance.getResult("\$data.stringEmpty", testData))
             Assert.assertEquals("test", instance.getResult("\$data.stringEmpty + 'test'", testData))
             Assert.assertEquals("", instance.getResult("''", testData))
@@ -108,16 +113,16 @@ class GXAnalyzeTest {
     @Test
     fun num_test() {
         repeat(100) {
-            Assert.assertEquals(10000f, instance.getResult("10000", testData))
+            Assert.assertEquals(10000L, instance.getResult("10000", testData))
             Assert.assertEquals(10f, instance.getResult("10.000", testData))
             Assert.assertEquals(100f, instance.getResult("100.00", testData))
             Assert.assertEquals(1000f, instance.getResult("1000.0", testData))
             Assert.assertEquals(1001f, instance.getResult("1001.0", testData))
-            Assert.assertEquals(1111f, instance.getResult("1111", testData))
-            Assert.assertEquals(11110f, instance.getResult("11110", testData))
-            Assert.assertEquals(20000f, instance.getResult("10000+10000", testData))
+            Assert.assertEquals(1111L, instance.getResult("1111", testData))
+            Assert.assertEquals(11110L, instance.getResult("11110", testData))
+            Assert.assertEquals(20000L, instance.getResult("10000+10000", testData))
             Assert.assertEquals(
-                26f,
+                26L,
                 instance.getResult("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1", testData)
             )
         }
@@ -154,6 +159,8 @@ class GXAnalyzeTest {
                     testData
                 )
             )
+            Assert.assertEquals(8f, instance.getResult("size()", testData))
+            Assert.assertEquals(16f, instance.getResult("size()+8", testData))
         }
     }
 
@@ -172,9 +179,9 @@ class GXAnalyzeTest {
     @Test
     fun mod_calculate() {
         repeat(100) {
-            Assert.assertEquals(0f, instance.getResult("2%2", testData))
-            Assert.assertEquals(0f, instance.getResult("3%-1", testData))
-            Assert.assertEquals(1f, instance.getResult("3%2", testData))
+            Assert.assertEquals(0L, instance.getResult("2%2", testData))
+            Assert.assertEquals(0L, instance.getResult("3%-1", testData))
+            Assert.assertEquals(1L, instance.getResult("3%2", testData))
         }
     }
 
@@ -182,20 +189,21 @@ class GXAnalyzeTest {
     @Test
     fun add_calculate() {
         repeat(100) {
-            Assert.assertEquals(10f, instance.getResult("1+2+3+4", testData))
-            Assert.assertEquals(1f, instance.getResult("0+1", testData))
+            Assert.assertEquals(10L, instance.getResult("1+2+3+4", testData))
+            Assert.assertEquals(1L, instance.getResult("0+1", testData))
             Assert.assertEquals("abcd", instance.getResult("'ab'+'cd'", testData))
             Assert.assertEquals(10f, instance.getResult("\$data+2", testData))
+            Assert.assertEquals(10L, instance.getResult("\$data.long+2", testData))
             Assert.assertEquals(16f, instance.getResult("\$data+\$data", testData))
             Assert.assertEquals("1231", instance.getResult("'123' + 1", testData))
             Assert.assertEquals("1231", instance.getResult("'1' + 231", testData))
-            Assert.assertEquals("1231", instance.getResult("'123' + 1.000", testData))
+            Assert.assertEquals("1231.000", instance.getResult("'123' + 1.000", testData))
             Assert.assertEquals("1231.001", instance.getResult("'123' + 1.001", testData))
-            Assert.assertEquals("1231.001", instance.getResult("'123' + 1.001000", testData))
-            Assert.assertEquals("123.001.001", instance.getResult("'123.00' + 1.001000", testData))
-            Assert.assertEquals("1230", instance.getResult("'123' + 0.000", testData))
+            Assert.assertEquals("1231.001000", instance.getResult("'123' + 1.001000", testData))
+            Assert.assertEquals("123.001.001000", instance.getResult("'123.00' + 1.001000", testData))
+            Assert.assertEquals("1230.000", instance.getResult("'123' + 0.000", testData))
             Assert.assertEquals("1230.001", instance.getResult("'123' + 0.001", testData))
-            Assert.assertEquals("1231", instance.getResult("123.000 + '1'", testData))
+            Assert.assertEquals("123.0001", instance.getResult("123.000 + '1'", testData))
             Assert.assertEquals("123.0011", instance.getResult("123.001 + '1'", testData))
             Assert.assertEquals("123.0011.0", instance.getResult("123.001 + '1.0'", testData))
         }
@@ -204,9 +212,9 @@ class GXAnalyzeTest {
     @Test
     fun subtract_calculate() {
         repeat(100) {
-            Assert.assertEquals(3f, instance.getResult("4-1", testData))
-            Assert.assertEquals(-1f, instance.getResult("1-2", testData))
-            Assert.assertEquals(-1f, instance.getResult("0-1", testData))
+            Assert.assertEquals(3L, instance.getResult("4-1", testData))
+            Assert.assertEquals(-1L, instance.getResult("1-2", testData))
+            Assert.assertEquals(-1L, instance.getResult("0-1", testData))
             Assert.assertEquals(-2f, instance.getResult("\$data-10", testData))
             Assert.assertEquals(2f, instance.getResult("10-\$data", testData))
             Assert.assertEquals(0f, instance.getResult("8-\$data", testData))
@@ -219,17 +227,17 @@ class GXAnalyzeTest {
     @Test
     fun multiply_calculate() {
         repeat(100) {
-            Assert.assertEquals(0f, instance.getResult("0*2", testData))
-            Assert.assertEquals(-2f, instance.getResult("-1*2", testData))
-            Assert.assertEquals(-2f, instance.getResult("2*-1", testData))
-            Assert.assertEquals(-1f, instance.getResult("+1*-1", testData))
-            Assert.assertEquals(2f, instance.getResult("2*+1", testData))
+            Assert.assertEquals(0L, instance.getResult("0*2", testData))
+            Assert.assertEquals(-2L, instance.getResult("-1*2", testData))
+            Assert.assertEquals(-2L, instance.getResult("2*-1", testData))
+            Assert.assertEquals(-1L, instance.getResult("+1*-1", testData))
+            Assert.assertEquals(2L, instance.getResult("2*+1", testData))
             Assert.assertEquals(4.4f, instance.getResult("2.2*2", testData))
             Assert.assertEquals(-4.4f, instance.getResult("-2.2*2", testData))
             Assert.assertEquals(-8f, instance.getResult("\$data*-1", testData))
             Assert.assertEquals(64f, instance.getResult("\$data*\$data", testData))
             Assert.assertEquals(16f, instance.getResult("\$data*2", testData))
-            Assert.assertEquals(1f, instance.getResult("1*1", testData))
+            Assert.assertEquals(1L, instance.getResult("1*1", testData))
             Assert.assertEquals(true, instance.getResult("(1+1)>1 ? 1>0 : 2<3", testData))
             Assert.assertEquals(
                 2f,
@@ -254,10 +262,12 @@ class GXAnalyzeTest {
     @Test
     fun divide_calculate() {
         repeat(100) {
-            Assert.assertEquals(-0.5f, instance.getResult("-1/2", testData))
-            Assert.assertEquals(0.5f, instance.getResult("1/2", testData))
-            Assert.assertEquals(1f, instance.getResult("1/1", testData))
-            Assert.assertEquals(1f, instance.getResult("-1/-1", testData))
+            Assert.assertEquals(-0.5f, instance.getResult("-1.0/2.0", testData))
+            Assert.assertEquals(0L, instance.getResult("-1/2", testData))
+            Assert.assertEquals(0.5f, instance.getResult("1.0/2", testData))
+            Assert.assertEquals(0L, instance.getResult("1/2", testData))
+            Assert.assertEquals(1L, instance.getResult("1/1", testData))
+            Assert.assertEquals(1L, instance.getResult("-1/-1", testData))
             Assert.assertEquals(-8f, instance.getResult("\$data/-1", testData))
             Assert.assertEquals(1f, instance.getResult("\$data/\$data", testData))
         }
@@ -267,22 +277,22 @@ class GXAnalyzeTest {
     @Test
     fun multi_calculate() {
         repeat(100) {
-            Assert.assertEquals(8f, instance.getResult("1+1*2+3+4/2", testData))
-            Assert.assertEquals(-1f, instance.getResult("(1+1-3)", testData))
-            Assert.assertEquals(-2f, instance.getResult("(1+1)-2*2", testData))
-            Assert.assertEquals(-4f, instance.getResult("(1-3)*2", testData))
-            Assert.assertEquals(4f, instance.getResult("1+1*3", testData))
-            Assert.assertEquals(4f, instance.getResult("1+2*3/2", testData))
-            Assert.assertEquals(4f, instance.getResult("(1+1)*2", testData))
-            Assert.assertEquals(2f, instance.getResult("(1+3)/2", testData))
+            Assert.assertEquals(8L, instance.getResult("1+1*2+3+4/2", testData))
+            Assert.assertEquals(-1L, instance.getResult("(1+1-3)", testData))
+            Assert.assertEquals(-2L, instance.getResult("(1+1)-2*2", testData))
+            Assert.assertEquals(-4L, instance.getResult("(1-3)*2", testData))
+            Assert.assertEquals(4L, instance.getResult("1+1*3", testData))
+            Assert.assertEquals(4L, instance.getResult("1+2*3/2", testData))
+            Assert.assertEquals(4L, instance.getResult("(1+1)*2", testData))
+            Assert.assertEquals(2L, instance.getResult("(1+3)/2", testData))
         }
     }
 
     @Test
     fun single_op_expression() {
         repeat(100) {
-            Assert.assertEquals(1f, instance.getResult("+1", testData))
-            Assert.assertEquals(-1f, instance.getResult("-1", testData))
+            Assert.assertEquals(1L, instance.getResult("+1", testData))
+            Assert.assertEquals(-1L, instance.getResult("-1", testData))
             Assert.assertEquals(true, instance.getResult("!false", testData))
             Assert.assertEquals(false, instance.getResult("!true", testData))
         }
@@ -363,21 +373,21 @@ class GXAnalyzeTest {
     fun ternary() {
         repeat(100) {
             Assert.assertEquals(null, instance.getResult("false ? \$data : null", testData))
-            Assert.assertEquals(0f, instance.getResult("false ? 1 : 0", testData))
-            Assert.assertEquals(1f, instance.getResult("\$data ? 1 : 0", testData))
-            Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
-            Assert.assertEquals(1f, instance.getResult("true ? 1 : 0", testData))
+            Assert.assertEquals(0L, instance.getResult("false ? 1 : 0", testData))
+            Assert.assertEquals(1L, instance.getResult("\$data ? 1 : 0", testData))
+            Assert.assertEquals(1L, instance.getResult("true ? 1 : 0", testData))
+            Assert.assertEquals(1L, instance.getResult("true ? 1 : 0", testData))
             Assert.assertEquals(true, instance.getResult("true ?: 1", testData))
-            Assert.assertEquals(1f, instance.getResult("false ?: 1", testData))
+            Assert.assertEquals(1L, instance.getResult("false ?: 1", testData))
             Assert.assertEquals(true, instance.getResult("true ?: \$data", testData))
             Assert.assertEquals("123", instance.getResult("true ? '123' : '456'", testData))
             Assert.assertEquals("123", instance.getResult("'true' ? '123' : '456'", testData))
             Assert.assertEquals(null, instance.getResult("true ? null : \$data", testData))
-            Assert.assertEquals(1f, instance.getResult("false ? \$\$ : 1", testData))
+            Assert.assertEquals(1L, instance.getResult("false ? \$\$ : 1", testData))
             Assert.assertEquals(testData, instance.getResult("true ? \$\$ : 1", testData))
             Assert.assertEquals(testData, instance.getResult("\$\$ ?: 0", testData))
-            Assert.assertEquals(1f, instance.getResult("\$data.true?1:2", testData))
-            Assert.assertEquals(2f, instance.getResult("\$data.false?1:2", testData))
+            Assert.assertEquals(1L, instance.getResult("\$data.true?1:2", testData))
+            Assert.assertEquals(2L, instance.getResult("\$data.false?1:2", testData))
 //            Assert.assertEquals(2f, instance.getResult("($$!=null)?size($$):0", testData))
         }
     }

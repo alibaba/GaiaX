@@ -14,7 +14,7 @@ enum {
     GX_TAG_OBJECT = 5,
     GX_TAG_ARRAY = 6,
     GX_TAG_MAP = 7,
-    GX_TAG_INT = 8,
+    GX_TAG_LONG = 8,
 };
 
 class GXValue {
@@ -22,6 +22,7 @@ public:
     int64_t tag;
     int32_t int32;  //Bool 1，0
     float float64;  //Float
+    int64_t intNum;    //long
     void *ptr;      //Array,Map
     char *str;      //String
     GXValue() {}
@@ -34,6 +35,11 @@ public:
     GXValue(int tag, int32_t i) {
         this->tag = tag;
         this->int32 = i;
+    }
+
+    GXValue(int tag, int64_t i) {
+        this->tag = tag;
+        this->intNum = i;
     }
 
     GXValue(int tag, void *p) {
@@ -68,6 +74,10 @@ static int GX_VALUE_GET_TAG(GXValue v) {
     return v.tag;
 }
 
+static long GX_VALUE_GET_LONG(GXValue v) {
+    return v.intNum;
+}
+
 static int32_t GX_VALUE_GET_BOOL(GXValue v) {
     return v.int32;
 }
@@ -87,6 +97,15 @@ static void *GX_VALUE_GET_OBJECT(GXValue v) {
  */
 static GXValue *GX_NewNull(int val) {
     GXValue *v = new GXValue(GX_TAG_NULL, val);
+    return v;
+}
+
+/**
+ * 通过该方法NewInt对象
+ * @param val long值
+ */
+static GXValue *GX_NewLong(int64_t val) {
+    GXValue *v = new GXValue(GX_TAG_LONG, val);
     return v;
 }
 

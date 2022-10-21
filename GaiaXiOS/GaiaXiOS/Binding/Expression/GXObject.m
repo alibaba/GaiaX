@@ -22,11 +22,18 @@
 @implementation GXFloat
 
 + (NSNumber *)getResultByValue:(CGFloat)value{
+    NSDecimalNumber *number = [NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%f",value]];
+    return number;
+}
+
+@end
+@implementation GXLong
+
++ (NSNumber *)getResultByValue:(int64_t)value{
     return @(value);
 }
 
 @end
-
 @implementation GXStr
 
 + (NSString *)getResultByValue:(NSString *)value{

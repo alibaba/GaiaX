@@ -17,20 +17,20 @@ struct Closure {                                                    //闭包CLOS
 };
 static vector<Closure> closureArray;                                //闭包集合
 static unordered_map<char, string> wordToSymbol;                    //key:word value:symbol
-static unordered_map<string, char> symbolToWord;                    //key:symbol value:word
 static unordered_map<string, string> cache;                         //表达式缓存
 /*
  * 存放终结符完整词汇的string集合
  */
 static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id",
-                                ",",
+                                ",", "function", "long",
                                 "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==",
                                 "!=",
                                 "&&", "||", "?", ":", "?:", "error", "#", "~"};
 /*
  * 存放终结符标识符的char集合
  */
-static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', '(', ')', '!', '-',
+static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', 'a', 'o', '(', ')',
+                                '!', '-',
                                 '+', '%',
                                 '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y',
                                 'e', '#',
@@ -50,7 +50,8 @@ static char nonTerminalSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 
  */
 static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
                            "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
-                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~", "O->t|f|n|v|u|s|d"};
+                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~",
+                           "O->t|f|n|v|u|s|d|a|o"};
 
 /*
  * 判断word是否为终结符
@@ -409,13 +410,11 @@ void initTerminal() {
     set<char> m;
     for (int i = 0; i < sizeTerminal; i++) {
         wordToSymbol.insert(pair<char, string>(terminalSymbol[i], terminalWord[i]));
-        symbolToWord.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
         terminal.insert(pair<string, char>(terminalWord[i], terminalSymbol[i]));
         terminalSymbolMap[terminalSymbol[i]] = m;
     }
     for (int i = 0; i < sizeNonTerminal; i++) {
         wordToSymbol.insert(pair<char, string>(nonTerminalSymbol[i], nonTerminalWord[i]));
-        symbolToWord.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
         nonTerminal.insert(pair<string, char>(nonTerminalWord[i], nonTerminalSymbol[i]));
         nonTerminalSymbolMap[nonTerminalSymbol[i]] = m;
     }
@@ -472,7 +471,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     //返回值都为bool
     if (op == ">") {
         result.token = "bool";
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(left.name) > stof(right.name)) {
                 result.name = "true";
             } else {
@@ -485,7 +484,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         //返回值都为bool
     else if (op == ">=") {
         result.token = "bool";
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(left.name) >= stof(right.name)) {
                 result.name = "true";
             } else {
@@ -498,7 +497,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         //返回值都为bool
     else if (op == "<") {
         result.token = "bool";
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(left.name) < stof(right.name)) {
                 result.name = "true";
             } else {
@@ -511,7 +510,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         //返回值都为bool
     else if (op == "<=") {
         result.token = "bool";
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(left.name) <= stof(right.name)) {
                 result.name = "true";
             } else {
@@ -530,7 +529,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && right.token == "num") {
+        } else if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
             if (left.name == "true" && (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
@@ -542,15 +541,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "num") {
+        } else if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if ((stof(left.name) != 0.0F) && (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "bool") {
+        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
             if (((stof(left.name) != 0.0F) && right.name == "true") ||
-                (left.token == "num" && right.token == "string")) {
+                ((left.token == "num" || left.token == "long") && right.token == "string")) {
                 result.name = "true";
             } else {
                 result.name = "false";
@@ -562,7 +561,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "string" && right.token == "num") {
+        } else if (left.token == "string" && (right.token == "num" || right.token == "long")) {
             if (left.name == "true" && (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
@@ -581,7 +580,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && right.token == "num") {
+        } else if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
             if (left.name == "true" || (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
@@ -593,13 +592,13 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "num") {
+        } else if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if ((stof(left.name) != 0.0F) || (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "bool") {
+        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
             if (((stof(left.name) != 0.0F) || right.name == "true") ||
                 (left.token == "num" || right.token == "string")) {
                 result.name = "true";
@@ -613,14 +612,14 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "string" && right.token == "num") {
+        } else if (left.token == "string" && (right.token == "num" || right.token == "long")) {
             if (left.name == "true" || (stof(right.name) != 0.0F)) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
         } else if (left.token == "null") {
-            if (right.token == "num") {
+            if ((right.token == "num" || right.token == "long")) {
                 if (stof(right.name) != 0.0F) {
                     result.name = "true";
                 } else {
@@ -632,7 +631,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = "false";
             }
         } else if (right.token == "null") {
-            if (left.token == "num") {
+            if (left.token == "num" || left.token == "long") {
                 if (stof(left.name) != 0.0F) {
                     result.name = "true";
                 } else {
@@ -650,21 +649,21 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         //返回值都为bool
     else if (op == "!=") {
         result.token = "bool";
-        if (left.token == "bool" && right.token == "num") {
+        if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
             if ((left.name == "true" && (stof(right.name) == 0.0F)) ||
                 (left.name == "false" && (stof(right.name) != 0.0F))) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "bool") {
+        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
             if (((stof(left.name) == 0.0F) && right.name == "true") ||
                 ((stof(left.name) != 0.0F) && right.name == "false")) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if ((left.token == "num" && right.token == "num")) {
+        } else if (((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long"))) {
             float lef = stof(left.name);
             float rig = stof(right.name);
             if (lef != rig) {
@@ -686,21 +685,21 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         //返回值都为bool
     else if (op == "==") {
         result.token = "bool";
-        if (left.token == "bool" && right.token == "num") {
+        if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
             if ((left.name == "true" && (stof(right.name) != 0.0F)) ||
                 (left.name == "false" && (stof(right.name) == 0.0F))) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "num" && right.token == "bool") {
+        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
             if (((stof(left.name) != 0.0F) && right.name == "true") ||
                 ((stof(left.name) == 0.0F) && right.name == "false")) {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if ((left.token == "num" && right.token == "num") &&
+        } else if (((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) &&
                    (stof(left.name) == stof(right.name))) {
             result.name = "true";
         } else if ((left.name == right.name)) {
@@ -717,7 +716,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         if (left.name == "true" || ((left.name != "false" && left.token != "null"))) {
             result.name = right.name;
             result.token = right.token;
-        } else if (left.token == "num" && stof(left.name) != 0.0F) {
+        } else if ((left.token == "num" || left.token == "long") && stof(left.name) != 0.0F) {
             result.name = right.name;
             result.token = right.token;
         } else {
@@ -741,10 +740,13 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = left.name;
         }
     } else if (op == "+") {
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             float temp = stof(left.name) + stof(right.name);
             result.name = to_string(temp);
-            result.token = "num";
+            result.token = "long";
+            if(left.token == "num" || right.token == "num"){
+                result.token = "num";
+            }
         } else if (left.token == "string" && right.token == "string") {
             result.token = "string";
             result.name = left.name + right.name;
@@ -752,30 +754,30 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "null";
             result.token = "null";
         } else {
-            if (left.token == "num" && right.token == "string") {
-                if (left.name.find('.') != -1) {
-                    regex e("0+?$");
-                    regex e2("[.]$");
-                    left.name = regex_replace(left.name, e, "");
-                    left.name = regex_replace(left.name, e2, "");
-                }
+            if ((left.token == "num" || left.token == "long") && right.token == "string") {
+//                if (left.name.find('.') != -1) {
+//                    regex e("0+?$");
+//                    regex e2("[.]$");
+//                    left.name = regex_replace(left.name, e, "");
+//                    left.name = regex_replace(left.name, e2, "");
+//                }
                 result.name = left.name + right.name;
                 result.token = "string";
-            } else if (right.token == "num" && left.token == "string") {
-                if (right.name.find('.') != -1) {
-                    regex e("0+?$");
-                    regex e2("[.]$");
-                    right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    right.name = regex_replace(right.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                }
+            } else if ((right.token == "num" || right.token == "long") && left.token == "string") {
+//                if (right.name.find('.') != -1) {
+//                    regex e("0+?$");
+//                    regex e2("[.]$");
+//                    right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+//                    right.name = regex_replace(right.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+//                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else {
                 result.token = "error";
-                if (left.token == "string" || left.token == "num") {
+                if (left.token == "string" || (left.token == "num" || left.token == "long")) {
                     result.name = "expressionError: '" + right.name +
                                   "' expected num or string value,not '" + right.token + "'";
-                } else if (right.token == "string" || right.token == "num") {
+                } else if (right.token == "string" || (right.token == "num" || right.token == "long")) {
                     result.name = "expressionError: '" + left.name +
                                   "' expected num or string value,not '" + left.token + "'";
                 } else {
@@ -785,23 +787,26 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             }
         }
     } else if (op == "-") {
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             float temp = stof(left.name) - stof(right.name);
             result.name = to_string(temp);
-            result.token = "num";
+            result.token = "long";
+            if(left.token == "num" || right.token == "num"){
+                result.token = "num";
+            }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
             result.token = "null";
         } else {
             result.token = "error";
-            if (left.token == "num") {
+            if ((left.token == "num" || left.token == "long")) {
                 result.name =
                         "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (left.token == "null" || right.token == "null") {
                 result.name = "null";
                 result.token = "null";
-            } else if (right.token == "num") {
+            } else if ((right.token == "num" || right.token == "long")) {
                 result.name =
                         "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
@@ -812,23 +817,26 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             }
         }
     } else if (op == "*") {
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             float temp = stof(left.name) * stof(right.name);
             result.name = to_string(temp);
-            result.token = "num";
+            result.token = "long";
+            if(left.token == "num" || right.token == "num"){
+                result.token = "num";
+            }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
             result.token = "null";
         } else {
             result.token = "error";
-            if (left.token == "num") {
+            if ((left.token == "num" || left.token == "long")) {
                 result.name =
                         "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (left.token == "null" || right.token == "null") {
                 result.name = "null";
                 result.token = "null";
-            } else if (right.token == "num") {
+            } else if ((right.token == "num" || right.token == "long")) {
                 result.name =
                         "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
@@ -839,28 +847,31 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             }
         }
     } else if (op == "/") {
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(right.name) == 0) {
                 result.token = "error";
                 result.name = "expressionError: divide or mod by zero";
             } else {
                 float temp = stof(left.name) / stof(right.name);
                 result.name = to_string(temp);
-                result.token = "num";
+                result.token = "long";
+                if(left.token == "num" || right.token == "num"){
+                    result.token = "num";
+                }
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
             result.token = "null";
         } else {
             result.token = "error";
-            if (left.token == "num") {
+            if ((left.token == "num" || left.token == "long")) {
                 result.name =
                         "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (left.token == "null" || right.token == "null") {
                 result.name = "null";
                 result.token = "null";
-            } else if (right.token == "num") {
+            } else if ((right.token == "num" || right.token == "long")) {
                 result.name =
                         "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
@@ -871,28 +882,31 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             }
         }
     } else if (op == "%") {
-        if (left.token == "num" && right.token == "num") {
+        if ((left.token == "num" || left.token == "long") && (right.token == "num" || right.token == "long")) {
             if (stof(right.name) == 0) {
                 result.token = "error";
                 result.name = "expressionError: divide or mod by zero";
             } else {
                 float temp = stoi(left.name) % stoi(right.name);
                 result.name = to_string(temp);
-                result.token = "num";
+                result.token = "long";
+                if(left.token == "num" || right.token == "num"){
+                    result.token = "num";
+                }
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
             result.token = "null";
         } else {
             result.token = "error";
-            if (left.token == "num") {
+            if ((left.token == "num" || left.token == "long")) {
                 result.name =
                         "expressionError: '" + right.name + "'" + ": expected num value,not: " +
                         right.token;
             } else if (left.token == "null" || right.token == "null") {
                 result.name = "null";
                 result.token = "null";
-            } else if (right.token == "num") {
+            } else if ((right.token == "num" || right.token == "long")) {
                 result.name =
                         "expressionError: '" + left.name + "'" + ": expected num value,not: " +
                         left.token;
@@ -915,10 +929,10 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
         return result;
     }
     if (op == "-") {
-        if (left.token == "num") {
+        if ((left.token == "num" || left.token == "long")) {
             float temp = -stof(left.name);
             result.name = to_string(temp);
-            result.token = "num";
+            result.token = left.token;
         } else {
             result.token = "error";
             result.name =
@@ -926,8 +940,8 @@ GXATSNode GXAnalyze::singleCalculate(GXATSNode left, string op) {
                     left.token;
         }
     } else if (op == "+") {
-        if (left.token == "num") {
-            result.token = "num";
+        if ((left.token == "num" || left.token == "long")) {
+            result.token = left.token;
             result.name = left.name;
         } else {
             result.token = "error";
@@ -991,6 +1005,43 @@ long GXAnalyze::getValue(string expression, void *source) {
                 if (gxv->tag == GX_TAG_FLOAT) {
                     tokenNum.name = to_string(gxv->float64);
                     tokenNum.token = "num";
+                } else if (gxv->tag == GX_TAG_LONG) {
+                    tokenNum.name = to_string(gxv->intNum);
+                    tokenNum.token = "long";
+                } else if (gxv->tag == GX_TAG_STRING) {
+                    tokenNum.name = gxv->str;
+                    tokenNum.token = "string";
+                } else if (gxv->tag == GX_TAG_BOOL) {
+                    if (gxv->int32 == 1) {
+                        tokenNum.name = "true";
+                    } else {
+                        tokenNum.name = "false";
+                    }
+                    tokenNum.token = "bool";
+                } else if (gxv->tag == GX_TAG_ARRAY) {
+                    tokenNum.name = to_string((long) (gxv->ptr));
+                    tokenNum.token = "array";
+                } else if (gxv->tag == GX_TAG_MAP) {
+                    tokenNum.name = to_string((long) (gxv->ptr));
+                    tokenNum.token = "map";
+                } else if (gxv->tag == GX_TAG_NULL) {
+                    tokenNum.name = "null";
+                    tokenNum.token = "null";
+                }
+                if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                    delete[] gxv->str;
+                    gxv->str = NULL;
+                }
+                delete gxv;
+            } else if (token.token == "function") {
+                long res = this->getFunctionValue(token.name, nullptr, 0, "");
+                GXValue *gxv = (GXValue *) res;
+                if (gxv->tag == GX_TAG_FLOAT) {
+                    tokenNum.name = to_string(gxv->float64);
+                    tokenNum.token = "num";
+                } else if (gxv->tag == GX_TAG_LONG) {
+                    tokenNum.name = to_string(gxv->intNum);
+                    tokenNum.token = "long";
                 } else if (gxv->tag == GX_TAG_STRING) {
                     tokenNum.name = gxv->str;
                     tokenNum.token = "string";
@@ -1045,13 +1096,15 @@ long GXAnalyze::getValue(string expression, void *source) {
                     pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (res.token == "num") {
-                if (res.name.find('.') != -1) {
-                    regex e("0+?$");
-                    regex e2("[.]$");
-                    res.name = regex_replace(res.name, e, "");
-                    res.name = regex_replace(res.name, e2, "");
-                }
+//                if (res.name.find('.') != -1) {
+//                    regex e("0+?$");
+//                    regex e2("[.]$");
+//                    res.name = regex_replace(res.name, e, "");
+//                    res.name = regex_replace(res.name, e2, "");
+//                }
                 pointer = new GXValue(GX_TAG_FLOAT, (float) atof(res.name.c_str()));
+            } else if (res.token == "long") {
+                pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(res.name.c_str()));
             } else if (res.token == "map") {
                 pointer = new GXValue(GX_TAG_MAP, (void *) atol(res.name.c_str()));
             } else if (res.token == "array") {
@@ -1066,6 +1119,7 @@ long GXAnalyze::getValue(string expression, void *source) {
     } else {
         Res = check(result, array, this, source, expression);
     }
+    arrayNum.clear();
     array.clear();
     return Res;
 }
@@ -1133,6 +1187,10 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
                     GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
                             node.name.c_str()));
                     paramsTempArray.push_back((long) par);
+                } else if (node.token == "long") {
+                    GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(
+                            node.name.c_str()));
+                    paramsTempArray.push_back((long) par);
                 } else if (node.token == "string") {
                     GXValue *par = new GXValue(GX_TAG_STRING,
                                                node.name.c_str());
@@ -1169,6 +1227,10 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
                     num1 = -1;
                     if (node.token == "num") {
                         GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
+                                node.name.c_str()));
+                        paramsTempArray.push_back((long) par);
+                    } else if (node.token == "long") {
+                        GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(
                                 node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "string") {
@@ -1226,6 +1288,9 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
                 if (fun->tag == GX_TAG_FLOAT) {
                     node.name = to_string(fun->float64);
                     node.token = "num";
+                } else if (fun->tag == GX_TAG_LONG) {
+                    node.name = to_string(fun->intNum);
+                    node.token = "long";
                 } else if (fun->tag == GX_TAG_BOOL) {
                     if (fun->int32 == 1) {
                         node.name = "true";
@@ -1280,13 +1345,15 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
             pointer = new GXValue(GX_TAG_BOOL, 0);
         }
     } else if (res.token == "num") {
-        if (res.name.find('.') != -1) {
-            regex e("0+?$");
-            regex e2("[.]$");
-            res.name = regex_replace(res.name, e, "");
-            res.name = regex_replace(res.name, e2, "");
-        }
+//        if (res.name.find('.') != -1) {
+//            regex e("0+?$");
+//            regex e2("[.]$");
+//            res.name = regex_replace(res.name, e, "");
+//            res.name = regex_replace(res.name, e2, "");
+//        }
         pointer = new GXValue(GX_TAG_FLOAT, (float) atof(res.name.c_str()));
+    } else if (res.token == "long") {
+        pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(res.name.c_str()));
     } else if (res.token == "map") {
         pointer = new GXValue(GX_TAG_MAP, (void *) atol(res.name.c_str()));
     } else if (res.token == "array") {
@@ -1347,13 +1414,15 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (valueStack[0].token == "num") {
-                if (valueStack[0].name.find('.') != -1) {
-                    regex e("0+?$");
-                    regex e2("[.]$");
-                    valueStack[0].name = regex_replace(valueStack[0].name, e, "");
-                    valueStack[0].name = regex_replace(valueStack[0].name, e2, "");
-                }
+//                if (valueStack[0].name.find('.') != -1) {
+//                    regex e("0+?$");
+//                    regex e2("[.]$");
+//                    valueStack[0].name = regex_replace(valueStack[0].name, e, "");
+//                    valueStack[0].name = regex_replace(valueStack[0].name, e2, "");
+//                }
                 pointer = new GXValue(GX_TAG_FLOAT, (float) atof(valueStack[0].name.c_str()));
+            } else if (valueStack[0].token == "long") {
+                pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "map") {
                 pointer = new GXValue(GX_TAG_MAP, (void *) atol(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "array") {
@@ -1379,7 +1448,8 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             string temp = wordToSymbol[cur_symbol];
             if ((isTerminalWord(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
-                  temp == "num" || temp == "string" || temp == "data" || temp == "id")) ||
+                  temp == "num" || temp == "string" || temp == "data" || temp == "id" ||
+                  temp == "function" || temp == "long")) ||
                 (temp == "map" || temp == "array")) {
                 // push value
                 if (isTerminalWord(temp) && temp == "id") {
@@ -1394,6 +1464,46 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     if (gxv->tag == GX_TAG_FLOAT) {
                         t1.name = to_string(gxv->float64);
                         t1.token = "num";
+                    } else if (gxv->tag == GX_TAG_LONG) {
+                        t1.name = to_string(gxv->intNum);
+                        t1.token = "long";
+                    } else if (gxv->tag == GX_TAG_STRING) {
+                        t1.name = gxv->str;
+                        t1.token = "string";
+                    } else if (gxv->tag == GX_TAG_BOOL) {
+                        if (gxv->int32 == 1) {
+                            t1.name = "true";
+                        } else {
+                            t1.name = "false";
+                        }
+                        t1.token = "bool";
+                    } else if (gxv->tag == GX_TAG_ARRAY) {
+                        t1.name = to_string((long) (gxv->ptr));
+                        t1.token = "array";
+                    } else if (gxv->tag == GX_TAG_MAP) {
+                        t1.name = to_string((long) (gxv->ptr));
+                        t1.token = "map";
+                    } else if (gxv->tag == GX_TAG_NULL) {
+                        t1.name = "null";
+                        t1.token = "null";
+                    }
+                    valueStack[valueSize] = t1;
+                    ++valueSize;
+                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                        delete[] gxv->str;
+                        gxv->str = NULL;
+                    }
+                    delete gxv;
+                } else if (temp == "function") {
+                    long res = analyze->getFunctionValue(array[valueStep].name, nullptr, 0, "");
+                    GXValue *gxv = (GXValue *) res;
+                    t1.count = array[valueStep].count;
+                    if (gxv->tag == GX_TAG_FLOAT) {
+                        t1.name = to_string(gxv->float64);
+                        t1.token = "num";
+                    } else if (gxv->tag == GX_TAG_LONG) {
+                        t1.name = to_string(gxv->intNum);
+                        t1.token = "long";
                     } else if (gxv->tag == GX_TAG_STRING) {
                         t1.name = gxv->str;
                         t1.token = "string";
@@ -1459,6 +1569,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     if ((isTerminalWord(action[i]) &&
                          !((action[i] == "true" || action[i] == "false" || action[i] == "null" ||
                             action[i] == "value" || action[i] == "num" || action[i] == "string" ||
+                            action[i] == "long" ||
                             action[i] == "data" || action[i] == "id"))) ||
                         (action[i] == "map" || action[i] == "array")) {
                         if (!isChangedOp) {
@@ -1521,6 +1632,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         if (fun->tag == GX_TAG_FLOAT) {
                                             tempR.name = to_string(fun->float64);
                                             tempR.token = "num";
+                                        }else if(fun->tag == GX_TAG_LONG){
+                                            tempR.name = to_string(fun->intNum);
+                                            tempR.token = "long";
                                         } else if (fun->tag == GX_TAG_BOOL) {
                                             if (fun->int32 == 1) {
                                                 tempR.name = "true";
@@ -1561,6 +1675,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         if (valueStack[i].token == "num") {
                                             GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
                                                     valueStack[i].name.c_str()));
+                                            paramsTempArray.push_back((long) par);
+                                        } else if (valueStack[i].token == "long") {
+                                            GXValue *par = new GXValue(GX_TAG_LONG,
+                                                                       (int64_t)atoll(valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "string") {
                                             GXValue *par = new GXValue(GX_TAG_STRING,

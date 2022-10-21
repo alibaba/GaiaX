@@ -20,6 +20,7 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -33,10 +34,11 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
 import com.alibaba.gaiax.template.*
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import jp.wasabeef.blurry.Blurry
 
 /**
  * @suppress

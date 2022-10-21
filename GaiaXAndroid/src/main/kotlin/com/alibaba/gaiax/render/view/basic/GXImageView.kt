@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
@@ -29,6 +30,8 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXMode
@@ -38,7 +41,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
  * @suppress
  */
 @Keep
-open class GXImageView : AppCompatImageView, GXIImageView {
+open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
 
     constructor(context: Context) : super(context)
 
@@ -177,6 +180,21 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         }
     }
 
+    interface GXImageViewListener {
+        fun onDrawableChanged(gxImageView: GXImageView)
+    }
+
+    var onImageDrawableListener: GXImageViewListener? = null
+
+    override fun setImageDrawable(drawable: Drawable?) {
+        super.setImageDrawable(drawable)
+        if (onImageDrawableListener != null && drawable is BitmapDrawable) {
+            this.post {
+                onImageDrawableListener?.onDrawableChanged(this@GXImageView)
+            }
+        }
+    }
+
     override fun setFrame(l: Int, t: Int, r: Int, b: Int): Boolean {
         updateMatrix(this, drawable)
         return super.setFrame(l, t, r, b)
@@ -184,12 +202,16 @@ open class GXImageView : AppCompatImageView, GXIImageView {
 
     private var mode: GXMode? = null
 
-    override fun setImageStyle(gxCss: GXCss) = if (gxCss.style.mode != null) {
-        this.mode = gxCss.style.mode
-        val scaleType = gxCss.style.mode.getScaleType()
-        this.scaleType = scaleType
-    } else {
-        this.scaleType = ScaleType.FIT_XY
+    override fun setImageStyle(gxTemplateContext: GXTemplateContext, gxCss: GXCss) {
+        if (gxCss.style.mode != null) {
+            this.mode = gxCss.style.mode
+            val scaleType = gxCss.style.mode.getScaleType()
+            this.scaleType = scaleType
+        } else {
+            this.scaleType = ScaleType.FIT_XY
+        }
+        gxTemplateContext.initImageDrawableListener()
+        this.onImageDrawableListener = gxTemplateContext.onImageDrawableListener
     }
 
     override fun draw(canvas: Canvas?) {
@@ -260,4 +282,7 @@ open class GXImageView : AppCompatImageView, GXIImageView {
         )
     }
 
+    override fun release() {
+        onImageDrawableListener = null
+    }
 }

@@ -36,6 +36,7 @@ import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXProgressView
 import com.alibaba.gaiax.render.view.basic.GXText
+import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
@@ -857,17 +858,37 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun nodeViewCss(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-            val view = gxNode.view ?: return
+            val gxView = gxNode.view ?: return
             val gxCss = gxNode.templateNode.finalCss ?: return
 
-            if (view is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
-                view.setTextStyle(gxCss)
-            } else if (view is GXIImageView && gxNode.isImageType()) {
-                view.setImageStyle(gxCss)
+            // 对高斯模糊前置处理
+            bindBackdropFilter(gxTemplateContext, gxNode, gxCss, gxView)
+
+            if (gxView is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
+                gxView.setTextStyle(gxCss)
+            } else if (gxView is GXIImageView && gxNode.isImageType()) {
+                gxView.setImageStyle(gxTemplateContext, gxCss)
             } else if (gxNode.isContainerType()) {
-                bindContainerViewCss(gxTemplateContext, gxCss, view, gxNode)
+                bindContainerViewCss(gxTemplateContext, gxCss, gxView, gxNode)
             }
-            bindCommonViewCss(view, gxCss, gxNode)
+
+            bindCommonViewCss(gxTemplateContext, gxView, gxCss, gxNode)
+        }
+
+        private fun bindBackdropFilter(
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
+            gxCss: GXCss,
+            gxView: View
+        ) {
+            if (gxNode.isViewType()) {
+                if (gxCss.style.backdropFilter != null) {
+                    (gxView as GXView).setBackdropFilter(
+                        gxTemplateContext,
+                        gxCss.style.backdropFilter
+                    )
+                }
+            }
         }
 
         private fun nodeViewEvent(
@@ -1066,7 +1087,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             val container = view as GXContainer
 
-            gxTemplateContext.containers.add(container)
+            gxTemplateContext.initContainers()
+            gxTemplateContext.containers?.add(container)
 
             val adapter: GXContainerViewAdapter?
             if (container.adapter != null) {
@@ -1232,21 +1254,27 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             view.onBindData(data)
         }
 
-        private fun bindCommonViewCss(view: View, gxCss: GXCss, node: GXNode) {
+        private fun bindCommonViewCss(
+            gxTemplateContext: GXTemplateContext,
+            gxView: View,
+            gxCss: GXCss,
+            gxNode: GXNode
+        ) {
 
-            view.setDisplay(gxCss.style.display)
+            gxView.setDisplay(gxCss.style.display)
 
-            if (!node.isCustomViewType()) {
+            if (!gxNode.isCustomViewType()) {
 
-                view.setHidden(gxCss.style.display, gxCss.style.hidden)
+                gxView.setHidden(gxCss.style.display, gxCss.style.hidden)
 
-                view.setOpacity(gxCss.style.opacity)
+                gxView.setOpacity(gxCss.style.opacity)
 
-                view.setOverflow(gxCss.style.overflow)
+                gxView.setOverflow(gxCss.style.overflow)
 
-                view.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
+                gxView.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
 
-                view.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
+                gxView.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
+
             }
         }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.template;
+package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSONObject
 

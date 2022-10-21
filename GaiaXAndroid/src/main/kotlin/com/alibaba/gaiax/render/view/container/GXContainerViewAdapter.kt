@@ -385,7 +385,7 @@ class GXContainerViewAdapter(
 
     override fun getItemCount(): Int {
         return if (hasFooter()) {
-            containerData.size + 1;
+            containerData.size + 1
         } else {
             containerData.size
         }

@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.render.view.container
-
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.alibaba.gaiax.GXTemplateEngine
+package com.alibaba.gaiax.render.view
 
 /**
  * @suppress
  */
-class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+interface GXIRelease {
 
-    var childTag: Any? = null
-    var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+    fun release()
 }

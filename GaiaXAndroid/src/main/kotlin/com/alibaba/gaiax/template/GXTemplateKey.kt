@@ -23,6 +23,14 @@ package com.alibaba.gaiax.template
  */
 object GXTemplateKey {
 
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter
+     */
+    const val STYLE_BACKDROP_FILTER = "backdrop-filter"
+
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow
+     */
     const val STYLE_BOX_SHADOW = "box-shadow"
 
     /**

@@ -52,7 +52,7 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                                 return GXAnalyze.createValueString(value)
                             }
                             is Int -> {
-                                return GXAnalyze.createValueFloat64(value.toFloat())
+                                return GXAnalyze.createValueLong(value.toLong())
                             }
                             is Float -> {
                                 return GXAnalyze.createValueFloat64(value)
@@ -62,6 +62,9 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                             }
                             is BigDecimal -> {
                                 return GXAnalyze.createValueFloat64(value.toFloat())
+                            }
+                            is Long ->{
+                                return GXAnalyze.createValueLong(value)
                             }
                             null -> {
                                 return GXAnalyze.createValueNull()

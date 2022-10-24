@@ -81,6 +81,15 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'lib/*/libc++_shared.so'
+    }
+
+    // https://www.jianshu.com/p/681589927f1f
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-Analyze"]
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

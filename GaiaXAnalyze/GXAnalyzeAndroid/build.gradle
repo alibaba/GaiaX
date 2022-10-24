@@ -80,10 +80,11 @@ android {
             version "3.10.2"
         }
     }
-
-    packagingOptions {
-        exclude 'lib/*/libc++_shared.so'
-    }
+    //过滤掉libc++_shared.so，不添加到APK中。
+    //当APK中已有libc++_shared.so，可以打开这段注释，减少包大小。
+//    packagingOptions {
+//        exclude 'lib/*/libc++_shared.so'
+//    }
 
     // https://www.jianshu.com/p/681589927f1f
     compileOptions {

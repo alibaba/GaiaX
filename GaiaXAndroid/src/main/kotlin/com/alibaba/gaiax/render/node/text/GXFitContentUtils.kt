@@ -133,14 +133,23 @@ object GXFitContentUtils {
                 }
             }
 
-
             var textHeight = nodeHeight
+
+            // FIXED: template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom
+            val textTopAndBottomPadding =
+                (finalFlexBox.padding?.top?.value ?: 0F) + (finalFlexBox.padding?.bottom?.value
+                    ?: 0F)
+            // 高度等于上下padding之和，也认为是0高度
+            if (textHeight == textTopAndBottomPadding) {
+                textHeight = 0F
+            }
+
             if (textHeight == 0F) {
                 // 兼容处理， 如果未设置高度，那么使用文本默认的高度
                 textHeight = measuredHeight
             }
 
-            // 修复template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
+            // FIXED: template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
                 (finalFlexBox.padding?.start?.value ?: 0F) + (finalFlexBox.padding?.end?.value
                     ?: 0F)

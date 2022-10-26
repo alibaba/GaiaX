@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             // 9292
             intent.putExtra(
                 "GAIA_STUDIO_URL",
-                "gaiax://gaiax/preview?url=ws://30.78.148.113:9001&id=test-template&type=auto"
+                "gaiax://gaiax/preview?url=ws://30.78.148.15:9001&id=test-template&type=auto"
             )
             launcher.launch(intent)
         }

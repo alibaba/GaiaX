@@ -862,6 +862,28 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
+    fun template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = "HelloWorld"
+        val padding = 10F.dpToPx().roundToInt()
+        textView.setPadding(0, padding, 0, padding)
+        textView.setFontSize(13F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
+    }
+
+    @Test
     fun template_text_fitcontent_lines_1_width_100_percent_height_100px() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

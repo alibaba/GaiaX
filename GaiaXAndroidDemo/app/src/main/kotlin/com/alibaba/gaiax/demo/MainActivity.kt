@@ -44,31 +44,27 @@ class MainActivity : AppCompatActivity() {
 
         GXClientToStudio.instance.init(applicationContext)
 
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionMultiVersionExpression())
+        GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
 
-        GXRegisterCenter.instance
-            .registerExtensionException(object :
-                GXRegisterCenter.GXIExtensionException {
-                override fun exception(exception: Exception) {
-                    exception.printStackTrace()
-                }
-            })
+        GXRegisterCenter.instance.registerExtensionException(object :
+            GXRegisterCenter.GXIExtensionException {
+            override fun exception(exception: Exception) {
+                exception.printStackTrace()
+            }
+        })
 
-        GXRegisterCenter.instance
-            .registerExtensionTemplateSource(GXManualPushSource.instance, 101)
+        GXRegisterCenter.instance.registerExtensionTemplateSource(GXManualPushSource.instance, 101)
             .registerExtensionTemplateSource(GXFastPreviewSource.instance, 102)
 
-        GXRegisterCenter.instance
-            .registerExtensionFontFamily(object :
-                GXRegisterCenter.GXIExtensionFontFamily {
-                override fun fontFamily(fontFamilyName: String): Typeface? {
-                    if (fontFamilyName == "iconfont") {
-                        return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
-                    }
-                    return null
+        GXRegisterCenter.instance.registerExtensionFontFamily(object :
+            GXRegisterCenter.GXIExtensionFontFamily {
+            override fun fontFamily(fontFamilyName: String): Typeface? {
+                if (fontFamilyName == "iconfont") {
+                    return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
                 }
-            })
+                return null
+            }
+        })
 
         findViewById<AppCompatButton>(R.id.fastpreview)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)

@@ -57,11 +57,14 @@ class GXClientToStudio {
 
     fun init(context: Context) {
         applicationContext = context.applicationContext
-        socketHelper = GXSocket()
+        if (socketHelper == null) {
+            socketHelper = GXSocket()
+        }
     }
 
     fun destroy() {
         socketHelper?.disconnectToServer()
+        socketHelper = null
     }
 
     fun manualConnect(context: Context, params: JSONObject) {

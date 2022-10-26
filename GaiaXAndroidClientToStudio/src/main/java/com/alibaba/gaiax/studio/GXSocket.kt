@@ -5,12 +5,12 @@ import android.os.Looper
 import android.util.Log
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.zhangke.websocket.SocketListener
-import com.zhangke.websocket.WebSocketHandler
-import com.zhangke.websocket.WebSocketManager
-import com.zhangke.websocket.WebSocketSetting
-import com.zhangke.websocket.response.ErrorResponse
-import org.java_websocket.framing.Framedata
+import com.alibaba.gaiax.studio.third.socket.java_websocket.framing.Framedata
+import com.alibaba.gaiax.studio.third.socket.websocket.SocketListener
+import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketHandler
+import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketManager
+import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketSetting
+import com.alibaba.gaiax.studio.third.socket.websocket.response.ErrorResponse
 import java.nio.ByteBuffer
 
 class GXSocket : SocketListener {
@@ -69,7 +69,8 @@ class GXSocket : SocketListener {
         gxSocketIsConnected = true
 
         //初始化WebSocket
-        webSocketSetting = WebSocketSetting()
+        webSocketSetting =
+            WebSocketSetting()
         webSocketSetting?.connectUrl = serverAddress //必填
         //设置连接超时时间
         webSocketSetting?.connectTimeout = 15 * 1000

@@ -90,8 +90,8 @@ allprojects {
 
 Android-Support version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:$0.2.8-support'
-implementation 'com.github.alibaba.GaiaX:GaiaX:$0.2.8-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.8-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.8-support'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 

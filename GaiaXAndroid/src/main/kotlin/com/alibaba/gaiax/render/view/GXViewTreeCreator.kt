@@ -31,9 +31,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
 
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View {
         val rootView = GXViewFactory.createView<View>(
-            context.context,
-            rootNode.getType(),
-            rootNode.getCustomViewClass()
+            context.context, rootNode.getType(), rootNode.getCustomViewClass()
         ).apply {
             this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(rootNode, layout)
             rootNode.view = this
@@ -50,7 +48,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
         childLayout: Layout,
         mergeX: Float,
         mergeY: Float
-    ): View? {
+    ): View {
 
         // If have the shadow
         // You need to build your own BOXLAYOUT and put it in the same place as the horizontal one
@@ -58,10 +56,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
             GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_SHADOW_LAYOUT, null)
                 .apply {
                     this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                        childNode,
-                        childLayout,
-                        mergeX,
-                        mergeY
+                        childNode, childLayout, mergeX, mergeY
                     )
                     childNode.boxLayoutView = this
                     (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
@@ -75,10 +70,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
         val childView =
             GXViewFactory.createView<View>(context.context, childType, childViewType).apply {
                 this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                    childNode,
-                    childLayout,
-                    mergeX,
-                    mergeY
+                    childNode, childLayout, mergeX, mergeY
                 )
                 childNode.view = this
                 if (parentMergeView is ViewGroup) {
@@ -87,19 +79,17 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
             }
 
         //没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
-        if (childNode.isNeedLottie()){
-            GXViewFactory.createView<View>(context.context,GXViewKey.VIEW_TYPE_LOTTIE,null)?.apply {
-                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                    childNode,
-                    childLayout,
-                    mergeX,
-                    mergeY
-                )
-                childNode.lottieView = this
-                if (parentMergeView is ViewGroup) {
-                    parentMergeView.addView(this)
+        if (childNode.isNeedLottie()) {
+            GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_LOTTIE, null)
+                .apply {
+                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
+                        childNode, childLayout, mergeX, mergeY
+                    )
+                    childNode.lottieView = this
+                    if (parentMergeView is ViewGroup) {
+                        parentMergeView.addView(this)
+                    }
                 }
-            }
         }
         return childView
     }

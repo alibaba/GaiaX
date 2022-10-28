@@ -1,6 +1,6 @@
 
 import { View } from "@tarojs/components";
-import { Component } from "react";
+import { Component, ReactNode } from "react";
 import {
   GXTemplate,
   GXEngineInstance,
@@ -10,6 +10,7 @@ import {
   GXMeasureSize,
   GXTemplateData,
   GXIExtensionTemplateSource,
+  GXIExtensionCustomComponent,
   GXIEventListener,
   GXGesture,
   GXITrackListener,
@@ -17,12 +18,23 @@ import {
 } from "@gaiax/taro";
 import "./index.scss";
 import * as GXFastPreview from "../../gaiax/GXFastPreview";
+import CustomComponent from "./CustomComponent";
 
 // Debug Outline
 if (process.env.TARO_ENV === 'h5') {
   require('./index_h5_debug.scss')
 } else if (process.env.TARO_ENV === 'weapp') {
   require('./index_weapp_debug.scss')
+}
+
+// 创建自定义组件的扩展方法
+class GXCustomComponent implements GXIExtensionCustomComponent {
+  createComponent(target: string, data: any): ReactNode {
+    if (target == "test") {
+      return <CustomComponent propDataValue={data}></CustomComponent>;
+    }
+    return null;
+  }
 }
 
 class GXFastPreviewTemplateSource implements GXIExtensionTemplateSource {
@@ -51,6 +63,7 @@ interface IParams {
 }
 
 const gxTemplateSource = new GXFastPreviewTemplateSource();
+const gxCustomComponent = new GXCustomComponent();
 
 export default class Index extends Component<IParams> {
 
@@ -78,6 +91,9 @@ export default class Index extends Component<IParams> {
     GXRegisterCenterInstance.registerExtensionTemplateSource(gxTemplateSource);
     GXFastPreview.GXFastPreviewInstance.startFastPreview();
     GXFastPreview.GXFastPreviewInstance.setListener(gxFastPreviewListener);
+
+    // 注册扩展方法
+    GXRegisterCenterInstance.registerExtensionCustomComponent(gxCustomComponent);
   }
 
   componentDidMount() { }

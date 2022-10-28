@@ -170,9 +170,9 @@ export class GXScrollConfig {
  * 节点的原始样式
  */
 export default class GXTemplateNode {
-    
+
     forceWidthChange: boolean;
-    
+
     imageMode: string;
 
     getExtend(gxTemplateData?: GXJSONObject): GXJSONObject {
@@ -261,6 +261,10 @@ export default class GXTemplateNode {
         return this.layer['type'];
     }
 
+    getCustomView(): string {
+        return this.layer['view-class-taro']
+    }
+
     isNestChildTemplateType(): boolean {
         return GXTemplateNode.isNestChildTemplateType(this.layer);
     }
@@ -317,8 +321,7 @@ export default class GXTemplateNode {
         return layer != null &&
             layer['type'] == 'gaia-template'
             && layer['sub-type'] == 'custom'
-            && layer['view-class-android'] == null
-            && layer['view-class-ios'] == null
+            && layer['view-class-taro'] == null
     }
 
     static isContainerType(layer: GXJSONObject): boolean {
@@ -326,7 +329,7 @@ export default class GXTemplateNode {
     }
 
     static isCustomType(layer: GXJSONObject): boolean {
-        return false
+        return layer != null && layer['type'] == 'custom' && (layer['view-class-taro'] != null)
     }
 
     static isTextType(layer: GXJSONObject): boolean {

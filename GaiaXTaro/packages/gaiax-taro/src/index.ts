@@ -7,6 +7,7 @@ export { default as GXTemplateComponent } from './components/GXTemplateComponent
 export { default as GXTemplateEngine } from './gaiax/GXTemplateEngine';
 export { default as GXTemplateInfo } from './gaiax/GXTemplateInfo';
 export { default as GXRegisterCenter } from './gaiax/GXRegisterCenter'
+export { default as GXIExtensionCustomComponent } from './gaiax/GXIExtensionCustomComponent'
 export { default as GXIExtensionTemplateInfoSource } from './gaiax/GXIExtensionTemplateInfoSource'
 export { default as GXIExtensionTemplateSource } from './gaiax/GXIExtensionTemplateSource'
 export { default as GXTemplate } from './gaiax/GXTemplate'

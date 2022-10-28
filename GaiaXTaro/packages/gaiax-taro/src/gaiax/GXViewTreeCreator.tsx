@@ -16,6 +16,7 @@ import GXScroll from "../components/scroll/GXScroll";
 import GXGrid from "../components/grid/GXGrid";
 import GXGesture from "./GXGesture";
 import GXTrack from "./GXTrack";
+import { GXRegisterCenterInstance } from "./GXRegisterCenterInstance";
 
 export default class GXViewTreeCreator {
 
@@ -101,6 +102,15 @@ export default class GXViewTreeCreator {
                 gxVisualTemplateNodeData
             );
         }
+        // CustomView
+        else if (gxNode.gxTemplateNode.isCustomType()) {
+            this.createCustomNode(
+                gxTemplateContext,
+                gxNode,
+                gxTemplateData,
+                gxParentNode
+            );
+        }
         // Text
         else if (gxNode.gxTemplateNode.isTextType()) {
             this.createTextNode(
@@ -148,6 +158,37 @@ export default class GXViewTreeCreator {
         }
 
         return gxNode;
+    }
+
+    private createCustomNode(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxTemplateData: GXJSONObject,
+        gxParentNode: GXNode
+    ) {
+        gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
+
+        const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
+        const customView = gxNode.gxTemplateNode.getCustomView();
+
+        const childArray: ReactNode[] = [];
+
+        if (customView != null) {
+            const component: ReactNode = GXRegisterCenterInstance.gxExtensionCustomComponent?.createComponent(customView, data.value);
+            if (component != null) {
+                childArray.push(component);
+            }
+        }
+
+        gxNode.gxView = <GXView
+            onClick={this.createEvent(gxTemplateContext, gxNode, gxTemplateData)?.bind(this)}
+            propStyle={gxNode.gxTemplateNode.finalStyle}
+            propGXNode={gxNode}
+            key={gxNode.gxId}
+        >{childArray}</GXView>;
+
+        this.sendTrack(gxTemplateContext, gxNode, gxTemplateData);
     }
 
     private createContainerNode(

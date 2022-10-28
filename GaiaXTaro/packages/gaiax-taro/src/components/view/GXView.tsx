@@ -14,7 +14,7 @@ export interface GXViewProps {
 
 export default class GXView extends React.Component<GXViewProps, GXViewState> {
 
-  private handleClick(): void {
+   handleClick(): void {
     this.props.onClick && this.props.onClick(arguments as any)
   }
 

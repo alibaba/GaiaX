@@ -1,7 +1,9 @@
 #include "GXAnalyze.h"
+#include <mutex>          // std::mutex
 
 using namespace std;
 
+static mutex mtx;                                                   //锁，避免多线程读写导致的线程不安全问题发生
 static vector<vector<char> > grammarProduct;                        //文法grammarProduct[S]产生式 ，~为空字
 static unordered_map<char, set<char> > terminalSymbolMap;           //终结符(char)terminal symbol,及它的first集合(set<char>)
 static unordered_map<char, set<char> > nonTerminalSymbolMap;        //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
@@ -1083,8 +1085,11 @@ long GXAnalyze::getValue(string expression, void *source) {
     delete[]input;
     result = result + "#";
     long Res;
-    if (cache.count(result) != 0) {
-        if (cache[result] == "(0)") {
+    mtx.lock();
+    unordered_map<string, string>::iterator iter = cache.find(result);
+    mtx.unlock();
+    if (iter!=cache.end()) {
+        if (iter->second == "(0)") {
             GXATSNode res = arrayNum[0];
             GXValue *pointer;
             if (res.token == "string") {
@@ -1114,7 +1119,7 @@ long GXAnalyze::getValue(string expression, void *source) {
             }
             Res = (long) pointer;
         } else {
-            Res = calculateCache(cache[result], arrayNum, this, source);
+            Res = calculateCache(iter->second, arrayNum, this, source);
         }
     } else {
         Res = check(result, array, this, source, expression);
@@ -1128,7 +1133,7 @@ long GXAnalyze::getValue(string expression, void *source) {
  * 计算缓存格式的表达式的方法
  */
 long
-GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze, void *source) {
+GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_analyze, void *source) {
     long *paramsStack;
     int paramsSize = 0;
     bool isFunction = false;
@@ -1139,11 +1144,11 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
     int num2 = -1;
     GXATSNode res;
     string op = "";
-    for (int i = 0; i < cache.length(); i++) {
-        if (cache[i] == '(') {
+    for (int i = 0; i < cacheString.length(); i++) {
+        if (cacheString[i] == '(') {
             continue;
         }
-        if (cache[i] == ')') {
+        if (cacheString[i] == ')') {
             if (op == "") {
                 res = array[num1];
             } else if (hasNum2) {
@@ -1160,23 +1165,23 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
             op = "";
             continue;
         }
-        if (isNumber(cache[i])) {
+        if (isNumber(cacheString[i])) {
             if (isNum1) {
                 if (num1 == -1) {
-                    num1 = cache[i] - '0';
+                    num1 = cacheString[i] - '0';
                 } else {
-                    num1 = num1 * 10 + (cache[i] - '0');
+                    num1 = num1 * 10 + (cacheString[i] - '0');
                 }
             } else {
                 hasNum2 = true;
                 if (num2 == -1) {
-                    num2 = cache[i] - '0';
+                    num2 = cacheString[i] - '0';
                 } else {
-                    num2 = num2 * 10 + (cache[i] - '0');
+                    num2 = num2 * 10 + (cacheString[i] - '0');
                 }
             }
         } else {
-            if (cache[i] == ',') {
+            if (cacheString[i] == ',') {
                 //函数参数
                 if (!isFunction) {
                     paramsStack = new long[array.size() + 2];
@@ -1216,9 +1221,9 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
                     paramsTempArray.push_back((long) par);
                 }
                 num1 = -1;
-            } else if (cache[i] == 'g') {
+            } else if (cacheString[i] == 'g') {
                 //函数名
-                if (cache[i - 1] != '(') {
+                if (cacheString[i - 1] != '(') {
                     if (!isFunction) {
                         paramsStack = new long[array.size() + 2];
                         isFunction = true;
@@ -1259,12 +1264,12 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
                     }
                 }
                 int numFunction = -1;
-                for (int x = i + 1; x < cache.length(); x++) {
-                    if (isNumber(cache[x])) {
+                for (int x = i + 1; x < cacheString.length(); x++) {
+                    if (isNumber(cacheString[x])) {
                         if (numFunction == -1) {
-                            numFunction = cache[x] - '0';
+                            numFunction = cacheString[x] - '0';
                         } else {
-                            numFunction = numFunction * 10 + (cache[x] - '0');
+                            numFunction = numFunction * 10 + (cacheString[x] - '0');
                         }
                         i++;
                     } else {
@@ -1327,9 +1332,9 @@ GXAnalyze::calculateCache(string cache, vector<GXATSNode> array, void *p_analyze
             } else {
                 //操作符
                 isNum1 = false;
-                op = op + cache[i];
-                if (!isNumber(cache[i + 1]) && cache[i + 1] != ')') {
-                    op = op + cache[i + 1];
+                op = op + cacheString[i];
+                if (!isNumber(cacheString[i + 1]) && cacheString[i + 1] != ')') {
+                    op = op + cacheString[i + 1];
                     i++;
                 }
             }
@@ -1434,9 +1439,12 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             delete[] symbolStack;
             delete[] valueStack;
             delete[] paramsStack;
-            if (cache.count(s) == 0) {
-                cache[s] = tree;
+            mtx.lock();
+            auto iterEnd = cache.find(s);
+            if (iterEnd == cache.end()) {
+                cache.insert(pair<string,string>{s,tree});
             }
+            mtx.unlock();
             return (long) pointer;
         } else if (new_status[0] ==
                    's') {
@@ -1445,7 +1453,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             // 1
             symbolStack[symbolSize] = cur_symbol; //读入一个字符
             ++symbolSize;
-            string temp = wordToSymbol[cur_symbol];
+            string temp;
+            auto ite = wordToSymbol.find(cur_symbol);
+            if(ite != wordToSymbol.end()){
+                temp = ite->second;
+            }
             if ((isTerminalWord(temp) &&
                  (temp == "true" || temp == "false" || temp == "null" || temp == "value" ||
                   temp == "num" || temp == "string" || temp == "data" || temp == "id" ||
@@ -1560,8 +1572,13 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 GXATSNode tempR2;
                 bool isChangedOp = false;
                 char reduced_symbol = grammarProduct[gid][0];
+                unordered_map<char, string>:: iterator iterAction;
                 for (int i = 0; i < len; i++) {
-                    action[i] = wordToSymbol[symbolStack[symbolSize - 1]];
+                    iterAction = wordToSymbol.find(symbolStack[symbolSize - 1]);
+                    if(iterAction != wordToSymbol.end()){
+                        action[i] = iterAction->second;
+                    }
+//                    action[i] = wordToSymbol[symbolStack[symbolSize - 1]];
                     --statusSize;
                     --symbolSize;
                 }

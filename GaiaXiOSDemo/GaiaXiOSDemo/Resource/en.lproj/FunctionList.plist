@@ -33,13 +33,12 @@
 		<string>EventViewController</string>
 	</dict>
 	<dict>
-		<key>New item</key>
-		<dict>
-			<key>title</key>
-			<string>Template List</string>
-			<key>class</key>
-			<string>ListViewController</string>
-		</dict>
+		<key>title</key>
+		<string>Template List</string>
+		<key>class</key>
+		<string>ListViewController</string>
+	</dict>
+	<dict>
 		<key>title</key>
 		<string>Recycle Template List</string>
 		<key>class</key>

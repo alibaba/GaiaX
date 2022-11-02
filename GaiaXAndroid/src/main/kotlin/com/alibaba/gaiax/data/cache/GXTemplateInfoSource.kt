@@ -16,6 +16,11 @@ class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
         }
     }
 
+    /**
+     * 模板数据锁，为了防止模板被多线程同时加载占用资源，使用锁对象来控制加载顺序
+     */
+    private val dataLock = ConcurrentHashMap<String, Any>()
+
     private val dataCache = ConcurrentHashMap<String, ConcurrentHashMap<String, GXTemplateInfo>>()
 
     private fun exist(templateBiz: String, templateId: String) =
@@ -26,7 +31,21 @@ class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
             dataCache[gxTemplateItem.bizId]?.get(gxTemplateItem.templateId)
                 ?: throw IllegalArgumentException("Template exist but reference is null")
         } else {
-            val template = GXTemplateInfo.createTemplate(gxTemplateItem)
+
+            // 生成模板锁
+            val lockName = gxTemplateItem.bizId + gxTemplateItem.templateId
+            var templateLockObj = dataLock[lockName]
+            if (templateLockObj == null) {
+                templateLockObj = Any()
+                dataLock[lockName] = templateLockObj
+            }
+
+            // 使用锁去加载模板数据
+            // 以防止同时多个数据源请求同一个模板导致的数据不一致和性能损耗
+            var template: GXTemplateInfo
+            synchronized(templateLockObj) {
+                template = GXTemplateInfo.createTemplate(gxTemplateItem)
+            }
             return template.apply {
                 var bizList = dataCache[gxTemplateItem.bizId]
                 if (bizList == null) {
@@ -40,8 +59,7 @@ class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
     }
 
     private fun collectionNestTemplate(
-        bizList: ConcurrentHashMap<String, GXTemplateInfo>,
-        info: GXTemplateInfo
+        bizList: ConcurrentHashMap<String, GXTemplateInfo>, info: GXTemplateInfo
     ) {
         info.children?.forEach {
             bizList[it.layer.id] = it
@@ -53,5 +71,6 @@ class GXTemplateInfoSource : GXRegisterCenter.GXIExtensionTemplateInfoSource {
 
     fun clean() {
         dataCache.clear()
+        dataLock.clear()
     }
 }

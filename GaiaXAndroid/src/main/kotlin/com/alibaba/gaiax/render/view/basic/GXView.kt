@@ -137,7 +137,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
         }
     }
 
-    fun onBlurChanged(gxTemplateContext: GXTemplateContext, gxImageView: GXImageView) {
+    fun onBlurChanged(gxTemplateContext: GXTemplateContext, gxImageView: View) {
         val target = this
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             val rootView = gxTemplateContext.rootView as? ViewGroup
@@ -188,8 +188,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     }
 
     fun setBackdropFilter(
-        gxTemplateContext: GXTemplateContext,
-        gxBackdropFilter: GXBackdropFilter?
+        gxTemplateContext: GXTemplateContext, gxBackdropFilter: GXBackdropFilter?
     ) {
         // TODO View高斯模糊和图片渲染有直接关系
         // 如果设置了高斯模糊，但是组件中没有图片，高斯模糊的逻辑也不会执行

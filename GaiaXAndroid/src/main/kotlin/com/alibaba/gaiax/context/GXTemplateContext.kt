@@ -133,7 +133,7 @@ class GXTemplateContext private constructor(
         if (onImageDrawableListener == null) {
             onImageDrawableListener = object : GXImageView.GXImageViewListener {
 
-                override fun onDrawableChanged(gxImageView: GXImageView) {
+                override fun onDrawableChanged(gxImageView: View) {
                     blurViews?.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
                 }
             }

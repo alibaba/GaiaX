@@ -175,9 +175,9 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     ) {
         Blurry.with(target.context)
             .radius(25)
-            .sampling(8)
+            .sampling(12)
             .captureTargetRect(offsetViewBounds)
-            .color(Color.parseColor("#33FFFFFF"))
+            .color(Color.parseColor("#70FFFFFF"))
             .capture(srcView)
             .getAsync {
                 // TODO 有过有异形圆角会有问题

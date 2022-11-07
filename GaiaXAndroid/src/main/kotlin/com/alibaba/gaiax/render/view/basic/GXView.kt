@@ -169,10 +169,17 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun blur(
-        srcView: View, offsetViewBounds: Rect, target: GXView
+        srcView: View,
+        offsetViewBounds: Rect,
+        target: GXView
     ) {
-        Blurry.with(target.context).radius(25).sampling(8).captureTargetRect(offsetViewBounds)
-            .color(Color.parseColor("#33FFFFFF")).capture(srcView).getAsync {
+        Blurry.with(target.context)
+            .radius(25)
+            .sampling(8)
+            .captureTargetRect(offsetViewBounds)
+            .color(Color.parseColor("#33FFFFFF"))
+            .capture(srcView)
+            .getAsync {
                 // TODO 有过有异形圆角会有问题
                 if (it != null) {
                     target.background = GXBlurBitmapDrawable(resources, it)

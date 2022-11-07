@@ -127,7 +127,7 @@ object GXAccessibilityUtils {
      *  FIX: to fix accessibility question when view as a button view was used.
      */
     fun accessibilityOfViewAsButton(gxNode: GXNode) {
-        if (gxNode.isViewType()) {
+        if (gxNode.isViewType() && !gxNode.isRoot) {
             gxNode.view?.let {
                 ViewCompat.setAccessibilityDelegate(it, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
@@ -135,6 +135,17 @@ object GXAccessibilityUtils {
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
                         info?.className = Button::class.java.name
+                    }
+                })
+            }
+        } else {
+            gxNode.view?.let {
+                ViewCompat.setAccessibilityDelegate(it, object : AccessibilityDelegateCompat() {
+                    override fun onInitializeAccessibilityNodeInfo(
+                        host: View?, info: AccessibilityNodeInfoCompat?
+                    ) {
+                        super.onInitializeAccessibilityNodeInfo(host, info)
+                        info?.className = View::class.java.name
                     }
                 })
             }

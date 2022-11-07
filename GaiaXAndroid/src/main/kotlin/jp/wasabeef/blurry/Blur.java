@@ -63,8 +63,8 @@ class Blur {
         paint.setFlags(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
         PorterDuffColorFilter filter = new PorterDuffColorFilter(factor.color, PorterDuff.Mode.SRC_ATOP);
         paint.setColorFilter(filter);
-        if (factor.captureAcquireRect != null) {
-            Rect rect = factor.captureAcquireRect;
+        if (factor.captureTargetRect != null) {
+            Rect rect = factor.captureTargetRect;
             Rect srcRect = new Rect(rect.left, rect.top, rect.right, rect.bottom);
             Rect dstRect = new Rect(0, 0, factor.width, factor.height);
             canvas.drawBitmap(source, srcRect, dstRect, paint);

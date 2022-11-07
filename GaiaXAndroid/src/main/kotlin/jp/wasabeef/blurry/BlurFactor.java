@@ -29,5 +29,5 @@ class BlurFactor {
     public int radius = DEFAULT_RADIUS;
     public int sampling = DEFAULT_SAMPLING;
     public int color = Color.TRANSPARENT;
-    public Rect captureAcquireRect;
+    public Rect captureTargetRect;
 }

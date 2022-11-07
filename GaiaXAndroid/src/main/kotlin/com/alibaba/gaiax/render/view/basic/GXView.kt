@@ -47,19 +47,14 @@ import kotlin.math.roundToInt
  * @suppress
  */
 @Keep
-open class GXView : AbsoluteLayout,
-    GXIViewBindData,
-    GXIRootView,
-    GXIRoundCorner {
+open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     )
 
     private var gxBackdropFilter: GXBackdropFilter? = null
@@ -159,12 +154,13 @@ open class GXView : AbsoluteLayout,
                 if (imageOffsetViewBounds.contains(targetOffsetViewBounds)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         if (target.isAttachedToWindow) {
-                            blur(rootView, targetOffsetViewBounds, target)
+                            blur(gxImageView, targetOffsetViewBounds, target)
                             return
+                        } else {
+                            target.post {
+                                blur(gxImageView, targetOffsetViewBounds, target)
+                            }
                         }
-                    }
-                    target.post {
-                        blur(rootView, targetOffsetViewBounds, target)
                     }
                 }
             }
@@ -173,16 +169,16 @@ open class GXView : AbsoluteLayout,
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun blur(
-        rootView: ViewGroup,
+        srcView: View,
         offsetViewBounds: Rect,
         target: GXView
     ) {
         Blurry.with(target.context)
             .radius(25)
             .sampling(8)
-            .captureAcquireRect(offsetViewBounds)
+            .captureTargetRect(offsetViewBounds)
             .color(Color.parseColor("#33FFFFFF"))
-            .capture(rootView)
+            .capture(srcView)
             .getAsync {
                 // TODO 有过有异形圆角会有问题
                 if (it != null) {

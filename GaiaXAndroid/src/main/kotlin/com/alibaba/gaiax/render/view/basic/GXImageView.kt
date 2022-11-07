@@ -29,8 +29,8 @@ import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.GXRoundBorderDelegate
 import com.alibaba.gaiax.template.GXCss
@@ -132,32 +132,8 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     open fun bindDesc(data: JSONObject?) {
-        try {
-            // 原有无障碍逻辑
-            val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
-                this.contentDescription = accessibilityDesc
-                this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-            } else {
-                this.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-            }
-
-            // 新增Enable逻辑
-            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-                if (enable) {
-                    this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                    if (accessibilityDesc == null || accessibilityDesc.isEmpty()) {
-                        this.contentDescription = "图片"
-                    }
-                } else {
-                    this.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                }
-            }
-        } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
-                throw e
-            }
-        }
+        val view = this
+        GXAccessibilityUtils.accessibilityOfImage(view, data)
     }
 
     private var delegate: GXRoundBorderDelegate? = null

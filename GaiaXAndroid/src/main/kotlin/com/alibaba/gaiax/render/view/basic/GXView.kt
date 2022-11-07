@@ -31,15 +31,14 @@ import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXBackdropFilter
-import com.alibaba.gaiax.template.GXTemplateKey
 import jp.wasabeef.blurry.Blurry
 import kotlin.math.roundToInt
 
@@ -70,29 +69,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     }
 
     override fun onBindData(data: JSONObject?) {
-        try {
-            // 原有无障碍逻辑
-            val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
-                contentDescription = accessibilityDesc
-                importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-            } else {
-                importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-            }
-
-            // 新增无障碍Enable逻辑
-            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-                importantForAccessibility = if (enable) {
-                    View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                } else {
-                    View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                }
-            }
-        } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
-                throw e
-            }
-        }
+        GXAccessibilityUtils.accessibilityOfView(this, data)
     }
 
     override fun setRoundCornerRadius(radius: FloatArray) {
@@ -169,17 +146,10 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun blur(
-        srcView: View,
-        offsetViewBounds: Rect,
-        target: GXView
+        srcView: View, offsetViewBounds: Rect, target: GXView
     ) {
-        Blurry.with(target.context)
-            .radius(25)
-            .sampling(12)
-            .captureTargetRect(offsetViewBounds)
-            .color(Color.parseColor("#70FFFFFF"))
-            .capture(srcView)
-            .getAsync {
+        Blurry.with(target.context).radius(25).sampling(12).captureTargetRect(offsetViewBounds)
+            .color(Color.parseColor("#70FFFFFF")).capture(srcView).getAsync {
                 // TODO 有过有异形圆角会有问题
                 if (it != null) {
                     target.background = GXBlurBitmapDrawable(resources, it)

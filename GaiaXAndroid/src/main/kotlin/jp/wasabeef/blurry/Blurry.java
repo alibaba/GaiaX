@@ -90,8 +90,8 @@ public class Blurry {
             return this;
         }
 
-        public Composer captureAcquireRect(Rect offsetViewBounds) {
-            this.factor.captureAcquireRect = offsetViewBounds;
+        public Composer captureTargetRect(Rect offsetViewBounds) {
+            this.factor.captureTargetRect = offsetViewBounds;
             return this;
         }
 

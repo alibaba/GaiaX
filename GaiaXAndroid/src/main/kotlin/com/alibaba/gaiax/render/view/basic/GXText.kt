@@ -27,7 +27,7 @@ import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
@@ -46,9 +46,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     )
 
     override fun onBindData(data: JSONObject?) {
@@ -62,34 +60,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
     }
 
     private fun bindDesc(textView: TextView, content: CharSequence, data: JSONObject?) {
-        try {
-            // 原有无障碍逻辑
-            val desc = data?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC) as? String
-            if (desc != null && desc.isNotBlank()) {
-                textView.contentDescription = desc
-                textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            } else {
-                textView.contentDescription = null
-                if (content.isNotEmpty()) {
-                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                } else {
-                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                }
-            }
-
-            // 新增Enable逻辑
-            data?.getBoolean(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)?.let { enable ->
-                if (enable) {
-                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                } else {
-                    textView.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                }
-            }
-        } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
-                throw e
-            }
-        }
+        GXAccessibilityUtils.accessibilityOfText(textView, data, content)
     }
 
     private fun getContent(data: Any?): CharSequence {
@@ -155,8 +126,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
         if (background is GXColorGradientDrawable) {
             (background as GXColorGradientDrawable).setStroke(
-                borderWidth.toDouble().roundToInt(),
-                borderColor
+                borderWidth.toDouble().roundToInt(), borderColor
             )
         } else {
             val shape = GXRoundCornerBorderGradientDrawable()

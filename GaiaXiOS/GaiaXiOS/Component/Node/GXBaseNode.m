@@ -536,8 +536,15 @@
     
     //判断是否存在
     if(effectView == nil){
-        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        if (@available(iOS 10.0, *)) {
+            UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+            effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        } else {
+            // Fallback on earlier versions
+            UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+            effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        }
+        effectView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
         [view insertSubview:effectView atIndex:0];
         view.blurView = effectView;
     }

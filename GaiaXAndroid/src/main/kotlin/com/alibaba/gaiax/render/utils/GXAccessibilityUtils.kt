@@ -66,7 +66,7 @@ object GXAccessibilityUtils {
         }
     }
 
-    private fun getClassNameByTraits(traits: String): String {
+    fun getClassNameByTraits(traits: String): String {
         return when (traits) {
             "button" -> Button::class.java.name
             "image" -> ImageView::class.java.name

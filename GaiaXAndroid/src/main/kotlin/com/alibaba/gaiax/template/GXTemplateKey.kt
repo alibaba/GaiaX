@@ -358,6 +358,7 @@ object GXTemplateKey {
     const val GAIAX_VALUE = "value"
     const val GAIAX_ACCESSIBILITY_DESC = "accessibilityDesc"
     const val GAIAX_ACCESSIBILITY_ENABLE = "accessibilityEnable"
+    const val GAIAX_ACCESSIBILITY_TRAITS = "accessibilityTraits"
     const val GAIAX_PLACEHOLDER = "placeholder"
     const val GAIAX_EXTEND = "extend"
 

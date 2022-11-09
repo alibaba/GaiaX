@@ -856,9 +856,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 if (gxNodeEvent is GXINodeEvent) {
                     // 添加事件
                     gxNodeEvent.addDataBindingEvent(gxTemplateContext, gxNode, templateData)
-
-                    GXAccessibilityUtils.accessibilityOfViewAsButton(gxNode)
-
                 } else {
                     throw IllegalArgumentException("Not support the event $gxNodeEvent")
                 }

@@ -28,6 +28,7 @@ import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
+import com.alibaba.gaiax.expression.GXExtensionExpression
 import com.alibaba.gaiax.render.GXRenderImpl
 import com.alibaba.gaiax.render.node.*
 import com.alibaba.gaiax.render.utils.GXContainerUtils
@@ -752,6 +753,7 @@ class GXTemplateEngine {
         this.context = context.applicationContext
         GXStyleConvert.instance.init(context.assets)
         GXRegisterCenter.instance
+            .registerExtensionExpression(GXExtensionExpression())
             // priority 0
             .registerExtensionTemplateInfoSource(GXTemplateInfoSource.instance, 0)
             // priority 0

@@ -1,7 +1,7 @@
 package com.alibaba.gaiax.demo.utils
 
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.adapter.GXAnalyzeWrapper
+import com.alibaba.gaiax.expression.GXAnalyzeWrapper
 import com.alibaba.gaiax.template.GXIExpression
 
 class GXExtensionMultiVersionExpression : GXRegisterCenter.GXIExtensionExpression {

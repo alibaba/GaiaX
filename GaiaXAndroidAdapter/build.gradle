@@ -98,10 +98,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:4.1.0'
 
     if (System.getProperties().get("GaiaXDemo") == "true") {
-        implementation project(path: ':GXAnalyzeAndroid')
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
         implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
     }
 

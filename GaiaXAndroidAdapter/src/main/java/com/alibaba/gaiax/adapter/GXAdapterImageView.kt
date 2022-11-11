@@ -17,13 +17,10 @@
 package com.alibaba.gaiax.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 
 @Keep
 class GXAdapterImageView(context: Context) : GXImageView(context) {
@@ -34,10 +31,5 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
             bindRes(resUri)
         }
         Glide.with(context).load(uri).into(this)
-//        Glide.with(this).asBitmap().load(uri).into(object : SimpleTarget<Bitmap>() {
-//            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//                setImageBitmap(resource)
-//            }
-//        })
     }
 }

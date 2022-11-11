@@ -32,7 +32,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
-import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXProgressView
@@ -776,6 +775,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             // 对高斯模糊前置处理
             bindBackdropFilter(gxTemplateContext, gxNode, gxCss, gxView)
 
+            // 对BoxShadow处理
+            bindBoxShadow(gxNode, gxCss)
+
             if (gxView is GXText && (gxNode.isTextType() || gxNode.isRichTextType() || gxNode.isIconFontType())) {
                 gxView.setTextStyle(gxCss)
             } else if (gxView is GXIImageView && gxNode.isImageType()) {
@@ -787,8 +789,20 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             bindCommonViewCss(gxTemplateContext, gxView, gxCss, gxNode)
         }
 
+        private fun bindBoxShadow(
+            gxNode: GXNode,
+            gxCss: GXCss,
+        ) {
+            if (gxNode.isViewType() || gxNode.isImageType()) {
+                gxNode.boxLayoutView?.setStyle(gxCss.style)
+            }
+        }
+
         private fun bindBackdropFilter(
-            gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxCss: GXCss, gxView: View
+            gxTemplateContext: GXTemplateContext,
+            gxNode: GXNode,
+            gxCss: GXCss,
+            gxView: View
         ) {
             if (gxNode.isViewType()) {
                 if (gxCss.style.backdropFilter != null) {

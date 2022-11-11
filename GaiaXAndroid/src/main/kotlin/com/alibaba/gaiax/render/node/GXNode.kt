@@ -23,6 +23,7 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
+import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
@@ -78,7 +79,7 @@ class GXNode {
     /**
      * 同级阴影View引用
      */
-    var boxLayoutView: View? = null
+    var boxLayoutView: GXShadowLayout? = null
 
     /**
      * 节点上覆盖的lottieView

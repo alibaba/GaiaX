@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.adapter
+package com.alibaba.gaiax.expression
 
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.template.GXIExpression
@@ -28,5 +28,4 @@ class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
     override fun isTrue(expVersion: String?, value: Any?): Boolean {
         return value == true
     }
-
 }

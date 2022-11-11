@@ -46,11 +46,6 @@ android {
         kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX"]
     }
 
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_7
-//        targetCompatibility JavaVersion.VERSION_1_7
-//    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -108,6 +103,12 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.26@jar'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.0'
+
+    if (System.getProperties().get("GaiaXDemo") == "true") {
+        implementation project(path: ':GXAnalyzeAndroid')
+    } else {
+        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
+    }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.github.bumptech.glide:glide:4.12.0'

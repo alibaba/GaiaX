@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.adapter
+package com.alibaba.gaiax.expression
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray

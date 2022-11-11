@@ -28,7 +28,6 @@ class GXAdapter : GXTemplateEngine.GXIAdapter {
     override fun init(context: Context) {
         GXRegisterCenter.instance
             .registerExtensionLottieAnimation(GXExtensionLottieAnimation())
-            .registerExtensionExpression(GXExtensionExpression())
             .registerExtensionViewSupport(
                 GXViewKey.VIEW_TYPE_IMAGE,
                 GXAdapterImageView::class.java

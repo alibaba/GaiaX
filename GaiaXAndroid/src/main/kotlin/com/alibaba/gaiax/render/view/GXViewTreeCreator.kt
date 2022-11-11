@@ -58,8 +58,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
                     this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
                         childNode, childLayout, mergeX, mergeY
                     )
-                    childNode.boxLayoutView = this
-                    (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
+                    childNode.boxLayoutView = this as GXShadowLayout
                     if (parentMergeView is ViewGroup) {
                         parentMergeView.addView(this)
                     }

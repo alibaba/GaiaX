@@ -8,7 +8,7 @@ allprojects {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 }
 
@@ -21,7 +21,7 @@ buildscript {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 
     dependencies {
@@ -100,7 +100,7 @@ dependencies {
     if (System.getProperties().get("GaiaXDemo") == "true") {
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
+        implementation('com.github.alibaba.GaiaX:GaiaX:0.2.9') { changing = true }
     }
 
     testImplementation 'junit:junit:4.13.2'

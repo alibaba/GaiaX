@@ -50,7 +50,17 @@
 
 
 + (id)env:(NSArray *)value{
-    return nil;
+    //解析内容
+    if (value.count > 0) {
+        id result = value[0];
+        if (result) {
+            if ([result isKindOfClass:[NSString class]] && [[result lowercaseString] isEqualToString:@"isios"] ) {
+                //string
+                return @(YES);
+            }
+        }
+    }
+    return @(NO);
 }
 
 @end

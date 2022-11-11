@@ -69,19 +69,6 @@
         [self setupNormalBackground:view];
     }
     
-    
-    //boxShadow
-    NSString *boxShadow = [styleInfo gx_stringForKey:@"box-shadow"];
-    if (boxShadow.length) {
-        self.boxShadow = boxShadow;
-    }
-    
-    //毛玻璃
-    NSString *backdropFilter = [styleInfo gx_stringForKey:@"backdrop-filter"];
-    if (backdropFilter.length) {
-        self.backdropFilter = backdropFilter;
-    }
-    
     //渐变色背景
     if (self.isSupportGradientBgColor) {
         NSString *backgroundImage = [styleInfo gx_stringForKey:@"background-image"];
@@ -376,6 +363,15 @@
         
     } else {
         //不做处理
+    }
+    
+    //boxShadow
+    NSString *boxShadow = [styleInfo gx_stringForKey:@"box-shadow"];
+    if (boxShadow.length && self.isSupportShadow) {
+        self.boxShadow = boxShadow;
+        if (!isMark) {
+            [self setupShadow:view];
+        }
     }
     
     return isMark;

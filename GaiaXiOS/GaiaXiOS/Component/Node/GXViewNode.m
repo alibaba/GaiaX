@@ -150,6 +150,22 @@
 }
 
 
+- (BOOL)updateLayoutStyle:(NSDictionary *)styleInfo{
+    BOOL isMark = [super updateLayoutStyle:styleInfo];
+
+    //毛玻璃
+    NSString *backdropFilter = [styleInfo gx_stringForKey:@"backdrop-filter"];
+    if (backdropFilter.length ) {
+        self.backdropFilter = backdropFilter;
+        if (!isMark) {
+            [self setupBlur:self.associatedView];
+        }
+    }
+    
+    return isMark;
+}
+
+
 #pragma mark - 属性解析
 
 //读取属性

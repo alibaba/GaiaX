@@ -79,7 +79,7 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                             is BigDecimal -> {
                                 return GXAnalyze.createValueFloat64(value.toFloat())
                             }
-                            is Long ->{
+                            is Long -> {
                                 return GXAnalyze.createValueLong(value)
                             }
                             null -> {
@@ -97,8 +97,7 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                  * 用于处理函数逻辑
                  */
                 override fun computeFunctionExpression(
-                    functionName: String,
-                    params: LongArray
+                    functionName: String, params: LongArray
                 ): Long {
                     if (functionName == "size" && params.size == 1) {
                         when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
@@ -121,7 +120,16 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                                 return GXAnalyze.createValueFloat64(0f)
                             }
                         }
-                    } else if (functionName == "env") {
+                    } else if (functionName == "env" && params.size == 1) {
+                        val value = GXAnalyze.wrapAsGXValue(params[0])
+                        if (value is GXString) {
+                            val envValue = value.getString()
+                            if ("isAndroid".equals(envValue, ignoreCase = true)) {
+                                return GXAnalyze.createValueBool(true)
+                            } else if ("isiOS".equals(envValue, ignoreCase = true)) {
+                                return GXAnalyze.createValueBool(false)
+                            }
+                        }
                     }
                     return 0L
                 }

@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.analyze
 
 import androidx.annotation.Keep
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 
 @Keep
@@ -108,6 +109,13 @@ class GXAnalyze {
             }
             is JSONObject -> {
                 return getJsonResult(expression, data)
+            }
+            is JSONArray -> {
+                return JSONArray().apply {
+                    for (jsonObject in expression) {
+                        add(getResult(jsonObject, data))
+                    }
+                }
             }
             else -> return null
         }

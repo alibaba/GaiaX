@@ -69,6 +69,13 @@
         [self setupNormalBackground:view];
     }
     
+    
+    //boxShadow
+    NSString *boxShadow = [styleInfo gx_stringForKey:@"box-shadow"];
+    if (boxShadow.length) {
+        self.boxShadow = boxShadow;
+    }
+    
     //毛玻璃
     NSString *backdropFilter = [styleInfo gx_stringForKey:@"backdrop-filter"];
     if (backdropFilter.length) {

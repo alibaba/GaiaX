@@ -15,6 +15,25 @@ import java.math.BigDecimal
 class GXCommonExpressionTest : GXBaseTest() {
 
     @Test
+    fun template_env() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "expression",
+            "template_env"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+        )
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject())
+        )
+
+        Assert.assertEquals("GaiaXAndroid", (rootView.child(0) as TextView).text)
+    }
+
+   @Test
     fun template_double() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

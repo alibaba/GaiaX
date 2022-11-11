@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.utils
 
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.expression.GXAnalyzeWrapper
 import com.alibaba.gaiax.template.GXIExpression
 
 class GXExtensionMultiVersionExpression : GXRegisterCenter.GXIExtensionExpression {
@@ -9,7 +10,7 @@ class GXExtensionMultiVersionExpression : GXRegisterCenter.GXIExtensionExpressio
         if (expVersion == "V1") {
             return GXYKExpression.create(value)
         }
-        return GXOpenExpression(value)
+        return GXAnalyzeWrapper(value)
     }
 
     override fun isTrue(expVersion: String?, value: Any?): Boolean {

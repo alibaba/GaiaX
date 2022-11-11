@@ -23,7 +23,6 @@ import android.util.AttributeSet
 import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
-import com.alibaba.gaiax.R
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskBitmapShadowDrawable
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXBlurMaskShadowDrawable
 import com.alibaba.gaiax.render.view.basic.boxshadow.GXShadowDrawable
@@ -34,23 +33,27 @@ import kotlin.math.absoluteValue
  * @suppress
  */
 @Keep
-open class GXShadowLayout @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AbsoluteLayout(context, attrs, defStyleAttr) {
+open class GXShadowLayout : AbsoluteLayout {
 
-    private var shadowColor = Color.GRAY
-    private var shadowBlur = 0f
-    private var shadowInset = false
-    private var shadowSpread = 0f
-    private var boxRadius = 0f
-    private var topLeftBoxRadius = 0f
-    private var topRightBoxRadius = 0f
-    private var bottomLeftBoxRadius = 0f
-    private var bottomRightBoxRadius = 0f
-    private var shadowVerticalOffset = 0f
-    private var shadowHorizontalOffset = 0f
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context, attrs, defStyleAttr
+    )
+
+    var mShadowColor = Color.GRAY
+    private var mShadowBlur = 0f
+    private var mShadowInset = false
+    private var mShadowSpread = 0f
+    private var mBoxRadius = 0f
+    private var mTopLeftBoxRadius = 0f
+    private var mTopRightBoxRadius = 0f
+    private var mBottomLeftBoxRadius = 0f
+    private var mBottomRightBoxRadius = 0f
+    private var mShadowVerticalOffset = 0f
+    private var mShadowHorizontalOffset = 0f
 
     private val clipPath = Path()
     private val clipPaint = Paint().apply {
@@ -70,47 +73,6 @@ open class GXShadowLayout @JvmOverloads constructor(
 
     init {
         setWillNotDraw(false)
-        init(attrs, defStyleAttr)
-    }
-
-    private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
-        // Load attributes
-        context.obtainStyledAttributes(attrs, R.styleable.GXBoxShadowLayout, defStyleAttr, 0)
-            .apply {
-
-                val vOffset =
-                    getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetVertical, 0f)
-                setShadowYOffset(vOffset)
-
-                val hOffset =
-                    getDimension(R.styleable.GXBoxShadowLayout_box_shadowOffsetHorizontal, 0f)
-                setShadowXOffset(hOffset)
-
-                setShadowColor(getColor(R.styleable.GXBoxShadowLayout_box_shadowColor, Color.GRAY))
-
-                setShadowBlur(getDimension(R.styleable.GXBoxShadowLayout_box_shadowBlur, 0f))
-
-                setShadowInset(getBoolean(R.styleable.GXBoxShadowLayout_box_shadowInset, false))
-
-                setShadowSpread(getDimension(R.styleable.GXBoxShadowLayout_box_shadowSpread, 0f))
-
-                boxRadius = getDimension(R.styleable.GXBoxShadowLayout_box_radius, 0f)
-
-                if (hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopLeft) ||
-                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusTopRight) ||
-                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft) ||
-                    hasValue(R.styleable.GXBoxShadowLayout_box_radiusBottomRight)
-                ) {
-                    setBoxRadius(
-                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopLeft, boxRadius),
-                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusTopRight, boxRadius),
-                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomLeft, boxRadius),
-                        getDimension(R.styleable.GXBoxShadowLayout_box_radiusBottomRight, boxRadius)
-                    )
-                } else {
-                    setBoxRadius(boxRadius)
-                }
-            }.recycle()
     }
 
     override fun draw(canvas: Canvas) {
@@ -129,16 +91,18 @@ open class GXShadowLayout @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         shadowDrawable.setBounds(0, 0, w, h)
-        setBoxRadius(
-            this.topLeftBoxRadius,
-            this.topRightBoxRadius,
-            this.bottomLeftBoxRadius,
-            this.bottomRightBoxRadius
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setBoxRadius(
+                this.mTopLeftBoxRadius,
+                this.mTopRightBoxRadius,
+                this.mBottomLeftBoxRadius,
+                this.mBottomRightBoxRadius
+            )
+        }
     }
 
     private fun clipRadius(canvas: Canvas) {
-        if (boxRadius > 0 || topLeftBoxRadius > 0 || topRightBoxRadius > 0 || bottomLeftBoxRadius > 0 || bottomRightBoxRadius > 0) {
+        if (mBoxRadius > 0 || mTopLeftBoxRadius > 0 || mTopRightBoxRadius > 0 || mBottomLeftBoxRadius > 0 || mBottomRightBoxRadius > 0) {
             canvas.drawPath(clipPath, clipPaint)
         }
     }
@@ -148,60 +112,62 @@ open class GXShadowLayout @JvmOverloads constructor(
     }
 
     fun setShadowYOffset(shadowVerticalOffset: Float) {
-        this.shadowVerticalOffset = shadowVerticalOffset
+        this.mShadowVerticalOffset = shadowVerticalOffset
         resetShadowOffset()
         invalidate()
     }
 
 
-    fun getShadowVerticalOffset(): Float = this.shadowVerticalOffset
+    fun getShadowVerticalOffset(): Float = this.mShadowVerticalOffset
 
     fun setShadowXOffset(shadowHorizontalOffset: Float) {
-        this.shadowHorizontalOffset = shadowHorizontalOffset
+        this.mShadowHorizontalOffset = shadowHorizontalOffset
         resetShadowOffset()
         invalidate()
     }
 
 
-    fun getShadowHorizontalOffset(): Float = this.shadowHorizontalOffset
+    fun getShadowHorizontalOffset(): Float = this.mShadowHorizontalOffset
 
     fun setShadowColor(shadowColor: Int) {
-        this.shadowColor = shadowColor
+        this.mShadowColor = shadowColor
         shadowDrawable.setShadowColor(shadowColor)
         invalidate()
     }
 
-    fun getShadowColor(): Int = this.shadowColor
+    fun getShadowColor(): Int = this.mShadowColor
 
     fun setShadowBlur(shadowBlur: Float) {
-        this.shadowBlur = shadowBlur
+        this.mShadowBlur = shadowBlur
         shadowDrawable.setShadowBlur(shadowBlur)
         invalidate()
     }
 
     fun setShadowInset(shadowInset: Boolean) {
-        this.shadowInset = shadowInset
+        this.mShadowInset = shadowInset
         shadowDrawable.setShadowInset(shadowInset)
         invalidate()
     }
 
-    fun isShadowInset(): Boolean = this.shadowInset
+    fun isShadowInset(): Boolean = this.mShadowInset
 
     fun setShadowSpread(shadowSpread: Float) {
-        this.shadowSpread = shadowSpread
+        this.mShadowSpread = shadowSpread
         resetShadowOffset()
         invalidate()
     }
 
 
-    fun getShadowSpread() = shadowSpread
+    fun getShadowSpread() = mShadowSpread
 
     fun setBoxRadius(radius: Float) {
-        this.boxRadius = radius.absoluteValue
-        setBoxRadius(this.boxRadius, this.boxRadius, this.boxRadius, this.boxRadius)
+        this.mBoxRadius = radius.absoluteValue
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setBoxRadius(this.mBoxRadius, this.mBoxRadius, this.mBoxRadius, this.mBoxRadius)
+        }
     }
 
-    fun getRadius(): Float = this.boxRadius
+    fun getRadius(): Float = this.mBoxRadius
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setBoxRadius(
@@ -210,18 +176,18 @@ open class GXShadowLayout @JvmOverloads constructor(
         bottomLeft: Float,
         bottomRight: Float
     ) {
-        this.topLeftBoxRadius = topLeft.absoluteValue
-        this.topRightBoxRadius = topRight.absoluteValue
-        this.bottomLeftBoxRadius = bottomLeft.absoluteValue
-        this.bottomRightBoxRadius = bottomRight.absoluteValue
+        this.mTopLeftBoxRadius = topLeft.absoluteValue
+        this.mTopRightBoxRadius = topRight.absoluteValue
+        this.mBottomLeftBoxRadius = bottomLeft.absoluteValue
+        this.mBottomRightBoxRadius = bottomRight.absoluteValue
 
         clipPath.reset()
         clipPath.fillType = Path.FillType.INVERSE_WINDING
         clipPath.addRoundRect2(
-            this.topLeftBoxRadius,
-            this.topRightBoxRadius,
-            this.bottomLeftBoxRadius,
-            this.bottomRightBoxRadius,
+            this.mTopLeftBoxRadius,
+            this.mTopRightBoxRadius,
+            this.mBottomLeftBoxRadius,
+            this.mBottomRightBoxRadius,
             width.toFloat(),
             height.toFloat()
         )
@@ -231,12 +197,12 @@ open class GXShadowLayout @JvmOverloads constructor(
         shadowPathOffsetY = 0f
         shadowPath.fillType = Path.FillType.WINDING
         shadowPath.addRoundRect2(
-            this.topLeftBoxRadius,
-            this.topRightBoxRadius,
-            this.bottomLeftBoxRadius,
-            this.bottomRightBoxRadius,
-            width.toFloat() + shadowSpread * 2,
-            height.toFloat() + shadowSpread * 2
+            this.mTopLeftBoxRadius,
+            this.mTopRightBoxRadius,
+            this.mBottomLeftBoxRadius,
+            this.mBottomRightBoxRadius,
+            width.toFloat() + mShadowSpread * 2,
+            height.toFloat() + mShadowSpread * 2
         )
 
         resetShadowOffset()
@@ -249,22 +215,22 @@ open class GXShadowLayout @JvmOverloads constructor(
 
     private fun resetShadowOffset() {
         shadowPath.offset(-shadowPathOffsetX, -shadowPathOffsetY)
-        shadowPathOffsetX = -shadowSpread + shadowHorizontalOffset
-        shadowPathOffsetY = -shadowSpread + shadowVerticalOffset
+        shadowPathOffsetX = -mShadowSpread + mShadowHorizontalOffset
+        shadowPathOffsetY = -mShadowSpread + mShadowVerticalOffset
         shadowPath.offset(shadowPathOffsetX, shadowPathOffsetY)
         shadowDrawable.invalidateCache()
     }
 
-    fun getTopLeftRadius() = topLeftBoxRadius
+    fun getTopLeftRadius() = mTopLeftBoxRadius
 
 
-    fun getTopRightRadius() = topRightBoxRadius
+    fun getTopRightRadius() = mTopRightBoxRadius
 
 
-    fun getBottomRightRadius() = bottomRightBoxRadius
+    fun getBottomRightRadius() = mBottomRightBoxRadius
 
 
-    fun getBottomLeftRadius() = bottomLeftBoxRadius
+    fun getBottomLeftRadius() = mBottomLeftBoxRadius
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun Path.addRoundRect2(tL: Float, tR: Float, bL: Float, bR: Float, w: Float, h: Float) {

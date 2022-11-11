@@ -9,7 +9,7 @@ allprojects {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 }
 
@@ -22,7 +22,7 @@ buildscript {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 
     dependencies {
@@ -103,16 +103,11 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.26@jar'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.0'
-
-    if (System.getProperties().get("GaiaXDemo") == "true") {
-        implementation project(path: ':GXAnalyzeAndroid')
-    } else {
-        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
-    }
+    implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:0.2.9'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.github.bumptech.glide:glide:4.12.0'
-    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
+    androidTestImplementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:0.2.9'
     androidTestImplementation 'com.airbnb.android:lottie:4.1.0'
 
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

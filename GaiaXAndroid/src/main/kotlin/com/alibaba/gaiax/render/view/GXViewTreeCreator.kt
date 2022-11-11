@@ -78,7 +78,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
                 }
             }
 
-        //没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
+        // 没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
         if (childNode.isNeedLottie()) {
             GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_LOTTIE, null)
                 .apply {

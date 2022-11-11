@@ -20,6 +20,7 @@ import android.view.View
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 
 /**
  * @suppress

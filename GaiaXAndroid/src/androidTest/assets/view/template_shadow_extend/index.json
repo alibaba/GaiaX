@@ -1,0 +1,10 @@
+{
+  "id": "template_shadow_extend",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
+}

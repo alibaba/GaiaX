@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXImageView
+import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -258,6 +259,21 @@ class GXComponentViewTest : GXBaseTest() {
 
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
+    }
+
+    @Test
+    fun template_shadow_extend() {
+        val rootView = GXTemplateEngine.instance.createView(
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "view",
+                "template_shadow_extend"
+            ), size
+        )
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
+
+        Assert.assertEquals(Color.parseColor("#FF0000"), (rootView.child(0) as GXShadowLayout).mShadowColor)
+
     }
 
     @Test

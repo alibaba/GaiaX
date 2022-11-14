@@ -7,12 +7,20 @@
             "value": "$data.title"
         }
     },
-    "event":{
-     "gx-content-uper-scroll-item":{
-        "type":"'tap'",
-        "params": {
-            "value": "'我是event'"
-        }
-     }
+    "event": {
+        "gx-content-uper-scroll-item": [
+            {
+                "type": "'tap'",
+                "params": {
+                    "value": "'click event'"
+                }
+            },
+            {
+                "type": "'longpress'",
+                "params": {
+                    "value": "'long click event'"
+                }
+            }
+        ]
     }
 }

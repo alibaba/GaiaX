@@ -1,6 +1,6 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXLong() : GXValue() {
+class GXLong() : GXValue() {
     private var value: Long? = null
 
     constructor(value: Long) : this() {
@@ -12,6 +12,6 @@ public final class GXLong() : GXValue() {
     }
 
     override fun getValue(): Any? {
-        return value;
+        return value
     }
 }

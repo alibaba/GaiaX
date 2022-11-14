@@ -840,6 +840,35 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
+    fun template_text_fitcontent_two_text_shrink() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_two_text_shrink"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["text1"] = "新手妈妈"
+            this["text2"] =
+                "育儿育儿育儿育儿育儿育儿育儿育儿00000000000育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育000000育"
+        })
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = templateData.data.getString("text1")
+        textView.setFontSize(13F.dpToPx())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(375F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
+        Assert.assertEquals(375F.dpToPx() - textView.measuredWidth.toFloat(), rootView.child(0).child(1).width())
+    }
+
+    @Test
     fun template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

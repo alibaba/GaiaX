@@ -1,0 +1,22 @@
+{
+  "id": "template_text_fitcontent_two_text_shrink",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container_tag",
+      "type": "view",
+      "layers": [
+        {
+          "id": "tag_1",
+          "type": "view",
+          "layers": [{ "id": "tag_1_text", "type": "text" }]
+        },
+        {
+          "id": "tag_2",
+          "type": "view",
+          "layers": [{ "id": "tag_2_text", "type": "text" }]
+        }
+      ]
+    }
+  ]
+}

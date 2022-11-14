@@ -1,6 +1,6 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXBool() : GXValue() {
+class GXBool() : GXValue() {
     private var value: Boolean? = null
 
     constructor(value: Boolean) : this() {

@@ -6,7 +6,7 @@ abstract class GXValue {
         return if (clazz.isInstance(this)) {
             this as T
         } else {
-            throw RuntimeException("expected: " + clazz.getSimpleName() + ", actual: " + javaClass.getSimpleName());
+            throw RuntimeException("expected: " + clazz.simpleName + ", actual: " + javaClass.simpleName)
         }
     }
 

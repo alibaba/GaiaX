@@ -86,7 +86,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         // 更新布局
         Layout.updateNodeTreeLayout(gxTemplateContext, rootNode, templateData, size)
 
-        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+        // 如计算文字自适应的情况，需要处理后重新计算
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
 
         // 更新样式
@@ -111,7 +111,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         internal fun updateNodeTreeLayoutByDirtyText(
-            gxTemplateContext: GXTemplateContext, rootNode: GXNode, size: Size<Float?>
+            gxTemplateContext: GXTemplateContext,
+            rootNode: GXNode,
+            size: Size<Float?>
         ) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
                 var isTextDirty = false
@@ -602,12 +604,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             style: app.visly.stretch.Style
         ): Boolean? {
 
-            if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
-                return null
-            }
-
             GXFitContentUtils.fitContent(
-                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
+                gxTemplateContext,
+                gxNode,
+                gxTemplateNode,
+                gxStretchNode,
+                templateData
             )?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上

@@ -1,0 +1,38 @@
+#template_text_fitcontent_two_text_shrink {
+  width: 100%;
+  background-color: #ffffff;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+#container_tag {
+  width: 100%;
+  background-color: #ffffff;
+  align-items: center;
+}
+#tag_1 {
+  align-items: center;
+    flex-shrink: 1;
+}
+#tag_1_text {
+  text-overflow: ellipsis;
+  color: #000000;
+  font-size: 13px;
+  text-align: left;
+  fit-content: true;
+  lines: 1;
+  flex-shrink: 1;
+}
+#tag_2 {
+  align-items: center;
+    flex-shrink: 1;
+}
+#tag_2_text {
+  text-overflow: ellipsis;
+  color: #000000;
+  font-size: 13px;
+  text-align: left;
+  fit-content: true;
+  lines: 1;
+  flex-shrink: 1;
+}

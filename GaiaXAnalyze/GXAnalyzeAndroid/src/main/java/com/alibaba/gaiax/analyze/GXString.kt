@@ -1,6 +1,6 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXString() : GXValue() {
+class GXString() : GXValue() {
     private var value: String? = null
 
     constructor(value: String) : this() {
@@ -12,6 +12,6 @@ public final class GXString() : GXValue() {
     }
 
     override fun getValue(): Any? {
-        return value;
+        return value
     }
 }

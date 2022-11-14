@@ -1,0 +1,6 @@
+{
+  "data": {
+    "tag_1_text": { "value": "$text1" },
+    "tag_2_text": { "value": "$text2" }
+  }
+}

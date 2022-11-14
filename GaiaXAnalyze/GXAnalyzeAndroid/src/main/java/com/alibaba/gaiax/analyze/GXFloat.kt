@@ -1,6 +1,6 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXFloat() : GXValue() {
+class GXFloat() : GXValue() {
     private var value: Float? = null
 
     constructor(value: Float) : this() {
@@ -12,6 +12,6 @@ public final class GXFloat() : GXValue() {
     }
 
     override fun getValue(): Any? {
-        return value;
+        return value
     }
 }

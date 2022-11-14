@@ -20,6 +20,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Dimension
+import app.visly.stretch.Display
 import app.visly.stretch.PositionType
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
@@ -552,19 +553,45 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             val gxStyle = gxNode.templateNode.finalCss?.style
 
-            if (gxStyle != null && gxStyle.fitContent == true) {
+            if (gxStyle != null && gxStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
 
-                if (gxTemplateContext.dirtyTexts == null) {
-                    gxTemplateContext.dirtyTexts = mutableSetOf()
-                }
-                gxTemplateContext.dirtyTexts?.add(
-                    GXDirtyText(
-                        gxTemplateContext, gxNode, templateData
+                // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
+                // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
+                // 如果提前计算，会导致结果不正确
+                if (gxTemplateContext.isFlexGrowLayout) {
+                    if (gxTemplateContext.dirtyTexts == null) {
+                        gxTemplateContext.dirtyTexts = mutableSetOf()
+                    }
+                    gxTemplateContext.dirtyTexts?.add(
+                        GXDirtyText(
+                            gxTemplateContext, gxNode, templateData
+                        )
                     )
+                    return null
+                }
+
+                // 处理普通的fitContent逻辑
+                return updateLayoutByFitContent(
+                    gxTemplateContext,
+                    gxNode,
+                    gxNode.templateNode,
+                    gxNode.stretchNode,
+                    gxStyle,
+                    templateData,
+                    gxNode.stretchNode.node.getStyle()
                 )
             }
 
             return null
+        }
+
+        private fun isSelfAndParentNodeTreeFlex(gxNode: GXNode?): Boolean {
+            // 根节点的父节点
+            if (gxNode == null) {
+                return true
+            }
+            val selfIsFlex = gxNode.stretchNode.node.getStyle().display == Display.Flex
+            return selfIsFlex && isSelfAndParentNodeTreeFlex(gxNode.parentNode)
         }
 
         private fun updateLayoutByFitContent(

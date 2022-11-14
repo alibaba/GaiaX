@@ -85,7 +85,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         // 更新布局
         Layout.updateNodeTreeLayout(gxTemplateContext, rootNode, templateData, size)
 
-        // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
+        // 如计算文字自适应的情况，需要处理后重新计算
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
 
         // 更新样式

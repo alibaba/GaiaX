@@ -21,6 +21,106 @@ mod gaiax_flex_grow_and_flex_shrink {
     ///                 - container_2_1_1 width:150
     ///                 - container_2_1_2 width:150
     #[test]
+    fn shrink_two_text() {
+        let mut stretch = Stretch::new();
+
+        let root = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(400.0), height: Dimension::Points(100.0) },
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
+
+        let container_1 = stretch
+            .new_node(
+                Style { size: Size { width: Dimension::Percent(1.0), ..Default::default() }, ..Default::default() },
+                &[],
+            )
+            .unwrap();
+
+        let container_1_1 = stretch
+            .new_node(Style {  flex_direction: FlexDirection::Row, ..Default::default() }, &[])
+            .unwrap();
+
+        let container_1_2 = stretch
+            .new_node(Style { flex_shrink: 1.0, flex_direction: FlexDirection::Row, ..Default::default() }, &[])
+            .unwrap();
+
+        let container_1_1_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(100.0), height: Dimension::Points(100.0) },
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
+
+        let container_1_2_1 = stretch
+            .new_node(
+                Style {
+                    size: Size { width: Dimension::Points(500.0), height: Dimension::Points(100.0) },
+                    flex_shrink: 1.0,
+                    flex_direction: FlexDirection::Row,
+                    ..Default::default()
+                },
+                &[],
+            )
+            .unwrap();
+
+        stretch.add_child(root, container_1).unwrap();
+
+        stretch.add_child(container_1, container_1_1).unwrap();
+        stretch.add_child(container_1, container_1_2).unwrap();
+        stretch.add_child(container_1_1, container_1_1_1).unwrap();
+        stretch.add_child(container_1_2, container_1_2_1).unwrap();
+
+        stretch.compute_layout(root, Size { width: Number::Defined(1000.0), height: Number::Defined(1000.0) }).unwrap();
+
+        let root_size = stretch.layout(root).unwrap().size;
+
+        let container_1_size = stretch.layout(container_1).unwrap().size;
+
+        let container_1_1_size = stretch.layout(container_1_1).unwrap().size;
+        let container_1_2_size = stretch.layout(container_1_2).unwrap().size;
+
+        let container_1_1_1_size = stretch.layout(container_1_1_1).unwrap().size;
+        let container_1_2_1_size = stretch.layout(container_1_2_1).unwrap().size;
+
+        assert_eq!(root_size.width, 400.0);
+
+        assert_eq!(container_1_size.width, 400.0);
+
+        assert_eq!(container_1_1_size.width, 100.0);
+        assert_eq!(container_1_2_size.width, 300.0);
+
+        assert_eq!(container_1_1_1_size.width, 100.0);
+        assert_eq!(container_1_2_1_size.width, 300.0);
+
+    }
+
+    ///
+    /// Input hierarchy:
+    ///    - root 400 direction:row
+    ///         - container_1 100
+    ///         - container_2 flex_grow:1 flex_shrink:1 direction:column
+    ///             - container_2_1 flex_grow:1 flex_shrink:1 direction:row
+    ///                 - container_2_1_1 width:200 flex_shrink:1
+    ///                 - container_2_1_2 width:200 flex_shrink:1
+    ///
+    /// Output hierarchy:
+    ///     - root width:400
+    ///         - container_1 width:100
+    ///         - container_2 width:300
+    ///             - container_2_1 width:300
+    ///                 - container_2_1_1 width:150
+    ///                 - container_2_1_2 width:150
+    #[test]
     fn flex_grow_and_flex_shrink() {
         let mut stretch = Stretch::new();
 

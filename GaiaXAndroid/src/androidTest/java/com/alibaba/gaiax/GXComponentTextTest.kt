@@ -862,10 +862,15 @@ class GXComponentTextTest : GXBaseTest() {
         textView.setFontSize(13F.dpToPx())
         textView.measure(0, 0)
 
+        val textView1 = GXText(GXMockUtils.context)
+        textView1.text = templateData.data.getString("text2")
+        textView1.setFontSize(13F.dpToPx())
+        textView1.measure(0, 0)
+
         Assert.assertEquals(375F.dpToPx(), rootView.width())
         Assert.assertEquals(375F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
-        Assert.assertEquals(375F.dpToPx() - textView.measuredWidth.toFloat(), rootView.child(0).child(1).width())
+        Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).child(1).width())
     }
 
     @Test

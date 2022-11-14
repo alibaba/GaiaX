@@ -12,6 +12,7 @@
 }
 #tag_1 {
   align-items: center;
+    flex-shrink: 1;
 }
 #tag_1_text {
   text-overflow: ellipsis;
@@ -24,6 +25,7 @@
 }
 #tag_2 {
   align-items: center;
+    flex-shrink: 1;
 }
 #tag_2_text {
   text-overflow: ellipsis;

@@ -56,27 +56,28 @@ object GXFitContentUtils {
         templateData: JSONObject
     ): Size<Dimension>? {
 
+        if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
+            return null
+        }
+
+        if (!gxNode.isNodeVisibleInTree()) {
+            return null
+        }
+
         val androidContext = gxTemplateContext.context
         val nodeId = gxTemplateNode.getNodeId()
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
         val finalCss = gxTemplateNode.finalCss ?: return null
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
-        val nodeLayout = gxStretchNode.layoutByBind
-            ?: gxStretchNode.layoutByCreate
-            ?: return null
+        val nodeLayout = gxStretchNode.layoutByBind ?: gxStretchNode.layoutByCreate ?: return null
 
         val gxCacheText = GXMeasureViewPool.obtain(androidContext)
 
         gxCacheText.setTextStyle(finalCss)
 
         val textContent = getMeasureContent(
-            gxTemplateContext,
-            nodeId,
-            gxCacheText,
-            finalCss,
-            gxTemplateNode,
-            templateData
+            gxTemplateContext, nodeId, gxCacheText, finalCss, gxTemplateNode, templateData
         )
 
         if (textContent == null) {
@@ -112,13 +113,11 @@ object GXFitContentUtils {
             var measuredWidth = gxCacheText.measuredWidth.toFloat()
             val measuredHeight = gxCacheText.measuredHeight.toFloat()
 
-            val isUndefineSize = finalCss.flexBox.size?.width == null ||
-                    finalCss.flexBox.size.width is Dimension.Auto ||
-                    finalCss.flexBox.size.width is Dimension.Undefined
+            val isUndefineSize =
+                finalCss.flexBox.size?.width == null || finalCss.flexBox.size.width is Dimension.Auto || finalCss.flexBox.size.width is Dimension.Undefined
 
-            val isDefineMinSize = finalCss.flexBox.minSize != null &&
-                    (finalCss.flexBox.minSize.width !is Dimension.Auto ||
-                            finalCss.flexBox.minSize.width !is Dimension.Undefined)
+            val isDefineMinSize =
+                finalCss.flexBox.minSize != null && (finalCss.flexBox.minSize.width !is Dimension.Auto || finalCss.flexBox.minSize.width !is Dimension.Undefined)
 
             // fix: 如果没有定义宽度，但是定义了最小宽度，那么需要做一下修正
             if (isUndefineSize && isDefineMinSize) {
@@ -183,8 +182,7 @@ object GXFitContentUtils {
                 }
             } else if (nodeWidth > 0) {
                 val widthSpec = View.MeasureSpec.makeMeasureSpec(
-                    nodeWidth.toInt(),
-                    View.MeasureSpec.AT_MOST
+                    nodeWidth.toInt(), View.MeasureSpec.AT_MOST
                 )
                 gxCacheText.measure(widthSpec, 0)
                 result = Size(
@@ -205,8 +203,7 @@ object GXFitContentUtils {
                 }
             } else if (nodeWidth > 0) {
                 val widthSpec = View.MeasureSpec.makeMeasureSpec(
-                    nodeWidth.toInt(),
-                    View.MeasureSpec.AT_MOST
+                    nodeWidth.toInt(), View.MeasureSpec.AT_MOST
                 )
                 gxCacheText.measure(widthSpec, 0)
                 result = Size(

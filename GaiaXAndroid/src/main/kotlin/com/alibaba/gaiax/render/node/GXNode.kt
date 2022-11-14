@@ -18,6 +18,7 @@ package com.alibaba.gaiax.render.node
 
 import android.animation.AnimatorSet
 import android.view.View
+import app.visly.stretch.Display
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
@@ -38,8 +39,7 @@ class GXNode {
      * 在有些情况下，业务会根据数据动态修改高度，在首次的时候没有这些数据，
      * 从而计算出一个高度并缓存，当第二次再刷新数据时带有这些数据，就不会再去计算新的高度了，导致问题。
      */
-    var multiTypeItemComputeCache: MutableMap<GXTemplateEngine.GXTemplateItem, Layout>? =
-        null
+    var multiTypeItemComputeCache: MutableMap<GXTemplateEngine.GXTemplateItem, Layout>? = null
 
     /**
      * 属性动画
@@ -118,8 +118,7 @@ class GXNode {
         null
 
     fun addChildTemplateItems(
-        templateItem: GXTemplateEngine.GXTemplateItem,
-        visualTemplateNode: GXTemplateNode
+        templateItem: GXTemplateEngine.GXTemplateItem, visualTemplateNode: GXTemplateNode
     ) {
         if (childTemplateItems == null) {
             childTemplateItems = mutableListOf()
@@ -176,7 +175,9 @@ class GXNode {
     }
 
     fun isNeedLottie(): Boolean {
-        return templateNode.animationBinding?.type?.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE,true) == true
+        return templateNode.animationBinding?.type?.equals(
+            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true
+        ) == true
     }
 
     fun setIdPath(parent: GXNode?, layer: GXLayer) {
@@ -212,5 +213,19 @@ class GXNode {
         children?.forEach {
             it.resetTree(gxTemplateContext)
         }
+    }
+
+    fun isNodeVisibleInTree(): Boolean {
+        return isNodeVisibleInTree(this)
+    }
+
+    private fun isNodeVisibleInTree(gxNode: GXNode): Boolean {
+        if (gxNode.stretchNode.node.getStyle().display == Display.None) {
+            return false
+        }
+        gxNode.parentNode?.let {
+            return isNodeVisibleInTree(it)
+        }
+        return true
     }
 }

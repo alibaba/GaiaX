@@ -225,7 +225,6 @@ data class GXTemplateNode(
         return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode, finalCss=$finalCss)"
     }
 
-
     companion object {
 
         fun createNode(

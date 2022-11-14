@@ -20,7 +20,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Dimension
-import app.visly.stretch.Display
 import app.visly.stretch.PositionType
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSON
@@ -111,7 +110,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         internal fun updateNodeTreeLayoutByDirtyText(
-            gxTemplateContext: GXTemplateContext, rootNode: GXNode, size: Size<Float?>
+            gxTemplateContext: GXTemplateContext,
+            rootNode: GXNode,
+            size: Size<Float?>
         ) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
                 var isTextDirty = false
@@ -551,45 +552,19 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             val gxStyle = gxNode.templateNode.finalCss?.style
 
-            if (gxStyle != null && gxStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
+            if (gxStyle != null && gxStyle.fitContent == true) {
 
-                // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
-                // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
-                // 如果提前计算，会导致结果不正确
-                if (gxTemplateContext.isFlexGrowLayout) {
-                    if (gxTemplateContext.dirtyTexts == null) {
-                        gxTemplateContext.dirtyTexts = mutableSetOf()
-                    }
-                    gxTemplateContext.dirtyTexts?.add(
-                        GXDirtyText(
-                            gxTemplateContext, gxNode, templateData
-                        )
-                    )
-                    return null
+                if (gxTemplateContext.dirtyTexts == null) {
+                    gxTemplateContext.dirtyTexts = mutableSetOf()
                 }
-
-                // 处理普通的fitContent逻辑
-                return updateLayoutByFitContent(
-                    gxTemplateContext,
-                    gxNode,
-                    gxNode.templateNode,
-                    gxNode.stretchNode,
-                    gxStyle,
-                    templateData,
-                    gxNode.stretchNode.node.getStyle()
+                gxTemplateContext.dirtyTexts?.add(
+                    GXDirtyText(
+                        gxTemplateContext, gxNode, templateData
+                    )
                 )
             }
 
             return null
-        }
-
-        private fun isSelfAndParentNodeTreeFlex(gxNode: GXNode?): Boolean {
-            // 根节点的父节点
-            if (gxNode == null) {
-                return true
-            }
-            val selfIsFlex = gxNode.stretchNode.node.getStyle().display == Display.Flex
-            return selfIsFlex && isSelfAndParentNodeTreeFlex(gxNode.parentNode)
         }
 
         private fun updateLayoutByFitContent(
@@ -602,12 +577,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             style: app.visly.stretch.Style
         ): Boolean? {
 
-            if (!gxTemplateNode.isTextType() && !gxTemplateNode.isRichTextType()) {
-                return null
-            }
-
             GXFitContentUtils.fitContent(
-                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
+                gxTemplateContext,
+                gxNode,
+                gxTemplateNode,
+                gxStretchNode,
+                templateData
             )?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上

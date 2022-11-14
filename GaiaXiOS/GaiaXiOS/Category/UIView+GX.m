@@ -78,10 +78,10 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 - (void)setGxEvent:(GXEventType)eventType with:(GXEvent *)gxEvent {
     switch (eventType) {
         case GXEventTypeTap:
-            return objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+            objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
             break;
         case GXEventTypeLongPress:
-            return objc_setAssociatedObject(self, &kGXEventLongpressKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+            objc_setAssociatedObject(self, &kGXEventLongpressKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
             break;
         default:
             break;

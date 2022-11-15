@@ -412,6 +412,73 @@ class GXComponentEventTest : GXBaseTest() {
     }
 
     @Test
+    fun template_event_register_node_event_multiple_events() {
+
+        val templateId = "template_event_register_node_event_multiple_events"
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "event",
+            templateId
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        var gesture: GXTemplateEngine.GXGesture? = null
+
+        templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
+
+            override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                super.onGestureEvent(gxGesture)
+                gesture = gxGesture
+            }
+        }
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val targetView = GXTemplateEngine.instance.getGXViewById(rootView, "target")
+
+        Assert.assertEquals(true, targetView != null)
+
+        // click event
+        targetView?.performClick()
+
+        Assert.assertEquals(true, gesture != null)
+        Assert.assertEquals("tap", gesture?.gestureType)
+        Assert.assertEquals(true, gesture?.view == targetView)
+        Assert.assertEquals(-1, gesture?.index)
+        Assert.assertEquals("target", gesture?.nodeId)
+        Assert.assertEquals(
+            templateId,
+            gesture?.templateItem?.templateId
+        )
+        Assert.assertEquals(JSONObject().apply {
+            this["type"] = "tap"
+            this["value"] = null
+        }.toJSONString(), gesture?.eventParams?.toJSONString())
+
+
+        // long click event
+        gesture = null
+        targetView?.performLongClick()
+
+        Assert.assertEquals(true, gesture != null)
+        Assert.assertEquals("longpress", gesture?.gestureType)
+        Assert.assertEquals(true, gesture?.view == targetView)
+        Assert.assertEquals(-1, gesture?.index)
+        Assert.assertEquals("target", gesture?.nodeId)
+        Assert.assertEquals(
+            templateId,
+            gesture?.templateItem?.templateId
+        )
+        Assert.assertEquals(JSONObject().apply {
+            this["type"] = "longpress"
+            this["value"] = null
+        }.toJSONString(), gesture?.eventParams?.toJSONString())
+    }
+
+    @Test
     fun template_event_tap_listener() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

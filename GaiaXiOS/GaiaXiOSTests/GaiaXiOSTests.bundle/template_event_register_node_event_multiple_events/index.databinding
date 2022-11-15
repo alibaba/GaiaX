@@ -1,0 +1,14 @@
+{
+    "event": {
+        "target": [
+            {
+                "type": "'tap'",
+                "value": "$action"
+            },
+            {
+                "type": "'longpress'",
+                "value": "$action"
+            }
+        ]
+    }
+}

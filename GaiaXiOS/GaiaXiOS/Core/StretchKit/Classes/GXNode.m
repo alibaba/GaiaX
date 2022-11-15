@@ -455,6 +455,7 @@
             gxEvent.templateItem = self.templateItem;
             gxEvent.nodeId = self.nodeId;
             gxEvent.view = view;
+            gxEvent.eventType = eventType;
             //赋值
             [view setGxEvent:eventType with:gxEvent];
         }

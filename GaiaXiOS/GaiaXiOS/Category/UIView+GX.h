@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //view对应node
 @property(nonatomic, strong)GXNode *gxNode;
+//view对应的 tap event
+@property(nonatomic, strong)GXEvent *gxEvent;
 //view对应的track
 @property(nonatomic, strong)GXTrack *gxTrack;
 //业务id

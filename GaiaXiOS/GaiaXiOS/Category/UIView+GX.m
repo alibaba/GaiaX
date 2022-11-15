@@ -64,10 +64,18 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 }
 
 // gxEvents
+- (GXEvent *)gxEvent {
+    return objc_getAssociatedObject(self, &kGXEventTapKey);
+}
+
+- (void)setGxEvent:(GXEvent *)gxEvent {
+    objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+}
+
 - (GXEvent *)getGxEvent:(GXEventType)eventType {
     switch (eventType) {
         case GXEventTypeTap:
-            return objc_getAssociatedObject(self, &kGXEventTapKey);
+            return self.gxEvent;
         case GXEventTypeLongPress:
             return objc_getAssociatedObject(self, &kGXEventLongpressKey);
         default:
@@ -78,7 +86,7 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 - (void)setGxEvent:(GXEventType)eventType with:(GXEvent *)gxEvent {
     switch (eventType) {
         case GXEventTypeTap:
-            objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+            self.gxEvent = gxEvent;
             break;
         case GXEventTypeLongPress:
             objc_setAssociatedObject(self, &kGXEventLongpressKey, gxEvent, OBJC_ASSOCIATION_RETAIN);

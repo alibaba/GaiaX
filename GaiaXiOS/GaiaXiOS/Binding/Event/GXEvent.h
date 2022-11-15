@@ -25,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //event gesture type
 typedef NS_ENUM(NSUInteger, GXEventType) {
-    GXEventTypeUnknown = -1, // Unknown event type
-    GXEventTypeTap = 0,//tap
-    GXEventTypeLongPress,//long press
+    GXEventTypeUnknown = 0, // Unknown event type
+    GXEventTypeTap = 1,//tap
+    GXEventTypeLongPress = 2,//long press
 };
 
 

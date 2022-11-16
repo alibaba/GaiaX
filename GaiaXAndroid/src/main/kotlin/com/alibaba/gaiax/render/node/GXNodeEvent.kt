@@ -35,7 +35,10 @@ class GXNodeEvent : GXINodeEvent {
                 continue
             }
 
+            // 默认为 tap 事件
             val eventType = eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
+                ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+
             when (eventType) {
                 GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
                     gxNode.view?.setOnClickListener {

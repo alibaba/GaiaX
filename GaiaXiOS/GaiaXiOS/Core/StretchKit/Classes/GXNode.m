@@ -448,6 +448,11 @@
         NSString *type = [event gx_stringForKey: @"type"];
         GXEventType eventType = [GXEvent getType:type];
         
+        // 兜底默认为 tap 类型
+        if (eventType == GXEventTypeUnknown) {
+            eventType = GXEventTypeTap;
+        }
+        
         // 获取event
         GXEvent *gxEvent = [view getGxEvent:eventType];
         if (nil == gxEvent) {

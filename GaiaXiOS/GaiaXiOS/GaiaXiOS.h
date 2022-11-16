@@ -51,3 +51,4 @@ FOUNDATION_EXPORT const unsigned char GaiaXiOSVersionString[];
 #import <GaiaXiOS/GXEvent.h>
 #import <GaiaXiOS/GXTrack.h>
 #import <GaiaXiOS/GXData.h>
+#import <GaiaXiOS/UIView+GX.h>

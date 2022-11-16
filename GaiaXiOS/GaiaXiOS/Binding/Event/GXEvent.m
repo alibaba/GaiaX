@@ -37,21 +37,19 @@
     return self;
 }
 
-- (void)setupEventInfo:(NSDictionary *)eventInfo{
-    //默认手势
-    self.gestureType = GXEventGestureTypeTap;
-    
-    //解析数据信息
-    NSDictionary *eventParams = nil;
-    if ([GXUtils isValidDictionary:eventInfo]) {
-        eventParams = eventInfo;
-        //手势类型
-        NSString *type = [eventParams gx_stringForKey:@"type"];
-        self.gestureType = (![type isEqualToString:@"longpress"]) ? GXEventGestureTypeTap : GXEventGestureTypeLongPress;
-    }
-    
+- (void)setupEventInfo:(NSDictionary *)eventInfo {
     //事件信息
-    self.eventParams = eventParams;
+    self.eventParams = eventInfo;
+}
+
++ (GXEventType)getType:(NSString *)eventType {
+    if ([@"tap" isEqualToString:eventType]) {
+        return GXEventTypeTap;
+    } else if ([@"longpress" isEqualToString:eventType]) {
+        return GXEventTypeLongPress;
+    } else {
+        return GXEventTypeUnknown;
+    }
 }
 
 @end

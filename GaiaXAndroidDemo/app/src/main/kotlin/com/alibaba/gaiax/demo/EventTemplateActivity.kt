@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.demo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.gaiax.GXTemplateEngine
@@ -54,6 +55,7 @@ class EventTemplateActivity : AppCompatActivity() {
                         isFollowed = true
                     }
                 }
+                Log.d(TAG, gxGesture.toString())
             }
         }
 

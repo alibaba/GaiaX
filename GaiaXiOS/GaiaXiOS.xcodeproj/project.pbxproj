@@ -139,7 +139,7 @@
 		8DFEC286273504F6001F3B74 /* GXCornerRadiusHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEC284273504F6001F3B74 /* GXCornerRadiusHelper.m */; };
 		8DFEC28927350509001F3B74 /* GXGradientHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFEC28727350509001F3B74 /* GXGradientHelper.h */; };
 		8DFEC28A27350509001F3B74 /* GXGradientHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEC28827350509001F3B74 /* GXGradientHelper.m */; };
-		8DFEC28D27350795001F3B74 /* UIView+GX.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFEC28B27350795001F3B74 /* UIView+GX.h */; };
+		8DFEC28D27350795001F3B74 /* UIView+GX.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFEC28B27350795001F3B74 /* UIView+GX.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DFEC28E27350795001F3B74 /* UIView+GX.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEC28C27350795001F3B74 /* UIView+GX.m */; };
 		8DFEC2BE27350BBA001F3B74 /* libstretch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFEC2B227350BBA001F3B74 /* libstretch.a */; };
 		8DFEC2BF27350BBA001F3B74 /* libstretch.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFEC2B427350BBA001F3B74 /* libstretch.h */; };
@@ -181,6 +181,7 @@
 		8DFF8502273E69BC0014C0DA /* GXFileHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFF8500273E69BC0014C0DA /* GXFileHandler.h */; };
 		8DFF8503273E69BC0014C0DA /* GXFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF8501273E69BC0014C0DA /* GXFileHandler.m */; };
 		960DAA88A4F50DDC29631263 /* libPods-GaiaXiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */; };
+		B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B188ACE429237797005C9F62 /* GXEventTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -373,6 +374,7 @@
 		8DFF8500273E69BC0014C0DA /* GXFileHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXFileHandler.h; sourceTree = "<group>"; };
 		8DFF8501273E69BC0014C0DA /* GXFileHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXFileHandler.m; sourceTree = "<group>"; };
 		A23EDE6F4FF3A79714BEBD6C /* Pods-GaiaXiOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		B188ACE429237797005C9F62 /* GXEventTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXEventTest.swift; sourceTree = "<group>"; };
 		CA43FB5B0B95A83F4433A734 /* Pods-GaiaXiOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -418,6 +420,7 @@
 				8DDF3BD7276225A50014E4D8 /* GXTemplateTest.mm */,
 				8DF79CB92760A9AA00A867BE /* GXEgnineTest.mm */,
 				8DDF3BB82761DFB30014E4D8 /* GXSwiftTest.swift */,
+				B188ACE429237797005C9F62 /* GXEventTest.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DFEC28D27350795001F3B74 /* UIView+GX.h in Headers */,
 				8DCE3362283E11C900A42EF8 /* GXTemplateSourceProtocal.h in Headers */,
 				8DEFA65B27968D43003730A6 /* GXBizServiceProtocol.h in Headers */,
 				8DEFA65727965D91003730A6 /* GXLottieAniamtionProtocal.h in Headers */,
@@ -932,7 +936,6 @@
 				8DFEC2582734DB80001F3B74 /* GXTemplateItem.h in Headers */,
 				8DB60A2C27F4764E0038BE13 /* GXFunction.h in Headers */,
 				8DFEC2EE27351BB6001F3B74 /* GXBaseNode.h in Headers */,
-				8DFEC28D27350795001F3B74 /* UIView+GX.h in Headers */,
 				8D9FC9D0273A220800912EE6 /* GXTextNode.h in Headers */,
 				8D9FC9E0273A224900912EE6 /* GXIconFontNode.h in Headers */,
 				8DFEC2FA27352C3E001F3B74 /* GXLRUCache.h in Headers */,
@@ -1146,6 +1149,7 @@
 				8DDF3BB92761DFB30014E4D8 /* GXSwiftTest.swift in Sources */,
 				8D1CBD1E2758AA4500EC2B4D /* GaiaXiOSTests.m in Sources */,
 				8DBBA433278449BE00ACCFBC /* GXExpressionTest.mm in Sources */,
+				B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */,
 				8DDF3BD8276225A50014E4D8 /* GXTemplateTest.mm in Sources */,
 				8DF79CBA2760A9AA00A867BE /* GXEgnineTest.mm in Sources */,
 			);

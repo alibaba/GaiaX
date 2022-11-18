@@ -13,7 +13,7 @@
 
 + (id)getValueWithAdress:(long)adress{
     id result = nil;
-
+    
     if (adress > 0) {
         //获取value对应的地址
         NSString *hexAdress = [NSString stringWithFormat:@"%lx",adress];
@@ -110,6 +110,8 @@
         //未知类型，返回null
         val = GX_NewNull(0);
     }
-        return (long)(val);
+    
+    return (long)(val);
 }
+
 @end

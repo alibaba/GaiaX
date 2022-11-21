@@ -284,9 +284,7 @@ class GXTemplateEngine {
     /**
      * Custom view bind data interface
      */
-    interface GXICustomViewBindData : GXIViewBindData {
-        override fun onBindData(data: JSONObject?) {}
-    }
+    interface GXICustomViewBindData : GXIViewBindData
 
     /**
      * Event listener

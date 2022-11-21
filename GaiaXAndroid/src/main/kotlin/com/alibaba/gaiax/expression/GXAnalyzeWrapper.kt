@@ -100,40 +100,51 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                     functionName: String, params: LongArray
                 ): Long {
                     if (functionName == "size" && params.size == 1) {
-                        when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
-                            is GXString -> {
-                                value.getString()?.let {
-                                    return GXAnalyze.createValueFloat64(it.length.toFloat())
-                                }
-                            }
-                            is GXMap -> {
-                                (value.getValue() as? JSONObject)?.let {
-                                    return GXAnalyze.createValueFloat64(it.size.toFloat())
-                                }
-                            }
-                            is GXArray -> {
-                                (value.getValue() as? JSONArray)?.let {
-                                    return GXAnalyze.createValueFloat64(it.size.toFloat())
-                                }
-                            }
-                            else -> {
-                                return GXAnalyze.createValueFloat64(0f)
-                            }
-                        }
+                        return functionSize(params)
                     } else if (functionName == "env" && params.size == 1) {
-                        val value = GXAnalyze.wrapAsGXValue(params[0])
-                        if (value is GXString) {
-                            val envValue = value.getString()
-                            if ("isAndroid".equals(envValue, ignoreCase = true)) {
-                                return GXAnalyze.createValueBool(true)
-                            } else if ("isiOS".equals(envValue, ignoreCase = true)) {
-                                return GXAnalyze.createValueBool(false)
-                            }
-                        }
+                        return functionEnv(params)
                     }
                     return 0L
                 }
             })
+        }
+
+        private fun functionEnv(params: LongArray): Long {
+            val value = GXAnalyze.wrapAsGXValue(params[0])
+            if (value is GXString) {
+                val envValue = value.getString()
+                if ("isAndroid".equals(envValue, ignoreCase = true)) {
+                    return GXAnalyze.createValueBool(true)
+                } else if ("isiOS".equals(envValue, ignoreCase = true)) {
+                    return GXAnalyze.createValueBool(false)
+                }
+            }
+            return 0L
+        }
+
+        private fun functionSize(params: LongArray): Long {
+            when (val value = GXAnalyze.wrapAsGXValue(params[0])) {
+                is GXString -> {
+                    value.getString()?.let {
+                        return GXAnalyze.createValueFloat64(it.length.toFloat())
+                    }
+                }
+                is GXMap -> {
+                    (value.getValue() as? JSONObject)?.let {
+                        return GXAnalyze.createValueFloat64(it.size.toFloat())
+                    }
+                }
+                is GXArray -> {
+                    (value.getValue() as? JSONArray)?.let {
+                        return GXAnalyze.createValueFloat64(it.size.toFloat())
+                    }
+                }
+                else -> {
+                    return GXAnalyze.createValueFloat64(0f)
+                }
+            }
+            // nothing
+            return 0L
         }
     }
 }

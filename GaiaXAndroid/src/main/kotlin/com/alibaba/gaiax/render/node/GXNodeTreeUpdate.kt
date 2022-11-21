@@ -111,9 +111,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         internal fun updateNodeTreeLayoutByDirtyText(
-            gxTemplateContext: GXTemplateContext,
-            rootNode: GXNode,
-            size: Size<Float?>
+            gxTemplateContext: GXTemplateContext, rootNode: GXNode, size: Size<Float?>
         ) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
                 var isTextDirty = false
@@ -605,11 +603,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         ): Boolean? {
 
             GXFitContentUtils.fitContent(
-                gxTemplateContext,
-                gxNode,
-                gxTemplateNode,
-                gxStretchNode,
-                templateData
+                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
             )?.let { src ->
 
                 // 自适应之后的宽度，要更新到原有尺寸上
@@ -801,10 +795,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindBackdropFilter(
-            gxTemplateContext: GXTemplateContext,
-            gxNode: GXNode,
-            gxCss: GXCss,
-            gxView: View
+            gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxCss: GXCss, gxView: View
         ) {
             if (gxNode.isViewType()) {
                 if (gxCss.style.backdropFilter != null) {

@@ -1,0 +1,11 @@
+{
+  "id": "template_customview_binddata",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "target",
+      "type": "custom",
+      "view-class-android": "com.alibaba.gaiax.customview.CustomView"
+    }
+  ]
+}

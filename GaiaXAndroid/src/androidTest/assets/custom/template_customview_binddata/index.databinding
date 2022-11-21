@@ -1,0 +1,8 @@
+{
+  "data": {
+    "target": {
+      "value": "$title",
+      "extend": { "custom_extend_subtitle": "$subtitle" }
+    }
+  }
+}

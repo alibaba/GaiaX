@@ -552,4 +552,16 @@ class GXComponentViewTest : GXBaseTest() {
         Assert.assertEquals(true, (rootView.childCount() == 2))
         Assert.assertEquals(true, (rootView.child(1) .getTag(R.id.gaiax_rv_touch) == 1))
     }
+
+    //Lottie单测
+    @Test
+    fun template_animation_lottie_local_2(){
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_animation_lottie_local_2")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+        Assert.assertEquals(true, (rootView.childCount() == 2))
+        Assert.assertEquals(true, (rootView.child(1) .getTag(R.id.gaiax_rv_touch) == 1))
+    }
 }

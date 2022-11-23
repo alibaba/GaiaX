@@ -43,9 +43,7 @@ class GXAnimationBinding(
 ) {
 
     fun executeAnimation(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxTemplateData: JSONObject
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: JSONObject
     ) {
 
         val state = gxState?.value(gxTemplateData)
@@ -54,26 +52,17 @@ class GXAnimationBinding(
         if (trigger &&
             // 这里兼容1的状态
             GXExpressionFactory.isTrue(
-                gxTemplateContext.templateInfo.expVersion,
-                state
+                gxTemplateContext.templateInfo.expVersion, state
             ) == true
         ) {
             gxAnimation.executeAnimation(
-                gxState,
-                gxAnimationExpression,
-                gxTemplateContext,
-                gxNode,
-                gxTemplateData
+                gxState, gxAnimationExpression, gxTemplateContext, gxNode, gxTemplateData
             )
         }
         // 自动触发动画
         else if (!trigger) {
             gxAnimation.executeAnimation(
-                gxState,
-                gxAnimationExpression,
-                gxTemplateContext,
-                gxNode,
-                gxTemplateData
+                gxState, gxAnimationExpression, gxTemplateContext, gxNode, gxTemplateData
             )
         }
     }
@@ -87,27 +76,46 @@ class GXAnimationBinding(
         private const val KEY_LOTTIE_ANIMATOR = "lottieAnimator"
 
         fun create(expVersion: String?, data: JSONObject): GXAnimationBinding? {
-            val type = data.getString(KEY_TYPE) ?: return null
+            val typeSrc = data.getString(KEY_TYPE) ?: return null
+
+            // FIX:https://github.com/alibaba/GaiaX/issues/278
+            // 兼容普通字符串和表达式
+            val typeResult: String = if (
+                GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(typeSrc, true) ||
+                GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(typeSrc, true)
+            ) {
+                typeSrc
+            } else {
+                val typeExp = GXExpressionFactory.create(expVersion, typeSrc)
+                typeExp?.value()?.toString() ?: ""
+            }
+
             val trigger = data.getBooleanValue(KEY_TRIGGER)
-            val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
-                expVersion,
-                data.getString(KEY_STATE)
-            ) else null
+
+            val stateExp = if (data.containsKey(KEY_STATE)) {
+                GXExpressionFactory.create(expVersion, data.getString(KEY_STATE))
+            } else {
+                null
+            }
 
             val gxExpression = GXExpressionFactory.create(expVersion, data)
 
-            if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true)) {
+            if (GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(typeResult, true)) {
                 val lottieData = data.getJSONObject(KEY_LOTTIE_ANIMATOR) ?: data
                 val lottieAnimator = GXLottieAnimation.create(expVersion, lottieData)
                 if (lottieAnimator != null) {
-                    return GXAnimationBinding(type, trigger, state, lottieAnimator, gxExpression)
+                    return GXAnimationBinding(
+                        typeResult, trigger, stateExp, lottieAnimator, gxExpression
+                    )
                 }
                 return null
-            } else if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP, true)) {
+            } else if (GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(typeResult, true)) {
                 val animatorData = data.getJSONObject(KEY_PROP_ANIMATOR_SET)
                 val animatorSet = GXPropAnimationSet.create(animatorData)
                 if (animatorSet != null) {
-                    return GXAnimationBinding(type, trigger, state, animatorSet, gxExpression)
+                    return GXAnimationBinding(
+                        typeResult, trigger, stateExp, animatorSet, gxExpression
+                    )
                 }
             }
 

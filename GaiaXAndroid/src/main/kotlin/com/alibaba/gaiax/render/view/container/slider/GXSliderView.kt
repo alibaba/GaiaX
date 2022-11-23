@@ -255,8 +255,8 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
             val tr = radius[2]
             val bl = radius[4]
             val br = radius[6]
-            if (tl == tr && tr == bl && bl == br && tl > 0) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (tl == tr && tr == bl && bl == br && tl > 0) {
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
@@ -266,6 +266,9 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
                             outline.setRoundRect(0, 0, view.width, view.height, tl)
                         }
                     }
+                } else {
+                    this.clipToOutline = false
+                    this.outlineProvider = null
                 }
             }
         }

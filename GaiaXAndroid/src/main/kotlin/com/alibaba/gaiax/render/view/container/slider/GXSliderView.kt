@@ -47,21 +47,21 @@ import java.util.*
 class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
 
     enum class IndicatorPosition(val value: String) {
-        LEFT_TOP("left-top"),
-        LEFT_BOTTOM("left-bottom"),
-        RIGHT_TOP("right-top"),
-        RIGHT_BOTTOM("right-bottom"),
+        TOP_LEFT("top-left"),
         TOP_CENTER("top-center"),
-        BOTTOM_CENTER("bottom-center");
+        TOP_RIGHT("top-right"),
+        BOTTOM_LEFT("bottom-left"),
+        BOTTOM_CENTER("bottom-center"),
+        BOTTOM_RIGHT("bottom-right");
 
         companion object {
             fun fromValue(value: String?): IndicatorPosition = when (value) {
-                LEFT_TOP.value -> LEFT_TOP
-                LEFT_BOTTOM.value -> LEFT_BOTTOM
-                RIGHT_TOP.value -> RIGHT_TOP
+                TOP_LEFT.value -> TOP_LEFT
                 TOP_CENTER.value -> TOP_CENTER
+                TOP_RIGHT.value -> TOP_RIGHT
+                BOTTOM_LEFT.value -> BOTTOM_LEFT
                 BOTTOM_CENTER.value -> BOTTOM_CENTER
-                else -> RIGHT_BOTTOM
+                else -> BOTTOM_RIGHT
             }
         }
     }
@@ -140,24 +140,24 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
         }
 
         when (config?.indicatorPosition) {
-            IndicatorPosition.LEFT_TOP -> {
-                layoutParams.gravity = Gravity.LEFT or Gravity.TOP
-            }
-            IndicatorPosition.LEFT_BOTTOM -> {
-                layoutParams.gravity = Gravity.LEFT or Gravity.BOTTOM
-            }
-            IndicatorPosition.RIGHT_TOP -> {
-                layoutParams.gravity = Gravity.RIGHT or Gravity.TOP
+            IndicatorPosition.TOP_LEFT -> {
+                layoutParams.gravity = Gravity.TOP or Gravity.LEFT
             }
             IndicatorPosition.TOP_CENTER -> {
                 layoutParams.gravity = Gravity.TOP or Gravity.CENTER
+            }
+            IndicatorPosition.TOP_RIGHT -> {
+                layoutParams.gravity = Gravity.TOP or Gravity.RIGHT
+            }
+            IndicatorPosition.BOTTOM_LEFT -> {
+                layoutParams.gravity = Gravity.BOTTOM or Gravity.LEFT
             }
             IndicatorPosition.BOTTOM_CENTER -> {
                 layoutParams.gravity = Gravity.BOTTOM or Gravity.CENTER
             }
             else -> {
-                // RIGHT_BOTTOM
-                layoutParams.gravity = Gravity.RIGHT or Gravity.BOTTOM
+                // BOTTOM_RIGHT
+                layoutParams.gravity = Gravity.BOTTOM or Gravity.RIGHT
             }
         }
 

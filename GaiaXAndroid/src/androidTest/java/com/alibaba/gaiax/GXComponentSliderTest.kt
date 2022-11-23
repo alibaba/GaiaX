@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.view.container.slider.GXSliderBaseIndicatorView
+import com.alibaba.gaiax.customview.CustomSliderIndicatorView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -46,7 +46,7 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(true, rootView is GXSliderView)
         Assert.assertEquals(2, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0) is ViewPager)
-        Assert.assertEquals(true, rootView.child(1) is GXSliderBaseIndicatorView)
+        Assert.assertEquals(true, rootView.child(1) is CustomSliderIndicatorView)
 
         val gxSliderView = rootView as GXSliderView
         val config = gxSliderView.getConfig()
@@ -63,6 +63,6 @@ class GXComponentSliderTest : GXBaseTest() {
             ), config?.indicatorMargin
         )
         Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPosition)
-        Assert.assertEquals("com.example.custom.CustomSliderIndicatorView", config?.indicatorClass)
+        Assert.assertEquals("com.alibaba.gaiax.customview.CustomSliderIndicatorView", config?.indicatorClass)
     }
 }

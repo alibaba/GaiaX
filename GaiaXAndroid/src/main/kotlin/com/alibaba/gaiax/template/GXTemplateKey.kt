@@ -409,6 +409,9 @@ object GXTemplateKey {
     const val GAIAX_LAYER_SLIDER_SELECTED_INDEX = "slider-selected-index"
     const val GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR = "slider-indicator-selected-color"
     const val GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR = "slider-indicator-unselected-color"
+    const val GAIAX_LAYER_SLIDER_INDICATOR_MARGIN = "slider-indicator-margin"
+    const val GAIAX_LAYER_SLIDER_INDICATOR_POSITION = "slider-indicator-position"
+    const val GAIAX_LAYER_SLIDER_INDICATOR_CLASS = "slider-indicator-class-android"
 
     // GXProgressView
     const val GAIAX_LAYER_PROGRESS_STROKE_COLOR = "stroke-color"

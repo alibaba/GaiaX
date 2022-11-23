@@ -1,11 +1,12 @@
 package com.alibaba.gaiax
 
 import android.graphics.Color
-import android.widget.LinearLayout
+import android.graphics.Rect
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.render.view.container.slider.GXSliderBaseIndicatorView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
@@ -45,8 +46,7 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(true, rootView is GXSliderView)
         Assert.assertEquals(2, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0) is ViewPager)
-        Assert.assertEquals(true, rootView.child(1) is LinearLayout)
-        Assert.assertEquals(3, rootView.child(1).childCount())
+        Assert.assertEquals(true, rootView.child(1) is GXSliderBaseIndicatorView)
 
         val gxSliderView = rootView as GXSliderView
         val config = gxSliderView.getConfig()
@@ -56,5 +56,13 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(1, config?.selectedIndex)
         Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColor?.value())
         Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor?.value())
+        Assert.assertEquals(
+            Rect(
+                30F.dpToPx().toInt(),
+                10F.dpToPx().toInt(), 30F.dpToPx().toInt(), 10F.dpToPx().toInt()
+            ), config?.indicatorMargin
+        )
+        Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPosition)
+        Assert.assertEquals("com.example.custom.CustomSliderIndicatorView", config?.indicatorClass)
     }
 }

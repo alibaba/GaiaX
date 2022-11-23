@@ -5,6 +5,9 @@
   "slider-scroll-time-interval": 6000,
   "slider-has-indicator": true,
   "slider-infinity-scroll": true,
+  "slider-indicator-margin": "{10,30,10,30}",
+  "slider-indicator-position": "top-center",
+  "slider-indicator-class-android": "com.example.custom.CustomSliderIndicatorView",
   "layers": [
     {
       "id": "template-slider-item-size-fixed",

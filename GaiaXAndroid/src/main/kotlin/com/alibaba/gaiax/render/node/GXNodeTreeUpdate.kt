@@ -1235,7 +1235,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             container.setConfig(gxNode.templateNode.finalSliderConfig)
 
             adapter.setData(containerTemplateData)
-            container.setIndicatorCount(containerTemplateData.size)
+            container.setPageSize(containerTemplateData.size)
 
             container.onBindData(templateData)
         }

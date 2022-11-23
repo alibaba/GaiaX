@@ -17,46 +17,51 @@
 package com.alibaba.gaiax.render.view.container.slider
 
 import android.content.Context
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.StateListDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
-import android.view.View
-import android.view.View.OnTouchListener
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
+import android.widget.FrameLayout
+import androidx.annotation.Keep
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIViewBindData
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXSliderConfig
 import java.util.*
 
 /**
  * @suppress
  */
-class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
+@Keep
+class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView {
 
-    val TAG = "GXSliderView"
+    enum class IndicatorPosition(val value: String) {
+        LEFT_TOP("left-top"),
+        LEFT_BOTTOM("left-bottom"),
+        RIGHT_TOP("right-top"),
+        RIGHT_BOTTOM("right-bottom"),
+        TOP_CENTER("top-center"),
+        BOTTOM_CENTER("bottom-center");
 
-    // 指示器左右间距
-    private val INDICATOR_HORIZONTAL_MARGIN = 10.0F
+        companion object {
+            fun fromValue(value: String?): IndicatorPosition = when (value) {
+                LEFT_TOP.value -> LEFT_TOP
+                LEFT_BOTTOM.value -> LEFT_BOTTOM
+                RIGHT_TOP.value -> RIGHT_TOP
+                TOP_CENTER.value -> TOP_CENTER
+                BOTTOM_CENTER.value -> BOTTOM_CENTER
+                else -> RIGHT_BOTTOM
+            }
+        }
+    }
 
-    // 指示器底部间距
-    private val INDICATOR_BOTTOM_MARGIN = 10.0F
-
-    // 指示器 Item 之间的间距
-    private val INDICATOR_ITEM_HORIZONTAL_MARGIN = 5.0F
-
-    // 指示器大小
-    private val INDICATOR_ITEM_SIZE = 8.0F
-
+    companion object {
+        private const val TAG = "[GaiaX] [GXSliderView]"
+    }
 
     constructor(context: Context) : super(context) {
         initView()
@@ -70,10 +75,9 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
     private var config: GXSliderConfig? = null
 
     var viewPager: ViewPager? = null
-    private var indicatorContainer: LinearLayout? = null
-    private var selectedIndicatorItem: View? = null
+    private var indicatorView: GXSliderBaseIndicatorView? = null
 
-    private var indicatorItems = mutableListOf<View>()
+    private var pageSize: Int = 0
 
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
@@ -82,7 +86,6 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
     private fun initView() {
         initViewPager()
-        initIndicator()
     }
 
     private fun initViewPager() {
@@ -97,14 +100,7 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
             override fun onPageSelected(position: Int) {
                 if (config?.hasIndicator == true) {
-                    if (config?.hasIndicator == true
-                        && config?.infinityScroll == true
-                        && indicatorItems.size > 0
-                    ) {
-                        indicatorChanged(position % indicatorItems.size)
-                    } else {
-                        indicatorChanged(position)
-                    }
+                    indicatorView?.updateSelectedIndex(position % pageSize)
                 }
             }
 
@@ -112,39 +108,82 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
             }
 
         })
-        viewPager?.setOnTouchListener(OnTouchListener { v, event ->
+        viewPager?.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> stopTimer()
                 MotionEvent.ACTION_MOVE -> stopTimer()
                 MotionEvent.ACTION_UP -> startTimer()
             }
             false
-        })
+        }
 
         addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     private fun initIndicator() {
-        indicatorContainer = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER
+        indicatorView = createIndicatorView()
+
+        val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+        config?.indicatorMargin?.let {
+            layoutParams.leftMargin = it.left
+            layoutParams.topMargin = it.top
+            layoutParams.rightMargin = it.right
+            layoutParams.bottomMargin = it.bottom
         }
 
-        addView(
-            indicatorContainer,
-            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                setMargins(
-                    INDICATOR_HORIZONTAL_MARGIN.dpToPx().toInt(),
-                    0,
-                    INDICATOR_HORIZONTAL_MARGIN.dpToPx().toInt(),
-                    INDICATOR_BOTTOM_MARGIN.dpToPx().toInt()
-                )
-            })
+        when (config?.indicatorPosition) {
+            IndicatorPosition.LEFT_TOP -> {
+                layoutParams.gravity = Gravity.LEFT or Gravity.TOP
+            }
+            IndicatorPosition.LEFT_BOTTOM -> {
+                layoutParams.gravity = Gravity.LEFT or Gravity.BOTTOM
+            }
+            IndicatorPosition.RIGHT_TOP -> {
+                layoutParams.gravity = Gravity.RIGHT or Gravity.TOP
+            }
+            IndicatorPosition.TOP_CENTER -> {
+                layoutParams.gravity = Gravity.TOP or Gravity.CENTER
+            }
+            IndicatorPosition.BOTTOM_CENTER -> {
+                layoutParams.gravity = Gravity.BOTTOM or Gravity.CENTER
+            }
+            else -> {
+                // RIGHT_BOTTOM
+                layoutParams.gravity = Gravity.RIGHT or Gravity.BOTTOM
+            }
+        }
+
+        addView(indicatorView, layoutParams)
+    }
+
+    private fun createIndicatorView(): GXSliderBaseIndicatorView {
+        config?.indicatorClass?.let { it ->
+            try {
+                (Class.forName(it).getConstructor(Context::class.java)
+                    .newInstance(context) as? GXSliderBaseIndicatorView)?.let { customIndicatorView ->
+                    return customIndicatorView
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "create custom indicator class fail, class:$it")
+                e.printStackTrace()
+            }
+        }
+
+        return GXSliderDefaultIndicatorView(context)
     }
 
     fun setConfig(config: GXSliderConfig?) {
         this.config = config
+
+        if (config?.hasIndicator == true) {
+            initIndicator()
+
+            indicatorView?.setIndicatorColor(
+                config.indicatorSelectedColor.value(context),
+                config.indicatorUnselectedColor.value(context)
+            )
+        }
     }
 
     override fun onBindData(data: JSONObject?) {
@@ -159,46 +198,9 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
         startTimer()
     }
 
-    fun setIndicatorCount(count: Int) {
-        indicatorItems.clear()
-        indicatorContainer?.removeAllViews()
-
-        if (config?.hasIndicator != false) {
-            for (i in 0 until count) {
-                val view = View(context)
-                view.background = getIndicatorItemDrawable(this)
-                if (i == 0) {
-                    selectedIndicatorItem = view
-                    selectedIndicatorItem?.isSelected = true
-                }
-                indicatorItems.add(view)
-
-                indicatorContainer?.addView(
-                    view,
-                    LayoutParams(
-                        INDICATOR_ITEM_SIZE.dpToPx().toInt(),
-                        INDICATOR_ITEM_SIZE.dpToPx().toInt()
-                    ).apply {
-                        setMargins(
-                            INDICATOR_ITEM_HORIZONTAL_MARGIN.dpToPx().toInt(),
-                            0,
-                            INDICATOR_ITEM_HORIZONTAL_MARGIN.dpToPx().toInt(),
-                            0
-                        )
-                    })
-            }
-        }
-    }
-
-    private fun indicatorChanged(position: Int) {
-        if (position in 0 until indicatorItems.size) {
-            val item = indicatorItems[position]
-            if (item != selectedIndicatorItem) {
-                item.isSelected = true
-                selectedIndicatorItem?.isSelected = false
-                selectedIndicatorItem = item
-            }
-        }
+    fun setPageSize(size: Int) {
+        pageSize = size
+        indicatorView?.setIndicatorCount(size)
     }
 
     private fun startTimer() {
@@ -230,30 +232,6 @@ class GXSliderView : RelativeLayout, GXIViewBindData, GXIRootView {
 
         timer = null
         timerTask = null
-    }
-
-    private fun getIndicatorItemDrawable(gxSliderView: GXSliderView): StateListDrawable {
-        val drawable = StateListDrawable()
-        val selectedDrawable = ShapeDrawable(OvalShape())
-        val unselectedDrawable = ShapeDrawable(OvalShape())
-
-        selectedDrawable.intrinsicWidth = INDICATOR_ITEM_SIZE.dpToPx().toInt()
-        selectedDrawable.intrinsicHeight = INDICATOR_ITEM_SIZE.dpToPx().toInt()
-        unselectedDrawable.intrinsicWidth = INDICATOR_ITEM_SIZE.dpToPx().toInt()
-        unselectedDrawable.intrinsicHeight = INDICATOR_ITEM_SIZE.dpToPx().toInt()
-
-        drawable.addState(
-            intArrayOf(android.R.attr.state_selected),
-            selectedDrawable
-        )
-        drawable.addState(intArrayOf(), unselectedDrawable)
-        config?.indicatorSelectedColor?.let {
-            selectedDrawable.paint?.color = it.value(gxSliderView.context)
-        }
-        config?.indicatorUnselectedColor?.let {
-            unselectedDrawable.paint?.color = it.value(gxSliderView.context)
-        }
-        return drawable
     }
 
     override fun setTemplateContext(gxContext: GXTemplateContext?) {

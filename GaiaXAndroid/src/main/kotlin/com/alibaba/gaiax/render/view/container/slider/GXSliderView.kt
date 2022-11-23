@@ -17,19 +17,26 @@
 package com.alibaba.gaiax.render.view.container.slider
 
 import android.content.Context
+import android.graphics.Outline
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRootView
+import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
 import java.util.*
 
@@ -37,7 +44,7 @@ import java.util.*
  * @suppress
  */
 @Keep
-class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView {
+class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
 
     enum class IndicatorPosition(val value: String) {
         LEFT_TOP("left-top"),
@@ -241,4 +248,38 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView {
     override fun getTemplateContext(): GXTemplateContext? = gxTemplateContext
 
     fun getConfig(): GXSliderConfig? = config
+
+    override fun setRoundCornerRadius(radius: FloatArray) {
+        if (radius.size == 8) {
+            val tl = radius[0]
+            val tr = radius[2]
+            val bl = radius[4]
+            val br = radius[6]
+            if (tl == tr && tr == bl && bl == br && tl > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    this.clipToOutline = true
+                    this.outlineProvider = object : ViewOutlineProvider() {
+                        override fun getOutline(view: View, outline: Outline) {
+                            if (alpha >= 0.0f) {
+                                outline.alpha = alpha
+                            }
+                            outline.setRoundRect(0, 0, view.width, view.height, tl)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
+        if (radius.size == 8) {
+            val shape = GXRoundCornerBorderGradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = radius
+            shape.setStroke(borderWidth.toInt(), borderColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                foreground = shape
+            }
+        }
+    }
 }

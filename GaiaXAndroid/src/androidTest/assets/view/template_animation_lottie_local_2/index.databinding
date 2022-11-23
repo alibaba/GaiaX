@@ -1,0 +1,12 @@
+{
+  "animation": {
+    "target": {
+      "type": "'lottie'",
+      "trigger":false,
+      "lottieAnimator": {
+        "value": "features/yk_dynamic_favorite",
+        "loop":false
+      }
+    }
+  }
+}

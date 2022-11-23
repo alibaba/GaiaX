@@ -1,0 +1,10 @@
+{
+  "id": "template_animation_lottie_local_2",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
+}

@@ -4,11 +4,9 @@
 }
 
 #image {
-  width: 90%;
+  width: 100%;
   height: 100%;
   mode: aspectFill;
-  border-radius: 10px;
-  margin-left: 5%;
 }
 
 #title {
@@ -18,5 +16,5 @@
   fit-content: true;
   position: absolute;
   bottom: 10px;
-  left: 10%;
+  left: 5%;
 }

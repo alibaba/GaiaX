@@ -33,6 +33,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
@@ -102,6 +103,16 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     borderRadius ?: FloatArray(8) { 0F })
             }
         } else if (this is GXContainer) {
+            if (cornerRadius != null) {
+                this.setRoundCornerRadius(cornerRadius)
+            }
+            if (borderColor != null && borderWidth != null) {
+                this.setRoundCornerBorder(
+                    borderColor,
+                    borderWidth,
+                    borderRadius ?: FloatArray(8) { 0F })
+            }
+        } else if (this is GXSliderView) {
             if (cornerRadius != null) {
                 this.setRoundCornerRadius(cornerRadius)
             }

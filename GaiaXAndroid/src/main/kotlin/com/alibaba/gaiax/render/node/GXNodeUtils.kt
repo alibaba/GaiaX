@@ -278,6 +278,21 @@ object GXNodeUtils {
                 ).stretchNode
                 return stretchNode.layoutByBind
             }
+            gxNode.isSliderType() -> {
+                val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
+                    gxItemViewPort.width,
+                    gxItemViewPort.height
+                )
+                val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
+                val stretchNode = computeItemSizeByCreateAndBindNode(
+                    gxTemplateContext,
+                    gxItemTemplateItem,
+                    gxMeasureSize,
+                    gxTemplateData,
+                    gxItemVisualTemplateNode
+                ).stretchNode
+                return stretchNode.layoutByBind
+            }
             else -> {
                 return null
             }
@@ -480,6 +495,11 @@ object GXNodeUtils {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     return null
                 }
+            } else if (gxNode.isSliderType()) {
+                return Size(
+                    Dimension.Points(itemSize.width),
+                    Dimension.Points(itemSize.height)
+                )
             }
         }
         return null

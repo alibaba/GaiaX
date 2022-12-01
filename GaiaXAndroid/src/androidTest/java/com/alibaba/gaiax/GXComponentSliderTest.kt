@@ -42,7 +42,7 @@ class GXComponentSliderTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(MOCK_SCREEN_WIDTH, rootView.width())
-        Assert.assertEquals(100F.dpToPx(), rootView.height())
+        Assert.assertEquals(150F.dpToPx(), rootView.height())
         Assert.assertEquals(true, rootView is GXSliderView)
         Assert.assertEquals(2, rootView.childCount())
         Assert.assertEquals(true, rootView.child(0) is ViewPager)

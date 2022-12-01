@@ -54,7 +54,7 @@
     if (value.count > 0) {
         id result = value[0];
         if (result) {
-            if ([result isKindOfClass:[NSString class]] && [[result lowercaseString] isEqualToString:@"isiOS"] ) {
+            if ([result isKindOfClass:[NSString class]] && [[result lowercaseString] isEqualToString:@"isios"] ) {
                 //string
                 return @(YES);
             }

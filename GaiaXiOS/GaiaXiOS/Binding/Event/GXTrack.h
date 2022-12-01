@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 //template id
 @property (nonatomic, copy) NSString *templateId;
 //track parameters
-@property (nonatomic, weak) NSDictionary *trackParams;
+@property (nonatomic, strong) NSDictionary *trackParams;
 
 //set track information
 - (void)setupTrackInfo:(NSDictionary *)trackInfo;

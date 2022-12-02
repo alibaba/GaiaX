@@ -204,6 +204,7 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
                 mainHandler.post {
                     if (it in 0 until count) {
                         viewPager?.setCurrentItem(it, false)
+                        indicatorView?.updateSelectedIndex(it)
                     }
                 }
             }

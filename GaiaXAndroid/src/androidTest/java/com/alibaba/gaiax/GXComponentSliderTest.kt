@@ -21,11 +21,9 @@ import org.junit.runner.RunWith
 class GXComponentSliderTest : GXBaseTest() {
 
     @Test
-    fun template_slider_size_fixed() {
+    fun template_slider_size_aspect_ratio() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "slider",
-            "template-slider-size-fixed"
+            GXMockUtils.context, "slider", "template_slider_size_aspect_ratio"
         )
 
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
@@ -36,8 +34,29 @@ class GXComponentSliderTest : GXBaseTest() {
             }
         })
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, 100F.dpToPx())
+            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(375F.dpToPx() * 1.5F, rootView.height())
+    }
+
+    @Test
+    fun template_slider_size_fixed() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "slider", "template-slider-size-fixed"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                add(JSONObject())
+                add(JSONObject())
+                add(JSONObject())
+            }
+        })
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, 100F.dpToPx())
         )
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
@@ -59,10 +78,14 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(
             Rect(
                 30F.dpToPx().toInt(),
-                10F.dpToPx().toInt(), 30F.dpToPx().toInt(), 10F.dpToPx().toInt()
+                10F.dpToPx().toInt(),
+                30F.dpToPx().toInt(),
+                10F.dpToPx().toInt()
             ), config?.indicatorMargin
         )
         Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPosition)
-        Assert.assertEquals("com.alibaba.gaiax.customview.CustomSliderIndicatorView", config?.indicatorClass)
+        Assert.assertEquals(
+            "com.alibaba.gaiax.customview.CustomSliderIndicatorView", config?.indicatorClass
+        )
     }
 }

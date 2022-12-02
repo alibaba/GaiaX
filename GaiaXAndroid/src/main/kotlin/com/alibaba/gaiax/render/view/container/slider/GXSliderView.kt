@@ -128,6 +128,10 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
     }
 
     private fun initIndicator() {
+        if (indicatorView != null) {
+            removeView(indicatorView)
+        }
+
         indicatorView = createIndicatorView()
 
         val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -197,8 +201,10 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
         viewPager?.adapter?.notifyDataSetChanged()
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
-                if (it in 0 until count) {
-                    viewPager?.setCurrentItem(it, false)
+                mainHandler.post {
+                    if (it in 0 until count) {
+                        viewPager?.setCurrentItem(it, false)
+                    }
                 }
             }
         }
@@ -211,6 +217,8 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
     }
 
     private fun startTimer() {
+        stopTimer()
+
         config?.scrollTimeInterval?.let {
             if (it > 0) {
                 timer = Timer()

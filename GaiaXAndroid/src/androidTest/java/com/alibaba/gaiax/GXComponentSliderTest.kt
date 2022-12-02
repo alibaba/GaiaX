@@ -39,7 +39,29 @@ class GXComponentSliderTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(375F.dpToPx(), rootView.width())
-        Assert.assertEquals(375F.dpToPx() * 1.5F, rootView.height())
+        Assert.assertEquals(375F.dpToPx(), rootView.height())
+    }
+
+    @Test
+    fun template_slider_root_width_percent_item_size_aspect_ratio() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "slider", "template_slider_root_width_percent_item_size_aspect_ratio"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                add(JSONObject())
+                add(JSONObject())
+                add(JSONObject())
+            }
+        })
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(375F.dpToPx() * 0.9F, rootView.width())
+        Assert.assertEquals(375F.dpToPx() * 0.9F, rootView.height())
     }
 
     @Test

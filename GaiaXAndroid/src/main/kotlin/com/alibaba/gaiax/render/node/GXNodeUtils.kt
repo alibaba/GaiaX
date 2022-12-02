@@ -407,6 +407,20 @@ object GXNodeUtils {
                 }
             }
         }
+        else if (gxNode.isSliderType()) {
+            when (val nodeWith = gxNode.templateNode.finalCss?.flexBox?.size?.width) {
+                is Dimension.Percent -> {
+                    gxTemplateContext.size.width?.let {
+                        return Size(it * nodeWith.value, null)
+                    }
+                }
+                else -> {
+                    gxTemplateContext.size.width?.let {
+                        return Size(it, null)
+                    }
+                }
+            }
+        }
         return Size(null, null)
     }
 

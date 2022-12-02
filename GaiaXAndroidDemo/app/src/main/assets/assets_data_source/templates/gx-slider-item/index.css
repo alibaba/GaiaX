@@ -1,12 +1,11 @@
 #gx-slider-item {
   width: 100%;
-  height: 150px;
 }
 
 #image {
   width: 100%;
-  height: 100%;
   mode: aspectFill;
+  aspect-ratio: 1.777;
 }
 
 #title {

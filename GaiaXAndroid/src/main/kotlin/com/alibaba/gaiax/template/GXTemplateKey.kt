@@ -387,8 +387,6 @@ object GXTemplateKey {
     const val GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT = "grid-compute-container-height"
     const val GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT =
         "scroll-compute-container-height"
-    const val GAIAX_CUSTOM_PROPERTY_SLIDER_COMPUTE_CONTAINER_HEIGHT =
-        "slider-compute-container-height"
 
     const val GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME = "iconfont"
 

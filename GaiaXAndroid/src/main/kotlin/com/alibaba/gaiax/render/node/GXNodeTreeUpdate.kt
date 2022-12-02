@@ -366,16 +366,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             } else if (gxNode.isSliderType()) {
                 var isComputeContainerHeight = finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined
 
-                // 对计算结果进行处理
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
-                    GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SLIDER_COMPUTE_CONTAINER_HEIGHT,
-                    isComputeContainerHeight
-                ).apply {
-                    this.flexBox = finalFlexBox
-                })?.let {
-                    isComputeContainerHeight = it as Boolean
-                }
-
                 // 容器节点没有设置高度
                 if (isComputeContainerHeight) {
                     val containerSize = GXNodeUtils.computeContainerSizeByItemTemplate(

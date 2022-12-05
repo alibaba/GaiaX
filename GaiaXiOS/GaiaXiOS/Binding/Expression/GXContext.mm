@@ -89,6 +89,9 @@
         if (strcmp([number objCType], @encode(BOOL)) == 0 || strcmp([number objCType], @encode(char)) == 0) {
             //bool类型
             val = GX_NewBool([number boolValue]);
+        } else if (strcmp([number objCType], @encode(int)) == 0 || strcmp([number objCType], @encode(long)) == 0) {
+            // long类型
+            val = GX_NewLong([number longValue]);
         } else {
             //float类型
             val = GX_NewFloat64([number floatValue]);

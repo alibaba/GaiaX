@@ -57,11 +57,6 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
-
-    var blurViews: MutableSet<GXView>? = null
-
-    var onImageDrawableListener: GXImageView.GXImageViewListener? = null
-
     var isAppear: Boolean = false
 
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
@@ -105,7 +100,6 @@ class GXTemplateContext private constructor(
     }
 
     fun release() {
-        blurViews?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()
@@ -120,23 +114,6 @@ class GXTemplateContext private constructor(
     fun manualExposure() {
         manualTrackMap?.forEach {
             templateData?.trackListener?.onManualExposureTrackEvent(it.value)
-        }
-    }
-
-    fun initBlurViews() {
-        if (blurViews == null) {
-            blurViews = mutableSetOf()
-        }
-    }
-
-    fun initImageDrawableListener() {
-        if (onImageDrawableListener == null) {
-            onImageDrawableListener = object : GXImageView.GXImageViewListener {
-
-                override fun onDrawableChanged(gxImageView: View) {
-                    blurViews?.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
-                }
-            }
         }
     }
 

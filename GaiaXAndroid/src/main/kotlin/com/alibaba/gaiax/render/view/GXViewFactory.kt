@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.render.view
 
 import android.content.Context
+import android.os.Build
 import android.view.View
 import com.alibaba.gaiax.render.view.basic.*
 import com.alibaba.gaiax.render.view.container.GXGridView
@@ -30,11 +31,13 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 object GXViewFactory {
 
     internal val viewSupport: MutableMap<String, Class<*>> = mutableMapOf()
-    internal val viewCreatorSupport: MutableMap<String,(Context) -> View> = mutableMapOf()
+    internal val viewCreatorSupport: MutableMap<String, (Context) -> View> = mutableMapOf()
 
     init {
         viewSupport[GXViewKey.VIEW_TYPE_GAIA_TEMPLATE] = GXView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_VIEW] = GXView::class.java
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            viewSupport[GXViewKey.VIEW_TYPE_VIEW] = GXBlurView::class.java
+        }
         viewSupport[GXViewKey.VIEW_TYPE_TEXT] = GXText::class.java
         viewSupport[GXViewKey.VIEW_TYPE_RICH_TEXT] = GXRichText::class.java
         viewSupport[GXViewKey.VIEW_TYPE_IMAGE] = GXImageView::class.java
@@ -53,9 +56,9 @@ object GXViewFactory {
     fun <T : View> createView(context: Context, type: String, customViewClass: String? = null): T {
         val result = if (GXViewKey.VIEW_TYPE_CUSTOM == type && customViewClass != null) {
             newInstance<T>(customViewClass, context)
-        } else if (viewSupport.contains(type)){
+        } else if (viewSupport.contains(type)) {
             newInstance<T>(viewSupport[type], context)
-        } else{
+        } else {
             viewCreatorSupport[type]?.invoke(context)
         }
         return result as T

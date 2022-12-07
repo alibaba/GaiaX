@@ -3,6 +3,7 @@ package jp.wasabeef.blurry;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -16,6 +17,8 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
+
+import com.alibaba.gaiax.render.view.basic.GXView;
 
 /**
  * Copyright (C) 2020 Wasabeef
@@ -39,7 +42,6 @@ public class Blur {
     public static Bitmap of(View capture, BlurFactor factor) {
         capture.setDrawingCacheEnabled(true);
         capture.destroyDrawingCache();
-        capture.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         Bitmap captureCache = capture.getDrawingCache();
         Bitmap bitmap = of(capture.getContext(), captureCache.copy(Bitmap.Config.ARGB_8888, true), factor);
         captureCache.recycle();

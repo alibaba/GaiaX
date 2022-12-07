@@ -134,11 +134,14 @@ class GXBlurHelper(private val host: GXView) {
                         isRendering = true
                         renderingCount++
                         try {
+                            // 缩放画布
                             blurringCanvas.scale(1f / sampling.toFloat(), 1f / sampling.toFloat())
+                            // 平移画布
                             blurringCanvas.translate(-x.toFloat(), -y.toFloat())
                             if (captureView.background != null) {
                                 captureView.background.draw(blurringCanvas)
                             }
+                            // 绘制父View到画布中，此处要有标记，否则会把BlurView的子View也绘制进去
                             isCaptureViewDrawing = true
                             captureView.draw(blurringCanvas)
                             isCaptureViewDrawing = false
@@ -148,6 +151,8 @@ class GXBlurHelper(private val host: GXView) {
                             renderingCount--
                             blurringCanvas.restoreToCount(rc)
                         }
+
+                        // 对画布的Bitmap进行高斯模糊，并将结果copy到blurredBitmap中
                         blurImpl.blur(bitmapToBlur, blurredBitmap)
 
                         host.invalidate()

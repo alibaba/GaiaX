@@ -33,6 +33,7 @@ import androidx.annotation.Keep
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -44,7 +45,8 @@ import java.util.*
  * @suppress
  */
 @Keep
-class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
+class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView,
+    GXIRoundCorner, GXIRelease, View.OnAttachStateChangeListener {
 
     enum class IndicatorPosition(val value: String) {
         TOP_LEFT("top-left"),
@@ -293,5 +295,18 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView, GXIRoundCorner {
                 foreground = shape
             }
         }
+    }
+
+    override fun release() {
+        indicatorView = null
+        stopTimer()
+    }
+
+    override fun onViewAttachedToWindow(view: View?) {
+        startTimer()
+    }
+
+    override fun onViewDetachedFromWindow(view: View?) {
+        stopTimer()
     }
 }

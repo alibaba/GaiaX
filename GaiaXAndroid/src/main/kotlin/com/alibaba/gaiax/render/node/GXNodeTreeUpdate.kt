@@ -311,8 +311,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalScrollConfig is null")
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
-                var isComputeContainerHeight =
-                    finalScrollConfig.isHorizontal && finalFlexGrow == null && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
+                var isComputeContainerHeight = finalScrollConfig.isHorizontal
+                        && finalFlexGrow == null
+                        && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
 
                 // 对计算结果进行处理
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
@@ -339,8 +340,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 val finalGridConfig = gxNode.templateNode.finalGridConfig
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalGridConfig is null")
 
-                var isComputeContainerHeight =
-                    finalGridConfig.isVertical && finalFlexGrow == null && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
+                var isComputeContainerHeight = finalGridConfig.isVertical
+                        && finalFlexGrow == null
+                        && (finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined)
 
                 // 对计算结果进行处理
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
@@ -364,7 +366,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     }
                 }
             } else if (gxNode.isSliderType()) {
-                var isComputeContainerHeight = finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined
+                var isComputeContainerHeight =
+                    finalHeight == null || finalHeight == Dimension.Auto || finalHeight == Dimension.Undefined
 
                 // 容器节点没有设置高度
                 if (isComputeContainerHeight) {
@@ -959,6 +962,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     view, gxNode.templateNode, templateData
                 )
             }
+
+            gxTemplateContext.bindDataCount++
         }
 
         private fun bindScrollAndGrid(

@@ -100,7 +100,12 @@ dependencies {
     if (System.getProperties().get("GaiaXDemo") == "true") {
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation('com.github.alibaba.GaiaX:GaiaX:0.2.9') { changing = true }
+        println("version = " + version)
+        if (version != null) {
+            implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
+        } else {
+            implementation("com.github.alibaba.GaiaX:GaiaX:0.2.9") { changing = true }
+        }
     }
 
     testImplementation 'junit:junit:4.13.2'

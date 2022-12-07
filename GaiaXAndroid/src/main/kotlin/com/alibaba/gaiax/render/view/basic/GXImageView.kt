@@ -20,10 +20,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Matrix
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
 import android.widget.ImageView
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatImageView
@@ -136,6 +134,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         GXAccessibilityUtils.accessibilityOfImage(view, data)
     }
 
+    var gxTemplateContext: GXTemplateContext? = null
     private var delegate: GXRoundBorderDelegate? = null
 
     private fun updateMatrix(imageView: ImageView, drawable: Drawable?) {
@@ -150,21 +149,6 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
                 val matrix: Matrix? =
                     mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
                 imageView.imageMatrix = matrix
-            }
-        }
-    }
-
-    interface GXImageViewListener {
-        fun onDrawableChanged(gxImageView: View)
-    }
-
-    var onImageDrawableListener: GXImageViewListener? = null
-
-    override fun setImageDrawable(drawable: Drawable?) {
-        super.setImageDrawable(drawable)
-        if (onImageDrawableListener != null && drawable is BitmapDrawable) {
-            this.post {
-                onImageDrawableListener?.onDrawableChanged(this)
             }
         }
     }
@@ -184,8 +168,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         } else {
             this.scaleType = ScaleType.FIT_XY
         }
-        gxTemplateContext.initImageDrawableListener()
-        this.onImageDrawableListener = gxTemplateContext.onImageDrawableListener
+        this.gxTemplateContext = gxTemplateContext
     }
 
     override fun draw(canvas: Canvas?) {
@@ -249,6 +232,6 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     override fun release() {
-        onImageDrawableListener = null
+        this.gxTemplateContext = null
     }
 }

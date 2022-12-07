@@ -17,19 +17,52 @@
 package com.alibaba.gaiax.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 
 @Keep
 class GXAdapterImageView(context: Context) : GXImageView(context) {
+
+    private val requestListener = object : RequestListener<Drawable> {
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: Target<Drawable>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            gxTemplateContext?.let {
+                it.bindDataCount++
+            }
+            return false
+        }
+
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<Drawable>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            return false
+        }
+    }
 
     override fun bindNetUri(data: JSONObject, uri: String, placeholder: String?) {
         // 占位图仅对网络图生效
         placeholder?.let { resUri ->
             bindRes(resUri)
         }
-        Glide.with(context).load(uri).into(this)
+        Glide
+            .with(context)
+            .load(uri)
+            .listener(requestListener)
+            .into(this)
     }
 }

@@ -46,7 +46,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-            context, attrs, defStyleAttr
+        context, attrs, defStyleAttr
     )
 
     companion object {
@@ -64,15 +64,15 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         try {
             // drawable resource
             imageView.resources.getIdentifier(uri, "drawable", imageView.context.packageName)
-                    .takeIf { it != 0 }?.let {
-                        return it
-                    }
+                .takeIf { it != 0 }?.let {
+                    return it
+                }
 
             // mipmap resource
             imageView.resources.getIdentifier(uri, "mipmap", imageView.context.packageName)
-                    .takeIf { it != 0 }?.let {
-                        return it
-                    }
+                .takeIf { it != 0 }?.let {
+                    return it
+                }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -80,7 +80,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     private fun isNetUri(uri: String) =
-            (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
+        (uri.startsWith(NET_HTTP_PREFIX) || uri.startsWith(NET_HTTPS_PREFIX))
 
     private fun isLocalUri(uri: String) = uri.startsWith(LOCAL_PREFIX)
 
@@ -134,19 +134,20 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         GXAccessibilityUtils.accessibilityOfImage(view, data)
     }
 
+    var gxTemplateContext: GXTemplateContext? = null
     private var delegate: GXRoundBorderDelegate? = null
 
     private fun updateMatrix(imageView: ImageView, drawable: Drawable?) {
         if (drawable != null && imageView.scaleType == ScaleType.MATRIX) {
             val viewWidth: Int =
-                    imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
+                imageView.layoutParams.width - imageView.paddingLeft - imageView.paddingRight
             val viewHeight: Int =
-                    imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
+                imageView.layoutParams.height - imageView.paddingTop - imageView.paddingBottom
             val drawableWidth = drawable.intrinsicWidth
             val drawableHeight = drawable.intrinsicHeight
             if (drawableWidth > 0 && drawableHeight > 0) {
                 val matrix: Matrix? =
-                        mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
+                    mode?.getMatrix(viewWidth, viewHeight, drawableWidth, drawableHeight)
                 imageView.imageMatrix = matrix
             }
         }
@@ -167,6 +168,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         } else {
             this.scaleType = ScaleType.FIT_XY
         }
+        this.gxTemplateContext = gxTemplateContext
     }
 
     override fun draw(canvas: Canvas?) {
@@ -198,7 +200,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     fun setRoundCornerRadius(
-            topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float
+        topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float
     ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
@@ -214,21 +216,22 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     fun setRoundCornerBorder(
-            borderColor: Int,
-            borderWidth: Float,
-            topLeft: Float,
-            topRight: Float,
-            bottomLeft: Float,
-            bottomRight: Float
+        borderColor: Int,
+        borderWidth: Float,
+        topLeft: Float,
+        topRight: Float,
+        bottomLeft: Float,
+        bottomRight: Float
     ) {
         if (delegate == null) {
             delegate = GXRoundBorderDelegate()
         }
         delegate?.setRoundCornerBorder(
-                borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight
+            borderColor, borderWidth, topLeft, topRight, bottomLeft, bottomRight
         )
     }
 
     override fun release() {
+        this.gxTemplateContext = null
     }
 }

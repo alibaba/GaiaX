@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.render.view.basic
+package com.alibaba.gaiax.render.view.blur
 
 import android.content.Context
 import android.graphics.Bitmap

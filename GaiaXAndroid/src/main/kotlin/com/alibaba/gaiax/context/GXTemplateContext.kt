@@ -23,8 +23,6 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIRootView
-import com.alibaba.gaiax.render.view.basic.GXImageView
-import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.util.concurrent.CopyOnWriteArraySet
@@ -56,6 +54,11 @@ class GXTemplateContext private constructor(
      */
     var visualTemplateNode: GXTemplateNode? = null
 ) {
+
+    /**
+     * 数据绑定计数
+     */
+    var bindDataCount: Int = 0
 
     var isAppear: Boolean = false
 

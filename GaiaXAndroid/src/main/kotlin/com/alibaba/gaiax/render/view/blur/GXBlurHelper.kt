@@ -1,14 +1,14 @@
-package com.alibaba.gaiax.render.view.basic
+package com.alibaba.gaiax.render.view.blur
 
-import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
+import com.alibaba.gaiax.render.view.basic.GXView
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-open class GXBlurView(context: Context?) : GXView(context!!) {
+class GXBlurHelper(private val host: GXView) {
 
     // default 4
     var sampling: Int = 4
@@ -21,21 +21,19 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
     // var color = Color.parseColor("#70FFFFFF")
     var color = Color.TRANSPARENT
 
-    private var renderingCount = 0
+    var renderingCount = 0
 
-    private var isCaptureViewDrawing: Boolean = false
+    var isCaptureViewDrawing: Boolean = false
 
     private val blurImpl = GXBlurImpl()
 
-    private var dirtyToDraw = false
-
     private var bitmapToBlur: Bitmap? = null
 
-    private var blurredBitmap: Bitmap? = null
+    var blurredBitmap: Bitmap? = null
 
     private var blurringCanvas: Canvas? = null
 
-    private var isRendering = false
+    var isRendering = false
 
     private val paint = Paint()
 
@@ -52,14 +50,14 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
         blurredBitmap = null
     }
 
-    private fun innerRelease() {
+    fun innerRelease() {
         releaseBitmap()
         blurImpl.release()
     }
 
     private fun prepare(): Boolean {
-        val width = width
-        val height = height
+        val width = host.layoutParams.width
+        val height = host.layoutParams.height
 
         if (radius == 0f || width == 0 && height == 0) {
             innerRelease()
@@ -69,18 +67,24 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
         val scaledWidth = width / sampling
         val scaledHeight = height / sampling
 
-        var dirty = dirtyToDraw
         if (blurringCanvas == null || blurredBitmap == null) {
-            dirty = true
             releaseBitmap()
             var r = false
             try {
-                bitmapToBlur = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888)
+                bitmapToBlur = Bitmap.createBitmap(
+                    scaledWidth,
+                    scaledHeight,
+                    Bitmap.Config.ARGB_8888
+                )
                 if (bitmapToBlur == null) {
                     return false
                 }
                 blurringCanvas = bitmapToBlur?.let { Canvas(it) }
-                blurredBitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888)
+                blurredBitmap = Bitmap.createBitmap(
+                    scaledWidth,
+                    scaledHeight,
+                    Bitmap.Config.ARGB_8888
+                )
                 if (blurredBitmap == null) {
                     return false
                 }
@@ -93,24 +97,31 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
                     innerRelease()
                 }
             }
+
+            blurImpl.prepare(host.context, bitmapToBlur, radius)
         }
-        if (dirty) {
-            dirtyToDraw = blurImpl.prepare(context, bitmapToBlur, radius)
+
+        host.gxTemplateContext?.let {
+            if (it.bindDataCount <= 0) {
+                return false
+            }
+            it.bindDataCount--
         }
+
         return true
     }
 
     private val preDrawListener = ViewTreeObserver.OnPreDrawListener {
         val locations = IntArray(2)
         captureView?.let { captureView ->
-            if (isShown && prepare()) {
+            if (host.isShown && prepare()) {
 
                 captureView.getLocationOnScreen(locations)
 
                 var x = -locations[0]
                 var y = -locations[1]
 
-                getLocationOnScreen(locations)
+                host.getLocationOnScreen(locations)
 
                 x += locations[0]
                 y += locations[1]
@@ -139,7 +150,7 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
                         }
                         blurImpl.blur(bitmapToBlur, blurredBitmap)
 
-                        invalidate()
+                        host.invalidate()
                     }
                 }
             }
@@ -147,63 +158,50 @@ open class GXBlurView(context: Context?) : GXView(context!!) {
         true
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        if (gxBackdropFilter != null) {
-            captureView = gxTemplateContext?.rootView
+    fun onAttachedToWindow() {
+        if (host.gxBackdropFilter != null) {
+            captureView = host.gxTemplateContext?.rootView
             if (captureView != null) {
                 captureView?.viewTreeObserver?.addOnPreDrawListener(preDrawListener)
             }
         }
     }
 
-    override fun onDetachedFromWindow() {
-        if (gxBackdropFilter != null) {
+    fun onDetachedFromWindow() {
+        if (host.gxBackdropFilter != null) {
             if (captureView != null) {
                 captureView?.viewTreeObserver?.removeOnPreDrawListener(preDrawListener)
             }
             innerRelease()
-        }
-        super.onDetachedFromWindow()
-    }
-
-    override fun draw(canvas: Canvas) {
-        if (gxBackdropFilter != null) {
-            if (isRendering) {
-                // Quit here, don't draw views above me
-            } else if (renderingCount > 0) {
-                // Doesn't support blurview overlap on another blurview
-            } else {
-                super.draw(canvas)
-            }
-        } else {
-            super.draw(canvas)
-        }
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        if (gxBackdropFilter != null) {
-            if (!isCaptureViewDrawing) {
-                blurredBitmap?.let {
-                    drawBlurredBitmap(canvas, it)
-                }
-                super.dispatchDraw(canvas)
-            }
-        } else {
-            super.dispatchDraw(canvas)
         }
     }
 
     private fun drawBlurredBitmap(canvas: Canvas, bitmap: Bitmap) {
         rectSrc.right = bitmap.width
         rectSrc.bottom = bitmap.height
-        rectDst.right = layoutParams.width
-        rectDst.bottom = layoutParams.height
+        rectDst.right = host.layoutParams.width
+        rectDst.bottom = host.layoutParams.height
+        paint.flags = Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG
+        paint.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
         canvas.drawBitmap(bitmap, rectSrc, rectDst, paint)
     }
 
-    init {
-        paint.flags = Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG
-        paint.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+    fun callbackDispatchDraw(canvas: Canvas, callback: () -> Unit) {
+        if (!isCaptureViewDrawing) {
+            blurredBitmap?.let {
+                drawBlurredBitmap(canvas, it)
+            }
+            callback()
+        }
+    }
+
+    fun callbackDraw(canvas: Canvas, callback: () -> Unit) {
+        if (isRendering) {
+            // Quit here, don't draw views above me
+        } else if (renderingCount > 0) {
+            // Doesn't support blurview overlap on another blurview
+        } else {
+            callback()
+        }
     }
 }

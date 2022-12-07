@@ -107,7 +107,12 @@ dependencies {
     if (System.getProperties().get("GaiaXDemo") == "true") {
         implementation project(path: ':GXAnalyzeAndroid')
     } else {
-        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:0.2.9'
+        println("version = " + version)
+        if (version != null) {
+            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:$version") { changing = true }
+        } else {
+            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.2.9") { changing = true }
+        }
     }
 
     testImplementation 'junit:junit:4.13.2'

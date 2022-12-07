@@ -939,8 +939,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val css = gxNode.templateNode.css
             val layer = gxNode.templateNode.layer
 
-            gxTemplateContext.bindDataCount++
-
             when {
                 gxNode.isCustomViewType() -> bindCustom(
                     gxTemplateContext, view, gxNode.templateNode, templateData
@@ -964,6 +962,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     view, gxNode.templateNode, templateData
                 )
             }
+
+            gxTemplateContext.bindDataCount++
         }
 
         private fun bindScrollAndGrid(

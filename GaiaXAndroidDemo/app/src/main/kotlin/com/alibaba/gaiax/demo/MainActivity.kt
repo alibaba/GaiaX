@@ -4,6 +4,9 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -28,6 +31,36 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
             startActivity(intent)
         }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menus, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.fastpreview -> {
+                val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)
+                launcher.launch(intent)
+                true
+            }
+            R.id.fastpreview_emulator -> {
+                val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
+                // 9001
+                // 9292
+                intent.putExtra(
+                    "GAIA_STUDIO_URL",
+                    "gaiax://gaiax/preview?url=ws://30.78.147.86:9001&id=test-template&type=auto"
+                )
+                launcher.launch(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onDestroy() {
         GXClientToStudio.instance.destroy()
@@ -66,22 +99,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        findViewById<AppCompatButton>(R.id.fastpreview)?.setOnClickListener {
-            val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)
-            launcher.launch(intent)
-        }
-
-        findViewById<AppCompatButton>(R.id.fastpreview_emulator)?.setOnClickListener {
-            val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
-            // 9001
-            // 9292
-            intent.putExtra(
-                "GAIA_STUDIO_URL",
-                "gaiax://gaiax/preview?url=ws://30.78.147.86:9001&id=test-template&type=auto"
-            )
-            launcher.launch(intent)
-        }
-
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, NormalTemplateActivity::class.java)
             startActivity(intent)
@@ -112,10 +129,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        findViewById<AppCompatButton>(R.id.remote)?.setOnClickListener {
-            val intent = Intent(this, RemoteDataSourceTemplateActivity::class.java)
-            startActivity(intent)
-        }
         findViewById<AppCompatButton>(R.id.style)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, StyleTemplateActivity::class.java)
             startActivity(intent)

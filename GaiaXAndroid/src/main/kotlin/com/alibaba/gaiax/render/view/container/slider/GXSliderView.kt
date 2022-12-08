@@ -23,7 +23,6 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -33,10 +32,7 @@ import androidx.annotation.Keep
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.GXIRelease
-import com.alibaba.gaiax.render.view.GXIRootView
-import com.alibaba.gaiax.render.view.GXIRoundCorner
-import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
 import java.util.*
@@ -45,8 +41,8 @@ import java.util.*
  * @suppress
  */
 @Keep
-class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView,
-    GXIRoundCorner, GXIRelease, View.OnAttachStateChangeListener {
+class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
+    GXIRoundCorner, GXIRelease, GXIViewVisibleChange {
 
     enum class IndicatorPosition(val value: String) {
         TOP_LEFT("top-left"),
@@ -178,7 +174,6 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView,
                     return customIndicatorView
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "create custom indicator class fail, class:$it")
                 e.printStackTrace()
             }
         }
@@ -200,17 +195,19 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView,
     }
 
     override fun onBindData(data: JSONObject?) {
+        stopTimer()
+
         viewPager?.adapter?.notifyDataSetChanged()
+
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
-                mainHandler.post {
-                    if (it in 0 until count) {
-                        viewPager?.setCurrentItem(it, false)
-                        indicatorView?.updateSelectedIndex(it)
-                    }
+                if (it in 0 until count) {
+                    viewPager?.setCurrentItem(it, false)
+                    indicatorView?.updateSelectedIndex(it)
                 }
             }
         }
+
         startTimer()
     }
 
@@ -302,11 +299,11 @@ class GXSliderView : FrameLayout, GXIViewBindData, GXIRootView,
         stopTimer()
     }
 
-    override fun onViewAttachedToWindow(view: View?) {
-        startTimer()
-    }
-
-    override fun onViewDetachedFromWindow(view: View?) {
-        stopTimer()
+    override fun onVisibleChanged(visible: Boolean) {
+        if (visible) {
+            startTimer()
+        } else {
+            stopTimer()
+        }
     }
 }

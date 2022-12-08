@@ -34,6 +34,7 @@ import com.alibaba.gaiax.render.node.*
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -727,6 +728,10 @@ class GXTemplateEngine {
      * 当View可见时
      */
     fun onAppear(targetView: View) {
+        if (targetView is GXIViewVisibleChange) {
+            targetView.onVisibleChanged(true)
+        }
+
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = true
             gxTemplateContext.manualExposure()
@@ -738,6 +743,10 @@ class GXTemplateEngine {
      * 当View不可见时
      */
     fun onDisappear(targetView: View) {
+        if (targetView is GXIViewVisibleChange) {
+            targetView.onVisibleChanged(false)
+        }
+
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = false
             GXContainerUtils.notifyOnDisappear(gxTemplateContext)

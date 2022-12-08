@@ -22,6 +22,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.text.GXDirtyText
+import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXTemplateInfo
@@ -96,7 +97,7 @@ class GXTemplateContext private constructor(
      */
     var indexPosition: Int = -1
 
-    var containers: CopyOnWriteArraySet<GXContainer>? = null
+    var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     override fun toString(): String {
         return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"

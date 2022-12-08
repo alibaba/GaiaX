@@ -28,7 +28,7 @@
 
     UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, self.view.frame.size.width - 20, 40)];
     label1.textColor = [UIColor blackColor];
-    NSString *tmpString = NSLocalizedString(@"normal_template", nil);
+    NSString *tmpString = NSLocalizedString(@"style_blur_template", nil);
     label1.text = [NSString stringWithFormat:@"%@ 1",tmpString];
     [self.view addSubview:label1];
 

@@ -1,0 +1,10 @@
+{
+  "id": "template_iconfont_throw_exception",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "iconfont"
+    }
+  ]
+}

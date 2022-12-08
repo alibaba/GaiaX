@@ -34,11 +34,7 @@ class GXSliderViewAdapter(
     val gxNode: GXNode
 ) : PagerAdapter() {
 
-    companion object {
-        fun getItemViewTag(position: Int): String {
-            return "gx_slider_item_view_at_$position"
-        }
-    }
+    private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
 
     private var config: GXSliderConfig? = null
     private var data = JSONArray()
@@ -77,7 +73,6 @@ class GXSliderViewAdapter(
                 nodeLayout?.height
             )
         )
-        itemView?.tag = getItemViewTag(position)
         if (itemView != null) {
             GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
@@ -128,11 +123,12 @@ class GXSliderViewAdapter(
             })
             container.addView(itemView)
         }
+        itemViewMap[getItemViewKey(position)] = itemView
         return itemView ?: throw IllegalArgumentException("Create Item View error")
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-
+        itemViewMap.remove(getItemViewKey(position))
     }
 
     fun setData(data: JSONArray) {
@@ -146,5 +142,13 @@ class GXSliderViewAdapter(
 
     private fun getTemplateItem(): GXTemplateEngine.GXTemplateItem? {
         return gxNode.childTemplateItems?.firstOrNull()?.first
+    }
+
+    private fun getItemViewKey(position: Int): String {
+        return "item_$position"
+    }
+
+    fun getItemView(position: Int): View? {
+        return itemViewMap[getItemViewKey(position)]
     }
 }

@@ -34,7 +34,7 @@ object GXContainerUtils {
     fun notifyOnAppear(gxTemplateContext: GXTemplateContext) {
         gxTemplateContext.containers?.forEach { container ->
             findVisibleItems(container) {
-                onDisappear(it)
+                onAppear(it)
             }
         }
     }
@@ -70,9 +70,12 @@ object GXContainerUtils {
                     }
                 }
             } else if (container is GXSliderView) {
-                container.viewPager?.let {
-                    it.findViewWithTag<View>(GXSliderViewAdapter.getItemViewTag(it.currentItem))?.let { itemView ->
-                        callBack(itemView)
+                container.viewPager?.let { viewPager ->
+                    val adapter = viewPager.adapter
+                    if (adapter is GXSliderViewAdapter) {
+                        adapter.getItemView(viewPager.currentItem)?.let { itemView ->
+                            callBack(itemView)
+                        }
                     }
                 }
             }

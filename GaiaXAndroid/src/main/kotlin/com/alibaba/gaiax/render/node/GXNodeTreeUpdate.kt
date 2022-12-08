@@ -1240,6 +1240,10 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             }
 
             val container = view as GXSliderView
+
+            gxTemplateContext.initContainers()
+            gxTemplateContext.containers?.add(container)
+
             container.setTemplateContext(gxTemplateContext)
 
             val adapter: GXSliderViewAdapter?

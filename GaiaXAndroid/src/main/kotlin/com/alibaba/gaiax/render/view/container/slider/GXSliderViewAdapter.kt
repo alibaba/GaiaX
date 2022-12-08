@@ -34,6 +34,12 @@ class GXSliderViewAdapter(
     val gxNode: GXNode
 ) : PagerAdapter() {
 
+    companion object {
+        fun getItemViewTag(position: Int): String {
+            return "gx_slider_item_view_at_$position"
+        }
+    }
+
     private var config: GXSliderConfig? = null
     private var data = JSONArray()
 
@@ -71,6 +77,7 @@ class GXSliderViewAdapter(
                 nodeLayout?.height
             )
         )
+        itemView?.tag = getItemViewTag(position)
         if (itemView != null) {
             GXTemplateEngine.instance.bindData(itemView, GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {

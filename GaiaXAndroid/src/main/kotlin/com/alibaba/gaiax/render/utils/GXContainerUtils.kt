@@ -17,51 +17,62 @@
 
 package com.alibaba.gaiax.render.utils
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXViewHolder
+import com.alibaba.gaiax.render.view.container.slider.GXSliderView
+import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 
 object GXContainerUtils {
 
     fun notifyOnAppear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers?.forEach {
-            it?.findVisibleItems {
-                onAppear(it)
-            }
-        }
-    }
-
-    fun notifyOnDisappear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers?.forEach {
-            it?.findVisibleItems {
+        gxTemplateContext.containers?.forEach { container ->
+            findVisibleItems(container) {
                 onDisappear(it)
             }
         }
     }
 
-    private fun GXContainer.findVisibleItems(callBack: (holder: GXViewHolder) -> Unit) {
+    fun notifyOnDisappear(gxTemplateContext: GXTemplateContext) {
+        gxTemplateContext.containers?.forEach { container ->
+            findVisibleItems(container) {
+                onDisappear(it)
+            }
+        }
+    }
+
+    fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
         try {
-            val rc = this
-            if (rc.layoutManager is LinearLayoutManager) {
-                val layoutManager = rc.layoutManager as LinearLayoutManager
-                val firstPos = layoutManager.findFirstVisibleItemPosition()
-                val lastPos = layoutManager.findLastVisibleItemPosition() + 1
-                for (index in firstPos..lastPos) {
-                    (rc.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
-                        callBack(it)
+            if (container is GXContainer) {
+                if (container.layoutManager is LinearLayoutManager) {
+                    val layoutManager = container.layoutManager as LinearLayoutManager
+                    val firstPos = layoutManager.findFirstVisibleItemPosition()
+                    val lastPos = layoutManager.findLastVisibleItemPosition() + 1
+                    for (index in firstPos..lastPos) {
+                        (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
+                            callBack(it.itemView)
+                        }
+                    }
+                } else if (container.layoutManager is GridLayoutManager) {
+                    val layoutManager = container.layoutManager as GridLayoutManager
+                    val firstPos = layoutManager.findFirstVisibleItemPosition()
+                    val lastPos = layoutManager.findLastVisibleItemPosition() + 1
+                    for (index in firstPos..lastPos) {
+                        (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
+                            callBack(it.itemView)
+                        }
                     }
                 }
-            } else if (rc.layoutManager is GridLayoutManager) {
-                val layoutManager = rc.layoutManager as GridLayoutManager
-                val firstPos = layoutManager.findFirstVisibleItemPosition()
-                val lastPos = layoutManager.findLastVisibleItemPosition() + 1
-                for (index in firstPos..lastPos) {
-                    (rc.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
-                        callBack(it)
+            } else if (container is GXSliderView) {
+                container.viewPager?.let {
+                    it.findViewWithTag<View>(GXSliderViewAdapter.getItemViewTag(it.currentItem))?.let { itemView ->
+                        callBack(itemView)
                     }
                 }
             }
@@ -70,18 +81,15 @@ object GXContainerUtils {
         }
     }
 
-    private fun onAppear(holder: GXViewHolder) {
-        val itemView = holder.itemView
-        if (itemView is ViewGroup && itemView.childCount > 0) {
-            GXTemplateEngine.instance.onAppear(itemView.getChildAt(0))
+    private fun onAppear(view: View?) {
+        if (view is ViewGroup && view.childCount > 0) {
+            GXTemplateEngine.instance.onAppear(view.getChildAt(0))
         }
     }
 
-    private fun onDisappear(holder: GXViewHolder) {
-        val itemView = holder.itemView
-        if (itemView is ViewGroup && itemView.childCount > 0) {
-            GXTemplateEngine.instance.onDisappear(itemView.getChildAt(0))
+    private fun onDisappear(view: View?) {
+        if (view is ViewGroup && view.childCount > 0) {
+            GXTemplateEngine.instance.onDisappear(view.getChildAt(0))
         }
     }
-
 }

@@ -20,6 +20,8 @@
 		8D1D6300274F360600B94B1E /* GXDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D62FE274F360600B94B1E /* GXDataManager.m */; };
 		8D1D6303274F361000B94B1E /* GXDataParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1D6301274F361000B94B1E /* GXDataParser.h */; };
 		8D1D6304274F361000B94B1E /* GXDataParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D6302274F361000B94B1E /* GXDataParser.m */; };
+		8D77E6CB29431D8500FD2DB8 /* GXBlurView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D77E6C929431D8500FD2DB8 /* GXBlurView.h */; };
+		8D77E6CC29431D8500FD2DB8 /* GXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D77E6CA29431D8500FD2DB8 /* GXBlurView.m */; };
 		8D9FC9CC273A21F600912EE6 /* GXViewNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D9FC9CA273A21F600912EE6 /* GXViewNode.h */; };
 		8D9FC9CD273A21F600912EE6 /* GXViewNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D9FC9CB273A21F600912EE6 /* GXViewNode.m */; };
 		8D9FC9D0273A220800912EE6 /* GXTextNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D9FC9CE273A220800912EE6 /* GXTextNode.h */; };
@@ -211,6 +213,8 @@
 		8D1D62FE274F360600B94B1E /* GXDataManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXDataManager.m; sourceTree = "<group>"; };
 		8D1D6301274F361000B94B1E /* GXDataParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXDataParser.h; sourceTree = "<group>"; };
 		8D1D6302274F361000B94B1E /* GXDataParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXDataParser.m; sourceTree = "<group>"; };
+		8D77E6C929431D8500FD2DB8 /* GXBlurView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXBlurView.h; sourceTree = "<group>"; };
+		8D77E6CA29431D8500FD2DB8 /* GXBlurView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXBlurView.m; sourceTree = "<group>"; };
 		8D9FC9CA273A21F600912EE6 /* GXViewNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXViewNode.h; sourceTree = "<group>"; };
 		8D9FC9CB273A21F600912EE6 /* GXViewNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXViewNode.m; sourceTree = "<group>"; };
 		8D9FC9CE273A220800912EE6 /* GXTextNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXTextNode.h; sourceTree = "<group>"; };
@@ -808,6 +812,8 @@
 				8DFEC2D727351951001F3B74 /* GXView.m */,
 				8DE5E3B22747AF9600C9FA02 /* GXRichText.h */,
 				8DE5E3B32747AF9600C9FA02 /* GXRichText.m */,
+				8D77E6C929431D8500FD2DB8 /* GXBlurView.h */,
+				8D77E6CA29431D8500FD2DB8 /* GXBlurView.m */,
 				8DFEC2DA27351966001F3B74 /* GXImageView.h */,
 				8DFEC2DB27351966001F3B74 /* GXImageView.m */,
 				8DE14A1A288E339300FCF226 /* GXProgressView.h */,
@@ -996,6 +1002,7 @@
 				8DFF8502273E69BC0014C0DA /* GXFileHandler.h in Headers */,
 				8DB60A2227F4764E0038BE13 /* GXATSNode.h in Headers */,
 				8DFEC2C227350E01001F3B74 /* GXLayout.h in Headers */,
+				8D77E6CB29431D8500FD2DB8 /* GXBlurView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1220,6 +1227,7 @@
 				8DCE3367283E451D00A42EF8 /* GXTemplateSource.m in Sources */,
 				8DFEC3042735319A001F3B74 /* GXBizContext.m in Sources */,
 				8DE5E38B27449C4E00C9FA02 /* GXRenderManager.m in Sources */,
+				8D77E6CC29431D8500FD2DB8 /* GXBlurView.m in Sources */,
 				8DFEC2752734DDC8001F3B74 /* NSArray+GX.m in Sources */,
 				8DFEC2F72735286B001F3B74 /* GXCache.m in Sources */,
 				8DB60A1327F4764E0038BE13 /* GXNativeAnalyze.mm in Sources */,

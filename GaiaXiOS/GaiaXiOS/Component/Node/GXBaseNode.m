@@ -25,6 +25,7 @@
 #import "GXCommonDef.h"
 #import "NSArray+GX.h"
 #import "UIColor+GX.h"
+#import "GXBlurView.h"
 #import "UIView+GX.h"
 #import "GXUtils.h"
 
@@ -539,15 +540,22 @@
     
     //判断是否存在
     if(effectView == nil){
-        if (@available(iOS 10.0, *)) {
-            UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-            effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        if (@available(iOS 13.0, *)) {
+            if ([UITraitCollection currentTraitCollection].userInterfaceStyle == UIUserInterfaceStyleDark) {
+                UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+                effectView = [[GXBlurView alloc] initWithEffect:effect];
+                // effectView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
+            } else {
+                UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+                effectView = [[GXBlurView alloc] initWithEffect:effect];
+                // effectView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.4];
+            }
         } else {
-            // Fallback on earlier versions
-            UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-            effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
+            UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+            effectView = [[GXBlurView alloc] initWithEffect:effect];
+            // effectView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.4];
         }
-        effectView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.25];
+        effectView.userInteractionEnabled = false;
         [view insertSubview:effectView atIndex:0];
         view.blurView = effectView;
     }

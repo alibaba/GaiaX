@@ -287,7 +287,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val containerTemplateData =
                 (gxNode.templateNode.getDataValue(templateData) as? JSONArray) ?: JSONArray()
 
-            val style = gxNode.stretchNode.node.getStyle()
+            val stretchStyle = gxNode.stretchNode.node.getStyle()
 
             val finalCss = gxNode.templateNode.finalCss
             val finalFlexBox = finalCss?.flexBox
@@ -388,9 +388,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             }
 
             if (isDirty) {
-                style.free()
-                style.init()
-                gxNode.stretchNode.node.setStyle(style)
+                stretchStyle.free()
+                stretchStyle.init()
+                gxNode.stretchNode.node.setStyle(stretchStyle)
                 gxNode.stretchNode.node.markDirty()
                 return true
             }

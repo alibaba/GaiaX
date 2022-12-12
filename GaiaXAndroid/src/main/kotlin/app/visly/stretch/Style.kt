@@ -303,7 +303,7 @@ data class Style(
     }
 
     fun safeFree() {
-        synchronized(Stretch::class.java) {
+        synchronized(this) {
             if (rustptr != -1L) {
                 nFree(rustptr)
                 rustptr = -1

@@ -1,21 +1,26 @@
 package com.alibaba.gaiax
 
-import android.util.Log
-import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.UiThreadTestRule
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
 
 
 @RunWith(AndroidJUnit4::class)
 class GXComponentAnimationTest : GXBaseTest() {
 
+    private val uiThreadTest = UiThreadTestRule()
+
     @Test
-    @UiThreadTest
+    // @UiThreadTest
     fun template_animation_prop_youku() {
+        val countDownLatch = CountDownLatch(1)
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "animation",
@@ -29,23 +34,19 @@ class GXComponentAnimationTest : GXBaseTest() {
         val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject())
         gxTemplateData.eventListener = object : GXTemplateEngine.GXIEventListener {
             override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
-                super.onAnimationEvent(gxAnimation)
-
                 if (gxAnimation.state == GXTemplateEngine.GXAnimation.STATE_END) {
-                    Log.d(
-                        "GXComponentAnimationTest",
-                        "X = "
-                    )
-                    if (100F.dpToPx() != child.x) {
-                        throw IllegalArgumentException("x position error should ${100F.dpToPx()} but actual ${child.x}")
-                    }
-
-                    if (150F.dpToPx() != child.y) {
-                        throw IllegalArgumentException("y position error should ${150F.dpToPx()} but actual ${child.y}")
-                    }
+                    countDownLatch.countDown()
                 }
             }
         }
-        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        uiThreadTest.runOnUiThread {
+            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        }
+
+        countDownLatch.await()
+
+        Assert.assertEquals(100F.dpToPx(), child.x)
+        Assert.assertEquals(150F.dpToPx(), child.y)
     }
 }

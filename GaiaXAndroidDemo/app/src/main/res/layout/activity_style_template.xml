@@ -6,20 +6,25 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BackdropFilter-Blur"
-        android:textStyle="bold" />
-
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/rebind"
+        android:id="@+id/rebind1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rebind" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/template_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rebind2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rebind" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/template_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

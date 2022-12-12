@@ -1,0 +1,11 @@
+{
+  "id": "gx-style-animation-prop",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-style-animation-prop",
+    "version": "0.0.1",
+    "modify-timestamp": "Mon Dec 12 2022 10:44:45 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [{ "id": "src", "type": "view" }]
+}

@@ -21,14 +21,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
     [self renderTemplate1];
+    
+    [self renderTemplate2];
+}
+
+- (void)renderTemplate2{
+    
+    UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(_view1.frame) + 30, self.view.frame.size.width, 40)];
+    label2.textColor = [UIColor blackColor];
+    label2.text = NSLocalizedString(@"gx-style-animation-prop", nil);
+    [self.view addSubview:label2];
+
+    //templateItem
+    GXTemplateItem *templateItem2 = [[GXTemplateItem alloc] init];
+    templateItem2.templateId = @"gx-style-animation-prop";
+    templateItem2.bizId = [GaiaXHelper bizId];
+    templateItem2.isLocal = YES;
+
+    //渲染view
+    _view2 = [TheGXTemplateEngine creatViewByTemplateItem:templateItem2 measureSize:CGSizeMake(self.view.frame.size.width, NAN)];
+    CGRect frame2 = _view2.frame;
+    frame2.origin.y = CGRectGetMaxY(label2.frame);
+    _view2.frame = frame2;
+    [self.view addSubview:_view2];
+
+    //绑定数据
+    GXTemplateData *data2 = [[GXTemplateData alloc] init];
+    data2.data = @{@"empty": @"empty"};
+    [TheGXTemplateEngine bindData:data2 onView:_view2];
 }
 
 - (void)renderTemplate1{
 
     UILabel *label1 = [[UILabel alloc] initWithFrame:CGRectMake(10, 100, self.view.frame.size.width - 20, 40)];
     label1.textColor = [UIColor blackColor];
-    NSString *tmpString = NSLocalizedString(@"style_blur_template", nil);
+    NSString *tmpString = NSLocalizedString(@"gx-style-backdrop-filter", nil);
     label1.text = [NSString stringWithFormat:@"%@ 1",tmpString];
     [self.view addSubview:label1];
 

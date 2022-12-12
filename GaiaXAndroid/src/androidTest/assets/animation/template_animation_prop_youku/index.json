@@ -1,0 +1,5 @@
+{
+  "id": "template_animation_prop_youku",
+  "type": "gaia-template",
+  "layers": [{ "id": "src", "type": "view" }]
+}

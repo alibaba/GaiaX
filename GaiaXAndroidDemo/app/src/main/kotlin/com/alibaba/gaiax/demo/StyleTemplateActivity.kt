@@ -14,15 +14,8 @@ class StyleTemplateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_style_template)
 
-        findViewById<AppCompatButton>(R.id.rebind).setOnClickListener {
-            if (view != null && templateData != null) {
-                count++
-                templateData = createData()
-                GXTemplateEngine.instance.bindData(view!!, templateData!!)
-            }
-        }
-
         renderTemplate1(this)
+        renderTemplate2(this)
     }
 
     override fun onDestroy() {
@@ -32,10 +25,19 @@ class StyleTemplateActivity : AppCompatActivity() {
 
     private var count: Int = 0
 
-    var view: View? = null
-    var templateData: GXTemplateEngine.GXTemplateData? = null
-
     private fun renderTemplate1(activity: StyleTemplateActivity) {
+
+        var view: View? = null
+        var templateData: GXTemplateEngine.GXTemplateData? = null
+
+        findViewById<AppCompatButton>(R.id.rebind1).setOnClickListener {
+            if (view != null && templateData != null) {
+                count++
+                templateData = createData()
+                GXTemplateEngine.instance.bindData(view!!, templateData!!)
+            }
+        }
+
         // 初始化
         GXTemplateEngine.instance.init(activity)
 
@@ -70,4 +72,40 @@ class StyleTemplateActivity : AppCompatActivity() {
                 "https://gw.alicdn.com/imgextra/i1/O1CN01KbLBlr1SmrmfDeShB_!!6000000002290-2-tps-1500-756.png"
         }
     })
+
+    private fun renderTemplate2(activity: StyleTemplateActivity) {
+        var view: View? = null
+        var templateData: GXTemplateEngine.GXTemplateData? = null
+
+        findViewById<AppCompatButton>(R.id.rebind2).setOnClickListener {
+            if (view != null && templateData != null) {
+                count++
+                templateData = createData()
+                GXTemplateEngine.instance.bindData(view!!, templateData!!)
+            }
+        }
+
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(
+            activity, "assets_data_source/templates", "gx-style-animation-prop"
+        )
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        // 创建模板View
+        view = GXTemplateEngine.instance.createView(params, size)!!
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData!!)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
+    }
 }

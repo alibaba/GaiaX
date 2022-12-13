@@ -111,39 +111,26 @@ class GXAnalyze {
                 return getJsonResult(expression, data)
             }
             is JSONArray -> {
-                return JSONArray().apply {
-                    for (jsonObject in expression) {
-                        add(getResult(jsonObject, data))
-                    }
-                }
+                return getJsonArrayResult(expression, data)
             }
             else -> return null
         }
     }
 
-    private fun getJsonResult(expression: JSONObject, data: Any?): Any {
-        val result = JSONObject()
-        expression.forEach {
-            val value = it.value
-            when (value) {
-                is String -> {
-                    result[it.key] = getResult(value, data)
-                }
-                is Int -> {
-                    result[it.key] = value
-                }
-                is Float -> {
-                    result[it.key] = value
-                }
-                is Boolean -> {
-                    result[it.key] = value
-                }
-                is JSONObject -> {
-                    result[it.key] = getJsonResult(value, data)
-                }
+    private fun getJsonArrayResult(expression: JSONArray, data: Any?): Any? {
+        return JSONArray().apply {
+            expression.forEach {
+                this.add(getResult(it, data))
             }
         }
-        return result
+    }
+
+    private fun getJsonResult(expression: JSONObject, data: Any?): Any {
+        return JSONObject().apply {
+            expression.forEach {
+                this[it.key] = getResult(it.value, data)
+            }
+        }
     }
 
     private external fun getResultNative(self: Any, expression: String, data: Any?): Long

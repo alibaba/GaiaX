@@ -49,4 +49,38 @@ class GXComponentAnimationTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), child.x)
         Assert.assertEquals(150F.dpToPx(), child.y)
     }
+
+    @Test
+    // @UiThreadTest
+    fun template_animation_prop() {
+        val countDownLatch = CountDownLatch(1)
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "animation",
+            "template_animation_prop"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        val child = rootView.child(0)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        gxTemplateData.eventListener = object : GXTemplateEngine.GXIEventListener {
+            override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                if (gxAnimation.state == GXTemplateEngine.GXAnimation.STATE_END) {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+
+        uiThreadTest.runOnUiThread {
+            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        }
+
+        countDownLatch.await()
+
+        Assert.assertEquals(100F.dpToPx(), child.x)
+        Assert.assertEquals(150F.dpToPx(), child.y)
+    }
 }

@@ -33,8 +33,8 @@ import com.alibaba.gaiax.utils.setValueExt
 
 internal class GXAdapterLottieAnimation : GXLottieAnimation() {
 
-    override fun executeAnimation(
-        gxState: GXIExpression?,
+    override fun playAnimation(
+        state: GXIExpression?,
         gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
@@ -42,13 +42,13 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
     ) {
         val gxAnimationData = gxAnimationExpression?.value(gxTemplateData) as? JSONObject
 
-        val remoteUri = this.gxRemoteUri?.value(gxTemplateData) as? String
+        val remoteUri = this.gxRemoteUri
         if (remoteUri != null) {
             remotePlay(
                 gxTemplateContext,
                 gxNode,
                 gxTemplateData,
-                gxState,
+                state,
                 gxAnimationData,
                 remoteUri,
                 loopCount
@@ -56,13 +56,13 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
             return
         }
 
-        val localUri = this.gxLocalUri?.value(gxTemplateData) as? String
+        val localUri = this.gxLocalUri
         if (localUri != null) {
             localPlay(
                 gxTemplateContext,
                 gxNode,
                 gxTemplateData,
-                gxState,
+                state,
                 gxAnimationData,
                 localUri,
                 loopCount

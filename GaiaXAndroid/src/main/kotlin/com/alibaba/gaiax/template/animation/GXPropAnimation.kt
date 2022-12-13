@@ -21,9 +21,6 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.view.View
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.utils.getBooleanExt
 
 class GXPropAnimation(
@@ -56,16 +53,6 @@ class GXPropAnimation(
         }
         valueAnimator.startDelay = delay
         return valueAnimator
-    }
-
-    override fun executeAnimation(
-        gxState: GXIExpression?,
-        gxAnimationExpression: GXIExpression?,
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxTemplateData: JSONObject
-    ) {
-
     }
 
     var duration: Int = 300

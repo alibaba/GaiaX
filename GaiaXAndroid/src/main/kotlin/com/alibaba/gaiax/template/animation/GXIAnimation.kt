@@ -16,20 +16,8 @@
 
 package com.alibaba.gaiax.template.animation
 
-import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.template.GXIExpression
-
 /**
  * @suppress
  */
 interface GXIAnimation {
-    fun executeAnimation(
-        gxState: GXIExpression?,
-        gxAnimationExpression: GXIExpression?,
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxTemplateData: JSONObject
-    )
 }

@@ -27,25 +27,12 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXColor
-import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.getStringExt
 
-class GXPropAnimationSet : GXIAnimation, GXIPropAnimation {
+class GXPropAnimationSet : GXIPropAnimation {
 
-    override fun executeAnimation(
-        gxState: GXIExpression?,
-        gxAnimationExpression: GXIExpression?,
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxTemplateData: JSONObject
-    ) {
-        gxNode.view?.let { targetView ->
-            playAnimation(gxTemplateContext, gxNode, targetView)
-        }
-    }
-
-    private fun playAnimation(context: GXTemplateContext, child: GXNode, targetView: View) {
+    fun playAnimation(context: GXTemplateContext, child: GXNode, targetView: View) {
         if (child.propAnimatorSet == null) {
             child.propAnimatorSet = createAnimator(targetView) as AnimatorSet
         }

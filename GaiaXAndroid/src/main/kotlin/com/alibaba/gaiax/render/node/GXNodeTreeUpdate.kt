@@ -45,6 +45,10 @@ import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXStyle
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.animation.GXAnimationBinding
+import com.alibaba.gaiax.template.animation.GXLottieAnimation
+import com.alibaba.gaiax.template.animation.GXPropAnimationSet
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
 
 /**
@@ -775,9 +779,119 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         private fun nodeViewAnimation(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
-            gxNode.templateNode.animationBinding?.executeAnimation(
-                gxTemplateContext, gxNode, templateData
-            )
+            val gxAnimation = gxNode
+                .templateNode
+                .animationBinding
+                ?.animation?.value(templateData) as? JSONObject ?: return
+
+            val type = gxAnimation.getString(GXAnimationBinding.KEY_TYPE) ?: return
+
+            val trigger = gxAnimation.getBooleanValue(GXAnimationBinding.KEY_TRIGGER)
+
+            val state = gxAnimation.getString(GXAnimationBinding.KEY_STATE)
+
+            val animation = if (GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(type, true)) {
+                val lottieData = gxAnimation
+                    .getJSONObject(GXAnimationBinding.KEY_LOTTIE_ANIMATOR) ?: return
+                GXLottieAnimation.create(lottieData)
+            } else if (GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(type, true)) {
+                val animatorData = gxAnimation
+                    .getJSONObject(GXAnimationBinding.KEY_PROP_ANIMATOR_SET) ?: return
+                GXPropAnimationSet.create(animatorData)
+            } else {
+                null
+            }
+
+            // 符合条件触发动画
+            if (trigger &&
+                // 这里兼容1的状态
+                GXExpressionFactory.isTrue(gxTemplateContext.templateInfo.expVersion, state) == true
+            ) {
+                if (animation is GXPropAnimationSet) {
+                    gxNode.view?.let { targetView ->
+                        animation.playAnimation(gxTemplateContext, gxNode, targetView)
+                    }
+                }
+            }
+            // 自动触发动画
+            else if (!trigger) {
+                if (animation is GXPropAnimationSet) {
+                    gxNode.view?.let { targetView ->
+                        animation.playAnimation(gxTemplateContext, gxNode, targetView)
+                    }
+                } else if (animation is GXLottieAnimation) {
+                }
+            }
+//
+
+//    // 动画类型
+//    // LOTTIE/PROP
+//    val type: String,
+//    // 是否手动触发动画
+//    // true是手动触发；false是自动触发；
+//    val trigger: Boolean,
+//    // 动画是否正在被触发，与trigger配合使用，需要业务方传值
+//    val gxState: GXIExpression? = null,
+//    // 动画数据
+//    // Lottie动画或者属性动画
+//    val gxAnimation: GXIAnimation,
+//    // 动画源表达式
+//    val gxAnimationExpression: GXIExpression? = null
+            //
+//            val typeSrc = data.getString(KEY_TYPE) ?: return null
+//
+//            // FIX:https://github.com/alibaba/GaiaX/issues/278
+//            // 兼容普通字符串和表达式
+//            val typeResult: String = if (
+//                GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(typeSrc, true) ||
+//                GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(typeSrc, true)
+//            ) {
+//                typeSrc
+//            } else {
+//                val typeExp = GXExpressionFactory.create(expVersion, typeSrc)
+//                typeExp?.value()?.toString() ?: ""
+//            }
+//
+//            val trigger = data.getBooleanValue(KEY_TRIGGER)
+//
+//            val stateExp = if (data.containsKey(KEY_STATE)) {
+//                GXExpressionFactory.create(expVersion, data.getString(KEY_STATE))
+//            } else {
+//                null
+//            }
+//
+//            val gxExpression = GXExpressionFactory.create(expVersion, data)
+//
+//            if (GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(typeResult, true)) {
+//                val lottieData = data.getJSONObject(KEY_LOTTIE_ANIMATOR) ?: data
+//                val lottieAnimator = GXLottieAnimation.create(expVersion, lottieData)
+//                if (lottieAnimator != null) {
+//                    return GXAnimationBinding(
+//                        typeResult, trigger, stateExp, lottieAnimator, gxExpression
+//                    )
+//                }
+//                return null
+//            } else if (GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(typeResult, true)) {
+//                val animatorData = data.getJSONObject(KEY_PROP_ANIMATOR_SET)
+//                val animatorSet = GXPropAnimationSet.create(animatorData)
+//                if (animatorSet != null) {
+//                    return GXAnimationBinding(
+//                        typeResult, trigger, stateExp, animatorSet, gxExpression
+//                    )
+//                }
+//            }
+//
+//            return null
+
+//            gxNode.templateNode.animationBinding?.executeAnimation(
+//                gxTemplateContext, gxNode, templateData
+//            )
+
+//            fun executeAnimation(
+//                gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxTemplateData: JSONObject
+//            ) {
+
+
         }
 
         private fun nodeViewCss(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {

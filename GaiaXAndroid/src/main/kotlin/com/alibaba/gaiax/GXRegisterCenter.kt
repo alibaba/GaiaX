@@ -190,39 +190,39 @@ class GXRegisterCenter {
         fun create(): GXLottieAnimation?
     }
 
-    interface GXIExtensionCompatibility {
+    class GXIExtensionCompatibilityConfig {
 
         /**
          * 是否兼容容器数据的传递顺序
          */
-        fun isCompatibilityContainerDataPassSequence() = false
+        var isCompatibilityContainerDataPassSequence = false
 
         /**
          * 是否兼容容器嵌套模板的判定逻辑
          */
-        fun isCompatibilityContainerNestTemplateJudgementCondition() = false
+        var isCompatibilityContainerNestTemplateJudgementCondition = false
 
         /**
          * 是否兼容容器数据源抛异常的行为
          */
-        fun isPreventContainerDataSourceThrowException() = false
+        var isPreventContainerDataSourceThrowException = false
 
         /**
          * 是否兼容IconFont的字体抛异常行为
          */
-        fun isPreventIconFontTypefaceThrowException() = false
+        var isPreventIconFontTypefaceThrowException = false
 
         /**
          *
          */
-        fun isPreventAccessibilityThrowException() = false
+        var isPreventAccessibilityThrowException = false
 
         /**
          *
          */
-        fun isPreventFitContentThrowException() = false
+        var isPreventFitContentThrowException = false
 
-        fun isCompatibilityDataBindingFitContent() = false
+        var isCompatibilityDataBindingFitContent = false
     }
 
     internal var extensionBizMap: GXIExtensionBizMap? = null
@@ -235,7 +235,7 @@ class GXRegisterCenter {
     internal var extensionGrid: GXIExtensionGrid? = null
     internal var extensionScroll: GXIExtensionScroll? = null
     internal var extensionException: GXIExtensionException? = null
-    internal var extensionCompatibility: GXIExtensionCompatibility? = null
+    internal var extensionCompatibilityConfig: GXIExtensionCompatibilityConfig? = null
     internal var extensionNodeEvent: GXIExtensionNodeEvent? = null
     internal var extensionContainerDataUpdate: GXIExtensionContainerDataUpdate? = null
     internal var extensionContainerItemBind: GXIExtensionContainerItemBind? = null
@@ -323,8 +323,8 @@ class GXRegisterCenter {
         return this
     }
 
-    fun registerExtensionCompatibility(extensionCompatibility: GXIExtensionCompatibility): GXRegisterCenter {
-        this.extensionCompatibility = extensionCompatibility
+    fun registerExtensionCompatibility(extensionCompatibility: GXIExtensionCompatibilityConfig): GXRegisterCenter {
+        this.extensionCompatibilityConfig = extensionCompatibility
         return this
     }
 
@@ -376,7 +376,7 @@ class GXRegisterCenter {
         extensionScroll = null
         extensionGrid = null
         extensionNodeEvent = null
-        extensionCompatibility = null
+        extensionCompatibilityConfig = null
         extensionExpression = null
         extensionContainerDataUpdate = null
         extensionContainerItemBind = null

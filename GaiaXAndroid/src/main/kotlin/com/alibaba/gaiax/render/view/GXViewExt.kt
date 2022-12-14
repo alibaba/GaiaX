@@ -354,7 +354,7 @@ fun GXText.setFontFamilyAndFontWeight(style: GXStyle) {
     // check
     if (this is GXIconFont) {
         if (style.fontFamily == null) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventIconFontTypefaceThrowException() == true) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventIconFontTypefaceThrowException == true) {
                 this.typeface = GXStyleConvert.instance.fontFamily(GXTemplateKey.GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME)
             } else {
                 throw IllegalArgumentException("GXIconFont view must have font family property")

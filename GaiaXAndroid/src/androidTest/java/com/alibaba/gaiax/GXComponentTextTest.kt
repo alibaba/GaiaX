@@ -1120,12 +1120,12 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_fitcontent_lines_0_width_null_height_100px_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventFitContentThrowException(): Boolean {
-                return true
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventFitContentThrowException = true
             }
-        })
+        )
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -1134,12 +1134,12 @@ class GXComponentTextTest : GXBaseTest() {
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventFitContentThrowException(): Boolean {
-                return false
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventFitContentThrowException = false
             }
-        })
+        )
     }
 
     @Test
@@ -1397,12 +1397,13 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isCompatibilityDataBindingFitContent(): Boolean {
-                return true
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isCompatibilityDataBindingFitContent = true
             }
-        })
+        )
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -1422,12 +1423,12 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isCompatibilityDataBindingFitContent(): Boolean {
-                return false
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isCompatibilityDataBindingFitContent = false
             }
-        })
+        )
+
     }
 
     @Test

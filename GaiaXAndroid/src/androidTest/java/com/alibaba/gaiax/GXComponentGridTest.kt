@@ -771,12 +771,11 @@ class GXComponentGridTest : GXBaseTest() {
     @Test
     fun template_grid_height_auto_no_data() {
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventContainerDataSourceThrowException(): Boolean {
-                return true
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventContainerDataSourceThrowException=true
             }
-        })
+        )
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

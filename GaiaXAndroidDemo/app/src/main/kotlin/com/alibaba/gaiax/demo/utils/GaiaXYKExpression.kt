@@ -640,13 +640,13 @@ sealed class GaiaXYKExpression : GXIExpression {
             return rawJson?.getAnyExt(value)
         }
 
-        override fun expression(): Any {
-            return value
-        }
-
-        fun setData(rawJson: JSON?, target: Any) {
-            rawJson?.setValueExt(value, target)
-        }
+//        override fun expression(): Any {
+//            return value
+//        }
+//
+//        fun setData(rawJson: JSON?, target: Any) {
+//            rawJson?.setValueExt(value, target)
+//        }
 
         override fun toString(): String {
             return "GValue(value='$value')"

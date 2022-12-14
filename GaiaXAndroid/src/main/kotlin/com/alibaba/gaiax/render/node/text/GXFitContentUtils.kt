@@ -175,7 +175,7 @@ object GXFitContentUtils {
             gxCacheText.setFontLines(fontLines)
 
             if (nodeWidth == 0F) {
-                if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {
+                if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventFitContentThrowException == true) {
                     result = null
                 } else {
                     throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")
@@ -196,7 +196,7 @@ object GXFitContentUtils {
             gxCacheText.setFontLines(fontLines)
 
             if (nodeWidth == 0F) {
-                if (GXRegisterCenter.instance.extensionCompatibility?.isPreventFitContentThrowException() == true) {
+                if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventFitContentThrowException == true) {
                     result = null
                 } else {
                     throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")

@@ -33,12 +33,12 @@ class GXComponentIconFontTest : GXBaseTest() {
 
     @Test
     fun template_iconfont_prevent_throw_exception() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventIconFontTypefaceThrowException(): Boolean {
-                return true
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventIconFontTypefaceThrowException = true
             }
-        })
+        )
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "iconfont",

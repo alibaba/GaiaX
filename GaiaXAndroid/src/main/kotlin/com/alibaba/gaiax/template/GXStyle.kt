@@ -124,7 +124,7 @@ data class GXStyle(
                 fontTextDecoration = convertStyle.textDecoration(css),
                 boxShadow = convertStyle.boxShadow(css),
                 backdropFilter = convertStyle.backdropFilter(css),
-                fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
+                fitContent = if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
                     convertStyle.fitContent(css)
                 } else {
                     null
@@ -197,7 +197,7 @@ data class GXStyle(
                 boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
                 backdropFilter = heightPriorityStyle.backdropFilter
                     ?: lowPriorityStyle.backdropFilter,
-                fitContent = if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityDataBindingFitContent() == true) {
+                fitContent = if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
                     if (lowPriorityStyle.fitContent == true && heightPriorityStyle.fitContent == false) {
                         lowPriorityStyle.fitContent
                     } else {

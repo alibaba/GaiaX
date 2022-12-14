@@ -241,7 +241,7 @@ data class GXLayer constructor(
      * 嵌套子模板类型，是个虚拟节点
      */
     fun isNestChildTemplateType(): Boolean {
-        if (GXRegisterCenter.instance.extensionCompatibility?.isCompatibilityContainerNestTemplateJudgementCondition() == true) {
+        if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityContainerNestTemplateJudgementCondition == true) {
             return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
                     || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == null && customNodeClass == null
         }

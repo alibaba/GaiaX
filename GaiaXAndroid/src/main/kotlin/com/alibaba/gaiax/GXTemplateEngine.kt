@@ -277,6 +277,11 @@ class GXTemplateEngine {
          */
         var animationParams: JSONObject? = null
 
+        /**
+         * Animation params expression
+         */
+        var animationParamsExpression: JSONObject? = null
+
         override fun toString(): String {
             return "GXAnimation(type=$state, nodeId=$nodeId, targetView=$view)"
         }

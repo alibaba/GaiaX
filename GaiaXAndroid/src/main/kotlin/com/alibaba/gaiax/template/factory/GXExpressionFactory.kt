@@ -32,13 +32,6 @@ object GXExpressionFactory {
         return GXRegisterCenter.instance.extensionExpression?.isTrue(expVersion, value)
     }
 
-    fun valuePath(expression: Any?): String? {
-        if (expression is String && expression.startsWith("$")) {
-            return expression.substring(1, expression.length)
-        }
-        return null
-    }
-
     fun create(expression: Any?): GXIExpression? {
         return create(null, expression)
     }

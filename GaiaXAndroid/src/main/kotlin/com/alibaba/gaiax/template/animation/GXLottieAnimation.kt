@@ -26,7 +26,8 @@ open class GXLottieAnimation : GXIAnimation {
     open fun playAnimation(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxAnimationData: JSONObject
+        gxAnimationExpression: JSONObject,
+        gxAnimationValue: JSONObject,
     ) {
 
     }

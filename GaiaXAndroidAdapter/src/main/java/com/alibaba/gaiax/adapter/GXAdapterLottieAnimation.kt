@@ -33,13 +33,15 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
     override fun playAnimation(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxAnimationData: JSONObject
+        gxAnimationExpression: JSONObject,
+        gxAnimationValue: JSONObject,
     ) {
         this.gxRemoteUri?.let {
             remotePlay(
                 gxTemplateContext,
                 gxNode,
-                gxAnimationData,
+                gxAnimationExpression,
+                gxAnimationValue,
                 it,
                 loopCount
             )
@@ -49,7 +51,8 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
             localPlay(
                 gxTemplateContext,
                 gxNode,
-                gxAnimationData,
+                gxAnimationExpression,
+                gxAnimationValue,
                 it,
                 loopCount
             )
@@ -77,7 +80,8 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
     private fun localPlay(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxAnimationData: JSONObject?,
+        gxAnimationExpression: JSONObject,
+        gxAnimationValue: JSONObject,
         localUri: String,
         loopCount: Int
     ) {
@@ -111,7 +115,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                         this.state = "END"
                         this.nodeId = gxNode.id
                         this.view = lottieView
-                        this.animationParams = gxAnimationData
+                        this.animationParams = gxAnimationValue
                     })
             }
 
@@ -121,7 +125,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                         this.state = "START"
                         this.nodeId = gxNode.id
                         this.view = lottieView
-                        this.animationParams = gxAnimationData
+                        this.animationParams = gxAnimationValue
                     })
             }
 
@@ -133,7 +137,8 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
     private fun remotePlay(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxAnimationData: JSONObject?,
+        gxAnimationExpression: JSONObject,
+        gxAnimationValue: JSONObject,
         remoteUri: String,
         loopCount: Int
     ) {
@@ -176,7 +181,8 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                                     this.state = "END"
                                     this.nodeId = gxNode.id
                                     this.view = lottieView
-                                    this.animationParams = gxAnimationData
+                                    this.animationParams = gxAnimationValue
+                                    this.animationParamsExpression = gxAnimationExpression
                                 })
                         }
 
@@ -187,7 +193,8 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                                     this.state = "START"
                                     this.nodeId = gxNode.id
                                     this.view = lottieView
-                                    this.animationParams = gxAnimationData
+                                    this.animationParams = gxAnimationValue
+                                    this.animationParamsExpression = gxAnimationExpression
                                 })
                         }
                     })

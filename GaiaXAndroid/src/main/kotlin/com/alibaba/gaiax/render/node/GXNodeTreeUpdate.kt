@@ -818,44 +818,65 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             gxNode: GXNode,
             templateData: JSONObject
         ) {
-            val gxAnimationData = gxNode
+
+            val gxAnimationExpression = gxNode
+                .templateNode
+                .animationBinding
+                ?.animation
+                ?.expression() as? JSONObject ?: return
+
+            val gxAnimationValue = gxNode
                 .templateNode
                 .animationBinding
                 ?.animation?.value(templateData) as? JSONObject ?: return
 
-            val type = gxAnimationData.getString(GXAnimationBinding.KEY_TYPE) ?: return
+            val type = gxAnimationValue.getString(GXAnimationBinding.KEY_TYPE) ?: return
 
-            val trigger = gxAnimationData.getBooleanValue(GXAnimationBinding.KEY_TRIGGER)
-
-            val state = gxAnimationData.getString(GXAnimationBinding.KEY_STATE)
+            val trigger = gxAnimationValue.getBooleanValue(GXAnimationBinding.KEY_TRIGGER)
 
             // 手动触发动画
             if (trigger) {
+
+                val state = gxAnimationValue[GXAnimationBinding.KEY_STATE]
+
                 // 符合条件触发动画
                 val isState = GXExpressionFactory
                     .isTrue(gxTemplateContext.templateInfo.expVersion, state) == true
                 if (isState) {
-                    playAnimation(gxTemplateContext, gxNode, gxAnimationData, type)
+                    playAnimation(
+                        gxTemplateContext,
+                        gxNode,
+                        gxAnimationValue,
+                        gxAnimationExpression,
+                        type
+                    )
                 }
             }
             // 自动触发动画
             else {
-                playAnimation(gxTemplateContext, gxNode, gxAnimationData, type)
+                playAnimation(
+                    gxTemplateContext,
+                    gxNode,
+                    gxAnimationExpression,
+                    gxAnimationValue,
+                    type
+                )
             }
         }
 
         private fun playAnimation(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
-            gxAnimationData: JSONObject,
+            gxAnimationExpression: JSONObject,
+            gxAnimationValue: JSONObject,
             type: String
         ) {
             val animation = if (GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(type, true)) {
-                val lottieData = gxAnimationData
+                val lottieData = gxAnimationValue
                     .getJSONObject(GXAnimationBinding.KEY_LOTTIE_ANIMATOR) ?: return
                 GXLottieAnimation.create(lottieData)
             } else if (GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(type, true)) {
-                val animatorData = gxAnimationData
+                val animatorData = gxAnimationValue
                     .getJSONObject(GXAnimationBinding.KEY_PROP_ANIMATOR_SET) ?: return
                 GXPropAnimationSet.create(animatorData)
             } else {
@@ -867,7 +888,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     animation.playAnimation(gxTemplateContext, gxNode, targetView)
                 }
             } else if (animation is GXLottieAnimation) {
-                animation.playAnimation(gxTemplateContext, gxNode, gxAnimationData)
+                animation.playAnimation(
+                    gxTemplateContext,
+                    gxNode,
+                    gxAnimationExpression,
+                    gxAnimationValue
+                )
             }
         }
 

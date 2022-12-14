@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.adapter
+package com.alibaba.gaiax.utils
 
 import android.animation.Animator
 import com.airbnb.lottie.LottieAnimationView

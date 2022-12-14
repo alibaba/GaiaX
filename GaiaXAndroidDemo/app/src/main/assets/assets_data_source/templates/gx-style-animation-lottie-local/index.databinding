@@ -1,0 +1,11 @@
+{
+  "animation": {
+    "src": {
+      "type": "'lottie'",
+      "lottieAnimator": {
+        "value": "'assets_data_source/templates/lottie'",
+        "loop": true
+      }
+    }
+  }
+}

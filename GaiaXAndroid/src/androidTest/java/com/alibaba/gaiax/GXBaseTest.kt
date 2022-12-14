@@ -36,7 +36,7 @@ open class GXBaseTest {
     var context: Context = InstrumentationRegistry.getInstrumentation().context
 
     @Before
-    fun before() {
+    open fun before() {
         GXTemplateEngine.instance.init(GXMockUtils.context)
 
         // 清除缓存，否则会导致模板复用，引发单测失败

@@ -25,26 +25,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class GXComponentViewTest : GXBaseTest() {
-    @Before
-    fun registerLottieView() {
-
-        GXRegisterCenter.instance.registerExtensionViewSupport(
-            GXViewKey.VIEW_TYPE_LOTTIE,
-            ::buildLottieView
-        )
-            .registerExtensionLottieAnimation(object :
-                GXRegisterCenter.GXIExtensionLottieAnimation {
-                override fun create(): GXLottieAnimation? {
-                    return GXLottieAnimation()
-                }
-            })
-    }
-
-    private fun buildLottieView(context: Context): View {
-        return View(context).apply {
-            setTag(R.id.gaiax_rv_touch, 1)
-        }
-    }
 
     @Test
     fun template_merge_empty_node_with_padding() {
@@ -544,37 +524,5 @@ class GXComponentViewTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(true, (rootView.child(0).clipToOutline))
-    }
-
-    //Lottie单测
-    @Test
-    fun template_animation_lottie_local() {
-        val templateItem =
-            GXTemplateEngine.GXTemplateItem(
-                GXMockUtils.context,
-                "view",
-                "template_animation_lottie_local"
-            )
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
-        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-        GXTemplateEngine.instance.bindData(rootView, templateData)
-        Assert.assertEquals(true, (rootView.childCount() == 2))
-        Assert.assertEquals(true, (rootView.child(1).getTag(R.id.gaiax_rv_touch) == 1))
-    }
-
-    //Lottie单测
-    @Test
-    fun template_animation_lottie_local_2() {
-        val templateItem =
-            GXTemplateEngine.GXTemplateItem(
-                GXMockUtils.context,
-                "view",
-                "template_animation_lottie_local_2"
-            )
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
-        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-        GXTemplateEngine.instance.bindData(rootView, templateData)
-        Assert.assertEquals(true, (rootView.childCount() == 2))
-        Assert.assertEquals(true, (rootView.child(1).getTag(R.id.gaiax_rv_touch) == 1))
     }
 }

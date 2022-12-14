@@ -20,16 +20,13 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.template.GXIExpression
 
 open class GXLottieAnimation : GXIAnimation {
 
     open fun playAnimation(
-        state: GXIExpression?,
-        gxAnimationExpression: GXIExpression?,
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxTemplateData: JSONObject
+        gxAnimationData: JSONObject
     ) {
 
     }

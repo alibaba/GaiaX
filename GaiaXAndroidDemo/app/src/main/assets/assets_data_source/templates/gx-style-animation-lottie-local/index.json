@@ -1,0 +1,5 @@
+{
+  "id": "gx-style-animation-lottie-local",
+  "type": "gaia-template",
+  "layers": [{ "id": "src", "type": "view" }]
+}

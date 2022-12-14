@@ -16,6 +16,8 @@ class StyleTemplateActivity : AppCompatActivity() {
 
         renderTemplate1(this)
         renderTemplate2(this)
+        renderTemplate3(this)
+        renderTemplate4(this)
     }
 
     override fun onDestroy() {
@@ -107,5 +109,62 @@ class StyleTemplateActivity : AppCompatActivity() {
 
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
+    }
+
+    private fun renderTemplate3(activity: StyleTemplateActivity) {
+        var view: View? = null
+        var templateData: GXTemplateEngine.GXTemplateData? = null
+
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(
+            activity, "assets_data_source/templates", "gx-style-animation-lottie-remote"
+        )
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        // 创建模板View
+        view = GXTemplateEngine.instance.createView(params, size)!!
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_3).addView(view, 0)
+    }
+
+
+    private fun renderTemplate4(activity: StyleTemplateActivity) {
+        var view: View? = null
+        var templateData: GXTemplateEngine.GXTemplateData? = null
+
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(
+            activity, "assets_data_source/templates", "gx-style-animation-lottie-local"
+        )
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+
+        // 创建模板View
+        view = GXTemplateEngine.instance.createView(params, size)!!
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_4).addView(view, 0)
     }
 }

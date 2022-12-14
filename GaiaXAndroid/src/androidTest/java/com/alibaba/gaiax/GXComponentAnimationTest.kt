@@ -10,7 +10,7 @@ import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.test.R
-import com.alibaba.gaiax.utils.GXAdapterLottieAnimation
+import com.alibaba.gaiax.utils.GXTestLottieAnimation
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
@@ -28,7 +28,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             .registerExtensionLottieAnimation(object :
                 GXRegisterCenter.GXIExtensionLottieAnimation {
                 override fun create(): GXLottieAnimation {
-                    return GXAdapterLottieAnimation()
+                    return GXTestLottieAnimation()
                 }
             })
             .registerExtensionViewSupport(

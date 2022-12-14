@@ -28,7 +28,7 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.animation.GXDefaultAnimatorListener
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 
-internal class GXAdapterLottieAnimation : GXLottieAnimation() {
+internal class GXTestLottieAnimation : GXLottieAnimation() {
 
     override fun playAnimation(
         gxTemplateContext: GXTemplateContext,

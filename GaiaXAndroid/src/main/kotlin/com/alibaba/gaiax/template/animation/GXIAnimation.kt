@@ -19,5 +19,4 @@ package com.alibaba.gaiax.template.animation
 /**
  * @suppress
  */
-interface GXIAnimation {
-}
+interface GXIAnimation 

@@ -8,14 +8,16 @@ class GXExtensionMultiVersionExpression : GXRegisterCenter.GXIExtensionExpressio
 
     override fun create(expVersion: String?, value: Any): GXIExpression {
         if (expVersion == "V1") {
-            return GaiaXExpression.create(value)
+            val expression = GaiaXYKExpression.create(value)
+            expression.expression = value
+            return expression
         }
         return GXAnalyzeWrapper(value)
     }
 
     override fun isTrue(expVersion: String?, value: Any?): Boolean {
         if (expVersion == "V1") {
-            return GaiaXExpression.isCondition(value)
+            return GaiaXYKExpression.isCondition(value)
         }
         return value == true
     }

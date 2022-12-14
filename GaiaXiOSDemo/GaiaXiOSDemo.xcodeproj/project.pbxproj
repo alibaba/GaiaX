@@ -733,7 +733,7 @@
 				8DB52193275A0DD200EB8126 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		8DB52194275A0DD200EB8126 /* Build configuration list for PBXNativeTarget "GaiaXiOSDemo" */ = {
 			isa = XCConfigurationList;
@@ -742,7 +742,7 @@
 				8DB52196275A0DD200EB8126 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

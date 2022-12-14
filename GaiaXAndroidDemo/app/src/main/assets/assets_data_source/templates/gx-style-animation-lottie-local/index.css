@@ -1,0 +1,15 @@
+#gx-style-animation-lottie-local {
+  width: 100%;
+  height: 100px;
+  background-color: #ffffff;
+  border-color: #ff0000;
+  border-width: 1px;
+  border-style: solid;
+  justify-content: center;
+  align-items: center;
+}
+#src {
+  width: 50px;
+  height: 50px;
+  background-color: #e4e4e4;
+}

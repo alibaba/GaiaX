@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.adapter
+package com.alibaba.gaiax.utils
 
 import android.animation.Animator
 import com.airbnb.lottie.LottieAnimationView
@@ -28,7 +28,7 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.animation.GXDefaultAnimatorListener
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 
-internal class GXAdapterLottieAnimation : GXLottieAnimation() {
+internal class GXTestLottieAnimation : GXLottieAnimation() {
 
     override fun playAnimation(
         gxTemplateContext: GXTemplateContext,

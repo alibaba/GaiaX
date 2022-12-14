@@ -1,10 +1,10 @@
 {
   "animation": {
     "target": {
-      "type": "lottie",
+      "type": "'lottie'",
       "trigger":false,
       "lottieAnimator": {
-        "url": "https://files.alicdn.com/tpsservice/d32faa78264b12792655ba7ef47235d3.zip",
+        "url": "'https://files.alicdn.com/tpsservice/d32faa78264b12792655ba7ef47235d3.zip'",
         "loop":false
       }
     }

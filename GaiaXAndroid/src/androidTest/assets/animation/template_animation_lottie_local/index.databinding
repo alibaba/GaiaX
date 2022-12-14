@@ -1,10 +1,10 @@
 {
   "animation": {
     "target": {
-      "type": "lottie",
+      "type": "'lottie'",
       "trigger":false,
       "lottieAnimator": {
-        "value": "features/yk_dynamic_favorite",
+        "value": "'animation/lottie'",
         "loop":false
       }
     }

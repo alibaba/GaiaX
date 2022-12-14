@@ -1,0 +1,33 @@
+{
+  "animation": {
+    "src": {
+      "type": "'prop'",
+      "propAnimatorSet": {
+        "animators": [
+          {
+            "delay": 0,
+            "loopCount": 1,
+            "loopMode": "'reset'",
+            "duration": 300,
+            "valueType": "'floatType'",
+            "propName": "'positionX'",
+            "interpolator": "'standard'",
+            "valueFrom": "0",
+            "valueTo": "100"
+          },
+          {
+            "delay": 0,
+            "loopCount": 1,
+            "loopMode": "'reset'",
+            "duration": 300,
+            "valueType": "'floatType'",
+            "propName": "'positionY'",
+            "interpolator": "'standard'",
+            "valueFrom": "0",
+            "valueTo": "150"
+          }
+        ]
+      }
+    }
+  }
+}

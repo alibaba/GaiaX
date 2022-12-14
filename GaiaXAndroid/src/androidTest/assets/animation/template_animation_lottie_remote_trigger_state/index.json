@@ -1,5 +1,6 @@
 {
-  "id": "template_animation_lottie_local_2",
+  "exp-version": "V2",
+  "id": "template_animation_lottie_remote_trigger_state",
   "type": "gaia-template",
   "layers": [
     {

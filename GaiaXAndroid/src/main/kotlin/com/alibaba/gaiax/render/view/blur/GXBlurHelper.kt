@@ -44,6 +44,7 @@ class GXBlurHelper(private val host: GXView) {
     private var captureView: View? = null
 
     private fun releaseBitmap() {
+        blurringCanvas = null
         bitmapToBlur?.recycle()
         bitmapToBlur = null
         blurredBitmap?.recycle()
@@ -67,7 +68,7 @@ class GXBlurHelper(private val host: GXView) {
         val scaledWidth = width / sampling
         val scaledHeight = height / sampling
 
-        if (blurringCanvas == null || blurredBitmap == null) {
+        if (bitmapToBlur == null || blurredBitmap == null) {
             releaseBitmap()
             var r = false
             try {
@@ -177,7 +178,6 @@ class GXBlurHelper(private val host: GXView) {
             if (captureView != null) {
                 captureView?.viewTreeObserver?.removeOnPreDrawListener(preDrawListener)
             }
-            innerRelease()
         }
     }
 

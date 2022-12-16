@@ -1019,14 +1019,11 @@ long GXAnalyze::getValue(string expression, void *source) {
                 long res = this->getSourceValue(token.name, source);
                 GXValue *gxv = (GXValue *) res;
                 if (gxv->tag == GX_TAG_FLOAT) {
-                    string float2string = to_string(gxv->float64);
-                    if (float2string.find('.') != -1) {
-                        regex e("0+?$");
-                        regex e2("[.]$");
-                        float2string = regex_replace(float2string, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        float2string = regex_replace(float2string, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    tokenNum.name = to_string(gxv->float64);
+                    if (tokenNum.name.find('.') != -1) {
+                        tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                     }
-                    tokenNum.name = float2string;
                     tokenNum.token = "num";
                 } else if (gxv->tag == GX_TAG_LONG) {
                     tokenNum.name = to_string(gxv->intNum);
@@ -1060,14 +1057,11 @@ long GXAnalyze::getValue(string expression, void *source) {
                 long res = this->getFunctionValue(token.name, nullptr, 0, "");
                 GXValue *gxv = (GXValue *) res;
                 if (gxv->tag == GX_TAG_FLOAT) {
-                    string float2string = to_string(gxv->float64);
-                    if (float2string.find('.') != -1) {
-                        regex e("0+?$");
-                        regex e2("[.]$");
-                        float2string = regex_replace(float2string, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        float2string = regex_replace(float2string, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    tokenNum.name = to_string(gxv->float64);
+                    if (tokenNum.name.find('.') != -1) {
+                        tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                     }
-                    tokenNum.name = float2string;
                     tokenNum.token = "num";
                 } else if (gxv->tag == GX_TAG_LONG) {
                     tokenNum.name = to_string(gxv->intNum);
@@ -1320,14 +1314,11 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                 GXATSNode node = array[numFunction];
                 //取出结果
                 if (fun->tag == GX_TAG_FLOAT) {
-                    string float2string = to_string(fun->float64);
-                    if (float2string.find('.') != -1) {
-                        regex e("0+?$");
-                        regex e2("[.]$");
-                        float2string = regex_replace(float2string, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        float2string = regex_replace(float2string, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                    node.name = to_string(fun->float64);
+                    if (node.name.find('.') != -1) {
+                        node.name = regex_replace(node.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        node.name = regex_replace(node.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                     }
-                    node.name = float2string;
                     node.token = "num";
                 } else if (fun->tag == GX_TAG_LONG) {
                     node.name = to_string(fun->intNum);
@@ -1510,15 +1501,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     GXValue *gxv = (GXValue *) res;
                     t1.count = array[valueStep].count;
                     if (gxv->tag == GX_TAG_FLOAT) {
-                        string float2string = to_string(gxv->float64);
-                        if (float2string.find('.') != -1) {
-                            regex e("0+?$");
-                            regex e2("[.]$");
-                            float2string = regex_replace(float2string, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                            float2string = regex_replace(float2string, e2,
-                                                         ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        t1.name = to_string(gxv->float64);
+                        if (t1.name.find('.') != -1) {
+                            t1.name = regex_replace(t1.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            t1.name = regex_replace(t1.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                         }
-                        t1.name = float2string;
                         t1.token = "num";
                     } else if (gxv->tag == GX_TAG_LONG) {
                         t1.name = to_string(gxv->intNum);
@@ -1555,15 +1542,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     GXValue *gxv = (GXValue *) res;
                     t1.count = array[valueStep].count;
                     if (gxv->tag == GX_TAG_FLOAT) {
-                        string float2string = to_string(gxv->float64);
-                        if (float2string.find('.') != -1) {
-                            regex e("0+?$");
-                            regex e2("[.]$");
-                            float2string = regex_replace(float2string, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                            float2string = regex_replace(float2string, e2,
-                                                         ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        t1.name = to_string(gxv->float64);
+                        if (t1.name.find('.') != -1) {
+                            t1.name = regex_replace(t1.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            t1.name = regex_replace(t1.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                         }
-                        t1.name = float2string;
                         t1.token = "num";
                     } else if (gxv->tag == GX_TAG_LONG) {
                         t1.name = to_string(gxv->intNum);
@@ -1699,16 +1682,11 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         tempR.count = valueStack[i].count;
                                         //取出结果
                                         if (fun->tag == GX_TAG_FLOAT) {
-                                            string float2string = to_string(fun->float64);
-                                            if (float2string.find('.') != -1) {
-                                                regex e("0+?$");
-                                                regex e2("[.]$");
-                                                float2string = regex_replace(float2string, e,
-                                                                             ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                                                float2string = regex_replace(float2string, e2,
-                                                                             ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                            tempR.name = to_string(fun->float64);
+                                            if (tempR.name.find('.') != -1) {
+                                                tempR.name = regex_replace(tempR.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                                tempR.name = regex_replace(tempR.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                                             }
-                                            tempR.name = float2string;
                                             tempR.token = "num";
                                         } else if (fun->tag == GX_TAG_LONG) {
                                             tempR.name = to_string(fun->intNum);

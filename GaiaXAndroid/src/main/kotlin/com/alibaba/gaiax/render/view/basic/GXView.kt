@@ -131,7 +131,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
                 }
                 this.gxBlurHelper?.radius = 25F
                 this.gxBlurHelper?.sampling = 12
-//                this.gxBlurHelper?.color = Color.parseColor("#70FFFFFF")
+                // this.gxBlurHelper?.color = Color.parseColor("#70FFFFFF")
             }
             this.gxBackdropFilter = gxBackdropFilter
         } else if (gxBackdropFilter is GXBackdropFilter.None) {
@@ -195,6 +195,10 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     }
 
     override fun release() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            gxBlurHelper?.innerRelease()
+            gxBlurHelper = null
+        }
         gxTemplateContext = null
     }
 

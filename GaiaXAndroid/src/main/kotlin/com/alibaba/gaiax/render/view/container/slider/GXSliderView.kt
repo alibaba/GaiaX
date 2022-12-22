@@ -195,9 +195,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun onBindData(data: JSONObject?) {
-        stopTimer()
-
         viewPager?.adapter?.notifyDataSetChanged()
+    }
+
+    private fun updateView() {
+        stopTimer()
 
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
@@ -305,6 +307,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
         } else {
             stopTimer()
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        updateView()
     }
 
     override fun onDetachedFromWindow() {

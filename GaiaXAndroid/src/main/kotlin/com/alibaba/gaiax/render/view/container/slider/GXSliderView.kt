@@ -195,6 +195,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun onBindData(data: JSONObject?) {
+    }
+
+    private fun updateView() {
         stopTimer()
 
         viewPager?.adapter?.notifyDataSetChanged()
@@ -305,6 +308,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
         } else {
             stopTimer()
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        updateView()
     }
 
     override fun onDetachedFromWindow() {

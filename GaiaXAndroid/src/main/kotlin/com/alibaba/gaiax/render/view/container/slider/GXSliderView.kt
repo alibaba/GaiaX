@@ -195,12 +195,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun onBindData(data: JSONObject?) {
+        viewPager?.adapter?.notifyDataSetChanged()
     }
 
     private fun updateView() {
         stopTimer()
-
-        viewPager?.adapter?.notifyDataSetChanged()
 
         config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->

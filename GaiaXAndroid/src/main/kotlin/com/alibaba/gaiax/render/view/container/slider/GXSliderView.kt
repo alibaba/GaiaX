@@ -306,4 +306,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
             stopTimer()
         }
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        stopTimer()
+    }
 }

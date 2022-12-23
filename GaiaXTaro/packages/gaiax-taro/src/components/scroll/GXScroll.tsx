@@ -128,7 +128,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
             childArray.push(
                 <View
                     style={itemWrapStyle}
-                    id={`${propGXNode.gxIdPath}-item-container-${itemIndex}`}
+                    data-id={`${propGXNode.gxIdPath}-item-container-${itemIndex}`}
                     key={`${propGXNode.gxIdPath}-item-container-${itemIndex}`}
                 >
                     <GXTemplateComponent
@@ -143,7 +143,7 @@ export default class GXScroll extends React.Component<GXScrollProps, GXScrollSta
         return (
             <ScrollView
                 key={propGXNode.gxIdPath}
-                id={propGXNode.gxIdPath}
+                data-id={propGXNode.gxIdPath}
                 scrollX={isHorizontal}
                 scrollY={isVertical}
                 style={finalScrollStyle}

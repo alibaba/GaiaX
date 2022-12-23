@@ -102,7 +102,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 if (childItem['gaiaxEmptyData'] != true) {
                     groupItemView = <View
                         key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
-                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
+                        data-id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-container-${childItemIndex}`}
                         style={gxGridGroupItemStyle}
                     >
                         <GXTemplateComponent
@@ -114,7 +114,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
                 } else {
                     groupItemView = <View
                         key={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
-                        id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
+                        data-id={`${propGXNode.gxIdPath}-group-${groupItemIndex}-item-${childItemIndex}`}
                         style={gxGridGroupItemStyle}
                     >
                     </View>;
@@ -127,7 +127,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
             const groupItemViews: ReactNode = <View
                 style={gxGridGroupStyle}
                 key={`${propGXNode.gxIdPath}-group-${groupItemIndex}`}
-                id={`${propGXNode.gxIdPath}-group-${groupItemIndex}`}
+                data-id={`${propGXNode.gxIdPath}-group-${groupItemIndex}`}
             >
                 {groupItemViewsArray}
             </View>
@@ -138,7 +138,7 @@ export default class GXGrid extends React.Component<GXGridProps, GXGridState> {
         return (
             <View
                 style={gxGridStyle}
-                id={propGXNode.gxIdPath}
+                data-id={propGXNode.gxIdPath}
             >
                 {groupViewsArray}
             </View>

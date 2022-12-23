@@ -22,7 +22,7 @@ export default class GXView extends React.Component<GXViewProps, GXViewState> {
     const { propStyle, propGXNode } = this.props
     return <View
       style={propStyle}
-      id={propGXNode.gxIdPath}
+      data-id={propGXNode.gxIdPath}
       onClick={this.handleClick.bind(this)}
     >
       {this.props.children}

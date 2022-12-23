@@ -28,7 +28,7 @@ export default class GXIconFontText extends React.Component<GXIconFontTextProps,
     return <View
       className={classNames('iconfont')}
       style={propStyle}
-      id={propGXNode.gxIdPath}
+      data-id={propGXNode.gxIdPath}
       onClick={this.handleClick.bind(this)}
     >{propDataValue}</View>
   }

@@ -56,7 +56,7 @@ export default class GXViewTreeCreator {
         }
 
         return <View
-            id={id}
+            data-id={id}
             key={id}
             style={gxRootStyle}>{gxRootNode.gxView}</View>;
     }

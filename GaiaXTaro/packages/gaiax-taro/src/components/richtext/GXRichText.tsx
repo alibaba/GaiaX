@@ -55,14 +55,14 @@ export default class GXRichText extends React.Component<GXRichTextProps, GXRichT
 
       return <Text
         style={propStyle}
-        id={propGXNode.gxIdPath}
+        data-id={propGXNode.gxIdPath}
         onClick={this.handleClick.bind(this)}  >
         {childArray}
       </Text>;
     }
     return <Text
       style={propStyle}
-      id={propGXNode.gxIdPath}
+      data-id={propGXNode.gxIdPath}
       onClick={this.handleClick.bind(this)}
     >
       {propDataValue}

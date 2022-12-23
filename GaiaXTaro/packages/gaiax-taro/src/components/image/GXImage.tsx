@@ -59,7 +59,7 @@ export default class GXImage extends React.Component<GXImageProps, GXImageState>
   render() {
     const { propStyle, propDataValue, propMode, propGXNode } = this.props;
     return <Image style={propStyle}
-      id={propGXNode.gxIdPath}
+      data-id={propGXNode.gxIdPath}
       mode={this.getMode((propMode || 'scaleToFill'))}
       onClick={this.handleClick.bind(this)}
       src={propDataValue} />;

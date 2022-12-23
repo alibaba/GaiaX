@@ -22,7 +22,7 @@ export default class GXText extends React.Component<GXTextProps, GXTextState> {
   render() {
     const { propGXNode, propStyle, propDataValue } = this.props
     return <Text
-      id={propGXNode.gxIdPath}
+      data-id={propGXNode.gxIdPath}
       style={propStyle}
       onClick={this.handleClick.bind(this)}
     >

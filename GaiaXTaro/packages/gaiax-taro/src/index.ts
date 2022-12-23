@@ -16,6 +16,9 @@ export { default as GXIEventListener } from './gaiax/GXIEventListener'
 export { default as GXITrackListener } from './gaiax/GXITrackListener'
 export { default as GXMeasureSize } from './gaiax/GXMeasureSize'
 export { default as GXTemplateData } from './gaiax/GXTemplateData'
+export { default as GXTemplateNode } from './gaiax/GXTemplateNode';
+
 export { GXRegisterCenterInstance } from './gaiax/GXRegisterCenterInstance'
 export { GXEngineInstance } from './gaiax/GXEngineInstance'
 
+export type { GXTemplateComponentProps } from './components/GXTemplateComponent';

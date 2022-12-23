@@ -1,0 +1,7 @@
+{
+    "data":{
+        "text":{
+            "value":" env('isAndroid') ? 'GaiaXAndroid' : 'GaiaXiOS' "
+        }
+    }
+}

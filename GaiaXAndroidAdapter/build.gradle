@@ -8,7 +8,7 @@ allprojects {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 }
 
@@ -21,7 +21,7 @@ buildscript {
         google()
         maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j'}
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
     }
 
     dependencies {
@@ -98,11 +98,14 @@ dependencies {
     implementation 'com.airbnb.android:lottie:4.1.0'
 
     if (System.getProperties().get("GaiaXDemo") == "true") {
-        implementation project(path: ':GXAnalyzeAndroid')
         implementation project(path: ':GaiaXAndroid')
     } else {
-        implementation 'com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT'
-        implementation('com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT') { changing = true }
+        println("version = " + version)
+        if (version != null) {
+            implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
+        } else {
+            implementation("com.github.alibaba.GaiaX:GaiaX:0.2.9") { changing = true }
+        }
     }
 
     testImplementation 'junit:junit:4.13.2'

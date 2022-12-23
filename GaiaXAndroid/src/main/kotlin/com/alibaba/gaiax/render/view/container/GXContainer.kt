@@ -27,17 +27,17 @@ import androidx.annotation.Keep
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXIRoundCorner
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 
-
 /**
  * @suppress
  */
 @Keep
-open class GXContainer : RecyclerView, GXIViewBindData, GXIRootView,
+open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootView,
     GXIRoundCorner {
 
     constructor(context: Context) : super(context)

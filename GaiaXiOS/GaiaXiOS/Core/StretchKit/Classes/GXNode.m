@@ -30,6 +30,7 @@
 #import "NSDictionary+GX.h"
 #import "GXTemplateEngine.h"
 #import "GXTemplateContext.h"
+#import "NSArray+GX.h"
 
 @interface GXNode ()<UIGestureRecognizerDelegate>{
     //Stretch
@@ -330,11 +331,21 @@
             }
             //绑定事件
             if (self.event) {
-                NSDictionary *resultEvent = [GXDataParser parseData:self.event withSource:data];
-                [self bindEvent:resultEvent];
-                if (self.track == nil) {
-                    [self bindTrack:resultEvent];
+                NSMutableArray *resultEventArray = [NSMutableArray array];
+                
+                // 兼容之前单事件数据格式
+                if ([self.event isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *resultEvent = [GXDataParser parseData:self.event withSource:data];
+                    [resultEventArray gx_addObject:resultEvent];
+                } else if ([self.event isKindOfClass:[NSArray class]]) {
+                    NSArray *eventArray = (NSArray *) self.event;
+                    for (int i = 0; i < eventArray.count; i++) {
+                        NSDictionary *value = [eventArray gx_objectAtIndex:i];
+                        NSDictionary *resultEvent = [GXDataParser parseData:value withSource:data];
+                        [resultEventArray gx_addObject:resultEvent];
+                    }
                 }
+                [self bindEvent:resultEventArray];
             }
             //绑定埋点
             if (self.track) {
@@ -428,40 +439,59 @@
 }
 
 //事件绑定
-- (void)bindEvent:(NSDictionary *)eventInfo{
+- (void)bindEvent:(NSArray *)events{
     UIView *view = self.associatedView;
-    //获取event
-    GXEvent *event = view.gxEvent;
-    if (nil == event) {
-        event = [[GXEvent alloc] init];
-        event.templateItem = self.templateItem;
-        event.nodeId = self.nodeId;
-        event.view = view;
-        //赋值
-        view.gxEvent = event;
-    }
-    //更新数据
-    [event setupEventInfo:eventInfo];
-    //绑定event
-    if (event.gestureType == GXEventGestureTypeLongPress) {
-        //长按事件
-        if (!_longPress) {
-            _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
-            _longPress.delegate = self;
-            view.userInteractionEnabled = true;
-            [view addGestureRecognizer:_longPress];
+    
+    // 绑定event
+    for (int i = 0; i < events.count; i++) {
+        NSDictionary *event = [events gx_objectAtIndex:i];
+        NSString *type = [event gx_stringForKey: @"type"];
+        GXEventType eventType = [GXEvent getType:type];
+        
+        // 兜底默认为 tap 类型
+        if (eventType == GXEventTypeUnknown) {
+            eventType = GXEventTypeTap;
         }
         
-    } else {
-        //点击事件
-        if (!_tap) {
-            _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
-            _tap.delegate = self;
-            view.userInteractionEnabled = true;
-            [view addGestureRecognizer:_tap];
+        // 获取event
+        GXEvent *gxEvent = [view getGxEvent:eventType];
+        if (nil == gxEvent) {
+            gxEvent = [[GXEvent alloc] init];
+            gxEvent.templateItem = self.templateItem;
+            gxEvent.nodeId = self.nodeId;
+            gxEvent.view = view;
+            gxEvent.eventType = eventType;
+            //赋值
+            [view setGxEvent:eventType with:gxEvent];
+        }
+        // 更新数据
+        [gxEvent setupEventInfo:event];
+        
+        // 绑定事件
+        switch (eventType) {
+            case GXEventTypeTap:
+                // 点击事件
+                if (!_tap) {
+                    _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGestureTap:)];
+                    _tap.delegate = self;
+                    view.userInteractionEnabled = true;
+                    [view addGestureRecognizer:_tap];
+                }
+                break;
+            case GXEventTypeLongPress:
+                // 长按事件
+                if (!_longPress) {
+                    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGestureLongpress:)];
+                    _longPress.delegate = self;
+                    view.userInteractionEnabled = true;
+                    [view addGestureRecognizer:_longPress];
+                }
+                break;
+            default:
+                GXLog(@"[GaiaX] 不支持的事件类型：%@", type);
+                break;
         }
     }
-    
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {

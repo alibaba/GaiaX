@@ -1,0 +1,6 @@
+{
+  "exp-version": "V2",
+  "id": "template_animation_prop",
+  "type": "gaia-template",
+  "layers": [{ "id": "src", "type": "view" }]
+}

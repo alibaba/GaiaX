@@ -1,0 +1,20 @@
+#template_slider_item_size_aspect_ratio {
+  width: 100%;
+}
+
+#image {
+  width: 100%;
+  aspect-ratio: 1;
+  mode: aspectFill;
+  border-radius: 10px;
+}
+
+#title {
+  text-overflow: ellipsis;
+  color: #FFFFFF;
+  font-size: 15px;
+  fit-content: true;
+  position: absolute;
+  bottom: 10px;
+  left: 10%;
+}

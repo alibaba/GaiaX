@@ -19,6 +19,7 @@
 #import <UIKit/UIKit.h>
 #import "GXFunctionDef.h"
 #import "GXCommonDef.h"
+#import "GXEvent.h"
 
 @class  GXNode;
 @class  GXEvent;
@@ -30,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //view对应node
 @property(nonatomic, strong)GXNode *gxNode;
-//view对应的event
+//view对应的 tap event
 @property(nonatomic, strong)GXEvent *gxEvent;
 //view对应的track
 @property(nonatomic, strong)GXTrack *gxTrack;
@@ -55,8 +56,17 @@ NS_ASSUME_NONNULL_BEGIN
 //获取view对应的vc
 - (UIViewController *)gx_viewController;
 
-//处理手势
-- (void)gx_handleGesture:(UIGestureRecognizer *)gesture;
+//处理点击手势
+- (void)gx_handleGestureTap:(UIGestureRecognizer *)gesture;
+
+//处理长按手势
+- (void)gx_handleGestureLongpress:(UIGestureRecognizer *)gesture;
+
+// 获取事件数据
+- (GXEvent *)getGxEvent:(GXEventType) eventType;
+
+// 设置事件数据
+- (void)setGxEvent:(GXEventType) eventType with: (GXEvent *) gxEvent;
 
 
 @end

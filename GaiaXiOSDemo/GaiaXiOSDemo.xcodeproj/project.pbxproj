@@ -45,6 +45,7 @@
 		8DDC0A8327D06512008CB84C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8527D06512008CB84C /* Localizable.strings */; };
 		8DDC0A8927D06949008CB84C /* FunctionList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8B27D06949008CB84C /* FunctionList.plist */; };
 		8DE156C2278C5CD300E1AA68 /* GaiaXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */; };
+		9D573E2E2941D94400BDF713 /* StyleViewConotroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D573E2D2941D94400BDF713 /* StyleViewConotroller.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +118,8 @@
 		8DE156C0278C5CD300E1AA68 /* GaiaXScanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXScanViewController.h; sourceTree = "<group>"; };
 		8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanViewController.m; sourceTree = "<group>"; };
 		9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D573E2D2941D94400BDF713 /* StyleViewConotroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StyleViewConotroller.m; sourceTree = "<group>"; };
+		9D573E2F2941D97B00BDF713 /* StyleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StyleViewController.h; sourceTree = "<group>"; };
 		B80658C1C14A90166664E38A /* Pods-GaiaXiOSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,6 +154,8 @@
 				8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */,
 				8D7570F628D0AF2A004AF92D /* RecycleTemplateListCell.h */,
 				8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */,
+				9D573E2D2941D94400BDF713 /* StyleViewConotroller.m */,
+				9D573E2F2941D97B00BDF713 /* StyleViewController.h */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -413,6 +418,7 @@
 				8D1FD1B0279E833D00835648 /* GaiaXScanView.m in Sources */,
 				8D2180DE2771AA98001401C8 /* NormalViewController.m in Sources */,
 				8D2180EA2771AACD001401C8 /* EventViewController.m in Sources */,
+				9D573E2E2941D94400BDF713 /* StyleViewConotroller.m in Sources */,
 				8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -587,6 +593,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = VY8F8V9AUC;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
@@ -634,6 +641,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -655,6 +665,7 @@
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = VY8F8V9AUC;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
@@ -702,6 +713,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "GaiaXiOSDemo/GaiaXiOSDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -719,7 +733,7 @@
 				8DB52193275A0DD200EB8126 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		8DB52194275A0DD200EB8126 /* Build configuration list for PBXNativeTarget "GaiaXiOSDemo" */ = {
 			isa = XCConfigurationList;
@@ -728,7 +742,7 @@
 				8DB52196275A0DD200EB8126 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

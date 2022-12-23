@@ -22,9 +22,8 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.text.GXDirtyText
+import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
-import com.alibaba.gaiax.render.view.basic.GXImageView
-import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.util.concurrent.CopyOnWriteArraySet
@@ -57,10 +56,10 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
-
-    var blurViews: MutableSet<GXView>? = null
-
-    var onImageDrawableListener: GXImageView.GXImageViewListener? = null
+    /**
+     * 数据绑定计数
+     */
+    var bindDataCount: Int = 0
 
     var isAppear: Boolean = false
 
@@ -98,14 +97,13 @@ class GXTemplateContext private constructor(
      */
     var indexPosition: Int = -1
 
-    var containers: CopyOnWriteArraySet<GXContainer>? = null
+    var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     override fun toString(): String {
         return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
     }
 
     fun release() {
-        blurViews?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()
@@ -120,23 +118,6 @@ class GXTemplateContext private constructor(
     fun manualExposure() {
         manualTrackMap?.forEach {
             templateData?.trackListener?.onManualExposureTrackEvent(it.value)
-        }
-    }
-
-    fun initBlurViews() {
-        if (blurViews == null) {
-            blurViews = mutableSetOf()
-        }
-    }
-
-    fun initImageDrawableListener() {
-        if (onImageDrawableListener == null) {
-            onImageDrawableListener = object : GXImageView.GXImageViewListener {
-
-                override fun onDrawableChanged(gxImageView: View) {
-                    blurViews?.forEach { it.onBlurChanged(this@GXTemplateContext, gxImageView) }
-                }
-            }
         }
     }
 

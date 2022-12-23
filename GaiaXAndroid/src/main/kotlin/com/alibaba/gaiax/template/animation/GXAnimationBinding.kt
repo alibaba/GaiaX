@@ -17,100 +17,32 @@
 package com.alibaba.gaiax.template.animation
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXIExpression
-import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 /**
  * @suppress
  */
 class GXAnimationBinding(
-    // 动画类型
-    // LOTTIE/PROP
     val type: String,
-    // 是否手动触发动画
-    // true是手动触发；false是自动触发；
-    val trigger: Boolean,
-    // 动画是否正在被触发，与trigger配合使用，需要业务方传值
-    val gxState: GXIExpression? = null,
-    // 动画数据
-    // Lottie动画或者属性动画
-    val gxAnimation: GXIAnimation,
-    // 动画源表达式
-    val gxAnimationExpression: GXIExpression? = null
+    val animation: GXIExpression
 ) {
-
-    fun executeAnimation(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxTemplateData: JSONObject
-    ) {
-
-        val state = gxState?.value(gxTemplateData)
-
-        // 符合条件触发动画
-        if (trigger &&
-            // 这里兼容1的状态
-            GXExpressionFactory.isTrue(
-                gxTemplateContext.templateInfo.expVersion,
-                state
-            ) == true
-        ) {
-            gxAnimation.executeAnimation(
-                gxState,
-                gxAnimationExpression,
-                gxTemplateContext,
-                gxNode,
-                gxTemplateData
-            )
-        }
-        // 自动触发动画
-        else if (!trigger) {
-            gxAnimation.executeAnimation(
-                gxState,
-                gxAnimationExpression,
-                gxTemplateContext,
-                gxNode,
-                gxTemplateData
-            )
-        }
-    }
 
     companion object {
 
-        private const val KEY_TYPE = "type"
-        private const val KEY_TRIGGER = "trigger"
-        private const val KEY_STATE = "state"
-        private const val KEY_PROP_ANIMATOR_SET = "propAnimatorSet"
-        private const val KEY_LOTTIE_ANIMATOR = "lottieAnimator"
+        const val KEY_TYPE = "type"
+        const val KEY_TRIGGER = "trigger"
+        const val KEY_STATE = "state"
+        const val KEY_PROP_ANIMATOR_SET = "propAnimatorSet"
+        const val KEY_LOTTIE_ANIMATOR = "lottieAnimator"
 
         fun create(expVersion: String?, data: JSONObject): GXAnimationBinding? {
-            val type = data.getString(KEY_TYPE) ?: return null
-            val trigger = data.getBooleanValue(KEY_TRIGGER)
-            val state = if (data.containsKey(KEY_STATE)) GXExpressionFactory.create(
-                expVersion,
-                data.getString(KEY_STATE)
-            ) else null
-
-            val gxExpression = GXExpressionFactory.create(expVersion, data)
-
-            if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true)) {
-                val lottieData = data.getJSONObject(KEY_LOTTIE_ANIMATOR) ?: data
-                val lottieAnimator = GXLottieAnimation.create(expVersion, lottieData)
-                if (lottieAnimator != null) {
-                    return GXAnimationBinding(type, trigger, state, lottieAnimator, gxExpression)
-                }
-                return null
-            } else if (type.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP, true)) {
-                val animatorData = data.getJSONObject(KEY_PROP_ANIMATOR_SET)
-                val animatorSet = GXPropAnimationSet.create(animatorData)
-                if (animatorSet != null) {
-                    return GXAnimationBinding(type, trigger, state, animatorSet, gxExpression)
-                }
+            val typeSrc = data.getString(KEY_TYPE) ?: return null
+            val type = GXExpressionFactory
+                .create(expVersion, typeSrc)?.value()?.toString() ?: return null
+            GXExpressionFactory.create(expVersion, data)?.let {
+                return GXAnimationBinding(type, it)
             }
-
             return null
         }
     }

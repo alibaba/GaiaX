@@ -28,11 +28,13 @@ import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
+import com.alibaba.gaiax.expression.GXExtensionExpression
 import com.alibaba.gaiax.render.GXRenderImpl
 import com.alibaba.gaiax.render.node.*
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -275,6 +277,11 @@ class GXTemplateEngine {
          */
         var animationParams: JSONObject? = null
 
+        /**
+         * Animation params expression
+         */
+        var animationParamsExpression: JSONObject? = null
+
         override fun toString(): String {
             return "GXAnimation(type=$state, nodeId=$nodeId, targetView=$view)"
         }
@@ -283,9 +290,7 @@ class GXTemplateEngine {
     /**
      * Custom view bind data interface
      */
-    interface GXICustomViewBindData : GXIViewBindData {
-        override fun onBindData(data: JSONObject?) {}
-    }
+    interface GXICustomViewBindData : GXIViewBindData
 
     /**
      * Event listener
@@ -728,6 +733,10 @@ class GXTemplateEngine {
      * 当View可见时
      */
     fun onAppear(targetView: View) {
+        if (targetView is GXIViewVisibleChange) {
+            targetView.onVisibleChanged(true)
+        }
+
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = true
             gxTemplateContext.manualExposure()
@@ -739,6 +748,10 @@ class GXTemplateEngine {
      * 当View不可见时
      */
     fun onDisappear(targetView: View) {
+        if (targetView is GXIViewVisibleChange) {
+            targetView.onVisibleChanged(false)
+        }
+
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = false
             GXContainerUtils.notifyOnDisappear(gxTemplateContext)
@@ -752,6 +765,7 @@ class GXTemplateEngine {
         this.context = context.applicationContext
         GXStyleConvert.instance.init(context.assets)
         GXRegisterCenter.instance
+            .registerExtensionExpression(GXExtensionExpression())
             // priority 0
             .registerExtensionTemplateInfoSource(GXTemplateInfoSource.instance, 0)
             // priority 0

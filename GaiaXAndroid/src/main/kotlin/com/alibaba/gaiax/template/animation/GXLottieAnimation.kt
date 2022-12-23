@@ -20,23 +20,20 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.template.GXIExpression
-import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
-abstract class GXLottieAnimation : GXIAnimation {
+open class GXLottieAnimation : GXIAnimation {
 
-    override fun executeAnimation(
-        gxState: GXIExpression?,
-        gxAnimationExpression: GXIExpression?,
+    open fun playAnimation(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        gxTemplateData: JSONObject
+        gxAnimationExpression: JSONObject,
+        gxAnimationValue: JSONObject,
     ) {
-        // nothing
+
     }
 
-    var gxLocalUri: GXIExpression? = null
-    var gxRemoteUri: GXIExpression? = null
+    var gxLocalUri: String? = null
+    var gxRemoteUri: String? = null
     var loopCount: Int = 0
 
     companion object {
@@ -45,7 +42,7 @@ abstract class GXLottieAnimation : GXIAnimation {
         private const val KEY_LOOP = "loop"
         private const val KEY_LOOP_COUNT = "loopCount"
 
-        fun create(expVersion: String?, data: JSONObject?): GXLottieAnimation? {
+        fun create(data: JSONObject?): GXLottieAnimation? {
             if (data == null) {
                 return null
             }
@@ -57,10 +54,10 @@ abstract class GXLottieAnimation : GXIAnimation {
             val animator = GXRegisterCenter.instance.extensionLottieAnimation?.create()
                 ?: return null
             if (localUri != null) {
-                animator.gxLocalUri = GXExpressionFactory.create(expVersion, localUri)
+                animator.gxLocalUri = localUri
             }
             if (remoteUri != null) {
-                animator.gxRemoteUri = GXExpressionFactory.create(expVersion, remoteUri)
+                animator.gxRemoteUri = remoteUri
             }
             if (data.containsKey(KEY_LOOP) && data.getBoolean(KEY_LOOP)) {
                 animator.loopCount = Int.MAX_VALUE

@@ -14,28 +14,49 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.alibaba.gaiax.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.view.LayoutInflater
+import android.widget.AbsoluteLayout
 import androidx.annotation.Keep
+import com.airbnb.lottie.LottieAnimationView
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.view.GXViewKey
+import com.alibaba.gaiax.template.animation.GXLottieAnimation
 
 @Keep
 class GXAdapter : GXTemplateEngine.GXIAdapter {
 
+    @SuppressLint("InflateParams")
     override fun init(context: Context) {
         GXRegisterCenter.instance
-            .registerExtensionLottieAnimation(GXExtensionLottieAnimation())
-            .registerExtensionExpression(GXExtensionExpression())
             .registerExtensionViewSupport(
                 GXViewKey.VIEW_TYPE_IMAGE,
                 GXAdapterImageView::class.java
             )
+            .registerExtensionLottieAnimation(object :
+                GXRegisterCenter.GXIExtensionLottieAnimation {
+                override fun create(): GXLottieAnimation {
+                    return GXAdapterLottieAnimation()
+                }
+            })
             .registerExtensionViewSupport(
-                GXViewKey.VIEW_TYPE_LOTTIE,
-                GXAdapterLottieCreator::localCreateLottieView
-            )
+                GXViewKey.VIEW_TYPE_LOTTIE
+            ) {
+                val lottieView: LottieAnimationView = LayoutInflater.from(context)
+                    .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
+                lottieView.layoutParams = AbsoluteLayout.LayoutParams(
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    AbsoluteLayout.LayoutParams.MATCH_PARENT,
+                    0,
+                    0
+                )
+                lottieView
+            }
     }
 }

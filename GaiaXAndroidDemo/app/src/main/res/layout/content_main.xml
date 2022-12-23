@@ -12,20 +12,6 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fastpreview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fastpreview"
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/fastpreview_emulator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fastpreview_emulator"
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/normal_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,17 +19,17 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/nest_template"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/nest_template"
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/container_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/container_template"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/nest_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nest_template"
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -65,13 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/track"
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/remote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/remote_data_source"
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton

@@ -40,7 +40,7 @@ class GXAnalyzeTest {
                     GXAnalyze.createValueBool(true);
                 } else if (valuePath == "data.false") {
                     GXAnalyze.createValueBool(false);
-                }else if(valuePath == "data.long"){
+                } else if (valuePath == "data.long") {
                     GXAnalyze.createValueLong(8L);
                 } else {
                     GXAnalyze.createValueFloat64(8F)
@@ -86,7 +86,7 @@ class GXAnalyzeTest {
                     } else {
                         return GXAnalyze.createValueFloat64(0f)
                     }
-                }else{
+                } else {
                     return GXAnalyze.createValueFloat64(8f)
                 }
                 return 0L
@@ -200,7 +200,10 @@ class GXAnalyzeTest {
             Assert.assertEquals("1231.000", instance.getResult("'123' + 1.000", testData))
             Assert.assertEquals("1231.001", instance.getResult("'123' + 1.001", testData))
             Assert.assertEquals("1231.001000", instance.getResult("'123' + 1.001000", testData))
-            Assert.assertEquals("123.001.001000", instance.getResult("'123.00' + 1.001000", testData))
+            Assert.assertEquals(
+                "123.001.001000",
+                instance.getResult("'123.00' + 1.001000", testData)
+            )
             Assert.assertEquals("1230.000", instance.getResult("'123' + 0.000", testData))
             Assert.assertEquals("1230.001", instance.getResult("'123' + 0.001", testData))
             Assert.assertEquals("123.0001", instance.getResult("123.000 + '1'", testData))

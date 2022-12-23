@@ -840,6 +840,40 @@ class GXComponentTextTest : GXBaseTest() {
     }
 
     @Test
+    fun template_text_fitcontent_two_text_shrink() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "text",
+            "template_text_fitcontent_two_text_shrink"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["text1"] = "新手妈妈"
+            this["text2"] =
+                "育儿育儿育儿育儿育儿育儿育儿育儿00000000000育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育育儿育儿育儿育儿育儿育儿育儿育儿00000000000000000育000000育"
+        })
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.text = templateData.data.getString("text1")
+        textView.setFontSize(13F.dpToPx())
+        textView.measure(0, 0)
+
+        val textView1 = GXText(GXMockUtils.context)
+        textView1.text = templateData.data.getString("text2")
+        textView1.setFontSize(13F.dpToPx())
+        textView1.measure(0, 0)
+
+        Assert.assertEquals(375F.dpToPx(), rootView.width())
+        Assert.assertEquals(375F.dpToPx(), rootView.child(0).width())
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).child(0).width())
+        Assert.assertEquals(textView1.measuredWidth.toFloat(), rootView.child(0).child(1).width())
+    }
+
+    @Test
     fun template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
@@ -1086,12 +1120,12 @@ class GXComponentTextTest : GXBaseTest() {
      */
     @Test
     fun template_text_fitcontent_lines_0_width_null_height_100px_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventFitContentThrowException(): Boolean {
-                return true
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventFitContentThrowException = true
             }
-        })
+        )
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -1100,12 +1134,12 @@ class GXComponentTextTest : GXBaseTest() {
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isPreventFitContentThrowException(): Boolean {
-                return false
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isPreventFitContentThrowException = false
             }
-        })
+        )
     }
 
     @Test
@@ -1363,12 +1397,13 @@ class GXComponentTextTest : GXBaseTest() {
 
     @Test
     fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isCompatibilityDataBindingFitContent(): Boolean {
-                return true
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isCompatibilityDataBindingFitContent = true
             }
-        })
+        )
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "text",
@@ -1388,12 +1423,12 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(object :
-            GXRegisterCenter.GXIExtensionCompatibility {
-            override fun isCompatibilityDataBindingFitContent(): Boolean {
-                return false
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+                this.isCompatibilityDataBindingFitContent = false
             }
-        })
+        )
+
     }
 
     @Test

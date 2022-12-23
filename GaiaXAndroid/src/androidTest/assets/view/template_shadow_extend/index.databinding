@@ -1,0 +1,9 @@
+{
+  "data": {
+    "target": {
+      "extend": {
+        "box-shadow": "env('isAndroid') ? '1px 1px 10px 3px #FF0000' : '5px 5px 4px 4px #00FF00'"
+      }
+    }
+  }
+}

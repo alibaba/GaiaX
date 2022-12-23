@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.analyze
 
 import androidx.annotation.Keep
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 
 @Keep
@@ -40,7 +41,7 @@ class GXAnalyze {
         external fun getValueFloat(value: Long): Float
         external fun getValueArray(value: Long): Any?
         external fun getValueMap(value: Long): Any?
-        external fun getValueLong(value: Long):Long
+        external fun getValueLong(value: Long): Long
         external fun createValueFloat64(value: Float): Long
         external fun createValueString(value: String): Long
         external fun createValueBool(value: Boolean): Long
@@ -88,11 +89,11 @@ class GXAnalyze {
             is String -> {
                 if (expression.trim() == "\$\$") {
                     return data
-                }else if(expression.trim() == ""){
+                } else if (expression.trim() == "") {
                     return null
                 }
-                val result = this.getResultNative(this, expression, data);
-                return wrapAsGXValue(result)?.getValue();
+                val result = this.getResultNative(this, expression, data)
+                return wrapAsGXValue(result)?.getValue()
             }
             is Int -> {
                 return expression
@@ -109,33 +110,27 @@ class GXAnalyze {
             is JSONObject -> {
                 return getJsonResult(expression, data)
             }
+            is JSONArray -> {
+                return getJsonArrayResult(expression, data)
+            }
             else -> return null
         }
     }
 
-    private fun getJsonResult(expression: JSONObject, data: Any?): Any {
-        val result = JSONObject()
-        expression.forEach {
-            val value = it.value
-            when (value) {
-                is String -> {
-                    result[it.key] = getResult(value, data)
-                }
-                is Int -> {
-                    result[it.key] = value
-                }
-                is Float -> {
-                    result[it.key] = value
-                }
-                is Boolean -> {
-                    result[it.key] = value
-                }
-                is JSONObject -> {
-                    result[it.key] = getJsonResult(value, data)
-                }
+    private fun getJsonArrayResult(expression: JSONArray, data: Any?): Any? {
+        return JSONArray().apply {
+            expression.forEach {
+                this.add(getResult(it, data))
             }
         }
-        return result
+    }
+
+    private fun getJsonResult(expression: JSONObject, data: Any?): Any {
+        return JSONObject().apply {
+            expression.forEach {
+                this[it.key] = getResult(it.value, data)
+            }
+        }
     }
 
     private external fun getResultNative(self: Any, expression: String, data: Any?): Long

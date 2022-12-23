@@ -296,8 +296,19 @@ data class Style(
     }
 
     fun free() {
-        nFree(rustptr)
-        rustptr = -1
+        if (rustptr != -1L) {
+            nFree(rustptr)
+            rustptr = -1
+        }
+    }
+
+    fun safeFree() {
+        synchronized(this) {
+            if (rustptr != -1L) {
+                nFree(rustptr)
+                rustptr = -1
+            }
+        }
     }
 
     private external fun nFree(ptr: Long)

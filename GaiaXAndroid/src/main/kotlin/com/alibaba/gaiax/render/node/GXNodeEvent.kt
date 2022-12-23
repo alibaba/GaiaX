@@ -1,5 +1,8 @@
 package com.alibaba.gaiax.render.node
 
+import android.util.Log
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -13,66 +16,86 @@ class GXNodeEvent : GXINodeEvent {
         templateData: JSONObject
     ) {
         val eventBinding = gxNode.templateNode.eventBinding ?: return
-        val eventData = eventBinding.event.value(templateData) as? JSONObject ?: return
-        val eventType = if (eventData.containsKey(GXTemplateKey.GAIAX_GESTURE_TYPE)) {
-            eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
-                ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
-        } else {
-            GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+        val eventJsonData = eventBinding.event.value(templateData) as? JSON ?: return
+
+        var eventDataList: JSONArray? = null
+        if (eventJsonData is JSONObject) {
+            eventDataList = JSONArray().apply {
+                add(eventJsonData)
+            }
+        } else if (eventJsonData is JSONArray) {
+            eventDataList = eventJsonData
         }
-        when (eventType) {
-            GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
-                gxNode.view?.setOnClickListener {
+        if (eventDataList == null) {
+            return
+        }
 
-                    // 发送点击事件
-                    gxTemplateContext.templateData?.eventListener?.onGestureEvent(
-                        GXTemplateEngine.GXGesture().apply {
-                            this.gestureType = eventType
-                            this.view = gxNode.view
-                            this.eventParams = eventData
-                            this.nodeId = gxNode.templateNode.layer.id
-                            this.templateItem = gxTemplateContext.templateItem
-                            this.index = -1
-                        })
+        for (eventData in eventDataList) {
+            if (eventData !is JSONObject) {
+                continue
+            }
 
-                    // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
-                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
-                            GXTemplateEngine.GXTrack().apply {
+            // 默认为 tap 事件
+            val eventType = eventData.getString(GXTemplateKey.GAIAX_GESTURE_TYPE)
+                ?: GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+
+            when (eventType) {
+                GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
+                    gxNode.view?.setOnClickListener {
+
+                        // 发送点击事件
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(
+                            GXTemplateEngine.GXGesture().apply {
+                                this.gestureType = eventType
                                 this.view = gxNode.view
-                                this.trackParams = trackData
+                                this.eventParams = eventData
                                 this.nodeId = gxNode.templateNode.layer.id
                                 this.templateItem = gxTemplateContext.templateItem
                                 this.index = -1
                             })
+
+                        // 发送点击埋点事件
+                        (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
+                            gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                                GXTemplateEngine.GXTrack().apply {
+                                    this.view = gxNode.view
+                                    this.trackParams = trackData
+                                    this.nodeId = gxNode.templateNode.layer.id
+                                    this.templateItem = gxTemplateContext.templateItem
+                                    this.index = -1
+                                })
+                        }
                     }
                 }
-            }
-            GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
-                gxNode.view?.setOnLongClickListener {
-                    // 发送点击事件
-                    gxTemplateContext.templateData?.eventListener?.onGestureEvent(
-                        GXTemplateEngine.GXGesture().apply {
-                            this.gestureType = eventType
-                            this.view = gxNode.view
-                            this.eventParams = eventData
-                            this.nodeId = gxNode.templateNode.layer.id
-                            this.templateItem = gxTemplateContext.templateItem
-                            this.index = -1
-                        })
-
-                    // 发送点击埋点事件
-                    (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
-                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
-                            GXTemplateEngine.GXTrack().apply {
+                GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
+                    gxNode.view?.setOnLongClickListener {
+                        // 发送点击事件
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(
+                            GXTemplateEngine.GXGesture().apply {
+                                this.gestureType = eventType
                                 this.view = gxNode.view
-                                this.trackParams = trackData
+                                this.eventParams = eventData
                                 this.nodeId = gxNode.templateNode.layer.id
                                 this.templateItem = gxTemplateContext.templateItem
                                 this.index = -1
                             })
+
+                        // 发送点击埋点事件
+                        (gxNode.templateNode.trackBinding?.track?.value(templateData) as? JSONObject)?.let { trackData ->
+                            gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                                GXTemplateEngine.GXTrack().apply {
+                                    this.view = gxNode.view
+                                    this.trackParams = trackData
+                                    this.nodeId = gxNode.templateNode.layer.id
+                                    this.templateItem = gxTemplateContext.templateItem
+                                    this.index = -1
+                                })
+                        }
+                        true
                     }
-                    true
+                }
+                else -> {
+                    Log.e("[GaiaX]", "unknown event type $eventType")
                 }
             }
         }

@@ -5,6 +5,9 @@
         },
         "blur_text": {
             "value": "$blur_text"
+        },
+         "blur_text_1": {
+            "value": "$blur_text"
         }
     }
 }

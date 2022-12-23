@@ -13,7 +13,7 @@
 
 + (id)getValueWithAdress:(long)adress{
     id result = nil;
-
+    
     if (adress > 0) {
         //获取value对应的地址
         NSString *hexAdress = [NSString stringWithFormat:@"%lx",adress];
@@ -89,6 +89,9 @@
         if (strcmp([number objCType], @encode(BOOL)) == 0 || strcmp([number objCType], @encode(char)) == 0) {
             //bool类型
             val = GX_NewBool([number boolValue]);
+        } else if (strcmp([number objCType], @encode(int)) == 0 || strcmp([number objCType], @encode(long)) == 0) {
+            // long类型
+            val = GX_NewLong([number longValue]);
         } else {
             //float类型
             val = GX_NewFloat64([number floatValue]);
@@ -110,6 +113,8 @@
         //未知类型，返回null
         val = GX_NewNull(0);
     }
-        return (long)(val);
+    
+    return (long)(val);
 }
+
 @end

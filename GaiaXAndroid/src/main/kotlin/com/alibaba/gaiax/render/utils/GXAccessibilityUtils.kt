@@ -60,7 +60,7 @@ object GXAccessibilityUtils {
                 })
             }
         } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventAccessibilityThrowException == false) {
                 throw e
             }
         }
@@ -112,7 +112,7 @@ object GXAccessibilityUtils {
                 })
             }
         } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventAccessibilityThrowException == false) {
                 throw e
             }
         }
@@ -147,7 +147,7 @@ object GXAccessibilityUtils {
                 })
             }
         } catch (e: Exception) {
-            if (GXRegisterCenter.instance.extensionCompatibility?.isPreventAccessibilityThrowException() == false) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventAccessibilityThrowException == false) {
                 throw e
             }
         }

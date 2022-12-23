@@ -47,7 +47,7 @@
 
     //templateItem
     GXTemplateItem *templateItem1 = [[GXTemplateItem alloc] init];
-    templateItem1.templateId = @"gx-style-backdrop-filter";
+    templateItem1.templateId = @"gx-vertical-item";
     templateItem1.bizId = [GaiaXHelper bizId];
     templateItem1.isLocal = YES;
 
@@ -61,9 +61,9 @@
 
     //绑定数据
     GXTemplateData *data1 = [[GXTemplateData alloc] init];
-//    data1.data = [GaiaXHelper jsonWithFileName:@"vertical-item"];
-    data1.data = @{@"blur_text": @"我是文本我是文本我是文本我是文本我是文本", @"img": @"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fphoto%2F2011-10-14%2Fenterdesk.com-2E8A38D0891116035E78DD713EED9637.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666781857&t=595349c20a2e34ceddbd48b130339fbf"};
-    
+    data1.data = [GaiaXHelper jsonWithFileName:@"vertical-item"];
+//    data1.data = @{@"blur_text": @"我是文本我是文本我是文本我是文本我是文本", @"img": @"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fphoto%2F2011-10-14%2Fenterdesk.com-2E8A38D0891116035E78DD713EED9637.jpg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666781857&t=595349c20a2e34ceddbd48b130339fbf"};
+//
     [TheGXTemplateEngine bindData:data1 onView:_view1];
     
 }

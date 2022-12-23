@@ -1,0 +1,18 @@
+{
+  "id": "template_slider_size_aspect_ratio",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "slider-scroll-time-interval": 6000,
+  "slider-has-indicator": true,
+  "slider-infinity-scroll": true,
+  "slider-indicator-margin": "{10,30,10,30}",
+  "slider-indicator-position": "top-center",
+  "slider-indicator-class-android": "com.alibaba.gaiax.customview.CustomSliderIndicatorView",
+  "layers": [
+    {
+      "id": "template_slider_item_size_aspect_ratio",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

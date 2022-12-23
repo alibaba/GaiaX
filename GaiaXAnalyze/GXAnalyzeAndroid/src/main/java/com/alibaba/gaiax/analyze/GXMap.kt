@@ -1,6 +1,6 @@
 package com.alibaba.gaiax.analyze
 
-public final class GXMap() : GXValue() {
+class GXMap() : GXValue() {
     private var value: Any? = null
 
     constructor(value: Any?) : this() {
@@ -8,6 +8,6 @@ public final class GXMap() : GXValue() {
     }
 
     override fun getValue(): Any? {
-        return value;
+        return value
     }
 }

@@ -68,6 +68,12 @@ open class GXDataBinding(
             result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
         }
 
+        // extend数据
+        getExtend(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_EXTEND, it)
+        }
+
         return result
     }
 

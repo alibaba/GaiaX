@@ -27,6 +27,7 @@
 }
 
 @end
+
 @implementation GXLong
 
 + (NSNumber *)getResultByValue:(int64_t)value{
@@ -34,6 +35,7 @@
 }
 
 @end
+
 @implementation GXStr
 
 + (NSString *)getResultByValue:(NSString *)value{

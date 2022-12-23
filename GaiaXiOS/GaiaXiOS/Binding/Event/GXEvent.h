@@ -24,9 +24,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //event gesture type
-typedef NS_ENUM(NSUInteger, GXEventGestureType) {
-    GXEventGestureTypeTap = 0,//tap
-    GXEventGestureTypeLongPress,//long press
+typedef NS_ENUM(NSUInteger, GXEventType) {
+    GXEventTypeUnknown = 0, // Unknown event type
+    GXEventTypeTap = 1,//tap
+    GXEventTypeLongPress = 2,//long press
 };
 
 
@@ -43,7 +44,10 @@ typedef NS_ENUM(NSUInteger, GXEventGestureType) {
 //template info
 @property (nonatomic, weak) GXTemplateItem *templateItem;
 //gesture type：tap, longpress
-@property (nonatomic, assign) GXEventGestureType gestureType;
+@property (nonatomic, assign) GXEventType eventType;
+
+// get event type
++ (GXEventType)getType:(NSString *)eventType;
 
 //set event information
 - (void)setupEventInfo:(NSDictionary *)eventInfo;

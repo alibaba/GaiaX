@@ -80,11 +80,13 @@ open class Node {
         }
     }
 
-    fun free() {
+    fun safeFree() {
         synchronized(Stretch::class.java) {
-            style.free()
-            nFree(Stretch.ptr, rustptr)
-            rustptr = -1
+            if (rustptr != -1L) {
+                style.free()
+                nFree(Stretch.ptr, rustptr)
+                rustptr = -1
+            }
         }
     }
 

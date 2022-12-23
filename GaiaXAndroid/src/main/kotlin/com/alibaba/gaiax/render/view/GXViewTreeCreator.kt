@@ -58,8 +58,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
                     this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
                         childNode, childLayout, mergeX, mergeY
                     )
-                    childNode.boxLayoutView = this
-                    (this as? GXShadowLayout)?.setStyle(childNode.templateNode.css.style)
+                    childNode.boxLayoutView = this as GXShadowLayout
                     if (parentMergeView is ViewGroup) {
                         parentMergeView.addView(this)
                     }
@@ -78,7 +77,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
                 }
             }
 
-        //没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
+        // 没有采用注册进ViewFactory的方式创建对象是因为lottie必须用xml形式创建。
         if (childNode.isNeedLottie()) {
             GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_LOTTIE, null)
                 .apply {

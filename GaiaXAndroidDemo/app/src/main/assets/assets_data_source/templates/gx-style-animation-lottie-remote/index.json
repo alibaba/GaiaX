@@ -1,0 +1,5 @@
+{
+  "id": "gx-style-animation-lottie-remote",
+  "type": "gaia-template",
+  "layers": [{ "id": "src", "type": "view" }]
+}

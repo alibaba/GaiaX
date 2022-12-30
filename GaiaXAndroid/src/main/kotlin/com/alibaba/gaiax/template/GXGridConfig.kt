@@ -16,7 +16,6 @@
 
 package com.alibaba.gaiax.template
 
-import android.graphics.Rect
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
@@ -38,7 +37,6 @@ data class GXGridConfig(
      * Spacing perpendicular to the item spacing
      */
     val rowSpacing: Int = 0,
-    val edgeInsets: Rect = Rect(0, 0, 0, 0),
     /**
      * scrollable
      */
@@ -71,7 +69,6 @@ data class GXGridConfig(
         fun create(
             data: JSONObject,
             direction: String?,
-            edgeInsets: String?,
             itemSpacing: String?,
             rowSpacing: String?,
             column: Int,
@@ -83,7 +80,6 @@ data class GXGridConfig(
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
                 GXContainerConvert.spacing(rowSpacing),
-                GXContainerConvert.edgeInsets(edgeInsets) ?: Rect(0, 0, 0, 0),
                 scrollable
             )
         }
@@ -91,7 +87,6 @@ data class GXGridConfig(
         fun create(srcConfig: GXGridConfig, data: JSONObject): GXGridConfig? {
             val gridColumn = data.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN)
             val scrollEnable = data.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE)
-            val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
 
             var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
             if (itemSpacing == null) {
@@ -108,15 +103,13 @@ data class GXGridConfig(
                 srcConfig.direction,
                 if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
                 if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets(edgeInsets)
-                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
                 scrollEnable ?: srcConfig.scrollEnable
             )
         }
     }
 
     override fun toString(): String {
-        return "GXGridConfig(column=$column, direction=$direction, itemSpacing=$itemSpacing, rowSpacing=$rowSpacing, edgeInsets=$edgeInsets)"
+        return "GXGridConfig(column=$column, direction=$direction, itemSpacing=$itemSpacing, rowSpacing=$rowSpacing)"
     }
 
 }

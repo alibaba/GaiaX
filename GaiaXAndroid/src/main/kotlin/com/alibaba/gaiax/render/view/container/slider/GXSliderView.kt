@@ -135,10 +135,10 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
         val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
         config?.indicatorMargin?.let {
-            layoutParams.leftMargin = it.left
-            layoutParams.topMargin = it.top
-            layoutParams.rightMargin = it.right
-            layoutParams.bottomMargin = it.bottom
+            layoutParams.leftMargin = it.start.valueInt
+            layoutParams.topMargin = it.top.valueInt
+            layoutParams.rightMargin = it.end.valueInt
+            layoutParams.bottomMargin = it.bottom.valueInt
         }
 
         when (config?.indicatorPosition) {

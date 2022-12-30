@@ -16,8 +16,8 @@
 
 package com.alibaba.gaiax.template
 
-import android.graphics.Rect
 import androidx.recyclerview.widget.LinearLayoutManager
+import app.visly.stretch.Rect
 
 /**
  * @suppress
@@ -30,13 +30,13 @@ object GXContainerConvert {
         else -> LinearLayoutManager.VERTICAL
     }
 
-    fun edgeInsets(edgeInsets: String?): Rect? = if (edgeInsets?.isNotEmpty() == true) {
+    fun edgeInsets(edgeInsets: String?): Rect<GXSize>? = if (edgeInsets?.isNotEmpty() == true) {
         val edge = edgeInsets.replace("{", "").replace("}", "").split(",")
-        val top = GXSize.create(edge[0]).valueInt
-        val left = GXSize.create(edge[1]).valueInt
-        val bottom = GXSize.create(edge[2]).valueInt
-        val right = GXSize.create(edge[3]).valueInt
-        Rect(left, top, right, bottom)
+        val top = GXSize.create(edge[0])
+        val left = GXSize.create(edge[1])
+        val bottom = GXSize.create(edge[2])
+        val right = GXSize.create(edge[3])
+        Rect(left, right, top, bottom)
     } else {
         null
     }

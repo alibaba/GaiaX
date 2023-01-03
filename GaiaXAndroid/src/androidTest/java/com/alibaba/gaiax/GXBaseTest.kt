@@ -93,8 +93,9 @@ open class GXBaseTest {
             )
             if (propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH) {
                 val responsiveRule = scrollConfig.data.getString("responsive-rule") ?: return null
-                val leftMargin = scrollConfig.edgeInsets.left
-                val rightMargin = scrollConfig.edgeInsets.right
+                val padding = gxTemplateContext.rootNode?.getPaddingRect()
+                val leftMargin = padding?.left ?: 0
+                val rightMargin = padding?.right ?: 0
                 val lineSpacing = scrollConfig.itemSpacing
                 if (responsiveRule == "response_layout_rule_5") {
                     return (GXScreenUtils.getScreenWidthPx(gxTemplateContext.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 2.5F

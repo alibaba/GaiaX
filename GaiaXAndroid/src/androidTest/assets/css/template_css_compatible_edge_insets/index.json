@@ -1,0 +1,11 @@
+{
+  "id": "template_css_compatible_edge_insets",
+  "type": "gaia-template",
+  "edge-insets": "{18,18,18,18}",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    }
+  ]
+}

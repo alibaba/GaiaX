@@ -873,7 +873,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         ) {
             val animation = if (GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE.equals(type, true)) {
                 val lottieData = gxAnimationValue
-                    .getJSONObject(GXAnimationBinding.KEY_LOTTIE_ANIMATOR) ?: return
+                    .getJSONObject(GXAnimationBinding.KEY_LOTTIE_ANIMATOR)
+                    ?: if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityLottieOldDataStructure == true) {
+                        gxAnimationValue
+                    } else {
+                        return
+                    }
                 GXLottieAnimation.create(lottieData)
             } else if (GXTemplateKey.GAIAX_ANIMATION_TYPE_PROP.equals(type, true)) {
                 val animatorData = gxAnimationValue

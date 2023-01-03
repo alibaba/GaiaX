@@ -1,0 +1,8 @@
+{
+  "exp-version": "V1",
+  "id": "template_animation_lottie_old_data_structure",
+  "type": "gaia-template",
+  "layers": [
+    { "id": "lottie_layout", "type": "view" }
+  ]
+}

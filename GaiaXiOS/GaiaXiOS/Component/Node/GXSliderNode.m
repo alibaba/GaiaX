@@ -694,19 +694,21 @@
     self.itemSpacing = [GXStyleHelper converSimpletValue:itemSpacing];
     
     //edge-inset
-    NSString *edgeInsets = [viewInfo gx_stringForKey:@"edge-insets"];
-    edgeInsets = [edgeInsets stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if (edgeInsets.length > 3) {
-        edgeInsets = [edgeInsets substringWithRange:NSMakeRange(1, edgeInsets.length-2)];
-        NSArray *tmpInsets = [edgeInsets componentsSeparatedByString:@","];
-        if (tmpInsets.count == 4) {
-            CGFloat top = [GXStyleHelper converSimpletValue:tmpInsets[0]];
-            CGFloat left = [GXStyleHelper converSimpletValue:tmpInsets[1]];
-            CGFloat right = [GXStyleHelper converSimpletValue:tmpInsets[3]];
-            CGFloat bottom = [GXStyleHelper converSimpletValue:tmpInsets[2]];
-            self.contentInset = UIEdgeInsetsMake(top, left, bottom, right);
-        }
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    StretchStyleRect padding = self.style.styleModel.padding;
+    if (padding.top.dimen_type == DIM_TYPE_POINTS) {
+        edgeInsets.top = (CGFloat) padding.top.dimen_value;
     }
+    if (padding.bottom.dimen_type == DIM_TYPE_POINTS) {
+        edgeInsets.bottom = (CGFloat) padding.bottom.dimen_value;
+    }
+    if (padding.left.dimen_type == DIM_TYPE_POINTS) {
+        edgeInsets.left = (CGFloat) padding.left.dimen_value;
+    }
+    if (padding.right.dimen_type == DIM_TYPE_POINTS) {
+        edgeInsets.right = (CGFloat) padding.right.dimen_value;
+    }
+    self.contentInset = edgeInsets;
     
     //direction
     NSString *direction = [viewInfo gx_stringForKey:@"direction"];

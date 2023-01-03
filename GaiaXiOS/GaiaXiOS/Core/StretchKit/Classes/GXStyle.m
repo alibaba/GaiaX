@@ -121,6 +121,46 @@ extern StretchStyleRect GXMakeRect(StretchStyleDimension left,
     GXLog(@"[GaiaX] 样式style释放 - %@", self);
 }
 
+// 兼容 edge-insets
+- (void)updateEdgeInsets:(NSString *)edgeInsetsStr {
+    if (edgeInsetsStr == nil) {
+        return;
+    }
+    edgeInsetsStr = [edgeInsetsStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    if (edgeInsetsStr != nil && edgeInsetsStr.length > 3) {
+        edgeInsetsStr = [edgeInsetsStr substringWithRange:NSMakeRange(1, edgeInsetsStr.length-2)];
+        NSArray *tmpInsets = [edgeInsetsStr componentsSeparatedByString:@","];
+        if (tmpInsets.count == 4) {
+            edgeInsets.top = [GXStyleHelper converSimpletValue:tmpInsets[0]];
+            edgeInsets.left = [GXStyleHelper converSimpletValue:tmpInsets[1]];
+            edgeInsets.right = [GXStyleHelper converSimpletValue:tmpInsets[3]];
+            edgeInsets.bottom = [GXStyleHelper converSimpletValue:tmpInsets[2]];
+        }
+    }
+    
+    StretchStyleRect padding = self.styleModel.padding;
+    if (edgeInsets.left > 0) {
+        padding.left.dimen_value = edgeInsets.left;
+        padding.left.dimen_type = DIM_TYPE_POINTS;
+    }
+    
+    if (edgeInsets.right > 0) {
+        padding.right.dimen_value = edgeInsets.right;
+        padding.right.dimen_type = DIM_TYPE_POINTS;
+    }
+    
+    if (edgeInsets.top > 0) {
+        padding.top.dimen_value = edgeInsets.top;
+        padding.top.dimen_type = DIM_TYPE_POINTS;
+    }
+    
+    if (edgeInsets.bottom > 0) {
+        padding.bottom.dimen_value = edgeInsets.bottom;
+        padding.bottom.dimen_type = DIM_TYPE_POINTS;
+    }
+    self.styleModel.padding = padding;
+}
 
 
 @end

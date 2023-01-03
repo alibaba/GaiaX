@@ -163,7 +163,7 @@
         if (priority >= 0 && priority <= 99) {
             _isNeedSort = YES;
             NSString *key = [NSString stringWithFormat:@"%ld", priority];
-            GXAssert(![_kvSources objectForKey:key] , @"已经存在相同优先级的数据源，请重新设置数据源优先级");
+//            GXAssert(![_kvSources objectForKey:key] , @"已经存在相同优先级的数据源，请重新设置数据源优先级");
             [_kvSources gx_setObject:source forKey:key];
         }
     }

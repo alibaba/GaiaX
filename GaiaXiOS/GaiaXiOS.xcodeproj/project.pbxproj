@@ -184,6 +184,7 @@
 		8DFF8503273E69BC0014C0DA /* GXFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF8501273E69BC0014C0DA /* GXFileHandler.m */; };
 		960DAA88A4F50DDC29631263 /* libPods-GaiaXiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */; };
 		B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B188ACE429237797005C9F62 /* GXEventTest.swift */; };
+		B1FAA68E29641D9400A67420 /* GXCssTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FAA68D29641D9400A67420 /* GXCssTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -379,6 +380,7 @@
 		8DFF8501273E69BC0014C0DA /* GXFileHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXFileHandler.m; sourceTree = "<group>"; };
 		A23EDE6F4FF3A79714BEBD6C /* Pods-GaiaXiOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		B188ACE429237797005C9F62 /* GXEventTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXEventTest.swift; sourceTree = "<group>"; };
+		B1FAA68D29641D9400A67420 /* GXCssTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXCssTest.swift; sourceTree = "<group>"; };
 		CA43FB5B0B95A83F4433A734 /* Pods-GaiaXiOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -425,6 +427,7 @@
 				8DF79CB92760A9AA00A867BE /* GXEgnineTest.mm */,
 				8DDF3BB82761DFB30014E4D8 /* GXSwiftTest.swift */,
 				B188ACE429237797005C9F62 /* GXEventTest.swift */,
+				B1FAA68D29641D9400A67420 /* GXCssTest.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";
@@ -1155,6 +1158,7 @@
 			files = (
 				8DDF3BB92761DFB30014E4D8 /* GXSwiftTest.swift in Sources */,
 				8D1CBD1E2758AA4500EC2B4D /* GaiaXiOSTests.m in Sources */,
+				B1FAA68E29641D9400A67420 /* GXCssTest.swift in Sources */,
 				8DBBA433278449BE00ACCFBC /* GXExpressionTest.mm in Sources */,
 				B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */,
 				8DDF3BD8276225A50014E4D8 /* GXTemplateTest.mm in Sources */,

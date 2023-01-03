@@ -128,6 +128,9 @@ class GXSliderViewAdapter(
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        if (obj is View) {
+            container.removeView(obj)
+        }
         itemViewMap.remove(getItemViewKey(position))
     }
 

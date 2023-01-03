@@ -772,7 +772,7 @@ class GXComponentGridTest : GXBaseTest() {
     fun template_grid_height_auto_no_data() {
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isPreventContainerDataSourceThrowException=true
             }
         )

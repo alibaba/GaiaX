@@ -1,0 +1,13 @@
+{
+  "animation": {
+    "lottie_layout": {
+      "type": "lottie",
+      "url": "${zipFilePath}",
+      "loopCount": "-1",
+      "loop": true,
+      "trigger": false,
+      "state": true,
+      "bundle": "gaiax.bundle"
+    }
+  }
+}

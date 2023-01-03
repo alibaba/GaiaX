@@ -1121,7 +1121,7 @@ class GXComponentTextTest : GXBaseTest() {
     @Test
     fun template_text_fitcontent_lines_0_width_null_height_100px_youku_version() {
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isPreventFitContentThrowException = true
             }
         )
@@ -1136,7 +1136,7 @@ class GXComponentTextTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isPreventFitContentThrowException = false
             }
         )
@@ -1399,7 +1399,7 @@ class GXComponentTextTest : GXBaseTest() {
     fun template_text_fitcontent_lines_0_width_100px_height_100px_databinding_fitcontent_youku_version() {
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityDataBindingFitContent = true
             }
         )
@@ -1424,7 +1424,7 @@ class GXComponentTextTest : GXBaseTest() {
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityDataBindingFitContent = false
             }
         )

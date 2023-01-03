@@ -220,7 +220,7 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_container_nest_template_judegment_condition() {
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = true
             }
         )
@@ -256,7 +256,7 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = false
             }
         )
@@ -265,7 +265,7 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_databinding_nest_scroll_nodes_self_youku_version() {
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerDataPassSequence = true
             }
         )
@@ -304,7 +304,7 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXIExtensionCompatibilityConfig().apply {
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerDataPassSequence = false
             }
         )

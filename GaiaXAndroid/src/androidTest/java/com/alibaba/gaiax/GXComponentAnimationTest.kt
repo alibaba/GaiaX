@@ -233,4 +233,44 @@ class GXComponentAnimationTest : GXBaseTest() {
 
         Assert.assertEquals(true, (rootView.child(1) as LottieAnimationView).composition == null)
     }
+
+    @Test
+    fun template_animation_lottie_old_data_structure() {
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+                isCompatibilityLottieOldDataStructure = true
+            })
+
+        val countDownLatch = CountDownLatch(1)
+
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "animation",
+                "template_animation_lottie_old_data_structure"
+            )
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["zipFilePath"] =
+                "https://ykimg.alicdn.com/product/xfile/2021-12-10/0a027f4c1be329002a7b4cf28e3c7906.zip"
+        })
+        gxTemplateData.eventListener = object : GXTemplateEngine.GXIEventListener {
+            override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                if (gxAnimation.state == GXTemplateEngine.GXAnimation.STATE_START) {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+        val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, gxMeasureSize)
+
+        uiThreadTest.runOnUiThread {
+            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        }
+
+        countDownLatch.await()
+
+        Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
+    }
 }

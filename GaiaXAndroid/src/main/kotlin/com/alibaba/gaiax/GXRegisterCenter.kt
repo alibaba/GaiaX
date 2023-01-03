@@ -190,7 +190,7 @@ class GXRegisterCenter {
         fun create(): GXLottieAnimation?
     }
 
-    class GXIExtensionCompatibilityConfig {
+    class GXExtensionCompatibilityConfig {
 
         /**
          * 是否兼容容器数据的传递顺序
@@ -223,6 +223,8 @@ class GXRegisterCenter {
         var isPreventFitContentThrowException = false
 
         var isCompatibilityDataBindingFitContent = false
+
+        var isCompatibilityLottieOldDataStructure = false
     }
 
     internal var extensionBizMap: GXIExtensionBizMap? = null
@@ -235,7 +237,7 @@ class GXRegisterCenter {
     internal var extensionGrid: GXIExtensionGrid? = null
     internal var extensionScroll: GXIExtensionScroll? = null
     internal var extensionException: GXIExtensionException? = null
-    internal var extensionCompatibilityConfig: GXIExtensionCompatibilityConfig? = null
+    internal var extensionCompatibilityConfig: GXExtensionCompatibilityConfig? = null
     internal var extensionNodeEvent: GXIExtensionNodeEvent? = null
     internal var extensionContainerDataUpdate: GXIExtensionContainerDataUpdate? = null
     internal var extensionContainerItemBind: GXIExtensionContainerItemBind? = null
@@ -323,7 +325,7 @@ class GXRegisterCenter {
         return this
     }
 
-    fun registerExtensionCompatibility(extensionCompatibility: GXIExtensionCompatibilityConfig): GXRegisterCenter {
+    fun registerExtensionCompatibility(extensionCompatibility: GXExtensionCompatibilityConfig): GXRegisterCenter {
         this.extensionCompatibilityConfig = extensionCompatibility
         return this
     }

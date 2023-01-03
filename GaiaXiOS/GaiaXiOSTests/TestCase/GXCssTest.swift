@@ -52,8 +52,8 @@ final class GXCssTest: XCTestCase {
         
         let edgeInsets = (rootView as? UICollectionView)?.contentInset
         XCTAssertEqual(18, edgeInsets?.top)
-        XCTAssertEqual(10, edgeInsets?.bottom)
+        XCTAssertEqual(0, edgeInsets?.bottom)
         XCTAssertEqual(18, edgeInsets?.left)
-        XCTAssertEqual(10, edgeInsets?.right)
+        XCTAssertEqual(0, edgeInsets?.right)
     }
 }

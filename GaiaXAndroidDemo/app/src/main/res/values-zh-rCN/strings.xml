@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">GaiaXDemo</string>
     <string name="fastpreview">实时预览</string>
-    <string name="fastpreview_emulator">实时预览 模拟器</string>
     <string name="normal_template">普通模板</string>
     <string name="nest_template">嵌套模板</string>
     <string name="container_template">容器模板</string>

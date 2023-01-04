@@ -19,6 +19,7 @@
 #import "ViewController.h"
 #import <GaiaXiOS/GaiaXiOS.h>
 #import "GaiaXScanViewController.h"
+#import "GaiaXPreviewViewController.h"
 #import "GaiaXHelper.h"
 
 
@@ -79,11 +80,26 @@
 #pragma mark -
 
 - (IBAction)previewAction:(id)sender{
-    UIViewController *vc = [[GaiaXScanViewController alloc] init];
-    vc.title = NSLocalizedString(@"fastpreview", nil);
-    [self.navigationController pushViewController:vc animated:YES];
+    if (self.isSimuLator) {
+        NSString *content = @"gaiax://gaiax/preview?url=ws://30.78.146.17:9001&id=test-template&type=auto";
+        GaiaXPreviewViewController *previewController = [[GaiaXPreviewViewController alloc] initWithUrl:content];
+        [self.navigationController pushViewController:previewController animated:YES];
+    }else {
+        UIViewController *vc = [[GaiaXScanViewController alloc] init];
+        vc.title = NSLocalizedString(@"fastpreview", nil);
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
+
+-(BOOL)isSimuLator
+{
+    if (TARGET_IPHONE_SIMULATOR == 1 && TARGET_OS_IPHONE == 1) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
 
 #pragma mark -
 

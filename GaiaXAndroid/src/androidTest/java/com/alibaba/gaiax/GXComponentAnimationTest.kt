@@ -272,5 +272,10 @@ class GXComponentAnimationTest : GXBaseTest() {
         countDownLatch.await()
 
         Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
+
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+                isCompatibilityLottieOldDataStructure = false
+            })
     }
 }

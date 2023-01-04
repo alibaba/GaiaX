@@ -1,0 +1,10 @@
+{
+  "data": {
+    "title": {
+      "value": "$title",
+      "extend": {
+        "fit-content": "true"
+      }
+    }
+  }
+}

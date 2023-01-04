@@ -1,0 +1,14 @@
+#template_scroll_vertical_different_item_height_item {
+  width: 50px;
+  background-color: #e4e4e4;
+}
+
+#title {
+  text-overflow: ellipsis;
+  color: #333333;
+  font-size: 12px;
+  lines: 2;
+  fit-content: true;
+  align-self: center;
+  width: 50px;
+}

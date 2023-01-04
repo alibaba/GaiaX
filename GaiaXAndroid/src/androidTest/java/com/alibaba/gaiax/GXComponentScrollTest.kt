@@ -1462,36 +1462,42 @@ class GXComponentScrollTest : GXBaseTest() {
         val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
 
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["nodes"] = JSONArray().apply {
-                this.add(JSONObject().apply {
-                    this["type"] = 0
-                })
-                this.add(JSONObject().apply {
-                    this["type"] = 1
-                })
-            }
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject().apply {
+                        this["type"] = 0
+                    })
+                    this.add(JSONObject().apply {
+                        this["type"] = 1
+                    })
+                }
+            })
+        )
 
         rootView.executeRecyclerView()
 
         Assert.assertEquals(375F.dpToPx(), rootView.width())
         Assert.assertEquals(120F.dpToPx(), rootView.height())
 
-        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["nodes"] = JSONArray().apply {
-                this.add(JSONObject().apply {
-                    this["type"] = 0
-                    this["smallItemWidth"] = "150px"
-                    this["smallItemHeight"] = "150px"
-                })
-                this.add(JSONObject().apply {
-                    this["type"] = 1
-                    this["largeItemWidth"] = "200px"
-                    this["largeItemHeight"] = "200px"
-                })
-            }
-        }))
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["nodes"] = JSONArray().apply {
+                    this.add(JSONObject().apply {
+                        this["type"] = 0
+                        this["smallItemWidth"] = "150px"
+                        this["smallItemHeight"] = "150px"
+                    })
+                    this.add(JSONObject().apply {
+                        this["type"] = 1
+                        this["largeItemWidth"] = "200px"
+                        this["largeItemHeight"] = "200px"
+                    })
+                }
+            })
+        )
 
 
         rootView.executeRecyclerView()
@@ -1759,5 +1765,34 @@ class GXComponentScrollTest : GXBaseTest() {
         Assert.assertEquals(true, throwException != null)
 
         GXRegisterCenter.instance.reset()
+    }
+
+    @Test
+    fun template_scroll_vertical_different_item_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "scroll",
+            "template_scroll_vertical_different_item_height"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["title"] = "GaiaX"
+                })
+                this.add(JSONObject().apply {
+                this["title"] = "GaiaXGaiaXGaiaXGaiaXGaiaXGaiaXGaiaX"
+            })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        val item1Height = rootView.child(0).height.toFloat()
+        val item2Height = rootView.child(1).height.toFloat()
+
+        Assert.assertEquals(true, item1Height != item2Height)
     }
 }

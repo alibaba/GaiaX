@@ -2,6 +2,7 @@ package com.alibaba.gaiax.demo
 
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -43,19 +44,19 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.fastpreview -> {
-                val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)
-                launcher.launch(intent)
-                true
-            }
-            R.id.fastpreview_emulator -> {
-                val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
-                // 9001
-                // 9292
-                intent.putExtra(
-                    "GAIA_STUDIO_URL",
-                    "gaiax://gaiax/preview?url=ws://30.78.147.86:9001&id=test-template&type=auto"
-                )
-                launcher.launch(intent)
+                if (Build.MODEL.contains("Android SDK")) {
+                    val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
+                    // 9001
+                    // 9292
+                    intent.putExtra(
+                        "GAIA_STUDIO_URL",
+                        "gaiax://gaiax/preview?url=ws://30.78.146.17:9001&id=test-template&type=auto"
+                    )
+                    launcher.launch(intent)
+                } else {
+                    val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)
+                    launcher.launch(intent)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -1,0 +1,10 @@
+{
+  "id": "template_scroll_vertical_different_item_height_item",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ]
+}

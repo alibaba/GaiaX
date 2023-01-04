@@ -45,6 +45,8 @@ class GXContainerViewAdapter(
     val gxContainer: GXContainer
 ) : RecyclerView.Adapter<GXViewHolder>() {
 
+    private var position: Int = 0
+
     lateinit var gxNode: GXNode
 
     private var containerData: JSONArray = JSONArray()
@@ -286,30 +288,29 @@ class GXContainerViewAdapter(
         childMeasureSize: GXTemplateEngine.GXMeasureSize,
         childVisualNestTemplateNode: GXTemplateNode?,
         childItemViewPort: Size<Float?>
-    ) = if (isChildFooterItem) {
-        // TODO: 此处可能有耗时问题，可以进行优化
-        val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
-            childTemplateItem,
-            childMeasureSize,
-            childVisualNestTemplateNode
-        )
-        GXNodeUtils.computeContainerFooterItemSize(
-            childTemplateContext,
-            gxNode,
-            childItemViewPort,
-            childTemplateItem,
-            childVisualNestTemplateNode,
-            containerData
-        )
-    } else {
-        gxNode.multiTypeItemComputeCache?.get(childTemplateItem) ?: kotlin.run {
-            // 某些情况下没有计算结果，需要再手动计算一下 @see updateContainerLayout
-            GXNodeUtils.computeContainerSizeByItemTemplate(
+    ): Layout? {
+        val itemData = containerData[position] as? JSONObject ?: JSONObject()
+        return if (isChildFooterItem) {
+            // TODO: 此处可能有耗时问题，可以进行优化
+            val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
+                childTemplateItem,
+                childMeasureSize,
+                childVisualNestTemplateNode
+            )
+            GXNodeUtils.computeContainerFooterItemSize(
+                childTemplateContext,
+                gxNode,
+                childItemViewPort,
+                childTemplateItem,
+                childVisualNestTemplateNode,
+                itemData
+            )
+        } else {
+            GXNodeUtils.computeContainerItemSize(
                 gxTemplateContext,
                 gxNode,
-                containerData
+                itemData
             )
-            gxNode.multiTypeItemComputeCache?.get(childTemplateItem)
         }
     }
 
@@ -345,6 +346,9 @@ class GXContainerViewAdapter(
             positionMap[position] = footerTemplateItem
             return viewType
         }
+
+        // update position
+        this.position = position
 
         // normal multi type
         val normalTemplateItem = getCurrentPositionTemplateItem(position)
@@ -385,7 +389,7 @@ class GXContainerViewAdapter(
 
     override fun getItemCount(): Int {
         return if (hasFooter()) {
-            containerData.size + 1;
+            containerData.size + 1
         } else {
             containerData.size
         }
@@ -399,6 +403,7 @@ class GXContainerViewAdapter(
     fun setContainerData(data: JSONArray) {
         viewTypeMap.clear()
         positionMap.clear()
+        position = 0
         val containerDataUpdate = GXRegisterCenter.instance.extensionContainerDataUpdate
         if (containerDataUpdate != null) {
             val oldData = containerData

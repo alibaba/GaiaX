@@ -56,12 +56,14 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
 
     override fun bindNetUri(data: JSONObject, uri: String, placeholder: String?) {
         // 占位图仅对网络图生效
+        var res = 0
         placeholder?.let { resUri ->
-            bindRes(resUri)
+            res = getRes(resUri)
         }
         Glide
             .with(context)
             .load(uri)
+            .placeholder(res)
             .listener(requestListener)
             .into(this)
     }

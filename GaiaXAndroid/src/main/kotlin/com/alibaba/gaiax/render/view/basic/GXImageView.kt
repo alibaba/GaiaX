@@ -129,6 +129,15 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         }
     }
 
+    open fun getRes(resUri: String): Int {
+        return try {
+            getResIdByUri(this, resUri);
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+    }
+
     open fun bindDesc(data: JSONObject?) {
         val view = this
         GXAccessibilityUtils.accessibilityOfImage(view, data)

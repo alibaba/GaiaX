@@ -67,13 +67,16 @@ typedef enum : NSUInteger {
 
 //解析css
 -(NSDictionary *)parse:(NSString *)cssStr{
-    NSUInteger length = cssStr.length;
-    if (cssStr && length == 0) {
+    if (!cssStr || ![cssStr isKindOfClass:[NSString class]] || !cssStr.length) {
         return nil;
     }
     
     //对应的css的map
     NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+
+    //处理字符串
+    cssStr = [cssStr stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    NSUInteger length = cssStr.length;
 
     //解析cssString
     for (NSUInteger i = 0; i < length; ++i) {

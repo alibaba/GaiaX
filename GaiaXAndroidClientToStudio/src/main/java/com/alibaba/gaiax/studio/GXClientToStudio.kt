@@ -187,6 +187,9 @@ class GXClientToStudio {
         }
     }
 
+    /**
+     * add method for fixing js connection
+     */
     fun sendMessage(data: JSONObject) {
         socketHelper?.sendMessage(data)
     }

@@ -19,5 +19,4 @@ package com.alibaba.gaiax.render.view
 /**
  * @suppress
  */
-interface GXIContainer {
-}
+interface GXIContainer

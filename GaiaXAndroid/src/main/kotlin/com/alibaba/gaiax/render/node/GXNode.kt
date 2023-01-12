@@ -175,7 +175,10 @@ class GXNode {
     }
 
     fun isNeedLottie(): Boolean {
-        return templateNode.animationBinding?.type?.equals(GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true) == true
+        return templateNode.animationBinding?.type?.equals(
+            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE,
+            true
+        ) == true
     }
 
     fun setIdPath(parent: GXNode?, layer: GXLayer) {

@@ -31,7 +31,8 @@ class GXPropAnimation(
     override fun createAnimator(targetView: View): Animator {
         val valueAnimator = ValueAnimator()
         valueAnimator.repeatCount = loopCount
-        valueAnimator.repeatMode = if (loopMode == GXPropAnimationSet.GXPropLoopMode.RESET) ValueAnimator.RESTART else ValueAnimator.REVERSE
+        valueAnimator.repeatMode =
+            if (loopMode == GXPropAnimationSet.GXPropLoopMode.RESET) ValueAnimator.RESTART else ValueAnimator.REVERSE
         valueAnimator.duration = duration.toLong()
         valueAnimator.interpolator = interpolator.value()
         if (value is GXPropAnimationSet.GXPropValue.GXPropValueFloat) {
@@ -55,7 +56,8 @@ class GXPropAnimation(
     }
 
     var duration: Int = 300
-    var interpolator: GXPropAnimationSet.GXPropInterpolator = GXPropAnimationSet.GXPropInterpolator.STANDARD
+    var interpolator: GXPropAnimationSet.GXPropInterpolator =
+        GXPropAnimationSet.GXPropInterpolator.STANDARD
     var loopCount: Int = 0
     var loopMode: GXPropAnimationSet.GXPropLoopMode = GXPropAnimationSet.GXPropLoopMode.RESET
     var delay: Long = 0

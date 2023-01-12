@@ -131,7 +131,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
 
     open fun getRes(resUri: String): Int {
         return try {
-            getResIdByUri(this, resUri);
+            getResIdByUri(this, resUri)
         } catch (e: Exception) {
             e.printStackTrace()
             0

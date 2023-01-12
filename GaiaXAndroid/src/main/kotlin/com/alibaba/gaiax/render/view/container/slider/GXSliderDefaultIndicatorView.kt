@@ -25,7 +25,7 @@ import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 /**
  * @suppress
  */
-class GXSliderDefaultIndicatorView: GXSliderBaseIndicatorView {
+class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
 
     companion object {
         // 指示器 Item 之间的间距
@@ -63,8 +63,9 @@ class GXSliderDefaultIndicatorView: GXSliderBaseIndicatorView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH
-                + (indicatorCount - 1) * INDICATOR_SPACING).toInt(),
+        setMeasuredDimension(
+            ((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH
+                    + (indicatorCount - 1) * INDICATOR_SPACING).toInt(),
             INDICATOR_HEIGHT.toInt()
         )
     }

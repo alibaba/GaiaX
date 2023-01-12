@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.template;
+package com.alibaba.gaiax.template
 
 import android.graphics.Rect
 import com.alibaba.fastjson.JSONObject

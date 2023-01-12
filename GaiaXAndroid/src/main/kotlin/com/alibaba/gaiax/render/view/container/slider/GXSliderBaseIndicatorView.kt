@@ -23,7 +23,7 @@ import android.view.View
 /**
  * @suppress
  */
-abstract class GXSliderBaseIndicatorView: View {
+abstract class GXSliderBaseIndicatorView : View {
 
     constructor(context: Context) : super(context)
 

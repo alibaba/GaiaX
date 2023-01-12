@@ -18,7 +18,6 @@ package com.alibaba.gaiax.render.view.basic
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build

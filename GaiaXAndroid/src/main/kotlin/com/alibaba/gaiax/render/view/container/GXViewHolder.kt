@@ -19,7 +19,6 @@ package com.alibaba.gaiax.render.view.container
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.render.node.GXTemplateNode
 
 /**
  * @suppress

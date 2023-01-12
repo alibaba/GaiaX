@@ -92,8 +92,11 @@ class GXViewFactoryTest {
     }
 
     @Before
-    fun registerLottie(){
-        GXRegisterCenter.instance.registerExtensionViewSupport(GXViewKey.VIEW_TYPE_LOTTIE,::buildLottieView)
+    fun registerLottie() {
+        GXRegisterCenter.instance.registerExtensionViewSupport(
+            GXViewKey.VIEW_TYPE_LOTTIE,
+            ::buildLottieView
+        )
     }
 
     fun buildLottieView(context: Context): View {

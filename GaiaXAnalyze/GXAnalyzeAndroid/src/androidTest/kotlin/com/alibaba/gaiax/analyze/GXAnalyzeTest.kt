@@ -35,13 +35,13 @@ class GXAnalyzeTest {
                 } else if (valuePath == "data.null") {
                     GXAnalyze.createValueNull()
                 } else if (valuePath == "data.stringEmpty") {
-                    GXAnalyze.createValueString("");
+                    GXAnalyze.createValueString("")
                 } else if (valuePath == "data.true") {
-                    GXAnalyze.createValueBool(true);
+                    GXAnalyze.createValueBool(true)
                 } else if (valuePath == "data.false") {
-                    GXAnalyze.createValueBool(false);
+                    GXAnalyze.createValueBool(false)
                 } else if (valuePath == "data.long") {
-                    GXAnalyze.createValueLong(8L);
+                    GXAnalyze.createValueLong(8L)
                 } else {
                     GXAnalyze.createValueFloat64(8F)
                 }

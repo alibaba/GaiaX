@@ -8,7 +8,7 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderBaseIndicatorView
  * @author guaiyu
  * @date 2022/11/23 11:40
  */
-class CustomSliderIndicatorView: GXSliderBaseIndicatorView {
+class CustomSliderIndicatorView : GXSliderBaseIndicatorView {
 
     constructor(context: Context) : super(context)
 

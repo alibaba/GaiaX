@@ -3,7 +3,6 @@ package com.alibaba.gaiax
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
 import org.junit.Test
@@ -33,7 +32,7 @@ class GXCommonExpressionTest : GXBaseTest() {
         Assert.assertEquals("GaiaXAndroid", (rootView.child(0) as TextView).text)
     }
 
-   @Test
+    @Test
     fun template_double() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

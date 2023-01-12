@@ -1143,7 +1143,7 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(
             3,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
+            (rootView.layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
         )
     }
 
@@ -1780,8 +1780,8 @@ class GXComponentScrollTest : GXBaseTest() {
                     this["title"] = "GaiaX"
                 })
                 this.add(JSONObject().apply {
-                this["title"] = "GaiaXGaiaXGaiaXGaiaXGaiaXGaiaXGaiaX"
-            })
+                    this["title"] = "GaiaXGaiaXGaiaXGaiaXGaiaXGaiaXGaiaX"
+                })
             }
         })
         val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)

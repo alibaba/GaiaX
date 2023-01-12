@@ -261,36 +261,13 @@ class GXSocket : SocketListener {
         val index_css = templateData.getString("index.css")
         val index_js = templateData.getString("index.js")
         val index_databinding = templateData.getString("index.databinding")
-        val index_mock = templateData.getString("index.mock")
+        val index_mock = templateData.getString("index.mock") ?: "{}"
+
+        // 忽略临时mock数据
         val index_data = templateData.getString("index.data")
-        if (index_mock != null) {
-            result["index.mock"] = JSONObject.parseObject(index_mock)
-        }
-        if ("{}" != index_databinding && index_mock != null) {
-            result["index.databinding"] = index_databinding
-        } else if (index_data != null) {
-            val index_json_object = JSONObject.parseObject(index_json)
-            val new_index_databinding = JSONObject()
-            if (index_json_object.containsKey("sub-type")) {
-                val id = index_json_object.getString("id")
-                val data = JSONObject()
-                data[id] = "\${nodes}"
-                new_index_databinding["data"] = data
-                result["index.databinding"] = new_index_databinding
-                val mock = JSONObject()
-                val nodes = JSONArray()
-                nodes.add(JSONObject())
-                nodes.add(JSONObject())
-                nodes.add(JSONObject())
-                nodes.add(JSONObject())
-                nodes.add(JSONObject())
-                mock["nodes"] = nodes
-                result["index.mock"] = mock
-            } else {
-                new_index_databinding["data"] = index_data
-                result["index.databinding"] = new_index_databinding
-            }
-        }
+
+        result["index.mock"] = JSONObject.parseObject(index_mock)
+        result["index.databinding"] = JSONObject.parseObject(index_databinding)
         result["index.json"] = JSONObject.parseObject(index_json)
         result["index.css"] = index_css
         result["index.js"] = index_js

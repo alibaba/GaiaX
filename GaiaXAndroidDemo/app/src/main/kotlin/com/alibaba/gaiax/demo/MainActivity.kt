@@ -44,13 +44,13 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.fastpreview -> {
-                if (Build.MODEL.contains("Android SDK")) {
+                if (Build.MODEL.contains("Android SDK") || Build.MODEL.contains("sdk_gphone64_x86_64")) {
                     val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
                     // 9001
                     // 9292
                     intent.putExtra(
                         "GAIA_STUDIO_URL",
-                        "gaiax://gaiax/preview?url=ws://30.78.146.17:9001&id=test-template&type=auto"
+                        "gaiax://gaiax/preview?url=ws://30.78.146.57:9292&id=test-template&type=auto"
                     )
                     launcher.launch(intent)
                 } else {

@@ -187,6 +187,10 @@ class GXClientToStudio {
         }
     }
 
+    fun sendMessage(data: JSONObject) {
+        socketHelper?.sendMessage(data)
+    }
+
     companion object {
         const val TAG = "[GaiaX][GXStudio]"
 

@@ -274,6 +274,10 @@ class GXSocket : SocketListener {
         return result
     }
 
+    fun sendMessage(data: JSONObject) {
+        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
+    }
+
     companion object {
         const val TAG = "[GaiaX][FastPreview]"
         private const val SOCKET_KEY = "GaiaXSocket"

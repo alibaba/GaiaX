@@ -45,7 +45,6 @@ open class GXBaseTest {
         GXRegisterCenter.instance
             .registerExtensionExpression(GXExtensionMultiVersionExpression())
             .registerExtensionColor(GXProcessorColor())
-            .registerExtensionSize(GXExtensionSize())
             .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
             .registerExtensionScroll(GXExtensionScroll())
     }

@@ -262,15 +262,14 @@ class GXSocket : SocketListener {
         val index_js = templateData.getString("index.js")
         val index_databinding = templateData.getString("index.databinding")
         val index_mock = templateData.getString("index.mock") ?: "{}"
-
-        // 忽略临时mock数据
-        val index_data = templateData.getString("index.data")
+        val index_data = templateData.getString("index.data") ?: ""
 
         result["index.mock"] = JSONObject.parseObject(index_mock)
         result["index.databinding"] = JSONObject.parseObject(index_databinding)
         result["index.json"] = JSONObject.parseObject(index_json)
         result["index.css"] = index_css
         result["index.js"] = index_js
+
         return result
     }
 

@@ -209,7 +209,7 @@ class GXNode {
     }
 
     fun resetTree(gxTemplateContext: GXTemplateContext) {
-        templateNode.reset()
+        templateNode.resetAllCache()
         stretchNode.reset(gxTemplateContext, this.templateNode)
         children?.forEach {
             it.resetTree(gxTemplateContext)

@@ -370,7 +370,7 @@ class GXContainerViewAdapter(
         gxNode.childTemplateItems?.let { items ->
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
-                gxNode.templateNode.resetData()
+                gxNode.templateNode.resetDataCache()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                     val path =
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")

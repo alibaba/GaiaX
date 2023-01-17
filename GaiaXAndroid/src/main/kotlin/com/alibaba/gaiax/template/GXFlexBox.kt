@@ -34,23 +34,169 @@ data class GXFlexBox(
     val alignSelf: AlignSelf? = null,
     val alignContent: AlignContent? = null,
     val justifyContent: JustifyContent? = null,
-    val position: Rect<Dimension>? = null,
-    val margin: Rect<Dimension>? = null,
-    val padding: Rect<Dimension>? = null,
-    val border: Rect<Dimension>? = null,
+    private val position: Rect<GXSize>? = null,
+    private val margin: Rect<GXSize>? = null,
+    private val padding: Rect<GXSize>? = null,
+    private val border: Rect<GXSize>? = null,
     val flexGrow: Float? = null,
     val flexShrink: Float? = null,
-    val flexBasis: Dimension? = null,
-    val size: Size<Dimension>? = null,
-    val minSize: Size<Dimension>? = null,
-    val maxSize: Size<Dimension>? = null,
+    private val flexBasis: GXSize? = null,
+    private val size: Size<GXSize>? = null,
+    private val minSize: Size<GXSize>? = null,
+    private val maxSize: Size<GXSize>? = null,
     val aspectRatio: Float? = null
 ) {
+    private var _maxSizeForStyle: Size<Dimension>? = null
 
-    fun isEmpty(): Boolean {
-        return display == null && positionType == null && direction == null && flexDirection == null && flexWrap == null && overflow == null && alignItems == null && alignSelf == null && alignContent == null && justifyContent == null
-                && position == null && margin == null && padding == null && border == null && flexGrow == null && flexShrink == null && flexBasis == null && size == null && minSize == null && maxSize == null && aspectRatio == null
+    private var _minSizeForStyle: Size<Dimension>? = null
+
+    private var _sizeForStyle: Size<Dimension>? = null
+
+    private var _flexBasisForStyle: Dimension? = null
+
+    private var _borderForStyle: Rect<Dimension>? = null
+
+    private var _paddingForStyle: Rect<Dimension>? = null
+
+    private var _marginForStyle: Rect<Dimension>? = null
+
+    private var _positionForStyle: Rect<Dimension>? = null
+
+    fun reset() {
+        _maxSizeForStyle = null
+        _minSizeForStyle = null
+        _sizeForStyle = null
+        _flexBasisForStyle = null
+        _borderForStyle = null
+        _paddingForStyle = null
+        _marginForStyle = null
+        _positionForStyle = null
     }
+
+    val maxSizeForStyle: Size<Dimension>?
+        get() = if (maxSize != null) {
+            if (_maxSizeForStyle == null) {
+                _maxSizeForStyle = Size(
+                    maxSize.width.valueDimension,
+                    maxSize.height.valueDimension,
+                )
+                _maxSizeForStyle
+            } else {
+                _maxSizeForStyle
+            }
+        } else {
+            null
+        }
+
+    val minSizeForStyle: Size<Dimension>?
+        get() = if (minSize != null) {
+            if (_minSizeForStyle == null) {
+                _minSizeForStyle = Size(
+                    minSize.width.valueDimension,
+                    minSize.height.valueDimension,
+                )
+                _minSizeForStyle
+            } else {
+                _minSizeForStyle
+            }
+        } else {
+            null
+        }
+
+    val sizeForStyle: Size<Dimension>?
+        get() = if (size != null) {
+            if (_sizeForStyle == null) {
+                _sizeForStyle = Size(
+                    size.width.valueDimension,
+                    size.height.valueDimension,
+                )
+                _sizeForStyle
+            } else {
+                _sizeForStyle
+            }
+        } else {
+            null
+        }
+
+    val flexBasisForStyle: Dimension?
+        get() = if (flexBasis != null) {
+            if (_flexBasisForStyle == null) {
+                _flexBasisForStyle = flexBasis.valueDimension
+                _flexBasisForStyle
+            } else {
+                _flexBasisForStyle
+            }
+        } else {
+            null
+        }
+
+    val borderForStyle: Rect<Dimension>?
+        get() = if (border != null) {
+            if (_borderForStyle == null) {
+                _borderForStyle = Rect(
+                    border.start.valueDimension,
+                    border.end.valueDimension,
+                    border.top.valueDimension,
+                    border.bottom.valueDimension,
+                )
+                _borderForStyle
+            } else {
+                _borderForStyle
+            }
+        } else {
+            null
+        }
+
+    val paddingForStyle: Rect<Dimension>?
+        get() = if (padding != null) {
+            if (_paddingForStyle == null) {
+                _paddingForStyle = Rect(
+                    padding.start.valueDimension,
+                    padding.end.valueDimension,
+                    padding.top.valueDimension,
+                    padding.bottom.valueDimension,
+                )
+                _paddingForStyle
+            } else {
+                _paddingForStyle
+            }
+        } else {
+            null
+        }
+
+    val marginForStyle: Rect<Dimension>?
+        get() = if (margin != null) {
+            if (_marginForStyle == null) {
+                _marginForStyle = Rect(
+                    margin.start.valueDimension,
+                    margin.end.valueDimension,
+                    margin.top.valueDimension,
+                    margin.bottom.valueDimension,
+                )
+                _marginForStyle
+            } else {
+                _marginForStyle
+            }
+        } else {
+            null
+        }
+
+    val positionForStyle: Rect<Dimension>?
+        get() = if (position != null) {
+            if (_positionForStyle == null) {
+                _positionForStyle = Rect(
+                    position.start.valueDimension,
+                    position.end.valueDimension,
+                    position.top.valueDimension,
+                    position.bottom.valueDimension,
+                )
+                _positionForStyle
+            } else {
+                _positionForStyle
+            }
+        } else {
+            null
+        }
 
     companion object {
 
@@ -68,41 +214,32 @@ data class GXFlexBox(
                 justifyContent = heightPriorityStyle.justifyContent
                     ?: lowPriorityStyle.justifyContent,
                 position = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.position,
-                    lowPriorityStyle.position
+                    heightPriorityStyle.position, lowPriorityStyle.position
                 ),
                 margin = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.margin,
-                    lowPriorityStyle.margin
+                    heightPriorityStyle.margin, lowPriorityStyle.margin
                 ),
                 padding = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.padding,
-                    lowPriorityStyle.padding
+                    heightPriorityStyle.padding, lowPriorityStyle.padding
                 ),
                 border = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.border,
-                    lowPriorityStyle.border
+                    heightPriorityStyle.border, lowPriorityStyle.border
                 ),
                 flexGrow = heightPriorityStyle.flexGrow ?: lowPriorityStyle.flexGrow,
                 flexShrink = heightPriorityStyle.flexShrink ?: lowPriorityStyle.flexShrink,
                 flexBasis = heightPriorityStyle.flexBasis ?: lowPriorityStyle.flexBasis,
                 size = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.size,
-                    lowPriorityStyle.size
+                    heightPriorityStyle.size, lowPriorityStyle.size
                 ),
                 minSize = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.minSize,
-                    lowPriorityStyle.minSize
+                    heightPriorityStyle.minSize, lowPriorityStyle.minSize
                 ),
                 maxSize = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.maxSize,
-                    lowPriorityStyle.maxSize
+                    heightPriorityStyle.maxSize, lowPriorityStyle.maxSize
                 ),
                 aspectRatio = heightPriorityStyle.aspectRatio ?: lowPriorityStyle.aspectRatio
-
             )
         }
-
 
         fun create(css: JSONObject): GXFlexBox {
             if (css.isEmpty()) {

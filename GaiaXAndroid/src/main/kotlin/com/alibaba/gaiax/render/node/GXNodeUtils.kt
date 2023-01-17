@@ -131,7 +131,7 @@ object GXNodeUtils {
             // init multi type item
             containerData.forEach { it ->
                 val itemData = it as JSONObject
-                gxNode.templateNode.resetData()
+                gxNode.templateNode.resetDataCache()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                     val path =
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
@@ -232,7 +232,7 @@ object GXNodeUtils {
         // case 2
         else {
             // init multi type item
-            gxNode.templateNode.resetData()
+            gxNode.templateNode.resetDataCache()
             gxNode.templateNode.getExtend(itemData)?.let { typeData ->
                 val path =
                     typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
@@ -479,8 +479,8 @@ object GXNodeUtils {
                 }
             }
         } else if (gxNode.isSliderType()) {
-            when (val nodeWith = gxNode.templateNode.finalCss?.flexBox?.size?.width) {
-                is Dimension.Percent -> {
+            when (val nodeWith = gxNode.templateNode.finalCss?.flexBox?.sizeForStyle?.width) {
+                is Dimension.Points -> {
                     gxTemplateContext.size.width?.let {
                         return Size(it * nodeWith.value, null)
                     }

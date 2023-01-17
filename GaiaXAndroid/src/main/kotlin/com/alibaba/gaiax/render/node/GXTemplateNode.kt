@@ -78,31 +78,22 @@ data class GXTemplateNode(
         return dataValueCache
     }
 
-    fun reset() {
-        resetData()
-        visualTemplateNode?.reset()
+    fun resetDataCache() {
+        dataExtendCache = null
+        dataValueCache = null
+        dataCache = null
+        visualTemplateNode?.resetDataCache()
+    }
 
-        // 此处不能重置config和css，不会产生好处，仅有负面影响
-        // 如果外部按异步调用更新逻辑，那么重置config和css可能导致取值为空，从而抛出异常
-        // resetBasic()
+    fun resetAllCache() {
+        resetDataCache()
+        finalCss?.flexBox?.reset()
+        css.flexBox.reset()
     }
 
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
-
-    fun resetData() {
-        dataExtendCache = null
-        dataValueCache = null
-        dataCache = null
-    }
-
-    private fun resetBasic() {
-        finalCss = null
-        finalGridConfig = null
-        finalScrollConfig = null
-        finalSliderConfig = null
-    }
 
     var finalGridConfig: GXGridConfig? = null
 
@@ -228,9 +219,7 @@ data class GXTemplateNode(
     companion object {
 
         fun createNode(
-            viewId: String,
-            template: GXTemplateInfo,
-            visualTemplateNode: GXTemplateNode? = null
+            viewId: String, template: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null
         ): GXTemplateNode {
             val layer = template.findLayer(viewId)
                 ?: throw IllegalArgumentException("Not found layer by view id, viewId = $viewId")

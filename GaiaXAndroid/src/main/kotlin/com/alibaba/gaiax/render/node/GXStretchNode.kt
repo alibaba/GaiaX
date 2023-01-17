@@ -114,13 +114,13 @@ data class GXStretchNode(
 
             flexBox.positionType?.let { style.positionType = it }
 
-            flexBox.position?.let { style.position = it }
+            flexBox.positionForStyle?.let { style.position = it }
 
-            flexBox.margin?.let { style.margin = it }
+            flexBox.marginForStyle?.let { style.margin = it }
 
-            flexBox.padding?.let { style.padding = it }
+            flexBox.paddingForStyle?.let { style.padding = it }
 
-            flexBox.border?.let { style.border = it }
+            flexBox.borderForStyle?.let { style.border = it }
 
             flexBox.flexGrow?.let {
                 style.flexGrow = it
@@ -129,11 +129,11 @@ data class GXStretchNode(
 
             flexBox.flexShrink?.let { style.flexShrink = it }
 
-            flexBox.size?.let { style.size = Size(it.width, it.height) }
+            flexBox.sizeForStyle?.let { style.size = Size(it.width, it.height) }
 
-            flexBox.minSize?.let { style.minSize = Size(it.width, it.height) }
+            flexBox.minSizeForStyle?.let { style.minSize = Size(it.width, it.height) }
 
-            flexBox.maxSize?.let { style.maxSize = Size(it.width, it.height) }
+            flexBox.maxSizeForStyle?.let { style.maxSize = Size(it.width, it.height) }
         }
     }
 }

@@ -24,43 +24,43 @@ import com.alibaba.fastjson.JSONObject
  */
 object GXFlexBoxConvert {
 
-    fun size(cssJson: JSONObject): Size<Dimension>? {
+    fun size(cssJson: JSONObject): Size<GXSize>? {
         val width = cssJson.getString(GXTemplateKey.FLEXBOX_SIZE_WIDTH)
         val height = cssJson.getString(GXTemplateKey.FLEXBOX_SIZE_HEIGHT)
         return if (width != null && height != null) {
-            Size(GXSize.create(width).valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.create(width), GXSize.create(height))
         } else if (width != null && height == null) {
-            Size(GXSize.create(width).valueDimension, GXSize.Auto.valueDimension)
+            Size(GXSize.create(width), GXSize.Auto)
         } else if (height != null && width == null) {
-            Size(GXSize.Auto.valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.Auto, GXSize.create(height))
         } else {
             null
         }
     }
 
-    fun minSize(cssJson: JSONObject): Size<Dimension>? {
+    fun minSize(cssJson: JSONObject): Size<GXSize>? {
         val width = cssJson.getString(GXTemplateKey.FLEXBOX_MIN_WIDTH)
         val height = cssJson.getString(GXTemplateKey.FLEXBOX_MIN_HEIGHT)
         return if (width != null && height != null) {
-            Size(GXSize.create(width).valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.create(width), GXSize.create(height))
         } else if (width != null && height == null) {
-            Size(GXSize.create(width).valueDimension, GXSize.Auto.valueDimension)
+            Size(GXSize.create(width), GXSize.Auto)
         } else if (height != null && width == null) {
-            Size(GXSize.Auto.valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.Auto, GXSize.create(height))
         } else {
             null
         }
     }
 
-    fun maxSize(cssJson: JSONObject): Size<Dimension>? {
+    fun maxSize(cssJson: JSONObject): Size<GXSize>? {
         val width = cssJson.getString(GXTemplateKey.FLEXBOX_MAX_WIDTH)
         val height = cssJson.getString(GXTemplateKey.FLEXBOX_MAX_HEIGHT)
         return if (width != null && height != null) {
-            Size(GXSize.create(width).valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.create(width), GXSize.create(height))
         } else if (width != null && height == null) {
-            Size(GXSize.create(width).valueDimension, GXSize.Auto.valueDimension)
+            Size(GXSize.create(width), GXSize.Auto)
         } else if (height != null && width == null) {
-            Size(GXSize.Auto.valueDimension, GXSize.create(height).valueDimension)
+            Size(GXSize.Auto, GXSize.create(height))
         } else {
             null
         }
@@ -162,10 +162,10 @@ object GXFlexBoxConvert {
     fun flexShrink(cssJson: JSONObject): Float? =
         cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_SHRINK)?.toFloat()
 
-    fun flexBasis(cssJson: JSONObject): Dimension? {
+    fun flexBasis(cssJson: JSONObject): GXSize? {
         val value = cssJson.getString(GXTemplateKey.FLEXBOX_FLEX_BASIS)
         if (value != null) {
-            return GXSize.create(value).valueDimension
+            return GXSize.create(value)
         }
         return null
     }
@@ -189,9 +189,9 @@ object GXFlexBoxConvert {
         return null
     }
 
-    fun margin(cssJson: JSONObject): Rect<Dimension>? {
+    fun margin(cssJson: JSONObject): Rect<GXSize>? {
         cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN)?.also {
-            val size = GXSize.create(it).valueDimension
+            val size = GXSize.create(it)
             return Rect(size, size, size, size)
         }
 
@@ -202,20 +202,20 @@ object GXFlexBoxConvert {
 
         if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(left ?: "").valueDimension,
-                GXSize.create(right ?: "").valueDimension,
-                GXSize.create(top ?: "").valueDimension,
-                GXSize.create(bottom ?: "").valueDimension
+                GXSize.create(left ?: ""),
+                GXSize.create(right ?: ""),
+                GXSize.create(top ?: ""),
+                GXSize.create(bottom ?: "")
             )
         }
 
         return null
     }
 
-    fun padding(cssJson: JSONObject): Rect<Dimension>? {
+    fun padding(cssJson: JSONObject): Rect<GXSize>? {
 
         cssJson.getString(GXTemplateKey.FLEXBOX_PADDING)?.also {
-            val size = GXSize.create(it).valueDimension
+            val size = GXSize.create(it)
             return Rect(size, size, size, size)
         }
 
@@ -226,21 +226,21 @@ object GXFlexBoxConvert {
 
         if (!paddingLeft.isNullOrEmpty() || !paddingRight.isNullOrEmpty() || !paddingTop.isNullOrEmpty() || !paddingBottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(paddingLeft ?: "").valueDimension,
-                GXSize.create(paddingRight ?: "").valueDimension,
-                GXSize.create(paddingTop ?: "").valueDimension,
-                GXSize.create(paddingBottom ?: "").valueDimension
+                GXSize.create(paddingLeft ?: ""),
+                GXSize.create(paddingRight ?: ""),
+                GXSize.create(paddingTop ?: ""),
+                GXSize.create(paddingBottom ?: "")
             )
         }
 
         return null
     }
 
-    fun border(cssJson: JSONObject): Rect<Dimension>? {
+    fun border(cssJson: JSONObject): Rect<GXSize>? {
 
         val value = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER)
         if (value != null) {
-            val size = GXSize.create(value).valueDimension
+            val size = GXSize.create(value)
             return Rect(size, size, size, size)
         }
 
@@ -251,17 +251,17 @@ object GXFlexBoxConvert {
 
         if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(left ?: "").valueDimension,
-                GXSize.create(right ?: "").valueDimension,
-                GXSize.create(top ?: "").valueDimension,
-                GXSize.create(bottom ?: "").valueDimension
+                GXSize.create(left ?: ""),
+                GXSize.create(right ?: ""),
+                GXSize.create(top ?: ""),
+                GXSize.create(bottom ?: "")
             )
         }
 
         return null
     }
 
-    fun position(cssJson: JSONObject): Rect<Dimension>? {
+    fun position(cssJson: JSONObject): Rect<GXSize>? {
         if (positionType(cssJson) == PositionType.Absolute) {
             val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
             val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
@@ -269,17 +269,17 @@ object GXFlexBoxConvert {
             val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
             if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
                 return Rect(
-                    GXSize.create(start ?: "").valueDimension,
-                    GXSize.create(end ?: "").valueDimension,
-                    GXSize.create(top ?: "").valueDimension,
-                    GXSize.create(bottom ?: "").valueDimension
+                    GXSize.create(start ?: ""),
+                    GXSize.create(end ?: ""),
+                    GXSize.create(top ?: ""),
+                    GXSize.create(bottom ?: "")
                 )
             }
         }
         return null
     }
 
-    fun positionByExtend(cssJson: JSONObject): Rect<Dimension>? {
+    fun positionByExtend(cssJson: JSONObject): Rect<GXSize>? {
         // 增加判断会导致databinding的时候无法执行过去
         // if (positionType(cssJson) == PositionType.Absolute) {
         val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
@@ -288,10 +288,10 @@ object GXFlexBoxConvert {
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
         if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(start ?: "").valueDimension,
-                GXSize.create(end ?: "").valueDimension,
-                GXSize.create(top ?: "").valueDimension,
-                GXSize.create(bottom ?: "").valueDimension
+                GXSize.create(start ?: ""),
+                GXSize.create(top ?: ""),
+                GXSize.create(end ?: ""),
+                GXSize.create(bottom ?: "")
             )
         }
         // }

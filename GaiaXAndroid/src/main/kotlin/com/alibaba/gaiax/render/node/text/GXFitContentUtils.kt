@@ -96,7 +96,7 @@ object GXFitContentUtils {
         var nodeHeight = nodeLayout.height
 
         // FIX: 如果databinding中引发了flex的改动，那么nodeLayout的结果可能不准确
-        val finalFlexBoxHeight = finalFlexBox.size?.height
+        val finalFlexBoxHeight = finalFlexBox.sizeForStyle?.height
         if (gxStretchNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
             nodeHeight = finalFlexBoxHeight.value
         }
@@ -113,11 +113,13 @@ object GXFitContentUtils {
             var measuredWidth = gxCacheText.measuredWidth.toFloat()
             val measuredHeight = gxCacheText.measuredHeight.toFloat()
 
+            val size = finalCss.flexBox.sizeForStyle
             val isUndefineSize =
-                finalCss.flexBox.size?.width == null || finalCss.flexBox.size.width is Dimension.Auto || finalCss.flexBox.size.width is Dimension.Undefined
+                size?.width == null || size.width is Dimension.Auto || size.width is Dimension.Undefined
 
+            val minSize = finalCss.flexBox.minSizeForStyle
             val isDefineMinSize =
-                finalCss.flexBox.minSize != null && (finalCss.flexBox.minSize.width !is Dimension.Auto || finalCss.flexBox.minSize.width !is Dimension.Undefined)
+                minSize != null && (minSize.width !is Dimension.Auto || minSize.width !is Dimension.Undefined)
 
             // fix: 如果没有定义宽度，但是定义了最小宽度，那么需要做一下修正
             if (isUndefineSize && isDefineMinSize) {
@@ -135,9 +137,10 @@ object GXFitContentUtils {
             var textHeight = nodeHeight
 
             // FIXED: template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom
+            val padding = finalFlexBox.paddingForStyle
             val textTopAndBottomPadding =
-                (finalFlexBox.padding?.top?.value ?: 0F) + (finalFlexBox.padding?.bottom?.value
-                    ?: 0F)
+                (padding?.top?.value ?: 0F) + (padding?.bottom?.value ?: 0F)
+
             // 高度等于上下padding之和，也认为是0高度
             if (textHeight == textTopAndBottomPadding) {
                 textHeight = 0F
@@ -150,7 +153,7 @@ object GXFitContentUtils {
 
             // FIXED: template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
-                (finalFlexBox.padding?.start?.value ?: 0F) + (finalFlexBox.padding?.end?.value
+                (padding?.start?.value ?: 0F) + (padding?.end?.value
                     ?: 0F)
 
             result = when {

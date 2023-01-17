@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXSize.Companion.ptToPx
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.Assert
@@ -106,6 +107,9 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_design_token_color() {
+        GXRegisterCenter.instance
+            .extensionColor = GXProcessorColor()
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
@@ -118,6 +122,9 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(true, rootView?.background is GradientDrawable)
         Assert.assertEquals(Color.RED, (rootView?.background as GradientDrawable).colors?.get(0))
+
+        GXRegisterCenter.instance
+            .extensionColor = null
     }
 
     @Test

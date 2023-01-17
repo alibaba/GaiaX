@@ -23,11 +23,9 @@ import org.junit.Before
 open class GXBaseTest {
 
     companion object {
-
-        val largeFontScale = 1.2F
-        val responsiveLayoutScale = 1.2F
-
         private const val TAG = "GXBaseTest"
+        const val largeFontScale = 1.2F
+        const val responsiveLayoutScale = 1.2F
         var MOCK_SCREEN_WIDTH = 1080F.dpToPx()
     }
 
@@ -42,12 +40,7 @@ open class GXBaseTest {
         // 清除缓存，否则会导致模板复用，引发单测失败
         GXTemplateInfoSource.instance.clean()
 
-        GXRegisterCenter.instance
-            .registerExtensionExpression(GXExtensionMultiVersionExpression())
-            .registerExtensionColor(GXProcessorColor())
-            .registerExtensionSize(GXExtensionSize())
-            .registerExtensionDynamicProperty(GXExtensionDynamicProperty())
-            .registerExtensionScroll(GXExtensionScroll())
+        GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
     }
 
     @After
@@ -58,9 +51,7 @@ open class GXBaseTest {
     class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
 
         override fun scrollIndex(
-            gxTemplateContext: GXTemplateContext,
-            container: GXContainer,
-            extend: JSONObject?
+            gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?
         ) {
             // scroll item to position
             gxTemplateContext.templateData?.scrollIndex?.let { scrollPosition ->
@@ -83,9 +74,7 @@ open class GXBaseTest {
         }
 
         override fun convert(
-            propertyName: String,
-            gxTemplateContext: GXTemplateContext,
-            scrollConfig: GXScrollConfig
+            propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig
         ): Any? {
             Log.d(
                 TAG,
@@ -112,8 +101,7 @@ open class GXBaseTest {
         override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
             Log.d(TAG, "convertProcessing() called with: params = $params")
             if (params.propertyName == GXTemplateKey.FLEXBOX_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MIN_SIZE || params.propertyName == GXTemplateKey.FLEXBOX_MAX_SIZE) {
-                @Suppress("UNCHECKED_CAST")
-                val newValue = params.value as Size<Dimension>
+                @Suppress("UNCHECKED_CAST") val newValue = params.value as Size<Dimension>
                 val fontName = params.cssStyle?.fontSize?.name
                 if (fontName == "gaiax_font") {
                     val height = newValue.height

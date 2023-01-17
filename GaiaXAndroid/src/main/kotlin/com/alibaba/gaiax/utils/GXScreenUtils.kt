@@ -33,8 +33,9 @@ object GXScreenUtils {
         return this / (Resources.getSystem().displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
     }
 
-    private var screenWidth = 0F
-    private var screenHeight = 0F
+    internal var isDebug: Boolean = false
+    internal var screenWidth = 0F
+    internal var screenHeight = 0F
 
     private val dm = DisplayMetrics()
 
@@ -67,6 +68,9 @@ object GXScreenUtils {
      * 4. 从Application中获取
      */
     private fun initScreen(context: Context) {
+        if (isDebug) {
+            return
+        }
         if (context is Activity) {
             // DecorView 获取
             screenWidth = context.window.decorView.measuredWidth.toFloat()

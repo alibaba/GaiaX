@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka'
 
 allprojects {
     repositories {
@@ -57,24 +56,19 @@ android {
             jniLibs.srcDir 'src/main/jniLibs'
         }
 
+        // https://stackoverflow.com/questions/26244998/androidmanifest-in-androidtest-directory-being-ignored/27884436#27884436
         // https://stackoverflow.com/questions/26663539/configuring-res-srcdirs-for-androidtest-sourceset
         // https://stackoverflow.com/questions/23643189/android-gradle-src-androidtest-res-layout-mylayout-xml-not-found-in-mypackage-r
         androidTest {
             java.srcDirs = ['src/androidTest/java']
             res.srcDirs = ['src/androidTest/res']
-            jniLibs.srcDir 'src/main/jniLibs'
+            jniLibs.srcDir 'src/androidTest/jniLibs'
+            manifest.srcFile "src/androidTest/AndroidManifest.xml"
         }
     }
 
     lintOptions {
         abortOnError false
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 
     testOptions {
@@ -90,6 +84,8 @@ android {
             }
         }
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi-v7a', 'arm64-v8a'
             }
@@ -108,10 +104,10 @@ dependencies {
         implementation project(path: ':GXAnalyzeAndroid')
     } else {
         println("version = " + version)
-        if (version != null) {
+        if (version != null && version != "unspecified") {
             implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:$version") { changing = true }
         } else {
-            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.2.9") { changing = true }
+            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.3.0") { changing = true }
         }
     }
 
@@ -125,12 +121,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
-}
-
-dokkaHtml {
-    outputDirectory.set(file("$buildDir/GaiaXApiDocs"))
-
-    moduleName.set("GaiaX")
 }
 
 afterEvaluate {

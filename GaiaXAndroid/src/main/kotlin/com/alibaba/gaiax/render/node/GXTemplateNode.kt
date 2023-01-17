@@ -78,40 +78,38 @@ data class GXTemplateNode(
         return dataValueCache
     }
 
-    fun reset() {
-        resetData()
-        visualTemplateNode?.reset()
-
-        // 此处不能重置config和css，不会产生好处，仅有负面影响
-        // 如果外部按异步调用更新逻辑，那么重置config和css可能导致取值为空，从而抛出异常
-        // resetBasic()
+    fun resetDataCache() {
+        dataExtendCache = null
+        dataValueCache = null
+        dataCache = null
+        visualTemplateNode?.resetDataCache()
     }
 
+    fun reset() {
+        resetDataCache()
+        finalCss?.flexBox?.reset()
+        css.flexBox.reset()
+    }
+
+    /*
+     * 数据缓存
+     */
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
 
-    fun resetData() {
-        dataExtendCache = null
-        dataValueCache = null
-        dataCache = null
-    }
-
-    private fun resetBasic() {
-        finalCss = null
-        finalGridConfig = null
-        finalScrollConfig = null
-        finalSliderConfig = null
-    }
+    /*
+     * 关于final属性的说明：
+     *
+     * final的字段主要用于存储index.css中的属性与index.databinding中涉及到样式的属性合并后的结果。
+     *
+     * 在bindData阶段使用。
+     */
 
     var finalGridConfig: GXGridConfig? = null
-
     var finalScrollConfig: GXScrollConfig? = null
-
     var finalSliderConfig: GXSliderConfig? = null
-
     var finalProgressConfig: GXProgressConfig? = null
-
     var finalCss: GXCss? = null
 
     /**
@@ -228,9 +226,7 @@ data class GXTemplateNode(
     companion object {
 
         fun createNode(
-            viewId: String,
-            template: GXTemplateInfo,
-            visualTemplateNode: GXTemplateNode? = null
+            viewId: String, template: GXTemplateInfo, visualTemplateNode: GXTemplateNode? = null
         ): GXTemplateNode {
             val layer = template.findLayer(viewId)
                 ?: throw IllegalArgumentException("Not found layer by view id, viewId = $viewId")

@@ -22,10 +22,8 @@ import com.alibaba.fastjson.JSONObject
  * @suppress
  */
 data class GXCss(
-    val style: GXStyle,
-    val flexBox: GXFlexBox
+    val style: GXStyle, val flexBox: GXFlexBox
 ) {
-
     companion object {
         fun create(lowPriorityCss: GXCss, highPriorityCss: GXCss?): GXCss {
             if (highPriorityCss == null) {

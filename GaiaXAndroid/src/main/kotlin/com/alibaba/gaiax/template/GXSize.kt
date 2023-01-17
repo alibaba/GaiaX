@@ -72,14 +72,14 @@ sealed class GXSize {
         }
 
         fun Float.ptToPx(): Float {
-            val screenWidthDP = GXScreenUtils.getScreenWidthDP(GXTemplateEngine.instance.context)
-            val screenHeightDp = GXScreenUtils.getScreenHeightDP(GXTemplateEngine.instance.context)
+            val screenWidthPx = GXScreenUtils.getScreenWidthPx(GXTemplateEngine.instance.context)
+            val screenHeightPx = GXScreenUtils.getScreenHeightPx(GXTemplateEngine.instance.context)
             val dpToPx = 375F.dpToPx()
-            var ratio = (Math.min(screenWidthDP, screenHeightDp)) / dpToPx
+            var ratio = (Math.min(screenWidthPx, screenHeightPx)) / dpToPx
             GXRegisterCenter.instance.extensionSize?.convert(ratio)?.let {
                 ratio = it
             }
-            return this.dpToPx().roundToInt().toFloat() * Math.max(ratio, 1F)
+            return (this.dpToPx() * Math.max(ratio, 1F)).roundToInt().toFloat()
         }
 
         private fun String.replacePxToEmpty(): String {

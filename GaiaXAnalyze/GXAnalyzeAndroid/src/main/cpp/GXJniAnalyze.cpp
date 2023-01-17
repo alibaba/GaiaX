@@ -18,8 +18,7 @@ static jlongArray getLongArray(long *paramPointers, int paramsSize);
  */
 static JNIEnv *getJNIEnv() {
     JNIEnv *env;
-    assert(javaVM != nullptr);
-    if (javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+    if (javaVM == nullptr || javaVM->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
         return nullptr;
     }
     return env;

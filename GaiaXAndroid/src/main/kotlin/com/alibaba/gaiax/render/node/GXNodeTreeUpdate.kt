@@ -41,10 +41,7 @@ import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
-import com.alibaba.gaiax.template.GXCss
-import com.alibaba.gaiax.template.GXLayer
-import com.alibaba.gaiax.template.GXStyle
-import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
@@ -143,7 +140,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             gxNode: GXNode,
             templateData: JSONObject
         ) {
-            gxNode.templateNode.reset()
+            gxNode.templateNode.resetDataCache()
             gxNode.stretchNode.reset(gxTemplateContext, gxNode.templateNode)
 
             if (gxNode.isNestRoot) {
@@ -223,8 +220,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxNode.templateNode.dataBinding
                     gxNode.templateNode.dataBinding = tmp
 
-                    gxNode.templateNode.visualTemplateNode?.resetData()
-                    gxNode.templateNode.resetData()
+                    gxNode.templateNode.resetDataCache()
 
                     valueData = gxNode.templateNode.visualTemplateNode?.getDataValue(templateData)
                 } else {
@@ -325,7 +321,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             var isDirty = false
 
-            val finalHeight = finalFlexBox.size?.height
+            val finalHeight = finalFlexBox.sizeForStyle?.height
             val finalFlexGrow = finalFlexBox.flexGrow
 
             if (gxNode.isScrollType()) {
@@ -352,7 +348,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.size?.height = it
+                        finalFlexBox.sizeForStyle?.height = it
                         isDirty = true
                     }
                 }
@@ -383,7 +379,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.size?.height = it
+                        finalFlexBox.sizeForStyle?.height = it
                         isDirty = true
                     }
                 }
@@ -397,7 +393,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.size?.height = it
+                        finalFlexBox.sizeForStyle?.height = it
                         isDirty = true
                     }
                 }
@@ -521,23 +517,23 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             // 仅在绝对布局下，才能更新position的数据
             if (stretchStyle.positionType == PositionType.Absolute) {
-                gxFlexBox.position?.let {
+                gxFlexBox.positionForStyle?.let {
                     GXTemplateUtils.updateDimension(it, stretchStyle.position)
                     isDirty = true
                 }
             }
 
-            gxFlexBox.margin?.let {
+            gxFlexBox.marginForStyle?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.margin)
                 isDirty = true
             }
 
-            gxFlexBox.padding?.let {
+            gxFlexBox.paddingForStyle?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.padding)
                 isDirty = true
             }
 
-            gxFlexBox.border?.let {
+            gxFlexBox.borderForStyle?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.border)
                 isDirty = true
             }
@@ -553,7 +549,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.size?.let {
+            gxFlexBox.sizeForStyle?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.size)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
@@ -563,7 +559,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.minSize?.let {
+            gxFlexBox.minSizeForStyle?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.minSize)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_MIN_SIZE, stretchStyle.minSize
@@ -573,7 +569,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.maxSize?.let {
+            gxFlexBox.maxSizeForStyle?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.maxSize)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_MAX_SIZE, stretchStyle.maxSize

@@ -7,8 +7,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import com.alibaba.gaiax.template.GXSize.Companion.ptToPx
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.utils.GXMockUtils
+import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -104,6 +107,9 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_design_token_color() {
+        GXRegisterCenter.instance
+            .extensionColor = GXProcessorColor()
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
@@ -116,10 +122,15 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(true, rootView?.background is GradientDrawable)
         Assert.assertEquals(Color.RED, (rootView?.background as GradientDrawable).colors?.get(0))
+
+        GXRegisterCenter.instance
+            .extensionColor = null
     }
 
     @Test
     fun template_design_token_dimen() {
+        GXRegisterCenter.instance.extensionSize = GXExtensionSize()
+
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,
             "common",
@@ -131,6 +142,8 @@ class GXCommonTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(100F, rootView.height())
+
+        GXRegisterCenter.instance.extensionSize = null
     }
 
     @Test
@@ -776,6 +789,37 @@ class GXCommonTest : GXBaseTest() {
 
         val text1 = GXTemplateEngine.instance.getGXViewById(rootView, "text1") as? TextView
         Assert.assertEquals("HelloWorld", text1?.text)
+    }
+
+    @Test
+    fun template_pt_change_screen_width() {
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "common",
+                "template_pt_change_screen_width"
+            )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem,
+            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
+
+        Assert.assertEquals(100f.ptToPx(), rootView.height())
+
+        GXScreenUtils.isDebug = true
+        GXScreenUtils.screenWidth = 1080F
+        GXScreenUtils.screenHeight = 1080F
+
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject()),
+            GXTemplateEngine.GXMeasureSize(300F.dpToPx(), null)
+        )
+
+        Assert.assertEquals(100f.ptToPx().toInt().toFloat(), rootView.height())
+
+        GXScreenUtils.isDebug = true
     }
 
 }

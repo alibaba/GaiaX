@@ -93,24 +93,24 @@ object GXTemplateUtils {
     }
 
     fun createRectDimensionByPriority(
-        heightPriority: Rect<Dimension>?,
-        lowPriority: Rect<Dimension>?
-    ): Rect<Dimension>? {
+        heightPriority: Rect<GXSize>?,
+        lowPriority: Rect<GXSize>?
+    ): Rect<GXSize>? {
         return if (lowPriority != null && heightPriority != null) {
             Rect(
-                start = if (heightPriority.start !is Dimension.Undefined && heightPriority.start !is Dimension.Auto)
+                start = if (heightPriority.start !is GXSize.Undefined && heightPriority.start !is GXSize.Auto)
                     heightPriority.start.copy()
                 else
                     lowPriority.start.copy(),
-                end = if (heightPriority.end !is Dimension.Undefined && heightPriority.end !is Dimension.Auto)
+                end = if (heightPriority.end !is GXSize.Undefined && heightPriority.end !is GXSize.Auto)
                     heightPriority.end.copy()
                 else
                     lowPriority.end.copy(),
-                top = if (heightPriority.top !is Dimension.Undefined && heightPriority.top !is Dimension.Auto)
+                top = if (heightPriority.top !is GXSize.Undefined && heightPriority.top !is GXSize.Auto)
                     heightPriority.top.copy()
                 else
                     lowPriority.top.copy(),
-                bottom = if (heightPriority.bottom !is Dimension.Undefined && heightPriority.bottom !is Dimension.Auto)
+                bottom = if (heightPriority.bottom !is GXSize.Undefined && heightPriority.bottom !is GXSize.Auto)
                     heightPriority.bottom.copy()
                 else
                     lowPriority.bottom.copy()
@@ -135,16 +135,16 @@ object GXTemplateUtils {
     }
 
     fun createSizeDimensionByPriority(
-        heightPriority: Size<Dimension>?,
-        lowPriority: Size<Dimension>?
-    ): Size<Dimension>? {
+        heightPriority: Size<GXSize>?,
+        lowPriority: Size<GXSize>?
+    ): Size<GXSize>? {
         return if (lowPriority != null && heightPriority != null) {
             Size(
-                width = if (heightPriority.width !is Dimension.Undefined && heightPriority.width !is Dimension.Auto)
+                width = if (heightPriority.width !is GXSize.Undefined && heightPriority.width !is GXSize.Auto)
                     heightPriority.width.copy()
                 else
                     lowPriority.width.copy(),
-                height = if (heightPriority.height !is Dimension.Undefined && heightPriority.height !is Dimension.Auto)
+                height = if (heightPriority.height !is GXSize.Undefined && heightPriority.height !is GXSize.Auto)
                     heightPriority.height.copy()
                 else
                     lowPriority.height.copy()

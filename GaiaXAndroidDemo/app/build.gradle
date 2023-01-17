@@ -20,8 +20,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath 'com.android.tools.build:gradle:7.4.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
     }
 }
 
@@ -68,6 +68,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.alibaba.gaiax.demo'
 
 }
 

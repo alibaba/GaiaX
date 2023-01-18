@@ -19,7 +19,6 @@ package com.alibaba.gaiax.render.node
 import android.animation.AnimatorSet
 import android.view.View
 import app.visly.stretch.Display
-import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -32,14 +31,6 @@ import com.alibaba.gaiax.template.GXTemplateKey
  * @suppress
  */
 class GXNode {
-
-    /**
-     * TODO:
-     * 此处的缓存可能会导致GXItemContainer高度不正确。
-     * 在有些情况下，业务会根据数据动态修改高度，在首次的时候没有这些数据，
-     * 从而计算出一个高度并缓存，当第二次再刷新数据时带有这些数据，就不会再去计算新的高度了，导致问题。
-     */
-    var multiTypeItemComputeCache: MutableMap<GXTemplateEngine.GXTemplateItem, Layout>? = null
 
     /**
      * 属性动画
@@ -208,11 +199,14 @@ class GXNode {
         }
     }
 
-    fun resetTree(gxTemplateContext: GXTemplateContext) {
+    /**
+     * 重置节点中的缓存
+     */
+    fun reset(gxTemplateContext: GXTemplateContext) {
         templateNode.reset()
         stretchNode.reset(gxTemplateContext, this.templateNode)
         children?.forEach {
-            it.resetTree(gxTemplateContext)
+            it.reset(gxTemplateContext)
         }
     }
 

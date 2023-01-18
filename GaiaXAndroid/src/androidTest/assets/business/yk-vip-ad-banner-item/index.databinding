@@ -1,0 +1,14 @@
+{
+  "event": { "yk-vip-ad-banner-item": "${data.action}" },
+  "data": {
+    "background": { "value": "${data.img}" },
+    "mark-img": { "value": "${data.markImg}" },
+    "card-title": {
+      "extend": {
+        "fit-content": "true",
+        "display": "@{ ${data.subtitle} ? flex : none }"
+      },
+      "value": "${data.subtitle}"
+    }
+  }
+}

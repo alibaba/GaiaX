@@ -83,16 +83,6 @@ object GXNodeUtils {
         //  2.1 显示一个坑位
         //  2.2 显示两个坑位
 
-        var multiTypeItemComputeCache = gxNode.multiTypeItemComputeCache
-
-        if (multiTypeItemComputeCache == null) {
-            multiTypeItemComputeCache = mutableMapOf()
-            gxNode.multiTypeItemComputeCache = multiTypeItemComputeCache
-        }
-
-        // TODO:https://github.com/alibaba/GaiaX/issues/193
-        multiTypeItemComputeCache.clear()
-
         // 1. 获取坑位的ViewPort信息
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
@@ -104,21 +94,14 @@ object GXNodeUtils {
             val itemTemplateItem = itemTemplatePair.first
             val itemVisualTemplateNode = itemTemplatePair.second
 
-            val itemLayout: Layout? =
-                if (!multiTypeItemComputeCache.containsKey(itemTemplateItem)) {
-                    computeItemLayout(
-                        gxTemplateContext,
-                        gxNode,
-                        itemViewPort,
-                        itemTemplateItem,
-                        itemVisualTemplateNode,
-                        containerData.firstOrNull() as? JSONObject ?: JSONObject()
-                    )?.apply {
-                        multiTypeItemComputeCache[itemTemplateItem] = this
-                    }
-                } else {
-                    multiTypeItemComputeCache[itemTemplateItem]
-                }
+            val itemLayout: Layout? = computeItemLayout(
+                gxTemplateContext,
+                gxNode,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                containerData.firstOrNull() as? JSONObject ?: JSONObject()
+            )
 
             // 3. 计算容器期望的宽高结果
             return computeContainerSize(gxTemplateContext, gxNode, itemLayout, containerData)
@@ -146,21 +129,14 @@ object GXNodeUtils {
                                 val itemTemplateItem = itemTemplatePair.first
                                 val itemVisualTemplateNode = itemTemplatePair.second
 
-                                val itemLayout: Layout? =
-                                    if (!multiTypeItemComputeCache.containsKey(itemTemplateItem)) {
-                                        computeItemLayout(
-                                            gxTemplateContext,
-                                            gxNode,
-                                            itemViewPort,
-                                            itemTemplateItem,
-                                            itemVisualTemplateNode,
-                                            itemData
-                                        )?.apply {
-                                            multiTypeItemComputeCache[itemTemplateItem] = this
-                                        }
-                                    } else {
-                                        multiTypeItemComputeCache[itemTemplateItem]
-                                    }
+                                val itemLayout: Layout? = computeItemLayout(
+                                    gxTemplateContext,
+                                    gxNode,
+                                    itemViewPort,
+                                    itemTemplateItem,
+                                    itemVisualTemplateNode,
+                                    itemData
+                                )
 
                                 // 3. 计算容器期望的宽高结果
                                 computeContainerSize(

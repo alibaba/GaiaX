@@ -2,11 +2,13 @@ package com.alibaba.gaiax
 
 import android.view.View
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
+import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -134,6 +136,40 @@ class GXBusinessTest : GXBaseTest() {
         )
     }
 
+    @Test
+    fun yk_vip_channel_sideslip() {
+        GXScreenUtils.isDebug = true
+
+        GXScreenUtils.screenWidth = 375F.dpToPx()
+        GXScreenUtils.screenHeight = 750F.dpToPx()
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "business", "yk-vip-channel-sideslip"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        val path = "business/yk-vip-adsideslip.json"
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(readJsonFromAssets(path))
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(rootView.height(), rootView.child(0).height())
+        Assert.assertEquals(rootView.child(0).height(), rootView.child(0).child(0).height())
+
+        GXScreenUtils.screenWidth = 750F.dpToPx()
+        GXScreenUtils.screenHeight = 750F.dpToPx()
+
+        GXTemplateEngine.instance.bindData(
+            rootView, gxTemplateData, GXTemplateEngine.GXMeasureSize(750F.dpToPx(), null)
+        )
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(rootView.height(), rootView.child(0).height())
+        Assert.assertEquals(rootView.child(0).height(), rootView.child(0).child(0).height())
+
+        GXScreenUtils.isDebug = false
+    }
 
     private fun readJsonFromAssets(path: String) = JSONObject.parseObject(
         context.assets.open(path).reader(Charset.forName("utf-8")).readText()

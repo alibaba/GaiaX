@@ -126,6 +126,15 @@ class GXTemplateContext private constructor(
         }
     }
 
+    /**
+     * 重置所有缓存计算的内容
+     */
+    fun reset() {
+        templateInfo.reset()
+        rootNode?.reset(this)
+    }
+
+
     companion object {
 
         fun createContext(

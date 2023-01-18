@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXSize.Companion.ptToPx
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.Assert
@@ -27,17 +26,13 @@ class GXCommonTest : GXBaseTest() {
     // @Test
     fun template_root_margin_flex_grow() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_root_margin_flex_grow"
+            GXMockUtils.context, "common", "template_root_margin_flex_grow"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject())
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject())
         )
 
         Assert.assertEquals(100F.dpToPx(), rootView.height())
@@ -47,17 +42,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_position_relative_left() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_position_relative_left"
+            GXMockUtils.context, "common", "template_position_relative_left"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject())
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject())
         )
 
         Assert.assertEquals(0F.dpToPx(), rootView.child(0).x())
@@ -66,17 +57,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_position_relative_databinding_left() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_position_relative_databinding_left"
+            GXMockUtils.context, "common", "template_position_relative_databinding_left"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_POSITION_LEFT] = "30px"
             })
         )
@@ -87,17 +74,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_position_absolute_databinding_left() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_position_absolute_databinding_left"
+            GXMockUtils.context, "common", "template_position_absolute_databinding_left"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_POSITION_LEFT] = "30px"
             })
         )
@@ -107,13 +90,10 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_design_token_color() {
-        GXRegisterCenter.instance
-            .extensionColor = GXProcessorColor()
+        GXRegisterCenter.instance.extensionColor = GXProcessorColor()
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_design_token_color"
+            GXMockUtils.context, "common", "template_design_token_color"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
@@ -123,8 +103,7 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(true, rootView?.background is GradientDrawable)
         Assert.assertEquals(Color.RED, (rootView?.background as GradientDrawable).colors?.get(0))
 
-        GXRegisterCenter.instance
-            .extensionColor = null
+        GXRegisterCenter.instance.extensionColor = null
     }
 
     @Test
@@ -132,9 +111,7 @@ class GXCommonTest : GXBaseTest() {
         GXRegisterCenter.instance.extensionSize = GXExtensionSize()
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_design_token_dimen"
+            GXMockUtils.context, "common", "template_design_token_dimen"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
@@ -149,13 +126,10 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_normal_nest_normal() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_normal_nest_normal"
+            GXMockUtils.context, "common", "template_normal_nest_normal"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -182,14 +156,12 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(2, rootView.child(0).child(1).childCount())
 
         Assert.assertEquals(
-            1080F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(0).width()
+            1080F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(0).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(0).height())
 
         Assert.assertEquals(
-            1080F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(1).width()
+            1080F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(1).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(1).height())
     }
@@ -197,17 +169,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_normal_nest_container() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_normal_nest_container"
+            GXMockUtils.context, "common", "template_normal_nest_container"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -232,24 +200,19 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_container_nest_template_judegment_condition() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
+            .apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = true
-            }
-        )
+            })
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_container_nest_template_judegment_condition"
+            GXMockUtils.context, "common", "template_container_nest_template_judegment_condition"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -268,33 +231,27 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
+            .apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = false
-            }
-        )
+            })
     }
 
     @Test
     fun template_databinding_nest_scroll_nodes_self_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
+            .apply {
                 this.isCompatibilityContainerDataPassSequence = true
-            }
-        )
+            })
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_databinding_nest_scroll_nodes_self"
+            GXMockUtils.context, "common", "template_databinding_nest_scroll_nodes_self"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -316,27 +273,22 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
+            .apply {
                 this.isCompatibilityContainerDataPassSequence = false
-            }
-        )
+            })
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun template_databinding_nest_scroll_nodes_self() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_databinding_nest_scroll_nodes_self"
+            GXMockUtils.context, "common", "template_databinding_nest_scroll_nodes_self"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -362,17 +314,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_databinding_nest_scroll_self_nodes() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_databinding_nest_scroll_self_nodes"
+            GXMockUtils.context, "common", "template_databinding_nest_scroll_self_nodes"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -398,17 +346,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_css_override_width_height() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_css_override_width_height"
+            GXMockUtils.context, "common", "template_nest_css_override_width_height"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -442,14 +386,12 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(2, rootView.child(0).child(1).childCount())
 
         Assert.assertEquals(
-            300F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(0).width()
+            300F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(0).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(0).height())
 
         Assert.assertEquals(
-            300F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(1).width()
+            300F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(1).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(1).height())
     }
@@ -457,17 +399,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_width_height() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_width_height"
+            GXMockUtils.context, "common", "template_nest_databinding_override_width_height"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -501,14 +439,12 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(2, rootView.child(0).child(1).childCount())
 
         Assert.assertEquals(
-            300F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(0).width()
+            300F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(0).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(0).height())
 
         Assert.assertEquals(
-            300F.dpToPx() - 100F.dpToPx(),
-            rootView.child(0).child(1).child(1).width()
+            300F.dpToPx() - 100F.dpToPx(), rootView.child(0).child(1).child(1).width()
         )
         Assert.assertEquals(20F.dpToPx(), rootView.child(0).child(1).child(1).height())
     }
@@ -516,17 +452,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_both() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_both"
+            GXMockUtils.context, "common", "template_nest_databinding_override_both"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -552,17 +484,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_only_child() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_only_child"
+            GXMockUtils.context, "common", "template_nest_databinding_override_only_child"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["nodes"] = JSONArray().apply {
                     this.add(JSONObject())
                     this.add(JSONObject())
@@ -588,17 +516,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_only_child_value() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_only_child_value"
+            GXMockUtils.context, "common", "template_nest_databinding_override_only_child_value"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "200px"
             })
         )
@@ -618,17 +542,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_both_value() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_both_value"
+            GXMockUtils.context, "common", "template_nest_databinding_override_both_value"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "200px"
                 this["data"] = JSONObject().apply {
                     this[GXTemplateKey.FLEXBOX_SIZE_WIDTH] = "300px"
@@ -651,17 +571,13 @@ class GXCommonTest : GXBaseTest() {
     @Test
     fun template_nest_databinding_override_height() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "common",
-            "template_nest_databinding_override_height"
+            GXMockUtils.context, "common", "template_nest_databinding_override_height"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "200px"
             })
         )
@@ -686,12 +602,10 @@ class GXCommonTest : GXBaseTest() {
             "template_nest_databinding_parent_update_property_height_and_child_update_property_width"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "200px"
                 this[GXTemplateKey.FLEXBOX_SIZE_WIDTH] = "300px"
             })
@@ -717,12 +631,10 @@ class GXCommonTest : GXBaseTest() {
             "template_nest_databinding_parent_update_property_height_and_child_update_property_height"
         )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "200px"
                 this["data"] = JSONObject().apply {
                     this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "300px"
@@ -750,12 +662,10 @@ class GXCommonTest : GXBaseTest() {
         val templateItem =
             GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "common", "template_databinding")
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["title"] = "HelloWorld"
             })
         )
@@ -768,19 +678,14 @@ class GXCommonTest : GXBaseTest() {
      */
     @Test
     fun template_databinding_nest_normal_template() {
-        val templateItem =
-            GXTemplateEngine.GXTemplateItem(
-                GXMockUtils.context,
-                "common",
-                "template_databinding_nest_normal_template"
-            )
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "common", "template_databinding_nest_normal_template"
+        )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+            templateItem, GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
         )
         GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            rootView, GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["title"] = "HelloWorld"
                 }
@@ -793,15 +698,11 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_pt_change_screen_width() {
-        val templateItem =
-            GXTemplateEngine.GXTemplateItem(
-                GXMockUtils.context,
-                "common",
-                "template_pt_change_screen_width"
-            )
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "common", "template_pt_change_screen_width"
+        )
         val rootView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
         )
         GXTemplateEngine.instance.bindData(rootView, GXTemplateEngine.GXTemplateData(JSONObject()))
 
@@ -820,6 +721,47 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100f.ptToPx().toInt().toFloat(), rootView.height())
 
         GXScreenUtils.isDebug = true
+    }
+
+    @Test
+    fun template_pt_change_screen_width_scroll() {
+        GXScreenUtils.isDebug = true
+
+        GXScreenUtils.screenWidth = 750F.dpToPx()
+        GXScreenUtils.screenHeight = 750F.dpToPx()
+
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "common", "template_pt_change_screen_width_scroll"
+        )
+        val rootView = GXTemplateEngine.instance.createView(
+            templateItem, GXTemplateEngine.GXMeasureSize(750F.dpToPx(), null)
+        )
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+                this.add(JSONObject())
+            }
+        })
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(rootView.height(), rootView.child(0).height())
+        Assert.assertEquals(rootView.child(0).height(), rootView.child(0).child(0).height())
+
+        GXScreenUtils.screenWidth = 375F.dpToPx()
+        GXScreenUtils.screenHeight = 750F.dpToPx()
+
+        GXTemplateEngine.instance.bindData(
+            rootView, gxTemplateData, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        )
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(rootView.height(), rootView.child(0).height())
+        Assert.assertEquals(rootView.child(0).height(), rootView.child(0).child(0).height())
+
+        GXScreenUtils.isDebug = false
     }
 
 }

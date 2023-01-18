@@ -1,0 +1,19 @@
+{
+  "exp-version": "V1",
+  "id": "yk-vip-channel-sideslip",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "row-spacing": 9,
+  "item-spacing": 6,
+  "direction": "horizontal",
+  "edge-insets": "{0,15,0,0}",
+  "line-spacing": 6,
+  "interitem-spacing": 9,
+  "layers": [
+    {
+      "id": "yk-vip-ad-banner-item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

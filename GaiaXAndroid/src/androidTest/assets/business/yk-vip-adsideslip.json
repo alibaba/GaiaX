@@ -1,0 +1,33 @@
+{
+  "level": 2,
+  "nodes": [
+    {
+      "data": {
+        "img": "http://ykimg.alicdn.com/develop/image/2022-06-15/3bfa638935bd114a4a5f6e21af6a87ed.png",
+        "markImg": "http://ykimg.alicdn.com/develop/image/2022-06-15/578315e60524952994add5de3cc7ff0f.png",
+        "subtitle": "测试推广"
+      }
+    },
+    {
+      "data": {
+        "img": "http://ykimg.alicdn.com/develop/image/2022-06-15/6a71564c8f994c839404b2a80b39f049.png",
+        "markImg": "http://ykimg.alicdn.com/develop/image/2022-06-15/5285d194daaab4797690ac3ba96324cb.png",
+        "subtitle": "联合更优惠"
+      }
+    },
+    {
+      "data": {
+        "img": "http://ykimg.alicdn.com/develop/image/2022-06-15/9c1b1d6563772f5ad884c43b97d8bb7a.png",
+        "markImg": "http://ykimg.alicdn.com/develop/image/2022-06-15/4a6db29f2ea29a9118d1a483307bda22.png",
+        "subtitle": "推广坑位3副标题"
+      }
+    },
+    {
+      "data": {
+        "img": "http://ykimg.alicdn.com/develop/image/2022-06-15/9c1b1d6563772f5ad884c43b97d8bb7a.png",
+        "markImg": "http://ykimg.alicdn.com/develop/image/2022-06-15/4a6db29f2ea29a9118d1a483307bda22.png",
+        "subtitle": "推广坑位3副标题"
+      }
+    }
+  ]
+}

@@ -129,6 +129,22 @@ data class GXTemplateInfo(
         return null
     }
 
+    /**
+     * 重置模板中的缓存
+     */
+    fun reset() {
+        reset(this)
+    }
+
+    private fun reset(gxTemplateInfo: GXTemplateInfo) {
+        gxTemplateInfo.css.forEach {
+            it.value.flexBox.reset()
+        }
+        gxTemplateInfo.children?.forEach {
+            reset(it)
+        }
+    }
+
     companion object {
 
         fun parseCss(value: String): JSONObject {

@@ -289,8 +289,8 @@ object GXFlexBoxConvert {
         if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
                 GXSize.create(start ?: ""),
-                GXSize.create(top ?: ""),
                 GXSize.create(end ?: ""),
+                GXSize.create(top ?: ""),
                 GXSize.create(bottom ?: "")
             )
         }

@@ -366,9 +366,11 @@ object GXNodeUtils {
                     return Size(it as Float, null)
                 }
 
+            val padding = gxNode.getPaddingRect()
+
             // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
-            val left: Float = finalScrollConfig.edgeInsets.left.toFloat()
-            val right = finalScrollConfig.edgeInsets.right.toFloat()
+            val left: Float = padding.left.toFloat()
+            val right = padding.right.toFloat()
             gxTemplateContext.size.width?.let {
                 return Size(it - left - right, null)
             }
@@ -382,9 +384,11 @@ object GXNodeUtils {
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
 
+            val padding = gxNode.getPaddingRect()
+
             return when {
                 gridConfig.isVertical -> {
-                    val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
+                    val padding = padding.left + padding.right
                     Size(containerWidth - padding, null)
                 }
                 gridConfig.isHorizontal -> {
@@ -422,9 +426,11 @@ object GXNodeUtils {
                     return Size(it as Float, null)
                 }
 
+            val padding = gxNode.getPaddingRect()
+
             // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
-            val left: Float = finalScrollConfig.edgeInsets.left.toFloat()
-            val right = finalScrollConfig.edgeInsets.right.toFloat()
+            val left: Float = padding.left.toFloat()
+            val right = padding.right.toFloat()
             gxTemplateContext.size.width?.let {
                 return Size(it - left - right, null)
             }
@@ -441,7 +447,10 @@ object GXNodeUtils {
                 gridConfig.isVertical -> {
                     val totalItemSpacing = gridConfig.itemSpacing *
                             (gridConfig.column(gxTemplateContext) - 1)
-                    val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
+
+                    val paddingRect = gxNode.getPaddingRect()
+
+                    val padding = paddingRect.left + paddingRect.right
                     val finalWidth = (containerWidth - totalItemSpacing - padding) * 1.0F /
                             gridConfig.column(gxTemplateContext)
                     Size(finalWidth, null)
@@ -543,10 +552,10 @@ object GXNodeUtils {
                     containerHeight += finalGridConfig.rowSpacing * (lines - 1)
 
                     // 处理padding
-                    val edgeInsets = finalGridConfig.edgeInsets
-                    containerHeight += edgeInsets.top + edgeInsets.bottom
+                    val padding = gxNode.getPaddingRect()
+                    containerHeight += padding.top + padding.bottom
 
-                    val containerWidth = itemSize.width - edgeInsets.left - edgeInsets.right
+                    val containerWidth = itemSize.width - padding.left - padding.right
 
                     return Size(
                         Dimension.Points(containerWidth),

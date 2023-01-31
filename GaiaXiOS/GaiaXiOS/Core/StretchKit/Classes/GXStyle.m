@@ -121,6 +121,38 @@ extern StretchStyleRect GXMakeRect(StretchStyleDimension left,
     GXLog(@"[GaiaX] 样式style释放 - %@", self);
 }
 
+// 兼容 edge-insets
+- (void)updateEdgeInsets:(NSString *)edgeInsetsStr {
+    if (edgeInsetsStr == nil) {
+        return;
+    }
+    edgeInsetsStr = [edgeInsetsStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (edgeInsetsStr != nil && edgeInsetsStr.length > 3) {
+        edgeInsetsStr = [edgeInsetsStr substringWithRange:NSMakeRange(1, edgeInsetsStr.length-2)];
+        NSArray *tmpInsets = [edgeInsetsStr componentsSeparatedByString:@","];
+        if (tmpInsets.count == 4) {
+            StretchStyleDimension top = [GXStyleHelper convertValue:tmpInsets[0]];
+            StretchStyleDimension left = [GXStyleHelper convertValue:tmpInsets[1]];
+            StretchStyleDimension right = [GXStyleHelper convertValue:tmpInsets[3]];
+            StretchStyleDimension bottom = [GXStyleHelper convertValue:tmpInsets[2]];
+            
+            StretchStyleRect padding = self.styleModel.padding;
+            if (left.dimen_type == DIM_TYPE_POINTS) {
+                padding.left = left;
+            }
+            if (right.dimen_type == DIM_TYPE_POINTS) {
+                padding.right = right;
+            }
+            if (top.dimen_type == DIM_TYPE_POINTS) {
+                padding.top = top;
+            }
+            if (bottom.dimen_type == DIM_TYPE_POINTS) {
+                padding.bottom = bottom;
+            }
+            self.styleModel.padding = padding;
+        }
+    }
+}
 
 
 @end

@@ -16,7 +16,7 @@
 
 package com.alibaba.gaiax.template
 
-import android.graphics.Rect
+import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 
@@ -30,7 +30,7 @@ data class GXSliderConfig(
     val selectedIndex: Int,
     val indicatorSelectedColor: GXColor,
     val indicatorUnselectedColor: GXColor,
-    val indicatorMargin: Rect,
+    val indicatorMargin: Rect<GXSize>,
     val indicatorPosition: GXSliderView.IndicatorPosition,
     val indicatorClass: String?
 ) {
@@ -56,7 +56,7 @@ data class GXSliderConfig(
             val indicatorMargin =
                 data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_MARGIN)?.let {
                     GXContainerConvert.edgeInsets(it)
-                } ?: Rect()
+                } ?: Rect<GXSize>(GXSize.Undefined, GXSize.Undefined, GXSize.Undefined, GXSize.Undefined)
             val indicatorPosition =
                 GXSliderView.IndicatorPosition.fromValue(data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_POSITION))
             val indicatorClass = data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_CLASS)

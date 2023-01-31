@@ -223,4 +223,12 @@ class GXNode {
         }
         return true
     }
+
+    fun getPaddingRect(): android.graphics.Rect {
+        templateNode.finalCss?.style?.padding?.let {
+            return android.graphics.Rect(it.start.valueInt, it.top.valueInt,
+                it.end.valueInt, it.bottom.valueInt)
+        }
+        return android.graphics.Rect()
+    }
 }

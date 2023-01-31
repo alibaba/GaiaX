@@ -204,6 +204,14 @@ data class GXTemplateInfo(
             val animationJson =
                 dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
 
+            // 兼容 edge-insets
+            layerJson.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)?.let {
+                if (!cssJson.containsKey(template.id)) {
+                    cssJson[template.id] = JSONObject()
+                }
+                cssJson.getJSONObject(template.id)?.put(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, it)
+            }
+
             val expVersion: String? = layerJson.getString(GXTemplateKey.GAIAX_LAYER_EXP_VERSION)
 
             val layer = GXLayer.create(layerJson)

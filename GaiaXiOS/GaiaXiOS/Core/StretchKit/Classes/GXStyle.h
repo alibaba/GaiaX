@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 //释放上次的rust指针
 - (void)freePrevRustptr;
 
+// 兼容 edge-insets
+- (void)updateEdgeInsets:(NSString *)edgeInsetsStr;
 
 @end
 

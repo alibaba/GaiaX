@@ -1328,7 +1328,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     gxTemplateContext, it, gxNode.stretchNode.layoutByBind
                 )
                 view.setGridContainerItemSpacingAndRowSpacing(
-                    it.edgeInsets, it.itemSpacing, it.rowSpacing
+                    gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
                 )
             }
         }
@@ -1344,25 +1344,25 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     scrollConfig.direction, gxNode.stretchNode.layoutByBind
                 )
 
-                val edgeInsets = scrollConfig.edgeInsets
+                val padding = gxNode.getPaddingRect()
                 val lineSpacing = scrollConfig.itemSpacing
                 if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
                     // 设置边距
-                    if (edgeInsets.top == 0 && edgeInsets.bottom == 0) {
+                    if (padding.top == 0 && padding.bottom == 0) {
                         view.setHorizontalScrollContainerLineSpacing(
-                            edgeInsets.left, edgeInsets.right, lineSpacing
+                            padding.left, padding.right, lineSpacing
                         )
                     } else {
                         if (lineSpacing != 0) {
                             view.setHorizontalScrollContainerLineSpacing(lineSpacing)
                         }
-                        view.setScrollContainerPadding(edgeInsets)
+                        view.setScrollContainerPadding(padding)
                     }
                 } else {
                     if (lineSpacing != 0) {
                         view.setVerticalScrollContainerLineSpacing(lineSpacing)
                     }
-                    view.setScrollContainerPadding(edgeInsets)
+                    view.setScrollContainerPadding(padding)
                 }
             }
         }

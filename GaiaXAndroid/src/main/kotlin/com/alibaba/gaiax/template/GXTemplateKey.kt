@@ -303,6 +303,7 @@ object GXTemplateKey {
 
     const val GAIAX_ANIMATION = "animation"
 
+    @Deprecated("Compatible")
     const val GAIAX_LAYER_EDGE_INSETS = "edge-insets"
 
     @Deprecated("Compatible")

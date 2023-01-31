@@ -106,7 +106,6 @@ data class GXLayer constructor(
             data: JSONObject
         ): GXLayer {
             val direction = data.getString(GXTemplateKey.GAIAX_LAYER_DIRECTION)
-            val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
             var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
             if (itemSpacing == null) {
                 itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
@@ -133,7 +132,6 @@ data class GXLayer constructor(
                     scrollConfig = GXScrollConfig.create(
                         data,
                         direction,
-                        edgeInsets,
                         itemSpacing,
                         gravity
                     ),
@@ -149,7 +147,6 @@ data class GXLayer constructor(
                     gridConfig = GXGridConfig.create(
                         data,
                         direction,
-                        edgeInsets,
                         itemSpacing,
                         rowSpacing,
                         column,

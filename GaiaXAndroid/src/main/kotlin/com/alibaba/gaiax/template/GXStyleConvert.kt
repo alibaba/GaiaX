@@ -62,6 +62,9 @@ class GXStyleConvert {
 
     fun padding(cssJson: JSONObject): Rect<GXSize>? {
         var result: Rect<GXSize>? = null
+        val edgeInsets = GXContainerConvert.edgeInsets(
+            cssJson.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
+        )
 
         cssJson.getString(GXTemplateKey.FLEXBOX_PADDING)?.also {
             val size = GXSize.create(it)
@@ -98,6 +101,26 @@ class GXStyleConvert {
                     Rect(GXSize.Undefined, GXSize.Undefined, GXSize.Undefined, GXSize.Undefined)
             }
             result?.bottom = GXSize.create(it)
+        }
+
+        edgeInsets?.let {
+            if (result == null) {
+                result =
+                    Rect(GXSize.Undefined, GXSize.Undefined, GXSize.Undefined, GXSize.Undefined)
+            }
+
+            if (edgeInsets.start !is GXSize.Undefined) {
+                result?.start = edgeInsets.start
+            }
+            if (edgeInsets.end !is GXSize.Undefined) {
+                result?.end = edgeInsets.end
+            }
+            if (edgeInsets.top !is GXSize.Undefined) {
+                result?.top = edgeInsets.top
+            }
+            if (edgeInsets.bottom !is GXSize.Undefined) {
+                result?.bottom = edgeInsets.bottom
+            }
         }
 
         return result

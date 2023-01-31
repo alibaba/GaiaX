@@ -21,6 +21,9 @@
             android:name=".StyleTemplateActivity"
             android:exported="false" />
         <activity
+            android:name=".JavascriptTemplateActivity"
+            android:exported="false" />
+        <activity
             android:name=".RemoteDataSourceTemplateActivity"
             android:exported="false" />
         <activity

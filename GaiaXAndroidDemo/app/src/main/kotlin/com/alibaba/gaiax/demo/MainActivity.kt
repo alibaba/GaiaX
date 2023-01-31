@@ -134,5 +134,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, StyleTemplateActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<AppCompatButton>(R.id.js)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, JavascriptTemplateActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

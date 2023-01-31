@@ -78,6 +78,8 @@ dependencies {
     implementation project(path: ':GaiaXAndroidClientToStudio')
     implementation project(path: ':GaiaXAndroidAdapter')
     implementation project(path: ':GaiaXAndroid')
+    implementation project(path: ':GaiaX-Android-JS')
+    implementation project(path: ':GaiaX-Android-QuickJS')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'

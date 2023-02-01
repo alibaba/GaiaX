@@ -31,7 +31,6 @@ android {
         targetSdk 33
 
         testInstrumentationRunner 'androidx.benchmark.junit4.AndroidBenchmarkRunner'
-        testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR,LOW-BATTERY"
     }
 
     testBuildType = "release"
@@ -58,5 +57,11 @@ dependencies {
     // in an app module this way - you will need to move any code you
     // want to benchmark to a library module:
     // https://developer.android.com/studio/projects/android-library#Convert
+
+    androidTestImplementation project(path: ':GaiaXAndroidAdapter')
+    androidTestImplementation project(path: ':GaiaXAndroid')
+    androidTestImplementation 'com.github.bumptech.glide:glide:4.12.0'
+    androidTestImplementation 'com.alibaba:fastjson:1.2.76'
+    androidTestImplementation 'com.airbnb.android:lottie:4.1.0'
 
 }

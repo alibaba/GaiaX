@@ -350,9 +350,9 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueString(JNIEnv
 
     jsize size = env->GetStringUTFLength(value);
     GXValue *result;
-    if(size <= 0){
+    if (size <= 0) {
         result = new GXValue(GX_TAG_STRING, "");
-    }else{
+    } else {
         result = new GXValue(GX_TAG_STRING, jstring2str(env, value).c_str());
     }
     return (jlong) result;
@@ -405,6 +405,6 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueLong(JNIEnv *env, jobject thiz,
                                                                         jlong value) {
-    GXValue *result = new GXValue(GX_TAG_LONG, (int64_t)value);
+    GXValue *result = new GXValue(GX_TAG_LONG, (int64_t) value);
     return (jlong) result;
 }

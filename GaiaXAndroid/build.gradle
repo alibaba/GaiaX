@@ -98,7 +98,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
 
     if (System.getProperties().get("GaiaXDemo") == "true") {
         implementation project(path: ':GXAnalyzeAndroid')

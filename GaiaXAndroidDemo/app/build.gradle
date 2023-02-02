@@ -100,3 +100,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test:core:1.4.1-alpha05'
 }
+
+dependencies {
+//    三方
+    implementation 'com.github.princekin-f:EasyFloat:2.0.4'
+}

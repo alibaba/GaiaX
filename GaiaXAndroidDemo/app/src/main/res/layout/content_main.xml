@@ -66,5 +66,11 @@
             android:layout_height="wrap_content"
             android:text="@string/js_data"
             android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/dev_tools"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/dev_tools" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,14 +11,17 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.SwitchCompat
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.demo.devtools.DevTools
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.studio.GXClientToStudio
+import com.lzf.easyfloat.permission.PermissionUtils
 
 
 class MainActivity : AppCompatActivity() {
@@ -139,5 +142,19 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, JavascriptTemplateActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<SwitchCompat>(R.id.dev_tools)?.setOnCheckedChangeListener { p0, result ->
+            if (result) {
+                if (PermissionUtils.checkPermission(applicationContext)) {
+                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
+                } else {
+                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
+                }
+            } else {
+                DevTools.instance.dismissDevTools()
+            }
+        }
     }
+
+
 }

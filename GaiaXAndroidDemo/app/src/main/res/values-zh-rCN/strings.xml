@@ -11,4 +11,5 @@
     <string name="style">样式</string>
     <string name="business">业务</string>
     <string name="js_data">JS能力</string>
+    <string name="dev_tools">GaiaX DevTools开关</string>
 </resources>

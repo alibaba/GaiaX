@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_secondary">
+
+    <TextView
+        android:id="@+id/window_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:text="DevTools"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="扫码连接到【Gaia Studio】"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_title" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_fast_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0sp"
+        android:text="打开【实时预览】"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_btn_scan" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_push_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开【实时推送】"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_btn_fast_preview"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_js_debug"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开GaiaXJS【断点调试】模式"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_btn_push_preview"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_cancel_dev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="关闭GaiaX DevTools"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_btn_js_debug"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/window_btn_close_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="收起"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/window_btn_cancel_dev" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

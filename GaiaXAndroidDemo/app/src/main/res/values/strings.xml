@@ -11,4 +11,5 @@
     <string name="style">Style</string>
     <string name="business">Business</string>
     <string name="js_data">JS Test Activity</string>
+    <string name="dev_tools">Open Dev Tools</string>
 </resources>

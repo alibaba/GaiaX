@@ -7,6 +7,7 @@ import androidx.benchmark.junit4.measureRepeated
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import org.junit.Rule
@@ -31,6 +32,7 @@ class GaiaXBenchmark {
     @Test
     fun profiler_dianbo_item_single() {
         GXTemplateEngine.instance.init(context)
+        GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
 
         val bizId = "templates"
         val templateId = "profiler_dianbo_item_single"

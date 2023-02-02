@@ -25,7 +25,7 @@ import com.lzf.easyfloat.enums.ShowPattern
  */
 class DevTools : DefaultLifecycleObserver {
     companion object {
-        val Tag = "devtools"
+        val TAG = "devtools"
 
         val instance by lazy {
             return@lazy DevTools()
@@ -34,33 +34,18 @@ class DevTools : DefaultLifecycleObserver {
 
     private var devtoolsContext: Context? = null
 
-    private var scanResult = null
+    private var scanResult: String = ""
 
-    private lateinit var observer: DevLifecycleObserver
-
-//    private var launcher =
-//        devtoolsContext?.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//            scanResult = it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
-//            Log.d("GaiaXDevTools", "StartActivityForResult() called scanResult = $scanResult")
-//            connectStudioMultiType(scanResult)
-//
-//        }
-
-    fun registerObserver(context: Context){
-        observer = DevLifecycleObserver((context as AppCompatActivity).activityResultRegistry)
-        (context as AppCompatActivity).lifecycle.addObserver(observer)
-    }
     fun createDevToolsFloatWindow(context: Context) {
         devtoolsContext = context
         EasyFloat.with(context)
             .setLayout(R.layout.layout_dev_tools) {
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_scan).setOnClickListener { view ->
-//                    val intent = Intent(context, GXQRCodeActivity::class.java)
-//                    (context as Activity).startActivityForResult(intent, 0)
-//                    (context as Activity)
-
-                    observer.selectImage(context)
+                    var intent = Intent(context, GXQRCodeActivity::class.java)
+                    intent.putExtra(TAG, TAG)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    context.startActivity(intent)
                 }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_fast_preview)
@@ -86,7 +71,7 @@ class DevTools : DefaultLifecycleObserver {
             }
             .setShowPattern(ShowPattern.FOREGROUND)
             .setDragEnable(true)
-            .setTag(Tag)
+            .setTag(TAG)
             .registerCallback {
                 createResult { isCreated, msg, view -> }
                 show { }
@@ -102,11 +87,12 @@ class DevTools : DefaultLifecycleObserver {
     }
 
     fun dismissDevTools() {
-        EasyFloat.dismiss(Tag)
+        EasyFloat.dismiss(TAG)
     }
 
-    private fun connectStudioMultiType(scanResult: String?) {
-
+    fun connectStudioMultiType(result: String) {
+        Log.d(TAG, "connectStudioMultiType: $result")
+        scanResult = result
     }
 
     private fun launchFastPreviewType(view: View?) {
@@ -127,30 +113,5 @@ class DevTools : DefaultLifecycleObserver {
 
     private fun foldWindowToSmall(view: View?) {
         EasyFloat.updateFloat(null, width = 150, height = 150)
-    }
-
-    class DevLifecycleObserver(private val registry: ActivityResultRegistry) :
-        DefaultLifecycleObserver {
-        lateinit var getContent: ActivityResultLauncher<Intent>
-
-        override fun onCreate(owner: LifecycleOwner) {
-            getContent = registry.register(
-                "key",
-                owner,
-                ActivityResultContracts.StartActivityForResult()
-            ) { uri ->
-                Log.d(
-                    "GaiaXDevTools",
-                    "StartActivityForResult() called scanResult Dev = $uri"
-                )
-            }
-        }
-
-        fun selectImage(context: Context) {
-            val intent = Intent(context, GXQRCodeActivity::class.java)
-            getContent.launch(intent)
-        }
-
-
     }
 }

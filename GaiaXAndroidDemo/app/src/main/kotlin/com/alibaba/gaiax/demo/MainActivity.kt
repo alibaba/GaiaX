@@ -146,27 +146,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<SwitchCompat>(R.id.dev_tools)?.setOnCheckedChangeListener { p0, result ->
             if (result) {
                 if (PermissionUtils.checkPermission(applicationContext)) {
-                    DevTools.instance.createDevToolsFloatWindow(this)
+                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
                 } else {
-                    DevTools.instance.createDevToolsFloatWindow(this)
+                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
                 }
             } else {
                 DevTools.instance.dismissDevTools()
             }
         }
-
-        DevTools.instance.registerObserver(this)
     }
-
-    // ------------------------------------------------------------------------
-    // HOOKS INTO ACTIVITY
-    // ------------------------------------------------------------------------
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d(
-            "GaiaXDevTools",
-            "StartActivityForResult() called scanResult = ${data?.getStringExtra("SCAN_RESULT")}"
-        )
-    }
-
 }

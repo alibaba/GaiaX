@@ -37,13 +37,17 @@ import kotlin.math.max
 object GXNodeUtils {
 
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
-        val layout = gxNode.stretchNode.node.computeLayout(size)
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        val layout = stretchNode.computeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
     }
 
     private fun composeStretchNodeByBindData(gxNode: GXNode, layout: Layout) {
-        layout.id = gxNode.stretchNode.node.id
-        layout.idPath = gxNode.stretchNode.node.idPath
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        layout.id = stretchNode.id
+        layout.idPath = stretchNode.idPath
         gxNode.stretchNode.layoutByBind = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
@@ -51,18 +55,30 @@ object GXNodeUtils {
     }
 
     fun computeNodeTreeByCreateView(gxNode: GXNode, size: Size<Float?>) {
-        val layout = gxNode.stretchNode.node.computeLayout(size)
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        val layout = stretchNode.computeLayout(size)
         composeStretchNodeByCreateView(gxNode, layout)
     }
 
     private fun composeStretchNodeByCreateView(gxNode: GXNode, layout: Layout) {
-        layout.id = gxNode.stretchNode.node.id
-        layout.idPath = gxNode.stretchNode.node.idPath
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        layout.id = stretchNode.id
+        layout.idPath = stretchNode.idPath
         gxNode.stretchNode.layoutByCreate = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByCreateView(childViewData, layout.children[index])
         }
     }
+
+    fun composeGXNodeByPrepare(gxNode: GXNode, layout: Layout) {
+        gxNode.layoutByPrepare = layout
+        gxNode.children?.forEachIndexed { index, childViewData ->
+            composeGXNodeByPrepare(childViewData, layout.children[index])
+        }
+    }
+
 
     /**
      * 用于预计算容器的尺寸

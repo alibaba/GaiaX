@@ -17,9 +17,12 @@
 package com.alibaba.gaiax.render
 
 import android.view.View
+import app.visly.stretch.Layout
+import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeTreeCreator
+import com.alibaba.gaiax.render.node.GXNodeTreePrepare
 import com.alibaba.gaiax.render.node.GXNodeTreeUpdate
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
@@ -30,8 +33,24 @@ import com.alibaba.gaiax.render.view.GXViewTreeUpdate
  */
 class GXRenderImpl {
 
+    var layoutTreeMap: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
+
+    fun prepareLayoutTree(gxTemplateContext: GXTemplateContext) {
+        if (layoutTreeMap.containsKey(gxTemplateContext.templateItem)) {
+            return
+        }
+        val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
+        gxTemplateContext.rootNode = rootNode
+        rootNode.stretchNode?.layoutByCreate?.let {
+            layoutTreeMap[gxTemplateContext.templateItem] = it
+        }
+        rootNode.release()
+    }
+
     fun createNode(gxTemplateContext: GXTemplateContext): GXNode {
-        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        val rootLayout = layoutTreeMap[gxTemplateContext.templateItem]
+            ?: throw IllegalArgumentException("root layout is null")
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)
         gxTemplateContext.rootNode = rootNode
         return rootNode
     }
@@ -44,8 +63,10 @@ class GXRenderImpl {
     }
 
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
+        val rootLayout = layoutTreeMap[gxTemplateContext.templateItem]
+            ?: throw IllegalArgumentException("root layout is null")
         // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)
         gxTemplateContext.rootNode = rootNode
         return rootNode
     }
@@ -82,4 +103,5 @@ class GXRenderImpl {
         // Update the view tree
         GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
     }
+
 }

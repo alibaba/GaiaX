@@ -16,7 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
-import app.visly.stretch.Layout
+import app.visly.stretch.Size
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXLayer
@@ -26,9 +26,9 @@ import com.alibaba.gaiax.template.GXTemplateInfo
  * 用于创建虚拟节点树
  * @suppress
  */
-object GXNodeTreeCreator {
+object GXNodeTreePrepare {
 
-    fun create(gxTemplateContext: GXTemplateContext, rootLayout: Layout): GXNode {
+    fun create(gxTemplateContext: GXTemplateContext): GXNode {
         val rootNode = createNode(
             gxTemplateContext,
             null,
@@ -37,7 +37,9 @@ object GXNodeTreeCreator {
             gxTemplateContext.templateInfo
         )
         rootNode.isRoot = true
-        GXNodeUtils.composeGXNodeByPrepare(rootNode, rootLayout)
+        GXNodeUtils.computeNodeTreeByCreateView(
+            rootNode, Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
+        )
         return rootNode
     }
 
@@ -72,7 +74,7 @@ object GXNodeTreeCreator {
         )
 
         // 初始化节点数据
-        gxNode.stretchNode = GXStretchNode.createEmptyNode(
+        gxNode.stretchNode = GXStretchNode.createNode(
             gxTemplateContext, gxNode.templateNode, gxNode.id, gxNode.idPath
         )
 
@@ -116,6 +118,10 @@ object GXNodeTreeCreator {
                     }
                     gxNode.children?.add(gxChildNode)
 
+                    // 建立节点的层级关系
+                    gxChildNode.stretchNode.node?.let {
+                        gxNode.stretchNode.node?.addChild(it)
+                    }
                 }
             }
             // 普通子节点
@@ -129,6 +135,11 @@ object GXNodeTreeCreator {
                     gxNode.children = mutableListOf()
                 }
                 gxNode.children?.add(gxChildNode)
+
+                // 建立节点的层级关系
+                gxChildNode.stretchNode.node?.let {
+                    gxNode.stretchNode.node?.addChild(it)
+                }
 
             }
         }

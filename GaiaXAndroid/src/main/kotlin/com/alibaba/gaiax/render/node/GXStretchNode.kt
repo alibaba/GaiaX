@@ -25,7 +25,7 @@ import com.alibaba.gaiax.template.GXFlexBox
  */
 @Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
-    val node: Node,
+    val node: Node? = null,
     var layoutByCreate: Layout? = null,
     var layoutByBind: Layout? = null
 ) {
@@ -37,25 +37,34 @@ data class GXStretchNode(
 
     private fun resetStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
         val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
-        val oldStyle = node.getStyle()
-        this.node.setStyle(stretchStyle)
-        this.node.markDirty()
-        oldStyle.safeFree()
+        val oldStyle = node?.getStyle()
+        this.node?.setStyle(stretchStyle)
+        this.node?.markDirty()
+        oldStyle?.safeFree()
     }
 
     fun initFinal() {
     }
 
-    override fun toString(): String {
-        return "GXStretchNode(node=$node, layout=$layoutByCreate)"
-    }
-
     fun free() {
         layoutByCreate = null
-        node.safeFree()
+        node?.safeFree()
+    }
+
+    override fun toString(): String {
+        return "GXStretchNode(node=$node, layoutByCreate=$layoutByCreate, layoutByBind=$layoutByBind)"
     }
 
     companion object {
+
+        fun createEmptyNode(
+            gxTemplateContext: GXTemplateContext,
+            templateNode: GXTemplateNode,
+            id: String,
+            idPath: String
+        ): GXStretchNode {
+            return GXStretchNode()
+        }
 
         fun createNode(
             gxTemplateContext: GXTemplateContext,
@@ -135,5 +144,7 @@ data class GXStretchNode(
 
             flexBox.maxSizeForStyle?.let { style.maxSize = Size(it.width, it.height) }
         }
+
+
     }
 }

@@ -19,6 +19,7 @@ package com.alibaba.gaiax.render.node
 import android.animation.AnimatorSet
 import android.view.View
 import app.visly.stretch.Display
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -86,6 +87,8 @@ class GXNode {
      * 节点虚拟数据
      */
     lateinit var stretchNode: GXStretchNode
+
+    var layoutByPrepare: Layout? = null
 
     /**
      * 父节点
@@ -215,7 +218,7 @@ class GXNode {
     }
 
     private fun isNodeVisibleInTree(gxNode: GXNode): Boolean {
-        if (gxNode.stretchNode.node.getStyle().display == Display.None) {
+        if (gxNode.stretchNode.node?.getStyle()?.display == Display.None) {
             return false
         }
         gxNode.parentNode?.let {

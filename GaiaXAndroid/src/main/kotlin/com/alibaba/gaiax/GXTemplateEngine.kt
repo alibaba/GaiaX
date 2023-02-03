@@ -444,6 +444,25 @@ class GXTemplateEngine {
         override fun toString(): String {
             return "GXTemplateItem(context=$context, bizId='$bizId', templateId='$templateId', templateVersion='$templateVersion'"
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as GXTemplateItem
+
+            if (bizId != other.bizId) return false
+            if (templateId != other.templateId) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = bizId.hashCode()
+            result = 31 * result + templateId.hashCode()
+            return result
+        }
+
     }
 
     internal lateinit var context: Context
@@ -549,6 +568,28 @@ class GXTemplateEngine {
         }
     }
 
+    fun prepareView(
+        gxTemplateItem: GXTemplateItem,
+        gxMeasureSize: GXMeasureSize,
+        gxVisualTemplateNode: GXTemplateNode? = null
+    ) {
+        try {
+            val templateInfo = data.getTemplateInfo(gxTemplateItem)
+            val gxTemplateContext = GXTemplateContext.createContext(
+                gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
+            )
+            render.prepareLayoutTree(gxTemplateContext)
+        } catch (e: Exception) {
+            val extensionException = GXRegisterCenter.instance.extensionException
+            if (extensionException != null) {
+                extensionException.exception(e)
+            } else {
+                throw e
+            }
+        }
+
+    }
+
     /**
      * @suppress
      * @hide
@@ -577,11 +618,11 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode?
     ): GXTemplateContext {
         val templateInfo = data.getTemplateInfo(gxTemplateItem)
-        val context = GXTemplateContext.createContext(
+        val gxTemplateContext = GXTemplateContext.createContext(
             gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
         )
-        render.createViewOnlyNodeTree(context)
-        return context
+        render.createViewOnlyNodeTree(gxTemplateContext)
+        return gxTemplateContext
     }
 
     /**

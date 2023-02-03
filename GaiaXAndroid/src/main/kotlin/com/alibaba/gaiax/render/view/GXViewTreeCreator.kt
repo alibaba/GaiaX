@@ -29,6 +29,17 @@ import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(gxTemplateContext, rootNode) {
 
+    override fun getChildLayout(childNode: GXNode): Layout {
+        return childNode.layoutByPrepare
+            ?: throw IllegalArgumentException("Stretch layout info is null")
+
+    }
+
+    override fun getRootLayout(): Layout {
+        return rootNode.layoutByPrepare
+            ?: throw IllegalArgumentException("Stretch layout info is null gxTemplateContext = $gxTemplateContext")
+    }
+
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View {
         val rootView = GXViewFactory.createView<View>(
             context.context, rootNode.getType(), rootNode.getCustomViewClass()

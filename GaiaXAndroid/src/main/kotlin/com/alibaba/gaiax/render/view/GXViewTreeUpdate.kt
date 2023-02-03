@@ -27,6 +27,16 @@ import com.alibaba.gaiax.render.node.GXNode
 open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(context, rootNode) {
 
+    override fun getChildLayout(childNode: GXNode): Layout {
+        return childNode.stretchNode.layoutByBind ?: childNode.layoutByPrepare
+        ?: throw IllegalArgumentException("Stretch layout info is null")
+    }
+
+    override fun getRootLayout(): Layout {
+        return rootNode.stretchNode.layoutByBind ?: rootNode.layoutByPrepare
+        ?: throw IllegalArgumentException("Stretch layout info is null gxTemplateContext = $gxTemplateContext")
+    }
+
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View? {
         return node.view?.also {
             GXViewLayoutParamsUtils.updateLayoutParams(it, layout, 0F, 0F)
@@ -47,20 +57,14 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
             if (childNode.isNeedShadow()) {
                 childNode.boxLayoutView?.let { shadowView ->
                     GXViewLayoutParamsUtils.updateLayoutParams(
-                        shadowView,
-                        childLayout,
-                        mergeX,
-                        mergeY
+                        shadowView, childLayout, mergeX, mergeY
                     )
                 }
             }
             if (childNode.isNeedLottie()) {
                 childNode.lottieView?.let { lottieView ->
                     GXViewLayoutParamsUtils.updateLayoutParams(
-                        lottieView,
-                        childLayout,
-                        mergeX,
-                        mergeY
+                        lottieView, childLayout, mergeX, mergeY
                     )
                 }
             }

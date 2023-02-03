@@ -52,10 +52,10 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View, info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }
@@ -104,10 +104,10 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View, info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }
@@ -139,10 +139,11 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View,
+                        info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }

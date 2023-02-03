@@ -92,12 +92,26 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 
+    def properties = System.getProperties()
+    def androidx_appcompat_appcompat_version = properties.getProperty("androidx_appcompat_appcompat_version")
+    if (androidx_appcompat_appcompat_version != null) {
+        implementation "androidx.appcompat:appcompat:$androidx_appcompat_appcompat_version"
+    } else {
+        implementation "androidx.appcompat:appcompat:1.0.0"
+    }
+
+    def com_airbnb_android_lottie = properties.get("com_airbnb_android_lottie")
+    if (com_airbnb_android_lottie != null) {
+        implementation "com.airbnb.android:lottie:$com_airbnb_android_lottie"
+    } else {
+        implementation "com.airbnb.android:lottie:4.1.0"
+    }
+
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.airbnb.android:lottie:4.1.0'
 
-    if (System.getProperties().get("GaiaXDemo") == "true") {
+
+    if (properties.get("isGaiaXDemo") == "true") {
         implementation project(path: ':GaiaXAndroid')
     } else {
         println("version = " + version)

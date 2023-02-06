@@ -65,9 +65,6 @@ object GXNodeTreePrepare {
 
         gxNode.parentNode = gxParentNode
 
-        // 设置ID与ID路径
-        gxNode.setIdPath(gxParentNode, gxLayer)
-
         // 初始化详细数据
         gxNode.templateNode = GXTemplateNode.createNode(
             gxLayer.id, gxTemplateInfo, gxVisualTemplateNode
@@ -75,7 +72,7 @@ object GXNodeTreePrepare {
 
         // 初始化节点数据
         gxNode.stretchNode = GXStretchNode.createNode(
-            gxTemplateContext, gxNode.templateNode, gxNode.id, gxNode.idPath
+            gxTemplateContext, gxNode.templateNode, gxNode.id
         )
 
         // 构建子层级节点

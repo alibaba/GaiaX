@@ -35,16 +35,14 @@ open class Node {
     }
 
     val id: String
-    val idPath: String
     private var rustptr: Long
     private var style: Style
     private var children: MutableList<Node>
     private var measure: MeasureFunc? = null
 
-    constructor(id: String, idPath: String, style: Style, measure: MeasureFunc) {
+    constructor(id: String, style: Style, measure: MeasureFunc) {
         synchronized(Stretch::class.java) {
             this.id = id
-            this.idPath = idPath
             this.rustptr =
                 nConstructLeaf(Stretch.ptr, style.rustptr, MeasureFuncImpl(WeakReference(measure)))
             this.style = style
@@ -53,10 +51,9 @@ open class Node {
         }
     }
 
-    constructor(id: String, idPath: String, style: Style, children: List<Node>) {
+    constructor(id: String, style: Style, children: List<Node>) {
         synchronized(Stretch::class.java) {
             this.id = id
-            this.idPath = idPath
             this.rustptr = nConstruct(
                 Stretch.ptr,
                 style.rustptr,
@@ -66,11 +63,10 @@ open class Node {
         }
     }
 
-    constructor(id: String, idPath: String, style: Style) {
+    constructor(id: String,  style: Style) {
         synchronized(Stretch::class.java) {
             val children: List<Node> = mutableListOf()
             this.id = id
-            this.idPath = idPath
             this.rustptr = nConstruct(
                 Stretch.ptr,
                 style.rustptr,

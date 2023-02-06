@@ -47,7 +47,6 @@ object GXNodeUtils {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
-        layout.idPath = stretchNode.idPath
         gxNode.stretchNode.layoutByBind = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
@@ -65,7 +64,6 @@ object GXNodeUtils {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
-        layout.idPath = stretchNode.idPath
         gxNode.stretchNode.layoutByCreate = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByPrepareView(childViewData, layout.children[index])

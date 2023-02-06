@@ -49,11 +49,6 @@ class GXNode {
     var id = ""
 
     /**
-     * ID路径
-     */
-    var idPath = ""
-
-    /**
      * 是否是根节点
      */
     var isRoot: Boolean = false
@@ -122,7 +117,6 @@ class GXNode {
 
     fun release() {
         isAnimating = false
-        idPath = ""
         if (view is GXIRelease) {
             (view as GXIRelease).release()
         }
@@ -175,25 +169,8 @@ class GXNode {
         ) == true
     }
 
-    fun setIdPath(parent: GXNode?, layer: GXLayer) {
-        id = layer.id
-        idPath = if (parent != null) {
-            if (idPath.isNotEmpty()) {
-                "${parent.idPath}@${idPath}@${layer.id}"
-            } else {
-                "${parent.idPath}@${layer.id}"
-            }
-        } else {
-            if (idPath.isNotEmpty()) {
-                "${idPath}@${layer.id}"
-            } else {
-                layer.id
-            }
-        }
-    }
-
     override fun toString(): String {
-        return "GXNode(id='$id', idPath='$idPath', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
+        return "GXNode(id='$id', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
     }
 
     fun initEventByRegisterCenter() {

@@ -36,7 +36,7 @@ data class GXStretchNode(
     private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
         if (this.node == null) {
-            val stretchNode = Node(gxNode.id, gxNode.idPath, stretchStyle, mutableListOf())
+            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
             this.node = stretchNode
             this.node?.let {
                 gxNode.parentNode?.stretchNode?.node?.addChild(it)
@@ -65,8 +65,7 @@ data class GXStretchNode(
         fun createEmptyNode(
             gxTemplateContext: GXTemplateContext,
             templateNode: GXTemplateNode,
-            id: String,
-            idPath: String
+            id: String
         ): GXStretchNode {
             return GXStretchNode()
         }
@@ -74,11 +73,10 @@ data class GXStretchNode(
         fun createNode(
             gxTemplateContext: GXTemplateContext,
             gxTemplateNode: GXTemplateNode,
-            id: String,
-            idPath: String
+            id: String
         ): GXStretchNode {
             val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
-            val stretchNode = Node(id, idPath, stretchStyle, mutableListOf())
+            val stretchNode = Node(id, stretchStyle, mutableListOf())
             return GXStretchNode(stretchNode, null)
         }
 

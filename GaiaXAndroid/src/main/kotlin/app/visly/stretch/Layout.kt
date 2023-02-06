@@ -9,8 +9,7 @@ data class Layout(
     val width: Float,
     val height: Float,
     val children: MutableList<Layout>,
-    var id: String = "",
-    var idPath: String = ""
+    var id: String = ""
 ) {
 
     companion object {
@@ -35,7 +34,7 @@ data class Layout(
     }
 
     override fun toString(): String {
-        return "Layout(x=$x, y=$y, width=$width, height=$height, id='$id' idPath='$idPath')"
+        return "Layout(x=$x, y=$y, width=$width, height=$height, id='$id')"
     }
 
 }

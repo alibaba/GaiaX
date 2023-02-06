@@ -207,7 +207,7 @@ class GXNode {
      */
     fun reset(gxTemplateContext: GXTemplateContext) {
         templateNode.reset()
-        stretchNode.reset(gxTemplateContext, this.templateNode)
+        stretchNode.reset(gxTemplateContext, this)
         children?.forEach {
             it.reset(gxTemplateContext)
         }

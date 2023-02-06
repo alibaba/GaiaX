@@ -25,22 +25,28 @@ import com.alibaba.gaiax.template.GXFlexBox
  */
 @Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
-    val node: Node? = null,
-    var layoutByCreate: Layout? = null,
-    var layoutByBind: Layout? = null
+    var node: Node? = null, var layoutByCreate: Layout? = null, var layoutByBind: Layout? = null
 ) {
 
-    fun reset(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        resetStyle(gxTemplateContext, gxTemplateNode)
+    fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        resetStyle(gxTemplateContext, gxNode)
         layoutByBind = null
     }
 
-    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
-        val oldStyle = node?.getStyle()
-        this.node?.setStyle(stretchStyle)
-        this.node?.markDirty()
-        oldStyle?.safeFree()
+    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+        if (this.node == null) {
+            val stretchNode = Node(gxNode.id, gxNode.idPath, stretchStyle, mutableListOf())
+            this.node = stretchNode
+            this.node?.let {
+                gxNode.parentNode?.stretchNode?.node?.addChild(it)
+            }
+        } else {
+            val oldStyle = this.node?.getStyle()
+            this.node?.setStyle(stretchStyle)
+            this.node?.markDirty()
+            oldStyle?.safeFree()
+        }
     }
 
     fun initFinal() {
@@ -77,8 +83,7 @@ data class GXStretchNode(
         }
 
         private fun createStretchStyle(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode
+            gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode
         ): Style {
             val style = Style()
 
@@ -96,9 +101,7 @@ data class GXStretchNode(
         }
 
         private fun updateStyle(
-            gxTemplateContext: GXTemplateContext,
-            flexBox: GXFlexBox,
-            style: Style
+            gxTemplateContext: GXTemplateContext, flexBox: GXFlexBox, style: Style
         ) {
             flexBox.display?.let { style.display = it }
 

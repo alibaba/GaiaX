@@ -101,16 +101,16 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
         internal fun updateNodeTreeLayout(
             gxTemplateContext: GXTemplateContext,
-            rootNode: GXNode,
+            gxNode: GXNode,
             templateData: JSONObject,
             size: Size<Float?>
         ) {
             // 更新布局
-            updateNodeTreeLayout(gxTemplateContext, rootNode, templateData)
+            updateNodeTreeLayout(gxTemplateContext, gxNode, templateData)
 
             // 计算布局
             if (gxTemplateContext.isDirty) {
-                GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
+                GXNodeUtils.computeNodeTreeByBindData(gxNode, size)
             }
         }
 
@@ -140,7 +140,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
             gxNode.templateNode.resetDataCache()
-            gxNode.stretchNode.reset(gxTemplateContext, gxNode.templateNode)
+            gxNode.stretchNode.reset(gxTemplateContext, gxNode)
 
             if (gxNode.isNestRoot) {
                 updateNestNodeLayout(gxTemplateContext, gxNode, templateData)

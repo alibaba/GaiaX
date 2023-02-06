@@ -565,6 +565,9 @@ class GXTemplateEngine {
             gxTemplateContext.reset()
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
+            gxRootNode.stretchNode.layoutByCreate?.let {
+                render.layoutTreeMap[gxTemplateContext.templateItem] = it
+            }
         }
     }
 

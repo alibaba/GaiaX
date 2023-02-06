@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.template.GXIExpression
 import com.alibaba.gaiax.utils.getAnyExt
-import com.alibaba.gaiax.utils.setValueExt
 import java.util.regex.Pattern
 
 /**
@@ -137,9 +136,7 @@ sealed class GaiaXYKExpression : GXIExpression {
      * 用于逻辑运算 == != >= <= > < && || %
      */
     data class GEval(
-        val operate: String,
-        val leftValue: GaiaXYKExpression,
-        val rightValue: GaiaXYKExpression
+        val operate: String, val leftValue: GaiaXYKExpression, val rightValue: GaiaXYKExpression
     ) : GaiaXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
@@ -640,14 +637,6 @@ sealed class GaiaXYKExpression : GXIExpression {
             return rawJson?.getAnyExt(value)
         }
 
-//        override fun expression(): Any {
-//            return value
-//        }
-//
-//        fun setData(rawJson: JSON?, target: Any) {
-//            rawJson?.setValueExt(value, target)
-//        }
-
         override fun toString(): String {
             return "GValue(value='$value')"
         }
@@ -705,19 +694,14 @@ sealed class GaiaXYKExpression : GXIExpression {
         companion object {
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ? "
+                ) && expression.contains(" : ") && !expression.contains(" ?: ")
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ? ") && expression.contains(
+                    " : "
+                ) && !expression.contains(" ?: ")
 
             private fun getExpressionValue(expression: String): String {
                 val startIndex = expression.indexOf("{")
@@ -795,8 +779,7 @@ sealed class GaiaXYKExpression : GXIExpression {
      * 三元表达式: @{ ${data} ?: b }
      */
     data class GTernaryValue2(
-        val conditionAndTrueBranch: GaiaXYKExpression,
-        val falseBranch: GaiaXYKExpression
+        val conditionAndTrueBranch: GaiaXYKExpression, val falseBranch: GaiaXYKExpression
     ) : GaiaXYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
@@ -853,15 +836,12 @@ sealed class GaiaXYKExpression : GXIExpression {
             }
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ?: "
+                )
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ?: ")
 
             fun isExpression(expression: String): Boolean {
                 return isExp(expression) || isExp2(expression)
@@ -972,19 +952,14 @@ sealed class GaiaXYKExpression : GXIExpression {
             }
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ? "
+                ) && expression.contains(" : ") && !expression.contains(" ?: ")
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ? ") && expression.contains(
+                    " : "
+                ) && !expression.contains(" ?: ")
 
 
             private fun isExp3(expression: String): Boolean {

@@ -21,7 +21,6 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.view.View
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.utils.getBooleanExt
 
 class GXPropAnimation(
     val name: GXPropAnimationSet.GXPropName,
@@ -91,12 +90,11 @@ class GXPropAnimation(
                     animator.loopMode = GXPropAnimationSet.GXPropLoopMode.create(this)
                 }
 
-                if (data.containsKey(KEY_LOOP) && data.getBooleanExt(KEY_LOOP)) {
+                if (data.containsKey(KEY_LOOP) && data.getBooleanValue(KEY_LOOP)) {
                     animator.loopCount = Int.MAX_VALUE
                 } else if (data.containsKey(KEY_LOOP_COUNT)) {
                     if (animator.loopMode == GXPropAnimationSet.GXPropLoopMode.REVERSE) {
-                        animator.loopCount =
-                            Math.max(1, data.getIntValue(KEY_LOOP_COUNT) * 2 - 1)
+                        animator.loopCount = Math.max(1, data.getIntValue(KEY_LOOP_COUNT) * 2 - 1)
                     } else {
                         animator.loopCount = Math.max(0, data.getIntValue(KEY_LOOP_COUNT) - 1)
                     }

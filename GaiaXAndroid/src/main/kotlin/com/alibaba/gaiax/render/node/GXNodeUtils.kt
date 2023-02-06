@@ -72,10 +72,10 @@ object GXNodeUtils {
         }
     }
 
-    fun composeGXNodeByPrepare(gxNode: GXNode, layout: Layout) {
+    fun composeGXNodeByPrepareLayout(gxNode: GXNode, layout: Layout) {
         gxNode.layoutByPrepare = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
-            composeGXNodeByPrepare(childViewData, layout.children[index])
+            composeGXNodeByPrepareLayout(childViewData, layout.children[index])
         }
     }
 

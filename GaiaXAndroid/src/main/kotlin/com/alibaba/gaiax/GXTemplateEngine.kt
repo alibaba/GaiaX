@@ -506,6 +506,8 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode? = null
     ): View? {
         return try {
+            prepareView(gxTemplateItem, gxMeasureSize)
+
             val gxTemplateContext = createViewOnlyNodeTree(
                 gxTemplateItem, gxMeasureSize, gxVisualTemplateNode
             )

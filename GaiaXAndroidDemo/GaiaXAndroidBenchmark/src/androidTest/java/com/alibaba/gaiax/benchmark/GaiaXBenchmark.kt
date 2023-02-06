@@ -49,8 +49,6 @@ class GaiaXBenchmark {
             )
             val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
 
-            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
-
             val rootView = GXTemplateEngine.instance.createView(
                 gxTemplateItem, gxMeasureSize
             )
@@ -71,8 +69,6 @@ class GaiaXBenchmark {
                 context, bizId, templateId
             )
             val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
-            // prepare
-            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
             val rootView = GXTemplateEngine.instance.createView(
                 gxTemplateItem, gxMeasureSize
             )

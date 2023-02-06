@@ -68,9 +68,6 @@ class NormalTemplateActivity : AppCompatActivity() {
             )
         )
 
-        // prepare
-        GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
-
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize)!!
 

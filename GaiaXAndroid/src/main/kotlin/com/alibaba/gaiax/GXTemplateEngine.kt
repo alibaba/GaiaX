@@ -580,6 +580,9 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode? = null
     ) {
         try {
+            if (render.layoutTreeMap.containsKey(gxTemplateItem)) {
+                return
+            }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)
             val gxTemplateContext = GXTemplateContext.createContext(
                 gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode

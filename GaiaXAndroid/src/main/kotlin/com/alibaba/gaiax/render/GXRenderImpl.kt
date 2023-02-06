@@ -36,9 +36,6 @@ class GXRenderImpl {
     var layoutTreeMap: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
 
     fun prepareLayoutTree(gxTemplateContext: GXTemplateContext) {
-        if (layoutTreeMap.containsKey(gxTemplateContext.templateItem)) {
-            return
-        }
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
         rootNode.stretchNode.layoutByCreate?.let {

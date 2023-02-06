@@ -383,8 +383,8 @@ object GXNodeUtils {
         // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
-            val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.layoutByPrepare?.width
+            val containerWidth =
+                gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
@@ -441,8 +441,8 @@ object GXNodeUtils {
         // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
-            val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.layoutByPrepare?.width
+            val containerWidth =
+                gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalGridConfig is null")
@@ -497,7 +497,9 @@ object GXNodeUtils {
         val gxItemTemplateContext = GXTemplateContext.createContext(
             gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
         )
-        GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
+        if (!GXTemplateEngine.instance.render.layoutTreeMap.containsKey(gxTemplateItem)) {
+            GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
+        }
         val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
         gxItemTemplateContext.templateData = gxTemplateData
         GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)

@@ -70,7 +70,7 @@ object GXFitContentUtils {
         val finalCss = gxTemplateNode.finalCss ?: return null
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
-        val nodeLayout = gxStretchNode.layoutByBind ?: gxStretchNode.layoutByCreate ?: return null
+        val nodeLayout = gxStretchNode.layoutByBind ?: return null
 
         val gxCacheText = GXMeasureViewPool.obtain(androidContext)
 

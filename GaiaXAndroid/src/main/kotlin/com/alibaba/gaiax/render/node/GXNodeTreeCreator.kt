@@ -37,7 +37,7 @@ object GXNodeTreeCreator {
             gxTemplateContext.templateInfo
         )
         rootNode.isRoot = true
-        GXNodeUtils.composeGXNodeByPrepareLayout(rootNode, rootLayout)
+        GXNodeUtils.composeGXNodeByCreateView(rootNode, rootLayout)
         return rootNode
     }
 

@@ -41,7 +41,7 @@ class GXRenderImpl {
         }
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
-        rootNode.stretchNode?.layoutByCreate?.let {
+        rootNode.stretchNode.layoutByCreate?.let {
             layoutTreeMap[gxTemplateContext.templateItem] = it
         }
         rootNode.release()

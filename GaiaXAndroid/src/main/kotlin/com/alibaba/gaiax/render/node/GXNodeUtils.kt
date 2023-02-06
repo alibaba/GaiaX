@@ -54,28 +54,28 @@ object GXNodeUtils {
         }
     }
 
-    fun computeNodeTreeByCreateView(gxNode: GXNode, size: Size<Float?>) {
+    fun computeNodeTreeByPrepareView(gxNode: GXNode, size: Size<Float?>) {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.computeLayout(size)
-        composeStretchNodeByCreateView(gxNode, layout)
+        composeStretchNodeByPrepareView(gxNode, layout)
     }
 
-    private fun composeStretchNodeByCreateView(gxNode: GXNode, layout: Layout) {
+    private fun composeStretchNodeByPrepareView(gxNode: GXNode, layout: Layout) {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
         layout.idPath = stretchNode.idPath
         gxNode.stretchNode.layoutByCreate = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
-            composeStretchNodeByCreateView(childViewData, layout.children[index])
+            composeStretchNodeByPrepareView(childViewData, layout.children[index])
         }
     }
 
-    fun composeGXNodeByPrepareLayout(gxNode: GXNode, layout: Layout) {
+    fun composeGXNodeByCreateView(gxNode: GXNode, layout: Layout) {
         gxNode.layoutByPrepare = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
-            composeGXNodeByPrepareLayout(childViewData, layout.children[index])
+            composeGXNodeByCreateView(childViewData, layout.children[index])
         }
     }
 
@@ -395,7 +395,6 @@ object GXNodeUtils {
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
             val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.stretchNode.layoutByCreate?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
@@ -455,7 +454,6 @@ object GXNodeUtils {
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
             val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.stretchNode.layoutByCreate?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalGridConfig is null")

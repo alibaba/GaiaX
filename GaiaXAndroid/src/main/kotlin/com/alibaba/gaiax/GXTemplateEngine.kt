@@ -564,7 +564,7 @@ class GXTemplateEngine {
         if (gxRootNode != null && isMeasureSizeChanged) {
             gxTemplateContext.reset()
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
-            GXNodeUtils.computeNodeTreeByCreateView(gxRootNode, size)
+            GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
         }
     }
 

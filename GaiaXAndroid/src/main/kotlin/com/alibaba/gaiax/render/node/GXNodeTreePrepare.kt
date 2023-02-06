@@ -37,7 +37,7 @@ object GXNodeTreePrepare {
             gxTemplateContext.templateInfo
         )
         rootNode.isRoot = true
-        GXNodeUtils.computeNodeTreeByCreateView(
+        GXNodeUtils.computeNodeTreeByPrepareView(
             rootNode, Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
         )
         return rootNode

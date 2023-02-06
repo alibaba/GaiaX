@@ -64,7 +64,6 @@ class GXSliderViewAdapter(
         val itemData = data.getJSONObject(realPosition) ?: JSONObject()
 
         val nodeLayout = gxNode.stretchNode.layoutByBind
-            ?: gxNode.stretchNode.layoutByCreate
 
         val itemView = GXTemplateEngine.instance.createView(
             templateItem,

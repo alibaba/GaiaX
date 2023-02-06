@@ -70,7 +70,8 @@ object GXFitContentUtils {
         val finalCss = gxTemplateNode.finalCss ?: return null
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
-        val nodeLayout = gxStretchNode.layoutByBind ?: return null
+        val nodeLayout = gxStretchNode.layoutByBind ?: gxNode.layoutByPrepare
+        ?: throw IllegalArgumentException("to fit content for text, but layout is null")
 
         val gxCacheText = GXMeasureViewPool.obtain(androidContext)
 

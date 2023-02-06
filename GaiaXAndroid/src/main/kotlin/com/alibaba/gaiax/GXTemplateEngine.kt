@@ -569,6 +569,7 @@ class GXTemplateEngine {
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
             gxRootNode.stretchNode.layoutByCreate?.let {
                 render.layoutTreeMap[gxTemplateContext.templateItem] = it
+                GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
     }

@@ -84,9 +84,7 @@ object GXNodeUtils {
      * 用于预计算容器的尺寸
      */
     fun computeContainerSizeByItemTemplate(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        containerData: JSONArray
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, containerData: JSONArray
     ): Size<Dimension?>? {
 
         if (gxNode.childTemplateItems?.isEmpty() == true) {
@@ -156,10 +154,7 @@ object GXNodeUtils {
 
                                 // 3. 计算容器期望的宽高结果
                                 computeContainerSize(
-                                    gxTemplateContext,
-                                    gxNode,
-                                    itemLayout,
-                                    containerData
+                                    gxTemplateContext, gxNode, itemLayout, containerData
                                 )?.apply {
                                     containerSizeList.add(this)
                                 }
@@ -186,9 +181,7 @@ object GXNodeUtils {
     }
 
     fun computeContainerItemSize(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        itemData: JSONObject
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, itemData: JSONObject
     ): Layout? {
 
         if (gxNode.childTemplateItems?.isEmpty() == true) {
@@ -311,8 +304,7 @@ object GXNodeUtils {
         when {
             gxNode.isScrollType() -> {
                 val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
-                    gxItemViewPort.width,
-                    gxItemViewPort.height
+                    gxItemViewPort.width, gxItemViewPort.height
                 )
                 val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
                 val stretchNode = computeItemSizeByCreateAndBindNode(
@@ -341,8 +333,7 @@ object GXNodeUtils {
             }
             gxNode.isSliderType() -> {
                 val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
-                    gxItemViewPort.width,
-                    gxItemViewPort.height
+                    gxItemViewPort.width, gxItemViewPort.height
                 )
                 val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
                 val stretchNode = computeItemSizeByCreateAndBindNode(
@@ -361,8 +352,7 @@ object GXNodeUtils {
     }
 
     fun computeFooterItemViewPort(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
     ): Size<Float?> {
 
         // 对于坑位的视口宽高，需要分为Scroll容器和Grid容器
@@ -373,14 +363,13 @@ object GXNodeUtils {
             val finalScrollConfig = gxNode.templateNode.finalScrollConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
 
-            GXRegisterCenter.instance
-                .extensionScroll?.convert(
-                    GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
-                    gxTemplateContext,
-                    finalScrollConfig
-                )?.let {
-                    return Size(it as Float, null)
-                }
+            GXRegisterCenter.instance.extensionScroll?.convert(
+                GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
+                gxTemplateContext,
+                finalScrollConfig
+            )?.let {
+                return Size(it as Float, null)
+            }
 
             val padding = gxNode.getPaddingRect()
 
@@ -395,6 +384,7 @@ object GXNodeUtils {
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
             val containerWidth = gxNode.stretchNode.layoutByBind?.width
+                ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
@@ -420,8 +410,7 @@ object GXNodeUtils {
     }
 
     fun computeItemViewPort(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
     ): Size<Float?> {
 
         // 对于坑位的视口宽高，需要分为Scroll容器和Grid容器
@@ -432,14 +421,13 @@ object GXNodeUtils {
             val finalScrollConfig = gxNode.templateNode.finalScrollConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
 
-            GXRegisterCenter.instance
-                .extensionScroll?.convert(
-                    GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
-                    gxTemplateContext,
-                    finalScrollConfig
-                )?.let {
-                    return Size(it as Float, null)
-                }
+            GXRegisterCenter.instance.extensionScroll?.convert(
+                GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
+                gxTemplateContext,
+                finalScrollConfig
+            )?.let {
+                return Size(it as Float, null)
+            }
 
             val padding = gxNode.getPaddingRect()
 
@@ -454,19 +442,22 @@ object GXNodeUtils {
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
             val containerWidth = gxNode.stretchNode.layoutByBind?.width
+                ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
             val gridConfig = gxNode.templateNode.finalGridConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalGridConfig is null")
             return when {
                 gridConfig.isVertical -> {
-                    val totalItemSpacing = gridConfig.itemSpacing *
-                            (gridConfig.column(gxTemplateContext) - 1)
+                    val totalItemSpacing =
+                        gridConfig.itemSpacing * (gridConfig.column(gxTemplateContext) - 1)
 
                     val paddingRect = gxNode.getPaddingRect()
 
                     val padding = paddingRect.left + paddingRect.right
-                    val finalWidth = (containerWidth - totalItemSpacing - padding) * 1.0F /
-                            gridConfig.column(gxTemplateContext)
+                    val finalWidth =
+                        (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column(
+                            gxTemplateContext
+                        )
                     Size(finalWidth, null)
                 }
                 gridConfig.isHorizontal -> {
@@ -496,24 +487,21 @@ object GXNodeUtils {
 
     private fun computeItemSizeByCreateAndBindNode(
         gxTemplateContext: GXTemplateContext,
-        templateItem: GXTemplateEngine.GXTemplateItem,
-        measureSize: GXTemplateEngine.GXMeasureSize,
-        templateData: GXTemplateEngine.GXTemplateData,
-        visualTemplateNode: GXTemplateNode?
+        gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+        gxTemplateData: GXTemplateEngine.GXTemplateData,
+        gxVisualTemplateNode: GXTemplateNode?
     ): GXNode {
-
         // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
-        val templateInfo = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
-        val context = GXTemplateContext.createContext(
-            templateItem,
-            measureSize,
-            templateInfo,
-            visualTemplateNode
+        val gxTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
+        val gxItemTemplateContext = GXTemplateContext.createContext(
+            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
         )
-        val rootNode = GXTemplateEngine.instance.render.createNode(context)
-        context.templateData = templateData
-        GXTemplateEngine.instance.render.bindNodeData(context)
-        return rootNode
+        GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
+        val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
+        gxItemTemplateContext.templateData = gxTemplateData
+        GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)
+        return gxItemRootNode
     }
 
     private fun computeContainerSize(
@@ -531,8 +519,7 @@ object GXNodeUtils {
                 // 如果是横向，那么高度就是坑位高度
                 if (finalScrollConfig.isHorizontal) {
                     return Size(
-                        Dimension.Points(itemSize.width),
-                        Dimension.Points(itemSize.height)
+                        Dimension.Points(itemSize.width), Dimension.Points(itemSize.height)
                     )
                 }
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
@@ -542,8 +529,7 @@ object GXNodeUtils {
                     containerHeight *= lines
                     containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
                     return Size(
-                        Dimension.Points(itemSize.width),
-                        Dimension.Points(containerHeight)
+                        Dimension.Points(itemSize.width), Dimension.Points(containerHeight)
                     )
                 }
             } else if (gxNode.isGridType()) {
@@ -572,8 +558,7 @@ object GXNodeUtils {
                     val containerWidth = itemSize.width - padding.left - padding.right
 
                     return Size(
-                        Dimension.Points(containerWidth),
-                        Dimension.Points(containerHeight)
+                        Dimension.Points(containerWidth), Dimension.Points(containerHeight)
                     )
                 } else if (finalGridConfig.isHorizontal) {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
@@ -581,8 +566,7 @@ object GXNodeUtils {
                 }
             } else if (gxNode.isSliderType()) {
                 return Size(
-                    Dimension.Points(itemSize.width),
-                    Dimension.Points(itemSize.height)
+                    Dimension.Points(itemSize.width), Dimension.Points(itemSize.height)
                 )
             }
         }

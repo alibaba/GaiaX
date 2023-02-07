@@ -205,7 +205,7 @@ class GXNode {
     }
 
     fun getPaddingRect(): android.graphics.Rect {
-        templateNode.finalCss?.style?.padding?.let {
+        templateNode.css.style.padding?.let {
             return android.graphics.Rect(it.start.valueInt, it.top.valueInt,
                 it.end.valueInt, it.bottom.valueInt)
         }

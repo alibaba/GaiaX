@@ -134,6 +134,62 @@ object GXTemplateUtils {
         }
     }
 
+
+    fun createRectDimensionByPriority2(
+        heightPriority: Rect<GXSize?>?,
+        lowPriority: Rect<GXSize?>?
+    ): Rect<GXSize?>? {
+        return if (lowPriority != null && heightPriority != null) {
+            Rect(
+                start = heightPriority.start?.copy() ?: lowPriority.start.copy(),
+                end = heightPriority.end?.copy() ?: lowPriority.end.copy(),
+                top = heightPriority.top?.copy() ?: lowPriority.top.copy(),
+                bottom = heightPriority.bottom?.copy() ?: lowPriority.bottom.copy()
+            )
+        } else if (heightPriority == null && lowPriority != null) {
+            Rect(
+                lowPriority.start?.copy(),
+                lowPriority.end?.copy(),
+                lowPriority.top?.copy(),
+                lowPriority.bottom?.copy()
+            )
+        } else if (lowPriority == null && heightPriority != null) {
+            Rect(
+                heightPriority.start?.copy(),
+                heightPriority.end?.copy(),
+                heightPriority.top?.copy(),
+                heightPriority.bottom?.copy()
+            )
+        } else {
+            null
+        }
+    }
+
+
+    fun createSizeDimensionByPriority2(
+        heightPriority: Size<GXSize?>?,
+        lowPriority: Size<GXSize?>?
+    ): Size<GXSize?>? {
+        return if (lowPriority != null && heightPriority != null) {
+            Size(
+                width = heightPriority.width?.copy()?:lowPriority.width?.copy(),
+                height = heightPriority.height?.copy()?: lowPriority.height?.copy()
+            )
+        } else if (heightPriority == null && lowPriority != null) {
+            Size(
+                width = lowPriority.width?.copy(),
+                height = lowPriority.height?.copy()
+            )
+        } else if (lowPriority == null && heightPriority != null) {
+            Size(
+                width = heightPriority.width?.copy(),
+                height = heightPriority.height?.copy()
+            )
+        } else {
+            null
+        }
+    }
+
     fun createSizeDimensionByPriority(
         heightPriority: Size<GXSize>?,
         lowPriority: Size<GXSize>?
@@ -163,6 +219,7 @@ object GXTemplateUtils {
             null
         }
     }
+
 }
 
 internal fun Dimension?.copy(): Dimension {

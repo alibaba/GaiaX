@@ -139,7 +139,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         private fun updateNodeTreeLayout(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
-            gxNode.templateNode.resetDataCache()
+            gxNode.templateNode.reset()
             gxNode.stretchNode.reset(gxTemplateContext, gxNode)
 
             if (gxNode.isNestRoot) {
@@ -295,17 +295,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             val stretchStyle = stretchNode.getStyle()
 
-            val finalCss = gxNode.templateNode.finalCss
-            val finalFlexBox = finalCss?.flexBox
-            val finalCssStyle = finalCss?.style
-
-            if (finalFlexBox == null) {
-                throw IllegalArgumentException("final flexbox is null, please check!")
-            }
-
-            if (finalCssStyle == null) {
-                throw IllegalArgumentException("final css style is null, please check!")
-            }
+            val finalCss = gxNode.templateNode.css
+            val finalFlexBox = finalCss.flexBox
+            val finalCssStyle = finalCss.style
 
             var isDirty = false
 
@@ -394,8 +386,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             if (isDirty) {
                 stretchStyle.free()
                 stretchStyle.init()
-                stretchNode?.setStyle(stretchStyle)
-                stretchNode?.markDirty()
+                stretchNode.setStyle(stretchStyle)
+                stretchNode.markDirty()
                 return true
             }
 
@@ -440,8 +432,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         ): Boolean? {
 
 
-            val gxFlexBox = gxNode.templateNode.finalCss?.flexBox ?: return null
-            val gxCssStyle = gxNode.templateNode.finalCss?.style ?: return null
+            val gxFlexBox = gxNode.templateNode.css.flexBox
+            val gxCssStyle = gxNode.templateNode.css.style
             val stretchNode = gxNode.stretchNode.node
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
             val stretchStyle: app.visly.stretch.Style = stretchNode.getStyle()
@@ -576,9 +568,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val stretchNode = gxNode.stretchNode.node
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
 
-            val gxStyle = gxNode.templateNode.finalCss?.style
+            val gxStyle = gxNode.templateNode.css.style
 
-            if (gxStyle != null && gxStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
+            if (gxStyle.fitContent == true && isSelfAndParentNodeTreeFlex(gxNode)) {
 
                 // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
                 // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
@@ -667,7 +659,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val stretchNode = gxNode.stretchNode.node
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
             val stretchStyle = stretchNode.getStyle()
-            val gxStyle = gxNode.templateNode.finalCss?.style ?: return false
+            val gxStyle = gxNode.templateNode.css.style
 
             // 处理fitContent逻辑
             val isDirty = updateLayoutByFitContent(
@@ -867,7 +859,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             gxTemplateContext: GXTemplateContext, gxNode: GXNode
         ) {
             val gxView = gxNode.view ?: return
-            val gxCss = gxNode.templateNode.finalCss ?: return
+            val gxCss = gxNode.templateNode.css
 
             // 对高斯模糊前置处理
             bindBackdropFilter(gxTemplateContext, gxNode, gxCss, gxView)
@@ -913,7 +905,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             if (templateData !is JSONObject) {
                 return
             }
-            val invisible = gxNode.templateNode.finalCss?.style?.isInvisible() ?: false
+            val invisible = gxNode.templateNode.css.style.isInvisible()
             if (invisible) {
                 return
             }
@@ -977,7 +969,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val view = gxNode.view ?: return
             val gxTemplateNode = gxNode.templateNode
 
-            val invisible = gxTemplateNode.finalCss?.style?.isInvisible() ?: false
+            val invisible = gxTemplateNode.css.style.isInvisible()
             if (invisible) {
                 return
             }

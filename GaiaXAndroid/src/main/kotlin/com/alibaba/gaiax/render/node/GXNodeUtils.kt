@@ -467,7 +467,7 @@ object GXNodeUtils {
                 }
             }
         } else if (gxNode.isSliderType()) {
-            when (val nodeWith = gxNode.templateNode.finalCss?.flexBox?.sizeFinal?.width) {
+            when (val nodeWith = gxNode.templateNode.css.flexBox.sizeFinal?.width) {
                 is Dimension.Points -> {
                     gxTemplateContext.size.width?.let {
                         return Size(it * nodeWith.value, null)

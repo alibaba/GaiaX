@@ -91,7 +91,7 @@ data class GXTemplateNode(
         layer.scrollConfig?.reset()
         layer.gridConfig?.reset()
         layer.progressConfig?.reset()
-        finalCss?.flexBox?.reset()
+        css.style.reset()
         css.flexBox.reset()
     }
 
@@ -101,16 +101,6 @@ data class GXTemplateNode(
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
-
-    /*
-     * 关于final属性的说明：
-     *
-     * final的字段主要用于存储index.css中的属性与index.databinding中涉及到样式的属性合并后的结果。
-     *
-     * 在bindData阶段使用。
-     */
-
-    var finalCss: GXCss? = null
 
     /**
      * @param visualTemplateData 当前节点的虚拟父节点使用的数据源
@@ -122,7 +112,6 @@ data class GXTemplateNode(
         nodeTemplateData: JSONObject?
     ) {
 
-        // 初始化扩展数据
         val extendCssData = dataBinding?.getExtend(nodeTemplateData)
 
         if (extendCssData != null && extendCssData.isNotEmpty()) {
@@ -130,24 +119,12 @@ data class GXTemplateNode(
             layer.gridConfig?.updateByExtend(extendCssData)
             layer.sliderConfig?.updateByExtend(extendCssData)
             layer.progressConfig?.updateByExtend(extendCssData)
+            css.updateByExtend(extendCssData)
         }
 
-        // 创建FinalStyle
-        val selfFinalCss: GXCss = if (extendCssData != null && extendCssData.isNotEmpty()) {
-            // 创建Css
-            val extendCss = GXCss.createByExtend(extendCssData)
-            // 合并原有CSS和扩展属性的CSS
-            GXCss.create(css, extendCss)
-        } else {
-            css
-        }
-
-        // 初始化虚拟节点的FinalStyle
         visualTemplateNode?.initFinal(gxTemplateContext, null, visualTemplateData)
 
-        // 合并Self和Visual
-        this.finalCss = GXCss.create(selfFinalCss, visualTemplateNode?.finalCss)
-
+        css.updateByVisual(visualTemplateNode?.css)
     }
 
     fun getNodeType() = layer.getNodeType()
@@ -189,7 +166,7 @@ data class GXTemplateNode(
     }
 
     override fun toString(): String {
-        return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode, finalCss=$finalCss)"
+        return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode,)"
     }
 
     companion object {

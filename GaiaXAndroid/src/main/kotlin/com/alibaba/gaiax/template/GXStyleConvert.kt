@@ -496,5 +496,9 @@ class GXStyleConvert {
         }
         return null
     }
+
+    fun fitContent(target: String): Boolean {
+        return target.toBoolean()
+    }
 }
 

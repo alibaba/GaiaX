@@ -65,6 +65,8 @@ object GXNodeTreePrepare {
 
         gxNode.parentNode = gxParentNode
 
+        gxNode.id = gxLayer.id
+
         // 初始化详细数据
         gxNode.templateNode = GXTemplateNode.createNode(
             gxLayer.id, gxTemplateInfo, gxVisualTemplateNode

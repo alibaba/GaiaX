@@ -224,7 +224,7 @@ object GXFlexBoxConvert {
         return null
     }
 
-    fun margin(cssJson: JSONObject): Rect<GXSize>? {
+    fun margin(cssJson: JSONObject): Rect<GXSize?>? {
         cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN)?.also {
             val size = GXSize.create(it)
             return Rect(size, size, size, size)
@@ -237,41 +237,41 @@ object GXFlexBoxConvert {
 
         if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(left ?: ""),
-                GXSize.create(right ?: ""),
-                GXSize.create(top ?: ""),
-                GXSize.create(bottom ?: "")
+                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
+                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!top.isNullOrEmpty()) GXSize.create(top) else null,
+                if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
         }
 
         return null
     }
 
-    fun padding(cssJson: JSONObject): Rect<GXSize>? {
+    fun padding(cssJson: JSONObject): Rect<GXSize?>? {
 
         cssJson.getString(GXTemplateKey.FLEXBOX_PADDING)?.also {
             val size = GXSize.create(it)
             return Rect(size, size, size, size)
         }
 
-        val paddingLeft = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_LEFT)
-        val paddingRight = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_RIGHT)
-        val paddingTop = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_TOP)
-        val paddingBottom = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_BOTTOM)
+        val left = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_LEFT)
+        val right = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_RIGHT)
+        val top = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_TOP)
+        val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_BOTTOM)
 
-        if (!paddingLeft.isNullOrEmpty() || !paddingRight.isNullOrEmpty() || !paddingTop.isNullOrEmpty() || !paddingBottom.isNullOrEmpty()) {
+        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(paddingLeft ?: ""),
-                GXSize.create(paddingRight ?: ""),
-                GXSize.create(paddingTop ?: ""),
-                GXSize.create(paddingBottom ?: "")
+                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
+                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!top.isNullOrEmpty()) GXSize.create(top) else null,
+                if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
         }
 
         return null
     }
 
-    fun border(cssJson: JSONObject): Rect<GXSize>? {
+    fun border(cssJson: JSONObject): Rect<GXSize?>? {
 
         val value = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER)
         if (value != null) {
@@ -286,50 +286,87 @@ object GXFlexBoxConvert {
 
         if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(left ?: ""),
-                GXSize.create(right ?: ""),
-                GXSize.create(top ?: ""),
-                GXSize.create(bottom ?: "")
+                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
+                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!top.isNullOrEmpty()) GXSize.create(top) else null,
+                if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
         }
 
         return null
     }
 
-    fun position(cssJson: JSONObject): Rect<GXSize>? {
+    fun position(cssJson: JSONObject): Rect<GXSize?>? {
         if (positionType(cssJson) == PositionType.Absolute) {
-            val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
-            val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
+            val left = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
+            val right = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
             val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
             val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
-            if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+            if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
                 return Rect(
-                    GXSize.create(start ?: ""),
-                    GXSize.create(end ?: ""),
-                    GXSize.create(top ?: ""),
-                    GXSize.create(bottom ?: "")
+                    if (!left.isNullOrEmpty()) GXSize.create(left) else null,
+                    if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                    if (!top.isNullOrEmpty()) GXSize.create(top) else null,
+                    if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
                 )
             }
         }
         return null
     }
 
-    fun positionByExtend(cssJson: JSONObject): Rect<GXSize>? {
-        // 增加判断会导致databinding的时候无法执行过去
-        // if (positionType(cssJson) == PositionType.Absolute) {
-        val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
-        val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
+    fun position2(cssJson: JSONObject): Rect<GXSize?>? {
+        val left = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
+        val right = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
-        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                GXSize.create(start ?: ""),
-                GXSize.create(end ?: ""),
-                GXSize.create(top ?: ""),
-                GXSize.create(bottom ?: "")
+                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
+                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!top.isNullOrEmpty()) GXSize.create(top) else null,
+                if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
         }
-        // }
         return null
     }
+
+    fun size2(cssJson: JSONObject): Size<GXSize?>? {
+        val width = cssJson.getString(GXTemplateKey.FLEXBOX_SIZE_WIDTH)
+        val height = cssJson.getString(GXTemplateKey.FLEXBOX_SIZE_HEIGHT)
+        return if (width != null || height != null) {
+            Size(
+                if (width != null) GXSize.create(width) else null,
+                if (height != null) GXSize.create(height) else null
+            )
+        } else {
+            null
+        }
+    }
+
+    fun minSize2(cssJson: JSONObject): Size<GXSize?>? {
+        val width = cssJson.getString(GXTemplateKey.FLEXBOX_MIN_WIDTH)
+        val height = cssJson.getString(GXTemplateKey.FLEXBOX_MIN_HEIGHT)
+        return if (width != null || height != null) {
+            Size(
+                if (width != null) GXSize.create(width) else null,
+                if (height != null) GXSize.create(height) else null
+            )
+        } else {
+            null
+        }
+    }
+
+    fun maxSize2(cssJson: JSONObject): Size<GXSize?>? {
+        val width = cssJson.getString(GXTemplateKey.FLEXBOX_MAX_WIDTH)
+        val height = cssJson.getString(GXTemplateKey.FLEXBOX_MAX_HEIGHT)
+        return if (width != null || height != null) {
+            Size(
+                if (width != null) GXSize.create(width) else null,
+                if (height != null) GXSize.create(height) else null
+            )
+        } else {
+            null
+        }
+    }
+
 }

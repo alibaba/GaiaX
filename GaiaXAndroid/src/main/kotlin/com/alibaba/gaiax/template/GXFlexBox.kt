@@ -18,73 +18,456 @@ package com.alibaba.gaiax.template
 
 import app.visly.stretch.*
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.template.utils.GXTemplateUtils
 
 /**
  * @suppress
  */
 data class GXFlexBox(
-    var display: Display? = null,
-    var positionType: PositionType? = null,
-    var direction: Direction? = null,
-    var flexDirection: FlexDirection? = null,
-    var flexWrap: FlexWrap? = null,
-    var overflow: Overflow? = null,
-    var alignItems: AlignItems? = null,
-    var alignSelf: AlignSelf? = null,
-    var alignContent: AlignContent? = null,
-    var justifyContent: JustifyContent? = null,
-    private var position: Rect<GXSize>? = null,
-    private var margin: Rect<GXSize>? = null,
-    private var padding: Rect<GXSize>? = null,
-    private var border: Rect<GXSize>? = null,
-    var flexGrow: Float? = null,
-    var flexShrink: Float? = null,
-    private var flexBasis: GXSize? = null,
-    private var size: Size<GXSize>? = null,
-    private var minSize: Size<GXSize>? = null,
-    private var maxSize: Size<GXSize>? = null,
-    var aspectRatio: Float? = null
+    private var displayForTemplate: Display? = null,
+    private var positionTypeForTemplate: PositionType? = null,
+    private var directionForTemplate: Direction? = null,
+    private var flexDirectionForTemplate: FlexDirection? = null,
+    private var flexWrapForTemplate: FlexWrap? = null,
+    private var overflowForTemplate: Overflow? = null,
+    private var alignItemsForTemplate: AlignItems? = null,
+    private var alignSelfForTemplate: AlignSelf? = null,
+    private var alignContentForTemplate: AlignContent? = null,
+    private var justifyContentForTemplate: JustifyContent? = null,
+    private var positionForTemplate: Rect<GXSize?>? = null,
+    private var marginForTemplate: Rect<GXSize?>? = null,
+    private var paddingForTemplate: Rect<GXSize?>? = null,
+    private var borderForTemplate: Rect<GXSize?>? = null,
+    private var flexGrowForTemplate: Float? = null,
+    private var flexShrinkForTemplate: Float? = null,
+    private var flexBasisForTemplate: GXSize? = null,
+    private var sizeForTemplate: Size<GXSize?>? = null,
+    private var minSizeForTemplate: Size<GXSize?>? = null,
+    private var maxSizeForTemplate: Size<GXSize?>? = null,
+    private var aspectRatioForTemplate: Float? = null
 ) {
-    private var _maxSize: Size<Dimension>? = null
+    private var displayForExtend: Display? = null
+    private var positionTypeForExtend: PositionType? = null
+    private var directionForExtend: Direction? = null
+    private var flexDirectionForExtend: FlexDirection? = null
+    private var flexWrapForExtend: FlexWrap? = null
+    private var overflowForExtend: Overflow? = null
+    private var alignItemsForExtend: AlignItems? = null
+    private var alignSelfForExtend: AlignSelf? = null
+    private var alignContentForExtend: AlignContent? = null
+    private var justifyContentForExtend: JustifyContent? = null
+    private var positionForExtend: Rect<GXSize?>? = null
+    private var marginForExtend: Rect<GXSize?>? = null
+    private var paddingForExtend: Rect<GXSize?>? = null
+    private var borderForExtend: Rect<GXSize?>? = null
+    private var flexGrowForExtend: Float? = null
+    private var flexShrinkForExtend: Float? = null
+    private var flexBasisForExtend: GXSize? = null
+    private var sizeForExtend: Size<GXSize?>? = null
+    private var minSizeForExtend: Size<GXSize?>? = null
+    private var maxSizeForExtend: Size<GXSize?>? = null
+    private var aspectRatioForExtend: Float? = null
 
-    private var _minSize: Size<Dimension>? = null
-
-    private var _size: Size<Dimension>? = null
-
-    private var _flexBasis: Dimension? = null
-
-    private var _border: Rect<Dimension>? = null
-
-    private var _padding: Rect<Dimension>? = null
-
-    private var _margin: Rect<Dimension>? = null
-
-    private var _position: Rect<Dimension>? = null
+    private var maxSizeForFinal: Size<Dimension>? = null
+    private var minSizeForFinal: Size<Dimension>? = null
+    private var sizeForFinal: Size<Dimension>? = null
+    private var borderForFinal: Rect<Dimension>? = null
+    private var paddingForFinal: Rect<Dimension>? = null
+    private var marginForFinal: Rect<Dimension>? = null
+    private var positionForFinal: Rect<Dimension>? = null
 
     fun reset() {
+        displayForExtend = null
+        positionTypeForExtend = null
+        directionForExtend = null
+        flexDirectionForExtend = null
+        flexWrapForExtend = null
+        overflowForExtend = null
+        alignItemsForExtend = null
+        alignSelfForExtend = null
+        alignContentForExtend = null
+        justifyContentForExtend = null
+        positionForExtend = null
+        marginForExtend = null
+        paddingForExtend = null
+        borderForExtend = null
+        flexGrowForExtend = null
+        flexShrinkForExtend = null
+        flexBasisForExtend = null
+        sizeForExtend = null
+        minSizeForExtend = null
+        maxSizeForExtend = null
+        aspectRatioForExtend = null
+
+        maxSizeForFinal = null
+        minSizeForFinal = null
+        sizeForFinal = null
+        borderForFinal = null
+        paddingForFinal = null
+        marginForFinal = null
+        positionForFinal = null
+
         _maxSize = null
         _minSize = null
         _size = null
-        _flexBasis = null
+        _border = null
         _border = null
         _padding = null
         _margin = null
         _position = null
     }
 
-    val maxSizeFinal: Size<Dimension>?
+    fun updateByExtend(extendCssData: JSONObject) {
+        val gxFlexBox = this
+
+        extendCssData.forEach {
+            val key: String = it.key
+            val value = it.value
+            when (key) {
+                GXTemplateKey.FLEXBOX_DISPLAY -> gxFlexBox.displayForExtend =
+                    GXFlexBoxConvert.display(value.toString())
+                GXTemplateKey.FLEXBOX_POSITION_TYPE -> gxFlexBox.positionTypeForExtend =
+                    GXFlexBoxConvert.positionType(value.toString())
+                GXTemplateKey.FLEXBOX_DIRECTION -> gxFlexBox.directionForExtend =
+                    GXFlexBoxConvert.direction(value.toString())
+                GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> gxFlexBox.flexDirectionForExtend =
+                    GXFlexBoxConvert.flexDirection(value.toString())
+                GXTemplateKey.FLEXBOX_FLEX_WRAP -> gxFlexBox.flexWrapForExtend =
+                    GXFlexBoxConvert.flexWrap(value.toString())
+                GXTemplateKey.FLEXBOX_OVERFLOW -> gxFlexBox.overflowForExtend =
+                    GXFlexBoxConvert.overflow(value.toString())
+                GXTemplateKey.FLEXBOX_ALIGN_ITEMS -> gxFlexBox.alignItemsForExtend =
+                    GXFlexBoxConvert.alignItems(value.toString())
+                GXTemplateKey.FLEXBOX_ALIGN_SELF -> gxFlexBox.alignSelfForExtend =
+                    GXFlexBoxConvert.alignSelf(value.toString())
+                GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> gxFlexBox.alignContentForExtend =
+                    GXFlexBoxConvert.alignContent(value.toString())
+                GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> gxFlexBox.justifyContentForExtend =
+                    GXFlexBoxConvert.justifyContent(value.toString())
+                GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (gxFlexBox.positionType == PositionType.Absolute && gxFlexBox.positionForExtend == null) {
+                    positionForFinal = null
+                    gxFlexBox.positionForExtend = GXFlexBoxConvert.position2(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (gxFlexBox.marginForExtend == null) {
+                    marginForFinal = null
+                    gxFlexBox.marginForExtend = GXFlexBoxConvert.margin(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxFlexBox.paddingForExtend == null) {
+                    paddingForFinal = null
+                    gxFlexBox.paddingForExtend = GXFlexBoxConvert.padding(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (gxFlexBox.borderForExtend == null) {
+                    borderForFinal = null
+                    gxFlexBox.borderForExtend = GXFlexBoxConvert.border(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_FLEX_BASIS -> gxFlexBox.flexBasisForExtend =
+                    GXFlexBoxConvert.flexBasis(value.toString())
+                GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (gxFlexBox.sizeForExtend == null) {
+                    sizeForFinal = null
+                    gxFlexBox.sizeForExtend = GXFlexBoxConvert.size2(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (gxFlexBox.minSizeForExtend == null) {
+                    minSizeForFinal = null
+                    gxFlexBox.minSizeForExtend = GXFlexBoxConvert.minSize2(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (gxFlexBox.maxSizeForExtend == null) {
+                    maxSizeForFinal = null
+                    gxFlexBox.maxSizeForExtend = GXFlexBoxConvert.maxSize2(extendCssData)
+                }
+                GXTemplateKey.FLEXBOX_ASPECT_RATIO -> gxFlexBox.aspectRatioForExtend =
+                    GXFlexBoxConvert.aspectRatio(value.toString())
+                GXTemplateKey.FLEXBOX_FLEX_GROW -> gxFlexBox.flexGrowForExtend =
+                    GXFlexBoxConvert.flexGrow(value.toString())
+                GXTemplateKey.FLEXBOX_FLEX_SHRINK -> gxFlexBox.flexShrinkForExtend =
+                    GXFlexBoxConvert.flexShrink(value.toString())
+            }
+        }
+    }
+
+    fun updateByVisual(visual: GXFlexBox) {
+        visual.display?.let {
+            displayForExtend = it
+        }
+        visual.positionType?.let {
+            positionTypeForExtend = it
+        }
+        visual.direction?.let {
+            directionForExtend = it
+        }
+        visual.flexDirection?.let {
+            flexDirectionForExtend = it
+        }
+        visual.flexWrap?.let {
+            flexWrapForExtend = it
+        }
+        visual.overflow?.let {
+            overflowForExtend = it
+        }
+        visual.alignItems?.let {
+            alignItemsForExtend = it
+        }
+        visual.alignSelf?.let {
+            alignSelfForExtend = it
+        }
+        visual.alignContent?.let {
+            alignContentForExtend = it
+        }
+        visual.justifyContent?.let {
+            justifyContentForExtend = it
+        }
+        visual.flexGrow?.let {
+            flexGrowForExtend = it
+        }
+        visual.flexShrink?.let {
+            flexShrinkForExtend = it
+        }
+        visual.flexBasis?.let {
+            flexBasisForExtend = it
+        }
+        visual.aspectRatio?.let {
+            aspectRatioForExtend = it
+        }
+        visual.position?.let {
+            if (positionForExtend != null) {
+                if (it.start != null) {
+                    positionForExtend?.start = it.start
+                }
+                if (it.end != null) {
+                    positionForExtend?.end = it.end
+                }
+                if (it.top != null) {
+                    positionForExtend?.top = it.top
+                }
+                if (it.bottom != null) {
+                    positionForExtend?.bottom = it.bottom
+                }
+            } else {
+                positionForExtend = it
+            }
+            positionForFinal = null
+        }
+        visual.margin?.let {
+            if (marginForExtend != null) {
+                if (it.start != null) {
+                    marginForExtend?.start = it.start
+                }
+                if (it.end != null) {
+                    marginForExtend?.end = it.end
+                }
+                if (it.top != null) {
+                    marginForExtend?.top = it.top
+                }
+                if (it.bottom != null) {
+                    marginForExtend?.bottom = it.bottom
+                }
+            } else {
+                marginForExtend = it
+            }
+            marginForFinal = null
+        }
+        visual.padding?.let {
+            if (paddingForExtend != null) {
+                if (it.start != null) {
+                    paddingForExtend?.start = it.start
+                }
+                if (it.end != null) {
+                    paddingForExtend?.end = it.end
+                }
+                if (it.top != null) {
+                    paddingForExtend?.top = it.top
+                }
+                if (it.bottom != null) {
+                    paddingForExtend?.bottom = it.bottom
+                }
+            } else {
+                paddingForExtend = it
+            }
+            paddingForFinal = null
+        }
+        visual.border?.let {
+            if (borderForExtend != null) {
+                if (it.start != null) {
+                    borderForExtend?.start = it.start
+                }
+                if (it.end != null) {
+                    borderForExtend?.end = it.end
+                }
+                if (it.top != null) {
+                    borderForExtend?.top = it.top
+                }
+                if (it.bottom != null) {
+                    borderForExtend?.bottom = it.bottom
+                }
+            } else {
+                borderForExtend = it
+            }
+            borderForFinal = null
+        }
+        visual.size?.let {
+            if (sizeForExtend != null) {
+                if (it.width != null) {
+                    sizeForExtend?.width = it.width
+                }
+                if (it.height != null) {
+                    sizeForExtend?.height = it.height
+                }
+            } else {
+                sizeForExtend = it
+            }
+            sizeForFinal = null
+        }
+        visual.minSize?.let {
+            if (minSizeForExtend != null) {
+                if (it.width != null) {
+                    minSizeForExtend?.width = it.width
+                }
+                if (it.height != null) {
+                    minSizeForExtend?.height = it.height
+                }
+            } else {
+                minSizeForExtend = it
+            }
+            minSizeForFinal = null
+        }
+        visual.maxSize?.let {
+            if (maxSizeForExtend != null) {
+                if (it.width != null) {
+                    maxSizeForExtend?.width = it.width
+                }
+                if (it.height != null) {
+                    maxSizeForExtend?.height = it.height
+                }
+            } else {
+                maxSizeForExtend = it
+            }
+            maxSizeForFinal = null
+        }
+    }
+
+    val display: Display?
         get() {
-            val gxMaxSize = maxSize
-            return if (gxMaxSize != null) {
+            return displayForExtend ?: displayForTemplate
+        }
+
+    val positionType: PositionType?
+        get() {
+            return positionTypeForExtend ?: positionTypeForTemplate
+        }
+
+    val direction: Direction?
+        get() {
+            return directionForExtend ?: directionForTemplate
+        }
+
+    val flexDirection: FlexDirection?
+        get() {
+            return flexDirectionForExtend ?: flexDirectionForTemplate
+        }
+
+    val flexWrap: FlexWrap?
+        get() {
+            return flexWrapForExtend ?: flexWrapForTemplate
+        }
+
+    val overflow: Overflow?
+        get() {
+            return overflowForExtend ?: overflowForTemplate
+        }
+
+    val alignItems: AlignItems?
+        get() {
+            return alignItemsForExtend ?: alignItemsForTemplate
+        }
+
+    val alignSelf: AlignSelf?
+        get() {
+            return alignSelfForExtend ?: alignSelfForTemplate
+        }
+
+    val alignContent: AlignContent?
+        get() {
+            return alignContentForExtend ?: alignContentForTemplate
+        }
+
+    val justifyContent: JustifyContent?
+        get() {
+            return justifyContentForExtend ?: justifyContentForTemplate
+        }
+
+    val flexGrow: Float?
+        get() {
+            return flexGrowForExtend ?: flexGrowForTemplate
+        }
+
+    val flexShrink: Float?
+        get() {
+            return flexShrinkForExtend ?: flexShrinkForTemplate
+        }
+
+    val aspectRatio: Float?
+        get() {
+            return aspectRatioForExtend ?: aspectRatioForTemplate
+        }
+
+    val flexBasis: GXSize?
+        get() {
+            return flexBasisForExtend ?: flexBasisForTemplate
+        }
+
+    var _maxSize: Size<GXSize?>? = null
+    val maxSize: Size<GXSize?>?
+        get() {
+            val forExtend = maxSizeForExtend
+            val forTemplate = maxSizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
                 if (_maxSize == null) {
                     _maxSize = Size(
-                        gxMaxSize.width.valueDimension,
-                        gxMaxSize.height.valueDimension,
+                        forExtend?.width ?: forTemplate?.width,
+                        forExtend?.height ?: forTemplate?.height
                     )
                     _maxSize
                 } else {
                     _maxSize
+                }
+            } else {
+                null
+            }
+        }
+
+    val maxSizeFinal: Size<Dimension>?
+        get() {
+            val forExtend = maxSizeForExtend
+            val forTemplate = maxSizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (maxSizeForFinal == null) {
+                    maxSizeForFinal = Size(
+                        forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
+                        ?: Dimension.Undefined,
+                        forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
+                        ?: Dimension.Undefined
+                    )
+                    maxSizeForFinal
+                } else {
+                    maxSizeForFinal
+                }
+            } else {
+                null
+            }
+        }
+
+    var _minSize: Size<GXSize?>? = null
+    val minSize: Size<GXSize?>?
+        get() {
+            val forExtend = minSizeForExtend
+            val forTemplate = minSizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_minSize == null) {
+                    _minSize = Size(
+                        forExtend?.width ?: forTemplate?.width,
+                        forExtend?.height ?: forTemplate?.height
+                    )
+                    _minSize
+                } else {
+                    _minSize
                 }
             } else {
                 null
@@ -93,16 +476,39 @@ data class GXFlexBox(
 
     val minSizeFinal: Size<Dimension>?
         get() {
-            val gxMinSize = minSize
-            return if (gxMinSize != null) {
-                if (_minSize == null) {
-                    _minSize = Size(
-                        gxMinSize.width.valueDimension,
-                        gxMinSize.height.valueDimension,
+            val forExtend = minSizeForExtend
+            val forTemplate = minSizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (minSizeForFinal == null) {
+                    minSizeForFinal = Size(
+                        forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
+                        ?: Dimension.Undefined,
+                        forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
+                        ?: Dimension.Undefined
                     )
-                    _minSize
+                    minSizeForFinal
                 } else {
-                    _minSize
+                    minSizeForFinal
+                }
+            } else {
+                null
+            }
+        }
+
+    var _size: Size<GXSize?>? = null
+    val size: Size<GXSize?>?
+        get() {
+            val forExtend = sizeForExtend
+            val forTemplate = sizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_size == null) {
+                    _size = Size(
+                        forExtend?.width ?: forTemplate?.width,
+                        forExtend?.height ?: forTemplate?.height
+                    )
+                    _size
+                } else {
+                    _size
                 }
             } else {
                 null
@@ -111,51 +517,89 @@ data class GXFlexBox(
 
     val sizeFinal: Size<Dimension>?
         get() {
-            val gxSize = size
-            return if (gxSize != null) {
-                if (_size == null) {
-                    _size = Size(
-                        gxSize.width.valueDimension,
-                        gxSize.height.valueDimension,
+            val forExtend = sizeForExtend
+            val forTemplate = sizeForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (sizeForFinal == null) {
+                    sizeForFinal = Size(
+                        forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
+                        ?: Dimension.Auto
                     )
-                    _size
+                    sizeForFinal
                 } else {
-                    _size
+                    sizeForFinal
                 }
             } else {
                 null
             }
         }
 
-    val flexBasisFinal: Dimension?
+    private var _border: Rect<GXSize?>? = null
+    val border: Rect<GXSize?>?
         get() {
-            val gxFlexBasis = flexBasis
-            return if (gxFlexBasis != null) {
-                if (_flexBasis == null) {
-                    _flexBasis = gxFlexBasis.valueDimension
-                    _flexBasis
+            val forExtend = borderForExtend
+            val forTemplate = borderForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_border == null) {
+                    _border = Rect(
+                        forExtend?.start ?: forTemplate?.start,
+                        forExtend?.end ?: forTemplate?.end,
+                        forExtend?.top ?: forTemplate?.top,
+                        forExtend?.bottom ?: forTemplate?.bottom
+                    )
+                    _border
                 } else {
-                    _flexBasis
+                    _border
                 }
             } else {
                 null
             }
         }
+
 
     val borderFinal: Rect<Dimension>?
         get() {
-            val gxBorder = border
-            return if (gxBorder != null) {
-                if (_border == null) {
-                    _border = Rect(
-                        gxBorder.start.valueDimension,
-                        gxBorder.end.valueDimension,
-                        gxBorder.top.valueDimension,
-                        gxBorder.bottom.valueDimension,
+            val forExtend = borderForExtend
+            val forTemplate = borderForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (borderForFinal == null) {
+                    borderForFinal = Rect(
+                        forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
+                        ?: Dimension.Auto
                     )
-                    _border
+                    borderForFinal
                 } else {
-                    _border
+                    borderForFinal
+                }
+            } else {
+                null
+            }
+        }
+
+    private var _padding: Rect<GXSize?>? = null
+    val padding: Rect<GXSize?>?
+        get() {
+            val forExtend = paddingForExtend
+            val forTemplate = paddingForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_padding == null) {
+                    _padding = Rect(
+                        forExtend?.start ?: forTemplate?.start,
+                        forExtend?.end ?: forTemplate?.end,
+                        forExtend?.top ?: forTemplate?.top,
+                        forExtend?.bottom ?: forTemplate?.bottom
+                    )
+                    _padding
+                } else {
+                    _padding
                 }
             } else {
                 null
@@ -164,18 +608,45 @@ data class GXFlexBox(
 
     val paddingFinal: Rect<Dimension>?
         get() {
-            val gxPadding = padding
-            return if (gxPadding != null) {
-                if (_padding == null) {
-                    _padding = Rect(
-                        gxPadding.start.valueDimension,
-                        gxPadding.end.valueDimension,
-                        gxPadding.top.valueDimension,
-                        gxPadding.bottom.valueDimension,
+            val forExtend = paddingForExtend
+            val forTemplate = paddingForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (paddingForFinal == null) {
+                    paddingForFinal = Rect(
+                        forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
+                        ?: Dimension.Auto
                     )
-                    _padding
+                    paddingForFinal
                 } else {
-                    _padding
+                    paddingForFinal
+                }
+            } else {
+                null
+            }
+        }
+
+    private var _margin: Rect<GXSize?>? = null
+    val margin: Rect<GXSize?>?
+        get() {
+            val forExtend = positionForExtend
+            val forTemplate = positionForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_margin == null) {
+                    _margin = Rect(
+                        forExtend?.start ?: forTemplate?.start,
+                        forExtend?.end ?: forTemplate?.end,
+                        forExtend?.top ?: forTemplate?.top,
+                        forExtend?.bottom ?: forTemplate?.bottom
+                    )
+                    _margin
+                } else {
+                    _margin
                 }
             } else {
                 null
@@ -184,18 +655,45 @@ data class GXFlexBox(
 
     val marginFinal: Rect<Dimension>?
         get() {
-            val gxMargin = margin
-            return if (gxMargin != null) {
-                if (_margin == null) {
-                    _margin = Rect(
-                        gxMargin.start.valueDimension,
-                        gxMargin.end.valueDimension,
-                        gxMargin.top.valueDimension,
-                        gxMargin.bottom.valueDimension,
+            val forExtend = marginForExtend
+            val forTemplate = marginForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (marginForFinal == null) {
+                    marginForFinal = Rect(
+                        forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
+                        ?: Dimension.Auto,
+                        forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
+                        ?: Dimension.Auto
                     )
-                    _margin
+                    marginForFinal
                 } else {
-                    _margin
+                    marginForFinal
+                }
+            } else {
+                null
+            }
+        }
+
+    private var _position: Rect<GXSize?>? = null
+    val position: Rect<GXSize?>?
+        get() {
+            val forExtend = positionForExtend
+            val forTemplate = positionForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (_position == null) {
+                    _position = Rect(
+                        forExtend?.start ?: forTemplate?.start,
+                        forExtend?.end ?: forTemplate?.end,
+                        forExtend?.top ?: forTemplate?.top,
+                        forExtend?.bottom ?: forTemplate?.bottom
+                    )
+                    _position
+                } else {
+                    _position
                 }
             } else {
                 null
@@ -204,18 +702,23 @@ data class GXFlexBox(
 
     val positionFinal: Rect<Dimension>?
         get() {
-            val gxPosition = position
-            return if (gxPosition != null) {
-                if (_position == null) {
-                    _position = Rect(
-                        gxPosition.start.valueDimension,
-                        gxPosition.end.valueDimension,
-                        gxPosition.top.valueDimension,
-                        gxPosition.bottom.valueDimension,
+            val forExtend = positionForExtend
+            val forTemplate = positionForTemplate
+            return if (forExtend != null || forTemplate != null) {
+                if (positionForFinal == null) {
+                    positionForFinal = Rect(
+                        forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
+                        ?: Dimension.Undefined,
+                        forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
+                        ?: Dimension.Undefined,
+                        forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
+                        ?: Dimension.Undefined,
+                        forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
+                        ?: Dimension.Undefined
                     )
-                    _position
+                    positionForFinal
                 } else {
-                    _position
+                    positionForFinal
                 }
             } else {
                 null
@@ -232,124 +735,55 @@ data class GXFlexBox(
 
             css.forEach {
                 val key: String = it.key
-                val value: String = it.value.toString()
+                val value = it.value
                 when (key) {
-                    GXTemplateKey.FLEXBOX_DISPLAY -> gxFlexBox.display =
-                        GXFlexBoxConvert.display(value)
-                    GXTemplateKey.FLEXBOX_POSITION_TYPE -> gxFlexBox.positionType =
-                        GXFlexBoxConvert.positionType(value)
-                    GXTemplateKey.FLEXBOX_DIRECTION -> gxFlexBox.direction =
-                        GXFlexBoxConvert.direction(value)
-                    GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> gxFlexBox.flexDirection =
-                        GXFlexBoxConvert.flexDirection(value)
-                    GXTemplateKey.FLEXBOX_FLEX_WRAP -> gxFlexBox.flexWrap =
-                        GXFlexBoxConvert.flexWrap(value)
-                    GXTemplateKey.FLEXBOX_OVERFLOW -> gxFlexBox.overflow =
-                        GXFlexBoxConvert.overflow(value)
-                    GXTemplateKey.FLEXBOX_ALIGN_ITEMS -> gxFlexBox.alignItems =
-                        GXFlexBoxConvert.alignItems(value)
-                    GXTemplateKey.FLEXBOX_ALIGN_SELF -> gxFlexBox.alignSelf =
-                        GXFlexBoxConvert.alignSelf(value)
-                    GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> gxFlexBox.alignContent =
-                        GXFlexBoxConvert.alignContent(value)
-                    GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> gxFlexBox.justifyContent =
-                        GXFlexBoxConvert.justifyContent(value)
-                    GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (gxFlexBox.position == null) gxFlexBox.position =
+                    GXTemplateKey.FLEXBOX_DISPLAY -> gxFlexBox.displayForTemplate =
+                        GXFlexBoxConvert.display(value.toString())
+                    GXTemplateKey.FLEXBOX_POSITION_TYPE -> gxFlexBox.positionTypeForTemplate =
+                        GXFlexBoxConvert.positionType(value.toString())
+                    GXTemplateKey.FLEXBOX_DIRECTION -> gxFlexBox.directionForTemplate =
+                        GXFlexBoxConvert.direction(value.toString())
+                    GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> gxFlexBox.flexDirectionForTemplate =
+                        GXFlexBoxConvert.flexDirection(value.toString())
+                    GXTemplateKey.FLEXBOX_FLEX_WRAP -> gxFlexBox.flexWrapForTemplate =
+                        GXFlexBoxConvert.flexWrap(value.toString())
+                    GXTemplateKey.FLEXBOX_OVERFLOW -> gxFlexBox.overflowForTemplate =
+                        GXFlexBoxConvert.overflow(value.toString())
+                    GXTemplateKey.FLEXBOX_ALIGN_ITEMS -> gxFlexBox.alignItemsForTemplate =
+                        GXFlexBoxConvert.alignItems(value.toString())
+                    GXTemplateKey.FLEXBOX_ALIGN_SELF -> gxFlexBox.alignSelfForTemplate =
+                        GXFlexBoxConvert.alignSelf(value.toString())
+                    GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> gxFlexBox.alignContentForTemplate =
+                        GXFlexBoxConvert.alignContent(value.toString())
+                    GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> gxFlexBox.justifyContentForTemplate =
+                        GXFlexBoxConvert.justifyContent(value.toString())
+                    GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (gxFlexBox.positionForTemplate == null) gxFlexBox.positionForTemplate =
                         GXFlexBoxConvert.position(css)
-                    GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (gxFlexBox.margin == null) gxFlexBox.margin =
+                    GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (gxFlexBox.marginForTemplate == null) gxFlexBox.marginForTemplate =
                         GXFlexBoxConvert.margin(css)
-                    GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxFlexBox.padding == null) gxFlexBox.padding =
+                    GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxFlexBox.paddingForTemplate == null) gxFlexBox.paddingForTemplate =
                         GXFlexBoxConvert.padding(css)
-                    GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (gxFlexBox.border == null) gxFlexBox.border =
+                    GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (gxFlexBox.borderForTemplate == null) gxFlexBox.borderForTemplate =
                         GXFlexBoxConvert.border(css)
-                    GXTemplateKey.FLEXBOX_FLEX_BASIS -> gxFlexBox.flexBasis =
-                        GXFlexBoxConvert.flexBasis(value)
-                    GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (gxFlexBox.size == null) gxFlexBox.size =
-                        GXFlexBoxConvert.size(css)
-                    GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (gxFlexBox.minSize == null) gxFlexBox.minSize =
-                        GXFlexBoxConvert.minSize(css)
-                    GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (gxFlexBox.maxSize == null) gxFlexBox.maxSize =
-                        GXFlexBoxConvert.maxSize(css)
-                    GXTemplateKey.FLEXBOX_ASPECT_RATIO -> gxFlexBox.aspectRatio =
-                        GXFlexBoxConvert.aspectRatio(value)
-                    GXTemplateKey.FLEXBOX_FLEX_GROW -> gxFlexBox.flexGrow =
-                        GXFlexBoxConvert.flexGrow(value)
-                    GXTemplateKey.FLEXBOX_FLEX_SHRINK -> gxFlexBox.flexShrink =
-                        GXFlexBoxConvert.flexShrink(value)
+                    GXTemplateKey.FLEXBOX_FLEX_BASIS -> gxFlexBox.flexBasisForTemplate =
+                        GXFlexBoxConvert.flexBasis(value.toString())
+                    GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (gxFlexBox.sizeForTemplate == null) gxFlexBox.sizeForTemplate =
+                        GXFlexBoxConvert.size2(css)
+                    GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (gxFlexBox.minSizeForTemplate == null) gxFlexBox.minSizeForTemplate =
+                        GXFlexBoxConvert.minSize2(css)
+                    GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (gxFlexBox.maxSizeForTemplate == null) gxFlexBox.maxSizeForTemplate =
+                        GXFlexBoxConvert.maxSize2(css)
+                    GXTemplateKey.FLEXBOX_ASPECT_RATIO -> gxFlexBox.aspectRatioForTemplate =
+                        GXFlexBoxConvert.aspectRatio(value.toString())
+                    GXTemplateKey.FLEXBOX_FLEX_GROW -> gxFlexBox.flexGrowForTemplate =
+                        GXFlexBoxConvert.flexGrow(value.toString())
+                    GXTemplateKey.FLEXBOX_FLEX_SHRINK -> gxFlexBox.flexShrinkForTemplate =
+                        GXFlexBoxConvert.flexShrink(value.toString())
                 }
             }
 
             return gxFlexBox
         }
 
-        fun create(lowPriorityStyle: GXFlexBox, heightPriorityStyle: GXFlexBox): GXFlexBox {
-            return GXFlexBox(
-                display = heightPriorityStyle.display ?: lowPriorityStyle.display,
-                positionType = heightPriorityStyle.positionType ?: lowPriorityStyle.positionType,
-                direction = heightPriorityStyle.direction ?: lowPriorityStyle.direction,
-                flexDirection = heightPriorityStyle.flexDirection ?: lowPriorityStyle.flexDirection,
-                flexWrap = heightPriorityStyle.flexWrap ?: lowPriorityStyle.flexWrap,
-                overflow = heightPriorityStyle.overflow ?: lowPriorityStyle.overflow,
-                alignItems = heightPriorityStyle.alignItems ?: lowPriorityStyle.alignItems,
-                alignSelf = heightPriorityStyle.alignSelf ?: lowPriorityStyle.alignSelf,
-                alignContent = heightPriorityStyle.alignContent ?: lowPriorityStyle.alignContent,
-                justifyContent = heightPriorityStyle.justifyContent
-                    ?: lowPriorityStyle.justifyContent,
-                position = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.position, lowPriorityStyle.position
-                ),
-                margin = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.margin, lowPriorityStyle.margin
-                ),
-                padding = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.padding, lowPriorityStyle.padding
-                ),
-                border = GXTemplateUtils.createRectDimensionByPriority(
-                    heightPriorityStyle.border, lowPriorityStyle.border
-                ),
-                flexGrow = heightPriorityStyle.flexGrow ?: lowPriorityStyle.flexGrow,
-                flexShrink = heightPriorityStyle.flexShrink ?: lowPriorityStyle.flexShrink,
-                flexBasis = heightPriorityStyle.flexBasis ?: lowPriorityStyle.flexBasis,
-                size = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.size, lowPriorityStyle.size
-                ),
-                minSize = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.minSize, lowPriorityStyle.minSize
-                ),
-                maxSize = GXTemplateUtils.createSizeDimensionByPriority(
-                    heightPriorityStyle.maxSize, lowPriorityStyle.maxSize
-                ),
-                aspectRatio = heightPriorityStyle.aspectRatio ?: lowPriorityStyle.aspectRatio
-            )
-        }
-
-        fun createByExtend(css: JSONObject): GXFlexBox {
-            if (css.isEmpty()) {
-                return GXFlexBox()
-            }
-            return GXFlexBox(
-                display = GXFlexBoxConvert.display(css),
-                positionType = GXFlexBoxConvert.positionType(css),
-                direction = GXFlexBoxConvert.direction(css),
-                flexDirection = GXFlexBoxConvert.flexDirection(css),
-                flexWrap = GXFlexBoxConvert.flexWrap(css),
-                overflow = GXFlexBoxConvert.overflow(css),
-                alignItems = GXFlexBoxConvert.alignItems(css),
-                alignSelf = GXFlexBoxConvert.alignSelf(css),
-                alignContent = GXFlexBoxConvert.alignContent(css),
-                justifyContent = GXFlexBoxConvert.justifyContent(css),
-                position = GXFlexBoxConvert.positionByExtend(css),
-                margin = GXFlexBoxConvert.margin(css),
-                padding = GXFlexBoxConvert.padding(css),
-                border = GXFlexBoxConvert.border(css),
-                flexBasis = GXFlexBoxConvert.flexBasis(css),
-                size = GXFlexBoxConvert.size(css),
-                minSize = GXFlexBoxConvert.minSize(css),
-                maxSize = GXFlexBoxConvert.maxSize(css),
-                aspectRatio = GXFlexBoxConvert.aspectRatio(css),
-                flexGrow = GXFlexBoxConvert.flexGrow(css),
-                flexShrink = GXFlexBoxConvert.flexShrink(css)
-            )
-        }
     }
 }

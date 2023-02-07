@@ -67,7 +67,7 @@ object GXFitContentUtils {
         val androidContext = gxTemplateContext.context
         val nodeId = gxTemplateNode.getNodeId()
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
-        val finalCss = gxTemplateNode.finalCss ?: return null
+        val finalCss = gxTemplateNode.css
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
         val nodeLayout = gxStretchNode.layoutByBind ?: gxNode.layoutByPrepare
@@ -154,8 +154,7 @@ object GXFitContentUtils {
 
             // FIXED: template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
-                (padding?.start?.value ?: 0F) + (padding?.end?.value
-                    ?: 0F)
+                (padding?.start?.value ?: 0F) + (padding?.end?.value ?: 0F)
 
             result = when {
                 // 没有设置宽度

@@ -61,6 +61,8 @@ object GXNodeTreeCreator {
         // 创建新节点
         val gxNode = GXNode()
 
+        gxNode.id = gxLayer.id
+
         gxNode.parentNode = gxParentNode
 
         // 初始化详细数据

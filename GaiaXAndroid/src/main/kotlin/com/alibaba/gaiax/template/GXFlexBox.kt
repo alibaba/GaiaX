@@ -46,176 +46,176 @@ data class GXFlexBox(
     private var maxSize: Size<GXSize>? = null,
     var aspectRatio: Float? = null
 ) {
-    private var _maxSizeForStyle: Size<Dimension>? = null
+    private var _maxSize: Size<Dimension>? = null
 
-    private var _minSizeForStyle: Size<Dimension>? = null
+    private var _minSize: Size<Dimension>? = null
 
-    private var _sizeForStyle: Size<Dimension>? = null
+    private var _size: Size<Dimension>? = null
 
-    private var _flexBasisForStyle: Dimension? = null
+    private var _flexBasis: Dimension? = null
 
-    private var _borderForStyle: Rect<Dimension>? = null
+    private var _border: Rect<Dimension>? = null
 
-    private var _paddingForStyle: Rect<Dimension>? = null
+    private var _padding: Rect<Dimension>? = null
 
-    private var _marginForStyle: Rect<Dimension>? = null
+    private var _margin: Rect<Dimension>? = null
 
-    private var _positionForStyle: Rect<Dimension>? = null
+    private var _position: Rect<Dimension>? = null
 
     fun reset() {
-        _maxSizeForStyle = null
-        _minSizeForStyle = null
-        _sizeForStyle = null
-        _flexBasisForStyle = null
-        _borderForStyle = null
-        _paddingForStyle = null
-        _marginForStyle = null
-        _positionForStyle = null
+        _maxSize = null
+        _minSize = null
+        _size = null
+        _flexBasis = null
+        _border = null
+        _padding = null
+        _margin = null
+        _position = null
     }
 
-    val maxSizeForStyle: Size<Dimension>?
+    val maxSizeFinal: Size<Dimension>?
         get() {
             val gxMaxSize = maxSize
             return if (gxMaxSize != null) {
-                if (_maxSizeForStyle == null) {
-                    _maxSizeForStyle = Size(
+                if (_maxSize == null) {
+                    _maxSize = Size(
                         gxMaxSize.width.valueDimension,
                         gxMaxSize.height.valueDimension,
                     )
-                    _maxSizeForStyle
+                    _maxSize
                 } else {
-                    _maxSizeForStyle
+                    _maxSize
                 }
             } else {
                 null
             }
         }
 
-    val minSizeForStyle: Size<Dimension>?
+    val minSizeFinal: Size<Dimension>?
         get() {
             val gxMinSize = minSize
             return if (gxMinSize != null) {
-                if (_minSizeForStyle == null) {
-                    _minSizeForStyle = Size(
+                if (_minSize == null) {
+                    _minSize = Size(
                         gxMinSize.width.valueDimension,
                         gxMinSize.height.valueDimension,
                     )
-                    _minSizeForStyle
+                    _minSize
                 } else {
-                    _minSizeForStyle
+                    _minSize
                 }
             } else {
                 null
             }
         }
 
-    val sizeForStyle: Size<Dimension>?
+    val sizeFinal: Size<Dimension>?
         get() {
             val gxSize = size
             return if (gxSize != null) {
-                if (_sizeForStyle == null) {
-                    _sizeForStyle = Size(
+                if (_size == null) {
+                    _size = Size(
                         gxSize.width.valueDimension,
                         gxSize.height.valueDimension,
                     )
-                    _sizeForStyle
+                    _size
                 } else {
-                    _sizeForStyle
+                    _size
                 }
             } else {
                 null
             }
         }
 
-    val flexBasisForStyle: Dimension?
+    val flexBasisFinal: Dimension?
         get() {
             val gxFlexBasis = flexBasis
             return if (gxFlexBasis != null) {
-                if (_flexBasisForStyle == null) {
-                    _flexBasisForStyle = gxFlexBasis.valueDimension
-                    _flexBasisForStyle
+                if (_flexBasis == null) {
+                    _flexBasis = gxFlexBasis.valueDimension
+                    _flexBasis
                 } else {
-                    _flexBasisForStyle
+                    _flexBasis
                 }
             } else {
                 null
             }
         }
 
-    val borderForStyle: Rect<Dimension>?
+    val borderFinal: Rect<Dimension>?
         get() {
             val gxBorder = border
             return if (gxBorder != null) {
-                if (_borderForStyle == null) {
-                    _borderForStyle = Rect(
+                if (_border == null) {
+                    _border = Rect(
                         gxBorder.start.valueDimension,
                         gxBorder.end.valueDimension,
                         gxBorder.top.valueDimension,
                         gxBorder.bottom.valueDimension,
                     )
-                    _borderForStyle
+                    _border
                 } else {
-                    _borderForStyle
+                    _border
                 }
             } else {
                 null
             }
         }
 
-    val paddingForStyle: Rect<Dimension>?
+    val paddingFinal: Rect<Dimension>?
         get() {
             val gxPadding = padding
             return if (gxPadding != null) {
-                if (_paddingForStyle == null) {
-                    _paddingForStyle = Rect(
+                if (_padding == null) {
+                    _padding = Rect(
                         gxPadding.start.valueDimension,
                         gxPadding.end.valueDimension,
                         gxPadding.top.valueDimension,
                         gxPadding.bottom.valueDimension,
                     )
-                    _paddingForStyle
+                    _padding
                 } else {
-                    _paddingForStyle
+                    _padding
                 }
             } else {
                 null
             }
         }
 
-    val marginForStyle: Rect<Dimension>?
+    val marginFinal: Rect<Dimension>?
         get() {
             val gxMargin = margin
             return if (gxMargin != null) {
-                if (_marginForStyle == null) {
-                    _marginForStyle = Rect(
+                if (_margin == null) {
+                    _margin = Rect(
                         gxMargin.start.valueDimension,
                         gxMargin.end.valueDimension,
                         gxMargin.top.valueDimension,
                         gxMargin.bottom.valueDimension,
                     )
-                    _marginForStyle
+                    _margin
                 } else {
-                    _marginForStyle
+                    _margin
                 }
             } else {
                 null
             }
         }
 
-    val positionForStyle: Rect<Dimension>?
+    val positionFinal: Rect<Dimension>?
         get() {
             val gxPosition = position
             return if (gxPosition != null) {
-                if (_positionForStyle == null) {
-                    _positionForStyle = Rect(
+                if (_position == null) {
+                    _position = Rect(
                         gxPosition.start.valueDimension,
                         gxPosition.end.valueDimension,
                         gxPosition.top.valueDimension,
                         gxPosition.bottom.valueDimension,
                     )
-                    _positionForStyle
+                    _position
                 } else {
-                    _positionForStyle
+                    _position
                 }
             } else {
                 null

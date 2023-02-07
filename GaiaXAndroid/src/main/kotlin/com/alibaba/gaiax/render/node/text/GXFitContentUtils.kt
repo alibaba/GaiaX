@@ -97,7 +97,7 @@ object GXFitContentUtils {
         var nodeHeight = nodeLayout.height
 
         // FIX: 如果databinding中引发了flex的改动，那么nodeLayout的结果可能不准确
-        val finalFlexBoxHeight = finalFlexBox.sizeForStyle?.height
+        val finalFlexBoxHeight = finalFlexBox.sizeFinal?.height
         if (gxStretchNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
             nodeHeight = finalFlexBoxHeight.value
         }
@@ -114,11 +114,11 @@ object GXFitContentUtils {
             var measuredWidth = gxCacheText.measuredWidth.toFloat()
             val measuredHeight = gxCacheText.measuredHeight.toFloat()
 
-            val size = finalCss.flexBox.sizeForStyle
+            val size = finalCss.flexBox.sizeFinal
             val isUndefineSize =
                 size?.width == null || size.width is Dimension.Auto || size.width is Dimension.Undefined
 
-            val minSize = finalCss.flexBox.minSizeForStyle
+            val minSize = finalCss.flexBox.minSizeFinal
             val isDefineMinSize =
                 minSize != null && (minSize.width !is Dimension.Auto || minSize.width !is Dimension.Undefined)
 
@@ -138,7 +138,7 @@ object GXFitContentUtils {
             var textHeight = nodeHeight
 
             // FIXED: template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom
-            val padding = finalFlexBox.paddingForStyle
+            val padding = finalFlexBox.paddingFinal
             val textTopAndBottomPadding =
                 (padding?.top?.value ?: 0F) + (padding?.bottom?.value ?: 0F)
 

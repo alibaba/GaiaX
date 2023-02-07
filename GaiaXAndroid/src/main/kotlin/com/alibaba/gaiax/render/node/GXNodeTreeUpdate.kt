@@ -309,7 +309,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             var isDirty = false
 
-            val finalHeight = finalFlexBox.sizeForStyle?.height
+            val finalHeight = finalFlexBox.sizeFinal?.height
             val finalFlexGrow = finalFlexBox.flexGrow
 
             if (gxNode.isScrollType()) {
@@ -335,7 +335,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.sizeForStyle?.height = it
+                        finalFlexBox.sizeFinal?.height = it
                         isDirty = true
                     }
                 }
@@ -365,7 +365,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.sizeForStyle?.height = it
+                        finalFlexBox.sizeFinal?.height = it
                         isDirty = true
                     }
                 }
@@ -379,7 +379,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                         gxTemplateContext, gxNode, containerTemplateData
                     )
                     containerSize?.height?.let {
-                        finalFlexBox.sizeForStyle?.height = it
+                        finalFlexBox.sizeFinal?.height = it
                         isDirty = true
                     }
                 }
@@ -504,23 +504,23 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             // 仅在绝对布局下，才能更新position的数据
             if (stretchStyle.positionType == PositionType.Absolute) {
-                gxFlexBox.positionForStyle?.let {
+                gxFlexBox.positionFinal?.let {
                     GXTemplateUtils.updateDimension(it, stretchStyle.position)
                     isDirty = true
                 }
             }
 
-            gxFlexBox.marginForStyle?.let {
+            gxFlexBox.marginFinal?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.margin)
                 isDirty = true
             }
 
-            gxFlexBox.paddingForStyle?.let {
+            gxFlexBox.paddingFinal?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.padding)
                 isDirty = true
             }
 
-            gxFlexBox.borderForStyle?.let {
+            gxFlexBox.borderFinal?.let {
                 GXTemplateUtils.updateDimension(it, stretchStyle.border)
                 isDirty = true
             }
@@ -536,7 +536,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.sizeForStyle?.let {
+            gxFlexBox.sizeFinal?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.size)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
@@ -546,7 +546,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.minSizeForStyle?.let {
+            gxFlexBox.minSizeFinal?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.minSize)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_MIN_SIZE, stretchStyle.minSize
@@ -556,7 +556,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 isDirty = true
             }
 
-            gxFlexBox.maxSizeForStyle?.let {
+            gxFlexBox.maxSizeFinal?.let {
                 GXTemplateUtils.updateSize(it, stretchStyle.maxSize)
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.FLEXBOX_MAX_SIZE, stretchStyle.maxSize

@@ -36,11 +36,11 @@ class GXFlexBoxTest {
             this[GXTemplateKey.FLEXBOX_SIZE_WIDTH] = "100%"
             this[GXTemplateKey.FLEXBOX_SIZE_HEIGHT] = "100px"
         })
-        Assert.assertEquals(true, flexBox.sizeForStyle?.width is Dimension.Percent)
-        Assert.assertEquals(1F, flexBox.sizeForStyle?.width?.value)
+        Assert.assertEquals(true, flexBox.sizeFinal?.width is Dimension.Percent)
+        Assert.assertEquals(1F, flexBox.sizeFinal?.width?.value)
 
-        Assert.assertEquals(true, flexBox.sizeForStyle?.height is Dimension.Points)
-        Assert.assertEquals(100F.dpToPx(), flexBox.sizeForStyle?.height?.value)
+        Assert.assertEquals(true, flexBox.sizeFinal?.height is Dimension.Points)
+        Assert.assertEquals(100F.dpToPx(), flexBox.sizeFinal?.height?.value)
     }
 
     @After

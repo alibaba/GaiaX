@@ -34,9 +34,9 @@ class GXComponentProgressTest : GXBaseTest() {
 
         val gxProgressView = rootView.child(0) as GXProgressView
         val config = gxProgressView.getConfig()
-        Assert.assertEquals(Color.parseColor("#00FFAA"), config?.strokeColor?.value())
-        Assert.assertEquals(Color.parseColor("#AAAAAA"), config?.trailColor?.value())
-        Assert.assertEquals(false, config?.animated)
-        Assert.assertEquals("line", config?.progressType)
+        Assert.assertEquals(Color.parseColor("#00FFAA"), config?.strokeColorFinal?.value())
+        Assert.assertEquals(Color.parseColor("#AAAAAA"), config?.trailColorFinal?.value())
+        Assert.assertEquals(false, config?.animatedFinal)
+        Assert.assertEquals("line", config?.progressTypeFinal)
     }
 }

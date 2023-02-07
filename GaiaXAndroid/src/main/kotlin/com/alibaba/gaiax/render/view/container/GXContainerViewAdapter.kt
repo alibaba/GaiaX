@@ -95,10 +95,10 @@ class GXContainerViewAdapter(
         // 构建坑位的容器
         val childItemContainer = GXItemContainer(parent.context)
 
-        gxNode.templateNode.finalScrollConfig?.let {
+        gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
+                childItemContainer.gravity = it.gravityFinal
             }
         }
 
@@ -114,7 +114,7 @@ class GXContainerViewAdapter(
         val itemContainerWidth =
             childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        val itemContainerHeight = gxNode.templateNode.finalScrollConfig?.let {
+        val itemContainerHeight = gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果容器高度小于坑位高度，那么需要重新设置容器高度
 //                if (childContainerSize != null && gxContainer.layoutParams.height < childContainerSize.height) {
@@ -183,10 +183,10 @@ class GXContainerViewAdapter(
 
         val childItemContainer = holder.itemView as GXItemContainer
 
-        gxNode.templateNode.finalScrollConfig?.let {
+        gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
+                childItemContainer.gravity = it.gravityFinal
             }
         }
 

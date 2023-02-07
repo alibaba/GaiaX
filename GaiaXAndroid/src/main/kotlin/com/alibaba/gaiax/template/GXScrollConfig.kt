@@ -27,15 +27,38 @@ data class GXScrollConfig(
     val data: JSONObject,
     val direction: Int = LinearLayoutManager.VERTICAL,
     val itemSpacing: Int = 0,
-    var gravity: Int = Gravity.TOP
+    val gravity: Int = Gravity.TOP
 ) {
+
+    private var _direction: Int? = null
+    private var _itemSpacing: Int? = null
+    private var _gravity: Int? = null
+
+    fun reset() {
+        _direction = null
+        _itemSpacing = null
+        _gravity = null
+    }
+
+    val directionFinal: Int
+        get() {
+            return _direction ?: direction
+        }
+
+    val itemSpacingFinal: Int
+        get() {
+            return _itemSpacing ?: itemSpacing
+        }
+
+    val gravityFinal: Int
+        get() {
+            return _gravity ?: gravity
+        }
+
     companion object {
 
         fun create(
-            data: JSONObject,
-            direction: String?,
-            itemSpacing: String?,
-            gravity: Int?
+            data: JSONObject, direction: String?, itemSpacing: String?, gravity: Int?
         ): GXScrollConfig {
             return GXScrollConfig(
                 data,
@@ -44,32 +67,29 @@ data class GXScrollConfig(
                 gravity ?: Gravity.TOP
             )
         }
+    }
 
-        fun create(srcConfig: GXScrollConfig, data: JSONObject): GXScrollConfig {
-            var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
-            if (itemSpacing == null) {
-                itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
-            }
-            return GXScrollConfig(
-                srcConfig.data,
-                srcConfig.direction,
-                if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
-                srcConfig.gravity
-            )
+    fun updateByExtend(extendCssData: JSONObject) {
+        var itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
+        if (itemSpacing == null) {
+            itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
+        }
+        if (itemSpacing != null) {
+            _itemSpacing = GXContainerConvert.spacing(itemSpacing)
         }
     }
 
     override fun toString(): String {
-        return "GXScrollConfig(direction=$direction, itemSpacing=$itemSpacing)"
+        return "GXScrollConfig(direction=$directionFinal, itemSpacing=$itemSpacingFinal)"
     }
 
     val isVertical
         get():Boolean {
-            return direction == LinearLayoutManager.VERTICAL
+            return directionFinal == LinearLayoutManager.VERTICAL
         }
 
     val isHorizontal
         get():Boolean {
-            return direction == LinearLayoutManager.HORIZONTAL
+            return directionFinal == LinearLayoutManager.HORIZONTAL
         }
 }

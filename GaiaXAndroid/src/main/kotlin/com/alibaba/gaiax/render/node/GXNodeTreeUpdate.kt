@@ -313,7 +313,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             val finalFlexGrow = finalFlexBox.flexGrow
 
             if (gxNode.isScrollType()) {
-                val finalScrollConfig = gxNode.templateNode.finalScrollConfig
+                val finalScrollConfig = gxNode.templateNode.layer.scrollConfig
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalScrollConfig is null")
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
@@ -342,7 +342,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             } else if (gxNode.isGridType()) {
 
-                val finalGridConfig = gxNode.templateNode.finalGridConfig
+                val finalGridConfig = gxNode.templateNode.layer.gridConfig
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalGridConfig is null")
 
                 var isComputeContainerHeight =
@@ -1264,12 +1264,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         private fun bindGridContainerCSS(
             gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
         ) {
-            gxNode.templateNode.finalGridConfig?.let {
+            gxNode.templateNode.layer.gridConfig?.let {
                 view.setGridContainerDirection(
                     gxTemplateContext, it, gxNode.stretchNode.layoutByBind
                 )
                 view.setGridContainerItemSpacingAndRowSpacing(
-                    gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
+                    gxNode.getPaddingRect(), it.itemSpacingFinal, it.rowSpacingFinal
                 )
             }
         }
@@ -1277,15 +1277,15 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         private fun bindScrollContainerCSS(
             gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
         ) {
-            gxNode.templateNode.finalScrollConfig?.let { scrollConfig ->
+            gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 
                 view.setScrollContainerDirection(
-                    scrollConfig.direction, gxNode.stretchNode.layoutByBind
+                    scrollConfig.directionFinal, gxNode.stretchNode.layoutByBind
                 )
 
                 val padding = gxNode.getPaddingRect()
-                val lineSpacing = scrollConfig.itemSpacing
-                if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
+                val lineSpacing = scrollConfig.itemSpacingFinal
+                if (scrollConfig.directionFinal == LinearLayoutManager.HORIZONTAL) {
                     // 设置边距
                     if (padding.top == 0 && padding.bottom == 0) {
                         view.setHorizontalScrollContainerLineSpacing(
@@ -1338,8 +1338,8 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 adapter = GXSliderViewAdapter(gxTemplateContext, gxNode)
                 container.viewPager?.adapter = adapter
             }
-            adapter.setConfig(gxNode.templateNode.finalSliderConfig)
-            container.setConfig(gxNode.templateNode.finalSliderConfig)
+            adapter.setConfig(gxNode.templateNode.layer.sliderConfig)
+            container.setConfig(gxNode.templateNode.layer.sliderConfig)
 
             adapter.setData(containerTemplateData)
             container.setPageSize(containerTemplateData.size)
@@ -1351,7 +1351,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
         ) {
             val progressView = view as? GXProgressView
-            progressView?.setConfig(gxTemplateNode.finalProgressConfig)
+            progressView?.setConfig(gxTemplateNode.layer.progressConfig)
             progressView?.onBindData(gxTemplateNode.getData(templateData))
         }
     }

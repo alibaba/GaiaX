@@ -87,6 +87,10 @@ data class GXTemplateNode(
 
     fun reset() {
         resetDataCache()
+        layer.sliderConfig?.reset()
+        layer.scrollConfig?.reset()
+        layer.gridConfig?.reset()
+        layer.progressConfig?.reset()
         finalCss?.flexBox?.reset()
         css.flexBox.reset()
     }
@@ -106,10 +110,6 @@ data class GXTemplateNode(
      * 在bindData阶段使用。
      */
 
-    var finalGridConfig: GXGridConfig? = null
-    var finalScrollConfig: GXScrollConfig? = null
-    var finalSliderConfig: GXSliderConfig? = null
-    var finalProgressConfig: GXProgressConfig? = null
     var finalCss: GXCss? = null
 
     /**
@@ -125,51 +125,20 @@ data class GXTemplateNode(
         // 初始化扩展数据
         val extendCssData = dataBinding?.getExtend(nodeTemplateData)
 
+        if (extendCssData != null && extendCssData.isNotEmpty()) {
+            layer.scrollConfig?.updateByExtend(extendCssData)
+            layer.gridConfig?.updateByExtend(extendCssData)
+            layer.sliderConfig?.updateByExtend(extendCssData)
+            layer.progressConfig?.updateByExtend(extendCssData)
+        }
+
         // 创建FinalStyle
-        val selfFinalCss: GXCss = if (extendCssData != null) {
+        val selfFinalCss: GXCss = if (extendCssData != null && extendCssData.isNotEmpty()) {
             // 创建Css
             val extendCss = GXCss.createByExtend(extendCssData)
-
-            // 更新除了CSS外的其他节点信息
-
-            // 仅当有Grid配置信息时，才处理更新
-            layer.gridConfig?.let {
-                finalGridConfig = GXGridConfig.create(it, extendCssData)
-            }
-
-            // 仅当有Scroll配置信息时，才处理更新
-            layer.scrollConfig?.let {
-                finalScrollConfig = GXScrollConfig.create(it, extendCssData)
-            }
-
-            layer.sliderConfig?.let {
-                finalSliderConfig = GXSliderConfig.create(it, extendCssData)
-            }
-
-            layer.progressConfig?.let {
-                finalProgressConfig = GXProgressConfig.create(it, extendCssData)
-            }
-
             // 合并原有CSS和扩展属性的CSS
             GXCss.create(css, extendCss)
         } else {
-
-            layer.gridConfig?.let {
-                finalGridConfig = it
-            }
-
-            layer.scrollConfig?.let {
-                finalScrollConfig = it
-            }
-
-            layer.sliderConfig?.let {
-                finalSliderConfig = it
-            }
-
-            layer.progressConfig?.let {
-                finalProgressConfig = it
-            }
-
             css
         }
 

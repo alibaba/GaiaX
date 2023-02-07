@@ -40,7 +40,7 @@ class GXSliderViewAdapter(
     private var data = JSONArray()
 
     override fun getCount(): Int {
-        return if (config?.infinityScroll == false) {
+        return if (config?.infinityScrollFinal == false) {
             data.size
         } else {
             Int.MAX_VALUE

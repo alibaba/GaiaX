@@ -85,7 +85,7 @@ open class GXBaseTest {
                 val padding = gxTemplateContext.rootNode?.getPaddingRect()
                 val leftMargin = padding?.left ?: 0
                 val rightMargin = padding?.right ?: 0
-                val lineSpacing = scrollConfig.itemSpacing
+                val lineSpacing = scrollConfig.itemSpacingFinal
                 if (responsiveRule == "response_layout_rule_5") {
                     return (GXScreenUtils.getScreenWidthPx(gxTemplateContext.context) - (leftMargin + rightMargin) - 2 * lineSpacing) / 2.5F
                 } else if (responsiveRule == "response_layout_rule_2") {

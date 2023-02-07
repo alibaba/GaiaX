@@ -170,9 +170,10 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     private var mode: GXMode? = null
 
     override fun setImageStyle(gxTemplateContext: GXTemplateContext, gxCss: GXCss) {
-        if (gxCss.style.mode != null) {
-            this.mode = gxCss.style.mode
-            val scaleType = gxCss.style.mode.getScaleType()
+        val gxMode = gxCss.style.mode
+        if (gxMode != null) {
+            this.mode = gxMode
+            val scaleType = gxMode.getScaleType()
             this.scaleType = scaleType
         } else {
             this.scaleType = ScaleType.FIT_XY

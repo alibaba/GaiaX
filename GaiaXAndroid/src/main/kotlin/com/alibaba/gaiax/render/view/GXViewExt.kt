@@ -203,18 +203,20 @@ private fun isContainShadowLayout(view: ViewGroup): Boolean {
  * @suppress
  */
 fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
-    if (style?.backgroundImage != null) {
+    val backgroundImage = style?.backgroundImage
+    val backgroundColor = style?.backgroundColor
+    if (backgroundImage != null) {
         if (this is GXText) {
             // GXText needs to be handled separately
             // @see GXViewExt.setFontBackgroundImage
         } else {
-            val drawable = style.backgroundImage.createDrawable()
+            val drawable = backgroundImage.createDrawable()
             this.background = drawable
         }
-    } else if (style?.backgroundColor != null) {
+    } else if (backgroundColor != null) {
         val drawable = GXColorGradientDrawable(
             GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                style.backgroundColor.value(this.context), style.backgroundColor.value(this.context)
+                backgroundColor.value(this.context), backgroundColor.value(this.context)
             )
         )
         // Use left and right gradients to simulate solid colors
@@ -246,8 +248,9 @@ fun GXText.setFontTextDecoration(textDecoration: Int?) {
  * @suppress
  */
 fun GXText.setFontTextLineHeight(style: GXStyle) {
-    if (style.fontLineHeight != null) {
-        val lineHeight = style.fontLineHeight.valueFloat
+    val fontLineHeight = style.fontLineHeight
+    if (fontLineHeight != null) {
+        val lineHeight = fontLineHeight.valueFloat
 
         GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
             GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight
@@ -266,9 +269,10 @@ fun GXText.setFontTextLineHeight(style: GXStyle) {
  * @suppress
  */
 fun GXText.setFontTextAlign(style: GXStyle) {
-    if (style.fontTextAlign != null) {
+    val fontTextAlign = style.fontTextAlign
+    if (fontTextAlign != null) {
         // Center up and down by default
-        setTextAlign(Gravity.CENTER_VERTICAL.or(style.fontTextAlign))
+        setTextAlign(Gravity.CENTER_VERTICAL.or(fontTextAlign))
     } else {
         // Center up and down by default
         setTextAlign(Gravity.CENTER_VERTICAL.or(Gravity.LEFT))
@@ -320,8 +324,9 @@ fun GXText.setFontLines(fontLiens: Int?) {
  * @suppress
  */
 fun GXText.setFontColor(style: GXStyle) {
-    if (style.fontColor != null) {
-        this.setTextColor(style.fontColor.value(this.context))
+    val fontColor = style.fontColor
+    if (fontColor != null) {
+        this.setTextColor(fontColor.value(this.context))
     } else {
         // The default color is black
         this.setTextColor(Color.BLACK)

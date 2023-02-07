@@ -1,20 +1,16 @@
 package com.alibaba.gaiax.demo.devtools
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import com.alibaba.gaiax.demo.R
-import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.IDevTools
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
 
@@ -23,7 +19,7 @@ import com.lzf.easyfloat.enums.ShowPattern
  *  @date: 2023-02-02
  *  Description:
  */
-class DevTools : DefaultLifecycleObserver {
+class DevTools : DefaultLifecycleObserver , IDevTools {
     companion object {
         val TAG = "devtools"
 
@@ -35,6 +31,10 @@ class DevTools : DefaultLifecycleObserver {
     private var devtoolsContext: Context? = null
 
     private var scanResult: String = ""
+
+    private var currentPreviewMode = GXClientToStudioMultiType.PREVIEW_NONE
+
+    private var currentJSMode = GXClientToStudioMultiType.JS_DEFAULT
 
     fun createDevToolsFloatWindow(context: Context) {
         devtoolsContext = context
@@ -50,17 +50,22 @@ class DevTools : DefaultLifecycleObserver {
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_fast_preview)
                     .setOnClickListener { view ->
-                        foldWindowToSmall(view)
+                        launchFastPreviewType()
                     }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_push_preview)
                     .setOnClickListener { view ->
-                        foldWindowToSmall(view)
+                        launchPushPreviewType()
                     }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_js_debug)
                     .setOnClickListener { view ->
-                        foldWindowToSmall(view)
+                        launchJsDebugType()
+                    }
+
+                it.findViewById<AppCompatButton>(R.id.window_btn_cancel_dev)
+                    .setOnClickListener { view ->
+                        disconnectStudioMultiType()
                     }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_close_window)
@@ -84,6 +89,8 @@ class DevTools : DefaultLifecycleObserver {
                 dragEnd { }
             }
             .show()
+
+        GXClientToStudioMultiType.instance.init(context)
     }
 
     fun dismissDevTools() {
@@ -93,25 +100,42 @@ class DevTools : DefaultLifecycleObserver {
     fun connectStudioMultiType(result: String) {
         Log.d(TAG, "connectStudioMultiType: $result")
         scanResult = result
-    }
-
-    private fun launchFastPreviewType(view: View?) {
-
-    }
-
-    private fun launchPushPreviewType(view: View?) {
-
-    }
-
-    private fun launchJsDebugType(view: View?) {
+        val params = GXClientToStudioMultiType.instance.getParams(scanResult)
+        if (params == null) {
+            Toast.makeText(devtoolsContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT).show()
+            return
+        }
+        GXClientToStudioMultiType.instance.setDevTools(this)
+        GXClientToStudioMultiType.instance.manualConnect(devtoolsContext!!, params)
 
     }
 
-    private fun disconnectStudioMultiType(view: View?) {
+
+    private fun launchFastPreviewType() {
+        currentPreviewMode = GXClientToStudioMultiType.PREVIEW_AUTO
+    }
+
+    private fun launchPushPreviewType() {
+        currentPreviewMode = GXClientToStudioMultiType.PREVIEW_MANUAL
+    }
+
+    private fun launchJsDebugType() {
+        currentJSMode = GXClientToStudioMultiType.JS_BREAKPOINT
+    }
+
+    private fun disconnectStudioMultiType() {
 
     }
 
     private fun foldWindowToSmall(view: View?) {
-        EasyFloat.updateFloat(null, width = 150, height = 150)
+        EasyFloat.updateFloat(TAG, width = 150, height = 150)
+    }
+
+    override fun getPreviewCurrentMode(): String {
+        return currentPreviewMode
+    }
+
+    override fun getJSCurrentMode(): String {
+        return currentJSMode
     }
 }

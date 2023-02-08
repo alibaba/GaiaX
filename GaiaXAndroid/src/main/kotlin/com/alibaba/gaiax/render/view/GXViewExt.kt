@@ -20,7 +20,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -50,80 +49,62 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
     val borderRadius = style?.borderRadius?.value
     val borderWidth = style?.borderWidth?.valueFloat
     val borderColor = style?.borderColor?.value(this.context)
-    var cornerRadius = style?.borderRadius?.value
-
-    // 2022/06/21
-    // Fix a ui bug,
-    // if we set corner radius and border radius in the same time, it will produce some defects at the view corner.
-    // we need make a special process in order fix the defects.
-
-    // 2022/09/13
-    // Fix a ui  bug
-    // Remove logic of radius increase because it will cause corner dim
-//    if (cornerRadius != null && cornerRadius.size == 8 &&
-//        borderRadius != null && borderWidth != null && borderColor != null
-//    ) {
-//        val tl = cornerRadius[0]
-//        val tr = cornerRadius[2]
-//        val bl = cornerRadius[4]
-//        val br = cornerRadius[6]
-//        if (tl == tr && tr == bl && bl == br) {
-//            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
-//        }
-//    }
+    val cornerRadius = style?.borderRadius?.value
 
     if (this is GXIRoundCorner) {
-        if (this is GXView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
+        when (this) {
+            is GXView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXText -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-        } else if (this is GXText) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
+            is GXIImageView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXContainer -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-        } else if (this is GXIImageView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
-            }
-        } else if (this is GXContainer) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
-            }
-        } else if (this is GXSliderView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXSliderView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
         }
+
     }
 }
 

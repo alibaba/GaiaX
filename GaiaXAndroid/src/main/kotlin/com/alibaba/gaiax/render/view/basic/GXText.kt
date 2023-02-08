@@ -21,6 +21,7 @@ import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
@@ -29,11 +30,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.*
-import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXTemplateKey
-import kotlin.math.roundToInt
 
 /**
  * @suppress
@@ -103,36 +102,45 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         setFontTextDecoration(style.fontTextDecoration)
     }
 
-    override fun setRoundCornerRadius(radiusArray: FloatArray) {
-        if (radiusArray[0] == radiusArray[2] && radiusArray[2] == radiusArray[4] && radiusArray[4] == radiusArray[6]) {
-            val radius = radiusArray[0]
-            if (radius > 0) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    private var lastRadius: FloatArray? = null
+
+    override fun setRoundCornerRadius(radius: FloatArray) {
+        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
+            val tl = radius[0]
+            val tr = radius[2]
+            val bl = radius[4]
+            val br = radius[6]
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (tl == tr && tr == bl && bl == br && tl > 0) {
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
                             if (alpha >= 0.0f) {
                                 outline.alpha = alpha
                             }
-                            outline.setRoundRect(0, 0, view.width, view.height, radius)
+                            outline.setRoundRect(0, 0, view.width, view.height, tl)
                         }
                     }
+                } else {
+                    this.clipToOutline = false
+                    this.outlineProvider = null
                 }
             }
+            this.lastRadius = radius
         }
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        if (background is GXColorGradientDrawable) {
-            (background as GXColorGradientDrawable).setStroke(
-                borderWidth.toDouble().roundToInt(), borderColor
-            )
-        } else {
-            val shape = GXRoundCornerBorderGradientDrawable()
-            shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = radius
-            shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
-            background = shape
+        if (background == null) {
+            val target = GXRoundCornerBorderGradientDrawable()
+            target.shape = GradientDrawable.RECTANGLE
+            target.cornerRadii = radius
+            target.setStroke(borderWidth.toInt(), borderColor)
+            background = target
+        } else if (background is GradientDrawable) {
+            val target = background as GradientDrawable
+            target.setStroke(borderWidth.toInt(), borderColor)
+            target.cornerRadii = radius
         }
     }
 }

@@ -259,8 +259,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
 
     fun getConfig(): GXSliderConfig? = config
 
+
+    private var lastRadius: FloatArray? = null
+
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (radius.size == 8) {
+        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
             val tl = radius[0]
             val tr = radius[2]
             val bl = radius[4]
@@ -281,17 +284,24 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                     this.outlineProvider = null
                 }
             }
+            this.lastRadius = radius
         }
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        if (radius.size == 8) {
-            val shape = GXRoundCornerBorderGradientDrawable()
-            shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = radius
-            shape.setStroke(borderWidth.toInt(), borderColor)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                foreground = shape
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (radius.size == 8) {
+                if (foreground == null) {
+                    val target = GXRoundCornerBorderGradientDrawable()
+                    target.shape = GradientDrawable.RECTANGLE
+                    target.cornerRadii = radius
+                    target.setStroke(borderWidth.toInt(), borderColor)
+                    foreground = target
+                } else if (foreground is GradientDrawable) {
+                    val target = foreground as GradientDrawable
+                    target.setStroke(borderWidth.toInt(), borderColor)
+                    target.cornerRadii = radius
+                }
             }
         }
     }

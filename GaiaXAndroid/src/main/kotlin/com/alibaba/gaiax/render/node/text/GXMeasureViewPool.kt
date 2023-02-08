@@ -25,7 +25,6 @@ import androidx.core.util.Pools
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.render.view.setTextFontFamily
 import java.lang.ref.WeakReference
 

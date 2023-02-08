@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.template
 
+import android.graphics.Rect
 import android.view.Gravity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSONObject
@@ -27,7 +28,8 @@ data class GXScrollConfig(
     val data: JSONObject,
     val direction: Int = LinearLayoutManager.VERTICAL,
     val itemSpacing: Int = 0,
-    val gravity: Int = Gravity.TOP
+    val edgeInsets: Rect = Rect(0, 0, 0, 0),
+    var gravity: Int = Gravity.TOP
 ) {
 
     private var _direction: Int? = null
@@ -58,22 +60,24 @@ data class GXScrollConfig(
     companion object {
 
         fun create(
-            data: JSONObject, direction: String?, itemSpacing: String?, gravity: Int?
+            data: JSONObject,
+            direction: String?,
+            edgeInsets: String?,
+            itemSpacing: String?,
+            gravity: Int?
         ): GXScrollConfig {
             return GXScrollConfig(
                 data,
                 GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
                 GXContainerConvert.spacing(itemSpacing),
+                GXContainerConvert.edgeInsets2(edgeInsets) ?: Rect(0, 0, 0, 0),
                 gravity ?: Gravity.TOP
             )
         }
     }
 
     fun updateByExtend(extendCssData: JSONObject) {
-        var itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
-        if (itemSpacing == null) {
-            itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
-        }
+        val itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
         if (itemSpacing != null) {
             _itemSpacing = GXContainerConvert.spacing(itemSpacing)
         }

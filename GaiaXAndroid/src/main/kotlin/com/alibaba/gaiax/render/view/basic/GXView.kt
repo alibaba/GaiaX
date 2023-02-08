@@ -54,6 +54,8 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     )
 
 
+    private var lastRadius: FloatArray? = null
+
     private var gxBlurHelper: GXBlurHelper? = null
 
     var gxBackdropFilter: GXBackdropFilter? = null
@@ -73,7 +75,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     }
 
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (radius.size == 8) {
+        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
             val tl = radius[0]
             val tr = radius[2]
             val bl = radius[4]
@@ -94,6 +96,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
                     this.outlineProvider = null
                 }
             }
+            this.lastRadius = radius
         }
     }
 
@@ -119,8 +122,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
 
 
     fun setBackdropFilter(
-        gxTemplateContext: GXTemplateContext,
-        gxBackdropFilter: GXBackdropFilter?
+        gxTemplateContext: GXTemplateContext, gxBackdropFilter: GXBackdropFilter?
     ) {
         this.gxTemplateContext = gxTemplateContext
         if (gxBackdropFilter is GXBackdropFilter.Blur) {

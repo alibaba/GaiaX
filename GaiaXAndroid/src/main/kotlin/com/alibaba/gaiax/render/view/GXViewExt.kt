@@ -195,11 +195,8 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
             this.background = backgroundImage.createDrawable()
         }
     } else if (backgroundColor != null) {
-        val drawable = GXColorGradientDrawable(
-            GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                backgroundColor.value(this.context), backgroundColor.value(this.context)
-            )
-        )
+        val color = backgroundColor.value(this.context)
+        val drawable = GXColorGradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color))
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
         this.background = drawable
@@ -427,13 +424,15 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
         val needForceRefresh =
             (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
                 ?: false
-        if (this.layoutManager == null || needForceRefresh) {
+        if (this.layoutManager == null) {
+            this.layoutManager = LinearLayoutManager(this.context, direction, false)
+        } else if (needForceRefresh) {
+            val tmp = this.layoutManager as LinearLayoutManager
             this.layoutManager = null
-            val target = LinearLayoutManager(
-                this.context, direction, false
-            )
-            this.layoutManager = target
+            this.layoutManager = tmp
+            tmp.orientation = direction
         }
+
     }
 }
 

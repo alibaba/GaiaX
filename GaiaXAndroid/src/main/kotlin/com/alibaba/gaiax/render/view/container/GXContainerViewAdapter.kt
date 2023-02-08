@@ -122,7 +122,7 @@ class GXContainerViewAdapter(
 //                }
 //                // 如果容器高度大于于坑位高度,并且是横向，那么可以设定gravity，需要让自己撑满容器
 //                else {
-                    gxContainer.layoutParams.height
+                gxContainer.layoutParams.height
 //                }
             } else {
                 childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
@@ -267,8 +267,8 @@ class GXContainerViewAdapter(
                 this.dataListener = object : GXTemplateEngine.GXIDataListener {
                     override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
                         return gxTemplateContext.templateData?.dataListener?.onTextProcess(
-                                gxTextData
-                            )
+                            gxTextData
+                        )
                     }
                 }
             }
@@ -425,8 +425,7 @@ class GXContainerViewAdapter(
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {
-        val layoutByBind = gxNode.stretchNode.layoutByBind
-        return layoutByBind?.width != targetWidth
+        return gxNode.stretchNode.layoutByBind?.width != targetWidth
     }
 
 }

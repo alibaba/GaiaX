@@ -18,7 +18,9 @@ package com.alibaba.gaiax.template
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 
 /**
  * The color wrapper class, all colors should be converted to GColor using the create method
@@ -42,6 +44,18 @@ class GXColor private constructor(val type: Int, private val value: Any) {
 
     override fun toString(): String {
         return "GXColor(type=$type, value=$value)"
+    }
+
+    private var _backgroundColor: GXColorGradientDrawable? = null
+    fun createBackgroundColorDrawable(context: Context?): GXColorGradientDrawable? {
+        if (_backgroundColor == null) {
+            val color = value(context)
+            _backgroundColor = GXColorGradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(color, color)
+            )
+        }
+        return _backgroundColor
     }
 
     companion object {

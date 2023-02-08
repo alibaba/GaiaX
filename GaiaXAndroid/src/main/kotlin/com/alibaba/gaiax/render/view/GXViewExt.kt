@@ -195,11 +195,9 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
             this.background = backgroundImage.createDrawable()
         }
     } else if (backgroundColor != null) {
-        val color = backgroundColor.value(this.context)
-        val drawable = GXColorGradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color))
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
-        this.background = drawable
+        this.background = backgroundColor.createBackgroundColorDrawable(this.context)
     } else {
         if (this.background is GXBlurBitmapDrawable) {
             // fix: rebind data cause background flicker

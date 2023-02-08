@@ -527,7 +527,7 @@ object GXNodeUtils {
                     val lines = max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
                     var containerHeight = itemSize.height
                     containerHeight *= lines
-                    containerHeight += finalScrollConfig.itemSpacingFinal * (lines - 1)
+                    containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
                     return Size(
                         Dimension.Points(itemSize.width), Dimension.Points(containerHeight)
                     )

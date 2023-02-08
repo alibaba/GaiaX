@@ -98,7 +98,7 @@ class GXContainerViewAdapter(
         gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravityFinal
+                childItemContainer.gravity = it.gravity
             }
         }
 
@@ -186,7 +186,7 @@ class GXContainerViewAdapter(
         gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravityFinal
+                childItemContainer.gravity = it.gravity
             }
         }
 

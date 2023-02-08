@@ -1272,12 +1272,12 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 
                 view.setScrollContainerDirection(
-                    scrollConfig.directionFinal, gxNode.stretchNode.layoutByBind
+                    scrollConfig.direction, gxNode.stretchNode.layoutByBind
                 )
 
                 val padding = gxNode.getPaddingRect()
-                val lineSpacing = scrollConfig.itemSpacingFinal
-                if (scrollConfig.directionFinal == LinearLayoutManager.HORIZONTAL) {
+                val lineSpacing = scrollConfig.itemSpacing
+                if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
                     // 设置边距
                     if (padding.top == 0 && padding.bottom == 0) {
                         view.setHorizontalScrollContainerLineSpacing(

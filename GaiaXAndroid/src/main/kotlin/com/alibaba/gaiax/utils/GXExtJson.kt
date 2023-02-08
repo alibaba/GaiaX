@@ -41,7 +41,8 @@ fun JSON.getAnyExt(valuePath: String): Any? {
         // 数组
         if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
             val arrayName = valuePath.substring(0, arrayLeftSymbolIndex)
-            val arrayIndex = valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
+            val arrayIndex =
+                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
             return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex)
         }
 
@@ -82,6 +83,9 @@ fun JSON.getStringExtCanNull(expression: String): String? {
     return getAnyExt(expression) as? String
 }
 
+fun JSON.getJSONArrayExt(expression: String): JSONArray? {
+    return getAnyExt(expression) as? JSONArray
+}
 
 /**
  * 例子：keyParams = curKey.nextKey.key.key;
@@ -142,6 +146,97 @@ fun JSON.setValueExt(expression: String, value: Any) {
         }
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+}
+
+/**
+ * 通过Key值获取boolean类型数据
+ *
+ * @param expression
+ * @suppress
+ */
+fun JSON.getBooleanExt(expression: String): Boolean {
+    val value = this.getStringExt(expression)
+    return "true".equals(value, ignoreCase = true)
+}
+
+/**
+ * 通过Key值获取Int类型数据
+ *
+ * @param expression
+ * @suppress
+ */
+fun JSON.getIntExt(expression: String): Int {
+    val value = this.getStringExt(expression)
+    return try {
+        return if (value.isNotEmpty()) {
+            value.toInt()
+        } else {
+            JsonExt.ERROR_RESULT_INT
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        JsonExt.ERROR_RESULT_INT
+    }
+}
+
+/**
+ * 通过Key值获取long类型数据
+ *
+ * @param expression
+ * @suppress
+ */
+fun JSON.getLongExt(expression: String): Long {
+    val value = this.getStringExt(expression)
+    return try {
+        return if (value.isNotEmpty()) {
+            value.toLong()
+        } else {
+            JsonExt.ERROR_RESULT_LONG
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        JsonExt.ERROR_RESULT_LONG
+    }
+}
+
+/**
+ * 通过Key值获取float类型数据
+ *
+ * @param expression
+ * @suppress
+ */
+fun JSON.getFloatExt(expression: String): Float {
+    val value = this.getStringExt(expression)
+    return try {
+        return if (value.isNotEmpty()) {
+            value.toFloat()
+        } else {
+            JsonExt.ERROR_RESULT_FLOAT
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        JsonExt.ERROR_RESULT_FLOAT
+    }
+}
+
+/**
+ * 通过Key值获取double类型数据
+ *
+ * @param expression
+ * @suppress
+ */
+fun JSON.getDoubleExt(expression: String): Double {
+    val value = this.getStringExt(expression)
+    return try {
+        return if (value.isNotEmpty()) {
+            value.toDouble()
+        } else {
+            JsonExt.ERROR_RESULT_DOUBLE
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        JsonExt.ERROR_RESULT_DOUBLE
     }
 }
 

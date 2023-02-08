@@ -139,8 +139,7 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
     }
 
     open fun bindDesc(data: JSONObject?) {
-        val view = this
-        GXAccessibilityUtils.accessibilityOfImage(view, data)
+        GXAccessibilityUtils.accessibilityOfImage(this, data)
     }
 
     var gxTemplateContext: GXTemplateContext? = null

@@ -81,7 +81,6 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
 
     fun setTextStyle(css: GXCss) {
         val style = css.style
-        val flexbox = css.flexBox
 
         setFontPadding(style.padding)
 

@@ -441,9 +441,9 @@ data class GXFlexBox(
                 if (maxSizeForFinal == null) {
                     maxSizeForFinal = Size(
                         forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
-                        ?: Dimension.Undefined,
+                        ?: Dimension.Auto,
                         forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
-                        ?: Dimension.Undefined
+                        ?: Dimension.Auto
                     )
                     maxSizeForFinal
                 } else {
@@ -482,9 +482,9 @@ data class GXFlexBox(
                 if (minSizeForFinal == null) {
                     minSizeForFinal = Size(
                         forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
-                        ?: Dimension.Undefined,
+                        ?: Dimension.Auto,
                         forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
-                        ?: Dimension.Undefined
+                        ?: Dimension.Auto
                     )
                     minSizeForFinal
                 } else {
@@ -567,13 +567,13 @@ data class GXFlexBox(
                 if (borderForFinal == null) {
                     borderForFinal = Rect(
                         forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
-                        ?: Dimension.Auto
+                        ?: Dimension.Undefined
                     )
                     borderForFinal
                 } else {
@@ -614,13 +614,13 @@ data class GXFlexBox(
                 if (paddingForFinal == null) {
                     paddingForFinal = Rect(
                         forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
-                        ?: Dimension.Auto
+                        ?: Dimension.Undefined
                     )
                     paddingForFinal
                 } else {
@@ -661,13 +661,13 @@ data class GXFlexBox(
                 if (marginForFinal == null) {
                     marginForFinal = Rect(
                         forExtend?.start?.valueDimension ?: forTemplate?.start?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.end?.valueDimension ?: forTemplate?.end?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.top?.valueDimension ?: forTemplate?.top?.valueDimension
-                        ?: Dimension.Auto,
+                        ?: Dimension.Undefined,
                         forExtend?.bottom?.valueDimension ?: forTemplate?.bottom?.valueDimension
-                        ?: Dimension.Auto
+                        ?: Dimension.Undefined
                     )
                     marginForFinal
                 } else {

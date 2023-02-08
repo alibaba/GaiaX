@@ -33,7 +33,7 @@ android {
         testInstrumentationRunner 'androidx.benchmark.junit4.AndroidBenchmarkRunner'
         // https://developer.android.google.cn/topic/performance/benchmarking/microbenchmark-profile?hl=zh-cn#method-tracing
         // must be one of: 'None', 'StackSampling', or 'MethodTracing'
-        testInstrumentationRunnerArguments["androidx.benchmark.profiling.mode"] = "MethodTracing"
+        testInstrumentationRunnerArguments["androidx.benchmark.profiling.mode"] = "StackSampling"
         testInstrumentationRunnerArguments["androidx.benchmark.profiling.sampleDurationSeconds"] = "10"
     }
 

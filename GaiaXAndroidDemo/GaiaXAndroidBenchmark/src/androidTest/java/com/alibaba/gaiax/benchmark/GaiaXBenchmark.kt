@@ -58,43 +58,6 @@ class GaiaXBenchmark {
         }
     }
 
-    @Test
-    fun profiler_dianbo_item_single_measure_createview() {
-
-        val bizId = "templates"
-        val templateId = "profiler_dianbo_item_single"
-
-        benchmarkRule.measureRepeated {
-            val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
-                context, bizId, templateId
-            )
-            val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
-            val rootView = GXTemplateEngine.instance.createView(
-                gxTemplateItem, gxMeasureSize
-            )
-        }
-    }
-
-    @Test
-    fun profiler_dianbo_item_single_measure_binddata() {
-
-        val bizId = "templates"
-        val templateId = "profiler_dianbo_item_single"
-
-        val data = readJsonFromAssets("data/$templateId.json")
-        val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
-            context, bizId, templateId
-        )
-        val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
-        val rootView = GXTemplateEngine.instance.createView(
-            gxTemplateItem, gxMeasureSize
-        )
-        benchmarkRule.measureRepeated {
-            val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
-            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
-        }
-    }
-
     private fun readJsonFromAssets(path: String) = JSONObject.parseObject(
         context.assets.open(path).reader(Charset.forName("utf-8")).readText()
     )

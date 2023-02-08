@@ -14,9 +14,9 @@ class NormalTemplateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_normal_template)
 
-//        renderTemplate1(this)
+        renderTemplate1(this)
         renderTemplate2(this)
-//        renderTemplate3(this)
+        renderTemplate3(this)
     }
 
     private fun renderTemplate1(activity: NormalTemplateActivity) {

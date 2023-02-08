@@ -37,6 +37,18 @@ fun View?.width(): Float {
     return this?.layoutParams?.width?.toFloat() ?: 0F
 }
 
+fun View?.lp(): AbsoluteLayout.LayoutParams {
+    return this?.layoutParams as AbsoluteLayout.LayoutParams
+}
+
+fun View?.lpX(): Float {
+    return (this?.layoutParams as AbsoluteLayout.LayoutParams).x.toFloat()
+}
+
+fun View?.lpY(): Float {
+    return (this?.layoutParams as AbsoluteLayout.LayoutParams).y.toFloat()
+}
+
 fun View?.height(): Float {
     return this?.layoutParams?.height?.toFloat() ?: 0F
 }

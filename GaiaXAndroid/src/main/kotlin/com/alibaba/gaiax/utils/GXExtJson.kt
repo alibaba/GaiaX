@@ -41,9 +41,8 @@ fun JSON.getAnyExt(valuePath: String): Any? {
         // 数组
         if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
             val arrayName = valuePath.substring(0, arrayLeftSymbolIndex).trim()
-            val arrayIndex =
-                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
-            return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex) as? JSONObject
+            val arrayIndex = valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
+            return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex)
         }
 
         // 对象

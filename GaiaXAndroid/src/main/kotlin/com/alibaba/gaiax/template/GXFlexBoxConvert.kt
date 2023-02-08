@@ -230,15 +230,15 @@ object GXFlexBoxConvert {
             return Rect(size, size, size, size)
         }
 
-        val left = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_LEFT)
-        val right = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_RIGHT)
+        val start = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_LEFT)
+        val end = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_TOP)
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_MARGIN_BOTTOM)
 
-        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
-                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!start.isNullOrEmpty()) GXSize.create(start) else null,
+                if (!end.isNullOrEmpty()) GXSize.create(end) else null,
                 if (!top.isNullOrEmpty()) GXSize.create(top) else null,
                 if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
@@ -254,15 +254,15 @@ object GXFlexBoxConvert {
             return Rect(size, size, size, size)
         }
 
-        val left = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_LEFT)
-        val right = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_RIGHT)
+        val start = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_LEFT)
+        val end = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_TOP)
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_PADDING_BOTTOM)
 
-        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
-                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!start.isNullOrEmpty()) GXSize.create(start) else null,
+                if (!end.isNullOrEmpty()) GXSize.create(end) else null,
                 if (!top.isNullOrEmpty()) GXSize.create(top) else null,
                 if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
@@ -279,15 +279,15 @@ object GXFlexBoxConvert {
             return Rect(size, size, size, size)
         }
 
-        val left = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_LEFT)
-        val right = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_RIGHT)
+        val start = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_LEFT)
+        val end = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_TOP)
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_BORDER_BOTTOM)
 
-        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
-                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!start.isNullOrEmpty()) GXSize.create(start) else null,
+                if (!end.isNullOrEmpty()) GXSize.create(end) else null,
                 if (!top.isNullOrEmpty()) GXSize.create(top) else null,
                 if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )
@@ -298,14 +298,14 @@ object GXFlexBoxConvert {
 
     fun position(cssJson: JSONObject): Rect<GXSize?>? {
         if (positionType(cssJson) == PositionType.Absolute) {
-            val left = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
-            val right = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
+            val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
+            val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
             val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
             val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
-            if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+            if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
                 return Rect(
-                    if (!left.isNullOrEmpty()) GXSize.create(left) else null,
-                    if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                    if (!start.isNullOrEmpty()) GXSize.create(start) else null,
+                    if (!end.isNullOrEmpty()) GXSize.create(end) else null,
                     if (!top.isNullOrEmpty()) GXSize.create(top) else null,
                     if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
                 )
@@ -315,14 +315,14 @@ object GXFlexBoxConvert {
     }
 
     fun position2(cssJson: JSONObject): Rect<GXSize?>? {
-        val left = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
-        val right = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
+        val start = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_LEFT)
+        val end = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_RIGHT)
         val top = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_TOP)
         val bottom = cssJson.getString(GXTemplateKey.FLEXBOX_POSITION_BOTTOM)
-        if (!left.isNullOrEmpty() || !right.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
+        if (!start.isNullOrEmpty() || !end.isNullOrEmpty() || !top.isNullOrEmpty() || !bottom.isNullOrEmpty()) {
             return Rect(
-                if (!left.isNullOrEmpty()) GXSize.create(left) else null,
-                if (!right.isNullOrEmpty()) GXSize.create(right) else null,
+                if (!start.isNullOrEmpty()) GXSize.create(start) else null,
+                if (!end.isNullOrEmpty()) GXSize.create(end) else null,
                 if (!top.isNullOrEmpty()) GXSize.create(top) else null,
                 if (!bottom.isNullOrEmpty()) GXSize.create(bottom) else null
             )

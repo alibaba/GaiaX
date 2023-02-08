@@ -22,38 +22,39 @@ import com.alibaba.fastjson.JSONObject
  * @suppress
  */
 data class GXProgressConfig(
-    private val strokeColor: GXColor,
-    private val trailColor: GXColor,
-    private val progressType: String,
-    private val animated: Boolean
+    private val strokeColorForTemplate: GXColor,
+    private val trailColorForTemplate: GXColor,
+    private val progressTypeForTemplate: String,
+    private val animatedForTemplate: Boolean
 ) {
-    private var _strokeColor: GXColor? = null
-    private var _trailColor: GXColor? = null
-    private var _progressType: String? = null
-    private var _animated: Boolean? = null
+
+    private var strokeColorForExtend: GXColor? = null
+    private var trailColorForExtend: GXColor? = null
+    private var progressTypeForExtend: String? = null
+    private var animatedForExtend: Boolean? = null
 
     fun reset() {
-        _strokeColor = null
-        _trailColor = null
-        _progressType = null
-        _animated = null
+        strokeColorForExtend = null
+        trailColorForExtend = null
+        progressTypeForExtend = null
+        animatedForExtend = null
     }
 
-    val strokeColorFinal: GXColor
+    val strokeColor: GXColor
         get() {
-            return _strokeColor ?: strokeColor
+            return strokeColorForExtend ?: strokeColorForTemplate
         }
-    val trailColorFinal: GXColor
+    val trailColor: GXColor
         get() {
-            return _trailColor ?: trailColor
+            return trailColorForExtend ?: trailColorForTemplate
         }
-    val progressTypeFinal: String
+    val progressType: String
         get() {
-            return _progressType ?: progressType
+            return progressTypeForExtend ?: progressTypeForTemplate
         }
-    val animatedFinal: Boolean
+    val animated: Boolean
         get() {
-            return _animated ?: animated
+            return animatedForExtend ?: animatedForTemplate
         }
 
     fun updateByExtend(extendCssData: JSONObject) {
@@ -68,16 +69,16 @@ data class GXProgressConfig(
         val progressType = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE)
         val animated = extendCssData.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED)
         if (strokeColor != null) {
-            _strokeColor = strokeColor
+            strokeColorForExtend = strokeColor
         }
         if (trailColor != null) {
-            _trailColor = trailColor
+            trailColorForExtend = trailColor
         }
         if (progressType != null) {
-            _progressType = progressType
+            progressTypeForExtend = progressType
         }
         if (animated != null) {
-            _animated = animated
+            animatedForExtend = animated
         }
     }
 
@@ -91,9 +92,7 @@ data class GXProgressConfig(
             } ?: GXColor.createHex("#BBBBBB")
             val progressType = data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE) ?: "line"
             val animated = data.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED) ?: true
-            return GXProgressConfig(
-                strokeColor, trailColor, progressType, animated
-            )
+            return GXProgressConfig(strokeColor, trailColor, progressType, animated)
         }
     }
 }

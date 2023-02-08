@@ -52,7 +52,7 @@ object GXContainerConvert {
         null
     }
 
-    fun spacing(itemSpacing: String?): Int {
-        return itemSpacing?.let { GXSize.create(it).valueInt } ?: 0
+    fun spacing(target: String?): Int {
+        return target?.let { GXSize.create(it).valueInt } ?: 0
     }
 }

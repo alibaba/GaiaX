@@ -390,9 +390,9 @@ fun View.setDisplay(visibility: Int?) {
 fun View.setGridContainerDirection(
     context: GXTemplateContext, config: GXGridConfig, layout: Layout?
 ) {
-    val direction: Int = config.directionFinal
+    val direction: Int = config.direction
     val column: Int = config.column(context)
-    val scrollEnable: Boolean = config.scrollEnableFinal
+    val scrollEnable: Boolean = config.scrollEnable
     if (this is RecyclerView) {
         val needForceRefresh =
             (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)

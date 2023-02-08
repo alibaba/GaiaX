@@ -24,82 +24,82 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
  * @suppress
  */
 data class GXSliderConfig(
-    private val scrollTimeInterval: Long,
-    private val infinityScroll: Boolean,
-    private val hasIndicator: Boolean,
-    private val selectedIndex: Int,
-    private val indicatorSelectedColor: GXColor,
-    private val indicatorUnselectedColor: GXColor,
-    private val indicatorMargin: Rect<GXSize>,
-    private val indicatorPosition: GXSliderView.IndicatorPosition,
-    private val indicatorClass: String?
+    private val scrollTimeIntervalForTemplate: Long,
+    private val infinityScrollForTemplate: Boolean,
+    private val hasIndicatorForTemplate: Boolean,
+    private val selectedIndexForTemplate: Int,
+    private val indicatorSelectedColorForTemplate: GXColor,
+    private val indicatorUnselectedColorForTemplate: GXColor,
+    private val indicatorMarginForTemplate: Rect<GXSize>,
+    private val indicatorPositionForTemplate: GXSliderView.IndicatorPosition,
+    private val indicatorClassForTemplate: String?
 ) {
-    private var _scrollTimeInterval: Long? = null
-    private var _infinityScroll: Boolean? = null
-    private var _hasIndicator: Boolean? = null
-    private var _selectedIndex: Int? = null
-    private var _indicatorSelectedColor: GXColor? = null
-    private var _indicatorUnselectedColor: GXColor? = null
-    private var _indicatorMargin: Rect<GXSize>? = null
-    private var _indicatorPosition: GXSliderView.IndicatorPosition? = null
-    private var _indicatorClass: String? = null
+    private var scrollTimeIntervalForExtend: Long? = null
+    private var infinityScrollForExtend: Boolean? = null
+    private var hasIndicatorForExtend: Boolean? = null
+    private var selectedIndexForExtend: Int? = null
+    private var indicatorSelectedColorForExtend: GXColor? = null
+    private var indicatorUnselectedColorForExtend: GXColor? = null
+    private var indicatorMarginForExtend: Rect<GXSize>? = null
+    private var indicatorPositionForExtend: GXSliderView.IndicatorPosition? = null
+    private var indicatorClassForExtend: String? = null
 
     fun reset() {
-        _scrollTimeInterval = null
-        _infinityScroll = null
-        _hasIndicator = null
-        _selectedIndex = null
-        _indicatorSelectedColor = null
-        _indicatorUnselectedColor = null
-        _indicatorMargin = null
-        _indicatorPosition = null
-        _indicatorClass = null
+        scrollTimeIntervalForExtend = null
+        infinityScrollForExtend = null
+        hasIndicatorForExtend = null
+        selectedIndexForExtend = null
+        indicatorSelectedColorForExtend = null
+        indicatorUnselectedColorForExtend = null
+        indicatorMarginForExtend = null
+        indicatorPositionForExtend = null
+        indicatorClassForExtend = null
     }
 
-    val scrollTimeIntervalFinal: Long
+    val scrollTimeInterval: Long
         get() {
-            return _scrollTimeInterval ?: scrollTimeInterval
+            return scrollTimeIntervalForExtend ?: scrollTimeIntervalForTemplate
         }
 
-    val infinityScrollFinal: Boolean
+    val infinityScroll: Boolean
         get() {
-            return _infinityScroll ?: infinityScroll
+            return infinityScrollForExtend ?: infinityScrollForTemplate
         }
 
-    val hasIndicatorFinal: Boolean
+    val hasIndicator: Boolean
         get() {
-            return _hasIndicator ?: hasIndicator
+            return hasIndicatorForExtend ?: hasIndicatorForTemplate
         }
 
-    val selectedIndexFinal: Int
+    val selectedIndex: Int
         get() {
-            return _selectedIndex ?: selectedIndex
+            return selectedIndexForExtend ?: selectedIndexForTemplate
         }
 
-    val indicatorSelectedColorFinal: GXColor
+    val indicatorSelectedColor: GXColor
         get() {
-            return _indicatorSelectedColor ?: indicatorSelectedColor
+            return indicatorSelectedColorForExtend ?: indicatorSelectedColorForTemplate
         }
 
-    val indicatorUnselectedColorFinal: GXColor
+    val indicatorUnselectedColor: GXColor
         get() {
-            return _indicatorUnselectedColor ?: indicatorUnselectedColor
+            return indicatorUnselectedColorForExtend ?: indicatorUnselectedColorForTemplate
         }
 
-    val indicatorMarginFinal: Rect<GXSize>
+    val indicatorMargin: Rect<GXSize>
         get() {
-            return _indicatorMargin ?: indicatorMargin
-        }
-    val indicatorPositionFinal: GXSliderView.IndicatorPosition
-        get() {
-            return _indicatorPosition ?: indicatorPosition
+            return indicatorMarginForExtend ?: indicatorMarginForTemplate
         }
 
-    val indicatorClassFinal: String?
+    val indicatorPosition: GXSliderView.IndicatorPosition
         get() {
-            return _indicatorClass ?: indicatorClass
+            return indicatorPositionForExtend ?: indicatorPositionForTemplate
         }
 
+    val indicatorClass: String?
+        get() {
+            return indicatorClassForExtend ?: indicatorClassForTemplate
+        }
 
     fun updateByExtend(extendCssData: JSONObject) {
         val scrollTimeInterval =
@@ -131,31 +131,31 @@ data class GXSliderConfig(
             extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_CLASS)
 
         if (scrollTimeInterval != null) {
-            _scrollTimeInterval = scrollTimeInterval
+            scrollTimeIntervalForExtend = scrollTimeInterval
         }
         if (infinityScroll != null) {
-            _infinityScroll = infinityScroll
+            infinityScrollForExtend = infinityScroll
         }
         if (hasIndicator != null) {
-            _hasIndicator = hasIndicator
+            hasIndicatorForExtend = hasIndicator
         }
         if (selectedIndex != null) {
-            _selectedIndex = selectedIndex
+            selectedIndexForExtend = selectedIndex
         }
         if (indicatorSelectedColor != null) {
-            _indicatorSelectedColor = indicatorSelectedColor
+            indicatorSelectedColorForExtend = indicatorSelectedColor
         }
         if (indicatorUnselectedColor != null) {
-            _indicatorUnselectedColor = indicatorUnselectedColor
+            indicatorUnselectedColorForExtend = indicatorUnselectedColor
         }
         if (indicatorMargin != null) {
-            _indicatorMargin = indicatorMargin
+            indicatorMarginForExtend = indicatorMargin
         }
         if (indicatorPosition != null) {
-            _indicatorPosition = indicatorPosition
+            indicatorPositionForExtend = indicatorPosition
         }
         if (indicatorClass != null) {
-            _indicatorClass = indicatorClass
+            indicatorClassForExtend = indicatorClass
         }
     }
 

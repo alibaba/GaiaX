@@ -101,11 +101,11 @@ class GXProgressView : View, GXIViewBindData {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        mPaint.color = config?.trailColorFinal?.value(context) ?: Color.GRAY
+        mPaint.color = config?.trailColor?.value(context) ?: Color.GRAY
         canvas?.drawPath(bgPath, mPaint)
 
         if (percent > 0) {
-            mPaint.color = config?.strokeColorFinal?.value(context) ?: Color.BLUE
+            mPaint.color = config?.strokeColor?.value(context) ?: Color.BLUE
             canvas?.drawPath(progressPath, mPaint)
         }
     }
@@ -113,7 +113,7 @@ class GXProgressView : View, GXIViewBindData {
     private fun updateProgressPath() {
         val progressWidth = (measuredWidth - PADDING * 2) * percent
 
-        if (config?.animatedFinal == false) {
+        if (config?.animated == false) {
             progressPath.reset()
             progressPath.moveTo(PADDING, PADDING)
             progressPath.lineTo(PADDING + progressWidth, PADDING)

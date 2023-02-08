@@ -1261,7 +1261,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     gxTemplateContext, it, gxNode.stretchNode.layoutByBind
                 )
                 view.setGridContainerItemSpacingAndRowSpacing(
-                    gxNode.getPaddingRect(), it.itemSpacingFinal, it.rowSpacingFinal
+                    gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
                 )
             }
         }

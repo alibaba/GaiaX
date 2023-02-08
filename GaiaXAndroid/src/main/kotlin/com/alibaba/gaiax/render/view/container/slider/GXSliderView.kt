@@ -104,7 +104,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
             }
 
             override fun onPageSelected(position: Int) {
-                if (config?.hasIndicatorFinal == true) {
+                if (config?.hasIndicator == true) {
                     indicatorView?.updateSelectedIndex(position % pageSize)
                 }
             }
@@ -134,14 +134,14 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
 
         val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
-        config?.indicatorMarginFinal?.let {
+        config?.indicatorMargin?.let {
             layoutParams.leftMargin = it.start.valueInt
             layoutParams.topMargin = it.top.valueInt
             layoutParams.rightMargin = it.end.valueInt
             layoutParams.bottomMargin = it.bottom.valueInt
         }
 
-        when (config?.indicatorPositionFinal) {
+        when (config?.indicatorPosition) {
             IndicatorPosition.TOP_LEFT -> {
                 layoutParams.gravity = Gravity.TOP or Gravity.LEFT
             }
@@ -167,7 +167,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     private fun createIndicatorView(): GXSliderBaseIndicatorView {
-        config?.indicatorClassFinal?.let { it ->
+        config?.indicatorClass?.let { it ->
             try {
                 (Class.forName(it).getConstructor(Context::class.java)
                     .newInstance(context) as? GXSliderBaseIndicatorView)?.let { customIndicatorView ->
@@ -184,12 +184,12 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     fun setConfig(config: GXSliderConfig?) {
         this.config = config
 
-        if (config?.hasIndicatorFinal == true) {
+        if (config?.hasIndicator == true) {
             initIndicator()
 
             indicatorView?.setIndicatorColor(
-                config.indicatorSelectedColorFinal.value(context),
-                config.indicatorUnselectedColorFinal.value(context)
+                config.indicatorSelectedColor.value(context),
+                config.indicatorUnselectedColor.value(context)
             )
         }
     }
@@ -201,7 +201,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     private fun updateView() {
         stopTimer()
 
-        config?.selectedIndexFinal?.let {
+        config?.selectedIndex?.let {
             viewPager?.adapter?.count?.let { count ->
                 if (it in 0 until count) {
                     viewPager?.setCurrentItem(it, false)
@@ -221,7 +221,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     private fun startTimer() {
         stopTimer()
 
-        config?.scrollTimeIntervalFinal?.let {
+        config?.scrollTimeInterval?.let {
             if (it > 0) {
                 timer = Timer()
                 timerTask = object : TimerTask() {

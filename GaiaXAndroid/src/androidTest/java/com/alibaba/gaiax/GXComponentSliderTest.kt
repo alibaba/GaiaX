@@ -94,23 +94,23 @@ class GXComponentSliderTest : GXBaseTest() {
 
         val gxSliderView = rootView as GXSliderView
         val config = gxSliderView.getConfig()
-        Assert.assertEquals(3000L, config?.scrollTimeIntervalFinal)
-        Assert.assertEquals(true, config?.infinityScrollFinal)
-        Assert.assertEquals(true, config?.hasIndicatorFinal)
-        Assert.assertEquals(1, config?.selectedIndexFinal)
-        Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColorFinal?.value())
-        Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColorFinal?.value())
+        Assert.assertEquals(3000L, config?.scrollTimeInterval)
+        Assert.assertEquals(true, config?.infinityScroll)
+        Assert.assertEquals(true, config?.hasIndicator)
+        Assert.assertEquals(1, config?.selectedIndex)
+        Assert.assertEquals(Color.parseColor("#FFFFFF"), config?.indicatorSelectedColor?.value())
+        Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor?.value())
         Assert.assertEquals(
             Rect(
                 GXSize.create("30"),
                 GXSize.create("30"),
                 GXSize.create("10"),
                 GXSize.create("10")
-            ), config?.indicatorMarginFinal
+            ), config?.indicatorMargin
         )
-        Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPositionFinal)
+        Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPosition)
         Assert.assertEquals(
-            "com.alibaba.gaiax.customview.CustomSliderIndicatorView", config?.indicatorClassFinal
+            "com.alibaba.gaiax.customview.CustomSliderIndicatorView", config?.indicatorClass
         )
     }
 }

@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.template
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -26,58 +25,51 @@ import com.alibaba.gaiax.context.GXTemplateContext
  * @suppress
  */
 data class GXGridConfig(
-    val data: JSONObject, val column: Int = 1, val direction: Int = RecyclerView.VERTICAL,
-    /**
-     * Item spacing
-     */
-    val itemSpacing: Int = 0,
-    /**
-     * Spacing perpendicular to the item spacing
-     */
-    val rowSpacing: Int = 0,
-    /**
-     * scrollable
-     */
-    val scrollEnable: Boolean = false
+    val data: JSONObject,
+    private val columnForTemplate: Int,
+    private val directionForTemplate: Int,
+    private val itemSpacingForTemplate: Int,
+    private val rowSpacingForTemplate: Int,
+    private val scrollEnableForTemplate: Boolean
 ) {
 
-    private var _column: Int? = null
-    private var _direction: Int? = null
-    private var _itemSpacing: Int? = null
-    private var _rowSpacing: Int? = null
-    private var _scrollEnable: Boolean? = null
+    private var columnForExtend: Int? = null
+    private var directionForExtend: Int? = null
+    private var itemSpacingForExtend: Int? = null
+    private var rowSpacingForExtend: Int? = null
+    private var scrollEnableForExtend: Boolean? = null
 
     fun reset() {
-        _column = null
-        _direction = null
-        _itemSpacing = null
-        _rowSpacing = null
-        _scrollEnable = null
+        columnForExtend = null
+        directionForExtend = null
+        itemSpacingForExtend = null
+        rowSpacingForExtend = null
+        scrollEnableForExtend = null
     }
 
-    private val columnFinal: Int
+    val column: Int
         get() {
-            return _column ?: column
+            return columnForExtend ?: columnForTemplate
         }
 
-    val directionFinal: Int
+    val direction: Int
         get() {
-            return _direction ?: direction
+            return directionForExtend ?: directionForTemplate
         }
 
-    val itemSpacingFinal: Int
+    val itemSpacing: Int
         get() {
-            return _itemSpacing ?: itemSpacing
+            return itemSpacingForExtend ?: itemSpacingForTemplate
         }
 
-    val rowSpacingFinal: Int
+    val rowSpacing: Int
         get() {
-            return _rowSpacing ?: rowSpacing
+            return rowSpacingForExtend ?: rowSpacingForTemplate
         }
 
-    val scrollEnableFinal: Boolean
+    val scrollEnable: Boolean
         get() {
-            return _scrollEnable ?: scrollEnable
+            return scrollEnableForExtend ?: scrollEnableForTemplate
         }
 
     fun column(context: GXTemplateContext): Int {
@@ -86,17 +78,17 @@ data class GXGridConfig(
         )?.let {
             return it as Int
         }
-        return columnFinal
+        return column
     }
 
     val isVertical
         get():Boolean {
-            return directionFinal == LinearLayoutManager.VERTICAL
+            return direction == LinearLayoutManager.VERTICAL
         }
 
     val isHorizontal
         get():Boolean {
-            return directionFinal == LinearLayoutManager.HORIZONTAL
+            return direction == LinearLayoutManager.HORIZONTAL
         }
 
     companion object {
@@ -133,22 +125,22 @@ data class GXGridConfig(
             rowSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_INTERITEM_SPACING)
         }
         if (gridColumn != null) {
-            _column = Math.max(gridColumn, 1)
+            columnForExtend = Math.max(gridColumn, 1)
         }
         if (itemSpacing != null) {
-            _itemSpacing = GXContainerConvert.spacing(itemSpacing)
+            itemSpacingForExtend = GXContainerConvert.spacing(itemSpacing)
         }
         if (rowSpacing != null) {
-            _rowSpacing = GXContainerConvert.spacing(rowSpacing)
+            rowSpacingForExtend = GXContainerConvert.spacing(rowSpacing)
         }
         if (scrollEnable != null) {
-            _scrollEnable = scrollEnable
+            scrollEnableForExtend = scrollEnable
         }
     }
 
 
     override fun toString(): String {
-        return "GXGridConfig(column=$column, direction=$direction, itemSpacing=$itemSpacing, rowSpacing=$rowSpacing)"
+        return "GXGridConfig(column=$columnForTemplate, direction=$directionForTemplate, itemSpacing=$itemSpacingForTemplate, rowSpacing=$rowSpacingForTemplate)"
     }
 
 

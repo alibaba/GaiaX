@@ -26,10 +26,10 @@ import com.alibaba.fastjson.JSONObject
  */
 data class GXScrollConfig(
     val data: JSONObject,
-    private var directionForTemplate: Int = LinearLayoutManager.VERTICAL,
-    private var itemSpacingForTemplate: Int = 0,
-    private var edgeInsetsForTemplate: Rect = Rect(0, 0, 0, 0),
-    private var gravityForTemplate: Int = Gravity.TOP
+    private var directionForTemplate: Int,
+    private var itemSpacingForTemplate: Int,
+    private var edgeInsetsForTemplate: Rect,
+    private var gravityForTemplate: Int
 ) {
 
     private var directionForExtend: Int? = null
@@ -71,22 +71,13 @@ data class GXScrollConfig(
             itemSpacing: String?,
             gravity: Int?
         ): GXScrollConfig {
-            val config = GXScrollConfig(data)
-            if (direction != null) {
-                config.directionForTemplate = GXContainerConvert.direction(direction)
-            }
-            if (itemSpacing != null) {
-                config.itemSpacingForTemplate = GXContainerConvert.spacing(itemSpacing)
-            }
-            if (edgeInsets != null) {
-                GXContainerConvert.edgeInsets2(edgeInsets)?.let {
-                    config.edgeInsetsForTemplate = it
-                }
-            }
-            if (gravity != null) {
-                config.gravityForTemplate = gravity
-            }
-            return config
+            return GXScrollConfig(
+                data,
+                GXContainerConvert.direction(direction ?: GXTemplateKey.GAIAX_VERTICAL),
+                GXContainerConvert.spacing(itemSpacing),
+                GXContainerConvert.edgeInsets2(edgeInsets) ?: Rect(0, 0, 0, 0),
+                gravity ?: Gravity.TOP
+            )
         }
     }
 

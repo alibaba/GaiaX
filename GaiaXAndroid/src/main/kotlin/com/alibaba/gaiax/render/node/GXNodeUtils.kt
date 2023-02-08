@@ -447,7 +447,7 @@ object GXNodeUtils {
             return when {
                 gridConfig.isVertical -> {
                     val totalItemSpacing =
-                        gridConfig.itemSpacingFinal * (gridConfig.column(gxTemplateContext) - 1)
+                        gridConfig.itemSpacing * (gridConfig.column(gxTemplateContext) - 1)
 
                     val paddingRect = gxNode.getPaddingRect()
 
@@ -549,7 +549,7 @@ object GXNodeUtils {
 
                     // 计算高度
                     containerHeight *= lines
-                    containerHeight += finalGridConfig.rowSpacingFinal * (lines - 1)
+                    containerHeight += finalGridConfig.rowSpacing * (lines - 1)
 
                     // 处理padding
                     val padding = gxNode.getPaddingRect()

@@ -192,8 +192,7 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
             // GXText needs to be handled separately
             // @see GXViewExt.setFontBackgroundImage
         } else {
-            val drawable = backgroundImage.createDrawable()
-            this.background = drawable
+            this.background = backgroundImage.createDrawable()
         }
     } else if (backgroundColor != null) {
         val drawable = GXColorGradientDrawable(

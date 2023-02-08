@@ -21,17 +21,18 @@ import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXCss
+import com.alibaba.gaiax.template.GXStyle
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
@@ -100,6 +101,25 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         setFontTextLineHeight(style)
 
         setFontTextDecoration(style.fontTextDecoration)
+    }
+
+    private var lastLineHeight: Float? = null
+    private fun setFontTextLineHeight(style: GXStyle) {
+        val lineHeight = style.fontLineHeight?.valueFloat
+        if (lineHeight != null && lastLineHeight != lineHeight) {
+            val result = GXRegisterCenter.instance.extensionDynamicProperty?.convert(
+                GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                    GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight
+                ).apply {
+                    this.cssStyle = style
+                })
+            if (result != null) {
+                this.setTextLineHeight(result as Float)
+            } else {
+                this.setTextLineHeight(lineHeight)
+            }
+        }
+        this.lastLineHeight = lineHeight
     }
 
     private var lastRadius: FloatArray? = null

@@ -1,0 +1,154 @@
+#profiler-uper-top {
+  width: 100%;
+  height: 48px;
+  padding-left: youku_margin_left;
+  padding-right: youku_margin_right;
+  overflow: visible;
+}
+#header {
+  height: 36px;
+  width: 36px;
+  overflow: hidden;
+}
+#header-img {
+  background-color: primaryFillColor;
+  background-size: cover;
+  border-color: outline;
+  border-width: 0.5px;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 36px;
+  width: 36px;
+}
+#v-icon {
+  right: 0px;
+  bottom: 0px;
+  width: 12px;
+  height: 12px;
+  overflow: hidden;
+  position: absolute;
+}
+#text-area {
+  justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 36px;
+  margin-left: 9px;
+  margin-right: 9px;
+  overflow: hidden;
+}
+#title-view {
+  width: 100%;
+  height: 20px;
+}
+#title {
+  font-family: PingFangSC-Semibold;
+  color: primaryInfo;
+  line-height: 20px;
+  overflow: hidden;
+  font-size: 14px;
+  height: 20px;
+  font-weight: 700;
+  fit-content: true;
+}
+#circleMark {
+  width: 42px;
+  height: 19px;
+  border-radius: 7px;
+  margin-left: 6px;
+}
+#sub-view {
+  overflow: hidden;
+  height: 16px;
+  width: 100%;
+}
+#sub-reason {
+  font-family: PingFangSC-Regular;
+  color: #ff6f3b;
+  line-height: 16px;
+  overflow: hidden;
+  font-size: 11px;
+  height: 16px;
+  width: 120px;
+}
+#sub-point {
+  font-family: PingFangSC-Regular;
+  color: tertiaryInfo;
+  line-height: 16px;
+  overflow: hidden;
+  font-size: 11px;
+  height: 16px;
+  width: 6px;
+}
+#sub-title {
+  font-family: PingFangSC-Regular;
+  color: tertiaryInfo;
+  line-height: 16px;
+  overflow: hidden;
+  font-size: 11px;
+  height: 16px;
+  flex-grow: 1;
+}
+#topclick {
+  width: 100%;
+  height: 36px;
+  position: absolute;
+  right: 100px;
+}
+#follow {
+  overflow: hidden;
+  height: 30px;
+  width: 60px;
+}
+#follow-bg {
+  position: absolute;
+  border-radius: 15px;
+  border-width: 1px;
+  width: 60px;
+  height: 30px;
+}
+#follow-text {
+  color: #24a5ff;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  text-align: center;
+  width: 60px;
+}
+#setTop {
+  overflow: hidden;
+  width: 32px;
+  height: 16px;
+}
+#setTop-bg {
+  position: absolute;
+  border-radius: 2px;
+  width: 32px;
+  height: 16px;
+  background-image: linear-gradient(to right, #4bb5ff, #6de7f3);
+}
+#setTop-text {
+  color: #ffffff;
+  font-size: 10px;
+  height: 16px;
+  line-height: 14px;
+  overflow: hidden;
+  text-align: center;
+  width: 32px;
+}
+#more {
+  margin-left: 0px;
+  margin-right: -9px;
+  background-size: contain;
+  height: 30px;
+  width: 34px;
+  justify-content: center;
+  align-items: center;
+}
+#more-icon {
+  height: 16px;
+  width: 16px;
+  color: quaternaryInfo;
+  font-size: 16px;
+}

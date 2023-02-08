@@ -1,0 +1,12 @@
+{
+  "config": { "render": { "type": "async_single", "preload": true } },
+  "data": {
+    "cover-img": {
+      "value": "${data.poster.img}",
+      "summary": "${data.summary}"
+    },
+    "play-vv-icon": "${data.player.playIcon}",
+    "play-vv-text": "${data.player.vv}",
+    "title": { "value": "${data.title}" }
+  }
+}

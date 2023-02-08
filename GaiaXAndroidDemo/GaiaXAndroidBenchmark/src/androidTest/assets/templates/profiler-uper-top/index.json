@@ -1,0 +1,60 @@
+{
+  "id": "profiler-uper-top",
+  "type": "gaia-template",
+  "exp-version": "V1",
+  "layers": [
+    {
+      "id": "header",
+      "type": "view",
+      "layers": [
+        { "id": "header-img", "type": "image" },
+        { "id": "v-icon", "type": "image" }
+      ]
+    },
+    {
+      "id": "text-area",
+      "type": "view",
+      "layers": [
+        {
+          "id": "title-view",
+          "type": "view",
+          "layers": [
+            { "id": "title", "type": "text" },
+            { "id": "circleMark", "type": "image" }
+          ]
+        },
+        {
+          "id": "sub-view",
+          "type": "view",
+          "layers": [
+            { "id": "sub-reason", "type": "text" },
+            { "id": "sub-point", "type": "text" },
+            { "id": "sub-title", "type": "text" }
+          ]
+        }
+      ]
+    },
+    { "id": "topclick", "type": "image" },
+    {
+      "id": "follow",
+      "type": "view",
+      "layers": [
+        { "id": "follow-bg", "type": "image" },
+        { "id": "follow-text", "type": "text" }
+      ]
+    },
+    {
+      "id": "setTop",
+      "type": "view",
+      "layers": [
+        { "id": "setTop-bg", "type": "view" },
+        { "id": "setTop-text", "type": "text" }
+      ]
+    },
+    {
+      "id": "more",
+      "type": "view",
+      "layers": [{ "id": "more-icon", "type": "iconfont" }]
+    }
+  ]
+}

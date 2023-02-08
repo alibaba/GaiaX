@@ -1,0 +1,18 @@
+{
+  "id": "profiler_uper",
+  "type": "gaia-template",
+  "exp-version": "V1",
+  "layers": [
+    {
+      "id": "profiler-uper-top",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "profiler-uper-scroll",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    { "id": "line", "type": "view" }
+  ]
+}

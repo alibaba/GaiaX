@@ -1,0 +1,18 @@
+#profiler_uper {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+#profiler-uper-top {
+  width: 100%;
+}
+#profiler-uper-scroll {
+  width: 100%;
+}
+#line {
+  height: 0.5px;
+  flex-grow: 1;
+  margin-left: youku_margin_left;
+  margin-right: youku_margin_right;
+  background-color: seconarySeparator;
+}

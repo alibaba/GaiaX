@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.utils
 
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
@@ -41,10 +42,15 @@ fun JSON.getAnyExt(valuePath: String): Any? {
         // 纯数组
         // nodes[0]
         if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
-            val arrayName = valuePath.substring(0, arrayLeftSymbolIndex)
-            val arrayIndex =
-                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
-            return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex)
+            val arrayName = valuePath.substring(0, arrayLeftSymbolIndex).trim()
+            val arrayIndex = valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
+            return (this as? JSONObject)?.getJSONArray(arrayName)?.let {
+                if (it.size > arrayIndex) {
+                    return it[arrayIndex]
+                } else {
+                    Log.e("[GaiaX]", "getAnyExt IndexOutOfBounds: XPath: ${valuePath} Index: ${arrayIndex}, Size: ${it.size}")
+                }
+            }
         }
 
         // 纯对象

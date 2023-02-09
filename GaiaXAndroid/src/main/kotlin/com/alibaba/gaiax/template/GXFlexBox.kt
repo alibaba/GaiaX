@@ -433,7 +433,7 @@ data class GXFlexBox(
             }
         }
 
-    val maxSizeFinal: Size<Dimension>?
+    val maxSizeForDimension: Size<Dimension>?
         get() {
             val forExtend = maxSizeForExtend
             val forTemplate = maxSizeForTemplate
@@ -474,7 +474,7 @@ data class GXFlexBox(
             }
         }
 
-    val minSizeFinal: Size<Dimension>?
+    val minSizeForDimension: Size<Dimension>?
         get() {
             val forExtend = minSizeForExtend
             val forTemplate = minSizeForTemplate
@@ -515,7 +515,7 @@ data class GXFlexBox(
             }
         }
 
-    val sizeFinal: Size<Dimension>?
+    val sizeForDimension: Size<Dimension>?
         get() {
             val forExtend = sizeForExtend
             val forTemplate = sizeForTemplate
@@ -559,7 +559,7 @@ data class GXFlexBox(
         }
 
 
-    val borderFinal: Rect<Dimension>?
+    val borderForDimension: Rect<Dimension>?
         get() {
             val forExtend = borderForExtend
             val forTemplate = borderForTemplate
@@ -606,7 +606,7 @@ data class GXFlexBox(
             }
         }
 
-    val paddingFinal: Rect<Dimension>?
+    val paddingForDimension: Rect<Dimension>?
         get() {
             val forExtend = paddingForExtend
             val forTemplate = paddingForTemplate
@@ -653,7 +653,7 @@ data class GXFlexBox(
             }
         }
 
-    val marginFinal: Rect<Dimension>?
+    val marginForDimension: Rect<Dimension>?
         get() {
             val forExtend = marginForExtend
             val forTemplate = marginForTemplate
@@ -700,7 +700,7 @@ data class GXFlexBox(
             }
         }
 
-    val positionFinal: Rect<Dimension>?
+    val positionForDimension: Rect<Dimension>?
         get() {
             val forExtend = positionForExtend
             val forTemplate = positionForTemplate

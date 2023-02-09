@@ -9,7 +9,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.adapter.GXAdapterImageView
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.container.GXContainer
@@ -38,17 +37,17 @@ class GaiaXBenchmark {
     fun before() {
         GXTemplateEngine.instance.init(context)
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
-        GXRegisterCenter.instance.registerExtensionViewSupport(GXViewKey.VIEW_TYPE_IMAGE, GXImageView::class.java)
-        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
-//            this. isCompatibilityContainerDataPassSequence = false
-//            this. isCompatibilityContainerNestTemplateJudgementCondition = false
-            this. isPreventContainerDataSourceThrowException = true
-            this. isPreventIconFontTypefaceThrowException = true
-            this. isPreventAccessibilityThrowException = true
-            this. isPreventFitContentThrowException = true
-//            this. isCompatibilityDataBindingFitContent = false
-//            this. isCompatibilityLottieOldDataStructure = false
-        })
+        GXRegisterCenter.instance.registerExtensionViewSupport(
+            GXViewKey.VIEW_TYPE_IMAGE,
+            GXImageView::class.java
+        )
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+                this.isPreventContainerDataSourceThrowException = true
+                this.isPreventIconFontTypefaceThrowException = true
+                this.isPreventAccessibilityThrowException = true
+                this.isPreventFitContentThrowException = true
+            })
     }
 
     @Test
@@ -65,15 +64,23 @@ class GaiaXBenchmark {
             )
             val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
 
-            val rootView = GXTemplateEngine.instance.createView(
-                gxTemplateItem, gxMeasureSize
-            )
+            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
+
+            val gxTemplateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                gxTemplateItem, gxMeasureSize, null
+            )!!
+
+            val gxView = GXTemplateEngine.instance.createViewOnlyViewTree(gxTemplateContext)!!
 
             val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
-            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+            GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+
+            GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
         }
     }
-   @Test
+
+    @Test
     fun profiler_uper() {
         val bizId = "templates"
         val templateId = "profiler_uper"

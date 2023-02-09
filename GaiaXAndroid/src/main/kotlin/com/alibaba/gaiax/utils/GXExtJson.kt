@@ -83,8 +83,12 @@ fun JSON.getStringExtCanNull(expression: String): String? {
     return getAnyExt(expression) as? String
 }
 
-fun JSON.getJSONArrayExt(expression: String): JSONArray? {
-    return getAnyExt(expression) as? JSONArray
+fun JSON.getJSONArrayExt(expression: String): JSONArray {
+    return getAnyExt(expression) as? JSONArray ?: JSONArray()
+}
+
+fun JSON.getJSONObjectExt(expression: String): JSONObject {
+    return getAnyExt(expression) as? JSONObject ?: JSONObject()
 }
 
 /**

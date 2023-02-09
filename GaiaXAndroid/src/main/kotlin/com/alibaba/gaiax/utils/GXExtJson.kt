@@ -20,6 +20,7 @@ import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import java.util.regex.Pattern
 
 private var sArrayPattern: Pattern? = null
@@ -64,7 +65,12 @@ fun JSON.getAnyExt(valuePath: String): Any? {
         val restKey = valuePath.substring(keyIndex + 1, valuePath.length)
         return ((this as? JSONObject)?.getAnyExt(firstKey) as? JSON)?.getAnyExt(restKey)
     } catch (e: Exception) {
-        e.printStackTrace()
+        val extensionException = GXRegisterCenter.instance.extensionException
+        if (extensionException != null) {
+            extensionException.exception(e)
+        } else {
+            e.printStackTrace()
+        }
     }
     return null
 }

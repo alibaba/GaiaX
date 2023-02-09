@@ -44,12 +44,14 @@ fun JSON.getAnyExt(valuePath: String): Any? {
         // nodes[0]
         if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
             val arrayName = valuePath.substring(0, arrayLeftSymbolIndex).trim()
-            val arrayIndex = valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
-            return (this as? JSONObject)?.getJSONArray(arrayName)?.let {
+            val arrayIndex =
+                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
+            (this as? JSONObject)?.getJSONArray(arrayName)?.let {
                 if (it.size > arrayIndex) {
                     return it[arrayIndex]
                 } else {
                     Log.e("[GaiaX]", "getAnyExt IndexOutOfBounds: XPath: $valuePath Index: ${arrayIndex}, Size: ${it.size}")
+                    return null
                 }
             }
         }

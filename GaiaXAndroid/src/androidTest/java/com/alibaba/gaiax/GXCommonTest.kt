@@ -797,6 +797,7 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals("data.data.title", data.getAnyExt("data.data.title"))
         Assert.assertEquals("nodes[0].title", data.getAnyExt("nodes[0].title"))
         Assert.assertEquals( "nodes[1].nodes[1].title", data.getAnyExt("nodes[1].nodes[1].title"))
+        Assert.assertEquals( null, data.getAnyExt("nodes[2]"))
     }
 
 }

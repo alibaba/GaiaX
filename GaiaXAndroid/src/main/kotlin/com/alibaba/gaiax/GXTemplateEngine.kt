@@ -569,7 +569,7 @@ class GXTemplateEngine {
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
             gxRootNode.stretchNode.layoutByCreate?.let {
-                GXCache.instance.layoutTreeCache[gxTemplateContext.templateItem] = it
+                GXCache.instance.layoutCacheForPrepareView[gxTemplateContext.templateItem] = it
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
@@ -581,7 +581,7 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode? = null
     ) {
         try {
-            if (GXCache.instance.layoutTreeCache.containsKey(gxTemplateItem)) {
+            if (GXCache.instance.layoutCacheForPrepareView.containsKey(gxTemplateItem)) {
                 return
             }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)

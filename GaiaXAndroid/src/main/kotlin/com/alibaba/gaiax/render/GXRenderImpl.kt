@@ -37,13 +37,13 @@ class GXRenderImpl {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
         rootNode.stretchNode.layoutByCreate?.let {
-            GXCache.instance.layoutTreeCache[gxTemplateContext.templateItem] = it
+            GXCache.instance.layoutCacheForPrepareView[gxTemplateContext.templateItem] = it
         }
         rootNode.release()
     }
 
     fun createNode(gxTemplateContext: GXTemplateContext): GXNode {
-        val rootLayout = GXCache.instance.layoutTreeCache[gxTemplateContext.templateItem]
+        val rootLayout = GXCache.instance.layoutCacheForPrepareView[gxTemplateContext.templateItem]
             ?: throw IllegalArgumentException("root layout is null")
         val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)
         gxTemplateContext.rootNode = rootNode
@@ -58,7 +58,7 @@ class GXRenderImpl {
     }
 
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
-        val rootLayout = GXCache.instance.layoutTreeCache[gxTemplateContext.templateItem]
+        val rootLayout = GXCache.instance.layoutCacheForPrepareView[gxTemplateContext.templateItem]
             ?: throw IllegalArgumentException("root layout is null")
         // Create a virtual node tree
         val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)

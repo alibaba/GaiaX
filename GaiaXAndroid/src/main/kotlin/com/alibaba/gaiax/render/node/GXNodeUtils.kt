@@ -82,8 +82,10 @@ object GXNodeUtils {
     /**
      * 用于预计算容器的尺寸
      */
-    fun computeContainerSizeByItemTemplate(
-        gxTemplateContext: GXTemplateContext, gxNode: GXNode, containerData: JSONArray
+    fun computeContainerSize(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxContainerData: JSONArray
     ): Size<Dimension?>? {
 
         val childTemplateItems = gxNode.childTemplateItems ?: return null
@@ -108,7 +110,7 @@ object GXNodeUtils {
             val itemTemplatePair = childTemplateItems.firstOrNull() ?: return null
             val childItemTemplateItem = itemTemplatePair.first
             val childItemVisualTemplateNode = itemTemplatePair.second
-            val childItemData = containerData.firstOrNull() as? JSONObject ?: JSONObject()
+            val childItemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
 
             val childItemLayout: Layout? = computeItemLayout(
                 gxTemplateContext,
@@ -120,7 +122,7 @@ object GXNodeUtils {
             )
 
             // 3. 计算容器期望的宽高结果
-            return computeContainerSize(gxTemplateContext, gxNode, childItemLayout, containerData)
+            return computeContainerSize(gxTemplateContext, gxNode, childItemLayout, gxContainerData)
         }
         // case 2
         else {
@@ -128,7 +130,7 @@ object GXNodeUtils {
             val containerSizeList = mutableListOf<Size<Dimension?>>()
 
             // init multi type item
-            containerData.forEach { it ->
+            gxContainerData.forEach { it ->
                 val itemData = it as JSONObject
                 gxNode.templateNode.resetDataCache()
                 gxNode.templateNode.getExtend(itemData)?.let { typeData ->
@@ -155,7 +157,7 @@ object GXNodeUtils {
 
                                 // 3. 计算容器期望的宽高结果
                                 computeContainerSize(
-                                    gxTemplateContext, gxNode, itemLayout, containerData
+                                    gxTemplateContext, gxNode, itemLayout, gxContainerData
                                 )?.apply {
                                     containerSizeList.add(this)
                                 }
@@ -181,11 +183,15 @@ object GXNodeUtils {
         }
     }
 
-    fun computeContainerItemSize(
-        gxTemplateContext: GXTemplateContext, gxNode: GXNode, itemData: JSONObject
+    fun computeItemOfContainerSize(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxItemData: JSONObject
     ): Layout? {
 
-        if (gxNode.childTemplateItems?.isEmpty() == true) {
+        val childTemplateItems = gxNode.childTemplateItems ?: return null
+
+        if (childTemplateItems.isEmpty()) {
             return null
         }
 
@@ -199,34 +205,33 @@ object GXNodeUtils {
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
         // case 1
-        if (gxNode.childTemplateItems?.size == 1) {
+        if (childTemplateItems.size == 1) {
 
             // 2. 计算坑位实际宽高结果
-            val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
-            val itemTemplateItem = itemTemplatePair.first
-            val itemVisualTemplateNode = itemTemplatePair.second
+            val itemTemplatePair = childTemplateItems.firstOrNull() ?: return null
+            val childItemTemplateItem = itemTemplatePair.first
+            val childItemVisualTemplateNode = itemTemplatePair.second
 
             return computeItemLayout(
                 gxTemplateContext,
                 gxNode,
                 itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData
+                childItemTemplateItem,
+                childItemVisualTemplateNode,
+                gxItemData
             )
         }
         // case 2
         else {
             // init multi type item
             gxNode.templateNode.resetDataCache()
-            gxNode.templateNode.getExtend(itemData)?.let { typeData ->
+            gxNode.templateNode.getExtend(gxItemData)?.let { typeData ->
                 val path =
                     typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
                 val templateId =
                     typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                val items = gxNode.childTemplateItems
-                if (items != null && templateId != null) {
-                    items.firstOrNull { it.first.templateId == templateId }
+                if (templateId != null) {
+                    childTemplateItems.firstOrNull { it.first.templateId == templateId }
                         ?.let { itemTemplatePair ->
 
                             // 2. 计算坑位实际宽高结果
@@ -239,7 +244,7 @@ object GXNodeUtils {
                                 itemViewPort,
                                 itemTemplateItem,
                                 itemVisualTemplateNode,
-                                itemData
+                                gxItemData
                             )
 
                         }
@@ -502,17 +507,17 @@ object GXNodeUtils {
             gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
 
-        if (!GXCache.instance.layoutTreeCache.containsKey(gxTemplateItem)) {
+        if (!GXCache.instance.layoutCacheForPrepareView.containsKey(gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
         }
+
+        gxItemTemplateContext.templateData = gxTemplateData
 
         // TODO 模板也有可能会因为数据的不同导致宽高结果不同，所以此处计算有一些问题
         // 1. 需要做缓存逻辑
         // 2. 需要识别出来子模板中是否会动态修改高度，这样才能尽可能减少问题的出现
 
         val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
-
-        gxItemTemplateContext.templateData = gxTemplateData
 
         GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)
 

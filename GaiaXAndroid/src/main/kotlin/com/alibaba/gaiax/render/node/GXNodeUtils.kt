@@ -25,6 +25,7 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXCache
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 import kotlin.math.ceil
@@ -85,7 +86,9 @@ object GXNodeUtils {
         gxTemplateContext: GXTemplateContext, gxNode: GXNode, containerData: JSONArray
     ): Size<Dimension?>? {
 
-        if (gxNode.childTemplateItems?.isEmpty() == true) {
+        val childTemplateItems = gxNode.childTemplateItems ?: return null
+
+        if (childTemplateItems.isEmpty()) {
             return null
         }
 
@@ -99,24 +102,25 @@ object GXNodeUtils {
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
 
         // case 1
-        if (gxNode.childTemplateItems?.size == 1) {
+        if (childTemplateItems.size == 1) {
 
             // 2. 计算坑位实际宽高结果
-            val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
-            val itemTemplateItem = itemTemplatePair.first
-            val itemVisualTemplateNode = itemTemplatePair.second
+            val itemTemplatePair = childTemplateItems.firstOrNull() ?: return null
+            val childItemTemplateItem = itemTemplatePair.first
+            val childItemVisualTemplateNode = itemTemplatePair.second
+            val childItemData = containerData.firstOrNull() as? JSONObject ?: JSONObject()
 
-            val itemLayout: Layout? = computeItemLayout(
+            val childItemLayout: Layout? = computeItemLayout(
                 gxTemplateContext,
                 gxNode,
                 itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                containerData.firstOrNull() as? JSONObject ?: JSONObject()
+                childItemTemplateItem,
+                childItemVisualTemplateNode,
+                childItemData
             )
 
             // 3. 计算容器期望的宽高结果
-            return computeContainerSize(gxTemplateContext, gxNode, itemLayout, containerData)
+            return computeContainerSize(gxTemplateContext, gxNode, childItemLayout, containerData)
         }
         // case 2
         else {
@@ -132,9 +136,8 @@ object GXNodeUtils {
                         typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
                     val templateId =
                         typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                    val items = gxNode.childTemplateItems
-                    if (items != null && templateId != null) {
-                        items.firstOrNull { it.first.templateId == templateId }
+                    if (templateId != null) {
+                        childTemplateItems.firstOrNull { it.first.templateId == templateId }
                             ?.let { itemTemplatePair ->
 
                                 // 2. 计算坑位实际宽高结果
@@ -384,8 +387,9 @@ object GXNodeUtils {
             val containerWidth =
                 gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.layer.gridConfig
-                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
+            val gridConfig = gxNode.templateNode.layer.gridConfig ?: throw IllegalArgumentException(
+                "Want to computeFooterItemViewPort, but finalGridConfig is null"
+            )
 
             val padding = gxNode.getPaddingRect()
 
@@ -442,8 +446,9 @@ object GXNodeUtils {
             val containerWidth =
                 gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.layer.gridConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalGridConfig is null")
+            val gridConfig = gxNode.templateNode.layer.gridConfig ?: throw IllegalArgumentException(
+                "Want to computeItemViewPort, but finalGridConfig is null"
+            )
             return when {
                 gridConfig.isVertical -> {
                     val totalItemSpacing =
@@ -490,17 +495,27 @@ object GXNodeUtils {
         gxTemplateData: GXTemplateEngine.GXTemplateData,
         gxVisualTemplateNode: GXTemplateNode?
     ): GXNode {
-        // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
-        val gxTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
+
+        val gxItemTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
+
         val gxItemTemplateContext = GXTemplateContext.createContext(
-            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
+            gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
-        if (!GXTemplateEngine.instance.render.layoutTreeMap.containsKey(gxTemplateItem)) {
+
+        if (!GXCache.instance.layoutTreeCache.containsKey(gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
         }
+
+        // TODO 模板也有可能会因为数据的不同导致宽高结果不同，所以此处计算有一些问题
+        // 1. 需要做缓存逻辑
+        // 2. 需要识别出来子模板中是否会动态修改高度，这样才能尽可能减少问题的出现
+
         val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
+
         gxItemTemplateContext.templateData = gxTemplateData
+
         GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)
+
         return gxItemRootNode
     }
 

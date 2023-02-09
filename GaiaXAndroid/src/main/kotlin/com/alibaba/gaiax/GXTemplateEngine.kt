@@ -38,6 +38,7 @@ import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXCache
 
 /**
  * GaiaX engine class.
@@ -568,7 +569,7 @@ class GXTemplateEngine {
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
             gxRootNode.stretchNode.layoutByCreate?.let {
-                render.layoutTreeMap[gxTemplateContext.templateItem] = it
+                GXCache.instance.layoutTreeCache[gxTemplateContext.templateItem] = it
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
@@ -580,7 +581,7 @@ class GXTemplateEngine {
         gxVisualTemplateNode: GXTemplateNode? = null
     ) {
         try {
-            if (render.layoutTreeMap.containsKey(gxTemplateItem)) {
+            if (GXCache.instance.layoutTreeCache.containsKey(gxTemplateItem)) {
                 return
             }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)

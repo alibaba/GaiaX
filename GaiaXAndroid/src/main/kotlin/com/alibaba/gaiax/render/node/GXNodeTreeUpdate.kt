@@ -16,7 +16,6 @@
 
 package com.alibaba.gaiax.render.node
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

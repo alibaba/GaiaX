@@ -33,29 +33,34 @@ fun String.safeParseToJson(): JSONObject = try {
 }
 
 fun JSON.getAnyExt(valuePath: String): Any? {
-    val keyIndex = valuePath.indexOf(".")
-    val arrayLeftSymbolIndex = valuePath.indexOf("[")
-    val arrayRightSymbolIndex = valuePath.indexOf("]")
+    try {
+        val keyIndex = valuePath.indexOf(".")
+        val arrayLeftSymbolIndex = valuePath.indexOf("[")
+        val arrayRightSymbolIndex = valuePath.indexOf("]")
 
-    // 纯数组
-    // nodes[0]
-    if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
-        val arrayName = valuePath.substring(0, arrayLeftSymbolIndex)
-        val arrayIndex =
-            valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
-        return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex)
+        // 纯数组
+        // nodes[0]
+        if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
+            val arrayName = valuePath.substring(0, arrayLeftSymbolIndex)
+            val arrayIndex =
+                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).trim().toInt()
+            return (this as? JSONObject)?.getJSONArray(arrayName)?.get(arrayIndex)
+        }
+
+        // 纯对象
+        // title
+        if (keyIndex == -1 && arrayLeftSymbolIndex == -1 && arrayRightSymbolIndex == -1) {
+            return (this as? JSONObject)?.get(valuePath)
+        }
+
+        // 拆解XPATH
+        val firstKey = valuePath.substring(0, keyIndex).trim()
+        val restKey = valuePath.substring(keyIndex + 1, valuePath.length)
+        return ((this as? JSONObject)?.getAnyExt(firstKey) as? JSON)?.getAnyExt(restKey)
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
-
-    // 纯对象
-    // title
-    if (keyIndex == -1 && arrayLeftSymbolIndex == -1 && arrayRightSymbolIndex == -1) {
-        return (this as? JSONObject)?.get(valuePath)
-    }
-
-    // 拆解XPATH
-    val firstKey = valuePath.substring(0, keyIndex).trim()
-    val restKey = valuePath.substring(keyIndex + 1, valuePath.length)
-    return ((this as? JSONObject)?.getAnyExt(firstKey) as? JSON)?.getAnyExt(restKey)
+    return null
 }
 
 

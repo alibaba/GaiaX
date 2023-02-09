@@ -306,7 +306,7 @@ class GXContainerViewAdapter(
                 itemData
             )
         } else {
-            GXNodeUtils.computeItemOfContainerSize(
+            GXNodeUtils.computeItemSize(
                 gxTemplateContext, gxNode, itemData
             )
         }

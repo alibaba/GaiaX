@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.util.Log
 import app.visly.stretch.Dimension
 import app.visly.stretch.Layout
 import app.visly.stretch.Size
@@ -83,9 +84,7 @@ object GXNodeUtils {
      * 用于预计算容器的尺寸
      */
     fun computeContainerSize(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxContainerData: JSONArray
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
     ): Size<Dimension?>? {
 
         val childTemplateItems = gxNode.childTemplateItems ?: return null
@@ -112,14 +111,20 @@ object GXNodeUtils {
             val childItemVisualTemplateNode = itemTemplatePair.second
             val childItemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
 
-            val childItemLayout: Layout? = computeItemLayout(
-                gxTemplateContext,
-                gxNode,
-                itemViewPort,
-                childItemTemplateItem,
-                childItemVisualTemplateNode,
-                childItemData
-            )
+            val childItemLayout = if (GXCache.instance.layoutCacheForSingleType.containsKey(childItemTemplateItem)) {
+                 GXCache.instance.layoutCacheForSingleType[childItemTemplateItem]
+            } else {
+                computeItemLayout(
+                    gxTemplateContext,
+                    gxNode,
+                    itemViewPort,
+                    childItemTemplateItem,
+                    childItemVisualTemplateNode,
+                    childItemData
+                )?.also {
+                    GXCache.instance.layoutCacheForSingleType[childItemTemplateItem] = it
+                }
+            }
 
             // 3. 计算容器期望的宽高结果
             return computeContainerSize(gxTemplateContext, gxNode, childItemLayout, gxContainerData)
@@ -183,10 +188,8 @@ object GXNodeUtils {
         }
     }
 
-    fun computeItemOfContainerSize(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        gxItemData: JSONObject
+    fun computeItemSize(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxItemData: JSONObject
     ): Layout? {
 
         val childTemplateItems = gxNode.childTemplateItems ?: return null
@@ -269,14 +272,13 @@ object GXNodeUtils {
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData =
                     GXTemplateEngine.GXTemplateData(itemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
+                return computeItemLayoutByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+                )
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -284,14 +286,13 @@ object GXNodeUtils {
                     GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
                 val itemTemplateData: GXTemplateEngine.GXTemplateData =
                     GXTemplateEngine.GXTemplateData(itemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
+                return computeItemLayoutByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
                     gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+                )
             }
             else -> {
                 return null
@@ -313,14 +314,13 @@ object GXNodeUtils {
                     gxItemViewPort.width, gxItemViewPort.height
                 )
                 val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
+                return computeItemLayoutByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
                     gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+                )
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
             gxNode.isGridType() -> {
@@ -328,28 +328,26 @@ object GXNodeUtils {
                     GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
                 val gxTemplateData: GXTemplateEngine.GXTemplateData =
                     GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
+                return computeItemLayoutByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
                     gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+                )
             }
             gxNode.isSliderType() -> {
                 val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
                     gxItemViewPort.width, gxItemViewPort.height
                 )
                 val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
+                return computeItemLayoutByCreateAndBindNode(
                     gxTemplateContext,
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
                     gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+                )
             }
             else -> {
                 return null
@@ -493,15 +491,31 @@ object GXNodeUtils {
         return Size(null, null)
     }
 
-    private fun computeItemSizeByCreateAndBindNode(
+    private fun computeItemLayoutByCreateAndBindNode(
         gxTemplateContext: GXTemplateContext,
         gxTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxMeasureSize: GXTemplateEngine.GXMeasureSize,
         gxTemplateData: GXTemplateEngine.GXTemplateData,
         gxVisualTemplateNode: GXTemplateNode?
-    ): GXNode {
+    ): Layout? {
 
         val gxItemTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
+
+        // TODO 模板也有可能会因为数据的不同导致宽高结果不同，所以此处计算有一些问题
+        // 1. 需要做缓存逻辑
+        // 2. 需要识别出来子模板中是否会动态修改高度，这样才能尽可能减少问题的出现
+
+//        if (gxItemTemplateInfo.isFlexibleHeight()) {
+//            // 如果是动态的高度，需要根据不同的数据取出一个最大值
+//        } else {
+//            // 如果是固定的高度，只需要计算一次，并使用缓存即可
+//
+////            if (GXCache.instance.layoutCacheForComputeItem.containsKey(gxTemplateItem)) {
+////                return GXCache.instance.layoutCacheForComputeItem[gxTemplateItem]
+////            } else {
+//
+////            }
+//        }
 
         val gxItemTemplateContext = GXTemplateContext.createContext(
             gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
@@ -513,15 +527,11 @@ object GXNodeUtils {
 
         gxItemTemplateContext.templateData = gxTemplateData
 
-        // TODO 模板也有可能会因为数据的不同导致宽高结果不同，所以此处计算有一些问题
-        // 1. 需要做缓存逻辑
-        // 2. 需要识别出来子模板中是否会动态修改高度，这样才能尽可能减少问题的出现
-
         val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
 
         GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)
 
-        return gxItemRootNode
+        return gxItemRootNode.stretchNode.layoutByBind
     }
 
     private fun computeContainerSize(

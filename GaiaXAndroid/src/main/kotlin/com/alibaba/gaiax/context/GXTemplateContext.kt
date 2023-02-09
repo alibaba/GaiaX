@@ -134,7 +134,6 @@ class GXTemplateContext private constructor(
         rootNode?.reset(this)
     }
 
-
     companion object {
 
         fun createContext(

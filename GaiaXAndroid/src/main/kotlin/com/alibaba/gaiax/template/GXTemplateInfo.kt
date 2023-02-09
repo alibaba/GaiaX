@@ -148,6 +148,13 @@ data class GXTemplateInfo(
         }
     }
 
+    /**
+     * TODO 未实现
+     */
+    fun isFlexibleHeight(): Boolean {
+        return false
+    }
+
     companion object {
 
         fun parseCss(value: String): JSONObject {

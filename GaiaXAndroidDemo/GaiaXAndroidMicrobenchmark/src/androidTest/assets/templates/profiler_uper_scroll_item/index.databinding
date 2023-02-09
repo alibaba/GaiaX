@@ -1,5 +1,4 @@
 {
-  "config": { "render": { "type": "async_single", "preload": true } },
   "data": {
     "cover-img": {
       "value": "${data.poster.img}",

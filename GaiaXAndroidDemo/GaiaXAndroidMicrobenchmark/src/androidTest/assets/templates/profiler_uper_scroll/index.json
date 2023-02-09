@@ -1,5 +1,5 @@
 {
-  "id": "profiler-uper-scroll",
+  "id": "profiler_uper_scroll",
   "exp-version": "V1",
   "type": "gaia-template",
   "sub-type": "scroll",
@@ -11,7 +11,7 @@
   "interitem-spacing": 0,
   "layers": [
     {
-      "id": "profiler-uper-scroll-item",
+      "id": "profiler_uper_scroll_item",
       "type": "gaia-template",
       "sub-type": "custom"
     }

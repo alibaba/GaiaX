@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.render.view.container
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView

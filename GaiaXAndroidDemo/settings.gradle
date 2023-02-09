@@ -13,4 +13,4 @@ project(':GaiaXAndroidAdapter').projectDir = file('../GaiaXAndroidAdapter')
 
 include ':GaiaXAndroidClientToStudio'
 project(':GaiaXAndroidClientToStudio').projectDir = file('../GaiaXAndroidClientToStudio')
-include ':GaiaXAndroidBenchmark'
+include ':GaiaXAndroidMicrobenchmark'

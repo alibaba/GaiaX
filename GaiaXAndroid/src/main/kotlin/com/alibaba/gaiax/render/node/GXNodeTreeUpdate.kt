@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -802,9 +803,9 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 符合条件触发动画
                 val isState = GXExpressionFactory.isTrue(
-                        gxTemplateContext.templateInfo.expVersion,
-                        state
-                    ) == true
+                    gxTemplateContext.templateInfo.expVersion,
+                    state
+                ) == true
                 if (isState) {
                     playAnimation(
                         gxTemplateContext, gxNode, gxAnimationValue, gxAnimationExpression, type

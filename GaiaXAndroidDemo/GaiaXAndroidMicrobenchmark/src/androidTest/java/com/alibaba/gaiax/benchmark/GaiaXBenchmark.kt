@@ -92,14 +92,50 @@ class GaiaXBenchmark {
             )
             val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
 
-            val rootView = GXTemplateEngine.instance.createView(
-                gxTemplateItem, gxMeasureSize
-            )
+            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
+
+            val gxTemplateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                gxTemplateItem, gxMeasureSize, null
+            )!!
+
+            val gxView = GXTemplateEngine.instance.createViewOnlyViewTree(gxTemplateContext)!!
 
             val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
-            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
 
-            val scroll = GXTemplateEngine.instance.getGXViewById(rootView, "profiler-uper-scroll")
+            GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+
+            GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
+
+        }
+    }
+
+    @Test
+    fun profiler_uper_scroll() {
+        val bizId = "templates"
+        val templateId = "profiler_uper_scroll"
+        val data = readJsonFromAssets("data/$templateId.json")
+
+        benchmarkRule.measureRepeated {
+            val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
+                context, bizId, templateId
+            )
+            val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+
+            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
+
+            val gxTemplateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                gxTemplateItem, gxMeasureSize, null
+            )!!
+
+            val gxView = GXTemplateEngine.instance.createViewOnlyViewTree(gxTemplateContext)!!
+
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
+
+            GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+
+            GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
+
+            val scroll = GXTemplateEngine.instance.getGXViewById(gxView, "profiler_uper_scroll")
             scroll.executeRecyclerView()
         }
     }

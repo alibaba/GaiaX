@@ -4,6 +4,6 @@
   },
   "data": {
     "profiler-uper-top": "${nodes[0].data}",
-    "profiler-uper-scroll": "$$"
+    "profiler_uper_scroll": "$$"
   }
 }

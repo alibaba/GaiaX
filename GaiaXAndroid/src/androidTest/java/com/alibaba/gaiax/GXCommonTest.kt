@@ -11,6 +11,7 @@ import com.alibaba.gaiax.template.GXSize.Companion.ptToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
+import com.alibaba.gaiax.utils.getAnyExt
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -200,8 +201,8 @@ class GXCommonTest : GXBaseTest() {
 
     @Test
     fun template_container_nest_template_judegment_condition() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
-            .apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = true
             })
 
@@ -231,16 +232,16 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
-            .apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerNestTemplateJudgementCondition = false
             })
     }
 
     @Test
     fun template_databinding_nest_scroll_nodes_self_youku_version() {
-        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
-            .apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerDataPassSequence = true
             })
 
@@ -273,8 +274,8 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).child(0).height())
 
-        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
-            .apply {
+        GXRegisterCenter.instance.registerExtensionCompatibility(
+            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
                 this.isCompatibilityContainerDataPassSequence = false
             })
     }
@@ -762,6 +763,40 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(rootView.child(0).height(), rootView.child(0).child(0).height())
 
         GXScreenUtils.isDebug = false
+    }
+
+    @Test
+    fun ext_json() {
+
+        val data = JSONObject().apply {
+            this["title"] = "title"
+            this["data"] = JSONObject().apply {
+                this["title"] = "data.title"
+                this["data"] = JSONObject().apply {
+                    this["title"] = "data.data.title"
+                }
+            }
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["title"] = "nodes[0].title"
+                })
+                this.add(JSONObject().apply {
+                    this["title"] = "nodes[1].title"
+                    this["nodes"] = JSONArray().apply {
+                        this.add(JSONObject().apply {
+                            this["title"] = "nodes[1].nodes[0].title"
+                        })
+                        this.add(JSONObject().apply {
+                            this["title"] = "nodes[1].nodes[1].title"
+                        })
+                    }
+                })
+            }
+        }
+        Assert.assertEquals("title", data.getAnyExt("title"))
+        Assert.assertEquals("data.data.title", data.getAnyExt("data.data.title"))
+        Assert.assertEquals("nodes[0].title", data.getAnyExt("nodes[0].title"))
+        Assert.assertEquals( "nodes[1].nodes[1].title", data.getAnyExt("nodes[1].nodes[1].title"))
     }
 
 }

@@ -1691,4 +1691,29 @@ class GXComponentScrollTest : GXBaseTest() {
 
         Assert.assertEquals(true, item1Height != item2Height)
     }
+    @Test
+    fun template_scroll_horizontal_different_item_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "scroll", "template_scroll_horizontal_different_item_height"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["height"] = "50px"
+                })
+                this.add(JSONObject().apply {
+                    this["height"] = "70px"
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(50F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.height())
+    }
 }

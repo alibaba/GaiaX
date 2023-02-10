@@ -83,7 +83,7 @@ class GXContainerViewAdapter(
 
         val childItemMeasureSize = getMeasureSize(childItemViewPort)
 
-        val childItemContainerSize = getChildContainerSize(
+        val childItemContainerSize = getChildItemContainerSize(
             isChildFooterItem,
             childTemplateItem,
             childItemMeasureSize,
@@ -118,13 +118,13 @@ class GXContainerViewAdapter(
         val itemContainerHeight = gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果容器高度小于坑位高度，那么需要重新设置容器高度
-//                if (childContainerSize != null && gxContainer.layoutParams.height < childContainerSize.height) {
-//                    childContainerSize.height.toInt()
-//                }
-//                // 如果容器高度大于于坑位高度,并且是横向，那么可以设定gravity，需要让自己撑满容器
-//                else {
-                gxContainer.layoutParams.height
-//                }
+                if (childContainerSize != null && gxContainer.layoutParams.height < childContainerSize.height) {
+                    childContainerSize.height.toInt()
+                }
+                // 如果容器高度大于于坑位高度,并且是横向，那么可以设定gravity，需要让自己撑满容器
+                else {
+                    gxContainer.layoutParams.height
+                }
             } else {
                 childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
             }
@@ -172,7 +172,7 @@ class GXContainerViewAdapter(
 
         val childItemMeasureSize = getMeasureSize(childItemViewPort)
 
-        val childItemContainerSize = getChildContainerSize(
+        val childItemContainerSize = getChildItemContainerSize(
             isChildFooterItem,
             childTemplateItem,
             childItemMeasureSize,
@@ -284,7 +284,7 @@ class GXContainerViewAdapter(
         }
     }
 
-    private fun getChildContainerSize(
+    private fun getChildItemContainerSize(
         isChildFooterItem: Boolean,
         childTemplateItem: GXTemplateEngine.GXTemplateItem,
         childMeasureSize: GXTemplateEngine.GXMeasureSize,
@@ -293,11 +293,10 @@ class GXContainerViewAdapter(
     ): Layout? {
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
         return if (isChildFooterItem) {
-            // TODO: 此处可能有耗时问题，可以进行优化
             val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
                 childTemplateItem, childMeasureSize, childVisualNestTemplateNode
             )
-            GXNodeUtils.computeContainerFooterItemSize(
+            GXNodeUtils.computeFooterItemContainerSize(
                 childTemplateContext,
                 gxNode,
                 childItemViewPort,
@@ -306,7 +305,7 @@ class GXContainerViewAdapter(
                 itemData
             )
         } else {
-            GXNodeUtils.computeItemSize(
+            GXNodeUtils.computeItemContainerSize(
                 gxTemplateContext, gxNode, itemData
             )
         }

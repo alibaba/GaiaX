@@ -565,8 +565,15 @@ class GXTemplateEngine {
     ) {
         val gxRootNode = gxTemplateContext.rootNode
         if (gxRootNode != null && isMeasureSizeChanged) {
+
+            //
             gxTemplateContext.reset()
-            GXCache.instance.layoutCacheForSingleType.clear()
+
+            //
+            GXCache.instance.layoutCacheForTemplateItem.clear()
+            GXCache.instance.layoutCacheForDataHashCode.clear()
+
+            //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
             gxRootNode.stretchNode.layoutByCreate?.let {

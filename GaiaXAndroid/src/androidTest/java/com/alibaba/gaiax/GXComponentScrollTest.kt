@@ -1689,7 +1689,9 @@ class GXComponentScrollTest : GXBaseTest() {
         val item2Height = rootView.child(1).height.toFloat()
 
         Assert.assertEquals(true, item1Height != item2Height)
+        Assert.assertEquals(200F.dpToPx(), rootView.height())
     }
+
     @Test
     fun template_scroll_horizontal_different_item_height() {
         val templateItem = GXTemplateEngine.GXTemplateItem(

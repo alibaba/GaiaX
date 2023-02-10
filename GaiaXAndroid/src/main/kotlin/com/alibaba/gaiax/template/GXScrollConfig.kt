@@ -97,8 +97,4 @@ data class GXScrollConfig(
         get():Boolean {
             return direction == LinearLayoutManager.HORIZONTAL
         }
-
-    override fun toString(): String {
-        return "GXScrollConfig(direction=$direction, itemSpacing=$itemSpacing)"
-    }
 }

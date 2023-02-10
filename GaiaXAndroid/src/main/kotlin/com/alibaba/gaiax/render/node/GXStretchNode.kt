@@ -56,10 +56,6 @@ data class GXStretchNode(
         node?.safeFree()
     }
 
-    override fun toString(): String {
-        return "GXStretchNode(node=$node, layoutByBind=$layoutByBind)"
-    }
-
     companion object {
 
         fun createEmptyNode(

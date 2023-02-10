@@ -153,10 +153,6 @@ open class Node {
         height: Float
     ): FloatArray
 
-    override fun toString(): String {
-        return "Node(id='$id', style=$style, children=$children)"
-    }
-
     fun markDirtyAll() {
         markDirty()
         children.forEach {

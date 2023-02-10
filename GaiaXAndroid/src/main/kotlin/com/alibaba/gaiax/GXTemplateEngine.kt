@@ -40,6 +40,7 @@ import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * GaiaX engine class.
@@ -148,10 +149,6 @@ class GXTemplateEngine {
          * Event data
          */
         var eventParams: JSONObject? = null
-
-        override fun toString(): String {
-            return "GXGesture(gestureType='$gestureType', view=$view, nodeId=$nodeId, index=$index, eventParams=$eventParams)"
-        }
     }
 
     /**
@@ -183,10 +180,6 @@ class GXTemplateEngine {
          * Buried data
          */
         var trackParams: JSONObject? = null
-
-        override fun toString(): String {
-            return "GXTrack(view=$view, nodeId=$nodeId, index=$index, trackParams=$trackParams)"
-        }
     }
 
     /**
@@ -242,10 +235,6 @@ class GXTemplateEngine {
          * Scroll state
          */
         var state: Int = 0
-
-        override fun toString(): String {
-            return "GXScroll(view=$view, dx=$dx, dy=$dy, state=$state)"
-        }
     }
 
     /**
@@ -283,10 +272,6 @@ class GXTemplateEngine {
          * Animation params expression
          */
         var animationParamsExpression: JSONObject? = null
-
-        override fun toString(): String {
-            return "GXAnimation(type=$state, nodeId=$nodeId, targetView=$view)"
-        }
     }
 
     /**
@@ -366,12 +351,7 @@ class GXTemplateEngine {
      *    如果内部模板的宽度能够自我撑开（具备宽度）；
      *    最终产物View的宽度就是是模板通过FlexBox计算后撑开的宽度，而高度就是Measure-Height。
      */
-    data class GXMeasureSize(var width: Float?, var height: Float?) {
-
-        override fun toString(): String {
-            return "GXMeasureSize(width=$width, height=$height)"
-        }
-    }
+    data class GXMeasureSize(var width: Float?, var height: Float?)
 
     /**
      * Template data parameters
@@ -442,10 +422,6 @@ class GXTemplateEngine {
          * @suppress
          */
         var isLocal: Boolean = false
-
-        override fun toString(): String {
-            return "GXTemplateItem(context=$context, bizId='$bizId', templateId='$templateId', templateVersion='$templateVersion'"
-        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -615,10 +591,28 @@ class GXTemplateEngine {
     fun createViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode?
+        gxVisualTemplateNode: GXTemplateNode? = null
+    ): GXTemplateContext? {
+        return createViewOnlyNodeTree(
+            gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, null, null
+        )
+    }
+
+    /**
+     * @suppress
+     * @hide
+     */
+    fun createViewOnlyNodeTree(
+        gxTemplateItem: GXTemplateItem,
+        gxMeasureSize: GXMeasureSize,
+        gxVisualTemplateNode: GXTemplateNode? = null,
+        gxItemPosition: Int? = null,
+        gxItemData: JSONObject? = null
     ): GXTemplateContext? {
         return try {
-            internalCreateViewOnlyNodeTree(gxTemplateItem, gxMeasureSize, gxVisualTemplateNode)
+            internalCreateViewOnlyNodeTree(
+                gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, gxItemPosition, gxItemData
+            )
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {
@@ -630,16 +624,25 @@ class GXTemplateEngine {
         }
     }
 
+
     private fun internalCreateViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode?
+        gxVisualTemplateNode: GXTemplateNode?,
+        gxItemPosition: Int?,
+        gxItemData: JSONObject?
     ): GXTemplateContext {
-        val templateInfo = data.getTemplateInfo(gxTemplateItem)
+        val gxTemplateInfo = data.getTemplateInfo(gxTemplateItem)
         val gxTemplateContext = GXTemplateContext.createContext(
-            gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
+            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
         )
-        render.createViewOnlyNodeTree(gxTemplateContext)
+        val itemCacheKey = "${gxItemPosition}-${gxItemData.hashCode()}-${gxTemplateItem.hashCode()}"
+        if (GXGlobalCache.instance.isExistNodeForItemPosition(itemCacheKey)) {
+            gxTemplateContext.rootNode = GXGlobalCache.instance.obtainNodeForItemPosition(itemCacheKey)
+            gxTemplateContext.isReuseRootNode = true
+        } else {
+            render.createViewOnlyNodeTree(gxTemplateContext)
+        }
         return gxTemplateContext
     }
 
@@ -691,6 +694,13 @@ class GXTemplateEngine {
     ) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
+
+        if (gxTemplateContext.isReuseRootNode) {
+            if (GXLog.isLog()) {
+                GXLog.e("reuse root node, skip bindDataOnlyNodeTree")
+            }
+            return
+        }
 
         var isMeasureSizeChanged = false
         if (gxMeasureSize != null) {

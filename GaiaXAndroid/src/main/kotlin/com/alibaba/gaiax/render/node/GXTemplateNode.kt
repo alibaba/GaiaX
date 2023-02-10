@@ -166,10 +166,6 @@ data class GXTemplateNode(
         return layer.id
     }
 
-    override fun toString(): String {
-        return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode,)"
-    }
-
     companion object {
 
         fun createNode(

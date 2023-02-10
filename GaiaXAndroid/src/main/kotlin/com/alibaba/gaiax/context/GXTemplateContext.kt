@@ -56,6 +56,8 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var isReuseRootNode: Boolean = false
+
     /**
      * 数据绑定计数
      */
@@ -104,10 +106,6 @@ class GXTemplateContext private constructor(
 
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
-    override fun toString(): String {
-        return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
-    }
-
     fun release() {
         layoutForItemPosition?.clear()
         containers?.clear()
@@ -119,6 +117,7 @@ class GXTemplateContext private constructor(
         visualTemplateNode = null
         rootNode?.release()
         rootNode = null
+        isReuseRootNode = false
     }
 
     fun manualExposure() {

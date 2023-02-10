@@ -218,18 +218,24 @@ class GXContainerViewAdapter(
         } else {
 
             // 获取坑位View
-            val childView = if (itemContainer.childCount != 0) {
+            val gxView = if (itemContainer.childCount != 0) {
                 itemContainer.getChildAt(0)
             } else {
-                val childView = GXTemplateEngine.instance.createView(
-                    templateItem, itemMeasureSize, visualNestTemplateNode
-                )
-                itemContainer.addView(childView)
-                childView
+
+                GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
+
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                    templateItem, itemMeasureSize, visualNestTemplateNode, itemPosition, itemData
+                ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+
+                val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
+
+                itemContainer.addView(itemView)
+                itemView
             }
 
             // 为坑位View绑定数据
-            val childTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
                     override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
                         super.onGestureEvent(gxGesture)
@@ -277,13 +283,23 @@ class GXContainerViewAdapter(
                     }
                 }
             }
-            if (childView != null) {
-                GXTemplateEngine.instance.bindData(
-                    childView, childTemplateData, itemMeasureSize
+
+            if (gxView != null) {
+
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(
+                    gxView,
+                    gxTemplateData,
+                    itemMeasureSize
+                )
+
+                GXTemplateEngine.instance.bindDataOnlyViewTree(
+                    gxView,
+                    gxTemplateData,
+                    itemMeasureSize
                 )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
-                itemContainer.layoutParams.width = childView.layoutParams.width
+                itemContainer.layoutParams.width = gxView.layoutParams.width
             }
         }
     }
@@ -306,7 +322,8 @@ class GXContainerViewAdapter(
                 itemViewPort,
                 gxTemplateItem,
                 gxVisualNestTemplateNode,
-                itemData
+                itemData,
+                position
             )
         } else {
             GXNodeUtils.computeItemContainerSize(

@@ -136,7 +136,13 @@ object GXNodeUtils {
                 val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
                 computeItemLayoutForMultiItemType(
-                    gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
+                    gxTemplateContext,
+                    gxNode,
+                    templateItems,
+                    itemData,
+                    itemViewPort,
+                    itemCacheKey,
+                    itemPosition
                 )
             }
 
@@ -196,7 +202,13 @@ object GXNodeUtils {
             val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
             computeItemLayoutForMultiItemType(
-                gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
+                gxTemplateContext,
+                gxNode,
+                templateItems,
+                itemData,
+                itemViewPort,
+                itemCacheKey,
+                itemPosition
             )
 
             return gxTemplateContext.getLayoutForItemPosition(itemCacheKey)
@@ -209,7 +221,8 @@ object GXNodeUtils {
         templateItems: MutableList<Pair<GXTemplateEngine.GXTemplateItem, GXTemplateNode>>,
         itemData: JSONObject,
         itemViewPort: Size<Float?>,
-        itemCacheKey: String
+        itemCacheKey: String,
+        itemPosition: Int
     ) {
         gxNode.templateNode.resetDataCache()
         val typeData = gxNode.templateNode.getExtend(itemData)
@@ -254,7 +267,8 @@ object GXNodeUtils {
                 itemViewPort,
                 itemTemplateItem,
                 itemVisualTemplateNode,
-                gxItemData
+                gxItemData,
+                itemCacheKey
             )?.let { itemLayout ->
                 gxTemplateContext.putLayoutForItemPosition(itemCacheKey, itemLayout)
             }
@@ -273,6 +287,8 @@ object GXNodeUtils {
 
         val itemTemplatePair = templateItems.firstOrNull() ?: return null
         val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
+        val itemPosition = 0
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
         val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
         val itemTemplateItem = itemTemplatePair.first
@@ -287,7 +303,8 @@ object GXNodeUtils {
                 itemViewPort,
                 itemTemplateItem,
                 itemVisualTemplateNode,
-                itemData
+                itemData,
+                itemCacheKey
             )?.also {
                 GXGlobalCache.instance.putLayoutForTemplateItem(itemTemplateItem, it)
             }
@@ -301,8 +318,10 @@ object GXNodeUtils {
         itemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
-        itemData: JSONObject
+        itemData: JSONObject,
+        itemPosition: Int
     ): Layout? {
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
         when {
             gxNode.isScrollType() -> {
                 val itemMeasureSize =
@@ -314,7 +333,8 @@ object GXNodeUtils {
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
-                    gxItemVisualTemplateNode
+                    gxItemVisualTemplateNode,
+                    itemCacheKey
                 )
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
@@ -328,7 +348,8 @@ object GXNodeUtils {
                     gxItemTemplateItem,
                     itemMeasureSize,
                     itemTemplateData,
-                    gxItemVisualTemplateNode
+                    gxItemVisualTemplateNode,
+                    itemCacheKey
                 )
             }
             else -> {
@@ -343,7 +364,8 @@ object GXNodeUtils {
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
-        gxItemData: JSONObject
+        gxItemData: JSONObject,
+        itemCacheKey: String
     ): Layout? {
         when {
             gxNode.isScrollType() -> {
@@ -356,7 +378,8 @@ object GXNodeUtils {
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
-                    gxItemVisualTemplateNode
+                    gxItemVisualTemplateNode,
+                    itemCacheKey
                 )
             }
             // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
@@ -370,7 +393,8 @@ object GXNodeUtils {
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
-                    gxItemVisualTemplateNode
+                    gxItemVisualTemplateNode,
+                    itemCacheKey
                 )
             }
             gxNode.isSliderType() -> {
@@ -383,7 +407,8 @@ object GXNodeUtils {
                     gxItemTemplateItem,
                     gxMeasureSize,
                     gxTemplateData,
-                    gxItemVisualTemplateNode
+                    gxItemVisualTemplateNode,
+                    itemCacheKey
                 )
             }
             else -> {
@@ -535,7 +560,8 @@ object GXNodeUtils {
         gxTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxMeasureSize: GXTemplateEngine.GXMeasureSize,
         gxTemplateData: GXTemplateEngine.GXTemplateData,
-        gxVisualTemplateNode: GXTemplateNode?
+        gxVisualTemplateNode: GXTemplateNode?,
+        itemCacheKey: String
     ): Layout? {
 
         val gxItemTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
@@ -554,6 +580,10 @@ object GXNodeUtils {
             GXTemplateEngine.instance.render.createViewOnlyNodeTree(gxItemTemplateContext)
 
         GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
+
+//        GXGlobalCache.instance.putNodeForItemPosition(
+//            "${itemCacheKey}-${gxTemplateItem.hashCode()}", gxItemRootNode
+//        )
 
         return gxItemRootNode.stretchNode.layoutByBind
     }

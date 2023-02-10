@@ -137,11 +137,4 @@ data class GXGridConfig(
             scrollEnableForExtend = scrollEnable
         }
     }
-
-
-    override fun toString(): String {
-        return "GXGridConfig(column=$columnForTemplate, direction=$directionForTemplate, itemSpacing=$itemSpacingForTemplate, rowSpacing=$rowSpacingForTemplate)"
-    }
-
-
 }

@@ -168,16 +168,6 @@ class GXNode {
         ) == true
     }
 
-    override fun toString(): String {
-        return "GXNode(id='$id', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
-    }
-
-    fun initEventByRegisterCenter() {
-        if (event == null) {
-            event = GXRegisterCenter.instance.extensionNodeEvent?.create()
-        }
-    }
-
     /**
      * 重置节点中的缓存
      */

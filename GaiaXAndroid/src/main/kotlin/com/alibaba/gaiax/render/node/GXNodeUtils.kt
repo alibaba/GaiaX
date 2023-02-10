@@ -545,7 +545,7 @@ object GXNodeUtils {
         )
 
         if (!GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
-            GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
+            GXTemplateEngine.instance.render.prepareView(gxItemTemplateContext)
         }
 
         gxItemTemplateContext.templateData = gxTemplateData

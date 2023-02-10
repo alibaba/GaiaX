@@ -33,7 +33,7 @@ import com.alibaba.gaiax.utils.GXGlobalCache
 class GXRenderImpl {
 
 
-    fun prepareLayoutTree(gxTemplateContext: GXTemplateContext) {
+    fun prepareView(gxTemplateContext: GXTemplateContext) {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
         rootNode.stretchNode.layoutByCreate?.let {

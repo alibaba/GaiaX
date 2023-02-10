@@ -596,7 +596,7 @@ class GXTemplateEngine {
             val gxTemplateContext = GXTemplateContext.createContext(
                 gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
             )
-            render.prepareLayoutTree(gxTemplateContext)
+            render.prepareView(gxTemplateContext)
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
             if (extensionException != null) {

@@ -489,9 +489,29 @@ class GXTemplateEngine {
         )
     }
 
-    fun destroyView(targetView: View?) {
-        GXTemplateContext.getContext(targetView)?.release()
-        GXTemplateContext.setContext(null)
+    fun prepareView(
+        gxTemplateItem: GXTemplateItem,
+        gxMeasureSize: GXMeasureSize,
+        gxVisualTemplateNode: GXTemplateNode? = null
+    ) {
+        try {
+            if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
+                return
+            }
+            val templateInfo = data.getTemplateInfo(gxTemplateItem)
+            val gxTemplateContext = GXTemplateContext.createContext(
+                gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
+            )
+            render.prepareView(gxTemplateContext)
+        } catch (e: Exception) {
+            val extensionException = GXRegisterCenter.instance.extensionException
+            if (extensionException != null) {
+                extensionException.exception(e)
+            } else {
+                throw e
+            }
+        }
+
     }
 
     /**
@@ -558,6 +578,11 @@ class GXTemplateEngine {
         }
     }
 
+    fun destroyView(targetView: View?) {
+        GXTemplateContext.getContext(targetView)?.release()
+        GXTemplateContext.setContext(null)
+    }
+
     /**
      * 当measure size发生变化的时候需要重新计算节点树，否则会导致bindData的传入数据不准确，引发布局错误
      */
@@ -581,31 +606,6 @@ class GXTemplateEngine {
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
-    }
-
-    fun prepareView(
-        gxTemplateItem: GXTemplateItem,
-        gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode? = null
-    ) {
-        try {
-            if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
-                return
-            }
-            val templateInfo = data.getTemplateInfo(gxTemplateItem)
-            val gxTemplateContext = GXTemplateContext.createContext(
-                gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
-            )
-            render.prepareView(gxTemplateContext)
-        } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
-            } else {
-                throw e
-            }
-        }
-
     }
 
     /**

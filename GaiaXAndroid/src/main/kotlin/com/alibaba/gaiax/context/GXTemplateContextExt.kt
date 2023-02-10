@@ -4,33 +4,33 @@ import app.visly.stretch.Layout
 import com.alibaba.gaiax.utils.GXLog
 
 
-fun GXTemplateContext.initLayoutForItemPosition() {
-    if (layoutForItemPosition == null) {
-        layoutForItemPosition = mutableMapOf()
+fun GXTemplateContext.initLayoutForScroll() {
+    if (layoutForScroll == null) {
+        layoutForScroll = mutableMapOf()
     }
 }
 
-fun GXTemplateContext.clearLayoutForItemPosition() {
-    layoutForItemPosition?.clear()
+fun GXTemplateContext.clearLayoutForScroll() {
+    layoutForScroll?.clear()
 }
 
-fun GXTemplateContext.isExistForItemPosition(key: Any): Boolean {
-    return layoutForItemPosition?.containsKey(key) == true
+fun GXTemplateContext.isExistForScroll(key: Any): Boolean {
+    return layoutForScroll?.containsKey(key) == true
 }
 
-fun GXTemplateContext.putLayoutForItemPosition(key: Any, value: Layout) {
+fun GXTemplateContext.putLayoutForScroll(key: Any, value: Layout) {
     if (GXLog.isLog()) {
-        GXLog.e("putLayoutForItemPosition key=$key value=$value")
+        GXLog.e("putLayoutForScroll key=$key value=$value")
     }
-    layoutForItemPosition?.put(key, value)
+    layoutForScroll?.put(key, value)
 }
 
-fun GXTemplateContext.getLayoutForItemPosition(key: Any): Layout? {
-    return layoutForItemPosition?.get(key)
+fun GXTemplateContext.getLayoutForScroll(key: Any): Layout? {
+    return layoutForScroll?.get(key)
 }
 
-fun GXTemplateContext.getMaxHeightLayoutForItemPosition(): Layout? {
-    return layoutForItemPosition?.maxWithOrNull { a, b ->
+fun GXTemplateContext.getMaxHeightLayoutForScroll(): Layout? {
+    return layoutForScroll?.maxWithOrNull { a, b ->
         a.value.height.compareTo(b.value.height)
     }?.value
 }

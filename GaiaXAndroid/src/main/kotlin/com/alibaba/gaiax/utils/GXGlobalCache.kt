@@ -20,25 +20,6 @@ class GXGlobalCache {
         return layoutForPrepareView.containsKey(key)
     }
 
-    fun isExistForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForTemplateItem.containsKey(key)
-    }
-
-    fun clearLayoutForTemplateItem() {
-        layoutForTemplateItem.clear()
-    }
-
-    fun getLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForTemplateItem[key]
-    }
-
-    fun putLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForTemplateItem[key] = value
-        if (GXLog.isLog()) {
-            GXLog.e("putLayoutForTemplateItem key=${key.hashCode()} value=$value")
-        }
-    }
-
     fun isExistNodeForItemPosition(key: Any): Boolean {
         return nodeForItemPosition.containsKey(key)
     }
@@ -59,15 +40,11 @@ class GXGlobalCache {
     }
 
     /**
-     * layout cache for preview view
+     * layout cache for preview view.
+     *
+     * the cache will use to reduce computation at create view step.
      */
     private val layoutForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
-        mutableMapOf()
-
-    /**
-     * layout cache for template item
-     */
-    private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
         mutableMapOf()
 
     /**

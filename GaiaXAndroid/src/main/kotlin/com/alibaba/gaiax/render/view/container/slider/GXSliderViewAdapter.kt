@@ -22,7 +22,6 @@ import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import app.visly.stretch.Layout
-import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
@@ -30,7 +29,6 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
-import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
 
@@ -58,24 +56,6 @@ class GXSliderViewAdapter(
         return view == obj
     }
 
-    private fun getVisualNestTemplateNode(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateNode? {
-        gxNode.childTemplateItems?.forEach {
-            if (it.first.templateId == gxTemplateItem.templateId) {
-                return it.second
-            }
-        }
-        return null
-    }
-
-    private fun getMeasureSize(itemViewPort: Size<Float?>) = GXTemplateEngine.GXMeasureSize(
-        itemViewPort.width, itemViewPort.height
-    )
-
-    private fun getContainerSize(itemPosition: Int, itemData: JSONObject): Layout? =
-        GXNodeUtils.computeItemContainerSize(
-            gxTemplateContext, gxNode, itemData, itemPosition
-        )
-
     private fun getItemContainerSize(containerSize: Layout?): ViewPager.LayoutParams {
         val itemContainerWidth =
             containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
@@ -96,18 +76,22 @@ class GXSliderViewAdapter(
             position
         }
 
-        val gxTemplateItem = getTemplateItem()
+        val templateItem = getTemplateItem()
             ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
 
         val itemData = data.getJSONObject(itemPosition) ?: JSONObject()
 
-        val visualNestTemplateNode = getVisualNestTemplateNode(gxTemplateItem)
+        val visualNestTemplateNode = gxNode.childTemplateItems?.firstOrNull()?.second
 
-        val itemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
+        val itemViewPort = GXNodeUtils.computeSliderItemViewPort(gxTemplateContext, gxNode)
 
-        val itemMeasureSize = getMeasureSize(itemViewPort)
+        val itemMeasureSize = GXTemplateEngine.GXMeasureSize(
+            itemViewPort.width, itemViewPort.height
+        )
 
-        val itemContainerSize = getContainerSize(itemPosition, itemData)
+        val itemContainerSize = GXNodeUtils.computeSliderItemContainerSize(
+            gxTemplateContext, gxNode, itemViewPort, itemData, itemPosition
+        )
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
@@ -121,21 +105,28 @@ class GXSliderViewAdapter(
                 gxTemplateContext.templateData?.tag,
                 itemContainer,
                 itemMeasureSize,
-                gxTemplateItem,
+                templateItem,
                 itemPosition,
                 visualNestTemplateNode,
                 itemData
             )
         } else {
 
-            val childView = if (itemContainer.childCount != 0) {
+            // 获取坑位View
+            val gxView = if (itemContainer.childCount != 0) {
                 itemContainer.getChildAt(0)
             } else {
-                val childView = GXTemplateEngine.instance.createView(
-                    gxTemplateItem, itemMeasureSize, visualNestTemplateNode
-                )
-                itemContainer.addView(childView)
-                childView
+
+                GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
+
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                    templateItem, itemMeasureSize, visualNestTemplateNode, itemPosition, itemData
+                ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+
+                val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
+
+                itemContainer.addView(itemView)
+                itemView
             }
 
             // 为坑位View绑定数据
@@ -187,13 +178,19 @@ class GXSliderViewAdapter(
                     }
                 }
             }
-            if (childView != null) {
-                GXTemplateEngine.instance.bindData(
-                    childView, gxTemplateData, itemMeasureSize
+
+            if (gxView != null) {
+
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(
+                    gxView, gxTemplateData, itemMeasureSize
+                )
+
+                GXTemplateEngine.instance.bindDataOnlyViewTree(
+                    gxView, gxTemplateData, itemMeasureSize
                 )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
-                itemContainer.layoutParams.width = childView.layoutParams.width
+                itemContainer.layoutParams.width = gxView.layoutParams.width
             }
         }
 

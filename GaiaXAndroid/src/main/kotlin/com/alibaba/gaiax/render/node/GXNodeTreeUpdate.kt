@@ -335,7 +335,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeGridAndSliderSize(
+                    val containerSize = GXNodeUtils.computeGridSize(
                         gxTemplateContext, gxNode, containerData
                     )
                     containerSize?.height?.let {
@@ -349,7 +349,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 容器节点没有设置高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeGridAndSliderSize(
+                    val containerSize = GXNodeUtils.computeSliderSize(
                         gxTemplateContext, gxNode, containerData
                     )
                     containerSize?.height?.let {

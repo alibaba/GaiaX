@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.context.clearLayoutForItemPosition
+import com.alibaba.gaiax.context.clearLayoutForScroll
 import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
@@ -581,9 +581,6 @@ class GXTemplateEngine {
             gxTemplateContext.reset()
 
             //
-            GXGlobalCache.instance.clearLayoutForTemplateItem()
-
-            //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
             gxRootNode.stretchNode.layoutByCreate?.let {
@@ -730,7 +727,7 @@ class GXTemplateEngine {
                 oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
         }
 
-        gxTemplateContext.clearLayoutForItemPosition()
+        gxTemplateContext.clearLayoutForScroll()
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)

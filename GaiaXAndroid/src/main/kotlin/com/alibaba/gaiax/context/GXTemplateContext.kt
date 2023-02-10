@@ -56,6 +56,7 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+
     var isReuseRootNode: Boolean = false
 
     /**
@@ -71,8 +72,20 @@ class GXTemplateContext private constructor(
 
     /**
      * item layout cache for item data.
+     *
+     * the cache will used to surely calculate once item layout at scroll container.
+     *
+     * if the cache be created at computeScrollSize, it will be used at createViewHolder and bindViewHolder.
+     * if the cache be created at createViewHolder, it will used at bindViewHolder.
+     *
+     * key is itemCacheKey ${itemPosition}-${itemData.hashCode()}.
+     * value is item layout.
      */
-    var layoutForItemPosition: MutableMap<Any, Layout>? = null
+    var layoutForScroll: MutableMap<Any, Layout>? = null
+
+    var sliderItemLayoutCache: Layout? = null
+
+    var gridItemLayoutCache: Layout? = null
 
     /**
      * Is dirty
@@ -107,7 +120,7 @@ class GXTemplateContext private constructor(
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     fun release() {
-        layoutForItemPosition?.clear()
+        layoutForScroll?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()

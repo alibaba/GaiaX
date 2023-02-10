@@ -547,9 +547,9 @@ object GXNodeUtils {
 
         gxItemTemplateContext.templateData = gxTemplateData
 
-        val gxItemRootNode = GXTemplateEngine.instance.render.createNode(gxItemTemplateContext)
+        val gxItemRootNode = GXTemplateEngine.instance.render.createViewOnlyNodeTree(gxItemTemplateContext)
 
-        GXTemplateEngine.instance.render.bindNodeData(gxItemTemplateContext)
+        GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
 
         return gxItemRootNode.stretchNode.layoutByBind
     }

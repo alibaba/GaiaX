@@ -80,23 +80,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
     }
 
-    fun buildLayoutAndStyle() {
-        val rootNode = gxTemplateContext.rootNode
-            ?: throw IllegalArgumentException("RootNode is null(buildLayoutAndStyle)")
-        val templateData =
-            gxTemplateContext.templateData?.data ?: throw IllegalArgumentException("Data is null")
-        val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
-
-        // 更新布局
-        Layout.updateNodeTreeLayout(gxTemplateContext, rootNode, templateData, size)
-
-        // 如计算文字自适应的情况，需要处理后重新计算
-        Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
-
-        // 更新样式
-        Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
-    }
-
     object Layout {
 
         internal fun updateNodeTreeLayout(

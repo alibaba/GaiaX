@@ -432,8 +432,7 @@ object GXNodeUtils {
 
             return when {
                 gxGridConfig.isVertical -> {
-                    val padding = padding.left + padding.right
-                    Size(containerWidth - padding, null)
+                    Size(containerWidth - (padding.left + padding.right), null)
                 }
                 gxGridConfig.isHorizontal -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见

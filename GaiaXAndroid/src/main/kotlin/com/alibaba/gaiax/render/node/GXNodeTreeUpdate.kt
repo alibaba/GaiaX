@@ -268,7 +268,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     gxTemplateContext, gxNode, templateData
                 )
                 if (isDirty) {
-                    gxTemplateContext.isDirty = isDirty
+                    gxTemplateContext.isDirty = true
                 }
             }
             // 普通节点
@@ -277,7 +277,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     gxTemplateContext, gxNode, templateData
                 )
                 if (isDirty) {
-                    gxTemplateContext.isDirty = isDirty
+                    gxTemplateContext.isDirty = true
                 }
             }
         }
@@ -867,10 +867,10 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             } else if (gxView is GXIImageView && gxNode.isImageType()) {
                 gxView.setImageStyle(gxTemplateContext, gxCss)
             } else if (gxNode.isContainerType()) {
-                bindContainerViewCss(gxTemplateContext, gxCss, gxView, gxNode)
+                bindContainerViewCss(gxTemplateContext, gxView, gxNode)
             }
 
-            bindCommonViewCss(gxTemplateContext, gxView, gxCss, gxNode)
+            bindCommonViewCss(gxView, gxCss, gxNode)
         }
 
         private fun bindBoxShadow(
@@ -952,7 +952,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                     // 添加事件
                     gxNodeEvent.addDataBindingEvent(gxTemplateContext, gxNode, templateData)
                 } else {
-                    throw IllegalArgumentException("Not support the event $gxNodeEvent")
+                    throw IllegalArgumentException("Not support the event")
                 }
             }
         }
@@ -1013,7 +1013,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             when {
                 gxNode.isCustomViewType() -> bindCustom(
-                    gxTemplateContext, view, gxNode.templateNode, templateData
+                    view, gxNode.templateNode, templateData
                 )
                 gxNode.isTextType() -> bindText(
                     gxTemplateContext, view, css, layer, gxNode.templateNode, templateData
@@ -1206,7 +1206,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindCustom(
-            gxTemplateContext: GXTemplateContext,
             view: GXIViewBindData,
             gxTemplateNode: GXTemplateNode,
             templateData: JSONObject
@@ -1216,7 +1215,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindCommonViewCss(
-            gxTemplateContext: GXTemplateContext, gxView: View, gxCss: GXCss, gxNode: GXNode
+            gxView: View, gxCss: GXCss, gxNode: GXNode
         ) {
 
             gxView.setDisplay(gxCss.style.display)
@@ -1237,13 +1236,13 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindContainerViewCss(
-            gxTemplateContext: GXTemplateContext, gxCss: GXCss, view: View, gxNode: GXNode
+            gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
         ) {
             if (gxNode.isContainerType()) {
                 if (gxNode.isGridType()) {
                     bindGridContainerCSS(gxTemplateContext, view, gxNode)
                 } else if (gxNode.isScrollType()) {
-                    bindScrollContainerCSS(gxTemplateContext, view, gxNode)
+                    bindScrollContainerCSS(view, gxNode)
                 }
             }
         }
@@ -1262,7 +1261,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindScrollContainerCSS(
-            gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
+            view: View, gxNode: GXNode
         ) {
             gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 

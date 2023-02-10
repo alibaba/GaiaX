@@ -81,7 +81,7 @@ class GXTemplateContext private constructor(
      * key is itemCacheKey ${itemPosition}-${itemData.hashCode()}.
      * value is item layout.
      */
-    var layoutForScroll: MutableMap<Any, Layout>? = null
+    var scrollItemLayoutCache: MutableMap<Any, Layout>? = null
 
     var sliderItemLayoutCache: Layout? = null
 
@@ -120,7 +120,7 @@ class GXTemplateContext private constructor(
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     fun release() {
-        layoutForScroll?.clear()
+        scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()

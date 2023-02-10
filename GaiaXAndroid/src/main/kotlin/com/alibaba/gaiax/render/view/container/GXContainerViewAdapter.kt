@@ -95,7 +95,7 @@ class GXContainerViewAdapter(
         val itemMeasureSize = getMeasureSize(itemViewPort)
 
         val itemContainerSize = getItemContainerSize(
-            isFooterItem, templateItem, itemMeasureSize, visualNestTemplateNode, itemViewPort
+            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
         )
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
@@ -180,7 +180,7 @@ class GXContainerViewAdapter(
         val itemMeasureSize = getMeasureSize(itemViewPort)
 
         val itemContainerSize = getItemContainerSize(
-            isFooterItem, templateItem, itemMeasureSize, visualNestTemplateNode, itemViewPort
+            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
         )
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
@@ -307,17 +307,12 @@ class GXContainerViewAdapter(
     private fun getItemContainerSize(
         isFooterItem: Boolean,
         gxTemplateItem: GXTemplateEngine.GXTemplateItem,
-        gxMeasureSize: GXTemplateEngine.GXMeasureSize,
         gxVisualNestTemplateNode: GXTemplateNode?,
         itemViewPort: Size<Float?>
     ): Layout? {
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
         return if (isFooterItem) {
-            val templateContext = GXTemplateEngine.instance.createTemplateContext(
-                gxTemplateItem, gxMeasureSize, gxVisualNestTemplateNode
-            )
-            GXNodeUtils.computeFooterItemContainerSize(
-                templateContext,
+            GXNodeUtils.computeScrollAndGridFooterItemContainerSize(
                 gxNode,
                 itemViewPort,
                 gxTemplateItem,
@@ -326,7 +321,7 @@ class GXContainerViewAdapter(
                 position
             )
         } else {
-            GXNodeUtils.computeItemContainerSize(
+            GXNodeUtils.computeScrollAndGridItemContainerSize(
                 gxTemplateContext, gxNode, itemData, position
             )
         }
@@ -337,8 +332,11 @@ class GXContainerViewAdapter(
     )
 
     private fun getItemViewPort(isFooterItem: Boolean) =
-        if (isFooterItem) GXNodeUtils.computeFooterItemViewPort(gxTemplateContext, gxNode)
-        else GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
+        if (isFooterItem) GXNodeUtils.computeScrollAndGridFooterItemViewPort(
+            gxTemplateContext,
+            gxNode
+        )
+        else GXNodeUtils.computeScrollAndGridItemViewPort(gxTemplateContext, gxNode)
 
     override fun getItemViewType(position: Int): Int {
 

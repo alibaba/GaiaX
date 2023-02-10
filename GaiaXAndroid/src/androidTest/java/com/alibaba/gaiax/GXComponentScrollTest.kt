@@ -10,7 +10,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -58,24 +57,23 @@ class GXComponentScrollTest : GXBaseTest() {
                 childItemContainer: ViewGroup,
                 childMeasureSize: GXTemplateEngine.GXMeasureSize,
                 childTemplateItem: GXTemplateEngine.GXTemplateItem,
-                childItemPosition: Int,
-                childVisualNestTemplateNode: GXTemplateNode?,
-                childItemData: JSONObject,
-                gxHostTemplateContext: GXTemplateContext?
+                gxExtendParams: GXTemplateEngine.GXExtendParams
             ): Any? {
                 // 获取坑位View
                 val childView = if (childItemContainer.childCount != 0) {
                     childItemContainer.getChildAt(0)
                 } else {
                     GXTemplateEngine.instance.createView(
-                        childTemplateItem, childMeasureSize, childVisualNestTemplateNode
+                        childTemplateItem,
+                        childMeasureSize,
+                        gxExtendParams
                     ).apply {
                         childItemContainer.addView(this)
                     }
                 }
 
                 // 为坑位View绑定数据
-                val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+                val childTemplateData = GXTemplateEngine.GXTemplateData(gxExtendParams.gxItemData!!)
                 GXTemplateEngine.instance.bindData(childView, childTemplateData)
                 return null
             }

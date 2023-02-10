@@ -106,9 +106,12 @@ class GXSliderViewAdapter(
                 itemContainer,
                 itemMeasureSize,
                 templateItem,
-                itemPosition,
-                visualNestTemplateNode,
-                itemData
+                GXTemplateEngine.GXExtendParams().apply {
+                    this.gxItemPosition = itemPosition
+                    this.gxItemData = itemData
+                    this.gxHostTemplateContext = gxTemplateContext
+                    this.gxVisualTemplateNode = visualNestTemplateNode
+                }
             )
         } else {
 
@@ -119,14 +122,15 @@ class GXSliderViewAdapter(
 
                 GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
-                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
-                    templateItem,
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem,
                     itemMeasureSize,
-                    visualNestTemplateNode,
-                    itemPosition,
-                    itemData,
-                    gxTemplateContext
-                ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    })
+                    ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
 
                 val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
 

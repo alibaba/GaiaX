@@ -24,7 +24,6 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
-import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
@@ -72,10 +71,7 @@ class GXRegisterCenter {
             itemContainer: ViewGroup,
             gxMeasureSize: GXTemplateEngine.GXMeasureSize,
             gxTemplateItem: GXTemplateEngine.GXTemplateItem,
-            itemPosition: Int,
-            visualNestTemplateNode: GXTemplateNode?,
-            itemData: JSONObject,
-            gxHostTemplateContext: GXTemplateContext? = null
+            gxExtendParams: GXTemplateEngine.GXExtendParams
         ): Any?
     }
 

@@ -209,10 +209,12 @@ class GXContainerViewAdapter(
                 itemContainer,
                 itemMeasureSize,
                 templateItem,
-                itemPosition,
-                visualNestTemplateNode,
-                itemData,
-                gxTemplateContext,
+                GXTemplateEngine.GXExtendParams().apply {
+                    this.gxItemPosition = itemPosition
+                    this.gxItemData = itemData
+                    this.gxHostTemplateContext = gxTemplateContext
+                    this.gxVisualTemplateNode = visualNestTemplateNode
+                }
             )
         } else {
 
@@ -226,10 +228,12 @@ class GXContainerViewAdapter(
                 val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
                     templateItem,
                     itemMeasureSize,
-                    visualNestTemplateNode,
-                    itemPosition,
-                    itemData,
-                    gxTemplateContext
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    }
                 ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
 
                 val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)

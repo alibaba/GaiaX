@@ -355,6 +355,13 @@ class GXTemplateEngine {
      */
     data class GXMeasureSize(var width: Float?, var height: Float?)
 
+    class GXExtendParams {
+        var gxItemPosition: Int? = null
+        var gxItemData: JSONObject? = null
+        var gxHostTemplateContext: GXTemplateContext? = null
+        var gxVisualTemplateNode: GXTemplateNode? = null
+    }
+
     /**
      * Template data parameters
      */
@@ -506,7 +513,7 @@ class GXTemplateEngine {
     fun createView(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode? = null
+        gxExtendParams: GXExtendParams? = null
     ): View? {
         if (GXLog.isLog()) {
             GXLog.e("createView")
@@ -515,7 +522,7 @@ class GXTemplateEngine {
             prepareView(gxTemplateItem, gxMeasureSize)
 
             val gxTemplateContext = createViewOnlyNodeTree(
-                gxTemplateItem, gxMeasureSize, gxVisualTemplateNode
+                gxTemplateItem, gxMeasureSize, gxExtendParams
             )
             if (gxTemplateContext != null) {
                 createViewOnlyViewTree(gxTemplateContext)
@@ -599,36 +606,14 @@ class GXTemplateEngine {
     fun createViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode? = null
-    ): GXTemplateContext? {
-        return createViewOnlyNodeTree(
-            gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, null, null, null
-        )
-    }
-
-    /**
-     * @suppress
-     * @hide
-     */
-    fun createViewOnlyNodeTree(
-        gxTemplateItem: GXTemplateItem,
-        gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode? = null,
-        gxItemPosition: Int? = null,
-        gxItemData: JSONObject? = null,
-        gxHostTemplateContext: GXTemplateContext? = null
+        gxExtendParams: GXExtendParams? = null
     ): GXTemplateContext? {
         if (GXLog.isLog()) {
             GXLog.e("createViewOnlyNodeTree")
         }
         return try {
             internalCreateViewOnlyNodeTree(
-                gxTemplateItem,
-                gxMeasureSize,
-                gxVisualTemplateNode,
-                gxItemPosition,
-                gxItemData,
-                gxHostTemplateContext
+                gxTemplateItem, gxMeasureSize, gxExtendParams
             )
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
@@ -645,19 +630,18 @@ class GXTemplateEngine {
     private fun internalCreateViewOnlyNodeTree(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
-        gxVisualTemplateNode: GXTemplateNode?,
-        gxItemPosition: Int?,
-        gxItemData: JSONObject?,
-        gxHostTemplateContext: GXTemplateContext? = null
+        gxExtendParams: GXExtendParams?
     ): GXTemplateContext {
         val gxTemplateInfo = data.getTemplateInfo(gxTemplateItem)
 
         val gxTemplateContext = GXTemplateContext.createContext(
-            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
+            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxExtendParams?.gxVisualTemplateNode
         )
 
+        val gxHostTemplateContext = gxExtendParams?.gxHostTemplateContext
         if (gxHostTemplateContext != null) {
-            val itemCacheKey = "${gxItemPosition}-${gxItemData.hashCode()}"
+            val itemCacheKey =
+                "${gxExtendParams.gxItemPosition}-${gxExtendParams.gxItemData.hashCode()}"
             if (gxHostTemplateContext.isExistNodeForScroll(itemCacheKey)) {
                 gxTemplateContext.rootNode = gxHostTemplateContext.obtainNodeForScroll(itemCacheKey)
                 gxTemplateContext.isReuseRootNode = true

@@ -100,29 +100,24 @@ object GXNodeUtils {
         // case 1
         if (templateItems.size == 1) {
 
+            val itemTemplatePair = templateItems.firstOrNull() ?: return null
+            val itemTemplateItem = itemTemplatePair.first
+            val itemVisualTemplateNode = itemTemplatePair.second
+
             // 2. 计算坑位实际宽高结果
             gxContainerData.forEach {
                 val itemData = it as JSONObject
-
-                val itemTemplatePair = templateItems.firstOrNull() ?: return null
-                val itemTemplateItem = itemTemplatePair.first
-                val itemVisualTemplateNode = itemTemplatePair.second
                 val itemHashCode = itemData.hashCode()
 
-                gxTemplateContext.initLayoutCache()
-
-                if (!gxTemplateContext.isExistOfLayoutCache(itemData)) {
-                    computeItemLayout(
-                        gxTemplateContext,
-                        gxNode,
-                        itemViewPort,
-                        itemTemplateItem,
-                        itemVisualTemplateNode,
-                        itemData
-                    )?.let { itemLayout ->
-                        gxTemplateContext.putLayoutCache(itemHashCode, itemLayout)
-                    }
-                }
+                computeItemLayoutToCache(
+                    gxTemplateContext,
+                    gxNode,
+                    itemData,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    itemHashCode
+                )
             }
 
             val itemLayout = gxTemplateContext.getMaxHeightLayoutOfLayoutCache()
@@ -214,23 +209,19 @@ object GXNodeUtils {
             // 2. 计算坑位实际宽高结果
             val itemTemplatePair = childTemplateItems.firstOrNull() ?: return null
             val itemTemplateItem = itemTemplatePair.first
+            val itemData = gxItemData
             val itemVisualTemplateNode = itemTemplatePair.second
-            val itemHashCode = gxItemData.hashCode()
+            val itemHashCode = itemData.hashCode()
 
-            gxTemplateContext.initLayoutCache()
-
-            if (!gxTemplateContext.isExistOfLayoutCache(itemHashCode)) {
-                computeItemLayout(
-                    gxTemplateContext,
-                    gxNode,
-                    itemViewPort,
-                    itemTemplateItem,
-                    itemVisualTemplateNode,
-                    gxItemData
-                )?.let { itemLayout ->
-                    gxTemplateContext.putLayoutCache(itemHashCode, itemLayout)
-                }
-            }
+            computeItemLayoutToCache(
+                gxTemplateContext,
+                gxNode,
+                itemData,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemHashCode
+            )
 
             return gxTemplateContext.getLayoutCache(itemHashCode)
         }
@@ -265,6 +256,31 @@ object GXNodeUtils {
             }
 
             return null
+        }
+    }
+
+    private fun computeItemLayoutToCache(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxItemData: JSONObject,
+        itemViewPort: Size<Float?>,
+        itemTemplateItem: GXTemplateEngine.GXTemplateItem,
+        itemVisualTemplateNode: GXTemplateNode,
+        itemHashCode: Int
+    ) {
+        gxTemplateContext.initLayoutCache()
+
+        if (!gxTemplateContext.isExistOfLayoutCache(itemHashCode)) {
+            computeItemLayout(
+                gxTemplateContext,
+                gxNode,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                gxItemData
+            )?.let { itemLayout ->
+                gxTemplateContext.putLayoutCache(itemHashCode, itemLayout)
+            }
         }
     }
 

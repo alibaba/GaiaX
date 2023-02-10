@@ -35,7 +35,6 @@ import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
 import com.alibaba.gaiax.utils.getStringExt
-import com.alibaba.gaiax.utils.getStringExtCanNull
 
 /**
  * @suppress
@@ -311,7 +310,7 @@ class GXContainerViewAdapter(
             )
         } else {
             GXNodeUtils.computeItemContainerSize(
-                gxTemplateContext, gxNode, itemData
+                gxTemplateContext, gxNode, itemData, position
             )
         }
     }
@@ -360,8 +359,9 @@ class GXContainerViewAdapter(
                 val itemData = containerData.getJSONObject(position)
                 gxNode.templateNode.resetDataCache()
                 val typeData = gxNode.templateNode.getExtend(itemData)
-                if (typeData != null){
-                    val itemConfig = "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
+                if (typeData != null) {
+                    val itemConfig =
+                        "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
                     val templateId = typeData.getStringExt(itemConfig)
                     return items.firstOrNull { it.first.templateId == templateId }?.first
                 }

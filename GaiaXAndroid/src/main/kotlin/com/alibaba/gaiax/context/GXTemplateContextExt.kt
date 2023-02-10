@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.context
 
 import app.visly.stretch.Layout
+import com.alibaba.gaiax.utils.GXLog
 
 
 fun GXTemplateContext.initLayoutCache() {
@@ -18,6 +19,9 @@ fun GXTemplateContext.isExistOfLayoutCache(key: Any): Boolean {
 }
 
 fun GXTemplateContext.putLayoutCache(key: Any, value: Layout) {
+    if (GXLog.isLog()) {
+        GXLog.e("putLayoutCache key=$key value=$value")
+    }
     layoutCache?.put(key, value)
 }
 

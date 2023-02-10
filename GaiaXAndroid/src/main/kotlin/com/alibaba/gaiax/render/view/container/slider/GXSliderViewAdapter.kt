@@ -38,8 +38,7 @@ import com.alibaba.gaiax.template.GXSliderConfig
  * @suppress
  */
 class GXSliderViewAdapter(
-    val gxTemplateContext: GXTemplateContext,
-    val gxNode: GXNode
+    val gxTemplateContext: GXTemplateContext, val gxNode: GXNode
 ) : PagerAdapter() {
 
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
@@ -68,24 +67,21 @@ class GXSliderViewAdapter(
         return null
     }
 
-    private fun getMeasureSize(childItemViewPort: Size<Float?>) =
-        GXTemplateEngine.GXMeasureSize(
-            childItemViewPort.width, childItemViewPort.height
-        )
+    private fun getMeasureSize(itemViewPort: Size<Float?>) = GXTemplateEngine.GXMeasureSize(
+        itemViewPort.width, itemViewPort.height
+    )
 
-    private fun getChildContainerSize(): Layout? =
+    private fun getContainerSize(itemPosition: Int, itemData: JSONObject): Layout? =
         GXNodeUtils.computeItemContainerSize(
-            gxTemplateContext,
-            gxNode,
-            data.firstOrNull() as? JSONObject ?: JSONObject()
+            gxTemplateContext, gxNode, itemData, itemPosition
         )
 
-    private fun getChildItemContainerSize(childContainerSize: Layout?): ViewPager.LayoutParams {
-        val itemContainerWidth = childContainerSize?.width?.toInt()
-            ?: FrameLayout.LayoutParams.WRAP_CONTENT
+    private fun getItemContainerSize(containerSize: Layout?): ViewPager.LayoutParams {
+        val itemContainerWidth =
+            containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
         val itemContainerHeight =
-            childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+            containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
         return ViewPager.LayoutParams().apply {
             this.width = itemContainerWidth
@@ -94,62 +90,60 @@ class GXSliderViewAdapter(
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val childItemPosition = if (data.size > 0) {
+        val itemPosition = if (data.size > 0) {
             position % data.size
         } else {
             position
         }
 
-        val childTemplateItem = getTemplateItem()
+        val gxTemplateItem = getTemplateItem()
             ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
 
-        val childItemData = data.getJSONObject(childItemPosition) ?: JSONObject()
+        val itemData = data.getJSONObject(itemPosition) ?: JSONObject()
 
-        val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
+        val visualNestTemplateNode = getVisualNestTemplateNode(gxTemplateItem)
 
-        val childItemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
+        val itemViewPort = GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
 
-        val childItemMeasureSize = getMeasureSize(childItemViewPort)
+        val itemMeasureSize = getMeasureSize(itemViewPort)
 
-        val childItemContainerSize = getChildContainerSize()
+        val itemContainerSize = getContainerSize(itemPosition, itemData)
 
-        val childItemContainerLayoutParams = getChildItemContainerSize(childItemContainerSize)
+        val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
-        val childItemContainer = GXItemContainer(container.context)
+        val itemContainer = GXItemContainer(container.context)
 
-        childItemContainer.layoutParams = childItemContainerLayoutParams
+        itemContainer.layoutParams = itemContainerLayoutParams
 
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
             processContainerItemBind.bindViewHolder(
                 gxTemplateContext.templateData?.tag,
-                childItemContainer,
-                childItemMeasureSize,
-                childTemplateItem,
-                childItemPosition,
-                childVisualNestTemplateNode,
-                childItemData
+                itemContainer,
+                itemMeasureSize,
+                gxTemplateItem,
+                itemPosition,
+                visualNestTemplateNode,
+                itemData
             )
         } else {
 
-            val childView = if (childItemContainer.childCount != 0) {
-                childItemContainer.getChildAt(0)
+            val childView = if (itemContainer.childCount != 0) {
+                itemContainer.getChildAt(0)
             } else {
                 val childView = GXTemplateEngine.instance.createView(
-                    childTemplateItem,
-                    childItemMeasureSize,
-                    childVisualNestTemplateNode
+                    gxTemplateItem, itemMeasureSize, visualNestTemplateNode
                 )
-                childItemContainer.addView(childView)
+                itemContainer.addView(childView)
                 childView
             }
 
             // 为坑位View绑定数据
-            val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData).apply {
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
                     override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
                         super.onGestureEvent(gxGesture)
-                        gxGesture.index = childItemPosition
+                        gxGesture.index = itemPosition
                         gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
                     }
 
@@ -166,19 +160,19 @@ class GXSliderViewAdapter(
 
                 this.trackListener = object : GXTemplateEngine.GXITrackListener {
                     override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
                     }
 
                     override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             gxTrack
                         )
                     }
 
                     override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
                             gxTrack
                         )
@@ -187,28 +181,27 @@ class GXSliderViewAdapter(
 
                 this.dataListener = object : GXTemplateEngine.GXIDataListener {
                     override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
-                        return gxTemplateContext.templateData?.dataListener
-                            ?.onTextProcess(gxTextData)
+                        return gxTemplateContext.templateData?.dataListener?.onTextProcess(
+                            gxTextData
+                        )
                     }
                 }
             }
             if (childView != null) {
                 GXTemplateEngine.instance.bindData(
-                    childView,
-                    childTemplateData,
-                    childItemMeasureSize
+                    childView, gxTemplateData, itemMeasureSize
                 )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
-                childItemContainer.layoutParams.width = childView.layoutParams.width
+                itemContainer.layoutParams.width = childView.layoutParams.width
             }
         }
 
-        container.addView(childItemContainer)
+        container.addView(itemContainer)
 
-        itemViewMap[getItemViewKey(position)] = childItemContainer
+        itemViewMap[getItemViewKey(position)] = itemContainer
 
-        return childItemContainer
+        return itemContainer
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {

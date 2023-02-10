@@ -25,7 +25,7 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.utils.GXCache
+import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.getStringExt
 import com.alibaba.gaiax.utils.getStringExtCanNull
 import kotlin.math.ceil
@@ -107,21 +107,20 @@ object GXNodeUtils {
             val itemTemplateItem = itemTemplatePair.first
             val itemVisualTemplateNode = itemTemplatePair.second
 
-            val itemLayout =
-                if (GXCache.instance.layoutCacheForTemplateItem.containsKey(itemTemplateItem)) {
-                    GXCache.instance.layoutCacheForTemplateItem[itemTemplateItem]
-                } else {
-                    computeItemLayout(
-                        gxTemplateContext,
-                        gxNode,
-                        itemViewPort,
-                        itemTemplateItem,
-                        itemVisualTemplateNode,
-                        itemData
-                    )?.also {
-                        GXCache.instance.layoutCacheForTemplateItem[itemTemplateItem] = it
-                    }
+            val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
+                GXGlobalCache.instance.layoutFTI[itemTemplateItem]
+            } else {
+                computeItemLayout(
+                    gxTemplateContext,
+                    gxNode,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    itemData
+                )?.also {
+                    GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
                 }
+            }
 
             // 3. 计算容器期望的宽高结果
             return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
@@ -202,21 +201,20 @@ object GXNodeUtils {
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        val itemLayout =
-            if (GXCache.instance.layoutCacheForTemplateItem.containsKey(itemTemplateItem)) {
-                GXCache.instance.layoutCacheForTemplateItem[itemTemplateItem]
-            } else {
-                computeItemLayout(
-                    gxTemplateContext,
-                    gxNode,
-                    itemViewPort,
-                    itemTemplateItem,
-                    itemVisualTemplateNode,
-                    itemData
-                )?.also {
-                    GXCache.instance.layoutCacheForTemplateItem[itemTemplateItem] = it
-                }
+        val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
+            GXGlobalCache.instance.layoutFTI[itemTemplateItem]
+        } else {
+            computeItemLayout(
+                gxTemplateContext,
+                gxNode,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData
+            )?.also {
+                GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
             }
+        }
         return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
     }
 
@@ -556,7 +554,7 @@ object GXNodeUtils {
             gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
 
-        if (!GXCache.instance.layoutCacheForPrepareView.containsKey(gxTemplateItem)) {
+        if (!GXGlobalCache.instance.layoutFPV.containsKey(gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
         }
 

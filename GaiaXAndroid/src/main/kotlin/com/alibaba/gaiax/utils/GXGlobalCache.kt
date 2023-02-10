@@ -20,25 +20,6 @@ class GXGlobalCache {
         return layoutForPrepareView.containsKey(key)
     }
 
-    fun isExistNodeForItemPosition(key: Any): Boolean {
-        return nodeForItemPosition.containsKey(key)
-    }
-
-    fun obtainNodeForItemPosition(key: Any): GXNode? {
-        val value = nodeForItemPosition.remove(key)
-        if (GXLog.isLog()) {
-            GXLog.e("obtainNodeForItemPosition key=${key} value=${value}")
-        }
-        return value
-    }
-
-    fun putNodeForItemPosition(key: Any, value: GXNode) {
-        nodeForItemPosition[key] = value
-        if (GXLog.isLog()) {
-            GXLog.e("putNodeForItemPosition key=${key} value=${value}")
-        }
-    }
-
     /**
      * layout cache for preview view.
      *
@@ -46,11 +27,6 @@ class GXGlobalCache {
      */
     private val layoutForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
         mutableMapOf()
-
-    /**
-     * node cache for item position
-     */
-    private val nodeForItemPosition: MutableMap<Any, GXNode> = mutableMapOf()
 
     companion object {
         val instance by lazy {

@@ -53,6 +53,7 @@ fun JSON.getAnyExt(valuePath: String): Any? {
                     return null
                 }
             }
+            return null
         }
 
         // 纯对象

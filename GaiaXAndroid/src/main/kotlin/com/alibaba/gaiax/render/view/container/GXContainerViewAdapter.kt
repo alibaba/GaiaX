@@ -211,7 +211,8 @@ class GXContainerViewAdapter(
                 templateItem,
                 itemPosition,
                 visualNestTemplateNode,
-                itemData
+                itemData,
+                gxTemplateContext,
             )
         } else {
 
@@ -223,7 +224,12 @@ class GXContainerViewAdapter(
                 GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
                 val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
-                    templateItem, itemMeasureSize, visualNestTemplateNode, itemPosition, itemData
+                    templateItem,
+                    itemMeasureSize,
+                    visualNestTemplateNode,
+                    itemPosition,
+                    itemData,
+                    gxTemplateContext
                 ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
 
                 val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
@@ -307,7 +313,12 @@ class GXContainerViewAdapter(
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
         return if (isFooterItem) {
             GXNodeUtils.computeScrollAndGridFooterItemContainerSize(
-                itemViewPort, gxTemplateItem, gxVisualNestTemplateNode, itemData, position
+                gxTemplateContext,
+                itemViewPort,
+                gxTemplateItem,
+                gxVisualNestTemplateNode,
+                itemData,
+                position
             )
         } else {
             GXNodeUtils.computeScrollAndGridItemContainerSize(

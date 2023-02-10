@@ -87,6 +87,8 @@ class GXTemplateContext private constructor(
 
     var gridItemLayoutCache: Layout? = null
 
+    var scrollNodeCache: MutableMap<Any, GXNode>? = null
+
     /**
      * Is dirty
      */

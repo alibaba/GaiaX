@@ -60,7 +60,8 @@ class GXComponentScrollTest : GXBaseTest() {
                 childTemplateItem: GXTemplateEngine.GXTemplateItem,
                 childItemPosition: Int,
                 childVisualNestTemplateNode: GXTemplateNode?,
-                childItemData: JSONObject
+                childItemData: JSONObject,
+                gxHostTemplateContext: GXTemplateContext?
             ): Any? {
                 // 获取坑位View
                 val childView = if (childItemContainer.childCount != 0) {

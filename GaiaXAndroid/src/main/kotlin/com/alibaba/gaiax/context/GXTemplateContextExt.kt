@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.context
 
 import app.visly.stretch.Layout
+import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.utils.GXLog
 
 fun GXTemplateContext.initLayoutForScroll() {
@@ -34,3 +35,28 @@ fun GXTemplateContext.getMaxHeightLayoutForScroll(): Layout? {
     }?.value
 }
 
+
+fun GXTemplateContext.initNodeForScroll() {
+    if (scrollNodeCache == null) {
+        scrollNodeCache = mutableMapOf()
+    }
+}
+
+fun GXTemplateContext.isExistNodeForScroll(key: Any): Boolean {
+    return scrollNodeCache?.containsKey(key) ?: false
+}
+
+fun GXTemplateContext.obtainNodeForScroll(key: Any): GXNode? {
+    val value = scrollNodeCache?.remove(key)
+    if (GXLog.isLog()) {
+        GXLog.e("obtainNodeForScroll key=${key} value=${value}")
+    }
+    return value
+}
+
+fun GXTemplateContext.putNodeForScroll(key: Any, value: GXNode) {
+    scrollNodeCache?.put(key, value)
+    if (GXLog.isLog()) {
+        GXLog.e("putNodeForScroll key=${key} value=${value}")
+    }
+}

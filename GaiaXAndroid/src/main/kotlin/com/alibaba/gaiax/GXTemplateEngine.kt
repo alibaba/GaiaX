@@ -25,6 +25,8 @@ import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.context.clearLayoutForScroll
+import com.alibaba.gaiax.context.isExistNodeForScroll
+import com.alibaba.gaiax.context.obtainNodeForScroll
 import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
@@ -599,11 +601,8 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
     ): GXTemplateContext? {
-        if (GXLog.isLog()) {
-            GXLog.e("createViewOnlyNodeTree")
-        }
         return createViewOnlyNodeTree(
-            gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, null, null
+            gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, null, null, null
         )
     }
 
@@ -616,11 +615,20 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null,
         gxItemPosition: Int? = null,
-        gxItemData: JSONObject? = null
+        gxItemData: JSONObject? = null,
+        gxHostTemplateContext: GXTemplateContext? = null
     ): GXTemplateContext? {
+        if (GXLog.isLog()) {
+            GXLog.e("createViewOnlyNodeTree")
+        }
         return try {
             internalCreateViewOnlyNodeTree(
-                gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, gxItemPosition, gxItemData
+                gxTemplateItem,
+                gxMeasureSize,
+                gxVisualTemplateNode,
+                gxItemPosition,
+                gxItemData,
+                gxHostTemplateContext
             )
         } catch (e: Exception) {
             val extensionException = GXRegisterCenter.instance.extensionException
@@ -639,20 +647,25 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode?,
         gxItemPosition: Int?,
-        gxItemData: JSONObject?
+        gxItemData: JSONObject?,
+        gxHostTemplateContext: GXTemplateContext? = null
     ): GXTemplateContext {
         val gxTemplateInfo = data.getTemplateInfo(gxTemplateItem)
+
         val gxTemplateContext = GXTemplateContext.createContext(
             gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxVisualTemplateNode
         )
-        val itemCacheKey = "${gxItemPosition}-${gxItemData.hashCode()}-${gxTemplateItem.hashCode()}"
-        if (GXGlobalCache.instance.isExistNodeForItemPosition(itemCacheKey)) {
-            gxTemplateContext.rootNode =
-                GXGlobalCache.instance.obtainNodeForItemPosition(itemCacheKey)
-            gxTemplateContext.isReuseRootNode = true
-        } else {
-            render.createViewOnlyNodeTree(gxTemplateContext)
+
+        if (gxHostTemplateContext != null) {
+            val itemCacheKey = "${gxItemPosition}-${gxItemData.hashCode()}"
+            if (gxHostTemplateContext.isExistNodeForScroll(itemCacheKey)) {
+                gxTemplateContext.rootNode = gxHostTemplateContext.obtainNodeForScroll(itemCacheKey)
+                gxTemplateContext.isReuseRootNode = true
+                return gxTemplateContext
+            }
         }
+
+        render.createViewOnlyNodeTree(gxTemplateContext)
         return gxTemplateContext
     }
 

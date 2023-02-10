@@ -186,7 +186,12 @@ object GXNodeUtils {
 
         if (gxTemplateContext.gridItemLayoutCache == null) {
             gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
             )
         }
         return gxTemplateContext.gridItemLayoutCache
@@ -268,7 +273,12 @@ object GXNodeUtils {
 
         if (gxTemplateContext.sliderItemLayoutCache == null) {
             gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
             )
         }
 
@@ -319,7 +329,12 @@ object GXNodeUtils {
 
         if (!gxTemplateContext.isExistForScroll(itemCacheKey)) {
             computeScrollItemLayout(
-                itemViewPort, itemTemplateItem, itemVisualTemplateNode, gxItemData, itemCacheKey
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                gxItemData,
+                itemCacheKey
             )?.let { itemLayout ->
                 gxTemplateContext.putLayoutForScroll(itemCacheKey, itemLayout)
             }
@@ -347,7 +362,12 @@ object GXNodeUtils {
 
         if (gxTemplateContext.gridItemLayoutCache == null) {
             gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
             )
         }
 
@@ -377,7 +397,12 @@ object GXNodeUtils {
 
         if (gxTemplateContext.sliderItemLayoutCache == null) {
             gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
             )
         }
 
@@ -387,6 +412,7 @@ object GXNodeUtils {
     }
 
     fun computeScrollAndGridFooterItemContainerSize(
+        gxTemplateContext: GXTemplateContext,
         itemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
@@ -398,6 +424,7 @@ object GXNodeUtils {
             GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
         val itemTemplateData = GXTemplateEngine.GXTemplateData(itemData)
         return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
             gxItemTemplateItem,
             itemMeasureSize,
             itemTemplateData,
@@ -407,6 +434,7 @@ object GXNodeUtils {
     }
 
     private fun computeSliderItemLayout(
+        gxTemplateContext: GXTemplateContext,
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
@@ -417,6 +445,7 @@ object GXNodeUtils {
             GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
         return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
             gxItemTemplateItem,
             gxMeasureSize,
             gxTemplateData,
@@ -426,6 +455,7 @@ object GXNodeUtils {
     }
 
     private fun computeScrollItemLayout(
+        gxTemplateContext: GXTemplateContext,
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
@@ -436,6 +466,7 @@ object GXNodeUtils {
             GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
         return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
             gxItemTemplateItem,
             gxMeasureSize,
             gxTemplateData,
@@ -445,6 +476,7 @@ object GXNodeUtils {
     }
 
     private fun computeGridItemLayout(
+        gxTemplateContext: GXTemplateContext,
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
@@ -455,6 +487,7 @@ object GXNodeUtils {
             GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
         return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
             gxItemTemplateItem,
             gxMeasureSize,
             gxTemplateData,
@@ -611,6 +644,7 @@ object GXNodeUtils {
     }
 
     private fun computeItemLayoutByCreateAndBindNode(
+        gxTemplateContext: GXTemplateContext,
         gxTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxMeasureSize: GXTemplateEngine.GXMeasureSize,
         gxTemplateData: GXTemplateEngine.GXTemplateData,
@@ -635,9 +669,8 @@ object GXNodeUtils {
 
         GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
 
-        GXGlobalCache.instance.putNodeForItemPosition(
-            "${itemCacheKey}-${gxTemplateItem.hashCode()}", gxItemRootNode
-        )
+        gxTemplateContext.initNodeForScroll()
+        gxTemplateContext.putNodeForScroll(itemCacheKey, gxItemRootNode)
 
         return gxItemRootNode.stretchNode.layoutByBind
     }

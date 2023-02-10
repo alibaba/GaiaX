@@ -69,12 +69,13 @@ class GXRegisterCenter {
     interface GXIExtensionContainerItemBind {
         fun bindViewHolder(
             tag: Any?,
-            childItemContainer: ViewGroup,
-            childMeasureSize: GXTemplateEngine.GXMeasureSize,
-            childTemplateItem: GXTemplateEngine.GXTemplateItem,
-            childItemPosition: Int,
-            childVisualNestTemplateNode: GXTemplateNode?,
-            childItemData: JSONObject
+            itemContainer: ViewGroup,
+            gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+            gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+            itemPosition: Int,
+            visualNestTemplateNode: GXTemplateNode?,
+            itemData: JSONObject,
+            gxHostTemplateContext: GXTemplateContext? = null
         ): Any?
     }
 

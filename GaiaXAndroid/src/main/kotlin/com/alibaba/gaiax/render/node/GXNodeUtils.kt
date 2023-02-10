@@ -23,7 +23,7 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.context.*
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.getStringExt
@@ -101,26 +101,31 @@ object GXNodeUtils {
         if (templateItems.size == 1) {
 
             // 2. 计算坑位实际宽高结果
-            val itemTemplatePair = templateItems.firstOrNull() ?: return null
-            val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
+            gxContainerData.forEach {
+                val itemData = it as JSONObject
 
-            val itemTemplateItem = itemTemplatePair.first
-            val itemVisualTemplateNode = itemTemplatePair.second
+                val itemTemplatePair = templateItems.firstOrNull() ?: return null
+                val itemTemplateItem = itemTemplatePair.first
+                val itemVisualTemplateNode = itemTemplatePair.second
+                val itemHashCode = itemData.hashCode()
 
-            val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
-                GXGlobalCache.instance.layoutFTI[itemTemplateItem]
-            } else {
-                computeItemLayout(
-                    gxTemplateContext,
-                    gxNode,
-                    itemViewPort,
-                    itemTemplateItem,
-                    itemVisualTemplateNode,
-                    itemData
-                )?.also {
-                    GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
+                gxTemplateContext.initLayoutCache()
+
+                if (!gxTemplateContext.isExistOfLayoutCache(itemData)) {
+                    computeItemLayout(
+                        gxTemplateContext,
+                        gxNode,
+                        itemViewPort,
+                        itemTemplateItem,
+                        itemVisualTemplateNode,
+                        itemData
+                    )?.let { itemLayout ->
+                        gxTemplateContext.putLayoutCache(itemHashCode, itemLayout)
+                    }
                 }
             }
+
+            val itemLayout = gxTemplateContext.getMaxHeightLayoutOfLayoutCache()
 
             // 3. 计算容器期望的宽高结果
             return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
@@ -184,40 +189,6 @@ object GXNodeUtils {
         }
     }
 
-    fun computeGridAndSliderSize(
-        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
-    ): Size<Dimension?>? {
-
-        val templateItems = gxNode.childTemplateItems ?: return null
-
-        if (templateItems.isEmpty()) {
-            return null
-        }
-
-        val itemTemplatePair = templateItems.firstOrNull() ?: return null
-        val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
-
-        val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
-        val itemTemplateItem = itemTemplatePair.first
-        val itemVisualTemplateNode = itemTemplatePair.second
-
-        val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
-            GXGlobalCache.instance.layoutFTI[itemTemplateItem]
-        } else {
-            computeItemLayout(
-                gxTemplateContext,
-                gxNode,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData
-            )?.also {
-                GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
-            }
-        }
-        return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
-    }
-
     fun computeItemContainerSize(
         gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxItemData: JSONObject
     ): Layout? {
@@ -242,20 +213,26 @@ object GXNodeUtils {
 
             // 2. 计算坑位实际宽高结果
             val itemTemplatePair = childTemplateItems.firstOrNull() ?: return null
-            val childItemTemplateItem = itemTemplatePair.first
-            val childItemVisualTemplateNode = itemTemplatePair.second
+            val itemTemplateItem = itemTemplatePair.first
+            val itemVisualTemplateNode = itemTemplatePair.second
+            val itemHashCode = gxItemData.hashCode()
 
-            // TODO 模板也有可能会因为数据的不同导致宽高结果不同，所以此处计算有一些问题
-            // 1. 需要做缓存逻辑
-            // 2. 需要识别出来子模板中是否会动态修改高度，这样才能尽可能减少问题的出现
-            return computeItemLayout(
-                gxTemplateContext,
-                gxNode,
-                itemViewPort,
-                childItemTemplateItem,
-                childItemVisualTemplateNode,
-                gxItemData
-            )
+            gxTemplateContext.initLayoutCache()
+
+            if (!gxTemplateContext.isExistOfLayoutCache(itemHashCode)) {
+                computeItemLayout(
+                    gxTemplateContext,
+                    gxNode,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    gxItemData
+                )?.let { itemLayout ->
+                    gxTemplateContext.putLayoutCache(itemHashCode, itemLayout)
+                }
+            }
+
+            return gxTemplateContext.getLayoutCache(itemHashCode)
         }
         // case 2
         else {
@@ -289,6 +266,40 @@ object GXNodeUtils {
 
             return null
         }
+    }
+
+    fun computeGridAndSliderSize(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
+    ): Size<Dimension?>? {
+
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
+            return null
+        }
+
+        val itemTemplatePair = templateItems.firstOrNull() ?: return null
+        val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
+
+        val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
+        val itemTemplateItem = itemTemplatePair.first
+        val itemVisualTemplateNode = itemTemplatePair.second
+
+        val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
+            GXGlobalCache.instance.layoutFTI[itemTemplateItem]
+        } else {
+            computeItemLayout(
+                gxTemplateContext,
+                gxNode,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData
+            )?.also {
+                GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
+            }
+        }
+        return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
     }
 
     fun computeFooterItemContainerSize(

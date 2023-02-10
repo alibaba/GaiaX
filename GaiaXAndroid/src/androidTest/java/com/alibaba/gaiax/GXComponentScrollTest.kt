@@ -1713,8 +1713,10 @@ class GXComponentScrollTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(50F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(50F.dpToPx(), rootView.child(0).child(0).height())
         Assert.assertEquals(70F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.child(1).child(0).height())
         Assert.assertEquals(70F.dpToPx(), rootView.height())
     }
 }

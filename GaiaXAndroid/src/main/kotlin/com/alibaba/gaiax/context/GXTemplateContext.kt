@@ -18,6 +18,7 @@ package com.alibaba.gaiax.context
 
 import android.content.Context
 import android.view.View
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
@@ -67,6 +68,11 @@ class GXTemplateContext private constructor(
     var dirtyTexts: MutableSet<GXDirtyText>? = null
 
     /**
+     * item layout cache for item data
+     */
+    var layoutCache: MutableMap<Any, Layout>? = null
+
+    /**
      * Is dirty
      */
     var isDirty: Boolean = false
@@ -103,6 +109,7 @@ class GXTemplateContext private constructor(
     }
 
     fun release() {
+        layoutCache?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()

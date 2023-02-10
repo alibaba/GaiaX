@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.context.clearLayoutCache
 import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
@@ -699,6 +700,7 @@ class GXTemplateEngine {
                 oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
         }
 
+        gxTemplateContext.clearLayoutCache()
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)

@@ -322,7 +322,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 }
 
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeContainerSize(
+                    val containerSize = GXNodeUtils.computeScrollSize(
                         gxTemplateContext, gxNode, containerData
                     )
                     containerSize?.height?.let {
@@ -352,7 +352,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeContainerSize(
+                    val containerSize = GXNodeUtils.computeGridAndSliderSize(
                         gxTemplateContext, gxNode, containerData
                     )
                     containerSize?.height?.let {
@@ -366,7 +366,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 容器节点没有设置高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeContainerSize(
+                    val containerSize = GXNodeUtils.computeGridAndSliderSize(
                         gxTemplateContext, gxNode, containerData
                     )
                     containerSize?.height?.let {
@@ -427,7 +427,6 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         private fun updateLayoutByFlexBox(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode
         ): Boolean? {
-
 
             val gxFlexBox = gxNode.templateNode.css.flexBox
             val gxCssStyle = gxNode.templateNode.css.style

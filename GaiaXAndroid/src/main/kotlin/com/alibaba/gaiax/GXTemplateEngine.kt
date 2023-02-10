@@ -571,7 +571,6 @@ class GXTemplateEngine {
 
             //
             GXCache.instance.layoutCacheForTemplateItem.clear()
-            GXCache.instance.layoutCacheForDataHashCode.clear()
 
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)

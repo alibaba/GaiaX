@@ -8,11 +8,7 @@ class GXCache {
     val layoutCacheForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
         mutableMapOf()
 
-    val layoutCacheForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
-        mutableMapOf()
-
-    val layoutCacheForDataHashCode: MutableMap<Int, Layout> =
-        mutableMapOf()
+    val layoutCacheForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
 
     companion object {
         val instance by lazy {

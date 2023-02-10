@@ -125,7 +125,7 @@ object GXNodeUtils {
             }
 
             // 3. 计算容器期望的宽高结果
-            val itemLayout = gxTemplateContext.getMaxHeightLayoutOfLayoutCache()
+            val itemLayout = gxTemplateContext.getMaxHeightLayoutForItemPosition()
             return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
         }
         // case 2
@@ -141,7 +141,7 @@ object GXNodeUtils {
             }
 
             // 3. 计算容器期望的宽高结果
-            val itemLayout = gxTemplateContext.getMaxHeightLayoutOfLayoutCache()
+            val itemLayout = gxTemplateContext.getMaxHeightLayoutForItemPosition()
             return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
         }
     }
@@ -188,7 +188,7 @@ object GXNodeUtils {
                 itemCacheKey
             )
 
-            return gxTemplateContext.getLayoutCache(itemCacheKey)
+            return gxTemplateContext.getLayoutForItemPosition(itemCacheKey)
         }
         // case 2
         else {
@@ -199,7 +199,7 @@ object GXNodeUtils {
                 gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
             )
 
-            return gxTemplateContext.getLayoutCache(itemCacheKey)
+            return gxTemplateContext.getLayoutForItemPosition(itemCacheKey)
         }
     }
 
@@ -245,9 +245,9 @@ object GXNodeUtils {
         itemVisualTemplateNode: GXTemplateNode,
         itemCacheKey: String
     ) {
-        gxTemplateContext.initLayoutCache()
+        gxTemplateContext.initLayoutForItemPosition()
 
-        if (!gxTemplateContext.isExistOfLayoutCache(itemCacheKey)) {
+        if (!gxTemplateContext.isExistForItemPosition(itemCacheKey)) {
             computeItemLayout(
                 gxTemplateContext,
                 gxNode,
@@ -256,7 +256,7 @@ object GXNodeUtils {
                 itemVisualTemplateNode,
                 gxItemData
             )?.let { itemLayout ->
-                gxTemplateContext.putLayoutCache(itemCacheKey, itemLayout)
+                gxTemplateContext.putLayoutForItemPosition(itemCacheKey, itemLayout)
             }
         }
     }
@@ -278,8 +278,8 @@ object GXNodeUtils {
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
-            GXGlobalCache.instance.layoutFTI[itemTemplateItem]
+        val itemLayout = if (GXGlobalCache.instance.isExistForTemplateItem(itemTemplateItem)) {
+            GXGlobalCache.instance.getLayoutForTemplateItem(itemTemplateItem)
         } else {
             computeItemLayout(
                 gxTemplateContext,
@@ -289,7 +289,7 @@ object GXNodeUtils {
                 itemVisualTemplateNode,
                 itemData
             )?.also {
-                GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
+                GXGlobalCache.instance.putLayoutForTemplateItem(itemTemplateItem, it)
             }
         }
         return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)
@@ -544,7 +544,7 @@ object GXNodeUtils {
             gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
 
-        if (!GXGlobalCache.instance.layoutFPV.containsKey(gxTemplateItem)) {
+        if (!GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareLayoutTree(gxItemTemplateContext)
         }
 

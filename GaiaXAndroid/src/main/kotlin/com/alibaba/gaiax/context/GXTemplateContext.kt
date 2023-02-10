@@ -70,7 +70,7 @@ class GXTemplateContext private constructor(
     /**
      * item layout cache for item data
      */
-    var layoutCache: MutableMap<Any, Layout>? = null
+    var layoutForItemPosition: MutableMap<Any, Layout>? = null
 
     /**
      * Is dirty
@@ -109,7 +109,7 @@ class GXTemplateContext private constructor(
     }
 
     fun release() {
-        layoutCache?.clear()
+        layoutForItemPosition?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()

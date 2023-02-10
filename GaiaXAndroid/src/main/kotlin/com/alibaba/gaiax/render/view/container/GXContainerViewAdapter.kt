@@ -92,8 +92,6 @@ class GXContainerViewAdapter(
 
         val itemViewPort = getItemViewPort(isFooterItem)
 
-        val itemMeasureSize = getMeasureSize(itemViewPort)
-
         val itemContainerSize = getItemContainerSize(
             isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
         )
@@ -287,15 +285,11 @@ class GXContainerViewAdapter(
             if (gxView != null) {
 
                 GXTemplateEngine.instance.bindDataOnlyNodeTree(
-                    gxView,
-                    gxTemplateData,
-                    itemMeasureSize
+                    gxView, gxTemplateData, itemMeasureSize
                 )
 
                 GXTemplateEngine.instance.bindDataOnlyViewTree(
-                    gxView,
-                    gxTemplateData,
-                    itemMeasureSize
+                    gxView, gxTemplateData, itemMeasureSize
                 )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
@@ -313,11 +307,7 @@ class GXContainerViewAdapter(
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
         return if (isFooterItem) {
             GXNodeUtils.computeScrollAndGridFooterItemContainerSize(
-                itemViewPort,
-                gxTemplateItem,
-                gxVisualNestTemplateNode,
-                itemData,
-                position
+                itemViewPort, gxTemplateItem, gxVisualNestTemplateNode, itemData, position
             )
         } else {
             GXNodeUtils.computeScrollAndGridItemContainerSize(
@@ -332,8 +322,7 @@ class GXContainerViewAdapter(
 
     private fun getItemViewPort(isFooterItem: Boolean) =
         if (isFooterItem) GXNodeUtils.computeScrollAndGridFooterItemViewPort(
-            gxTemplateContext,
-            gxNode
+            gxTemplateContext, gxNode
         )
         else GXNodeUtils.computeScrollAndGridItemViewPort(gxTemplateContext, gxNode)
 

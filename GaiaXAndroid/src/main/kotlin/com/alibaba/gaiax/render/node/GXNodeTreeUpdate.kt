@@ -376,9 +376,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
                 }
             }
 
-            updateLayoutByFlexBox(
-                gxTemplateContext, gxNode
-            )?.let {
+            updateLayoutByFlexBox(gxTemplateContext, gxNode)?.let {
                 isDirty = it
             }
 
@@ -801,8 +799,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
                 // 符合条件触发动画
                 val isState = GXExpressionFactory.isTrue(
-                    gxTemplateContext.templateInfo.expVersion,
-                    state
+                    gxTemplateContext.templateInfo.expVersion, state
                 ) == true
                 if (isState) {
                     playAnimation(

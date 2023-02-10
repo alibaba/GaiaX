@@ -8,8 +8,7 @@ class GXGlobalCache {
     /**
      * layout cache for preview view
      */
-    val layoutFPV: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
-        mutableMapOf()
+    val layoutFPV: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
 
     /**
      * layout cache for template item

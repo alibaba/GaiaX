@@ -571,7 +571,7 @@ class GXTemplateEngine {
             gxTemplateContext.reset()
 
             //
-            GXGlobalCache.instance.layoutFTI.clear()
+            GXGlobalCache.instance.layoutCache.clear()
 
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)

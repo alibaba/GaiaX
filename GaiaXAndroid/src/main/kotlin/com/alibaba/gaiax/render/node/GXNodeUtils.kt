@@ -275,8 +275,8 @@ object GXNodeUtils {
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        val itemLayout = if (GXGlobalCache.instance.layoutCache.containsKey(itemTemplateItem)) {
-            GXGlobalCache.instance.layoutCache[itemTemplateItem]
+        val itemLayout = if (GXGlobalCache.instance.layoutFTI.containsKey(itemTemplateItem)) {
+            GXGlobalCache.instance.layoutFTI[itemTemplateItem]
         } else {
             computeItemLayout(
                 gxTemplateContext,
@@ -286,7 +286,7 @@ object GXNodeUtils {
                 itemVisualTemplateNode,
                 itemData
             )?.also {
-                GXGlobalCache.instance.layoutCache[itemTemplateItem] = it
+                GXGlobalCache.instance.layoutFTI[itemTemplateItem] = it
             }
         }
         return computeContainerSize(gxTemplateContext, gxNode, itemLayout, gxContainerData)

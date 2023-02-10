@@ -14,7 +14,7 @@ class GXGlobalCache {
     /**
      * layout cache for template item
      */
-    val layoutCache: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
+    val layoutFTI: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> = mutableMapOf()
 
     companion object {
         val instance by lazy {

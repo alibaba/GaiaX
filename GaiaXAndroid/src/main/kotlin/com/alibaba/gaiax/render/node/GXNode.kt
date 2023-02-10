@@ -25,7 +25,6 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
-import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
@@ -205,10 +204,6 @@ class GXNode {
     }
 
     fun getPaddingRect(): android.graphics.Rect {
-        templateNode.css.style.padding?.let {
-            return android.graphics.Rect(it.start.valueInt, it.top.valueInt,
-                it.end.valueInt, it.bottom.valueInt)
-        }
-        return android.graphics.Rect()
+        return templateNode.css.style.paddingForAndroid
     }
 }

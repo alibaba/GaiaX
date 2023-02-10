@@ -36,9 +36,9 @@ import kotlin.math.max
 @Suppress("UNUSED_PARAMETER")
 object GXNodeUtils {
 
-    private const val ITEM_PATH =
+    internal const val ITEM_PATH =
         "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}"
-    private const val ITEM_CONFIG =
+    internal const val ITEM_CONFIG =
         "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
 
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
@@ -473,6 +473,7 @@ object GXNodeUtils {
             // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
             val left: Float = padding.left.toFloat()
             val right = padding.right.toFloat()
+
             gxTemplateContext.size.width?.let {
                 return Size(it - left - right, null)
             }
@@ -480,25 +481,27 @@ object GXNodeUtils {
         // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
+
             val containerWidth =
                 gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.layer.gridConfig ?: throw IllegalArgumentException(
-                "Want to computeItemViewPort, but finalGridConfig is null"
-            )
+
+            val gridConfig = gxNode.templateNode.layer.gridConfig
+                ?: throw IllegalArgumentException("Want to computeItemViewPort, but config is null")
+
             return when {
                 gridConfig.isVertical -> {
-                    val totalItemSpacing =
-                        gridConfig.itemSpacing * (gridConfig.column(gxTemplateContext) - 1)
+                    val column = gridConfig.column(gxTemplateContext)
+
+                    val totalItemSpacing = gridConfig.itemSpacing * (column - 1)
 
                     val paddingRect = gxNode.getPaddingRect()
 
                     val padding = paddingRect.left + paddingRect.right
-                    val finalWidth =
-                        (containerWidth - totalItemSpacing - padding) * 1.0F / gridConfig.column(
-                            gxTemplateContext
-                        )
-                    Size(finalWidth, null)
+
+                    val width = (containerWidth - totalItemSpacing - padding) * 1.0F / column
+
+                    Size(width, null)
                 }
                 gridConfig.isHorizontal -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见

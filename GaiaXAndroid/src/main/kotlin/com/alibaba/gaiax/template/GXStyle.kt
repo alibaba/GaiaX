@@ -146,6 +146,24 @@ data class GXStyle(
             return paddingForExtend ?: paddingForTemplate
         }
 
+    private var _paddingForAndroid: android.graphics.Rect? = null
+
+    val paddingForAndroid: android.graphics.Rect
+        get() {
+            val target = padding
+            if (target != null) {
+                if (_paddingForAndroid == null) {
+                    _paddingForAndroid = android.graphics.Rect(
+                        target.start.valueInt,
+                        target.top.valueInt,
+                        target.end.valueInt,
+                        target.bottom.valueInt
+                    )
+                }
+            }
+            return _paddingForAndroid ?: android.graphics.Rect()
+        }
+
     val borderWidth: GXSize?
         get() {
             return borderWidthForExtend ?: borderWidthForTemplate
@@ -290,6 +308,7 @@ data class GXStyle(
         boxShadowForExtend = null
         backdropFilterForExtend = null
         fitContentForExtend = null
+        _paddingForAndroid = null
     }
 
     fun updateByVisual(visual: GXStyle) {

@@ -28,7 +28,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.context.clearLayoutCache
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
@@ -116,7 +115,7 @@ class GXContainerViewAdapter(
 
         // 返回ViewHolder
         return GXViewHolder(itemContainer).apply {
-            this.childTemplateItem = templateItem
+            this.templateItem = templateItem
         }
     }
 
@@ -171,7 +170,7 @@ class GXContainerViewAdapter(
     private fun bindGXViewHolder(holder: GXViewHolder) {
 
         val templateItem =
-            holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+            holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
 
         val isFooterItem = templateItem == footerTemplateItem
 
@@ -360,14 +359,11 @@ class GXContainerViewAdapter(
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
                 gxNode.templateNode.resetDataCache()
-                gxNode.templateNode.getExtend(itemData)?.let { typeData ->
-                    val path =
-                        typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                    val templateId =
-                        typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                    if (templateId != null) {
-                        return items.firstOrNull { it.first.templateId == templateId }?.first
-                    }
+                val typeData = gxNode.templateNode.getExtend(itemData)
+                if (typeData != null){
+                    val itemConfig = "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
+                    val templateId = typeData.getStringExt(itemConfig)
+                    return items.firstOrNull { it.first.templateId == templateId }?.first
                 }
             } else {
                 return items.firstOrNull()?.first

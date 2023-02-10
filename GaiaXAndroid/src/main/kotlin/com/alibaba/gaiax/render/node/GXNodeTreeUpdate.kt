@@ -305,7 +305,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             if (gxNode.isScrollType()) {
                 val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
-                    ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalScrollConfig is null")
+                    ?: throw IllegalArgumentException("Want to updateContainerLayout, but gxScrollConfig is null")
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
                 var isComputeContainerHeight =
@@ -333,18 +333,18 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
 
             } else if (gxNode.isGridType()) {
 
-                val finalGridConfig = gxNode.templateNode.layer.gridConfig
-                    ?: throw IllegalArgumentException("Want to updateContainerLayout, but finalGridConfig is null")
+                val gxGridConfig = gxNode.templateNode.layer.gridConfig
+                    ?: throw IllegalArgumentException("Want to updateContainerLayout, but gxGridConfig is null")
 
                 var isComputeContainerHeight =
-                    finalGridConfig.isVertical && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+                    gxGridConfig.isVertical && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
                 // 对计算结果进行处理
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT,
                     isComputeContainerHeight
                 ).apply {
-                    this.gridConfig = finalGridConfig
+                    this.gridConfig = gxGridConfig
                     this.flexBox = gxFlexBox
                 })?.let {
                     isComputeContainerHeight = it as Boolean

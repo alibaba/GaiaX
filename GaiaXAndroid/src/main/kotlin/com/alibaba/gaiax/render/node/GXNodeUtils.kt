@@ -398,13 +398,13 @@ object GXNodeUtils {
         // 1. 对于Scroll容器，其坑位的宽高由坑位自身确定，可以直接使用未计算过的视口宽高
         // 其坑位的高度，可以不计算
         if (gxNode.isScrollType()) {
-            val finalScrollConfig = gxNode.templateNode.layer.scrollConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
+            val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+                ?: throw IllegalArgumentException("Want to computeItemViewPort, but gxScrollConfig is null")
 
             GXRegisterCenter.instance.extensionScroll?.convert(
                 GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
                 gxTemplateContext,
-                finalScrollConfig
+                gxScrollConfig
             )?.let {
                 return Size(it as Float, null)
             }
@@ -424,18 +424,18 @@ object GXNodeUtils {
             val containerWidth =
                 gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.layer.gridConfig ?: throw IllegalArgumentException(
-                "Want to computeFooterItemViewPort, but finalGridConfig is null"
-            )
+
+            val gxGridConfig = gxNode.templateNode.layer.gridConfig
+                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but gxGridConfig is null")
 
             val padding = gxNode.getPaddingRect()
 
             return when {
-                gridConfig.isVertical -> {
+                gxGridConfig.isVertical -> {
                     val padding = padding.left + padding.right
                     Size(containerWidth - padding, null)
                 }
-                gridConfig.isHorizontal -> {
+                gxGridConfig.isHorizontal -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     Size(null, null)
                 }
@@ -457,13 +457,13 @@ object GXNodeUtils {
         // 1. 对于Scroll容器，其坑位的宽高由坑位自身确定，可以直接使用未计算过的视口宽高
         // 其坑位的高度，可以不计算
         if (gxNode.isScrollType()) {
-            val finalScrollConfig = gxNode.templateNode.layer.scrollConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
+            val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+                ?: throw IllegalArgumentException("Want to computeItemViewPort, but gxScrollConfig is null")
 
             GXRegisterCenter.instance.extensionScroll?.convert(
                 GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
                 gxTemplateContext,
-                finalScrollConfig
+                gxScrollConfig
             )?.let {
                 return Size(it as Float, null)
             }
@@ -486,14 +486,14 @@ object GXNodeUtils {
                 gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
 
-            val gridConfig = gxNode.templateNode.layer.gridConfig
+            val gxGridConfig = gxNode.templateNode.layer.gridConfig
                 ?: throw IllegalArgumentException("Want to computeItemViewPort, but config is null")
 
             return when {
-                gridConfig.isVertical -> {
-                    val column = gridConfig.column(gxTemplateContext)
+                gxGridConfig.isVertical -> {
+                    val column = gxGridConfig.column(gxTemplateContext)
 
-                    val totalItemSpacing = gridConfig.itemSpacing * (column - 1)
+                    val totalItemSpacing = gxGridConfig.itemSpacing * (column - 1)
 
                     val paddingRect = gxNode.getPaddingRect()
 
@@ -503,7 +503,7 @@ object GXNodeUtils {
 
                     Size(width, null)
                 }
-                gridConfig.isHorizontal -> {
+                gxGridConfig.isHorizontal -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     Size(null, null)
                 }
@@ -564,43 +564,43 @@ object GXNodeUtils {
         if (itemSize != null) {
             // 容器的尺寸计算需要氛围Scroll和Grid
             if (gxNode.isScrollType()) {
-                val finalScrollConfig = gxNode.templateNode.layer.scrollConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalScrollConfig is null")
+                val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxScrollConfig is null")
 
                 // 如果是横向，那么高度就是坑位高度
-                if (finalScrollConfig.isHorizontal) {
+                if (gxScrollConfig.isHorizontal) {
                     return Size(
                         Dimension.Points(itemSize.width), Dimension.Points(itemSize.height)
                     )
                 }
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                else if (finalScrollConfig.isVertical) {
+                else if (gxScrollConfig.isVertical) {
                     val lines = max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
                     var containerHeight = itemSize.height
                     containerHeight *= lines
-                    containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
+                    containerHeight += gxScrollConfig.itemSpacing * (lines - 1)
                     return Size(
                         Dimension.Points(itemSize.width), Dimension.Points(containerHeight)
                     )
                 }
             } else if (gxNode.isGridType()) {
-                val finalGridConfig = gxNode.templateNode.layer.gridConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalGridConfig is null")
+                val gxGridConfig = gxNode.templateNode.layer.gridConfig
+                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxGridConfig is null")
 
                 // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                if (finalGridConfig.isVertical) {
+                if (gxGridConfig.isVertical) {
 
                     // 获取行数
                     val lines = max(
                         1,
-                        ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
+                        ceil((containerTemplateData.size * 1.0F / gxGridConfig.column(context)).toDouble()).toInt()
                     )
 
                     var containerHeight = itemSize.height
 
                     // 计算高度
                     containerHeight *= lines
-                    containerHeight += finalGridConfig.rowSpacing * (lines - 1)
+                    containerHeight += gxGridConfig.rowSpacing * (lines - 1)
 
                     // 处理padding
                     val padding = gxNode.getPaddingRect()
@@ -611,7 +611,7 @@ object GXNodeUtils {
                     return Size(
                         Dimension.Points(containerWidth), Dimension.Points(containerHeight)
                     )
-                } else if (finalGridConfig.isHorizontal) {
+                } else if (gxGridConfig.isHorizontal) {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     return null
                 }

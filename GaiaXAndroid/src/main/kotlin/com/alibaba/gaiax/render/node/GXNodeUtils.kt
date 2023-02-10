@@ -581,9 +581,9 @@ object GXNodeUtils {
 
         GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
 
-//        GXGlobalCache.instance.putNodeForItemPosition(
-//            "${itemCacheKey}-${gxTemplateItem.hashCode()}", gxItemRootNode
-//        )
+        GXGlobalCache.instance.putNodeForItemPosition(
+            "${itemCacheKey}-${gxTemplateItem.hashCode()}", gxItemRootNode
+        )
 
         return gxItemRootNode.stretchNode.layoutByBind
     }

@@ -470,6 +470,9 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
     ) {
+        if (GXLog.isLog()) {
+            GXLog.e("prepareView")
+        }
         try {
             if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
                 return
@@ -503,6 +506,9 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
     ): View? {
+        if (GXLog.isLog()) {
+            GXLog.e("createView")
+        }
         return try {
             prepareView(gxTemplateItem, gxMeasureSize)
 
@@ -536,6 +542,9 @@ class GXTemplateEngine {
     fun bindData(
         gxView: View?, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null
     ) {
+        if (GXLog.isLog()) {
+            GXLog.e("bindData")
+        }
         try {
             if (gxView == null) {
                 throw IllegalArgumentException("view is null")
@@ -593,6 +602,9 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
     ): GXTemplateContext? {
+        if (GXLog.isLog()) {
+            GXLog.e("createViewOnlyNodeTree")
+        }
         return createViewOnlyNodeTree(
             gxTemplateItem, gxMeasureSize, gxVisualTemplateNode, null, null
         )
@@ -638,7 +650,8 @@ class GXTemplateEngine {
         )
         val itemCacheKey = "${gxItemPosition}-${gxItemData.hashCode()}-${gxTemplateItem.hashCode()}"
         if (GXGlobalCache.instance.isExistNodeForItemPosition(itemCacheKey)) {
-            gxTemplateContext.rootNode = GXGlobalCache.instance.obtainNodeForItemPosition(itemCacheKey)
+            gxTemplateContext.rootNode =
+                GXGlobalCache.instance.obtainNodeForItemPosition(itemCacheKey)
             gxTemplateContext.isReuseRootNode = true
         } else {
             render.createViewOnlyNodeTree(gxTemplateContext)
@@ -653,6 +666,9 @@ class GXTemplateEngine {
     fun createViewOnlyViewTree(
         gxTemplateContext: GXTemplateContext
     ): View? {
+        if (GXLog.isLog()) {
+            GXLog.e("createViewOnlyViewTree")
+        }
         return try {
             internalCreateViewOnlyViewTree(gxTemplateContext)
         } catch (e: Exception) {
@@ -677,6 +693,9 @@ class GXTemplateEngine {
     fun bindDataOnlyNodeTree(
         view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null
     ) {
+        if (GXLog.isLog()) {
+            GXLog.e("bindDataOnlyNodeTree")
+        }
         try {
             internalBindDataOnlyNodeTree(view, gxTemplateData, gxMeasureSize)
         } catch (e: Exception) {
@@ -699,6 +718,7 @@ class GXTemplateEngine {
             if (GXLog.isLog()) {
                 GXLog.e("reuse root node, skip bindDataOnlyNodeTree")
             }
+            gxTemplateContext.isReuseRootNode = false
             return
         }
 
@@ -727,6 +747,9 @@ class GXTemplateEngine {
     fun bindDataOnlyViewTree(
         view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null
     ) {
+        if (GXLog.isLog()) {
+            GXLog.e("bindDataOnlyViewTree")
+        }
         try {
             internalBindDataOnlyViewTree(view, gxTemplateData, gxMeasureSize)
         } catch (e: Exception) {

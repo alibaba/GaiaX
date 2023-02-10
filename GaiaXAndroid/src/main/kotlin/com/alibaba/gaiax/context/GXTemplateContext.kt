@@ -70,7 +70,7 @@ class GXTemplateContext private constructor(
     var dirtyTexts: MutableSet<GXDirtyText>? = null
 
     /**
-     * item layout cache for item data
+     * item layout cache for item data.
      */
     var layoutForItemPosition: MutableMap<Any, Layout>? = null
 

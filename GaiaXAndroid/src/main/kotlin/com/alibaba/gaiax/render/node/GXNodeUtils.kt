@@ -136,12 +136,7 @@ object GXNodeUtils {
                 val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
                 computeScrollItemLayoutForMultiItemType(
-                    gxTemplateContext,
-                    gxNode,
-                    templateItems,
-                    itemData,
-                    itemViewPort,
-                    itemCacheKey
+                    gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
                 )
             }
 
@@ -191,11 +186,7 @@ object GXNodeUtils {
 
         if (gxTemplateContext.gridItemLayoutCache == null) {
             gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
+                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
             )
         }
         return gxTemplateContext.gridItemLayoutCache
@@ -249,12 +240,7 @@ object GXNodeUtils {
             val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
             computeScrollItemLayoutForMultiItemType(
-                gxTemplateContext,
-                gxNode,
-                templateItems,
-                itemData,
-                itemViewPort,
-                itemCacheKey
+                gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
             )
 
             return gxTemplateContext.getLayoutForScroll(itemCacheKey)
@@ -282,11 +268,7 @@ object GXNodeUtils {
 
         if (gxTemplateContext.sliderItemLayoutCache == null) {
             gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
+                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
             )
         }
 
@@ -337,11 +319,7 @@ object GXNodeUtils {
 
         if (!gxTemplateContext.isExistForScroll(itemCacheKey)) {
             computeScrollItemLayout(
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                gxItemData,
-                itemCacheKey
+                itemViewPort, itemTemplateItem, itemVisualTemplateNode, gxItemData, itemCacheKey
             )?.let { itemLayout ->
                 gxTemplateContext.putLayoutForScroll(itemCacheKey, itemLayout)
             }
@@ -369,11 +347,7 @@ object GXNodeUtils {
 
         if (gxTemplateContext.gridItemLayoutCache == null) {
             gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
+                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
             )
         }
 
@@ -403,11 +377,7 @@ object GXNodeUtils {
 
         if (gxTemplateContext.sliderItemLayoutCache == null) {
             gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
+                itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData, itemCacheKey
             )
         }
 
@@ -417,7 +387,6 @@ object GXNodeUtils {
     }
 
     fun computeScrollAndGridFooterItemContainerSize(
-        gxNode: GXNode,
         itemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
@@ -425,38 +394,16 @@ object GXNodeUtils {
         itemPosition: Int
     ): Layout? {
         val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
-        when {
-            gxNode.isScrollType() -> {
-                val itemMeasureSize =
-                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData =
-                    GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemLayoutByCreateAndBindNode(
-                    gxItemTemplateItem,
-                    itemMeasureSize,
-                    itemTemplateData,
-                    gxItemVisualTemplateNode,
-                    itemCacheKey
-                )
-            }
-            // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
-            gxNode.isGridType() -> {
-                val itemMeasureSize =
-                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData =
-                    GXTemplateEngine.GXTemplateData(itemData)
-                return computeItemLayoutByCreateAndBindNode(
-                    gxItemTemplateItem,
-                    itemMeasureSize,
-                    itemTemplateData,
-                    gxItemVisualTemplateNode,
-                    itemCacheKey
-                )
-            }
-            else -> {
-                return null
-            }
-        }
+        val itemMeasureSize =
+            GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
+        val itemTemplateData = GXTemplateEngine.GXTemplateData(itemData)
+        return computeItemLayoutByCreateAndBindNode(
+            gxItemTemplateItem,
+            itemMeasureSize,
+            itemTemplateData,
+            gxItemVisualTemplateNode,
+            itemCacheKey
+        )
     }
 
     private fun computeSliderItemLayout(
@@ -696,9 +643,7 @@ object GXNodeUtils {
     }
 
     private fun computeScrollContainerSize(
-        gxNode: GXNode,
-        itemSize: Layout?,
-        containerTemplateData: JSONArray
+        gxNode: GXNode, itemSize: Layout?, containerTemplateData: JSONArray
     ): Size<Dimension?>? {
         if (itemSize != null) {
             val gxScrollConfig = gxNode.templateNode.layer.scrollConfig

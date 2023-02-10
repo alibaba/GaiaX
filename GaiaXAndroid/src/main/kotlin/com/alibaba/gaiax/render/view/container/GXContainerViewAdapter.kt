@@ -313,7 +313,6 @@ class GXContainerViewAdapter(
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
         return if (isFooterItem) {
             GXNodeUtils.computeScrollAndGridFooterItemContainerSize(
-                gxNode,
                 itemViewPort,
                 gxTemplateItem,
                 gxVisualNestTemplateNode,

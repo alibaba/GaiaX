@@ -22,6 +22,7 @@ import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
@@ -233,6 +234,12 @@ data class GXStyle(
         extendCssData.forEach {
             val key: String = it.key
             val value = it.value
+            if (value == null) {
+                if (GXLog.isLog()) {
+                    GXLog.e("GXStyle.updateByExtend @forEach, key=$key, value=$value")
+                }
+                return@forEach
+            }
             when (key) {
                 GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForExtend =
                     convertStyle.font(value.toString())
@@ -397,6 +404,12 @@ data class GXStyle(
             css.forEach {
                 val key: String = it.key
                 val value = it.value
+                if (value == null) {
+                    if (GXLog.isLog()) {
+                        GXLog.e("GXFlexBox.create @forEach, key=$key, value=$value")
+                    }
+                    return@forEach
+                }
                 when (key) {
                     GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForTemplate =
                         convertStyle.font(value.toString())

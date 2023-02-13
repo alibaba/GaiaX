@@ -34,6 +34,7 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
+import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.getStringExt
 
 /**
@@ -69,9 +70,8 @@ class GXContainerViewAdapter(
         return try {
             createGXViewHolder(viewType, parent)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
                 GXViewHolder(GXItemContainer(parent.context))
             } else {
                 throw e
@@ -155,9 +155,8 @@ class GXContainerViewAdapter(
         return try {
             bindGXViewHolder(holder)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }

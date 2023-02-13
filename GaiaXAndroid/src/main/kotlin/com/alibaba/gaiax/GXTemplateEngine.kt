@@ -41,6 +41,7 @@ import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.GXLog
 
@@ -492,9 +493,8 @@ class GXTemplateEngine {
             )
             render.prepareView(gxTemplateContext)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }
@@ -530,9 +530,8 @@ class GXTemplateEngine {
                 null
             }
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
                 null
             } else {
                 throw e
@@ -563,9 +562,8 @@ class GXTemplateEngine {
             bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
 
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }
@@ -616,9 +614,8 @@ class GXTemplateEngine {
                 gxTemplateItem, gxMeasureSize, gxExtendParams
             )
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
                 null
             } else {
                 throw e
@@ -666,9 +663,8 @@ class GXTemplateEngine {
         return try {
             internalCreateViewOnlyViewTree(gxTemplateContext)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
                 null
             } else {
                 throw e
@@ -693,9 +689,8 @@ class GXTemplateEngine {
         try {
             internalBindDataOnlyNodeTree(view, gxTemplateData, gxMeasureSize)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }
@@ -747,9 +742,8 @@ class GXTemplateEngine {
         try {
             internalBindDataOnlyViewTree(view, gxTemplateData, gxMeasureSize)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }

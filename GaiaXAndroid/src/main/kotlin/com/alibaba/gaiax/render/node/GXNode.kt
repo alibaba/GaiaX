@@ -196,4 +196,10 @@ class GXNode {
     fun getPaddingRect(): android.graphics.Rect {
         return templateNode.css.style.paddingForAndroid
     }
+
+    fun initEventByRegisterCenter() {
+        if (event == null) {
+            event = GXRegisterCenter.instance.extensionNodeEvent?.create()
+        }
+    }
 }

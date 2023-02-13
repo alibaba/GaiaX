@@ -24,23 +24,23 @@ import com.alibaba.gaiax.template.GXIExpression
  */
 object GXExpressionFactory {
 
-    fun isTrue(value: Any?): Boolean? {
-        return isTrue(null, value)
-    }
-
     fun isTrue(expVersion: String?, value: Any?): Boolean? {
-        return GXRegisterCenter.instance.extensionExpression?.isTrue(expVersion, value)
+        return GXRegisterCenter.instance.extensionExpression?.isTrue(expVersion, null, value)
     }
 
-    fun create(expression: Any?): GXIExpression? {
-        return create(null, expression)
-    }
-
-    fun create(expVersion: String?, expression: Any?): GXIExpression? {
-        return if (expression == null) {
+    fun create(expVersion: String?, key: String, value: Any?): GXIExpression? {
+        return if (value == null) {
             null
         } else {
-            GXRegisterCenter.instance.extensionExpression?.create(expVersion, expression)
+            GXRegisterCenter.instance.extensionExpression?.create(expVersion, key, value)
+        }
+    }
+
+    fun create(expVersion: String?, value: Any?): GXIExpression? {
+        return if (value == null) {
+            null
+        } else {
+            GXRegisterCenter.instance.extensionExpression?.create(expVersion, null, value)
         }
     }
 }

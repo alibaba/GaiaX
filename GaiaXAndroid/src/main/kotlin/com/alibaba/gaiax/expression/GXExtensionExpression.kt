@@ -21,11 +21,11 @@ import com.alibaba.gaiax.template.GXIExpression
 
 class GXExtensionExpression : GXRegisterCenter.GXIExtensionExpression {
 
-    override fun create(expVersion: String?, value: Any): GXIExpression {
+    override fun create(expVersion: String?, key: String?, value: Any): GXIExpression {
         return GXAnalyzeWrapper(value)
     }
 
-    override fun isTrue(expVersion: String?, value: Any?): Boolean {
+    override fun isTrue(expVersion: String?, key: String?, value: Any?): Boolean {
         return value == true
     }
 }

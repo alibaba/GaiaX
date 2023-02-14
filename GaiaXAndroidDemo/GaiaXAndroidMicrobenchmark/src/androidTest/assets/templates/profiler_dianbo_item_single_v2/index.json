@@ -1,0 +1,63 @@
+{
+  "id": "profiler_dianbo_item_single_v2",
+  "exp-version": "V2",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "cover-img",
+      "class": "cover-img",
+      "type": "image"
+    },
+    {
+      "id": "text-area",
+      "class": "text-area",
+      "type": "view",
+      "layers": [
+        {
+          "id": "title-area",
+          "class": "title-area",
+          "type": "view",
+          "layers": [
+            {
+              "id": "title",
+              "class": "title",
+              "type": "text"
+            },
+            {
+              "id": "year",
+              "class": "year",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "top-text",
+          "class": "top-text",
+          "type": "text"
+        },
+        {
+          "id": "bottom-text",
+          "class": "bottom-text",
+          "type": "text"
+        },
+        {
+          "id": "reason-view",
+          "class": "reason-view",
+          "type": "view",
+          "layers": [
+            {
+              "id": "reason-icon",
+              "class": "reason-icon",
+              "type": "image"
+            },
+            {
+              "id": "reason",
+              "class": "reason",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

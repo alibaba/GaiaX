@@ -81,9 +81,11 @@ class GaiaXBenchmark {
     }
 
     @Test
-    fun profiler_uper() {
+    fun profiler_dianbo_item_single_v2() {
+
         val bizId = "templates"
-        val templateId = "profiler_uper"
+        val templateId = "profiler_dianbo_item_single_v2"
+
         val data = readJsonFromAssets("data/$templateId.json")
 
         benchmarkRule.measureRepeated {
@@ -105,7 +107,6 @@ class GaiaXBenchmark {
             GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
 
             GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
-
         }
     }
 

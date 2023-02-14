@@ -1,0 +1,43 @@
+{
+  "config": {
+    "layout": {
+      "component-width": "'100%'",
+      "component-height": "'112px'"
+    }
+  },
+  "data": {
+    "cover-img": {
+      "url": "$nodes[0].data.img",
+      "mark": {
+        "type": "$nodes[0].data.mark.type",
+        "img": "$nodes[0].data.mark.data.img",
+        "text": "$nodes[0].data.mark.data.text",
+        "color": "$nodes[0].data.mark.data.color"
+      },
+      "summary": "$nodes[0].data.summary",
+      "summary-type": "$nodes[0].data.summaryType",
+      "summary-color": "$nodes[0].data.summaryColor"
+    },
+    "title": {
+      "value": "$nodes[0].data.title",
+      "extend": {
+        "fit-content": "true"
+      }
+    },
+    "year": {
+      "value": "$nodes[0].data.year",
+      "extend": {
+        "fit-content": "true"
+      }
+    },
+    "top-text": "$nodes[0].data.formatInfo[0]",
+    "bottom-text": {
+      "value": "$nodes[0].data.formatInfo[1]",
+      "extend": {
+        "fit-content": "true"
+      }
+    },
+    "reason-icon": "'https://gw.alicdn.com/tfs/TB1PRxNEHY1gK0jSZTEXXXDQVXa-54-54.png'",
+    "reason": "$nodes[0].data.reason.text.title"
+  }
+}

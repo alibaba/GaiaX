@@ -9,6 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.expression.GXAnalyzeWrapper
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.container.GXContainer
@@ -38,8 +39,7 @@ class GaiaXBenchmark {
         GXTemplateEngine.instance.init(context)
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
         GXRegisterCenter.instance.registerExtensionViewSupport(
-            GXViewKey.VIEW_TYPE_IMAGE,
-            GXImageView::class.java
+            GXViewKey.VIEW_TYPE_IMAGE, GXImageView::class.java
         )
         GXRegisterCenter.instance.registerExtensionCompatibility(
             GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
@@ -149,6 +149,21 @@ class GaiaXBenchmark {
         if (this is GXContainer) {
             this.measure(View.MeasureSpec.AT_MOST, View.MeasureSpec.AT_MOST)
             this.layout(0, 0, 375F.dpToPx().toInt(), 750F.dpToPx().toInt())
+        }
+    }
+
+    @Test
+    fun profiler_analyze() {
+        val templateData = JSONObject().apply {
+            this["title"] = "GaiaX"
+        }
+
+        benchmarkRule.measureRepeated {
+            GXAnalyzeWrapper("\$data.title").value(templateData)
+
+            GXAnalyzeWrapper("\$data.title + 1000").value(templateData)
+
+            GXAnalyzeWrapper("\$data.title + 'GaiaX").value(templateData)
         }
     }
 }

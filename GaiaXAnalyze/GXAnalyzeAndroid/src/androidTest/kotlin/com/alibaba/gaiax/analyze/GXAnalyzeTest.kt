@@ -90,7 +90,10 @@ class GXAnalyzeTest {
         Assert.assertEquals(1111L, instance.getResult("1111", testData))
         Assert.assertEquals(11110L, instance.getResult("11110", testData))
         Assert.assertEquals(20000L, instance.getResult("10000+10000", testData))
-        Assert.assertEquals(26L, instance.getResult("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1", testData))
+        Assert.assertEquals(
+            26L,
+            instance.getResult("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1", testData)
+        )
     }
 
     @Test

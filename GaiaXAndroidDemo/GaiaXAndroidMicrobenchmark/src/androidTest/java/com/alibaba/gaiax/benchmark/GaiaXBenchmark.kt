@@ -159,11 +159,58 @@ class GaiaXBenchmark {
         }
 
         benchmarkRule.measureRepeated {
+            GXAnalyzeWrapper("10000").value(templateData)
+
+            GXAnalyzeWrapper("10000 + 1").value(templateData)
+
+            GXAnalyzeWrapper("12.100 + 1.12").value(templateData)
+
+            GXAnalyzeWrapper("10000 - 1").value(templateData)
+
+            GXAnalyzeWrapper("10000 / 1").value(templateData)
+
+            GXAnalyzeWrapper("10000 * 1").value(templateData)
+
+            GXAnalyzeWrapper("10000 % 10000").value(templateData)
+
+            GXAnalyzeWrapper("(1 + 1)/2").value(templateData)
+
+            GXAnalyzeWrapper("(1 + 1)/(2-1)").value(templateData)
+
+            GXAnalyzeWrapper("\$\$").value(templateData)
+
             GXAnalyzeWrapper("\$data.title").value(templateData)
 
             GXAnalyzeWrapper("\$data.title + 1000").value(templateData)
 
             GXAnalyzeWrapper("\$data.title + 'GaiaX").value(templateData)
+
+            GXAnalyzeWrapper("10%5").value(templateData)
+
+            GXAnalyzeWrapper("true ? 1 : 2").value(templateData)
+
+            GXAnalyzeWrapper("\$data.title == 'GaiaX ? \$data.title % 5 : 1'").value(templateData)
+
+            GXAnalyzeWrapper("size('1234')").value(templateData)
+
+            GXAnalyzeWrapper("true ? 1 : 2").value(templateData)
+
+            GXAnalyzeWrapper("(1+1)>1 ? 1>0 : 2<3").value(templateData)
+
+            GXAnalyzeWrapper("5%3 == 2").value(templateData)
+
+            GXAnalyzeWrapper("+1").value(templateData)
+
+            GXAnalyzeWrapper("-1").value(templateData)
+
+            GXAnalyzeWrapper("!false").value(templateData)
+
+            GXAnalyzeWrapper("null != null").value(templateData)
+
+            GXAnalyzeWrapper("'string' > 2").value(templateData)
+
+            GXAnalyzeWrapper("true || false").value(templateData)
+
         }
     }
 }

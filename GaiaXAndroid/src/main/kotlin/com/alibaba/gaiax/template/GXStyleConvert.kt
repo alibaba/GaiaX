@@ -54,11 +54,16 @@ class GXStyleConvert {
     }
 
     fun textDecoration(css: JSONObject): Int? =
-        when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_DECORATION)) {
-            "line-through" -> Paint.STRIKE_THRU_TEXT_FLAG
-            "underline" -> Paint.UNDERLINE_TEXT_FLAG
-            else -> null
+        css.getString(GXTemplateKey.STYLE_FONT_TEXT_DECORATION)?.let {
+            return textDecoration(it)
         }
+
+
+    fun textDecoration(target: String): Int? = when (target) {
+        "line-through" -> Paint.STRIKE_THRU_TEXT_FLAG
+        "underline" -> Paint.UNDERLINE_TEXT_FLAG
+        else -> null
+    }
 
     fun padding(cssJson: JSONObject): Rect<GXSize>? {
         var result: Rect<GXSize>? = null
@@ -126,13 +131,22 @@ class GXStyleConvert {
         return result
     }
 
-    fun overflow(css: JSONObject): Boolean? = when (css.getString(GXTemplateKey.FLEXBOX_OVERFLOW)) {
+    fun overflow(css: JSONObject): Boolean? = css.getString(GXTemplateKey.FLEXBOX_OVERFLOW)?.let {
+        return overflow(it)
+    }
+
+
+    fun overflow(target: String): Boolean? = when (target) {
         "visible" -> false
         "hidden" -> true
         else -> null
     }
 
-    fun opacity(css: JSONObject): Float? = css.getString(GXTemplateKey.STYLE_OPACITY)?.toFloat()
+    fun opacity(css: JSONObject): Float? = css.getString(GXTemplateKey.STYLE_OPACITY)?.let {
+        return opacity(it)
+    }
+
+    fun opacity(target: String): Float = target.toFloat()
 
     fun mode(css: JSONObject): GXMode? {
         if (css.containsKey(GXTemplateKey.STYLE_MODE)) {
@@ -143,7 +157,10 @@ class GXStyleConvert {
         return null
     }
 
-    fun hidden(css: JSONObject): Int? = when (css.getString(GXTemplateKey.STYLE_HIDDEN)) {
+    fun hidden(css: JSONObject): Int? =
+        css.getString(GXTemplateKey.STYLE_HIDDEN)?.let { return hidden(it) }
+
+    fun hidden(target: String): Int? = when (target) {
         "true" -> View.INVISIBLE
         "false" -> View.VISIBLE
         else -> null
@@ -159,36 +176,39 @@ class GXStyleConvert {
     }
 
     fun fontTextOverflow(css: JSONObject): TextUtils.TruncateAt? =
-        when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW)) {
-            "clip" -> {
-                GXRegisterCenter
-                    .instance
-                    .extensionStaticProperty
-                    ?.convert(
-                        GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
-                            GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW,
-                            "clip"
-                        )
-                    )
-                    ?.let {
-                        return it as TextUtils.TruncateAt
-                    }
-                null
+        css.getString(GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW)?.let { return fontTextOverflow(it) }
+            ?: TextUtils.TruncateAt.END
+
+    fun fontTextOverflow(target: String): TextUtils.TruncateAt? = when (target) {
+        "clip" -> {
+            GXRegisterCenter.instance.extensionStaticProperty?.convert(
+                GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
+                    GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW, "clip"
+                )
+            )?.let {
+                return it as TextUtils.TruncateAt
             }
-            "ellipsis" -> TextUtils.TruncateAt.END
-            "middle" -> TextUtils.TruncateAt.MIDDLE
-            else -> TextUtils.TruncateAt.END
+            null
         }
+        "ellipsis" -> TextUtils.TruncateAt.END
+        "middle" -> TextUtils.TruncateAt.MIDDLE
+        else -> TextUtils.TruncateAt.END
+    }
 
     fun fontTextAlign(css: JSONObject): Int? =
-        when (css.getString(GXTemplateKey.STYLE_FONT_TEXT_ALIGN)) {
-            "left" -> Gravity.LEFT
-            "right" -> Gravity.RIGHT
-            "center" -> Gravity.CENTER
-            else -> null
+        css.getString(GXTemplateKey.STYLE_FONT_TEXT_ALIGN)?.let {
+            return fontTextAlign(it)
         }
 
+    fun fontTextAlign(target: String): Int? = when (target) {
+        "left" -> Gravity.LEFT
+        "right" -> Gravity.RIGHT
+        "center" -> Gravity.CENTER
+        else -> null
+    }
+
     fun fontLines(css: JSONObject): Int? = css.getString(GXTemplateKey.STYLE_FONT_LINES)?.toInt()
+    fun fontLines(target: String): Int = target.toInt()
 
     fun fontFamily(css: JSONObject): Typeface? {
         return css.getString(GXTemplateKey.STYLE_FONT_FAMILY)?.let { return fontFamily(it) }
@@ -196,80 +216,92 @@ class GXStyleConvert {
 
     fun fontFamily(fontFamily: String): Typeface? {
         // extend
-        GXRegisterCenter
-            .instance
-            .extensionStaticProperty
-            ?.convert(
-                GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
-                    GXTemplateKey.STYLE_FONT_FAMILY,
-                    fontFamily
-                )
+        GXRegisterCenter.instance.extensionStaticProperty?.convert(
+            GXRegisterCenter.GXIExtensionStaticProperty.GXParams(
+                GXTemplateKey.STYLE_FONT_FAMILY, fontFamily
             )
-            ?.let {
-                (it as? Typeface)?.let { return it }
-            }
+        )?.let {
+            (it as? Typeface)?.let { return it }
+        }
         return null
     }
 
     fun font(css: JSONObject): GXSize? =
-        css.getString(GXTemplateKey.STYLE_FONT_SIZE)?.let { it -> return GXSize.create(it) }
+        css.getString(GXTemplateKey.STYLE_FONT_SIZE)?.let { it -> return font(it) }
+
+    fun font(target: String): GXSize = GXSize.create(target)
 
     fun backgroundColor(css: JSONObject): GXColor? =
-        css.getString(GXTemplateKey.STYLE_BACKGROUND_COLOR)?.let { it -> return GXColor.create(it) }
+        css.getString(GXTemplateKey.STYLE_BACKGROUND_COLOR)
+            ?.let { it -> return backgroundColor(it) }
 
-    fun boxShadow(css: JSONObject): GXBoxShadow? {
-        val boxShadow = css.getString(GXTemplateKey.STYLE_BOX_SHADOW)
-        if (boxShadow != null) {
-            val items = boxShadow.split(" ")
-            if (items.size == 5) {
-                val xOffset = items[0]
-                val yOffset = items[1]
-                val blurOffset = items[2]
-                val spreadOffset = items[3]
-                val color = items[4]
-                return GXBoxShadow(
-                    GXSize.create(xOffset),
-                    GXSize.create(yOffset),
-                    GXSize.create(blurOffset),
-                    GXSize.create(spreadOffset),
-                    GXColor.create(color) ?: GXColor.createUndefine()
-                )
-            }
+    fun backgroundColor(target: String): GXColor? = GXColor.create(target)
+
+    fun boxShadow(css: JSONObject): GXBoxShadow? =
+        css.getString(GXTemplateKey.STYLE_BOX_SHADOW)?.let {
+            return boxShadow(it)
+        }
+
+
+    fun boxShadow(target: String): GXBoxShadow? {
+        val items = target.split(" ")
+        if (items.size == 5) {
+            val xOffset = items[0]
+            val yOffset = items[1]
+            val blurOffset = items[2]
+            val spreadOffset = items[3]
+            val color = items[4]
+            return GXBoxShadow(
+                GXSize.create(xOffset),
+                GXSize.create(yOffset),
+                GXSize.create(blurOffset),
+                GXSize.create(spreadOffset),
+                GXColor.create(color) ?: GXColor.createUndefine()
+            )
         }
         return null
     }
 
-    fun backdropFilter(css: JSONObject): GXBackdropFilter? {
+    fun backdropFilter(css: JSONObject): GXBackdropFilter? =
         css.getString(GXTemplateKey.STYLE_BACKDROP_FILTER)?.let {
-            return GXBackdropFilter.create(it)
+            return backdropFilter(it)
         }
-        return null
-    }
+
+    fun backdropFilter(target: String): GXBackdropFilter? = GXBackdropFilter.create(target)
 
     fun fontColor(css: JSONObject): GXColor? =
         css.getString(GXTemplateKey.STYLE_FONT_COLOR)?.let { fontColor ->
-            return GXColor.create(fontColor)
+            return fontColor(fontColor)
         }
+
+    fun fontColor(target: String): GXColor? = GXColor.create(target)
 
     fun backgroundImage(css: JSONObject): GXLinearColor? =
         css.getString(GXTemplateKey.STYLE_BACKGROUND_IMAGE)?.let { it ->
-            if (it.startsWith("linear-gradient")) {
-                val linear = getLinearGradient(it)
-                val colors = getLinearGradientColors(linear)
-                val direction = getDirection(linear)
-                return GXLinearColor(direction, colors)
-            } else {
-                GXColor.create(it)?.let {
-                    val colors = mutableListOf<GXColor>()
-                    colors.add(it)
-                    return GXLinearColor(GradientDrawable.Orientation.LEFT_RIGHT, colors)
-                }
-            }
-            return null
+            return backgroundImage(it)
         }
 
+    fun backgroundImage(target: String): GXLinearColor? {
+        if (target.startsWith("linear-gradient")) {
+            val linear = getLinearGradient(target)
+            val colors = getLinearGradientColors(linear)
+            val direction = getDirection(linear)
+            return GXLinearColor(direction, colors)
+        } else {
+            GXColor.create(target)?.let {
+                val colors = mutableListOf<GXColor>()
+                colors.add(it)
+                return GXLinearColor(GradientDrawable.Orientation.LEFT_RIGHT, colors)
+            }
+        }
+        return null
+    }
+
+
     fun borderColor(css: JSONObject): GXColor? =
-        css.getString(GXTemplateKey.STYLE_BORDER_COLOR)?.let { return GXColor.create(it) }
+        css.getString(GXTemplateKey.STYLE_BORDER_COLOR)?.let { return borderColor(it) }
+
+    fun borderColor(target: String): GXColor? = GXColor.create(target)
 
     fun borderRadius(css: JSONObject): GXRoundedCorner? {
         var result: GXRoundedCorner? = null
@@ -309,102 +341,58 @@ class GXStyleConvert {
     }
 
     fun borderWidth(css: JSONObject): GXSize? =
-        css.getString(GXTemplateKey.STYLE_BORDER_WIDTH)?.let { return GXSize.create(it) }
+        css.getString(GXTemplateKey.STYLE_BORDER_WIDTH)?.let { return borderWidth(it) }
 
-    fun display(css: JSONObject): Int? = when (css.getString(GXTemplateKey.FLEXBOX_DISPLAY)) {
+    fun borderWidth(target: String): GXSize = GXSize.create(target)
+
+    fun display(css: JSONObject): Int? =
+        css.getString(GXTemplateKey.FLEXBOX_DISPLAY)?.let { return display(it) }
+
+    fun display(target: String): Int? = when (target) {
         "none" -> View.GONE
         "flex" -> View.VISIBLE
         else -> null
     }
 
     fun fontLineHeight(css: JSONObject): GXSize? =
-        css.getString(GXTemplateKey.STYLE_FONT_LINE_HEIGHT)?.let { GXSize.create(it) }
+        css.getString(GXTemplateKey.STYLE_FONT_LINE_HEIGHT)?.let { return fontLineHeight(it) }
+
+    fun fontLineHeight(target: String): GXSize = GXSize.create(target)
 
     fun createLinearGradient(
-        width: Float,
-        height: Float,
-        direction: GradientDrawable.Orientation,
-        colors: IntArray
+        width: Float, height: Float, direction: GradientDrawable.Orientation, colors: IntArray
     ): Shader? = when (direction) {
         // draw the gradient from the top to the bottom
         GradientDrawable.Orientation.TOP_BOTTOM -> GXLinearColorGradient(
-            0F,
-            0F,
-            0F,
-            height,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            0F, 0F, 0F, height, colors, null, Shader.TileMode.CLAMP
         )
         // raw the gradient from the bottom-left to the top-right
         GradientDrawable.Orientation.BOTTOM_TOP -> GXLinearColorGradient(
-            0F,
-            height,
-            0F,
-            0F,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            0F, height, 0F, 0F, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the left to the right
         GradientDrawable.Orientation.LEFT_RIGHT -> GXLinearColorGradient(
-            0F,
-            0F,
-            width,
-            0F,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            0F, 0F, width, 0F, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the right to the left
         GradientDrawable.Orientation.RIGHT_LEFT -> GXLinearColorGradient(
-            width,
-            0F,
-            0F,
-            0F,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            width, 0F, 0F, 0F, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the top-left to the bottom-right
         GradientDrawable.Orientation.TL_BR -> GXLinearColorGradient(
-            0F,
-            0F,
-            width,
-            height,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            0F, 0F, width, height, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the top-right to the bottom-left
         GradientDrawable.Orientation.TR_BL -> GXLinearColorGradient(
-            width,
-            0F,
-            0F,
-            height,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            width, 0F, 0F, height, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the bottom-right to the top-left
         GradientDrawable.Orientation.BR_TL -> GXLinearColorGradient(
-            width,
-            height,
-            0F,
-            0F,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            width, height, 0F, 0F, colors, null, Shader.TileMode.CLAMP
         )
         // draw the gradient from the bottom-left to the top-right
         GradientDrawable.Orientation.BL_TR -> GXLinearColorGradient(
-            0F,
-            height,
-            width,
-            0F,
-            colors,
-            null,
-            Shader.TileMode.CLAMP
+            0F, height, width, 0F, colors, null, Shader.TileMode.CLAMP
         )
         else -> null
     }
@@ -508,4 +496,9 @@ class GXStyleConvert {
         }
         return null
     }
+
+    fun fitContent(target: String): Boolean {
+        return target.toBoolean()
+    }
 }
+

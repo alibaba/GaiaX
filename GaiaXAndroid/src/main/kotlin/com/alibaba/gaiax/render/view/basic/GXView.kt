@@ -22,7 +22,6 @@ import android.graphics.Outline
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.AbsoluteLayout
@@ -37,7 +36,6 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.blur.GXBlurHelper
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXBackdropFilter
-import kotlin.math.roundToInt
 
 /**
  * @suppress
@@ -52,7 +50,6 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context, attrs, defStyleAttr
     )
-
 
     private var gxBlurHelper: GXBlurHelper? = null
 
@@ -72,8 +69,10 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
         GXAccessibilityUtils.accessibilityOfView(this, data)
     }
 
+    private var lastRadius: FloatArray? = null
+
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (radius.size == 8) {
+        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
             val tl = radius[0]
             val tr = radius[2]
             val bl = radius[4]
@@ -94,53 +93,51 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
                     this.outlineProvider = null
                 }
             }
+            this.lastRadius = radius
         }
     }
 
     override fun setRoundCornerBorder(borderColor: Int, borderWidth: Float, radius: FloatArray) {
-        when (background) {
-            null -> {
-                val shape = GXRoundCornerBorderGradientDrawable()
-                shape.shape = GradientDrawable.RECTANGLE
-                shape.cornerRadii = radius
-                shape.setStroke(borderWidth.toDouble().roundToInt(), borderColor)
-                background = shape
-            }
-            is GradientDrawable -> {
-                (background as GradientDrawable).setStroke(
-                    borderWidth.toDouble().roundToInt(), borderColor
-                )
-            }
-            else -> {
-                Log.e("[GaiaX]", "setRoundCornerBorder: not support current case")
-            }
+        if (background == null) {
+            val target = GXRoundCornerBorderGradientDrawable()
+            target.shape = GradientDrawable.RECTANGLE
+            target.cornerRadii = radius
+            target.setStroke(borderWidth.toInt(), borderColor)
+            background = target
+        } else if (background is GradientDrawable) {
+            val target = background as GradientDrawable
+            target.setStroke(borderWidth.toInt(), borderColor)
+            target.cornerRadii = radius
         }
     }
 
+    private var lastBackdropFilter: GXBackdropFilter? = null
 
     fun setBackdropFilter(
-        gxTemplateContext: GXTemplateContext,
-        gxBackdropFilter: GXBackdropFilter?
+        gxTemplateContext: GXTemplateContext, gxBackdropFilter: GXBackdropFilter?
     ) {
         this.gxTemplateContext = gxTemplateContext
-        if (gxBackdropFilter is GXBackdropFilter.Blur) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (gxBlurHelper == null) {
-                    this.gxBlurHelper = GXBlurHelper(this)
+        if (gxBackdropFilter != lastBackdropFilter) {
+            if (gxBackdropFilter is GXBackdropFilter.Blur) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (gxBlurHelper == null) {
+                        this.gxBlurHelper = GXBlurHelper(this)
+                    }
+                    this.gxBlurHelper?.radius = 25F
+                    this.gxBlurHelper?.sampling = 12
+                    // this.gxBlurHelper?.color = Color.parseColor("#70FFFFFF")
                 }
-                this.gxBlurHelper?.radius = 25F
-                this.gxBlurHelper?.sampling = 12
-                // this.gxBlurHelper?.color = Color.parseColor("#70FFFFFF")
+                this.gxBackdropFilter = gxBackdropFilter
+            } else if (gxBackdropFilter is GXBackdropFilter.None) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    this.gxBlurHelper?.innerRelease()
+                    this.gxBlurHelper = null
+                }
+                this.background = null
+                this.gxBackdropFilter = null
             }
-            this.gxBackdropFilter = gxBackdropFilter
-        } else if (gxBackdropFilter is GXBackdropFilter.None) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                this.gxBlurHelper?.innerRelease()
-                this.gxBlurHelper = null
-            }
-            this.background = null
-            this.gxBackdropFilter = null
         }
+        this.lastBackdropFilter = gxBackdropFilter
     }
 
     override fun onAttachedToWindow() {

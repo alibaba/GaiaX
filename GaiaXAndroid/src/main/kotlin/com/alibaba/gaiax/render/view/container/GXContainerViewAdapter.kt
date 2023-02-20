@@ -34,14 +34,14 @@ import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
+import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.getStringExt
-import com.alibaba.gaiax.utils.getStringExtCanNull
 
 /**
  * @suppress
  */
 class GXContainerViewAdapter(
-    val gxTemplateContext: GXTemplateContext, val gxContainer: GXContainer
+    val gxTemplateContext: GXTemplateContext, private val gxContainer: GXContainer
 ) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var position: Int = 0
@@ -51,15 +51,27 @@ class GXContainerViewAdapter(
     private var containerData: JSONArray = JSONArray()
 
     private var footerTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+
     private var footerTypeHasMore: Boolean = false
+
+    /**
+     * key: viewType
+     * value: templateItem
+     */
+    private val viewTypeMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
+
+    /**
+     * key: position
+     * value: templateItem
+     */
+    private val positionMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GXViewHolder {
         return try {
             createGXViewHolder(viewType, parent)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
                 GXViewHolder(GXItemContainer(parent.context))
             } else {
                 throw e
@@ -71,64 +83,58 @@ class GXContainerViewAdapter(
         viewType: Int, parent: ViewGroup
     ): GXViewHolder {
         // 准备构建坑位容器的参数
-        val childTemplateItem = viewTypeMap[viewType]
+        val templateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
 
-        val isChildFooterItem = childTemplateItem == footerTemplateItem
+        val isFooterItem = templateItem == footerTemplateItem
 
-        val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
+        val visualNestTemplateNode = getVisualNestTemplateNode(templateItem)
 
-        val childItemViewPort = getChildItemViewPort(isChildFooterItem)
+        val itemViewPort = getItemViewPort(isFooterItem)
 
-        val childItemMeasureSize = getMeasureSize(childItemViewPort)
-
-        val childItemContainerSize = getChildContainerSize(
-            isChildFooterItem,
-            childTemplateItem,
-            childItemMeasureSize,
-            childVisualNestTemplateNode,
-            childItemViewPort
+        val itemContainerSize = getItemContainerSize(
+            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
         )
 
-        val childItemContainerLayoutParams = getChildItemContainerSize(childItemContainerSize)
+        val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
         // 构建坑位的容器
-        val childItemContainer = GXItemContainer(parent.context)
+        val itemContainer = GXItemContainer(parent.context)
 
-        gxNode.templateNode.finalScrollConfig?.let {
+        gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
+                itemContainer.gravity = it.gravity
             }
         }
 
-        childItemContainer.layoutParams = childItemContainerLayoutParams
+        itemContainer.layoutParams = itemContainerLayoutParams
 
         // 返回ViewHolder
-        return GXViewHolder(childItemContainer).apply {
-            this.childTemplateItem = childTemplateItem
+        return GXViewHolder(itemContainer).apply {
+            this.templateItem = templateItem
         }
     }
 
-    private fun getChildItemContainerSize(childContainerSize: Layout?): FrameLayout.LayoutParams {
+    private fun getItemContainerSize(containerSize: Layout?): FrameLayout.LayoutParams {
         val itemContainerWidth =
-            childContainerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+            containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        val itemContainerHeight = gxNode.templateNode.finalScrollConfig?.let {
+        val itemContainerHeight = gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果容器高度小于坑位高度，那么需要重新设置容器高度
-//                if (childContainerSize != null && gxContainer.layoutParams.height < childContainerSize.height) {
-//                    childContainerSize.height.toInt()
-//                }
-//                // 如果容器高度大于于坑位高度,并且是横向，那么可以设定gravity，需要让自己撑满容器
-//                else {
+                if (containerSize != null && gxContainer.layoutParams.height < containerSize.height) {
+                    containerSize.height.toInt()
+                }
+                // 如果容器高度大于于坑位高度,并且是横向，那么可以设定gravity，需要让自己撑满容器
+                else {
                     gxContainer.layoutParams.height
-//                }
+                }
             } else {
-                childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+                containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
             }
         } ?: run {
-            childContainerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+            containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }
 
         return FrameLayout.LayoutParams(
@@ -149,9 +155,8 @@ class GXContainerViewAdapter(
         return try {
             bindGXViewHolder(holder)
         } catch (e: Exception) {
-            val extensionException = GXRegisterCenter.instance.extensionException
-            if (extensionException != null) {
-                extensionException.exception(e)
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
             } else {
                 throw e
             }
@@ -160,75 +165,88 @@ class GXContainerViewAdapter(
 
     private fun bindGXViewHolder(holder: GXViewHolder) {
 
-        val childTemplateItem =
-            holder.childTemplateItem ?: throw IllegalArgumentException("childTemplateItem is null")
+        val templateItem =
+            holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
 
-        val isChildFooterItem = childTemplateItem == footerTemplateItem
+        val isFooterItem = templateItem == footerTemplateItem
 
-        val childVisualNestTemplateNode = getVisualNestTemplateNode(childTemplateItem)
+        val visualNestTemplateNode = getVisualNestTemplateNode(templateItem)
 
-        val childItemViewPort = getChildItemViewPort(isChildFooterItem)
+        val itemViewPort = getItemViewPort(isFooterItem)
 
-        val childItemMeasureSize = getMeasureSize(childItemViewPort)
+        val itemMeasureSize = getMeasureSize(itemViewPort)
 
-        val childItemContainerSize = getChildContainerSize(
-            isChildFooterItem,
-            childTemplateItem,
-            childItemMeasureSize,
-            childVisualNestTemplateNode,
-            childItemViewPort
+        val itemContainerSize = getItemContainerSize(
+            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
         )
 
-        val childItemContainerLayoutParams = getChildItemContainerSize(childItemContainerSize)
+        val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
-        val childItemContainer = holder.itemView as GXItemContainer
+        val itemContainer = holder.itemView as GXItemContainer
 
-        gxNode.templateNode.finalScrollConfig?.let {
+        gxNode.templateNode.layer.scrollConfig?.let {
             if (it.isHorizontal) {
                 // 如果是scroll，并且是横向，那么可以设定gravity，需要让自己撑满容器
-                childItemContainer.gravity = it.gravity
+                itemContainer.gravity = it.gravity
             }
         }
 
-        childItemContainer.layoutParams = childItemContainerLayoutParams
+        itemContainer.layoutParams = itemContainerLayoutParams
 
-        val childItemPosition = holder.adapterPosition
+        val itemPosition = holder.adapterPosition
 
-        val childItemData = if (childItemPosition < containerData.size) containerData.getJSONObject(
-            childItemPosition
-        ) ?: JSONObject()
-        else JSONObject()
+        val itemData = if (itemPosition < containerData.size) {
+            containerData.getJSONObject(itemPosition) ?: JSONObject()
+        } else {
+            JSONObject()
+        }
 
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
             holder.childTag = processContainerItemBind.bindViewHolder(
                 gxTemplateContext.templateData?.tag,
-                childItemContainer,
-                childItemMeasureSize,
-                childTemplateItem,
-                childItemPosition,
-                childVisualNestTemplateNode,
-                childItemData
+                itemContainer,
+                itemMeasureSize,
+                templateItem,
+                GXTemplateEngine.GXExtendParams().apply {
+                    this.gxItemPosition = itemPosition
+                    this.gxItemData = itemData
+                    this.gxHostTemplateContext = gxTemplateContext
+                    this.gxVisualTemplateNode = visualNestTemplateNode
+                }
             )
         } else {
 
             // 获取坑位View
-            val childView = if (childItemContainer.childCount != 0) {
-                childItemContainer.getChildAt(0)
+            val gxView = if (itemContainer.childCount != 0) {
+                itemContainer.getChildAt(0)
             } else {
-                val childView = GXTemplateEngine.instance.createView(
-                    childTemplateItem, childItemMeasureSize, childVisualNestTemplateNode
-                )
-                childItemContainer.addView(childView)
-                childView
+
+                GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
+
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                    templateItem,
+                    itemMeasureSize,
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    }
+                ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+
+                val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
+
+                itemContainer.addView(itemView)
+                itemView
             }
 
             // 为坑位View绑定数据
-            val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData).apply {
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
                     override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
                         super.onGestureEvent(gxGesture)
-                        gxGesture.index = childItemPosition
+                        gxGesture.index = itemPosition
                         gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
                     }
 
@@ -245,19 +263,19 @@ class GXContainerViewAdapter(
 
                 this.trackListener = object : GXTemplateEngine.GXITrackListener {
                     override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
                     }
 
                     override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
                             gxTrack
                         )
                     }
 
                     override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                        gxTrack.index = childItemPosition
+                        gxTrack.index = itemPosition
                         gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
                             gxTrack
                         )
@@ -267,69 +285,60 @@ class GXContainerViewAdapter(
                 this.dataListener = object : GXTemplateEngine.GXIDataListener {
                     override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
                         return gxTemplateContext.templateData?.dataListener?.onTextProcess(
-                                gxTextData
-                            )
+                            gxTextData
+                        )
                     }
                 }
             }
-            if (childView != null) {
-                GXTemplateEngine.instance.bindData(
-                    childView, childTemplateData, childItemMeasureSize
+
+            if (gxView != null) {
+
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(
+                    gxView, gxTemplateData, itemMeasureSize
+                )
+
+                GXTemplateEngine.instance.bindDataOnlyViewTree(
+                    gxView, gxTemplateData, itemMeasureSize
                 )
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
-                childItemContainer.layoutParams.width = childView.layoutParams.width
+                itemContainer.layoutParams.width = gxView.layoutParams.width
             }
         }
     }
 
-    private fun getChildContainerSize(
-        isChildFooterItem: Boolean,
-        childTemplateItem: GXTemplateEngine.GXTemplateItem,
-        childMeasureSize: GXTemplateEngine.GXMeasureSize,
-        childVisualNestTemplateNode: GXTemplateNode?,
-        childItemViewPort: Size<Float?>
+    private fun getItemContainerSize(
+        isFooterItem: Boolean,
+        gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxVisualNestTemplateNode: GXTemplateNode?,
+        itemViewPort: Size<Float?>
     ): Layout? {
         val itemData = containerData[position] as? JSONObject ?: JSONObject()
-        return if (isChildFooterItem) {
-            // TODO: 此处可能有耗时问题，可以进行优化
-            val childTemplateContext = GXTemplateEngine.instance.createTemplateContext(
-                childTemplateItem, childMeasureSize, childVisualNestTemplateNode
-            )
-            GXNodeUtils.computeContainerFooterItemSize(
-                childTemplateContext,
-                gxNode,
-                childItemViewPort,
-                childTemplateItem,
-                childVisualNestTemplateNode,
-                itemData
+        return if (isFooterItem) {
+            GXNodeUtils.computeScrollAndGridFooterItemContainerSize(
+                gxTemplateContext,
+                itemViewPort,
+                gxTemplateItem,
+                gxVisualNestTemplateNode,
+                itemData,
+                position
             )
         } else {
-            GXNodeUtils.computeContainerItemSize(
-                gxTemplateContext, gxNode, itemData
+            GXNodeUtils.computeScrollAndGridItemContainerSize(
+                gxTemplateContext, gxNode, itemData, position
             )
         }
     }
 
-    private fun getMeasureSize(childItemViewPort: Size<Float?>) = GXTemplateEngine.GXMeasureSize(
-        childItemViewPort.width, childItemViewPort.height
+    private fun getMeasureSize(itemViewPort: Size<Float?>) = GXTemplateEngine.GXMeasureSize(
+        itemViewPort.width, itemViewPort.height
     )
 
-    private fun getChildItemViewPort(isChildFooterItem: Boolean) =
-        if (isChildFooterItem) GXNodeUtils.computeFooterItemViewPort(gxTemplateContext, gxNode)
-        else GXNodeUtils.computeItemViewPort(gxTemplateContext, gxNode)
-
-    /**
-     * key: viewType
-     * value: templateItem
-     */
-    private val viewTypeMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
-
-    /**
-     * key: position
-     * value: templateItem
-     */
-    private val positionMap: MutableMap<Int, GXTemplateEngine.GXTemplateItem> = mutableMapOf()
+    private fun getItemViewPort(isFooterItem: Boolean) =
+        if (isFooterItem) GXNodeUtils.computeScrollAndGridFooterItemViewPort(
+            gxTemplateContext, gxNode
+        )
+        else GXNodeUtils.computeScrollAndGridItemViewPort(gxTemplateContext, gxNode)
 
     override fun getItemViewType(position: Int): Int {
 
@@ -366,14 +375,12 @@ class GXContainerViewAdapter(
             if (items.size > 1) {
                 val itemData = containerData.getJSONObject(position)
                 gxNode.templateNode.resetDataCache()
-                gxNode.templateNode.getExtend(itemData)?.let { typeData ->
-                    val path =
-                        typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                    val templateId =
-                        typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                    if (templateId != null) {
-                        return items.firstOrNull { it.first.templateId == templateId }?.first
-                    }
+                val typeData = gxNode.templateNode.getExtend(itemData)
+                if (typeData != null) {
+                    val itemConfig =
+                        "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
+                    val templateId = typeData.getStringExt(itemConfig)
+                    return items.firstOrNull { it.first.templateId == templateId }?.first
                 }
             } else {
                 return items.firstOrNull()?.first
@@ -425,8 +432,7 @@ class GXContainerViewAdapter(
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {
-        val layoutByBind = gxNode.stretchNode.layoutByBind
-        return layoutByBind?.width != targetWidth
+        return gxNode.stretchNode.layoutByBind?.width != targetWidth
     }
 
 }

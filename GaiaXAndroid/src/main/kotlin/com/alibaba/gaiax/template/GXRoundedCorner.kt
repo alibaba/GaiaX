@@ -20,10 +20,7 @@ package com.alibaba.gaiax.template
  * @suppress
  */
 class GXRoundedCorner(
-    var topLeft: GXSize?,
-    var topRight: GXSize?,
-    var bottomLeft: GXSize?,
-    var bottomRight: GXSize?
+    var topLeft: GXSize?, var topRight: GXSize?, var bottomLeft: GXSize?, var bottomRight: GXSize?
 ) {
 
     private fun toFloatArray(): FloatArray {
@@ -44,10 +41,13 @@ class GXRoundedCorner(
         return result
     }
 
-    fun isSameRadius(): Boolean {
-        return topLeft?.valueFloat == topRight?.valueFloat && topRight?.valueFloat == bottomLeft?.valueFloat && bottomLeft?.valueFloat == bottomRight?.valueFloat
-    }
-
+    private var _value: FloatArray? = null
     val value: FloatArray
-        get() = toFloatArray()
+        get() {
+            //TODO: 缓存可能有风险
+            if (_value == null) {
+                _value = toFloatArray()
+            }
+            return _value ?: FloatArray(8)
+        }
 }

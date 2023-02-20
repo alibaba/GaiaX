@@ -18,20 +18,25 @@ package com.alibaba.gaiax.render.view.container.slider
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import app.visly.stretch.Layout
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.node.GXNodeUtils
+import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
 
 /**
  * @suppress
  */
 class GXSliderViewAdapter(
-    val gxTemplateContext: GXTemplateContext,
-    val gxNode: GXNode
+    val gxTemplateContext: GXTemplateContext, val gxNode: GXNode
 ) : PagerAdapter() {
 
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
@@ -51,8 +56,21 @@ class GXSliderViewAdapter(
         return view == obj
     }
 
+    private fun getItemContainerSize(containerSize: Layout?): ViewPager.LayoutParams {
+        val itemContainerWidth =
+            containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+
+        val itemContainerHeight =
+            containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+
+        return ViewPager.LayoutParams().apply {
+            this.width = itemContainerWidth
+            this.height = itemContainerHeight
+        }
+    }
+
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val realPosition = if (data.size > 0) {
+        val itemPosition = if (data.size > 0) {
             position % data.size
         } else {
             position
@@ -61,74 +79,135 @@ class GXSliderViewAdapter(
         val templateItem = getTemplateItem()
             ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
 
-        val itemData = data.getJSONObject(realPosition) ?: JSONObject()
+        val itemData = data.getJSONObject(itemPosition) ?: JSONObject()
 
-        val nodeLayout = gxNode.stretchNode.layoutByBind
-            ?: gxNode.stretchNode.layoutByCreate
+        val visualNestTemplateNode = gxNode.childTemplateItems?.firstOrNull()?.second
 
-        val itemView = GXTemplateEngine.instance.createView(
-            templateItem,
-            GXTemplateEngine.GXMeasureSize(
-                nodeLayout?.width,
-                nodeLayout?.height
-            )
+        val itemViewPort = GXNodeUtils.computeSliderItemViewPort(gxTemplateContext, gxNode)
+
+        val itemMeasureSize = GXTemplateEngine.GXMeasureSize(
+            itemViewPort.width, itemViewPort.height
         )
-        if (itemView != null) {
-            GXTemplateEngine.instance.bindData(
-                itemView,
-                GXTemplateEngine.GXTemplateData(itemData).apply {
-                    this.eventListener = object : GXTemplateEngine.GXIEventListener {
-                        override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
-                            super.onGestureEvent(gxGesture)
-                            gxGesture.index = realPosition
-                            gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
-                        }
 
-                        override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
-                            super.onScrollEvent(gxScroll)
-                            gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
-                        }
+        val itemContainerSize = GXNodeUtils.computeSliderItemContainerSize(
+            gxTemplateContext, gxNode, itemViewPort, itemData, itemPosition
+        )
 
-                        override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
-                            super.onAnimationEvent(gxAnimation)
-                            gxTemplateContext.templateData?.eventListener?.onAnimationEvent(
-                                gxAnimation
-                            )
-                        }
+        val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
+
+        val itemContainer = GXItemContainer(container.context)
+
+        itemContainer.layoutParams = itemContainerLayoutParams
+
+        val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
+        if (processContainerItemBind != null) {
+            processContainerItemBind.bindViewHolder(
+                gxTemplateContext.templateData?.tag,
+                itemContainer,
+                itemMeasureSize,
+                templateItem,
+                GXTemplateEngine.GXExtendParams().apply {
+                    this.gxItemPosition = itemPosition
+                    this.gxItemData = itemData
+                    this.gxHostTemplateContext = gxTemplateContext
+                    this.gxVisualTemplateNode = visualNestTemplateNode
+                }
+            )
+        } else {
+
+            // 获取坑位View
+            val gxView = if (itemContainer.childCount != 0) {
+                itemContainer.getChildAt(0)
+            } else {
+
+                GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
+
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem,
+                    itemMeasureSize,
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    })
+                    ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+
+                val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
+
+                itemContainer.addView(itemView)
+                itemView
+            }
+
+            // 为坑位View绑定数据
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
+                this.eventListener = object : GXTemplateEngine.GXIEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        super.onGestureEvent(gxGesture)
+                        gxGesture.index = itemPosition
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
                     }
 
-                    this.trackListener = object : GXTemplateEngine.GXITrackListener {
-                        override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                            gxTrack.index = realPosition
-                            gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
-                        }
-
-                        override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                            gxTrack.index = realPosition
-                            gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
-                                gxTrack
-                            )
-                        }
-
-                        override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                            gxTrack.index = realPosition
-                            gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
-                                gxTrack
-                            )
-                        }
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        super.onScrollEvent(gxScroll)
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                     }
 
-                    this.dataListener = object : GXTemplateEngine.GXIDataListener {
-                        override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
-                            return gxTemplateContext.templateData?.dataListener
-                                ?.onTextProcess(gxTextData)
-                        }
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        super.onAnimationEvent(gxAnimation)
+                        gxTemplateContext.templateData?.eventListener?.onAnimationEvent(gxAnimation)
                     }
-                })
-            container.addView(itemView)
+                }
+
+                this.trackListener = object : GXTemplateEngine.GXITrackListener {
+                    override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                    }
+
+                    override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            gxTrack
+                        )
+                    }
+
+                    override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
+                            gxTrack
+                        )
+                    }
+                }
+
+                this.dataListener = object : GXTemplateEngine.GXIDataListener {
+                    override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
+                        return gxTemplateContext.templateData?.dataListener?.onTextProcess(
+                            gxTextData
+                        )
+                    }
+                }
+            }
+
+            if (gxView != null) {
+
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(
+                    gxView, gxTemplateData, itemMeasureSize
+                )
+
+                GXTemplateEngine.instance.bindDataOnlyViewTree(
+                    gxView, gxTemplateData, itemMeasureSize
+                )
+
+                // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
+                itemContainer.layoutParams.width = gxView.layoutParams.width
+            }
         }
-        itemViewMap[getItemViewKey(position)] = itemView
-        return itemView ?: throw IllegalArgumentException("Create Item View error")
+
+        container.addView(itemContainer)
+
+        itemViewMap[getItemViewKey(position)] = itemContainer
+
+        return itemContainer
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {

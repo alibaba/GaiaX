@@ -1,0 +1,9 @@
+{
+  "config": {
+    "layout": { "component-width": "100%", "component-height": "173px" }
+  },
+  "data": {
+    "profiler-uper-top": "${nodes[0].data}",
+    "profiler_uper_scroll": "$$"
+  }
+}

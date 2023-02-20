@@ -16,10 +16,11 @@
 
 package com.alibaba.gaiax.utils
 
-import android.text.TextUtils
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import java.util.regex.Pattern
 
 private var sArrayPattern: Pattern? = null
@@ -33,85 +34,50 @@ fun String.safeParseToJson(): JSONObject = try {
     JSONObject()
 }
 
-/**
- * 通过Key值获取Sting类型数据
- *
- * @param expression key值的协议  a.b[0].c.d
- * 参数说明:
- * a为json根目录下的属性值；
- * b为a下的一个数组，b[0]代表a下的b数组的第0个索引对象(数组)
- * c为b数组的第0个索引下的key为c的对象。
- * d为c对象下的属性名，key为d的value取值对象不能确定
- * @return
- *
- * @suppress
- */
-fun JSON.getAnyExt(expression: String): Any? {
+fun JSON.getAnyExt(valuePath: String): Any? {
     try {
-        val exp = expression.trim()
-        val keys = JsonExt.parserKey(exp)
-        if (keys.isNotEmpty()) {
+        val keyIndex = valuePath.indexOf(".")
+        val arrayLeftSymbolIndex = valuePath.indexOf("[")
+        val arrayRightSymbolIndex = valuePath.indexOf("]")
 
-            val firstKey = keys[0]
-
-            var otherKey: String? = null
-            if (keys.size >= 2) {
-                otherKey = keys[1]
-            }
-
-            // 如果是对象，index == -1, 如果是数组，index >= 0(数组的索引)
+        // 纯数组
+        // nodes[0]
+        if (keyIndex == -1 && arrayLeftSymbolIndex != -1 && arrayRightSymbolIndex != -1) {
+            val arrayName = valuePath.substring(0, arrayLeftSymbolIndex)
             val arrayIndex =
-                JsonExt.getArrayIndex(firstKey)
-
-            // 标识还没有到keyParams的最后一层
-            if (otherKey != null && otherKey.isNotEmpty()) {
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO) {
-                    val obj = (this as JSONObject)[firstKey]
-                    if (obj is JSON) {
-                        return obj.getAnyExt(otherKey)
-                    }
+                valuePath.substring(arrayLeftSymbolIndex + 1, arrayRightSymbolIndex).toInt()
+            (this as? JSONObject)?.getJSONArray(arrayName)?.let {
+                if (it.size > arrayIndex) {
+                    return it[arrayIndex]
                 } else {
-                    // 数组的key
-                    // 例如：data[0] key为data, 索引为0
-                    val obj: Any? =
-                        JsonExt.getObjFromArray(
-                            this,
-                            firstKey,
-                            arrayIndex
-                        )
-                    if (obj is JSON) {
-                        return obj.getAnyExt(otherKey)
-                    }
-                }
-            } else {
-                //最后一层设置Value
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO && this is JSONObject) {
-                    if (this.containsKey(firstKey)) {
-                        return this[firstKey]
-                    }
-                } else {
-                    val key =
-                        JsonExt.getArrayKey(firstKey)
-                    if (this is JSONObject) {
-                        if (containsKey(key)) {
-                            val jsonArray = this.getJSONArray(key)
-                            if (jsonArray.size > arrayIndex) {
-                                return jsonArray[arrayIndex]
-                            }
-                        }
-                    } else if (this is JSONArray) {
-                        if (size > arrayIndex) {
-                            return this[arrayIndex]
-                        }
-                    }
+                    Log.e(
+                        "[GaiaX]",
+                        "getAnyExt IndexOutOfBounds: XPath: $valuePath Index: ${arrayIndex}, Size: ${it.size}"
+                    )
+                    return null
                 }
             }
+            return null
         }
+
+        // 纯对象
+        // title
+        if (keyIndex == -1 && arrayLeftSymbolIndex == -1 && arrayRightSymbolIndex == -1) {
+            return (this as? JSONObject)?.get(valuePath)
+        }
+
+        // 拆解XPATH
+        val firstKey = valuePath.substring(0, keyIndex).trim()
+        val restKey = valuePath.substring(keyIndex + 1, valuePath.length)
+        return ((this as? JSONObject)?.getAnyExt(firstKey) as? JSON)?.getAnyExt(restKey)
     } catch (e: Exception) {
-        e.printStackTrace()
+        if (GXExceptionHelper.isException()) {
+            GXExceptionHelper.exception(e)
+        }
     }
     return null
 }
+
 
 /**
  * 通过Key值获取Sting类型数据
@@ -130,108 +96,16 @@ fun JSON.getStringExt(expression: String): String {
     return getStringExtCanNull(expression) ?: ""
 }
 
-/**
- * @suppress
- */
 fun JSON.getStringExtCanNull(expression: String): String? {
-    try {
-        val exp = expression.trim()
-        val keys = JsonExt.parserKey(exp)
-        if (keys.isNotEmpty()) {
-
-            val firstKey = keys[0]
-
-            var otherKey: String? = null
-            if (keys.size >= 2) {
-                otherKey = keys[1]
-            }
-
-            // 如果是对象，index == -1, 如果是数组，index >= 0(数组的索引)
-            val arrayIndex =
-                JsonExt.getArrayIndex(firstKey)
-
-            // 标识还没有到keyParams的最后一层
-            if (otherKey != null && otherKey.isNotEmpty()) {
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO) {
-                    val obj = (this as JSONObject)[firstKey]
-                    if (obj is JSON) {
-                        return obj.getStringExtCanNull(otherKey)
-                    }
-                } else {
-                    // 数组的key
-                    // 例如：data[0] key为data, 索引为0
-                    val obj: Any? =
-                        JsonExt.getObjFromArray(
-                            this,
-                            firstKey,
-                            arrayIndex
-                        )
-                    if (obj is JSON) {
-                        return obj.getStringExtCanNull(otherKey)
-                    }
-                }
-            } else {
-                //最后一层设置Value
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO && this is JSONObject) {
-                    if (this.containsKey(firstKey)) {
-                        return this.getString(firstKey)
-                    }
-                } else {
-                    val key =
-                        JsonExt.getArrayKey(firstKey)
-                    if (this is JSONObject) {
-                        if (containsKey(key)) {
-                            val jsonArray = this.getJSONArray(key)
-                            if (jsonArray.size > arrayIndex) {
-                                return jsonArray.getString(arrayIndex)
-                            }
-                        }
-                    } else if (this is JSONArray) {
-                        if (size > arrayIndex) {
-                            return this.getString(arrayIndex)
-                        }
-                    }
-                }
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return null
+    return getAnyExt(expression) as? String
 }
 
-/**
- * 支持传入多个参数的从json获取String数据的方法，优先取
- * @param keyParams
- * @return
- *
- * @suppress
- */
-fun JSON.getStringExt(vararg keyParams: String): String {
-    for (key in keyParams) {
-        if (!TextUtils.isEmpty(key)) {
-            val res = getStringExt(key)
-            if (!TextUtils.isEmpty(res)) {
-                return res
-            }
-        }
-    }
-    return ""
+fun JSON.getJSONArrayExt(expression: String): JSONArray {
+    return getAnyExt(expression) as? JSONArray ?: JSONArray()
 }
 
-/**
- * 给JSON的克隆设置一个新值
- * @suppress
- */
-fun JSON.setValueToCloneExt(expression: String, value: Any): JSONObject {
-    return try {
-        val resultJson: JSONObject = (this as JSONObject).clone() as JSONObject
-        resultJson.setValueExt(expression, value)
-        resultJson
-    } catch (e: Exception) {
-        e.printStackTrace()
-        JSONObject()
-    }
+fun JSON.getJSONObjectExt(expression: String): JSONObject {
+    return getAnyExt(expression) as? JSONObject ?: JSONObject()
 }
 
 /**
@@ -388,156 +262,6 @@ fun JSON.getDoubleExt(expression: String): Double {
 }
 
 /**
- * 通过Key值获取JSONObject类型数据
- * @suppress
- */
-fun JSON.getJSONObjectExt(expression: String): JSONObject {
-    return getJSONObjectExt2(expression)
-}
-
-private fun JSON.getJSONObjectExt2(expression: String): JSONObject {
-    try {
-        val exp = expression.trim()
-        val keys = JsonExt.parserKey(exp)
-        if (keys.isNotEmpty()) {
-
-            val firstKey = keys[0]
-
-            var otherKey: String? = null
-            if (keys.size >= 2) {
-                otherKey = keys[1]
-            }
-
-            //如果是对象，index == -1, 如果是数组，index >= 0(数组的索引)
-            val arrayIndex =
-                JsonExt.getArrayIndex(firstKey)
-
-            //标识还没有到keyParams的最后一层
-            if (otherKey != null && otherKey.isNotEmpty()) {
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO) {
-                    val obj = (this as JSONObject)[firstKey]
-                    if (obj is JSON) {
-                        return obj.getJSONObjectExt2(otherKey)
-                    }
-                } else {
-                    //数组的key    例如：data[0] key为data, 索引为0
-                    val obj: Any? =
-                        JsonExt.getObjFromArray(
-                            this,
-                            firstKey,
-                            arrayIndex
-                        )
-                    if (obj is JSON) {
-                        return obj.getJSONObjectExt2(otherKey)
-                    }
-                }
-            } else {
-                //最后一层设置Value
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO && this is JSONObject) {
-                    if (containsKey(firstKey)) {
-                        return this.getJSONObject(firstKey)
-                    }
-                } else {
-                    val key =
-                        JsonExt.getArrayKey(firstKey)
-                    if (this is JSONObject) {
-                        if (containsKey(key)) {
-                            val jsonArray = this.getJSONArray(key)
-                            if (jsonArray.size > arrayIndex) {
-                                return jsonArray.getJSONObject(arrayIndex)
-                            }
-                        }
-                    } else if (this is JSONArray) {
-                        if (size > arrayIndex) {
-                            return this.getJSONObject(arrayIndex)
-                        }
-                    }
-                }
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return JSONObject()
-}
-
-/**
- * 通过Key值获取JSONArray类型数据
- *
- * @param expression
- * @suppress
- */
-fun JSON.getJSONArrayExt(expression: String): JSONArray {
-    return getJSONArray2Ext(expression)
-}
-
-private fun JSON.getJSONArray2Ext(expression: String): JSONArray {
-    try {
-        val exp = expression.trim()
-        val keys = JsonExt.parserKey(exp)
-        if (keys.isNotEmpty()) {
-
-            val firstKey = keys[0]
-
-            var otherKey: String? = null
-            if (keys.size >= 2) {
-                otherKey = keys[1]
-            }
-
-            //如果是对象，index == -1, 如果是数组，index >= 0(数组的索引)
-            val arrayIndex =
-                JsonExt.getArrayIndex(firstKey)
-
-            //标识还没有到keyParams的最后一层
-            if (otherKey != null && otherKey.isNotEmpty()) {
-                if (arrayIndex == JsonExt.ARRAY_INDEX_NO) {
-                    val obj = (this as JSONObject)[firstKey]
-                    if (obj is JSON) {
-                        return obj.getJSONArray2Ext(otherKey)
-                    }
-                } else {
-                    //数组的key    例如：data[0] key为data, 索引为0
-                    val obj =
-                        JsonExt.getObjFromArray(
-                            this,
-                            firstKey,
-                            arrayIndex
-                        )
-                    if (obj is JSON) {
-                        return obj.getJSONArray2Ext(otherKey)
-                    }
-                }
-            } else {
-                //最后一层设置Value
-                if (arrayIndex == -1 && this is JSONObject) {
-                    if (containsKey(firstKey)) {
-                        return this.getJSONArray(firstKey)
-                    }
-                } else {
-                    val key =
-                        JsonExt.getArrayKey(firstKey)
-                    if (this is JSONObject) {
-                        if (containsKey(key)) {
-                            val jsonArray = this.getJSONArray(key)
-                            if (jsonArray.size > arrayIndex) {
-                                return jsonArray.getJSONArray(arrayIndex)
-                            }
-                        }
-                    } else if (this is JSONArray) {
-                        if (size > arrayIndex) {
-                            return this.getJSONArray(arrayIndex)
-                        }
-                    }
-                }
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return JSONArray()
-}
-
-/**
  * @suppress
  */
 object JsonExt {
@@ -600,8 +324,7 @@ object JsonExt {
                 sArrayPattern = Pattern.compile("(?<=\\[)(.+?)(?=\\])")
             }
             result = matchArrayIndex(
-                arrayKey,
-                result
+                arrayKey, result
             )
         }
         return result
@@ -630,8 +353,7 @@ object JsonExt {
      */
     fun getObjFromArray(src: Any, arrayIndexKey: String, arrayIndex: Int): Any? {
         // array[index] 中的 array
-        val arrayKey =
-            getArrayKey(arrayIndexKey)
+        val arrayKey = getArrayKey(arrayIndexKey)
         var obj: Any? = null
         if (src is JSONObject) {
             if (src.containsKey(arrayKey)) {

@@ -18,17 +18,19 @@ package com.alibaba.gaiax.utils
 
 import android.util.Log
 
+
 /**
  * @suppress
  */
 object GXLog {
+    private const val TAG = "Alibaba-GaiaX"
 
     fun e(tag: String?, msg: String?) {
-        longE(tag ?: "[GaiaX]", msg ?: "")
+        longE(tag ?: TAG, msg ?: "")
     }
 
     fun e(msg: String?) {
-        longE("[GaiaX]", msg ?: "")
+        longE(TAG, msg ?: "")
     }
 
     private fun longE(tag: String, msg: String) {

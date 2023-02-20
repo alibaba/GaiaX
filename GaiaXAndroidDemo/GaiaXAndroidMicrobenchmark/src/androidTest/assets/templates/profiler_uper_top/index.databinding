@@ -1,0 +1,58 @@
+{
+  "data": {
+    "header-img": { "value": "${uploader.icon}" },
+    "v-icon": {
+      "value": "${vipMark.verifyIcon}",
+      "extend": { "display": "@{${vipMark.verifyIcon} ? flex : none}" }
+    },
+    "title": { "value": "${uploader.name}" },
+    "circleMark": {
+      "value": "@{${isDarkMode} ? ${uploader.circleMarkDarkUrl} : ${uploader.circleMarkUrl}}",
+      "extend": { "display": "@{${uploader.circleMarkUrl} ? flex : none}" }
+    },
+    "sub-view": {
+      "extend": {
+        "display": "@{${recReason.tags[0]} ? flex : @{${recReason.title} ? flex : @{${preview.publishTime} ? flex : none}}}"
+      }
+    },
+    "sub-reason": {
+      "value": "${recReason.tags[0]}",
+      "extend": {
+        "display": "@{${recReason.tags[0]} ? flex : none}",
+        "fit-content": "true"
+      }
+    },
+    "sub-point": {
+      "value": "·",
+      "extend": { "display": "@{${recReason.tags[0]} ? flex : none}" }
+    },
+    "sub-title": {
+      "value": "@{${recReason.title} ? ${recReason.title} : ${preview.publishTime}}"
+    },
+    "topclick": {
+      "accessibilityDesc": "用户头像， + ${uploader.name} + ， + @{${recReason.title} ? ${recReason.title} : ${preview.publishTime}}"
+    },
+    "follow": {
+      "extend": { "display": "@{${follow.isShowFollowButton} ? flex : none}" }
+    },
+    "follow-bg": {
+      "value": "@{${follow.isFollow} ? null : https://gw.alicdn.com/tfs/TB1.FAfG5_1gK0jSZFqXXcpaXXa-180-90.png}",
+      "extend": {
+        "border-color": "@{${follow.isFollow} ? rgba(157, 159, 168, 0.3) : transparent}"
+      }
+    },
+    "follow-text": {
+      "value": "@{${follow.isFollow} ? 已关注 : 关注}",
+      "extend": { "color": "@{${follow.isFollow} ? #9d9fa8 : #24a5ff}" }
+    },
+    "setTop": {
+      "extend": { "display": "@{${extraExtend.isTop} ? flex : none}" }
+    },
+    "setTop-text": { "value": "${mark.data.text}" },
+    "more": {
+      "accessibilityDesc": "更多操作",
+      "extend": { "display": "@{${canShowMore} ? flex : none}" }
+    },
+    "more-icon": { "accessibilityDesc": "更多，按钮", "value": "&#xe643;" }
+  }
+}

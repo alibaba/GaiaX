@@ -1104,11 +1104,6 @@ class GXComponentTextTest : GXBaseTest() {
         )
         textView.measure(widthSpec, 0)
 
-        Log.e(
-            "[GaiaX]",
-            "textView.measuredWidth=${textView.measuredWidth.toFloat()} textView.measuredHeight=${textView.measuredHeight.toFloat()}"
-        )
-
         Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }

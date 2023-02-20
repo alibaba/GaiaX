@@ -19,12 +19,12 @@ package com.alibaba.gaiax.render.node
 import android.animation.AnimatorSet
 import android.view.View
 import app.visly.stretch.Display
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
-import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
@@ -46,11 +46,6 @@ class GXNode {
      * ID
      */
     var id = ""
-
-    /**
-     * ID路径
-     */
-    var idPath = ""
 
     /**
      * 是否是根节点
@@ -87,6 +82,8 @@ class GXNode {
      */
     lateinit var stretchNode: GXStretchNode
 
+    var layoutByPrepare: Layout? = null
+
     /**
      * 父节点
      */
@@ -119,7 +116,6 @@ class GXNode {
 
     fun release() {
         isAnimating = false
-        idPath = ""
         if (view is GXIRelease) {
             (view as GXIRelease).release()
         }
@@ -172,39 +168,12 @@ class GXNode {
         ) == true
     }
 
-    fun setIdPath(parent: GXNode?, layer: GXLayer) {
-        id = layer.id
-        idPath = if (parent != null) {
-            if (idPath.isNotEmpty()) {
-                "${parent.idPath}@${idPath}@${layer.id}"
-            } else {
-                "${parent.idPath}@${layer.id}"
-            }
-        } else {
-            if (idPath.isNotEmpty()) {
-                "${idPath}@${layer.id}"
-            } else {
-                layer.id
-            }
-        }
-    }
-
-    override fun toString(): String {
-        return "GXNode(id='$id', idPath='$idPath', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
-    }
-
-    fun initEventByRegisterCenter() {
-        if (event == null) {
-            event = GXRegisterCenter.instance.extensionNodeEvent?.create()
-        }
-    }
-
     /**
      * 重置节点中的缓存
      */
     fun reset(gxTemplateContext: GXTemplateContext) {
         templateNode.reset()
-        stretchNode.reset(gxTemplateContext, this.templateNode)
+        stretchNode.reset(gxTemplateContext, this)
         children?.forEach {
             it.reset(gxTemplateContext)
         }
@@ -215,7 +184,7 @@ class GXNode {
     }
 
     private fun isNodeVisibleInTree(gxNode: GXNode): Boolean {
-        if (gxNode.stretchNode.node.getStyle().display == Display.None) {
+        if (gxNode.stretchNode.node?.getStyle()?.display == Display.None) {
             return false
         }
         gxNode.parentNode?.let {
@@ -225,10 +194,12 @@ class GXNode {
     }
 
     fun getPaddingRect(): android.graphics.Rect {
-        templateNode.finalCss?.style?.padding?.let {
-            return android.graphics.Rect(it.start.valueInt, it.top.valueInt,
-                it.end.valueInt, it.bottom.valueInt)
+        return templateNode.css.style.paddingForAndroid
+    }
+
+    fun initEventByRegisterCenter() {
+        if (event == null) {
+            event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         }
-        return android.graphics.Rect()
     }
 }

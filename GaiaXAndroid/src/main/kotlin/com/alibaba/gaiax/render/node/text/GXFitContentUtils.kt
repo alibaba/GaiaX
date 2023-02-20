@@ -67,10 +67,11 @@ object GXFitContentUtils {
         val androidContext = gxTemplateContext.context
         val nodeId = gxTemplateNode.getNodeId()
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
-        val finalCss = gxTemplateNode.finalCss ?: return null
+        val finalCss = gxTemplateNode.css
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
-        val nodeLayout = gxStretchNode.layoutByBind ?: gxStretchNode.layoutByCreate ?: return null
+        val nodeLayout = gxStretchNode.layoutByBind ?: gxNode.layoutByPrepare
+        ?: throw IllegalArgumentException("to fit content for text, but layout is null")
 
         val gxCacheText = GXMeasureViewPool.obtain(androidContext)
 
@@ -96,7 +97,7 @@ object GXFitContentUtils {
         var nodeHeight = nodeLayout.height
 
         // FIX: 如果databinding中引发了flex的改动，那么nodeLayout的结果可能不准确
-        val finalFlexBoxHeight = finalFlexBox.sizeForStyle?.height
+        val finalFlexBoxHeight = finalFlexBox.sizeForDimension?.height
         if (gxStretchNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
             nodeHeight = finalFlexBoxHeight.value
         }
@@ -113,11 +114,11 @@ object GXFitContentUtils {
             var measuredWidth = gxCacheText.measuredWidth.toFloat()
             val measuredHeight = gxCacheText.measuredHeight.toFloat()
 
-            val size = finalCss.flexBox.sizeForStyle
+            val size = finalCss.flexBox.sizeForDimension
             val isUndefineSize =
                 size?.width == null || size.width is Dimension.Auto || size.width is Dimension.Undefined
 
-            val minSize = finalCss.flexBox.minSizeForStyle
+            val minSize = finalCss.flexBox.minSizeForDimension
             val isDefineMinSize =
                 minSize != null && (minSize.width !is Dimension.Auto || minSize.width !is Dimension.Undefined)
 
@@ -137,7 +138,7 @@ object GXFitContentUtils {
             var textHeight = nodeHeight
 
             // FIXED: template_text_fitcontent_lines_null_width_fixed_height_null_padding_top_padding_bottom
-            val padding = finalFlexBox.paddingForStyle
+            val padding = finalFlexBox.paddingForDimension
             val textTopAndBottomPadding =
                 (padding?.top?.value ?: 0F) + (padding?.bottom?.value ?: 0F)
 
@@ -153,8 +154,7 @@ object GXFitContentUtils {
 
             // FIXED: template_text_fitcontent_lines_null_width_null_height_fixed_padding_left_padding_right
             val textLeftAndRightPadding =
-                (padding?.start?.value ?: 0F) + (padding?.end?.value
-                    ?: 0F)
+                (padding?.start?.value ?: 0F) + (padding?.end?.value ?: 0F)
 
             result = when {
                 // 没有设置宽度

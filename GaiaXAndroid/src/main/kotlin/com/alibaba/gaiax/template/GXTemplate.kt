@@ -50,8 +50,4 @@ class GXTemplate(
         result = 31 * result + version
         return result
     }
-
-    override fun toString(): String {
-        return "GXTemplate(id='$id', biz='$biz', version=$version)"
-    }
 }

@@ -20,32 +20,34 @@ import android.view.View
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeTreeCreator
+import com.alibaba.gaiax.render.node.GXNodeTreePrepare
 import com.alibaba.gaiax.render.node.GXNodeTreeUpdate
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdate
+import com.alibaba.gaiax.utils.GXGlobalCache
 
 /**
  * @suppress
  */
 class GXRenderImpl {
 
-    fun createNode(gxTemplateContext: GXTemplateContext): GXNode {
-        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+
+    fun prepareView(gxTemplateContext: GXTemplateContext) {
+        val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
-        return rootNode
-    }
-
-    fun bindNodeData(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.isDirty = false
-
-        // Update the virtual node tree
-        GXNodeTreeUpdate(gxTemplateContext).buildLayoutAndStyle()
+        rootNode.stretchNode.layoutByCreate?.let {
+            GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
+        }
+        rootNode.release()
     }
 
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
+        val rootLayout =
+            GXGlobalCache.instance.getLayoutForPrepareView(gxTemplateContext.templateItem)
+                ?: throw IllegalArgumentException("root layout is null")
         // Create a virtual node tree
-        val rootNode = GXNodeTreeCreator.create(gxTemplateContext)
+        val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)
         gxTemplateContext.rootNode = rootNode
         return rootNode
     }
@@ -82,4 +84,5 @@ class GXRenderImpl {
         // Update the view tree
         GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
     }
+
 }

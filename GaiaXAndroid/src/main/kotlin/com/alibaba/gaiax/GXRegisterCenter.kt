@@ -24,7 +24,6 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
-import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
@@ -69,12 +68,10 @@ class GXRegisterCenter {
     interface GXIExtensionContainerItemBind {
         fun bindViewHolder(
             tag: Any?,
-            childItemContainer: ViewGroup,
-            childMeasureSize: GXTemplateEngine.GXMeasureSize,
-            childTemplateItem: GXTemplateEngine.GXTemplateItem,
-            childItemPosition: Int,
-            childVisualNestTemplateNode: GXTemplateNode?,
-            childItemData: JSONObject
+            itemContainer: ViewGroup,
+            gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+            gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+            gxExtendParams: GXTemplateEngine.GXExtendParams
         ): Any?
     }
 
@@ -92,8 +89,8 @@ class GXRegisterCenter {
     }
 
     interface GXIExtensionExpression {
-        fun create(expVersion: String?, value: Any): GXIExpression
-        fun isTrue(expVersion: String?, value: Any?): Boolean
+        fun create(expVersion: String?, key: String?, value: Any): GXIExpression
+        fun isTrue(expVersion: String?, key: String?, value: Any?): Boolean
     }
 
     interface GXIExtensionDataBinding {

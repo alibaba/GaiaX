@@ -17,7 +17,6 @@
 package com.alibaba.gaiax.template
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -27,27 +26,55 @@ import com.alibaba.gaiax.context.GXTemplateContext
  */
 data class GXGridConfig(
     val data: JSONObject,
-    val column: Int = 1,
-    val direction: Int = RecyclerView.VERTICAL,
-    /**
-     * Item spacing
-     */
-    val itemSpacing: Int = 0,
-    /**
-     * Spacing perpendicular to the item spacing
-     */
-    val rowSpacing: Int = 0,
-    /**
-     * scrollable
-     */
-    val scrollEnable: Boolean = false
+    private val columnForTemplate: Int,
+    private val directionForTemplate: Int,
+    private val itemSpacingForTemplate: Int,
+    private val rowSpacingForTemplate: Int,
+    private val scrollEnableForTemplate: Boolean
 ) {
+
+    private var columnForExtend: Int? = null
+    private var directionForExtend: Int? = null
+    private var itemSpacingForExtend: Int? = null
+    private var rowSpacingForExtend: Int? = null
+    private var scrollEnableForExtend: Boolean? = null
+
+    fun reset() {
+        columnForExtend = null
+        directionForExtend = null
+        itemSpacingForExtend = null
+        rowSpacingForExtend = null
+        scrollEnableForExtend = null
+    }
+
+    val column: Int
+        get() {
+            return columnForExtend ?: columnForTemplate
+        }
+
+    val direction: Int
+        get() {
+            return directionForExtend ?: directionForTemplate
+        }
+
+    val itemSpacing: Int
+        get() {
+            return itemSpacingForExtend ?: itemSpacingForTemplate
+        }
+
+    val rowSpacing: Int
+        get() {
+            return rowSpacingForExtend ?: rowSpacingForTemplate
+        }
+
+    val scrollEnable: Boolean
+        get() {
+            return scrollEnableForExtend ?: scrollEnableForTemplate
+        }
 
     fun column(context: GXTemplateContext): Int {
         GXRegisterCenter.instance.extensionGrid?.convert(
-            GXTemplateKey.GAIAX_LAYER_COLUMN,
-            context,
-            this
+            GXTemplateKey.GAIAX_LAYER_COLUMN, context, this
         )?.let {
             return it as Int
         }
@@ -83,33 +110,31 @@ data class GXGridConfig(
                 scrollable
             )
         }
+    }
 
-        fun create(srcConfig: GXGridConfig, data: JSONObject): GXGridConfig? {
-            val gridColumn = data.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN)
-            val scrollEnable = data.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE)
+    fun updateByExtend(extendCssData: JSONObject) {
+        val gridColumn = extendCssData.getInteger(GXTemplateKey.GAIAX_LAYER_COLUMN)
+        val scrollEnable = extendCssData.getBoolean(GXTemplateKey.GAIAX_LAYER_SCROLL_ENABLE)
 
-            var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
-            if (itemSpacing == null) {
-                itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
-            }
-            var rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ROW_SPACING)
-            if (rowSpacing == null) {
-                rowSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_INTERITEM_SPACING)
-            }
-
-            return GXGridConfig(
-                srcConfig.data,
-                if (gridColumn != null) Math.max(gridColumn, 1) else srcConfig.column,
-                srcConfig.direction,
-                if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
-                if (rowSpacing != null) GXContainerConvert.spacing(rowSpacing) else srcConfig.rowSpacing,
-                scrollEnable ?: srcConfig.scrollEnable
-            )
+        var itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
+        if (itemSpacing == null) {
+            itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
+        }
+        var rowSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ROW_SPACING)
+        if (rowSpacing == null) {
+            rowSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_INTERITEM_SPACING)
+        }
+        if (gridColumn != null) {
+            columnForExtend = Math.max(gridColumn, 1)
+        }
+        if (itemSpacing != null) {
+            itemSpacingForExtend = GXContainerConvert.spacing(itemSpacing)
+        }
+        if (rowSpacing != null) {
+            rowSpacingForExtend = GXContainerConvert.spacing(rowSpacing)
+        }
+        if (scrollEnable != null) {
+            scrollEnableForExtend = scrollEnable
         }
     }
-
-    override fun toString(): String {
-        return "GXGridConfig(column=$column, direction=$direction, itemSpacing=$itemSpacing, rowSpacing=$rowSpacing)"
-    }
-
 }

@@ -18,6 +18,7 @@ package com.alibaba.gaiax.context
 
 import android.content.Context
 import android.view.View
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
@@ -55,6 +56,9 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+
+    var isReuseRootNode: Boolean = false
+
     /**
      * 数据绑定计数
      */
@@ -65,6 +69,25 @@ class GXTemplateContext private constructor(
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
 
     var dirtyTexts: MutableSet<GXDirtyText>? = null
+
+    /**
+     * item layout cache for item data.
+     *
+     * the cache will used to surely calculate once item layout at scroll container.
+     *
+     * if the cache be created at computeScrollSize, it will be used at createViewHolder and bindViewHolder.
+     * if the cache be created at createViewHolder, it will used at bindViewHolder.
+     *
+     * key is itemCacheKey ${itemPosition}-${itemData.hashCode()}.
+     * value is item layout.
+     */
+    var scrollItemLayoutCache: MutableMap<Any, Layout>? = null
+
+    var sliderItemLayoutCache: Layout? = null
+
+    var gridItemLayoutCache: Layout? = null
+
+    var scrollNodeCache: MutableMap<Any, GXNode>? = null
 
     /**
      * Is dirty
@@ -98,11 +121,8 @@ class GXTemplateContext private constructor(
 
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
-    override fun toString(): String {
-        return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
-    }
-
     fun release() {
+        scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()
@@ -112,6 +132,7 @@ class GXTemplateContext private constructor(
         visualTemplateNode = null
         rootNode?.release()
         rootNode = null
+        isReuseRootNode = false
     }
 
     fun manualExposure() {
@@ -133,7 +154,6 @@ class GXTemplateContext private constructor(
         templateInfo.reset()
         rootNode?.reset(this)
     }
-
 
     companion object {
 

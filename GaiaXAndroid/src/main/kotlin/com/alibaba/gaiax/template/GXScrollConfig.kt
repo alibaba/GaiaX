@@ -26,11 +26,42 @@ import com.alibaba.fastjson.JSONObject
  */
 data class GXScrollConfig(
     val data: JSONObject,
-    val direction: Int = LinearLayoutManager.VERTICAL,
-    val itemSpacing: Int = 0,
-    val edgeInsets: Rect = Rect(0, 0, 0, 0),
-    var gravity: Int = Gravity.TOP
+    private var directionForTemplate: Int,
+    private var itemSpacingForTemplate: Int,
+    private var edgeInsetsForTemplate: Rect,
+    private var gravityForTemplate: Int
 ) {
+
+    private var directionForExtend: Int? = null
+    private var itemSpacingForExtend: Int? = null
+    private var gravityForExtend: Int? = null
+
+    fun reset() {
+        directionForExtend = null
+        itemSpacingForExtend = null
+        gravityForExtend = null
+    }
+
+    val edgeInsets: Rect
+        get() {
+            return edgeInsetsForTemplate
+        }
+
+    val direction: Int
+        get() {
+            return directionForExtend ?: directionForTemplate
+        }
+
+    val itemSpacing: Int
+        get() {
+            return itemSpacingForExtend ?: itemSpacingForTemplate
+        }
+
+    val gravity: Int
+        get() {
+            return gravityForExtend ?: gravityForTemplate
+        }
+
     companion object {
 
         fun create(
@@ -48,26 +79,13 @@ data class GXScrollConfig(
                 gravity ?: Gravity.TOP
             )
         }
-
-        fun create(srcConfig: GXScrollConfig, data: JSONObject): GXScrollConfig {
-            val edgeInsets = data.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
-            var itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
-            if (itemSpacing == null) {
-                itemSpacing = data.getString(GXTemplateKey.GAIAX_LAYER_LINE_SPACING)
-            }
-            return GXScrollConfig(
-                srcConfig.data,
-                srcConfig.direction,
-                if (itemSpacing != null) GXContainerConvert.spacing(itemSpacing) else srcConfig.itemSpacing,
-                if (edgeInsets != null) GXContainerConvert.edgeInsets2(edgeInsets)
-                    ?: srcConfig.edgeInsets else srcConfig.edgeInsets,
-                srcConfig.gravity
-            )
-        }
     }
 
-    override fun toString(): String {
-        return "GXScrollConfig(direction=$direction, itemSpacing=$itemSpacing)"
+    fun updateByExtend(extendCssData: JSONObject) {
+        val itemSpacing = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_ITEM_SPACING)
+        if (itemSpacing != null) {
+            itemSpacingForExtend = GXContainerConvert.spacing(itemSpacing)
+        }
     }
 
     val isVertical

@@ -5,7 +5,6 @@ import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
@@ -192,7 +191,9 @@ class GXBusinessTest : GXBaseTest() {
         val topText = GXTemplateEngine.instance.getGXViewById(rootView, "top-text") as TextView
         val bottomText =
             GXTemplateEngine.instance.getGXViewById(rootView, "bottom-text") as TextView
+        val reasonView = GXTemplateEngine.instance.getGXViewById(rootView, "reason-view")
         val reason = GXTemplateEngine.instance.getGXViewById(rootView, "reason") as TextView
+        val reasonIcon = GXTemplateEngine.instance.getGXViewById(rootView, "reason-icon")
 
         Assert.assertEquals("我是标题", title.text)
         Assert.assertEquals("2022", year.text)
@@ -207,13 +208,25 @@ class GXBusinessTest : GXBaseTest() {
         Assert.assertEquals(18F.dpToPx(), coverImg.lpX())
 
         Assert.assertEquals(0F.dpToPx(), title.lpY())
-        Assert.assertEquals((18F + 84F + 9F).dpToPx(), title.lpX())
+        Assert.assertEquals(18F.dpToPx() + 84F.dpToPx() + 9F.dpToPx(), title.lpX())
 
-        Assert.assertEquals((20F + 3F).dpToPx(), topText.lpY())
-        Assert.assertEquals((18F + 84F + 9F).dpToPx(), topText.lpX())
+        Assert.assertEquals(20F.dpToPx() + 3F.dpToPx(), topText.lpY())
+        Assert.assertEquals(18F.dpToPx() + 84F.dpToPx() + 9F.dpToPx(), topText.lpX())
 
-        Assert.assertEquals((20F + 3F + 16F + 3F).dpToPx(), bottomText.lpY())
-        Assert.assertEquals((18F + 84F + 9F).dpToPx(), bottomText.lpX())
+        Assert.assertEquals(
+            20F.dpToPx() + 3F.dpToPx() + 16F.dpToPx() + 3F.dpToPx(),
+            bottomText.lpY()
+        )
+        Assert.assertEquals(18F.dpToPx() + 84F.dpToPx() + 9F.dpToPx(), bottomText.lpX())
+
+        Assert.assertEquals(rootView.height() - 28F.dpToPx(), reasonView.lpY())
+        Assert.assertEquals(18F.dpToPx() + 84F.dpToPx() + 9F.dpToPx(), reasonView.lpX())
+
+        Assert.assertEquals(0F.dpToPx(), reason.lpY())
+        Assert.assertEquals(6F.dpToPx(), reason.lpX())
+
+        Assert.assertEquals(0F.dpToPx(), reasonIcon.lpY())
+        Assert.assertEquals(4F.dpToPx(), reasonIcon.lpX())
     }
 
 

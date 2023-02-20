@@ -49,80 +49,62 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
     val borderRadius = style?.borderRadius?.value
     val borderWidth = style?.borderWidth?.valueFloat
     val borderColor = style?.borderColor?.value(this.context)
-    var cornerRadius = style?.borderRadius?.value
-
-    // 2022/06/21
-    // Fix a ui bug,
-    // if we set corner radius and border radius in the same time, it will produce some defects at the view corner.
-    // we need make a special process in order fix the defects.
-
-    // 2022/09/13
-    // Fix a ui  bug
-    // Remove logic of radius increase because it will cause corner dim
-//    if (cornerRadius != null && cornerRadius.size == 8 &&
-//        borderRadius != null && borderWidth != null && borderColor != null
-//    ) {
-//        val tl = cornerRadius[0]
-//        val tr = cornerRadius[2]
-//        val bl = cornerRadius[4]
-//        val br = cornerRadius[6]
-//        if (tl == tr && tr == bl && bl == br) {
-//            cornerRadius = FloatArray(8) { tl + 1F.dpToPx() }
-//        }
-//    }
+    val cornerRadius = style?.borderRadius?.value
 
     if (this is GXIRoundCorner) {
-        if (this is GXView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
+        when (this) {
+            is GXView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXText -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-        } else if (this is GXText) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
+            is GXIImageView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXContainer -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
-        } else if (this is GXIImageView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
-            }
-        } else if (this is GXContainer) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
-            }
-        } else if (this is GXSliderView) {
-            if (cornerRadius != null) {
-                this.setRoundCornerRadius(cornerRadius)
-            }
-            if (borderColor != null && borderWidth != null) {
-                this.setRoundCornerBorder(
-                    borderColor,
-                    borderWidth,
-                    borderRadius ?: FloatArray(8) { 0F })
+            is GXSliderView -> {
+                if (cornerRadius != null) {
+                    this.setRoundCornerRadius(cornerRadius)
+                }
+                if (borderColor != null && borderWidth != null) {
+                    this.setRoundCornerBorder(borderColor,
+                        borderWidth,
+                        borderRadius ?: FloatArray(8) { 0F })
+                }
             }
         }
+
     }
 }
 
@@ -203,23 +185,19 @@ private fun isContainShadowLayout(view: ViewGroup): Boolean {
  * @suppress
  */
 fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
-    if (style?.backgroundImage != null) {
+    val backgroundImage = style?.backgroundImage
+    val backgroundColor = style?.backgroundColor
+    if (backgroundImage != null) {
         if (this is GXText) {
             // GXText needs to be handled separately
             // @see GXViewExt.setFontBackgroundImage
         } else {
-            val drawable = style.backgroundImage.createDrawable()
-            this.background = drawable
+            this.background = backgroundImage.createDrawable()
         }
-    } else if (style?.backgroundColor != null) {
-        val drawable = GXColorGradientDrawable(
-            GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                style.backgroundColor.value(this.context), style.backgroundColor.value(this.context)
-            )
-        )
+    } else if (backgroundColor != null) {
         // Use left and right gradients to simulate solid colors
         // Convenient for rounded corner cutting
-        this.background = drawable
+        this.background = backgroundColor.createBackgroundColorDrawable(this.context)
     } else {
         if (this.background is GXBlurBitmapDrawable) {
             // fix: rebind data cause background flicker
@@ -246,8 +224,9 @@ fun GXText.setFontTextDecoration(textDecoration: Int?) {
  * @suppress
  */
 fun GXText.setFontTextLineHeight(style: GXStyle) {
-    if (style.fontLineHeight != null) {
-        val lineHeight = style.fontLineHeight.valueFloat
+    val fontLineHeight = style.fontLineHeight
+    if (fontLineHeight != null) {
+        val lineHeight = fontLineHeight.valueFloat
 
         GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
             GXTemplateKey.STYLE_FONT_LINE_HEIGHT, lineHeight
@@ -266,9 +245,10 @@ fun GXText.setFontTextLineHeight(style: GXStyle) {
  * @suppress
  */
 fun GXText.setFontTextAlign(style: GXStyle) {
-    if (style.fontTextAlign != null) {
+    val fontTextAlign = style.fontTextAlign
+    if (fontTextAlign != null) {
         // Center up and down by default
-        setTextAlign(Gravity.CENTER_VERTICAL.or(style.fontTextAlign))
+        setTextAlign(Gravity.CENTER_VERTICAL.or(fontTextAlign))
     } else {
         // Center up and down by default
         setTextAlign(Gravity.CENTER_VERTICAL.or(Gravity.LEFT))
@@ -320,8 +300,9 @@ fun GXText.setFontLines(fontLiens: Int?) {
  * @suppress
  */
 fun GXText.setFontColor(style: GXStyle) {
-    if (style.fontColor != null) {
-        this.setTextColor(style.fontColor.value(this.context))
+    val fontColor = style.fontColor
+    if (fontColor != null) {
+        this.setTextColor(fontColor.value(this.context))
     } else {
         // The default color is black
         this.setTextColor(Color.BLACK)
@@ -355,8 +336,10 @@ fun GXText.setFontFamilyAndFontWeight(style: GXStyle) {
     if (this is GXIconFont) {
         if (style.fontFamily == null) {
             if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventIconFontTypefaceThrowException == true) {
-                this.typeface =
-                    GXStyleConvert.instance.fontFamily(GXTemplateKey.GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME)
+                GXStyleConvert.instance.fontFamily(GXTemplateKey.GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME)
+                    ?.let {
+                        this.typeface = it
+                    }
             } else {
                 throw IllegalArgumentException("GXIconFont view must have font family property")
             }
@@ -441,13 +424,15 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
         val needForceRefresh =
             (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
                 ?: false
-        if (this.layoutManager == null || needForceRefresh) {
+        if (this.layoutManager == null) {
+            this.layoutManager = LinearLayoutManager(this.context, direction, false)
+        } else if (needForceRefresh) {
+            val tmp = this.layoutManager as LinearLayoutManager
             this.layoutManager = null
-            val target = LinearLayoutManager(
-                this.context, direction, false
-            )
-            this.layoutManager = target
+            this.layoutManager = tmp
+            tmp.orientation = direction
         }
+
     }
 }
 

@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -87,7 +88,11 @@ data class GXTemplateNode(
 
     fun reset() {
         resetDataCache()
-        finalCss?.flexBox?.reset()
+        layer.sliderConfig?.reset()
+        layer.scrollConfig?.reset()
+        layer.gridConfig?.reset()
+        layer.progressConfig?.reset()
+        css.style.reset()
         css.flexBox.reset()
     }
 
@@ -97,20 +102,6 @@ data class GXTemplateNode(
     var dataCache: JSONObject? = null
     var dataValueCache: JSON? = null
     var dataExtendCache: JSONObject? = null
-
-    /*
-     * 关于final属性的说明：
-     *
-     * final的字段主要用于存储index.css中的属性与index.databinding中涉及到样式的属性合并后的结果。
-     *
-     * 在bindData阶段使用。
-     */
-
-    var finalGridConfig: GXGridConfig? = null
-    var finalScrollConfig: GXScrollConfig? = null
-    var finalSliderConfig: GXSliderConfig? = null
-    var finalProgressConfig: GXProgressConfig? = null
-    var finalCss: GXCss? = null
 
     /**
      * @param visualTemplateData 当前节点的虚拟父节点使用的数据源
@@ -122,63 +113,19 @@ data class GXTemplateNode(
         nodeTemplateData: JSONObject?
     ) {
 
-        // 初始化扩展数据
         val extendCssData = dataBinding?.getExtend(nodeTemplateData)
 
-        // 创建FinalStyle
-        val selfFinalCss: GXCss = if (extendCssData != null) {
-            // 创建Css
-            val extendCss = GXCss.createByExtend(extendCssData)
-
-            // 更新除了CSS外的其他节点信息
-
-            // 仅当有Grid配置信息时，才处理更新
-            layer.gridConfig?.let {
-                finalGridConfig = GXGridConfig.create(it, extendCssData)
-            }
-
-            // 仅当有Scroll配置信息时，才处理更新
-            layer.scrollConfig?.let {
-                finalScrollConfig = GXScrollConfig.create(it, extendCssData)
-            }
-
-            layer.sliderConfig?.let {
-                finalSliderConfig = GXSliderConfig.create(it, extendCssData)
-            }
-
-            layer.progressConfig?.let {
-                finalProgressConfig = GXProgressConfig.create(it, extendCssData)
-            }
-
-            // 合并原有CSS和扩展属性的CSS
-            GXCss.create(css, extendCss)
-        } else {
-
-            layer.gridConfig?.let {
-                finalGridConfig = it
-            }
-
-            layer.scrollConfig?.let {
-                finalScrollConfig = it
-            }
-
-            layer.sliderConfig?.let {
-                finalSliderConfig = it
-            }
-
-            layer.progressConfig?.let {
-                finalProgressConfig = it
-            }
-
-            css
+        if (extendCssData != null && extendCssData.isNotEmpty()) {
+            layer.scrollConfig?.updateByExtend(extendCssData)
+            layer.gridConfig?.updateByExtend(extendCssData)
+            layer.sliderConfig?.updateByExtend(extendCssData)
+            layer.progressConfig?.updateByExtend(extendCssData)
+            css.updateByExtend(extendCssData)
         }
 
-        // 初始化虚拟节点的FinalStyle
         visualTemplateNode?.initFinal(gxTemplateContext, null, visualTemplateData)
 
-        // 合并Self和Visual
-        this.finalCss = GXCss.create(selfFinalCss, visualTemplateNode?.finalCss)
-
+        css.updateByVisual(visualTemplateNode?.css)
     }
 
     fun getNodeType() = layer.getNodeType()
@@ -217,10 +164,6 @@ data class GXTemplateNode(
 
     fun getNodeId(): String {
         return layer.id
-    }
-
-    override fun toString(): String {
-        return "GXTemplateNode(layer=$layer, css=$css, dataBinding=$dataBinding, eventBinding=$eventBinding, animationBinding=$animationBinding, visualTemplateNode=$visualTemplateNode, finalCss=$finalCss)"
     }
 
     companion object {

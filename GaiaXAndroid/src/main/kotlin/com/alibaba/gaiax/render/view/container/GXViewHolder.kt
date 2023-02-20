@@ -26,5 +26,5 @@ import com.alibaba.gaiax.GXTemplateEngine
 class GXViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var childTag: Any? = null
-    var childTemplateItem: GXTemplateEngine.GXTemplateItem? = null
+    var templateItem: GXTemplateEngine.GXTemplateItem? = null
 }

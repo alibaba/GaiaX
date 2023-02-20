@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.alibaba.gaiax.demo.R
+import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.IDevTools
@@ -19,7 +21,7 @@ import com.lzf.easyfloat.enums.ShowPattern
  *  @date: 2023-02-02
  *  Description:
  */
-class DevTools : DefaultLifecycleObserver , IDevTools {
+class DevTools : DefaultLifecycleObserver, IDevTools {
     companion object {
         val TAG = "devtools"
 
@@ -41,16 +43,22 @@ class DevTools : DefaultLifecycleObserver , IDevTools {
         EasyFloat.with(context)
             .setLayout(R.layout.layout_dev_tools) {
 
+                val windowWidth = it.layoutParams.width
+                val windowHeight = it.layoutParams.height
+
+                var logoView = it.findViewById<ImageView>(R.id.window_gaia_logo)
+                logoView.setOnClickListener { view ->
+                    view.visibility = View.INVISIBLE
+                    EasyFloat.updateFloat(TAG, width = windowWidth, height = windowHeight)
+                }
+
                 it.findViewById<AppCompatButton>(R.id.window_btn_scan).setOnClickListener { view ->
-                    var intent = Intent(context, GXQRCodeActivity::class.java)
-                    intent.putExtra(TAG, TAG)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    context.startActivity(intent)
+                    openQRCodeActivity(context)
                 }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_fast_preview)
                     .setOnClickListener { view ->
-                        launchFastPreviewType()
+                        launchAction(context) { context ->  openFastPreviewType(context) }
                     }
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_push_preview)
@@ -70,7 +78,7 @@ class DevTools : DefaultLifecycleObserver , IDevTools {
 
                 it.findViewById<AppCompatButton>(R.id.window_btn_close_window)
                     .setOnClickListener { view ->
-                        foldWindowToSmall(view)
+                        foldWindowToSmall(logoView)
                     }
 
             }
@@ -82,14 +90,11 @@ class DevTools : DefaultLifecycleObserver , IDevTools {
                 show { }
                 hide { }
                 dismiss { }
-                touchEvent { view, motionEvent ->
-
-                }
+                touchEvent { view, motionEvent -> }
                 drag { view, motionEvent -> }
                 dragEnd { }
             }
             .show()
-
         GXClientToStudioMultiType.instance.init(context)
     }
 
@@ -110,13 +115,39 @@ class DevTools : DefaultLifecycleObserver , IDevTools {
 
     }
 
+    private fun openQRCodeActivity(context: Context) {
+        val intent = Intent(context, GXQRCodeActivity::class.java)
+        intent.putExtra(TAG, TAG)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
 
-    private fun launchFastPreviewType() {
+    }
+
+    private fun launchAction(context: Context, action: (Context) -> Unit) {
+        val connectedState = GXClientToStudioMultiType.instance.isGaiaStudioConnected() ?: false
+        if (connectedState) {
+            action(context)
+        } else {
+            //未连接先扫码连接
+            Toast.makeText(context, "请先连接GaiaStudio", Toast.LENGTH_SHORT).show()
+            openQRCodeActivity(context)
+        }
+    }
+
+    private fun openFastPreviewType(context: Context) {
+        //开启FastPreviewActivity
+        val intent = Intent(devtoolsContext, GXFastPreviewActivity::class.java)
+        intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_MODE, GXFastPreviewActivity.GAIA_STUDIO_MODE_MULTI)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+        //修改DevTools状态
         currentPreviewMode = GXClientToStudioMultiType.PREVIEW_AUTO
+        GXClientToStudioMultiType.instance.sendMsgForGetTemplateData("")
     }
 
     private fun launchPushPreviewType() {
         currentPreviewMode = GXClientToStudioMultiType.PREVIEW_MANUAL
+        GXClientToStudioMultiType.instance.sendMsgForGetTemplateData("")
     }
 
     private fun launchJsDebugType() {
@@ -124,10 +155,11 @@ class DevTools : DefaultLifecycleObserver , IDevTools {
     }
 
     private fun disconnectStudioMultiType() {
-
+        GXClientToStudioMultiType.instance.sendMsgForDisconnect()
     }
 
-    private fun foldWindowToSmall(view: View?) {
+    private fun foldWindowToSmall(view: ImageView?) {
+        view?.visibility = View.VISIBLE
         EasyFloat.updateFloat(TAG, width = 150, height = 150)
     }
 

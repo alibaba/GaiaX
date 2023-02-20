@@ -2,8 +2,8 @@ package com.alibaba.gaiax.studio
 
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
 import android.util.Log
-import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.studio.third.socket.java_websocket.framing.Framedata
 import com.alibaba.gaiax.studio.third.socket.websocket.SocketListener
@@ -129,26 +129,29 @@ class GXSocket : SocketListener {
         val socketMethod = if (msgData.containsKey("method")) msgData.getString("method") else methodIdManager[socketId.toInt()]
 
         Log.e(TAG, "onMessage() called with: socketId = [$socketId], method = [$socketMethod]")
-
         when (socketMethod) {
             "initialized" -> {
-
+                gxSocketListener?.onStudioConnected()
             }
             "mode/get" -> {
-                responseObtainMode()
+                responseObtainMode(socketId.toInt())
             }
             "template/get" -> {
-
+                val result = msgData.getJSONObject("result")
+                if (result != null){
+                    obtainResultFromGetTemplate(result)
+                }
             }
             "template/didChangedNotification" -> {
-
+                val result = msgData.getJSONObject("params")
+                if (result != null){
+                    obtainResultFromGetTemplate(result)
+                }
             }
             "js/callSync" -> {}
             "js/callAsync" -> {}
             "js/callPromise" -> {}
-            "close" -> {
-                onDisconnect()
-            }
+
         }
 
     }
@@ -186,6 +189,9 @@ class GXSocket : SocketListener {
         sendMessage(data)
     }
 
+    /**
+     * 发送： initialized 初始化三合一请求
+     */
     fun sendMsgWithMultiTypeInit() {
         Log.d(TAG, "sendMsgWithMultiTypeInit() called ")
         val data = JSONObject()
@@ -222,6 +228,20 @@ class GXSocket : SocketListener {
         val params = JSONObject()
         params["id"] = templateId
         data["params"] = params
+        data["id"] = 104
+        sendMessage(data)
+    }
+
+    fun sendGetTemplateData(templateId: String?) {
+        Log.e(TAG, "sendGetTemplateData called with: templateId = $templateId")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "template/get"
+        if (!TextUtils.isEmpty(templateId)){
+            val params = JSONObject()
+            params["id"] = templateId
+            data["params"] = params
+        }
         data["id"] = 103
         sendMessage(data)
     }
@@ -333,25 +353,46 @@ class GXSocket : SocketListener {
         WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
     }
 
-    private fun responseObtainMode() {
+    private fun responseObtainMode(socketId: Int) {
         if (devTools != null) {
-            sendMsgForChangeMode(devTools!!.getPreviewCurrentMode(), devTools!!.getJSCurrentMode())
+            sendMsgForChangeMode(socketId, devTools!!.getPreviewCurrentMode(), devTools!!.getJSCurrentMode())
         }
     }
 
-    fun sendMsgForChangeMode(
+    /**
+     * 处理"template/get"和"template/didChangedNotification"
+     */
+    private fun obtainResultFromGetTemplate(templateData: JSONObject){
+        //解析根模板
+        val rootTemplateId = templateData.getString("templateId")
+        val rootTemplateData = templateData.getJSONObject("templateData")
+        val templateJson: JSONObject = createTemplateData(rootTemplateData)
+        gxSocketListener?.onStudioAddData(rootTemplateId, templateJson)
+        //解析子模板
+        val subTemplates = templateData.getJSONArray("subTemplates")
+        subTemplates.forEach {
+            val subTemplateItem = it as JSONObject
+            val subTemplateId = subTemplateItem.getString("templateId")
+            val subTemplateData = subTemplateItem.getJSONObject("templateData")
+            val subTemplateJson: JSONObject = createTemplateData(subTemplateData)
+            gxSocketListener?.onStudioAddData(subTemplateId, subTemplateJson)
+        }
+        gxSocketListener?.onStudioUpdate(rootTemplateId,templateJson)
+    }
+
+    private fun sendMsgForChangeMode(
+        socketId: Int,
         previewMode: String? = GXClientToStudioMultiType.PREVIEW_NONE,
         jsMode: String? = GXClientToStudioMultiType.JS_DEFAULT
     ) {
         Log.d(GXSocket.TAG, "sendMsgForChangeMode() called ")
         val data = JSONObject()
         data["jsonrpc"] = "2.0"
-        data["method"] = "mode/modify"
-        data["id"] = 303
-        val params = JSONObject()
-        params["preview"] = previewMode
-        params["js"] = jsMode
-        data["params"] = params
+        data["id"] = socketId
+        val result = JSONObject()
+        result["preview"] = previewMode
+        result["js"] = jsMode
+        data["result"] = result
         sendMessage(data)
     }
 

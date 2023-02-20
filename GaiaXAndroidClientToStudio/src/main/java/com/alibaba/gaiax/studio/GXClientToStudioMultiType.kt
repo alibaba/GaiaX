@@ -39,15 +39,17 @@ class GXClientToStudioMultiType {
 
         override fun onSocketDisconnected() {
             if (isWaitDisconnectMsgThenConnectGaiaStudio) {
+                //ip改变时的断开重连
                 isWaitDisconnectMsgThenConnectGaiaStudio = false
                 toConnectGaiaStudio()
             }
         }
 
         override fun onStudioConnected() {
+
             Log.d(TAG, "onStudioConnected() called currentTemplateId = $currentTemplateId")
             if (currentTemplateId != null) {
-                socketHelper?.sendGetTemplateData103(currentTemplateId)
+                socketHelper?.sendGetTemplateData(currentTemplateId)
             }
         }
 
@@ -218,12 +220,20 @@ class GXClientToStudioMultiType {
         socketHelper?.sendMessage(data)
     }
 
+    fun sendMsgForGetTemplateData(templateId: String?) {
+        socketHelper?.sendGetTemplateData(templateId)
+    }
+
     fun setDevTools(dev: IDevTools) {
         socketHelper?.devTools = dev
     }
 
+    fun isGaiaStudioConnected(): Boolean? {
+        return socketHelper?.gxSocketIsConnected
+    }
+
     companion object {
-        const val TAG = "[GaiaX][GXStudioMultiType]"
+        const val TAG = "[GXStudioMulti]"
 
         const val PREVIEW_AUTO = "auto"
         const val PREVIEW_MANUAL = "manual"

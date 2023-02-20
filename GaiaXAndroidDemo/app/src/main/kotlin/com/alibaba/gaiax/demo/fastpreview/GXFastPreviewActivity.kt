@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.demo.fastpreview
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.studio.GXClientToStudio
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
 
@@ -17,11 +19,13 @@ import com.alibaba.gaiax.utils.GXScreenUtils
  * websocket的通信能力来自三方库（已导入本地websocket）
  * https://github.com/0xZhangKe/WebSocketDemo
  */
-class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudio.GXSocketToStudioListener {
+class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudioMultiType.GXSocketToStudioListener {
 
     companion object {
         private const val TAG = "[GaiaX]"
         const val GAIA_STUDIO_URL = "GAIA_STUDIO_URL"
+        const val GAIA_STUDIO_MODE = "GAIA_STUDIO_MODE"
+        const val GAIA_STUDIO_MODE_MULTI = "MULTI"
     }
 
 
@@ -33,25 +37,33 @@ class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudio.GXSocketToSt
 
         fastPreviewRoot = findViewById(R.id.fast_preview_layout)
 
-        val url = intent.getStringExtra("GAIA_STUDIO_URL")
+        val mode = intent.getStringExtra(GAIA_STUDIO_MODE)
 
-        val params = GXClientToStudio.instance.getParams(url)
-        if (params == null) {
-            finish()
+        if (!TextUtils.isEmpty(mode) && mode ==  GAIA_STUDIO_MODE_MULTI){
+            GXClientToStudioMultiType.instance.gxSocketToStudioListener = this
             return
+        }else{
+            val url = intent.getStringExtra("GAIA_STUDIO_URL")
+
+            val params = GXClientToStudioMultiType.instance.getParams(url)
+            if (params == null) {
+                finish()
+                return
+            }
+            if ("auto" == params.getString("TYPE")) {
+                GXClientToStudioMultiType.instance.gxSocketToStudioListener = this
+                GXClientToStudioMultiType.instance.autoConnect(this, params);
+            } else if ("manual" == params.getString("TYPE")) {
+                GXClientToStudioMultiType.instance.manualConnect(this, params);
+                finish()
+            }
         }
-        if ("auto" == params.getString("TYPE")) {
-            GXClientToStudio.instance.gxSocketToStudioListener = this
-            GXClientToStudio.instance.autoConnect(this, params);
-        } else if ("manual" == params.getString("TYPE")) {
-            GXClientToStudio.instance.manualConnect(this, params);
-            finish()
-        }
+
     }
 
 
     override fun onDestroy() {
-        GXClientToStudio.instance.gxSocketToStudioListener = null
+        GXClientToStudioMultiType.instance.gxSocketToStudioListener = null
         super.onDestroy()
     }
 

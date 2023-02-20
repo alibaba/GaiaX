@@ -36,6 +36,13 @@ fun GXTemplateContext.getMaxHeightLayoutForScroll(): Layout? {
 }
 
 
+fun GXTemplateContext.getMinHeightLayoutForScroll(): Layout? {
+    return scrollItemLayoutCache?.minWithOrNull { a, b ->
+        a.value.height.compareTo(b.value.height)
+    }?.value
+}
+
+
 fun GXTemplateContext.initNodeForScroll() {
     if (scrollNodeCache == null) {
         scrollNodeCache = mutableMapOf()

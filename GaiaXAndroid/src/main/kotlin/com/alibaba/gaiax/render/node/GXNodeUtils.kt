@@ -107,6 +107,14 @@ object GXNodeUtils {
             val itemTemplateItem = itemTemplatePair.first
             val itemVisualTemplateNode = itemTemplatePair.second
 
+            // Improve: 如果之前计算过，并且内容高度都一样，那么直接使用缓存计算。在横滑容器数据量较大的情况下，会节省一些时间。
+            if (GXGlobalCache.instance.isExistForTemplateItem(itemTemplateItem)) {
+                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(itemTemplateItem)
+                return computeScrollContainerSize(
+                    gxNode, itemLayout, gxContainerData
+                )
+            }
+
             // 2. 计算坑位实际宽高结果
             gxContainerData.forEachIndexed { itemPosition, value ->
                 val itemData = value as JSONObject
@@ -123,9 +131,16 @@ object GXNodeUtils {
             }
 
             // 3. 计算容器期望的宽高结果
-            val itemLayout = gxTemplateContext.getMaxHeightLayoutForScroll()
+            val maxItemLayout = gxTemplateContext.getMaxHeightLayoutForScroll()
+            val minItemLayout = gxTemplateContext.getMinHeightLayoutForScroll()
+
+            if (maxItemLayout != null && minItemLayout != null && maxItemLayout.height == minItemLayout.height) {
+                // 如果相同，代表没有不一样的高度，下次可以只计算一次
+                GXGlobalCache.instance.putLayoutForTemplateItem(itemTemplateItem, maxItemLayout)
+            }
+
             return computeScrollContainerSize(
-                gxNode, itemLayout, gxContainerData
+                gxNode, maxItemLayout, gxContainerData
             )
         }
         // case 2

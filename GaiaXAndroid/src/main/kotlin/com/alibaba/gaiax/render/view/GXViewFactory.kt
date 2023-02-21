@@ -29,36 +29,35 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
  */
 object GXViewFactory {
 
-    internal val viewSupport: MutableMap<String, Class<*>> = mutableMapOf()
     internal val viewCreatorSupport: MutableMap<String, (Context) -> View> = mutableMapOf()
 
-    init {
-        viewSupport[GXViewKey.VIEW_TYPE_GAIA_TEMPLATE] = GXView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_VIEW] = GXView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_TEXT] = GXText::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_RICH_TEXT] = GXRichText::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_IMAGE] = GXImageView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_SCROLL] = GXScrollView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_GRID] = GXGridView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_ICON_FONT] = GXIconFont::class.java
-        // viewSupport[GXViewKey.VIEW_TYPE_LOTTIE] = GXLottie::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_SHADOW_LAYOUT] = GXShadowLayout::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_CONTAINER_SLIDER] = GXSliderView::class.java
-        viewSupport[GXViewKey.VIEW_TYPE_PROGRESS] = GXProgressView::class.java
-    }
+    @Suppress("UNCHECKED_CAST")
+    fun <T : View> createView(
+        context: Context, type: String, customViewClass: String? = null
+    ): T {
 
-    /**
-     * Use reflection to create views based on Type
-     */
-    fun <T : View> createView(context: Context, type: String, customViewClass: String? = null): T {
-        val result = if (GXViewKey.VIEW_TYPE_CUSTOM == type && customViewClass != null) {
-            newInstance<T>(customViewClass, context)
-        } else if (viewSupport.contains(type)) {
-            newInstance<T>(viewSupport[type], context)
-        } else {
-            viewCreatorSupport[type]?.invoke(context)
+        if (viewCreatorSupport.containsKey(type)) {
+            return viewCreatorSupport[type]?.invoke(context) as T
         }
-        return result as T
+
+        if (GXViewKey.VIEW_TYPE_CUSTOM == type && customViewClass != null) {
+            return newInstance<T>(customViewClass, context) as T
+        }
+
+        return when (type) {
+            GXViewKey.VIEW_TYPE_GAIA_TEMPLATE -> GXView(context) as T
+            GXViewKey.VIEW_TYPE_VIEW -> GXView(context) as T
+            GXViewKey.VIEW_TYPE_TEXT -> GXText(context) as T
+            GXViewKey.VIEW_TYPE_RICH_TEXT -> GXRichText(context) as T
+            GXViewKey.VIEW_TYPE_IMAGE -> GXImageView(context) as T
+            GXViewKey.VIEW_TYPE_CONTAINER_SCROLL -> GXScrollView(context) as T
+            GXViewKey.VIEW_TYPE_CONTAINER_GRID -> GXGridView(context) as T
+            GXViewKey.VIEW_TYPE_ICON_FONT -> GXIconFont(context) as T
+            GXViewKey.VIEW_TYPE_SHADOW_LAYOUT -> GXShadowLayout(context) as T
+            GXViewKey.VIEW_TYPE_CONTAINER_SLIDER -> GXSliderView(context) as T
+            GXViewKey.VIEW_TYPE_PROGRESS -> GXProgressView(context) as T
+            else -> throw IllegalArgumentException("unknown type")
+        }
     }
 
     private fun <T : View> newInstance(clazz: String?, context: Context) = if (clazz != null) {
@@ -66,12 +65,5 @@ object GXViewFactory {
         c.newInstance(context) as T
     } else {
         GXView(context)
-    }
-
-    private fun <T : View> newInstance(clazz: Class<*>?, context: Context) = if (clazz != null) {
-        val c = clazz.getConstructor(Context::class.java)
-        c.newInstance(context) as T
-    } else {
-        null
     }
 }

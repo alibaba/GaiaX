@@ -309,11 +309,6 @@ class GXRegisterCenter {
         return this
     }
 
-    fun registerExtensionViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
-        GXViewFactory.viewSupport[viewType] = clazz
-        return this
-    }
-
     fun registerExtensionViewSupport(
         viewType: String,
         viewCreator: (Context) -> View

@@ -80,6 +80,7 @@ dependencies {
     androidTestImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.benchmark:benchmark-junit4:1.1.1'
     androidTestImplementation 'androidx.recyclerview:recyclerview:1.0.0'
+    androidTestImplementation "androidx.appcompat:appcompat:1.0.0"
 
     // Add your dependencies here. Note that you cannot benchmark code
     // in an app module this way - you will need to move any code you

@@ -107,6 +107,12 @@
         styleModel.alignSelf = [self convertAlignSelf:alignSelf];
     }
     
+    // align-content
+    NSString *alignContent = [styleJSON gx_stringForKey:@"align-content"];
+    if (alignContent.length) {
+        styleModel.alignContent = [self convertAlignContent:alignContent];
+    }
+    
     // justify-content
     NSString *justifyContent = [styleJSON gx_stringForKey:@"justify-content"];
     if (justifyContent.length) {

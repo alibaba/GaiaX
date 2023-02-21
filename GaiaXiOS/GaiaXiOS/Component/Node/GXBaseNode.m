@@ -116,12 +116,32 @@
         }
     }
     
-    //更新flex-grow
-    NSString *flexGrowStr = [styleInfo gx_stringForKey:@"flex-grow"];
-    if (flexGrowStr) {
-        CGFloat flexGrow = [flexGrowStr floatValue];
-        if (flexGrow != self.style.styleModel.flexGrow) {
-            self.style.styleModel.flexGrow = flexGrow;
+    //align-content
+    NSString *alignContent = [styleInfo gx_stringForKey:@"align-content"];
+    if (alignContent.length) {
+        AlignContent ac = [GXStyleHelper convertAlignContent:alignContent];
+        if (self.style.styleModel.alignContent != ac) {
+            self.style.styleModel.alignContent = ac;
+            isMark = YES;
+        }
+    }
+    
+    //align-items
+    NSString *alignItems = [styleInfo gx_stringForKey:@"align-items"];
+    if (alignItems.length) {
+        AlignItems ai = [GXStyleHelper convertAlignItems:alignItems];
+        if (self.style.styleModel.alignItems != ai) {
+            self.style.styleModel.alignItems = ai;
+            isMark = YES;
+        }
+    }
+    
+    //align-self
+    NSString *alignSelf = [styleInfo gx_stringForKey:@"align-self"];
+    if (alignSelf.length) {
+        AlignSelf as = [GXStyleHelper convertAlignSelf:alignSelf];
+        if (self.style.styleModel.alignSelf != as) {
+            self.style.styleModel.alignSelf = as;
             isMark = YES;
         }
     }
@@ -132,6 +152,16 @@
         JustifyContent jc = [GXStyleHelper convertJustifyContent:justifyContent];
         if (self.style.styleModel.justifyContent != jc) {
             self.style.styleModel.justifyContent = jc;
+            isMark = YES;
+        }
+    }
+    
+    //更新flex-grow
+    NSString *flexGrowStr = [styleInfo gx_stringForKey:@"flex-grow"];
+    if (flexGrowStr) {
+        CGFloat flexGrow = [flexGrowStr floatValue];
+        if (flexGrow != self.style.styleModel.flexGrow) {
+            self.style.styleModel.flexGrow = flexGrow;
             isMark = YES;
         }
     }

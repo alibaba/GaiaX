@@ -20,10 +20,12 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
+    - name: Build before
+      run: ls -ll
     - name: run emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:
-          api-level: 29
+          api-level: 28
           script: ./gradlew connectedCheck
     - name: run analyze test
       run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest

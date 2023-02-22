@@ -29,4 +29,4 @@ jobs:
         cmake: 3.10.2.4988404
         script: ./gradlew connectedCheck
     - name: run analyze test
-      run: ./gradlew connectedAndroidTest
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest

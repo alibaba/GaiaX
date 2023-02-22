@@ -576,10 +576,7 @@ class GXTemplateEngine {
         }
         try {
             GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-
                 render.resetViewDataOnlyViewTree(gxTemplateContext)
-
-                GXContainerUtils.notifyOnResetView(gxTemplateContext)
             }
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {

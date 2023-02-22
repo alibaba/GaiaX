@@ -58,6 +58,10 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         bindDesc(this, content, data)
     }
 
+    override fun onResetData() {
+        this.text = ""
+    }
+
     open fun bindText(textView: TextView, content: CharSequence) {
         textView.text = content
     }

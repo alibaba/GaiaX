@@ -80,6 +80,14 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
     }
 
+    fun resetView() {
+        val rootNode = gxTemplateContext.rootNode
+            ?: throw IllegalArgumentException("RootNode is null(resetView)")
+
+        // 更新样式
+        Style.resetViewTree(rootNode)
+    }
+
     object Layout {
 
         internal fun updateNodeTreeLayout(
@@ -665,6 +673,14 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
     }
 
     object Style {
+
+        internal fun resetViewTree(gxNode: GXNode) {
+            resetViewData(gxNode)
+            gxNode.children?.forEach { childNode ->
+                resetViewTree(childNode)
+            }
+        }
+
         internal fun updateNodeTreeStyleAndData(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
@@ -982,6 +998,16 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
             }
         }
 
+        private fun resetViewData(
+            gxNode: GXNode
+        ) {
+            gxNode.templateNode.dataBinding ?: return
+            val view = gxNode.view ?: return
+            if (view is GXIViewBindData) {
+                view.onResetData()
+            }
+        }
+
         private fun nodeViewData(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
@@ -1189,9 +1215,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         }
 
         private fun bindCustom(
-            view: GXIViewBindData,
-            gxTemplateNode: GXTemplateNode,
-            templateData: JSONObject
+            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
         ) {
             val data = gxTemplateNode.getData(templateData)
             view.onBindData(data)

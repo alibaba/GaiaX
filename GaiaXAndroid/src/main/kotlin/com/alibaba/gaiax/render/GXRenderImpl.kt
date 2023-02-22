@@ -85,4 +85,8 @@ class GXRenderImpl {
         GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
     }
 
+    fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
+        GXNodeTreeUpdate(gxTemplateContext).resetView()
+    }
+
 }

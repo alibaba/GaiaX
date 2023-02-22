@@ -27,6 +27,4 @@ jobs:
         working-directory: ./GaiaXAnalyze/GXAnalyzeAndroid
         ndk: 21.0.6113669
         cmake: 3.10.2.4988404
-        script: ./gradlew connectedCheck
-    - name: run analyze test
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest
+        script: ./gradlew connectedCheck && ./gradlew connectedAndroidTest

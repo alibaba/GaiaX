@@ -14,8 +14,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: run tests
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    - name: run emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:
           api-level: 29
-          script: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest
+          script: ./gradlew connectedCheck
+    - name: run analyze test
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest

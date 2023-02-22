@@ -22,10 +22,12 @@ jobs:
         cache: gradle
     - name: Build before
       run: ls -ll
+    - name: run before emulator
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid
     - name: run emulator
       uses: reactivecircus/android-emulator-runner@v2
       with:
           api-level: 28
           script: ./gradlew connectedCheck
     - name: run analyze test
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && ./gradlew connectedAndroidTest
+      run: ./gradlew connectedAndroidTest

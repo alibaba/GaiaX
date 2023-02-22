@@ -20,14 +20,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-    - name: run before emulator
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid
-    - name: Build before
-      run: ls -ll
     - name: run tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 29
+        working-directory: ./GaiaXAnalyze/GXAnalyzeAndroid
         ndk: 21.0.6113669
         cmake: 3.10.2.4988404
         script: ./gradlew connectedCheck

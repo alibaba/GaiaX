@@ -499,8 +499,8 @@ class GXTemplateEngine {
                 throw e
             }
         }
-
     }
+
 
     /**
      * To create template's view with template information and template measure size.
@@ -561,6 +561,23 @@ class GXTemplateEngine {
             bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
             bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
 
+        } catch (e: Exception) {
+            if (GXExceptionHelper.isException()) {
+                GXExceptionHelper.exception(e)
+            } else {
+                throw e
+            }
+        }
+    }
+
+    fun resetView(gxView: View) {
+        if (GXLog.isLog()) {
+            GXLog.e("resetView")
+        }
+        try {
+            GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                render.resetViewDataOnlyViewTree(gxTemplateContext)
+            }
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)

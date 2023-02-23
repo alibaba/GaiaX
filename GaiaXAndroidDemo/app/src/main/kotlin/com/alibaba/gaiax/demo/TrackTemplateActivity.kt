@@ -29,6 +29,10 @@ class TrackTemplateActivity : AppCompatActivity() {
             targetView?.let { it1 -> GXTemplateEngine.instance.onDisappear(it1) }
         }
 
+        findViewById<AppCompatButton>(R.id.on_resetview).setOnClickListener {
+            targetView?.let { it1 -> GXTemplateEngine.instance.resetView(it1) }
+        }
+
         renderTemplate1(this)
     }
 

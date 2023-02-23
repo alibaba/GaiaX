@@ -71,7 +71,7 @@ class GXRenderImpl {
         gxTemplateContext.isDirty = false
 
         // Update the node tree
-        GXNodeTreeUpdate(gxTemplateContext).buildNodeLayout()
+        GXNodeTreeUpdate.buildNodeLayout(gxTemplateContext)
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
@@ -82,11 +82,11 @@ class GXRenderImpl {
         GXViewTreeUpdate(gxTemplateContext, rootNode).build()
 
         // Update the view tree
-        GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
+        GXNodeTreeUpdate.buildViewStyleAndData(gxTemplateContext)
     }
 
     fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
-        GXNodeTreeUpdate(gxTemplateContext).resetView()
+        GXNodeTreeUpdate.resetView(gxTemplateContext)
     }
 
 }

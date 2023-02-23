@@ -54,9 +54,9 @@ import com.alibaba.gaiax.template.utils.GXTemplateUtils
 /**
  * @suppress
  */
-class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
+object GXNodeTreeUpdate {
 
-    fun buildNodeLayout() {
+    fun buildNodeLayout( gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildNodeLayout)")
         val templateData =
@@ -70,7 +70,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
     }
 
-    fun buildViewStyleAndData() {
+    fun buildViewStyleAndData(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildViewStyle)")
         val templateData =
@@ -80,7 +80,7 @@ class GXNodeTreeUpdate(val gxTemplateContext: GXTemplateContext) {
         Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
     }
 
-    fun resetView() {
+    fun resetView(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(resetView)")
 

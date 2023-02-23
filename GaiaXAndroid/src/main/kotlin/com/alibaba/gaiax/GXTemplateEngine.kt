@@ -608,7 +608,7 @@ class GXTemplateEngine {
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
-            gxRootNode.stretchNode.layoutByCreate?.let {
+            gxRootNode.stretchNode.layoutByPrepareView?.let {
                 GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }

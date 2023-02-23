@@ -36,7 +36,7 @@ class GXRenderImpl {
     fun prepareView(gxTemplateContext: GXTemplateContext) {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
-        rootNode.stretchNode.layoutByCreate?.let {
+        rootNode.stretchNode.layoutByPrepareView?.let {
             GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
         }
         rootNode.release()

@@ -56,7 +56,7 @@ import com.alibaba.gaiax.template.utils.GXTemplateUtils
  */
 object GXNodeTreeUpdate {
 
-    fun buildNodeLayout( gxTemplateContext: GXTemplateContext) {
+    fun buildNodeLayout(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildNodeLayout)")
         val templateData =
@@ -130,8 +130,9 @@ object GXNodeTreeUpdate {
         private fun updateNodeTreeLayout(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
-            gxNode.templateNode.reset()
-            gxNode.stretchNode.reset(gxTemplateContext, gxNode)
+
+            gxNode.reset(gxTemplateContext)
+
 
             if (gxNode.isNestRoot) {
                 updateNestNodeLayout(gxTemplateContext, gxNode, templateData)
@@ -1259,7 +1260,7 @@ object GXNodeTreeUpdate {
         ) {
             gxNode.templateNode.layer.gridConfig?.let {
                 view.setGridContainerDirection(
-                    gxTemplateContext, it, gxNode.stretchNode.layoutByBind
+                    gxTemplateContext, it, gxNode.layoutByBind
                 )
                 view.setGridContainerItemSpacingAndRowSpacing(
                     gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
@@ -1273,7 +1274,7 @@ object GXNodeTreeUpdate {
             gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 
                 view.setScrollContainerDirection(
-                    scrollConfig.direction, gxNode.stretchNode.layoutByBind
+                    scrollConfig.direction, gxNode.layoutByBind
                 )
 
                 val padding = gxNode.getPaddingRect()

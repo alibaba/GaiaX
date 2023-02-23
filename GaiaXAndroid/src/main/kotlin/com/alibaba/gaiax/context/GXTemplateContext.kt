@@ -152,7 +152,7 @@ class GXTemplateContext private constructor(
      */
     fun reset() {
         templateInfo.reset()
-        rootNode?.reset(this)
+        rootNode?.resetTree(this)
     }
 
     companion object {

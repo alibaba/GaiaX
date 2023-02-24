@@ -37,6 +37,10 @@ fun View?.width(): Float {
     return this?.layoutParams?.width?.toFloat() ?: 0F
 }
 
+fun View?.text(): CharSequence {
+    return (this as? TextView)?.text ?: ""
+}
+
 fun View?.lp(): AbsoluteLayout.LayoutParams {
     return this?.layoutParams as AbsoluteLayout.LayoutParams
 }

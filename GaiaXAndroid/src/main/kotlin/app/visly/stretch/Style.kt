@@ -141,6 +141,25 @@ sealed class Dimension {
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Dimension
+
+        if (type != other.type) return false
+        if (value != other.value) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = type
+        result = 31 * result + value.hashCode()
+        return result
+    }
+
+
 }
 
 /**
@@ -151,6 +170,26 @@ data class Size<T>(var width: T, var height: T) {
     override fun toString(): String {
         return "Size(width=$width, height=$height)"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Size<*>
+
+        if (width != other.width) return false
+        if (height != other.height) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = width?.hashCode() ?: 0
+        result = 31 * result + (height?.hashCode() ?: 0)
+        return result
+    }
+
+
 }
 
 /**
@@ -160,6 +199,30 @@ data class Rect<T>(var start: T, var end: T, var top: T, var bottom: T) {
     override fun toString(): String {
         return "Rect(start=$start, end=$end, top=$top, bottom=$bottom)"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Rect<*>
+
+        if (start != other.start) return false
+        if (end != other.end) return false
+        if (top != other.top) return false
+        if (bottom != other.bottom) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = start?.hashCode() ?: 0
+        result = 31 * result + (end?.hashCode() ?: 0)
+        result = 31 * result + (top?.hashCode() ?: 0)
+        result = 31 * result + (bottom?.hashCode() ?: 0)
+        return result
+    }
+
+
 }
 
 /**

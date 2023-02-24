@@ -24,7 +24,6 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
@@ -52,7 +51,6 @@ object GXFitContentUtils {
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         gxTemplateNode: GXTemplateNode,
-        gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Size<Dimension>? {
 
@@ -70,7 +68,7 @@ object GXFitContentUtils {
         val finalCss = gxTemplateNode.css
         val finalFlexBox = finalCss.flexBox
         val finalStyle = finalCss.style
-        val nodeLayout = gxStretchNode.layoutByBind ?: gxNode.layoutByPrepare
+        val nodeLayout = gxNode.layoutByBind ?: gxNode.layoutByPrepare
         ?: throw IllegalArgumentException("to fit content for text, but layout is null")
 
         val gxCacheText = GXMeasureViewPool.obtain(androidContext)
@@ -98,7 +96,7 @@ object GXFitContentUtils {
 
         // FIX: 如果databinding中引发了flex的改动，那么nodeLayout的结果可能不准确
         val finalFlexBoxHeight = finalFlexBox.sizeForDimension?.height
-        if (gxStretchNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
+        if (gxNode.layoutByBind == null && finalFlexBoxHeight is Dimension.Points && nodeHeight != finalFlexBoxHeight.value) {
             nodeHeight = finalFlexBoxHeight.value
         }
 

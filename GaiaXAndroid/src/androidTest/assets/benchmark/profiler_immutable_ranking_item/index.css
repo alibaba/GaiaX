@@ -1,0 +1,88 @@
+#profiler_immutable_ranking_item {
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+#content {
+  width: 100%;
+  flex-direction: column;
+  aspect-ratio: 0.61;
+}
+#item-img {
+  width: 100%;
+  background-color: #e4e4e400;
+  border-radius: radius_secondary_medium;
+}
+#cover-img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 0.75;
+}
+#mask {
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  aspect-ratio: 3.7;
+  background-image: linear-gradient(to top, #fe008e66 0%, #00000000 100%);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+#left {
+  text-overflow: ellipsis;
+  font-size: 150px;
+  font-weight: 900;
+  font-family: Akrobat-Bold;
+  position: absolute;
+  left: 0px;
+  bottom: -38px;
+  width:100px;
+  height:200px;
+  background-image: linear-gradient(to bottom, #ffffff 0%, #00000000 100%);
+  box-shadow: 2px -4px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+#right-score {
+  text-overflow: ellipsis;
+  color: #ffffff;
+  font-size: content_score_text;
+  font-family: Akrobat-Bold;
+  font-weight: 400;
+  flex-shrink: 1;
+  position: absolute;
+  bottom: -21px;
+  right: 20px;
+  width:100%;
+  height:50px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
+}
+
+#right {
+  text-overflow: ellipsis;
+  color: #ffffff;
+  font-size: posteritem_subhead;
+  font-family: PingFang SC;
+  font-weight: 400;
+  flex-shrink: 1;
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
+width:100%;
+height:50px;
+}
+
+#title-view {
+  width: 100%;
+  background-color: #e4e4e400;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#title {
+  width: 100%;
+  text-overflow: ellipsis;
+  color: primaryInfo;
+  font-size: posteritem_maintitle;
+  font-weight: 500;
+  flex-grow: 1;
+}

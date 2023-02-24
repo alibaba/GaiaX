@@ -28,6 +28,7 @@ import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.util.concurrent.CopyOnWriteArraySet
 
+
 /**
  * @suppress
  */
@@ -56,6 +57,7 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var isMeasureSizeChanged: Boolean = false
 
     var isReuseRootNode: Boolean = false
 
@@ -89,10 +91,7 @@ class GXTemplateContext private constructor(
 
     var scrollNodeCache: MutableMap<Any, GXNode>? = null
 
-    /**
-     * Is dirty
-     */
-    var isDirty: Boolean = false
+    var dirtyFlag: Int = DIRTY_FLAG_DEFAULT
 
     /**
      * Is exist flexGrow logic
@@ -124,7 +123,7 @@ class GXTemplateContext private constructor(
     fun release() {
         scrollItemLayoutCache?.clear()
         containers?.clear()
-        isDirty = false
+        dirtyFlag = DIRTY_FLAG_DEFAULT
         dirtyTexts?.clear()
         dirtyTexts = null
         templateData = null
@@ -150,12 +149,48 @@ class GXTemplateContext private constructor(
     /**
      * 重置所有缓存计算的内容
      */
-    fun reset() {
+    fun resetFromResize() {
         templateInfo.reset()
-        rootNode?.reset(this)
+        rootNode?.resetFromResize(this)
+    }
+
+    fun dirtyForCompute() {
+        dirtyFlag = dirtyFlag.or(DIRTY_FLAG_COMPUTE)
+    }
+
+    fun dirtyForStyle() {
+        dirtyFlag = dirtyFlag.or(DIRTY_FLAG_STYLE)
+    }
+
+    fun dirtyForText() {
+        dirtyFlag = dirtyFlag.or(DIRTY_FLAG_TEXT)
+    }
+
+    fun isDirtyForText(): Boolean {
+        return dirtyFlag.and(DIRTY_FLAG_TEXT) == DIRTY_FLAG_TEXT
+    }
+
+    fun isDirtyForCompute(): Boolean {
+        return dirtyFlag.and(DIRTY_FLAG_COMPUTE) == DIRTY_FLAG_COMPUTE
+    }
+
+    fun isDirtyForStyle(): Boolean {
+        return dirtyFlag.and(DIRTY_FLAG_STYLE) == DIRTY_FLAG_STYLE
+    }
+
+    /**
+     * if prepare layout entirely equals bind layout, we think that the template is immutable because no anyone case will change the layout.
+     */
+    fun isImmutableTemplate(): Boolean {
+        return Layout.equals(rootNode?.layoutByBind, rootNode?.layoutByPrepare)
     }
 
     companion object {
+
+        const val DIRTY_FLAG_DEFAULT = 0x00000000
+        const val DIRTY_FLAG_COMPUTE = 0x00000001
+        const val DIRTY_FLAG_STYLE = 0x00000010
+        const val DIRTY_FLAG_TEXT = 0x00000100
 
         fun createContext(
             gxTemplateItem: GXTemplateEngine.GXTemplateItem,

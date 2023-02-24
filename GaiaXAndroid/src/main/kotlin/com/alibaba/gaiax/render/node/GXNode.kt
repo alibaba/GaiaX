@@ -32,6 +32,8 @@ import com.alibaba.gaiax.template.GXTemplateKey
  */
 class GXNode {
 
+    var isFitContentModify: Boolean = false
+
     /**
      * 属性动画
      */
@@ -84,6 +86,8 @@ class GXNode {
 
     var layoutByPrepare: Layout? = null
 
+    var layoutByBind: Layout? = null
+
     /**
      * 父节点
      */
@@ -127,6 +131,7 @@ class GXNode {
         }
         children?.clear()
         parentNode = null
+        isFitContentModify = false
     }
 
     fun getType() = templateNode.getNodeType()
@@ -163,20 +168,27 @@ class GXNode {
 
     fun isNeedLottie(): Boolean {
         return templateNode.animationBinding?.type?.equals(
-            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE,
-            true
+            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true
         ) == true
     }
 
     /**
      * 重置节点中的缓存
      */
-    fun reset(gxTemplateContext: GXTemplateContext) {
+    fun resetFromResize(gxTemplateContext: GXTemplateContext) {
+        isFitContentModify = false
+        layoutByBind = null
         templateNode.reset()
-        stretchNode.reset(gxTemplateContext, this)
+        stretchNode.resetFromResize(gxTemplateContext, this)
         children?.forEach {
-            it.reset(gxTemplateContext)
+            it.resetFromResize(gxTemplateContext)
         }
+    }
+
+    fun resetFromUpdate(gxTemplateContext: GXTemplateContext) {
+        layoutByBind = null
+        templateNode.reset()
+        stretchNode.initStyle(gxTemplateContext, this)
     }
 
     fun isNodeVisibleInTree(): Boolean {
@@ -202,4 +214,5 @@ class GXNode {
             event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         }
     }
+
 }

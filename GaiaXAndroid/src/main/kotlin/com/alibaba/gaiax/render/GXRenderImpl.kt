@@ -36,7 +36,7 @@ class GXRenderImpl {
     fun prepareView(gxTemplateContext: GXTemplateContext) {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
-        rootNode.stretchNode.layoutByCreate?.let {
+        rootNode.stretchNode.layoutByPrepareView?.let {
             GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
         }
         rootNode.release()
@@ -66,27 +66,36 @@ class GXRenderImpl {
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
+    /**
+     * use data to update layout, and combine node's extend data.
+     *
+     * it's includes to update stretch style and stretch node, to compute a new layout.
+     */
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
-        gxTemplateContext.isDirty = false
+        gxTemplateContext.dirtyFlag = GXTemplateContext.DIRTY_FLAG_DEFAULT
 
         // Update the node tree
-        GXNodeTreeUpdate(gxTemplateContext).buildNodeLayout()
+        GXNodeTreeUpdate.buildNodeLayout(gxTemplateContext)
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree) gxTemplateContext = $gxTemplateContext")
 
-        // Update view layout
-        GXViewTreeUpdate(gxTemplateContext, rootNode).build()
+        if (gxTemplateContext.isMeasureSizeChanged ||
+            !GXGlobalCache.instance.isImmutableTemplate(gxTemplateContext.templateItem)
+        ) {
+            // Update view layout
+            GXViewTreeUpdate(gxTemplateContext, rootNode).build()
+        }
 
         // Update the view tree
-        GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
+        GXNodeTreeUpdate.buildViewStyleAndData(gxTemplateContext)
     }
 
     fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
-        GXNodeTreeUpdate(gxTemplateContext).resetView()
+        GXNodeTreeUpdate.resetView(gxTemplateContext)
     }
 
 }

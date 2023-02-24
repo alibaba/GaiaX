@@ -27,7 +27,7 @@ import java.nio.charset.Charset
  * output the result. Modify your code to see how it affects performance.
  */
 @RunWith(AndroidJUnit4::class)
-class GaiaXBenchmark {
+class GXBenchmark {
 
     var context: Context = InstrumentationRegistry.getInstrumentation().context
 
@@ -79,6 +79,38 @@ class GaiaXBenchmark {
             GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
         }
     }
+
+
+    @Test
+    fun profiler_immutable_ranking_item() {
+
+        val bizId = "templates"
+        val templateId = "profiler_immutable_ranking_item"
+
+        val data = readJsonFromAssets("data/$templateId.json")
+
+        benchmarkRule.measureRepeated {
+            val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
+                context, bizId, templateId
+            )
+            val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+
+            GXTemplateEngine.instance.prepareView(gxTemplateItem, gxMeasureSize)
+
+            val gxTemplateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
+                gxTemplateItem, gxMeasureSize, null
+            )!!
+
+            val gxView = GXTemplateEngine.instance.createViewOnlyViewTree(gxTemplateContext)!!
+
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
+
+            GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+
+            GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
+        }
+    }
+
 
     @Test
     fun profiler_dianbo_item_single_v2() {

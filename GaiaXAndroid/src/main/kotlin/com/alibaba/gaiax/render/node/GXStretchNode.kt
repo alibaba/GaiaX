@@ -25,28 +25,35 @@ import com.alibaba.gaiax.template.GXFlexBox
  */
 @Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
-    var node: Node? = null, var layoutByCreate: Layout? = null, var layoutByBind: Layout? = null
+    var node: Node? = null, var layoutByPrepareView: Layout? = null
 ) {
 
-    fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-        resetStyle(gxTemplateContext, gxNode)
-        layoutByBind = null
+    fun initStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        if (this.node != null) {
+            return
+        }
+        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+        val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
+        this.node = stretchNode
+        this.node?.let {
+            gxNode.parentNode?.stretchNode?.node?.addChild(it)
+        }
+    }
+
+    fun resetFromResize(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        if (this.node == null) {
+            initStyle(gxTemplateContext, gxNode)
+        } else {
+            resetStyle(gxTemplateContext, gxNode)
+        }
     }
 
     private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
-        if (this.node == null) {
-            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
-            this.node = stretchNode
-            this.node?.let {
-                gxNode.parentNode?.stretchNode?.node?.addChild(it)
-            }
-        } else {
-            val oldStyle = this.node?.getStyle()
-            this.node?.setStyle(stretchStyle)
-            this.node?.markDirty()
-            oldStyle?.safeFree()
-        }
+        val oldStyle = this.node?.getStyle()
+        this.node?.setStyle(stretchStyle)
+        this.node?.markDirty()
+        oldStyle?.safeFree()
     }
 
     fun initFinal() {
@@ -59,17 +66,13 @@ data class GXStretchNode(
     companion object {
 
         fun createEmptyNode(
-            gxTemplateContext: GXTemplateContext,
-            templateNode: GXTemplateNode,
-            id: String
+            gxTemplateContext: GXTemplateContext, templateNode: GXTemplateNode, id: String
         ): GXStretchNode {
             return GXStretchNode()
         }
 
         fun createNode(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode,
-            id: String
+            gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, id: String
         ): GXStretchNode {
             val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
             val stretchNode = Node(id, stretchStyle, mutableListOf())

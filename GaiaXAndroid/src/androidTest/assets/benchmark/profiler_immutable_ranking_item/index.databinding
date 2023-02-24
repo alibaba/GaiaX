@@ -1,0 +1,47 @@
+{
+    "config":{
+        "layout":{
+            "item-width":"100%",
+            "item-aspect-ratio":"0.61"
+        },
+          "render":{
+              "item-placeholder":{
+                  "color":"#939393",
+                  "radius":"radius_secondary_medium",
+                  "width":"100%",
+                  "aspect-ratio":"0.75"
+              }
+          }
+    },
+    "event":{
+        "profiler_immutable_ranking_item":"${data.action}"
+    },
+    "data":{
+        "cover-img":{
+            "value":"${data.img}",
+            "mark":{
+                "type":"${data.mark.type}",
+                "img":"${data.mark.data.img}",
+                "text":"${data.mark.data.text}",
+                "color":"${data.mark.data.color}"
+            }
+        },
+        "mask":{
+            "extend":{
+                "background-image":"@{eval(${data.index} == 1) ? 'linear-gradient(to top,  #fe008e66 0%,#00000000 100%)' : @{eval(${data.index} == 2) ? 'linear-gradient(to top,  #FF4E3066 0%,#00000000 100%)' : @{eval(${data.index} == 3) ? 'linear-gradient(to top,  #FD910066 0%,#00000000 100%)' : 'linear-gradient(to top,  #00000066 0%,#00000000 100%)'}}}"
+            }
+        },
+        "left":{
+            "value":"${data.index}"
+        },
+        "right-score":{
+            "value":"${data.summary}"
+        },
+        "right":{
+            "value":"${data.summary}"
+        },
+        "title":{
+            "value":"${data.title}"
+        }
+    }
+}

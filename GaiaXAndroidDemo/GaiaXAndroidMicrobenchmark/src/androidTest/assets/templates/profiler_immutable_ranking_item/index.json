@@ -1,0 +1,29 @@
+{
+  "id": "profiler_immutable_ranking_item",
+  "type": "gaia-template",
+  "exp-version": "V1",
+  "layers": [
+    {
+      "id": "content",
+      "type": "view",
+      "layers": [
+        {
+          "id": "item-img",
+          "type": "view",
+          "layers": [
+            { "id": "cover-img", "type": "image" },
+            { "id": "mask", "type": "view" },
+            { "id": "left", "type": "text" },
+            { "id": "right-score", "type": "text" },
+            { "id": "right", "type": "text" }
+          ]
+        },
+        {
+          "id": "title-view",
+          "type": "view",
+          "layers": [{ "id": "title", "type": "text" }]
+        }
+      ]
+    }
+  ]
+}

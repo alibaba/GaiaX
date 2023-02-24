@@ -131,11 +131,7 @@ data class GXLayer constructor(
                     subType = subType,
                     customNodeClass = viewClass,
                     scrollConfig = GXScrollConfig.create(
-                        data,
-                        direction,
-                        edgeInsets,
-                        itemSpacing,
-                        gravity
+                        data, direction, edgeInsets, itemSpacing, gravity
                     ),
                     gridConfig = null
                 )
@@ -147,12 +143,7 @@ data class GXLayer constructor(
                     customNodeClass = viewClass,
                     scrollConfig = null,
                     gridConfig = GXGridConfig.create(
-                        data,
-                        direction,
-                        itemSpacing,
-                        rowSpacing,
-                        column,
-                        scrollable
+                        data, direction, itemSpacing, rowSpacing, column, scrollable
                     )
                 )
                 isSliderType(type, subType) -> GXLayer(
@@ -208,104 +199,117 @@ data class GXLayer constructor(
     /**
      * 节点真实类型
      */
-    fun getNodeType(): String {
-        if (subType != null) {
-            return subType
-        }
-        return type
+    val getNodeType: String by lazy {
+        subType ?: type
     }
 
     /**
      * 是否是容器类型
      */
-    fun isContainerType(): Boolean {
-        return isScrollType() || isGridType() || isSliderType()
+    val isContainerType: Boolean by lazy {
+        isScrollType || isGridType || isSliderType
     }
 
     /**
      * Scroll容器节点类型
      */
-    fun isScrollType(): Boolean {
-        return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
+    val isScrollType: Boolean by lazy {
+        type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SCROLL
     }
 
     /**
      * Grid容器节点类型
      */
-    fun isGridType(): Boolean {
-        return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_GRID
+    val isGridType: Boolean by lazy {
+        type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_GRID
     }
 
     /**
      * 嵌套子模板类型，是个虚拟节点
      */
-    fun isNestChildTemplateType(): Boolean {
+    val isNestChildTemplateType: Boolean by lazy {
         if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityContainerNestTemplateJudgementCondition == true) {
-            return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
-                    || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == null && customNodeClass == null
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == null && customNodeClass == null
+        } else {
+            type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
         }
-        return type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass == null
     }
 
     /**
      * 自定义组件类型
      */
-    fun isCustomType(): Boolean {
-        return type == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass != null
+    val isCustomType: Boolean by lazy {
+        type == GXViewKey.VIEW_TYPE_CUSTOM && customNodeClass != null
     }
 
     /**
      * 文本类型
      */
-    fun isTextType(): Boolean = GXViewKey.VIEW_TYPE_TEXT == type
+    val isTextType: Boolean by lazy { GXViewKey.VIEW_TYPE_TEXT == type }
 
     /**
      * 富文本类型
      */
-    fun isRichTextType(): Boolean = GXViewKey.VIEW_TYPE_RICH_TEXT == type
+    val isRichTextType: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_RICH_TEXT == type
+    }
 
     /**
      * 视图类型
      */
-    fun isViewType(): Boolean =
+    val isViewType: Boolean by lazy {
         GXViewKey.VIEW_TYPE_VIEW == type || GXViewKey.VIEW_TYPE_GAIA_TEMPLATE == type && subType == null
+    }
+
 
     /**
      * 可能是模板根节点、或者嵌套节点、或者自定义视图类型
      */
-    fun isGaiaTemplate(): Boolean = GXViewKey.VIEW_TYPE_GAIA_TEMPLATE == type
+    val isGaiaTemplate: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_GAIA_TEMPLATE == type
+    }
 
     /**
      * IconFont类型
      */
-    fun isIconFontType(): Boolean = GXViewKey.VIEW_TYPE_ICON_FONT == type
+    val isIconFontType: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_ICON_FONT == type
+    }
 
     /**
      * Lottie类型
      */
-    fun isLottieType(): Boolean = GXViewKey.VIEW_TYPE_LOTTIE == type
+    val isLottieType: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_LOTTIE == type
+    }
 
     /**
      * 图片类型
      */
-    fun isImageType(): Boolean = GXViewKey.VIEW_TYPE_IMAGE == type
+    val isImageType: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_IMAGE == type
+    }
 
     /**
      * Progress 类型
      */
-    fun isProgressType(): Boolean = GXViewKey.VIEW_TYPE_PROGRESS == type
+    val isProgressType: Boolean by lazy {
+        GXViewKey.VIEW_TYPE_PROGRESS == type
+    }
 
     /**
      * Slider 容器节点类型
      */
-    fun isSliderType(): Boolean =
+    val isSliderType: Boolean by lazy {
         type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE && subType == GXViewKey.VIEW_TYPE_CONTAINER_SLIDER
+    }
 
     /**
      * 是否能够被合并
      */
-    fun isCanMergeType(): Boolean =
-        !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE)
+    val isCanMergeType: Boolean by lazy {
+        !isContainerType && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE)
+    }
 
 }
 

@@ -80,7 +80,7 @@ object GXNodeTreePrepare {
         // 构建子层级节点
         gxLayer.layers.forEach { currentLayer ->
             // 嵌套子模板类型，是个虚拟节点
-            if (currentLayer.isNestChildTemplateType()) {
+            if (currentLayer.isNestChildTemplateType) {
                 val gxChildTemplateInfo = gxTemplateInfo.getChildTemplateInfo(currentLayer.id)
                     ?: throw IllegalArgumentException("Child template not found, id = ${currentLayer.id}")
 

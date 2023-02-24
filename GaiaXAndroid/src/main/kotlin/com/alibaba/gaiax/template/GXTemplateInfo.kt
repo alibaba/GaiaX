@@ -381,7 +381,7 @@ data class GXTemplateInfo(
 
         private fun forChildrenTemplate(layer: GXLayer, function: (layer: GXLayer) -> Unit) {
             layer.layers.forEach {
-                if (it.isNestChildTemplateType()) {
+                if (it.isNestChildTemplateType) {
                     function(it)
                 }
                 forChildrenTemplate(it, function)

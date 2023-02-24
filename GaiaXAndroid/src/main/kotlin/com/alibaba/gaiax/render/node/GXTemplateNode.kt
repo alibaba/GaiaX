@@ -16,7 +16,6 @@
 
 package com.alibaba.gaiax.render.node
 
-import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -128,43 +127,41 @@ data class GXTemplateNode(
         css.updateByVisual(visualTemplateNode?.css)
     }
 
-    fun getNodeType() = layer.getNodeType()
+    val getNodeType = layer.getNodeType
 
-    fun getCustomViewClass() = layer.customNodeClass
+    val getCustomViewClass = layer.customNodeClass
 
-    fun isTextType(): Boolean = layer.isTextType()
+    val isTextType: Boolean = layer.isTextType
 
-    fun isRichTextType(): Boolean = layer.isRichTextType()
+    val isRichTextType: Boolean = layer.isRichTextType
 
-    fun isViewType(): Boolean = layer.isViewType()
+    val isViewType: Boolean = layer.isViewType
 
-    fun isIconFontType(): Boolean = layer.isIconFontType()
+    val isIconFontType: Boolean = layer.isIconFontType
 
-    fun isLottieType(): Boolean = layer.isLottieType()
+    val isLottieType: Boolean = layer.isLottieType
 
-    fun isImageType(): Boolean = layer.isImageType()
+    val isImageType: Boolean = layer.isImageType
 
-    fun isScrollType(): Boolean = layer.isScrollType()
+    val isScrollType: Boolean = layer.isScrollType
 
-    fun isContainerType(): Boolean = layer.isContainerType()
+    val isContainerType: Boolean = layer.isContainerType
 
-    fun isGridType(): Boolean = layer.isGridType()
+    val isGridType: Boolean = layer.isGridType
 
-    fun isSliderType(): Boolean = layer.isSliderType()
+    val isSliderType: Boolean = layer.isSliderType
 
-    fun isProgressType(): Boolean = layer.isProgressType()
+    val isProgressType: Boolean = layer.isProgressType
 
-    fun isGaiaTemplateType(): Boolean = layer.isGaiaTemplate()
+    val isGaiaTemplateType: Boolean = layer.isGaiaTemplate
 
-    fun isCustomType(): Boolean = layer.isCustomType()
+    val isCustomType: Boolean = layer.isCustomType
 
-    fun isCanBeMergedType(): Boolean = layer.isCanMergeType()
+    val isCanBeMergedType: Boolean = layer.isCanMergeType
 
-    fun isNestChildTemplateType(): Boolean = layer.isNestChildTemplateType()
+    val isNestChildTemplateType: Boolean = layer.isNestChildTemplateType
 
-    fun getNodeId(): String {
-        return layer.id
-    }
+    val getNodeId: String = layer.id
 
     companion object {
 

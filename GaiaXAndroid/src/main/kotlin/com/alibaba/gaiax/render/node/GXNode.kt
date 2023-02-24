@@ -32,6 +32,8 @@ import com.alibaba.gaiax.template.GXTemplateKey
  */
 class GXNode {
 
+    var isFitContentModify: Boolean = false
+
     /**
      * 属性动画
      */
@@ -129,6 +131,7 @@ class GXNode {
         }
         children?.clear()
         parentNode = null
+        isFitContentModify = false
     }
 
     fun getType() = templateNode.getNodeType()
@@ -172,17 +175,20 @@ class GXNode {
     /**
      * 重置节点中的缓存
      */
-    fun resetTree(gxTemplateContext: GXTemplateContext) {
-        reset(gxTemplateContext)
+    fun resetFromResize(gxTemplateContext: GXTemplateContext) {
+        isFitContentModify = false
+        layoutByBind = null
+        templateNode.reset()
+        stretchNode.resetStyle(gxTemplateContext, this)
         children?.forEach {
-            it.resetTree(gxTemplateContext)
+            it.resetFromResize(gxTemplateContext)
         }
     }
 
-    fun reset(gxTemplateContext: GXTemplateContext) {
+    fun resetFromUpdate(gxTemplateContext: GXTemplateContext) {
         layoutByBind = null
         templateNode.reset()
-        stretchNode.reset(gxTemplateContext, this)
+        stretchNode.initStyle(gxTemplateContext, this)
     }
 
     fun isNodeVisibleInTree(): Boolean {

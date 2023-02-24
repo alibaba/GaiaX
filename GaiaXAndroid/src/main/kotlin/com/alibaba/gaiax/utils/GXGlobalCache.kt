@@ -2,7 +2,6 @@ package com.alibaba.gaiax.utils
 
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.render.node.GXNode
 
 class GXGlobalCache {
     fun putLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
@@ -31,7 +30,7 @@ class GXGlobalCache {
     private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
         mutableMapOf()
 
-    fun clean() {
+    fun clear() {
         layoutForTemplateItem.clear()
         layoutForPrepareView.clear()
     }

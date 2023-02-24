@@ -126,7 +126,7 @@ object GXNodeTreeUpdate {
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
 
-            gxNode.reset(gxTemplateContext)
+            gxNode.resetFromUpdate(gxTemplateContext)
 
             if (gxNode.isNestRoot) {
                 updateNestNodeLayout(gxTemplateContext, gxNode, templateData)
@@ -536,7 +536,7 @@ object GXNodeTreeUpdate {
             }
 
             gxFlexBox.sizeForDimension?.let {
-                if (it != stretchStyle.size) {
+                if (it != stretchStyle.size && !gxNode.isFitContentModify) {
                     GXTemplateUtils.updateSize(it, stretchStyle.size)
                     gxTemplateContext.dirtyForStyle()
                 }
@@ -616,12 +616,14 @@ object GXNodeTreeUpdate {
                 // 处理普通的fitContent逻辑
                 val stretchStyle = stretchNode.getStyle()
                 GXFitContentUtils.fitContent(
-                    gxTemplateContext, gxNode, gxNode.templateNode, gxNode.stretchNode, templateData
+                    gxTemplateContext, gxNode, gxNode.templateNode, templateData
                 )?.let { src ->
 
                     if (src != stretchStyle.size) {
                         // 自适应之后的宽度，要更新到原有尺寸上
                         GXTemplateUtils.updateSize(src, stretchStyle.size)
+
+                        gxNode.isFitContentModify = true
 
                         // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
                         // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
@@ -681,7 +683,7 @@ object GXNodeTreeUpdate {
 
             // 处理fitContent逻辑
             GXFitContentUtils.fitContent(
-                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
+                gxTemplateContext, gxNode, gxTemplateNode, templateData
             )?.let { src ->
 
                 if (src != stretchStyle.size) {

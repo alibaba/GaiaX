@@ -601,9 +601,9 @@ class GXTemplateEngine {
         val gxRootNode = gxTemplateContext.rootNode
         if (gxRootNode != null && isMeasureSizeChanged) {
 
-            //
-            gxTemplateContext.reset()
-            GXGlobalCache.instance.clean()
+            gxTemplateContext.clearLayoutForScroll()
+            gxTemplateContext.resetFromResize()
+            GXGlobalCache.instance.clear()
 
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
@@ -737,7 +737,6 @@ class GXTemplateEngine {
                 oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
         }
 
-        gxTemplateContext.clearLayoutForScroll()
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)

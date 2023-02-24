@@ -28,11 +28,18 @@ data class GXStretchNode(
     var node: Node? = null, var layoutByPrepareView: Layout? = null
 ) {
 
-    fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-        resetStyle(gxTemplateContext, gxNode)
+    fun initStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        if (this.node == null) {
+            val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
+            this.node = stretchNode
+            this.node?.let {
+                gxNode.parentNode?.stretchNode?.node?.addChild(it)
+            }
+        }
     }
 
-    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+    fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
         if (this.node == null) {
             val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())

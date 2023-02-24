@@ -24,7 +24,6 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
@@ -52,7 +51,6 @@ object GXFitContentUtils {
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         gxTemplateNode: GXTemplateNode,
-        gxStretchNode: GXStretchNode,
         templateData: JSONObject
     ): Size<Dimension>? {
 

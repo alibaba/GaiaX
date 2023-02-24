@@ -858,6 +858,7 @@ class GXComponentTextTest : GXBaseTest() {
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
 
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"

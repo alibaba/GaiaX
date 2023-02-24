@@ -153,9 +153,9 @@ class GXTemplateContext private constructor(
     /**
      * 重置所有缓存计算的内容
      */
-    fun reset() {
+    fun resetFromResize() {
         templateInfo.reset()
-        rootNode?.resetTree(this)
+        rootNode?.resetFromResize(this)
     }
 
     fun dirtyForCompute() {

@@ -178,6 +178,9 @@ class GXTemplateContext private constructor(
         return dirtyFlag.and(DIRTY_FLAG_STYLE) == DIRTY_FLAG_STYLE
     }
 
+    /**
+     * if prepare layout entirely equals bind layout, we think that the template is immutable because no anyone case will change the layout.
+     */
     fun isImmutableTemplate(): Boolean {
         return Layout.equals(rootNode?.layoutByBind, rootNode?.layoutByPrepare)
     }

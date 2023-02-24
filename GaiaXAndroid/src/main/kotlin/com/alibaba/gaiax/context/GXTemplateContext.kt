@@ -57,8 +57,8 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
-
     var isMeasureSizeChanged: Boolean = false
+
     var isReuseRootNode: Boolean = false
 
     /**
@@ -90,11 +90,6 @@ class GXTemplateContext private constructor(
     var gridItemLayoutCache: Layout? = null
 
     var scrollNodeCache: MutableMap<Any, GXNode>? = null
-
-    /**
-     * Is dirty
-     */
-    var isDirty: Boolean = false
 
     var dirtyFlag: Int = DIRTY_FLAG_DEFAULT
 
@@ -181,6 +176,10 @@ class GXTemplateContext private constructor(
 
     fun isDirtyForStyle(): Boolean {
         return dirtyFlag.and(DIRTY_FLAG_STYLE) == DIRTY_FLAG_STYLE
+    }
+
+    fun isImmutableTemplate(): Boolean {
+        return Layout.equals(rootNode?.layoutByBind, rootNode?.layoutByPrepare)
     }
 
     companion object {

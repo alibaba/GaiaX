@@ -4,37 +4,27 @@ import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
 
 class GXGlobalCache {
+
     fun putLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForPrepareView[key] = value
-        if (GXLog.isLog()) {
-            GXLog.e("putLayoutForPrepareView key=${key.hashCode()} value=$value")
-        }
+        layoutForPrepareView[key.getKey] = value
     }
 
     fun getLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForPrepareView[key]
+        return layoutForPrepareView[key.getKey]
     }
 
     fun isExistForPrepareView(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForPrepareView.containsKey(key)
+        return layoutForPrepareView.containsKey(key.getKey)
     }
 
-    /**
-     * layout cache for preview view.
-     *
-     * the cache will use to reduce computation at create view step.
-     */
-    private val layoutForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
-        mutableMapOf()
+    private val layoutForPrepareView: MutableMap<String, Layout> = mutableMapOf()
 
-    private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
-        mutableMapOf()
+    private val layoutForTemplateItem: MutableMap<String, Layout> = mutableMapOf()
 
-    internal val immutableTemplateItem: MutableSet<GXTemplateEngine.GXTemplateItem> =
-        mutableSetOf()
+    private val immutableTemplateItem: MutableSet<String> = mutableSetOf()
 
     fun isImmutableTemplate(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return immutableTemplateItem.contains(key)
+        return immutableTemplateItem.contains(key.getKey)
     }
 
     fun clear() {
@@ -44,15 +34,19 @@ class GXGlobalCache {
     }
 
     fun putLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForTemplateItem[key] = value
+        layoutForTemplateItem[key.getKey] = value
     }
 
     fun getLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForTemplateItem[key]
+        return layoutForTemplateItem[key.getKey]
     }
 
     fun isExistForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForTemplateItem.containsKey(key)
+        return layoutForTemplateItem.containsKey(key.getKey)
+    }
+
+    fun addImmutableTemplate(key: GXTemplateEngine.GXTemplateItem) {
+        immutableTemplateItem.add(key.getKey)
     }
 
     companion object {

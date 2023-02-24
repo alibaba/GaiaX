@@ -66,6 +66,11 @@ class GXRenderImpl {
             ?: throw IllegalArgumentException("Create template view exception, gxTemplateContext = $gxTemplateContext")
     }
 
+    /**
+     * use data to update layout, and combine node's extend data.
+     *
+     * it's includes to update stretch style and stretch node, to compute a new layout.
+     */
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
         gxTemplateContext.dirtyFlag = GXTemplateContext.DIRTY_FLAG_DEFAULT

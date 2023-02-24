@@ -143,7 +143,7 @@ object GXNodeTreeUpdate {
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
             // 容器节点
-            if (gxNode.templateNode.isContainerType) {
+            if (gxNode.templateNode.layer.isContainerType) {
                 updateNestContainerNodeLayout(gxTemplateContext, gxNode, templateData)
             }
             // 嵌套的子节点
@@ -753,7 +753,7 @@ object GXNodeTreeUpdate {
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
         ) {
             // 容器节点
-            if (gxNode.templateNode.isContainerType) {
+            if (gxNode.templateNode.layer.isContainerType) {
                 updateNestContainerNodeStyle(gxTemplateContext, gxNode, templateData)
             }
             // 嵌套的子节点
@@ -1039,7 +1039,7 @@ object GXNodeTreeUpdate {
                 if (gxTemplateContext.manualTrackMap == null) {
                     gxTemplateContext.manualTrackMap = mutableMapOf()
                 }
-                gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId, gxTrack)
+                gxTemplateContext.manualTrackMap?.put(gxTemplateNode.layer.id, gxTrack)
             } else {
                 val gxEventBinding = gxTemplateNode.eventBinding ?: return
                 val trackData = gxEventBinding.event.value(templateData) as? JSONObject ?: return

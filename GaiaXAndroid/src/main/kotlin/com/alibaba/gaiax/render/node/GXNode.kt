@@ -134,33 +134,33 @@ class GXNode {
         isFitContentModify = false
     }
 
-    fun getType() = templateNode.getNodeType
+    fun getType() = templateNode.layer.getNodeType
 
-    fun getCustomViewClass() = templateNode.getCustomViewClass
+    fun getCustomViewClass() = templateNode.layer.customNodeClass
 
-    fun isTextType(): Boolean = templateNode.isTextType
+    fun isTextType(): Boolean = templateNode.layer.isTextType
 
-    fun isRichTextType(): Boolean = templateNode.isRichTextType
+    fun isRichTextType(): Boolean = templateNode.layer.isRichTextType
 
-    fun isGaiaTemplateType(): Boolean = templateNode.isGaiaTemplateType
+    fun isGaiaTemplateType(): Boolean = templateNode.layer.isGaiaTemplate
 
-    fun isViewType(): Boolean = templateNode.isViewType
+    fun isViewType(): Boolean = templateNode.layer.isViewType
 
-    fun isIconFontType(): Boolean = templateNode.isIconFontType
+    fun isIconFontType(): Boolean = templateNode.layer.isIconFontType
 
-    fun isImageType(): Boolean = templateNode.isImageType
+    fun isImageType(): Boolean = templateNode.layer.isImageType
 
-    fun isContainerType(): Boolean = templateNode.isContainerType
+    fun isContainerType(): Boolean = templateNode.layer.isContainerType
 
-    fun isCustomViewType(): Boolean = templateNode.isCustomType
+    fun isCustomViewType(): Boolean = templateNode.layer.isCustomType
 
-    fun isGridType(): Boolean = templateNode.isGridType
+    fun isGridType(): Boolean = templateNode.layer.isGridType
 
-    fun isScrollType(): Boolean = templateNode.isScrollType
+    fun isScrollType(): Boolean = templateNode.layer.isScrollType
 
-    fun isSliderType(): Boolean = templateNode.isSliderType
+    fun isSliderType(): Boolean = templateNode.layer.isSliderType
 
-    fun isProgressType(): Boolean = templateNode.isProgressType
+    fun isProgressType(): Boolean = templateNode.layer.isProgressType
 
     fun isNeedShadow(): Boolean {
         return (isViewType() || isImageType()) && templateNode.css.style.boxShadow != null

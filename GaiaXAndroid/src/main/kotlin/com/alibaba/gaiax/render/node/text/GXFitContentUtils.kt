@@ -54,7 +54,7 @@ object GXFitContentUtils {
         templateData: JSONObject
     ): Size<Dimension>? {
 
-        if (!gxTemplateNode.isTextType && !gxTemplateNode.isRichTextType) {
+        if (!gxTemplateNode.layer.isTextType && !gxTemplateNode.layer.isRichTextType) {
             return null
         }
 
@@ -63,7 +63,7 @@ object GXFitContentUtils {
         }
 
         val androidContext = gxTemplateContext.context
-        val nodeId = gxTemplateNode.getNodeId
+        val nodeId = gxTemplateNode.layer.id
         val nodeDataBinding = gxTemplateNode.dataBinding ?: return null
         val finalCss = gxTemplateNode.css
         val finalFlexBox = finalCss.flexBox

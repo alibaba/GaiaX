@@ -127,42 +127,6 @@ data class GXTemplateNode(
         css.updateByVisual(visualTemplateNode?.css)
     }
 
-    val getNodeType = layer.getNodeType
-
-    val getCustomViewClass = layer.customNodeClass
-
-    val isTextType: Boolean = layer.isTextType
-
-    val isRichTextType: Boolean = layer.isRichTextType
-
-    val isViewType: Boolean = layer.isViewType
-
-    val isIconFontType: Boolean = layer.isIconFontType
-
-    val isLottieType: Boolean = layer.isLottieType
-
-    val isImageType: Boolean = layer.isImageType
-
-    val isScrollType: Boolean = layer.isScrollType
-
-    val isContainerType: Boolean = layer.isContainerType
-
-    val isGridType: Boolean = layer.isGridType
-
-    val isSliderType: Boolean = layer.isSliderType
-
-    val isProgressType: Boolean = layer.isProgressType
-
-    val isGaiaTemplateType: Boolean = layer.isGaiaTemplate
-
-    val isCustomType: Boolean = layer.isCustomType
-
-    val isCanBeMergedType: Boolean = layer.isCanMergeType
-
-    val isNestChildTemplateType: Boolean = layer.isNestChildTemplateType
-
-    val getNodeId: String = layer.id
-
     companion object {
 
         fun createNode(

@@ -65,7 +65,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
 
             val childNodeType = childTemplateNode.layer.getNodeType
             val childCustomViewType = childTemplateNode.layer.customNodeClass
-            val isChildCanBeMergedType = childTemplateNode.isCanBeMergedType
+            val isChildCanBeMergedType = childTemplateNode.layer.isCanMergeType
 
             val isCanBeMergedNode = isChildCanBeMergedType
                     // No style

@@ -722,7 +722,7 @@ class GXCommonTest : GXBaseTest() {
 
         Assert.assertEquals(100f.ptToPx().toInt().toFloat(), rootView.height())
 
-        GXScreenUtils.isDebug = true
+        GXScreenUtils.isDebug = false
     }
 
     @Test

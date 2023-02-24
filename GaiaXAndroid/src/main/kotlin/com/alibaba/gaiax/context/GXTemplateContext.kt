@@ -58,6 +58,7 @@ class GXTemplateContext private constructor(
 ) {
 
 
+    var isMeasureSizeChanged: Boolean = false
     var isReuseRootNode: Boolean = false
 
     /**

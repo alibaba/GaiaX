@@ -30,9 +30,17 @@ class GXGlobalCache {
     private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
         mutableMapOf()
 
+    internal val immutableTemplateItem: MutableSet<GXTemplateEngine.GXTemplateItem> =
+        mutableSetOf()
+
+    fun isImmutableTemplate(key: GXTemplateEngine.GXTemplateItem): Boolean {
+        return immutableTemplateItem.contains(key)
+    }
+
     fun clear() {
         layoutForTemplateItem.clear()
         layoutForPrepareView.clear()
+        immutableTemplateItem.clear()
     }
 
     fun putLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem, value: Layout) {

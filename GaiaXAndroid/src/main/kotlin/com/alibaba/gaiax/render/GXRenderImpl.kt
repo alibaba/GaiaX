@@ -78,8 +78,12 @@ class GXRenderImpl {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree) gxTemplateContext = $gxTemplateContext")
 
-        // Update view layout
-        GXViewTreeUpdate(gxTemplateContext, rootNode).build()
+        if (gxTemplateContext.isMeasureSizeChanged ||
+            !GXGlobalCache.instance.isImmutableTemplate(gxTemplateContext.templateItem)
+        ) {
+            // Update view layout
+            GXViewTreeUpdate(gxTemplateContext, rootNode).build()
+        }
 
         // Update the view tree
         GXNodeTreeUpdate.buildViewStyleAndData(gxTemplateContext)

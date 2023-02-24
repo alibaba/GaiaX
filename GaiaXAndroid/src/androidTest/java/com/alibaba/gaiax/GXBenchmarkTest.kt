@@ -22,12 +22,16 @@ class GXBenchmarkTest : GXBaseTest() {
         val data = readJsonFromAssets(path)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(data)
 
-        val rootView = GXTemplateEngine.instance.createView(
-            templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
-        )
-        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        repeat(2) {
+            val rootView = GXTemplateEngine.instance.createView(
+                templateItem, GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+            )
+            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
 
-        Assert.assertEquals(true, rootView != null)
+            Assert.assertEquals("东宫", GXTemplateEngine.instance.getGXViewById(rootView,"title").text())
+            Assert.assertEquals("55集全", GXTemplateEngine.instance.getGXViewById(rootView,"right").text())
+            Assert.assertEquals("55集全", GXTemplateEngine.instance.getGXViewById(rootView,"right-score").text())
+        }
     }
 
 

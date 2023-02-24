@@ -27,7 +27,7 @@ import java.nio.charset.Charset
  * output the result. Modify your code to see how it affects performance.
  */
 @RunWith(AndroidJUnit4::class)
-class GaiaXBenchmark {
+class GXBenchmark {
 
     var context: Context = InstrumentationRegistry.getInstrumentation().context
 

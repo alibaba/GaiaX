@@ -49,6 +49,7 @@ import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
+import com.alibaba.gaiax.utils.GXGlobalCache
 
 /**
  * @suppress
@@ -68,6 +69,7 @@ object GXNodeTreeUpdate {
         // 如果存在延迟计算文字自适应的情况，需要处理后重新计算
         Layout.updateNodeTreeLayoutByDirtyText(gxTemplateContext, rootNode, size)
     }
+
 
     fun buildViewStyleAndData(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode

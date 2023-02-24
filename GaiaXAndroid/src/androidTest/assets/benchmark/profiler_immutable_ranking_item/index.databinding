@@ -35,16 +35,10 @@
             "value":"${data.index}"
         },
         "right-score":{
-            "value":"${data.summary}",
-            "extend":{
-                "display":"@{eval(${data.summaryType} == 'SCORE') ? flex : none}"
-            }
+            "value":"${data.summary}"
         },
         "right":{
-            "value":"${data.summary}",
-            "extend":{
-                "display":"@{eval(${data.summaryType} == 'UPDATE_STATUS') ? flex : none}"
-            }
+            "value":"${data.summary}"
         },
         "title":{
             "value":"${data.title}"

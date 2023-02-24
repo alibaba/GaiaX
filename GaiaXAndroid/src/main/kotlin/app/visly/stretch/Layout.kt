@@ -31,6 +31,32 @@ data class Layout(
 
             return Pair(offset, Layout(x, y, width, height, children))
         }
+
+        fun equals(leftLayout: Layout?, rightLayout: Layout?): Boolean {
+            rightLayout as Layout
+            if (leftLayout?.x != rightLayout.x) {
+                return false
+            }
+            if (leftLayout.y != rightLayout.y) {
+                return false
+            }
+            if (leftLayout.width != rightLayout.width) {
+                return false
+            }
+            if (leftLayout.height != rightLayout.height) {
+                return false
+            }
+            if (leftLayout.children.size != rightLayout.children.size) {
+                return false
+            }
+            leftLayout.children.forEachIndexed { index, nextLeftLayout ->
+                val nextRightLayout = rightLayout.children[index]
+                if (!equals(nextLeftLayout, nextRightLayout)) {
+                    return false
+                }
+            }
+            return true
+        }
     }
 
     override fun toString(): String {

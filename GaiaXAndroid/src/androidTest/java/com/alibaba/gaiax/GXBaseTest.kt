@@ -14,6 +14,7 @@ import com.alibaba.gaiax.template.GXScrollConfig
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
+import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.After
@@ -39,6 +40,7 @@ open class GXBaseTest {
 
         // 清除缓存，否则会导致模板复用，引发单测失败
         GXTemplateInfoSource.instance.clean()
+        GXGlobalCache.instance.clear()
 
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
     }

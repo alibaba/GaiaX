@@ -21,6 +21,7 @@ package com.alibaba.gaiax
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import app.visly.stretch.Layout
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -593,29 +594,6 @@ class GXTemplateEngine {
     }
 
     /**
-     * 当measure size发生变化的时候需要重新计算节点树，否则会导致bindData的传入数据不准确，引发布局错误
-     */
-    private fun recomputeWhenMeasureSizeChanged(
-        gxTemplateContext: GXTemplateContext, isMeasureSizeChanged: Boolean
-    ) {
-        val gxRootNode = gxTemplateContext.rootNode
-        if (gxRootNode != null && isMeasureSizeChanged) {
-
-            gxTemplateContext.clearLayoutForScroll()
-            gxTemplateContext.resetFromResize()
-            GXGlobalCache.instance.clear()
-
-            //
-            val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
-            GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
-            gxRootNode.stretchNode.layoutByPrepareView?.let {
-                GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
-                GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
-            }
-        }
-    }
-
-    /**
      * @suppress
      * @hide
      */
@@ -729,21 +707,50 @@ class GXTemplateEngine {
             return
         }
 
-        var isMeasureSizeChanged = false
         if (gxMeasureSize != null) {
             val oldMeasureSize = gxTemplateContext.size
             gxTemplateContext.size = gxMeasureSize
-            isMeasureSizeChanged =
+            gxTemplateContext.isMeasureSizeChanged =
                 oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
+        } else {
+            gxTemplateContext.isMeasureSizeChanged = false
         }
 
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
 
-        recomputeWhenMeasureSizeChanged(gxTemplateContext, isMeasureSizeChanged)
+        val gxRootNode = gxTemplateContext.rootNode
+        if (gxRootNode != null && gxTemplateContext.isMeasureSizeChanged) {
+
+            gxTemplateContext.clearLayoutForScroll()
+            gxTemplateContext.resetFromResize()
+            GXGlobalCache.instance.clear()
+
+            //
+            val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
+            GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
+            gxRootNode.stretchNode.layoutByPrepareView?.let {
+                GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
+                GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
+            }
+        }
+
+        // 如果是不可变模板，那么直接跳过样式更新逻辑
+        if (GXGlobalCache.instance.isImmutableTemplate(gxTemplateContext.templateItem)) {
+            return
+        }
 
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
+
+        // 判断是否是不可变的模板，如果是则加入全局标记
+        if (Layout.equals(
+                gxTemplateContext.rootNode?.layoutByBind,
+                gxTemplateContext.rootNode?.layoutByPrepare
+            )
+        ) {
+            GXGlobalCache.instance.immutableTemplateItem.add(gxTemplateContext.templateItem)
+        }
     }
 
     /**

@@ -179,7 +179,7 @@ class GXNode {
         isFitContentModify = false
         layoutByBind = null
         templateNode.reset()
-        stretchNode.resetStyle(gxTemplateContext, this)
+        stretchNode.resetFromResize(gxTemplateContext, this)
         children?.forEach {
             it.resetFromResize(gxTemplateContext)
         }

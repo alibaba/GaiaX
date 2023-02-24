@@ -29,30 +29,31 @@ data class GXStretchNode(
 ) {
 
     fun initStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-        if (this.node == null) {
-            val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
-            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
-            this.node = stretchNode
-            this.node?.let {
-                gxNode.parentNode?.stretchNode?.node?.addChild(it)
-            }
+        if (this.node != null) {
+            return
+        }
+        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+        val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
+        this.node = stretchNode
+        this.node?.let {
+            gxNode.parentNode?.stretchNode?.node?.addChild(it)
         }
     }
 
-    fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
-        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+    fun resetFromResize(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         if (this.node == null) {
-            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
-            this.node = stretchNode
-            this.node?.let {
-                gxNode.parentNode?.stretchNode?.node?.addChild(it)
-            }
+            initStyle(gxTemplateContext, gxNode)
         } else {
-            val oldStyle = this.node?.getStyle()
-            this.node?.setStyle(stretchStyle)
-            this.node?.markDirty()
-            oldStyle?.safeFree()
+            resetStyle(gxTemplateContext, gxNode)
         }
+    }
+
+    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+        val oldStyle = this.node?.getStyle()
+        this.node?.setStyle(stretchStyle)
+        this.node?.markDirty()
+        oldStyle?.safeFree()
     }
 
     fun initFinal() {

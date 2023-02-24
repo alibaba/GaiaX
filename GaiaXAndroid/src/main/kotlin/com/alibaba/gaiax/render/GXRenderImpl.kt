@@ -68,7 +68,7 @@ class GXRenderImpl {
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         // Resetting the Template Status
-        gxTemplateContext.isDirty = false
+        gxTemplateContext.dirtyFlag = GXTemplateContext.DIRTY_FLAG_DEFAULT
 
         // Update the node tree
         GXNodeTreeUpdate.buildNodeLayout(gxTemplateContext)

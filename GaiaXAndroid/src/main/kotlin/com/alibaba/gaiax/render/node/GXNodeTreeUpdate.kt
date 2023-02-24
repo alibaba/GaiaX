@@ -43,7 +43,6 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXLayer
-import com.alibaba.gaiax.template.GXStyle
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
@@ -100,7 +99,7 @@ object GXNodeTreeUpdate {
             updateNodeTreeLayout(gxTemplateContext, gxNode, templateData)
 
             // 计算布局
-            if (gxTemplateContext.isDirty) {
+            if (gxTemplateContext.isDirtyForCompute()) {
                 GXNodeUtils.computeNodeTreeByBindData(gxNode, size)
             }
         }
@@ -109,19 +108,15 @@ object GXNodeTreeUpdate {
             gxTemplateContext: GXTemplateContext, rootNode: GXNode, size: Size<Float?>
         ) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
-                var isTextDirty = false
                 gxTemplateContext.dirtyTexts?.forEach {
-                    val isDirty = updateTextLayoutByFitContentByDirtyText(
+                    updateTextLayoutByFitContentByDirtyText(
                         it.gxTemplateContext,
                         it.gxNode,
                         it.templateData,
                     )
-                    if (isDirty) {
-                        isTextDirty = true
-                    }
                 }
                 gxTemplateContext.dirtyTexts?.clear()
-                if (isTextDirty) {
+                if (gxTemplateContext.isDirtyForText()) {
                     GXNodeUtils.computeNodeTreeByBindData(rootNode, size)
                 }
             }
@@ -132,7 +127,6 @@ object GXNodeTreeUpdate {
         ) {
 
             gxNode.reset(gxTemplateContext)
-
 
             if (gxNode.isNestRoot) {
                 updateNestNodeLayout(gxTemplateContext, gxNode, templateData)
@@ -256,27 +250,21 @@ object GXNodeTreeUpdate {
         ) {
             // 容器节点
             if (gxNode.isContainerType()) {
-                val isDirty = updateContainerLayout(
+                updateContainerLayout(
                     gxTemplateContext, gxNode, templateData
                 )
-                if (isDirty) {
-                    gxTemplateContext.isDirty = true
-                }
             }
             // 普通节点
             else {
-                val isDirty = updateNormalLayout(
+                updateNormalLayout(
                     gxTemplateContext, gxNode, templateData
                 )
-                if (isDirty) {
-                    gxTemplateContext.isDirty = true
-                }
             }
         }
 
         private fun updateContainerLayout(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
-        ): Boolean {
+        ) {
 
             //  对于容器嵌套模板，传递给下一层的数据只能是JSONArray
             val containerData =
@@ -289,8 +277,6 @@ object GXNodeTreeUpdate {
 
             val gxCss = gxNode.templateNode.css
             val gxFlexBox = gxCss.flexBox
-
-            var isDirty = false
 
             val height = gxFlexBox.sizeForDimension?.height
             val flexGrow = gxFlexBox.flexGrow
@@ -319,7 +305,6 @@ object GXNodeTreeUpdate {
                     )
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
-                        isDirty = true
                     }
                 }
 
@@ -349,7 +334,6 @@ object GXNodeTreeUpdate {
                     )
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
-                        isDirty = true
                     }
                 }
             } else if (gxNode.isSliderType()) {
@@ -363,195 +347,249 @@ object GXNodeTreeUpdate {
                     )
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
-                        isDirty = true
                     }
                 }
             }
 
-            updateLayoutByFlexBox(gxTemplateContext, gxNode)?.let {
-                isDirty = it
-            }
+            updateLayoutByFlexBox(gxTemplateContext, gxNode)
 
-            if (isDirty) {
+            if (gxTemplateContext.isDirtyForStyle()) {
                 stretchStyle.free()
                 stretchStyle.init()
                 stretchNode.setStyle(stretchStyle)
                 stretchNode.markDirty()
-                return true
             }
 
-            return false
         }
 
         private fun updateNormalLayout(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
-        ): Boolean {
-
-            var isDirty = false
+        ) {
 
             updateLayoutByFlexBox(
                 gxTemplateContext, gxNode
-            )?.let {
-                isDirty = it
-            }
+            )
 
             updateLayoutByCssStyle(
                 gxTemplateContext, gxNode, templateData
-            )?.let {
-                isDirty = it
-            }
+            )
 
             val stretchNode = gxNode.stretchNode.node
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
             val stretchStyle = stretchNode.getStyle()
 
-            if (isDirty) {
+            if (gxTemplateContext.isDirtyForStyle()) {
                 stretchStyle.free()
                 stretchStyle.init()
                 stretchNode.setStyle(stretchStyle)
                 stretchNode.markDirty()
-                return true
             }
-
-            return false
         }
 
         private fun updateLayoutByFlexBox(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode
-        ): Boolean? {
+        ) {
 
             val gxFlexBox = gxNode.templateNode.css.flexBox
             val gxCssStyle = gxNode.templateNode.css.style
-            val stretchNode = gxNode.stretchNode.node
+            val stretchStyle: app.visly.stretch.Style = gxNode.stretchNode.node?.getStyle()
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
-            val stretchStyle: app.visly.stretch.Style = stretchNode.getStyle()
 
-            var isDirty: Boolean? = null
             gxFlexBox.display?.let {
-                stretchStyle.display = it
-                isDirty = true
+                if (it != stretchStyle.display) {
+                    stretchStyle.display = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.aspectRatio?.let {
-                stretchStyle.aspectRatio = it
-                isDirty = true
+                if (it != stretchStyle.aspectRatio) {
+                    stretchStyle.aspectRatio = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.direction?.let {
-                stretchStyle.direction = it
-                isDirty = true
+                if (it != stretchStyle.direction) {
+                    stretchStyle.direction = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.flexDirection?.let {
-                stretchStyle.flexDirection = it
-                isDirty = true
+                if (it != stretchStyle.flexDirection) {
+                    stretchStyle.flexDirection = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.flexWrap?.let {
-                stretchStyle.flexWrap = it
-                isDirty = true
+                if (it != stretchStyle.flexWrap) {
+                    stretchStyle.flexWrap = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.overflow?.let {
-                stretchStyle.overflow = it
-                isDirty = true
+                if (it != stretchStyle.overflow) {
+                    stretchStyle.overflow = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.alignItems?.let {
-                stretchStyle.alignItems = it
-                isDirty = true
+                if (it != stretchStyle.alignItems) {
+                    stretchStyle.alignItems = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.alignSelf?.let {
-                stretchStyle.alignSelf = it
-                isDirty = true
+                if (it != stretchStyle.alignSelf) {
+                    stretchStyle.alignSelf = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.alignContent?.let {
-                stretchStyle.alignContent = it
-                isDirty = true
+                if (it != stretchStyle.alignContent) {
+                    stretchStyle.alignContent = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.justifyContent?.let {
-                stretchStyle.justifyContent = it
-                isDirty = true
+                if (it != stretchStyle.justifyContent) {
+                    stretchStyle.justifyContent = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.positionType?.let {
-                stretchStyle.positionType = it
-                isDirty = true
+                if (it != stretchStyle.positionType) {
+                    stretchStyle.positionType = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             // 仅在绝对布局下，才能更新position的数据
             if (stretchStyle.positionType == PositionType.Absolute) {
                 gxFlexBox.positionForDimension?.let {
-                    GXTemplateUtils.updateDimension(it, stretchStyle.position)
-                    isDirty = true
+                    if (it != stretchStyle.position) {
+                        GXTemplateUtils.updateDimension(it, stretchStyle.position)
+                        gxTemplateContext.dirtyForStyle()
+                    }
+                    gxTemplateContext.dirtyForCompute()
                 }
             }
 
             gxFlexBox.marginForDimension?.let {
-                GXTemplateUtils.updateDimension(it, stretchStyle.margin)
-                isDirty = true
+                if (it != stretchStyle.margin) {
+                    GXTemplateUtils.updateDimension(it, stretchStyle.margin)
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.paddingForDimension?.let {
-                GXTemplateUtils.updateDimension(it, stretchStyle.padding)
-                isDirty = true
+                if (it != stretchStyle.padding) {
+                    GXTemplateUtils.updateDimension(it, stretchStyle.padding)
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.borderForDimension?.let {
-                GXTemplateUtils.updateDimension(it, stretchStyle.border)
-                isDirty = true
+                if (it != stretchStyle.border) {
+                    GXTemplateUtils.updateDimension(it, stretchStyle.border)
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.flexGrow?.let {
-                stretchStyle.flexGrow = it
-                gxTemplateContext.isFlexGrowLayout = true
-                isDirty = true
+                if (it != stretchStyle.flexGrow) {
+                    stretchStyle.flexGrow = it
+                    gxTemplateContext.isFlexGrowLayout = true
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.flexShrink?.let {
-                stretchStyle.flexShrink = it
-                isDirty = true
+                if (it != stretchStyle.flexShrink) {
+                    stretchStyle.flexShrink = it
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.sizeForDimension?.let {
-                GXTemplateUtils.updateSize(it, stretchStyle.size)
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
-                    GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
-                ).apply {
-                    this.cssStyle = gxCssStyle
-                })
-                isDirty = true
+                if (it != stretchStyle.size) {
+                    GXTemplateUtils.updateSize(it, stretchStyle.size)
+                    gxTemplateContext.dirtyForStyle()
+                }
+
+                val extensionDynamicProperty = GXRegisterCenter.instance.extensionDynamicProperty
+                if (extensionDynamicProperty != null) {
+                    val width = stretchStyle.size.width
+                    val height = stretchStyle.size.height
+                    val gxParams = GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
+                    ).apply {
+                        this.cssStyle = gxCssStyle
+                    }
+                    extensionDynamicProperty.convert(gxParams)
+                    if (stretchStyle.size.width != width || stretchStyle.size.height != height) {
+                        gxTemplateContext.dirtyForStyle()
+                    }
+                }
+
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.minSizeForDimension?.let {
-                GXTemplateUtils.updateSize(it, stretchStyle.minSize)
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
-                    GXTemplateKey.FLEXBOX_MIN_SIZE, stretchStyle.minSize
-                ).apply {
-                    this.cssStyle = gxCssStyle
-                })
-                isDirty = true
+                if (it != stretchStyle.minSize) {
+                    GXTemplateUtils.updateSize(it, stretchStyle.minSize)
+                    GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_MIN_SIZE, stretchStyle.minSize
+                    ).apply {
+                        this.cssStyle = gxCssStyle
+                    })
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
             gxFlexBox.maxSizeForDimension?.let {
-                GXTemplateUtils.updateSize(it, stretchStyle.maxSize)
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
-                    GXTemplateKey.FLEXBOX_MAX_SIZE, stretchStyle.maxSize
-                ).apply {
-                    this.cssStyle = gxCssStyle
-                })
-                isDirty = true
+                if (it != stretchStyle.maxSize) {
+                    GXTemplateUtils.updateSize(it, stretchStyle.maxSize)
+                    GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_MAX_SIZE, stretchStyle.maxSize
+                    ).apply {
+                        this.cssStyle = gxCssStyle
+                    })
+                    gxTemplateContext.dirtyForStyle()
+                }
+                gxTemplateContext.dirtyForCompute()
             }
 
-            return isDirty
         }
 
         private fun updateLayoutByCssStyle(
             gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
-        ): Boolean? {
+        ) {
 
             val stretchNode = gxNode.stretchNode.node
                 ?: throw IllegalArgumentException("stretch node is null, please check!")
@@ -572,22 +610,49 @@ object GXNodeTreeUpdate {
                             gxTemplateContext, gxNode, templateData
                         )
                     )
-                    return null
+                    return
                 }
 
                 // 处理普通的fitContent逻辑
-                return updateLayoutByFitContent(
-                    gxTemplateContext,
-                    gxNode,
-                    gxNode.templateNode,
-                    gxNode.stretchNode,
-                    gxStyle,
-                    templateData,
-                    stretchNode.getStyle()
-                )
-            }
+                val stretchStyle = stretchNode.getStyle()
+                GXFitContentUtils.fitContent(
+                    gxTemplateContext, gxNode, gxNode.templateNode, gxNode.stretchNode, templateData
+                )?.let { src ->
 
-            return null
+                    if (src != stretchStyle.size) {
+                        // 自适应之后的宽度，要更新到原有尺寸上
+                        GXTemplateUtils.updateSize(src, stretchStyle.size)
+
+                        // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
+                        // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
+                        if (stretchStyle.flexGrow != 0F) {
+                            stretchStyle.flexGrow = 0F
+                        }
+
+                        gxTemplateContext.dirtyForStyle()
+
+                    }
+
+                    val extensionDynamicProperty =
+                        GXRegisterCenter.instance.extensionDynamicProperty
+                    if (extensionDynamicProperty != null) {
+                        val width = stretchStyle.size.width
+                        val height = stretchStyle.size.height
+                        val gxParams = GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                            GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
+                        ).apply {
+                            cssStyle = gxStyle
+                        }
+                        extensionDynamicProperty.convert(gxParams)
+                        if (stretchStyle.size.width != width || stretchStyle.size.height != height) {
+                            gxTemplateContext.dirtyForStyle()
+
+                        }
+                    }
+
+                    gxTemplateContext.dirtyForCompute()
+                }
+            }
         }
 
         private fun isSelfAndParentNodeTreeFlex(gxNode: GXNode?): Boolean {
@@ -601,46 +666,11 @@ object GXNodeTreeUpdate {
             return selfIsFlex && isSelfAndParentNodeTreeFlex(gxNode.parentNode)
         }
 
-        private fun updateLayoutByFitContent(
-            gxTemplateContext: GXTemplateContext,
-            gxNode: GXNode,
-            gxTemplateNode: GXTemplateNode,
-            gxStretchNode: GXStretchNode,
-            gxCssStyle: GXStyle,
-            templateData: JSONObject,
-            style: app.visly.stretch.Style
-        ): Boolean? {
-
-            GXFitContentUtils.fitContent(
-                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
-            )?.let { src ->
-
-                // 自适应之后的宽度，要更新到原有尺寸上
-                GXTemplateUtils.updateSize(src, style.size)
-
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
-                    GXTemplateKey.FLEXBOX_SIZE, style.size
-                ).apply {
-                    this.cssStyle = gxCssStyle
-                })
-
-                // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
-                // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
-                if (style.flexGrow != 0F) {
-                    style.flexGrow = 0F
-                }
-
-                return true
-            }
-
-            return null
-        }
-
         private fun updateTextLayoutByFitContentByDirtyText(
             gxTemplateContext: GXTemplateContext,
             gxNode: GXNode,
             templateData: JSONObject,
-        ): Boolean {
+        ) {
 
             val gxTemplateNode = gxNode.templateNode
             val gxStretchNode = gxNode.stretchNode
@@ -650,27 +680,48 @@ object GXNodeTreeUpdate {
             val gxStyle = gxNode.templateNode.css.style
 
             // 处理fitContent逻辑
-            val isDirty = updateLayoutByFitContent(
-                gxTemplateContext,
-                gxNode,
-                gxTemplateNode,
-                gxStretchNode,
-                gxStyle,
-                templateData,
-                stretchStyle
-            )
+            GXFitContentUtils.fitContent(
+                gxTemplateContext, gxNode, gxTemplateNode, gxStretchNode, templateData
+            )?.let { src ->
 
-            if (isDirty == true) {
+                if (src != stretchStyle.size) {
+                    // 自适应之后的宽度，要更新到原有尺寸上
+                    GXTemplateUtils.updateSize(src, stretchStyle.size)
+
+                    // 使用FlexGrow结合FitContent计算出来的宽度，需要将flexGrow重置成0，
+                    // 否则在Stretch计算的时候会使用FlexGrow计算出的宽度
+                    if (stretchStyle.flexGrow != 0F) {
+                        stretchStyle.flexGrow = 0F
+                    }
+
+                    gxTemplateContext.dirtyForStyle()
+                    gxTemplateContext.dirtyForText()
+                }
+
+                val extensionDynamicProperty = GXRegisterCenter.instance.extensionDynamicProperty
+                if (extensionDynamicProperty != null) {
+                    val width = stretchStyle.size.width
+                    val height = stretchStyle.size.height
+                    val gxParams = GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                        GXTemplateKey.FLEXBOX_SIZE, stretchStyle.size
+                    ).apply {
+                        cssStyle = gxStyle
+                    }
+                    extensionDynamicProperty.convert(gxParams)
+                    if (stretchStyle.size.width != width || stretchStyle.size.height != height) {
+                        gxTemplateContext.dirtyForStyle()
+                        gxTemplateContext.dirtyForText()
+                    }
+                }
+            }
+
+            if (gxTemplateContext.isDirtyForStyle()) {
                 stretchStyle.free()
                 stretchStyle.init()
                 stretchNode.setStyle(stretchStyle)
                 stretchNode.markDirty()
-                return true
             }
-
-            return false
         }
-
     }
 
     object Style {

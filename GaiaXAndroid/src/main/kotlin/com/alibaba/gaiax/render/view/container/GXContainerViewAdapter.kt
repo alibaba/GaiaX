@@ -432,7 +432,7 @@ class GXContainerViewAdapter(
     }
 
     fun isNeedForceRefresh(targetWidth: Float): Boolean {
-        return gxNode.stretchNode.layoutByBind?.width != targetWidth
+        return gxNode.layoutByBind?.width != targetWidth
     }
 
 }

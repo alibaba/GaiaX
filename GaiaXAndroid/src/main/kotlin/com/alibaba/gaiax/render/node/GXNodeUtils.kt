@@ -51,7 +51,7 @@ object GXNodeUtils {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
-        gxNode.stretchNode.layoutByBind = layout
+        gxNode.layoutByBind = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
         }
@@ -68,7 +68,7 @@ object GXNodeUtils {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         layout.id = stretchNode.id
-        gxNode.stretchNode.layoutByCreate = layout
+        gxNode.stretchNode.layoutByPrepareView = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByPrepareView(childViewData, layout.children[index])
         }
@@ -544,7 +544,7 @@ object GXNodeUtils {
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
             val containerWidth =
-                gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
+                gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
                 ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
 
             val gxGridConfig = gxNode.templateNode.layer.gridConfig
@@ -610,7 +610,7 @@ object GXNodeUtils {
     private fun computeGridItemViewPort(
         gxTemplateContext: GXTemplateContext, gxNode: GXNode
     ): Size<Float?> {
-        val containerWidth = gxNode.stretchNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
+        val containerWidth = gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
         ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
 
         val gxGridConfig = gxNode.templateNode.layer.gridConfig
@@ -687,7 +687,7 @@ object GXNodeUtils {
         gxTemplateContext.initNodeForScroll()
         gxTemplateContext.putNodeForScroll(itemCacheKey, gxItemRootNode)
 
-        return gxItemRootNode.stretchNode.layoutByBind
+        return gxItemRootNode.layoutByBind
     }
 
     private fun computeScrollContainerSize(

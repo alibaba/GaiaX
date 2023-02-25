@@ -84,6 +84,8 @@ class GXNode {
 
     var layoutByPrepare: Layout? = null
 
+    var layoutByBind: Layout? = null
+
     /**
      * 父节点
      */
@@ -163,20 +165,24 @@ class GXNode {
 
     fun isNeedLottie(): Boolean {
         return templateNode.animationBinding?.type?.equals(
-            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE,
-            true
+            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true
         ) == true
     }
 
     /**
      * 重置节点中的缓存
      */
+    fun resetTree(gxTemplateContext: GXTemplateContext) {
+        reset(gxTemplateContext)
+        children?.forEach {
+            it.resetTree(gxTemplateContext)
+        }
+    }
+
     fun reset(gxTemplateContext: GXTemplateContext) {
+        layoutByBind = null
         templateNode.reset()
         stretchNode.reset(gxTemplateContext, this)
-        children?.forEach {
-            it.reset(gxTemplateContext)
-        }
     }
 
     fun isNodeVisibleInTree(): Boolean {
@@ -202,4 +208,5 @@ class GXNode {
             event = GXRegisterCenter.instance.extensionNodeEvent?.create()
         }
     }
+
 }

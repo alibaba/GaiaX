@@ -28,12 +28,12 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(context, rootNode) {
 
     override fun getChildLayout(childNode: GXNode): Layout {
-        return childNode.stretchNode.layoutByBind
+        return childNode.layoutByBind
             ?: throw IllegalArgumentException("Stretch layout info is null")
     }
 
     override fun getRootLayout(): Layout {
-        return rootNode.stretchNode.layoutByBind
+        return rootNode.layoutByBind
             ?: throw IllegalArgumentException("Stretch layout info is null gxTemplateContext = $gxTemplateContext")
     }
 

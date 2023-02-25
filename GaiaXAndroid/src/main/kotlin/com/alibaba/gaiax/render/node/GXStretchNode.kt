@@ -25,12 +25,11 @@ import com.alibaba.gaiax.template.GXFlexBox
  */
 @Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
-    var node: Node? = null, var layoutByCreate: Layout? = null, var layoutByBind: Layout? = null
+    var node: Node? = null, var layoutByPrepareView: Layout? = null
 ) {
 
     fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         resetStyle(gxTemplateContext, gxNode)
-        layoutByBind = null
     }
 
     private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
@@ -59,17 +58,13 @@ data class GXStretchNode(
     companion object {
 
         fun createEmptyNode(
-            gxTemplateContext: GXTemplateContext,
-            templateNode: GXTemplateNode,
-            id: String
+            gxTemplateContext: GXTemplateContext, templateNode: GXTemplateNode, id: String
         ): GXStretchNode {
             return GXStretchNode()
         }
 
         fun createNode(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode,
-            id: String
+            gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, id: String
         ): GXStretchNode {
             val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
             val stretchNode = Node(id, stretchStyle, mutableListOf())

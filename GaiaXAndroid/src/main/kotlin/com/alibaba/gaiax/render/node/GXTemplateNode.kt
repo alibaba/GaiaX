@@ -16,7 +16,6 @@
 
 package com.alibaba.gaiax.render.node
 
-import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
@@ -124,9 +123,10 @@ data class GXTemplateNode(
             css.updateByExtend(extendCssData)
         }
 
-        visualTemplateNode?.initFinal(gxTemplateContext, null, visualTemplateData)
-
-        css.updateByVisual(visualTemplateNode?.css)
+        visualTemplateNode?.let {
+            it.initFinal(gxTemplateContext, null, visualTemplateData)
+            css.updateByVisual(it.css)
+        }
     }
 
     fun getNodeType() = layer.getNodeType()
@@ -180,14 +180,138 @@ data class GXTemplateNode(
             val trackBinding = template.findTrack(viewId)
             val animationBinding = template.findAnimation(viewId)
             return GXTemplateNode(
-                layer,
-                css,
+                copyLayer(layer),
+                copyCss(css),
                 dataBinding,
                 eventBinding,
                 trackBinding,
                 animationBinding,
                 visualTemplateNode
             )
+        }
+
+        private fun copyCss(css: GXCss): GXCss {
+            return GXCss(copyStyle(css.style), copyFlexBox(css.flexBox))
+        }
+
+        private fun copyFlexBox(flexBox: GXFlexBox): GXFlexBox {
+            return GXFlexBox(
+                flexBox.displayForTemplate,
+                flexBox.positionTypeForTemplate,
+                flexBox.directionForTemplate,
+                flexBox.flexDirectionForTemplate,
+                flexBox.flexWrapForTemplate,
+                flexBox.overflowForTemplate,
+                flexBox.alignItemsForTemplate,
+                flexBox.alignSelfForTemplate,
+                flexBox.alignContentForTemplate,
+                flexBox.justifyContentForTemplate,
+                flexBox.positionForTemplate,
+                flexBox.marginForTemplate,
+                flexBox.paddingForTemplate,
+                flexBox.borderForTemplate,
+                flexBox.flexGrowForTemplate,
+                flexBox.flexShrinkForTemplate,
+                flexBox.flexBasisForTemplate,
+                flexBox.sizeForTemplate,
+                flexBox.minSizeForTemplate,
+                flexBox.maxSizeForTemplate,
+                flexBox.aspectRatioForTemplate
+            )
+        }
+
+        private fun copyStyle(style: GXStyle): GXStyle {
+            return GXStyle(
+                style.fontSizeForTemplate,
+                style.fontFamilyForTemplate,
+                style.fontWeightForTemplate,
+                style.fontLinesForTemplate,
+                style.fontColorForTemplate,
+                style.fontTextOverflowForTemplate,
+                style.fontTextAlignForTemplate,
+                style.backgroundColorForTemplate,
+                style.backgroundImageForTemplate,
+                style.opacityForTemplate,
+                style.overflowForTemplate,
+                style.displayForTemplate,
+                style.hiddenForTemplate,
+                style.paddingForTemplate,
+                style.borderWidthForTemplate,
+                style.borderColorForTemplate,
+                style.borderRadiusForTemplate,
+                style.fontLineHeightForTemplate,
+                style.fontTextDecorationForTemplate,
+                style.modeForTemplate,
+                style.boxShadowForTemplate,
+                style.backdropFilterForTemplate,
+                style.fitContentForTemplate
+            )
+        }
+
+        private fun copyLayer(layer: GXLayer): GXLayer {
+            return GXLayer(
+                layer.id,
+                layer.css,
+                layer.type,
+                layer.subType,
+                layer.customNodeClass,
+                copyScrollConfig(layer.scrollConfig),
+                copyGridConfig(layer.gridConfig),
+                copySliderConfig(layer.sliderConfig),
+                copyProgressConfig(layer.progressConfig)
+            )
+        }
+
+        private fun copyProgressConfig(progressConfig: GXProgressConfig?): GXProgressConfig? {
+            return progressConfig?.let {
+                GXProgressConfig(
+                    it.strokeColorForTemplate,
+                    it.trailColorForTemplate,
+                    it.progressTypeForTemplate,
+                    it.animatedForTemplate
+                )
+            }
+        }
+
+        private fun copySliderConfig(sliderConfig: GXSliderConfig?): GXSliderConfig? {
+            return sliderConfig?.let {
+                GXSliderConfig(
+                    it.scrollTimeIntervalForTemplate,
+                    it.infinityScrollForTemplate,
+                    it.hasIndicatorForTemplate,
+                    it.selectedIndexForTemplate,
+                    it.indicatorSelectedColorForTemplate,
+                    it.indicatorUnselectedColorForTemplate,
+                    it.indicatorMarginForTemplate,
+                    it.indicatorPositionForTemplate,
+                    it.indicatorClassForTemplate
+                )
+            }
+        }
+
+        private fun copyGridConfig(gridConfig: GXGridConfig?): GXGridConfig? {
+            return gridConfig?.let {
+                GXGridConfig(
+                    it.data,
+                    it.columnForTemplate,
+                    it.directionForTemplate,
+                    it.itemSpacingForTemplate,
+                    it.rowSpacingForTemplate,
+                    it.scrollEnableForTemplate
+                )
+            }
+        }
+
+        private fun copyScrollConfig(scrollConfig: GXScrollConfig?): GXScrollConfig? {
+            return scrollConfig?.let {
+                GXScrollConfig(
+                    it.data,
+                    it.directionForTemplate,
+                    it.itemSpacingForTemplate,
+                    it.edgeInsetsForTemplate,
+                    it.gravityForTemplate
+                )
+            }
         }
     }
 }

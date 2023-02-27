@@ -26,11 +26,11 @@ import com.alibaba.gaiax.context.GXTemplateContext
  */
 data class GXGridConfig(
     val data: JSONObject,
-    private val columnForTemplate: Int,
-    private val directionForTemplate: Int,
-    private val itemSpacingForTemplate: Int,
-    private val rowSpacingForTemplate: Int,
-    private val scrollEnableForTemplate: Boolean
+    internal val columnForTemplate: Int,
+    internal val directionForTemplate: Int,
+    internal val itemSpacingForTemplate: Int,
+    internal val rowSpacingForTemplate: Int,
+    internal val scrollEnableForTemplate: Boolean
 ) {
 
     private var columnForExtend: Int? = null

@@ -24,27 +24,27 @@ import com.alibaba.gaiax.utils.GXLog
  * @suppress
  */
 data class GXFlexBox(
-    private var displayForTemplate: Display? = null,
-    private var positionTypeForTemplate: PositionType? = null,
-    private var directionForTemplate: Direction? = null,
-    private var flexDirectionForTemplate: FlexDirection? = null,
-    private var flexWrapForTemplate: FlexWrap? = null,
-    private var overflowForTemplate: Overflow? = null,
-    private var alignItemsForTemplate: AlignItems? = null,
-    private var alignSelfForTemplate: AlignSelf? = null,
-    private var alignContentForTemplate: AlignContent? = null,
-    private var justifyContentForTemplate: JustifyContent? = null,
-    private var positionForTemplate: Rect<GXSize?>? = null,
-    private var marginForTemplate: Rect<GXSize?>? = null,
-    private var paddingForTemplate: Rect<GXSize?>? = null,
-    private var borderForTemplate: Rect<GXSize?>? = null,
-    private var flexGrowForTemplate: Float? = null,
-    private var flexShrinkForTemplate: Float? = null,
-    private var flexBasisForTemplate: GXSize? = null,
-    private var sizeForTemplate: Size<GXSize?>? = null,
-    private var minSizeForTemplate: Size<GXSize?>? = null,
-    private var maxSizeForTemplate: Size<GXSize?>? = null,
-    private var aspectRatioForTemplate: Float? = null
+    internal var displayForTemplate: Display? = null,
+    internal var positionTypeForTemplate: PositionType? = null,
+    internal var directionForTemplate: Direction? = null,
+    internal var flexDirectionForTemplate: FlexDirection? = null,
+    internal var flexWrapForTemplate: FlexWrap? = null,
+    internal var overflowForTemplate: Overflow? = null,
+    internal var alignItemsForTemplate: AlignItems? = null,
+    internal var alignSelfForTemplate: AlignSelf? = null,
+    internal var alignContentForTemplate: AlignContent? = null,
+    internal var justifyContentForTemplate: JustifyContent? = null,
+    internal var positionForTemplate: Rect<GXSize?>? = null,
+    internal var marginForTemplate: Rect<GXSize?>? = null,
+    internal var paddingForTemplate: Rect<GXSize?>? = null,
+    internal var borderForTemplate: Rect<GXSize?>? = null,
+    internal var flexGrowForTemplate: Float? = null,
+    internal var flexShrinkForTemplate: Float? = null,
+    internal var flexBasisForTemplate: GXSize? = null,
+    internal var sizeForTemplate: Size<GXSize?>? = null,
+    internal var minSizeForTemplate: Size<GXSize?>? = null,
+    internal var maxSizeForTemplate: Size<GXSize?>? = null,
+    internal var aspectRatioForTemplate: Float? = null
 ) {
     private var displayForExtend: Display? = null
     private var positionTypeForExtend: PositionType? = null

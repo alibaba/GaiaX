@@ -86,7 +86,7 @@ class GXRefactorTest : GXBaseTest() {
         GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView2, gxTemplateData2)
 
         GXTemplateEngine.instance.bindDataOnlyViewTree(gxView1, gxTemplateData1)
-        GXTemplateEngine.instance.bindDataOnlyViewTree(gxView1, gxTemplateData2)
+        GXTemplateEngine.instance.bindDataOnlyViewTree(gxView2, gxTemplateData2)
 
         Assert.assertEquals(0F, (gxView1.child(0) as? GXView)?.radius?.get(0))
 

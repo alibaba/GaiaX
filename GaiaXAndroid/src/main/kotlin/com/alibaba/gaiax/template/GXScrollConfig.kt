@@ -26,10 +26,10 @@ import com.alibaba.fastjson.JSONObject
  */
 data class GXScrollConfig(
     val data: JSONObject,
-    private var directionForTemplate: Int,
-    private var itemSpacingForTemplate: Int,
-    private var edgeInsetsForTemplate: Rect,
-    private var gravityForTemplate: Int
+    internal var directionForTemplate: Int,
+    internal var itemSpacingForTemplate: Int,
+    internal var edgeInsetsForTemplate: Rect,
+    internal var gravityForTemplate: Int
 ) {
 
     private var directionForExtend: Int? = null

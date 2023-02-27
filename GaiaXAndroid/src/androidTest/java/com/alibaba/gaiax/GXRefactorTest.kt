@@ -3,10 +3,11 @@ package com.alibaba.gaiax
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXDarkUtils
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
@@ -16,7 +17,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class GXDarkModeTest : GXBaseTest() {
+class GXRefactorTest : GXBaseTest() {
 
     @Before
     fun init() {
@@ -39,9 +40,7 @@ class GXDarkModeTest : GXBaseTest() {
     @Test
     fun template_darkmode_background() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "darkmode",
-            "template_darkmode_background"
+            GXMockUtils.context, "refactor", "template_darkmode_background"
         )
         val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
 
@@ -49,8 +48,7 @@ class GXDarkModeTest : GXBaseTest() {
             val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
             GXTemplateEngine.instance.bindData(rootView, templateData)
             Assert.assertEquals(
-                Color.RED,
-                (rootView.background as GXColorGradientDrawable).colors[0]
+                Color.RED, (rootView.background as GXColorGradientDrawable).colors[0]
             )
         }
 
@@ -60,8 +58,40 @@ class GXDarkModeTest : GXBaseTest() {
             val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
             GXTemplateEngine.instance.bindData(rootView, templateData)
             Assert.assertEquals(
-                Color.GREEN,
-                (rootView.background as GXColorGradientDrawable).colors[0]
+                Color.GREEN, (rootView.background as GXColorGradientDrawable).colors[0]
+            )
+        }
+
+    }
+
+    @Test
+    fun template_cache_radius() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "refactor", "template_cache_radius"
+        )
+
+        kotlin.run {
+            val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["data"] = JSONObject().apply {
+                    this["title"] = "GaiaX"
+                }
+            })
+
+            val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
+            GXTemplateEngine.instance.bindData(rootView, templateData)
+            Assert.assertEquals(
+                0F.dpToPx(), (rootView.child(0) as? GXView)?.lastRadius?.get(0)
+            )
+        }
+
+        kotlin.run {
+            val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+                this["data"] = JSONObject()
+            })
+            val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
+            GXTemplateEngine.instance.bindData(rootView, templateData)
+            Assert.assertEquals(
+                7F.dpToPx(), (rootView.child(0) as GXView).lastRadius!![0]
             )
         }
 

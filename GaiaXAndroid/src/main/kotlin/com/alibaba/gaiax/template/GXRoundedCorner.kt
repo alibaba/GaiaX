@@ -41,12 +41,8 @@ class GXRoundedCorner(
         return result
     }
 
-    private var _value: FloatArray? = null
     val value: FloatArray
         get() {
-            if (_value == null) {
-                _value = toFloatArray()
-            }
-            return _value ?: FloatArray(8)
+            return toFloatArray()
         }
 }

@@ -110,12 +110,26 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         setFontTextDecoration(style.fontTextDecoration)
     }
 
+    fun reset() {
+        lastLineHeight = null
+        lastFontLines = null
+        lastFontColor = null
+        lastFontSize = null
+        lastTextDecoration = null
+        lastLeftPadding = null
+        lastTopPadding = null
+        lastRightPadding = null
+        lastBottomPadding = null
+        setPadding(0, 0, 0, 0)
+    }
+
+
     private var lastTextDecoration: Int? = null
     private fun setFontTextDecoration(textDecoration: Int?) {
         if (textDecoration != null && textDecoration != lastTextDecoration) {
             this.paint.flags = textDecoration
+            lastTextDecoration = textDecoration
         }
-        lastTextDecoration = textDecoration
     }
 
     private var lastLeftPadding: Int? = null
@@ -135,11 +149,11 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
                 rightPadding,
                 bottomPadding
             )
+            lastLeftPadding = leftPadding
+            lastTopPadding = topPadding
+            lastRightPadding = rightPadding
+            lastBottomPadding = bottomPadding
         }
-        lastLeftPadding = leftPadding
-        lastTopPadding = topPadding
-        lastRightPadding = rightPadding
-        lastBottomPadding = bottomPadding
     }
 
 
@@ -147,8 +161,8 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
     fun setFontSize(fontSize: Float?) {
         if (lastFontSize != fontSize && fontSize != null && fontSize >= 0) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
+            lastFontSize = fontSize
         }
-        lastFontSize = fontSize
     }
 
     private var lastFontColor: Int? = null
@@ -156,8 +170,8 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         val fontColor = style.fontColor?.value(this.context) ?: Color.BLACK
         if (fontColor != lastFontColor) {
             this.setTextColor(fontColor)
+            lastFontColor = fontColor
         }
-        lastFontColor = fontColor
     }
 
     private var lastFontLines: Int? = null
@@ -170,11 +184,12 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
                 0 -> this.maxLines = Int.MAX_VALUE
                 else -> this.maxLines = result
             }
+            this.lastFontLines = result
         }
-        this.lastFontLines = result
     }
 
     private var lastLineHeight: Float? = null
+
     private fun setFontTextLineHeight(style: GXStyle) {
         val lineHeight = style.fontLineHeight?.valueFloat
         if (lineHeight != null && lastLineHeight != lineHeight) {
@@ -189,8 +204,8 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
             } else {
                 this.setTextLineHeight(lineHeight)
             }
+            this.lastLineHeight = lineHeight
         }
-        this.lastLineHeight = lineHeight
     }
 
     override fun setRoundCornerRadius(radius: FloatArray) {
@@ -231,4 +246,5 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
             target.cornerRadii = radius
         }
     }
+
 }

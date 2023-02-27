@@ -64,4 +64,34 @@ class GXRefactorTest : GXBaseTest() {
 
     }
 
+    @Test
+    fun template_cache_gxcss_reuse() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "refactor", "template_cache_gxcss_reuse"
+        )
+
+        val gxTemplateData1 = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject().apply {
+                this["title"] = "GaiaX"
+            }
+        })
+        val gxTemplateData2 = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["data"] = JSONObject()
+        })
+
+        val gxView1 = GXTemplateEngine.instance.createView(templateItem, size)!!
+        val gxView2 = GXTemplateEngine.instance.createView(templateItem, size)!!
+
+        GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView1, gxTemplateData1)
+        GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView2, gxTemplateData2)
+
+        GXTemplateEngine.instance.bindDataOnlyViewTree(gxView1, gxTemplateData1)
+        GXTemplateEngine.instance.bindDataOnlyViewTree(gxView1, gxTemplateData2)
+
+        Assert.assertEquals(0F, (gxView1.child(0) as? GXView)?.radius?.get(0))
+
+        Assert.assertEquals(7F.dpToPx(), (gxView2.child(0) as? GXView)?.radius?.get(0))
+
+    }
+
 }

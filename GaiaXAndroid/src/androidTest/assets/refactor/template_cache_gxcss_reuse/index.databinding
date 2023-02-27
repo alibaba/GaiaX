@@ -1,0 +1,12 @@
+{
+  "data": {
+    "template_cache_gxcss_reuse_container": {
+      "extend": {
+        "border-top-left-radius": "$data.title ? '0px' : '7px'",
+        "border-top-right-radius": "$data.title ? '0px' : '7px'",
+        "border-bottom-left-radius": "'7px'",
+        "border-bottom-right-radius": "'7px'"
+      }
+    }
+  }
+}

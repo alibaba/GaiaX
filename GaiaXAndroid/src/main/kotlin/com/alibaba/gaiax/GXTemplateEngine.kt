@@ -893,6 +893,11 @@ class GXTemplateEngine {
         }
     }
 
+    fun clean() {
+        GXGlobalCache.instance.clean()
+        GXTemplateInfoSource.instance.clean()
+    }
+
     companion object {
 
         val instance by lazy {

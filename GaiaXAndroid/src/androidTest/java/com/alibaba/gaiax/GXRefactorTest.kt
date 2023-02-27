@@ -70,30 +70,28 @@ class GXRefactorTest : GXBaseTest() {
             GXMockUtils.context, "refactor", "template_cache_radius"
         )
 
-        kotlin.run {
-            val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["title"] = "GaiaX"
                 }
             })
+        )
+        Assert.assertEquals(
+            0F.dpToPx(), (rootView.child(0) as? GXView)?.lastRadius?.get(0)
+        )
 
-            val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
-            GXTemplateEngine.instance.bindData(rootView, templateData)
-            Assert.assertEquals(
-                0F.dpToPx(), (rootView.child(0) as? GXView)?.lastRadius?.get(0)
-            )
-        }
-
-        kotlin.run {
-            val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+        GXTemplateEngine.instance.bindData(
+            rootView,
+            GXTemplateEngine.GXTemplateData(JSONObject().apply {
                 this["data"] = JSONObject()
             })
-            val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
-            GXTemplateEngine.instance.bindData(rootView, templateData)
-            Assert.assertEquals(
-                7F.dpToPx(), (rootView.child(0) as GXView).lastRadius!![0]
-            )
-        }
+        )
+        Assert.assertEquals(
+            7F.dpToPx(), (rootView.child(0) as GXView).lastRadius!![0]
+        )
 
     }
 

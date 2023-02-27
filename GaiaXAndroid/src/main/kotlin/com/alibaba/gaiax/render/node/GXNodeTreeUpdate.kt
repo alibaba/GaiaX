@@ -133,7 +133,6 @@ object GXNodeTreeUpdate {
 
             gxNode.reset(gxTemplateContext)
 
-
             if (gxNode.isNestRoot) {
                 updateNestNodeLayout(gxTemplateContext, gxNode, templateData)
             } else if (gxNode.isContainerType()) {

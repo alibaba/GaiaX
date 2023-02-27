@@ -21,6 +21,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
+import com.alibaba.gaiax.utils.GXDarkUtils
 
 /**
  * The color wrapper class, all colors should be converted to GColor using the create method
@@ -42,11 +43,27 @@ class GXColor private constructor(val type: Int, val value: Any) {
         return valueCanNull(context) ?: UNDEFINE_COLOR
     }
 
+    private var _backgroundColor: GXColorGradientDrawable? = null
+    private var _backgroundColorDarkMode: GXColorGradientDrawable? = null
+
     fun createBackgroundColorDrawable(context: Context?): GXColorGradientDrawable? {
-        val color = value(context)
-        return GXColorGradientDrawable(
-            GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
-        )
+        if (GXDarkUtils.isDarkMode(context)) {
+            if (_backgroundColorDarkMode == null) {
+                val color = value(context)
+                _backgroundColorDarkMode = GXColorGradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
+                )
+            }
+            return _backgroundColorDarkMode
+        } else {
+            if (_backgroundColor == null) {
+                val color = value(context)
+                _backgroundColor = GXColorGradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
+                )
+            }
+            return _backgroundColor
+        }
     }
 
     companion object {

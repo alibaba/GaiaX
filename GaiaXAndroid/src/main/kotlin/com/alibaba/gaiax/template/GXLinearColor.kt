@@ -21,16 +21,30 @@ import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
+import com.alibaba.gaiax.utils.GXDarkUtils
 
 /**
  * @suppress
  */
 class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: MutableList<GXColor>) {
 
+    private var _shader: Shader? = null
+    private var _shaderDarkMode: Shader? = null
+
     fun createShader(view: TextView): Shader? {
         val height = view.layoutParams.height.toFloat()
         val width = view.layoutParams.width.toFloat()
-        return createShader(view, width, height)
+        return if (GXDarkUtils.isDarkMode(view.context)) {
+            if (_shaderDarkMode == null) {
+                _shaderDarkMode = createShader(view, width, height)
+            }
+            _shaderDarkMode
+        } else {
+            if (_shader == null) {
+                _shader = createShader(view, width, height)
+            }
+            _shader
+        }
     }
 
     private fun createShader(
@@ -49,8 +63,21 @@ class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: Mut
         GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
     }
 
+    private var _drawable: GradientDrawable? = null
+    private var _drawableDarkMode: GradientDrawable? = null
+
     fun createDrawable(context: Context? = null): GradientDrawable? {
-        return createDrawable()
+        return if (GXDarkUtils.isDarkMode(context)) {
+            if (_drawableDarkMode == null) {
+                _drawableDarkMode = createDrawable()
+            }
+            _drawableDarkMode
+        } else {
+            if (_drawable == null) {
+                _drawable = createDrawable()
+            }
+            _drawable
+        }
     }
 
     private fun createDrawable() = if (colors.size == 1) {

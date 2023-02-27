@@ -37,17 +37,14 @@ import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawabl
  * @suppress
  */
 @Keep
-open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootView,
-    GXIRoundCorner {
+open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootView, GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     )
 
     override fun onBindData(data: JSONObject?) {
@@ -63,8 +60,6 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
         return gxTemplateContext
     }
 
-    private var lastRadius: FloatArray? = null
-
     override fun setRoundCornerRadius(radius: FloatArray) {
         if (radius.size == 8) {
             val tl = radius[0]
@@ -72,7 +67,7 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
             val bl = radius[4]
             val br = radius[6]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (!this.lastRadius.contentEquals(radius) && tl == tr && tr == bl && bl == br && tl > 0) {
+                if (tl == tr && tr == bl && bl == br && tl > 0) {
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
@@ -82,7 +77,6 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
                             outline.setRoundRect(0, 0, view.width, view.height, tl)
                         }
                     }
-                    this.lastRadius = radius
                 } else {
                     this.clipToOutline = false
                     this.outlineProvider = null

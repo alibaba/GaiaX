@@ -64,35 +64,4 @@ class GXRefactorTest : GXBaseTest() {
 
     }
 
-    @Test
-    fun template_cache_radius() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context, "refactor", "template_cache_radius"
-        )
-
-        val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
-        GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
-                this["data"] = JSONObject().apply {
-                    this["title"] = "GaiaX"
-                }
-            })
-        )
-        Assert.assertEquals(
-            null, (rootView.child(0) as? GXView)?.lastRadius?.get(0)
-        )
-
-        GXTemplateEngine.instance.bindData(
-            rootView,
-            GXTemplateEngine.GXTemplateData(JSONObject().apply {
-                this["data"] = JSONObject()
-            })
-        )
-        Assert.assertEquals(
-            7F.dpToPx(), (rootView.child(0) as GXView).lastRadius!![0]
-        )
-
-    }
-
 }

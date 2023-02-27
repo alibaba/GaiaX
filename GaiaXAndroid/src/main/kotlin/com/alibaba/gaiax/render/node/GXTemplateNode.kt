@@ -94,6 +94,7 @@ data class GXTemplateNode(
         layer.progressConfig?.reset()
         css.style.reset()
         css.flexBox.reset()
+        visualTemplateNode?.reset()
     }
 
     /*

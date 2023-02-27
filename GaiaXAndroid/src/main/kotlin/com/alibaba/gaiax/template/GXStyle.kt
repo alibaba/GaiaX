@@ -261,12 +261,18 @@ data class GXStyle(
                     convertStyle.backgroundColor(value.toString())
                 GXTemplateKey.STYLE_BACKGROUND_IMAGE -> gxStyle.backgroundImageForExtend =
                     convertStyle.backgroundImage(value.toString())
-                GXTemplateKey.STYLE_MODE -> if (gxStyle.modeForExtend == null) gxStyle.modeForExtend =
-                    convertStyle.mode(extendCssData)
+                GXTemplateKey.STYLE_MODE -> {
+                    if (gxStyle.modeForExtend == null) {
+                        gxStyle.modeForExtend = convertStyle.mode(extendCssData)
+                    }
+                }
                 GXTemplateKey.STYLE_OPACITY -> gxStyle.opacityForTemplate =
                     convertStyle.opacity(value.toString())
-                GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> if (gxStyle.borderRadiusForExtend == null) gxStyle.borderRadiusForExtend =
-                    convertStyle.borderRadius(extendCssData)
+                GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> {
+                    if (gxStyle.borderRadiusForExtend == null) {
+                        gxStyle.borderRadiusForExtend = convertStyle.borderRadius(extendCssData)
+                    }
+                }
                 GXTemplateKey.FLEXBOX_OVERFLOW -> gxStyle.overflowForExtend =
                     convertStyle.overflow(value.toString())
                 GXTemplateKey.FLEXBOX_DISPLAY -> gxStyle.displayForExtend =

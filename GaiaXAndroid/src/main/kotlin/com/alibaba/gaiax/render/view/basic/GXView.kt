@@ -69,7 +69,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
         GXAccessibilityUtils.accessibilityOfView(this, data)
     }
 
-    private var lastRadius: FloatArray? = null
+    internal var lastRadius: FloatArray? = null
 
     override fun setRoundCornerRadius(radius: FloatArray) {
         if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {

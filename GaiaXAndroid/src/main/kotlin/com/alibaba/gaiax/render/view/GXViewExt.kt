@@ -192,7 +192,7 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
             // GXText needs to be handled separately
             // @see GXViewExt.setFontBackgroundImage
         } else {
-            this.background = backgroundImage.createDrawable()
+            this.background = backgroundImage.createDrawable(this.context)
         }
     } else if (backgroundColor != null) {
         // Use left and right gradients to simulate solid colors

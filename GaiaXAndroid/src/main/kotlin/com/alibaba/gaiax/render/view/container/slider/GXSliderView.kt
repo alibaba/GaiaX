@@ -263,13 +263,13 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     private var lastRadius: FloatArray? = null
 
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
+        if (radius.size == 8) {
             val tl = radius[0]
             val tr = radius[2]
             val bl = radius[4]
             val br = radius[6]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (tl == tr && tr == bl && bl == br && tl > 0) {
+                if (!this.lastRadius.contentEquals(radius) && tl == tr && tr == bl && bl == br && tl > 0) {
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
@@ -279,12 +279,12 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                             outline.setRoundRect(0, 0, view.width, view.height, tl)
                         }
                     }
+                    this.lastRadius = radius
                 } else {
                     this.clipToOutline = false
                     this.outlineProvider = null
                 }
             }
-            this.lastRadius = radius
         }
     }
 

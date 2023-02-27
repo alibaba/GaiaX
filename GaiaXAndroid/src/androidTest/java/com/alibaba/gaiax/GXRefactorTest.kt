@@ -80,7 +80,7 @@ class GXRefactorTest : GXBaseTest() {
             })
         )
         Assert.assertEquals(
-            0F.dpToPx(), (rootView.child(0) as? GXView)?.lastRadius?.get(0)
+            null, (rootView.child(0) as? GXView)?.lastRadius?.get(0)
         )
 
         GXTemplateEngine.instance.bindData(

@@ -96,7 +96,7 @@ fun JSON.getStringExt(expression: String): String {
 }
 
 fun JSON.getStringExtCanNull(expression: String): String? {
-    return getAnyExt(expression) as? String
+    return getAnyExt(expression)?.toString()
 }
 
 fun JSON.getJSONArrayExt(expression: String): JSONArray {

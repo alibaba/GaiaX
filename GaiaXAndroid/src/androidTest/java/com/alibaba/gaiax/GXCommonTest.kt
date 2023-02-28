@@ -768,16 +768,27 @@ class GXCommonTest : GXBaseTest() {
 
         val data = JSONObject().apply {
             this["title"] = "title"
-            this["position_int"] = 0
-            this["position_int_string"] = "0"
-            this["position_long"] = 1L
-            this["position_long_string"] = "1"
-            this["position_float"] = 2.0
-            this["position_float_string"] = "2"
-            this["position_double"] = 2.0
-            this["position_double_string"] = "2"
+
+            this["int"] = 0
+            this["int_string"] = "0"
+
+            this["long"] = 1L
+            this["long_string"] = "1"
+
+            this["float"] = 2.0
+            this["float_string"] = "2"
+
+            this["double"] = 2.0
+            this["double_string"] = "2"
+
             this["boolean"] = true
             this["boolean_string"] = "true"
+
+            this["string"] = "title"
+            this["string_int"] = 1
+            this["string_float"] = 2.0
+            this["string_true"] = true
+            this["string_long"] = 1L
 
             this["data"] = JSONObject().apply {
                 this["title"] = "data.title"
@@ -809,20 +820,32 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals(true, data.getAnyExt("nodes[1].nodes") is JSONArray)
         Assert.assertEquals(null, data.getAnyExt("nodes[2]"))
 
-        Assert.assertEquals(0, data.getIntExt("position_int"))
-        Assert.assertEquals(0, data.getIntExt("position_int_string"))
+        Assert.assertEquals(0, data.getIntExt("int"))
+        Assert.assertEquals(0, data.getIntExt("int_string"))
+        Assert.assertEquals(-1, data.getIntExt("int_null"))
 
-        Assert.assertEquals(1L, data.getLongExt("position_long"))
-        Assert.assertEquals(1L, data.getLongExt("position_long_string"))
+        Assert.assertEquals(1L, data.getLongExt("long"))
+        Assert.assertEquals(1L, data.getLongExt("long_string"))
+        Assert.assertEquals(-1L, data.getLongExt("long_null"))
 
-        Assert.assertEquals(true, data.getFloatExt("position_float") == 2.0.toFloat())
-        Assert.assertEquals(true, data.getFloatExt("position_float_string") == 2.0.toFloat())
+        Assert.assertEquals(true, data.getFloatExt("float") == 2.0.toFloat())
+        Assert.assertEquals(true, data.getFloatExt("float_string") == 2.0.toFloat())
+        Assert.assertEquals(true, data.getFloatExt("float_null") == -1F)
 
-        Assert.assertEquals(true, data.getDoubleExt("position_double") == 2.0.toDouble())
-        Assert.assertEquals(true, data.getDoubleExt("position_double_string") == 2.0.toDouble())
+        Assert.assertEquals(true, data.getDoubleExt("double") == 2.0.toDouble())
+        Assert.assertEquals(true, data.getDoubleExt("double_string") == 2.0.toDouble())
+        Assert.assertEquals(true, data.getDoubleExt("double_null") == -1.0)
 
         Assert.assertEquals(true, data.getBooleanExt("boolean"))
         Assert.assertEquals(true, data.getBooleanExt("boolean_string"))
+        Assert.assertEquals(false, data.getBooleanExt("boolean_null"))
+
+        Assert.assertEquals("title", data.getStringExtCanNull("string"))
+        Assert.assertEquals("1", data.getStringExtCanNull("string_int"))
+        Assert.assertEquals("2.0", data.getStringExtCanNull("string_float"))
+        Assert.assertEquals("true", data.getStringExtCanNull("string_true"))
+        Assert.assertEquals("1", data.getStringExtCanNull("string_long"))
+        Assert.assertEquals(null, data.getStringExtCanNull("string_null"))
     }
 
 }

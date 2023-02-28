@@ -20,7 +20,6 @@ import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.GXRegisterCenter
 import java.util.regex.Pattern
 
 private var sArrayPattern: Pattern? = null
@@ -177,7 +176,7 @@ fun JSON.setValueExt(expression: String, value: Any) {
  * @suppress
  */
 fun JSON.getBooleanExt(expression: String): Boolean {
-    val value = this.getStringExt(expression)
+    val value = (this.getAnyExt(expression) ?: "").toString()
     return "true".equals(value, ignoreCase = true)
 }
 
@@ -188,7 +187,7 @@ fun JSON.getBooleanExt(expression: String): Boolean {
  * @suppress
  */
 fun JSON.getIntExt(expression: String): Int {
-    val value = this.getStringExt(expression)
+    val value = (this.getAnyExt(expression) ?: "").toString()
     return try {
         return if (value.isNotEmpty()) {
             value.toInt()
@@ -208,7 +207,7 @@ fun JSON.getIntExt(expression: String): Int {
  * @suppress
  */
 fun JSON.getLongExt(expression: String): Long {
-    val value = this.getStringExt(expression)
+    val value = (this.getAnyExt(expression) ?: "").toString()
     return try {
         return if (value.isNotEmpty()) {
             value.toLong()
@@ -228,7 +227,7 @@ fun JSON.getLongExt(expression: String): Long {
  * @suppress
  */
 fun JSON.getFloatExt(expression: String): Float {
-    val value = this.getStringExt(expression)
+    val value = (this.getAnyExt(expression) ?: "").toString()
     return try {
         return if (value.isNotEmpty()) {
             value.toFloat()
@@ -248,7 +247,7 @@ fun JSON.getFloatExt(expression: String): Float {
  * @suppress
  */
 fun JSON.getDoubleExt(expression: String): Double {
-    val value = this.getStringExt(expression)
+    val value = (this.getAnyExt(expression) ?: "").toString()
     return try {
         return if (value.isNotEmpty()) {
             value.toDouble()

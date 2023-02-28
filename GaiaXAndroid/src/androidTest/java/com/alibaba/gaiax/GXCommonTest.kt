@@ -846,6 +846,7 @@ class GXCommonTest : GXBaseTest() {
         Assert.assertEquals("true", data.getStringExtCanNull("string_true"))
         Assert.assertEquals("1", data.getStringExtCanNull("string_long"))
         Assert.assertEquals(null, data.getStringExtCanNull("string_null"))
+        Assert.assertEquals("", data.getStringExt("string_null"))
     }
 
 }

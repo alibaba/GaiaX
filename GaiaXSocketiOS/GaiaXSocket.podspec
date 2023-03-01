@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/alibaba/GaiaX"
 
 
-  s.author       = { "jingcheng.zjc" => "jingcheng.zjc@alibaba-inc.com" }
+  s.author       = { "jingcheng1988" => "zhang_jing_cheng@163.com" }
   s.platform     = :ios, "9.0"
   s.source       = { :git => "https://github.com/alibaba/GaiaX.git", :tag => "#{s.version}" }
   

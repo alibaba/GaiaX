@@ -21,7 +21,9 @@
 #import "GaiaXScanViewController.h"
 #import "GaiaXPreviewViewController.h"
 #import "GaiaXHelper.h"
-
+#import "GaiaXDevTools.h"
+#import "GaiaXCommandCenter.h"
+#import "GaiaXSocketManager.h"
 
 @interface ViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -47,6 +49,16 @@
     //数据处理 & reload
     self.dataArray = [GaiaXHelper loadGaiaXFounctionList];
     [self.tableView reloadData];
+    
+    
+    [GaiaXCommandCenter sharedInstance];
+
+    [GaiaXDevTools show];
+    
+    NSString *url = [NSUserDefaults.standardUserDefaults stringForKey:@"gx_socket_url"];
+    if (url.length > 0) {
+        [[GaiaXSocketManager sharedInstance] connet:url];
+    }
 }
 
 
@@ -78,18 +90,6 @@
 
 
 #pragma mark -
-
-- (IBAction)previewAction:(id)sender{
-    if (self.isSimuLator) {
-        NSString *content = @"gaiax://gaiax/preview?url=ws://30.78.146.17:9001&id=test-template&type=auto";
-        GaiaXPreviewViewController *previewController = [[GaiaXPreviewViewController alloc] initWithUrl:content];
-        [self.navigationController pushViewController:previewController animated:YES];
-    }else {
-        UIViewController *vc = [[GaiaXScanViewController alloc] init];
-        vc.title = NSLocalizedString(@"fastpreview", nil);
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-}
 
 
 -(BOOL)isSimuLator

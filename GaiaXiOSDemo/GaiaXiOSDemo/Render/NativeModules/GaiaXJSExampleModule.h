@@ -13,15 +13,10 @@
 //  limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import "GXTemplateSourceProtocal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
-
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
-
-- (void)clearPreviewTemplates;
+@interface GaiaXJSExampleModule : NSObject
 
 @end
 

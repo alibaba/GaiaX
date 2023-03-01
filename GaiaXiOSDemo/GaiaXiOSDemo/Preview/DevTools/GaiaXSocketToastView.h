@@ -1,8 +1,4 @@
-//
-//  GaiaXSocketRequest.m
-//  GaiaXiOSDemo
-//
-//  Copyright (c) 2021, Alibaba Group Holding Limited.
+//  Copyright (c) 2023, Alibaba Group Holding Limited.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,19 +12,16 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
+
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GaiaXSocketRequest : NSObject
+@interface GaiaXSocketToastView : UIView
 
-@property (nonatomic, strong) NSString *method;
-@property (nonatomic, strong) NSNumber *requestId;
-@property (nonatomic, strong) NSString *parameters;
 
-+ (instancetype)requestWithRequestId:(NSNumber *)requestId Method:(NSString *)method parameters:(nullable id)parameters;
-
-- (NSString *)toJSONString;
+- (void)showToastWithTitle:(NSString *)title
+                  messages:(NSArray *)messages;
 
 @end
 

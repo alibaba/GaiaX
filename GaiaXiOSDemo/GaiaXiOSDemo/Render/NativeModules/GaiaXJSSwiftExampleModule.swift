@@ -12,17 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import "GXTemplateSourceProtocal.h"
 
-NS_ASSUME_NONNULL_BEGIN
+import Foundation
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
-
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
-
-- (void)clearPreviewTemplates;
-
-@end
-
-NS_ASSUME_NONNULL_END
+@objc(GaiaXJSSwiftExampleModule)
+class GaiaXJSSwiftExampleModule: NSObject {
+    @objc(log:)
+    func log(data: String) -> Void {
+        print("GaiaXJS Swift log ", data)
+    }
+}

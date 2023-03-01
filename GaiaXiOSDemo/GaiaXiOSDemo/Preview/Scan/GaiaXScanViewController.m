@@ -17,9 +17,10 @@
 //  limitations under the License.
 
 #import "GaiaXScanViewController.h"
-#import "GaiaXPreviewViewController.h"
 #import "GaiaXScanView.h"
 #import "GaiaXHelper.h"
+#import <GaiaXSocket/GaiaXSocket.h>
+#import "GaiaXCommandCenter.h"
 
 @interface GaiaXScanViewController ()<GaiaXScanViewDelegate>
 
@@ -44,13 +45,27 @@
 }
 
 - (void)didRecievedScanContent:(NSString *)content{
+        
     if (self.isFinished) {
         return;
     }
     
     self.isFinished = YES;
-    GaiaXPreviewViewController *previewController = [[GaiaXPreviewViewController alloc] initWithUrl:content];
-    [self.navigationController pushViewController:previewController animated:YES];
+    
+    NSString *resultString  = [GaiaXHelper URLDecodedString:content];
+    //解析url的参数
+    NSDictionary *params =  [GaiaXHelper parameterFromUrl:resultString];
+    //socketUrl
+    NSString *socketUrl = [params valueForKey:@"url"];
+    socketUrl = socketUrl.stringByRemovingPercentEncoding;
+    //type
+    NSString *type = [params valueForKey:@"type"];
+
+    if ([type isEqualToString:@"connect"]){
+        //建立socket连接
+        [GaiaXSocketManager.sharedInstance connet:socketUrl];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

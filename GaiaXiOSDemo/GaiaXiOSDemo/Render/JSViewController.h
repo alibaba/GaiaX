@@ -12,16 +12,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import "GXTemplateSourceProtocal.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
-
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
-
-- (void)clearPreviewTemplates;
+@interface JSViewController : UIViewController
 
 @end
 

@@ -12,16 +12,20 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+
 #import <Foundation/Foundation.h>
-#import "GXTemplateSourceProtocal.h"
 
 NS_ASSUME_NONNULL_BEGIN
+//@class GaiaXTemplateItem;
+@protocol GaiaXTemplateSourceInterface <NSObject>
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
+@required
+// priority
+//- (NSInteger)priority;
+//获取预览的数据源
+//- (NSDictionary *)getTemplateInfoWithTemplateItem:(GaiaXTemplateItem *)templateItem;
 
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
-
-- (void)clearPreviewTemplates;
+- (NSDictionary *)getTemplateInfoWithTemplateId:(NSString *)templateId;
 
 @end
 

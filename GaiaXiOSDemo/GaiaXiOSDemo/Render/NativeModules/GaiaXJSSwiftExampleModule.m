@@ -12,17 +12,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import "GXTemplateSourceProtocal.h"
 
-NS_ASSUME_NONNULL_BEGIN
+#import <GaiaXJS/GaiaXJS.h>
 
-@interface GaiaXPreviewTemplateSource : NSObject <GXTemplateSourceProtocal>
+@interface GAIAXJS_EXPORT_EXTERN_MODULE(SwiftExample, GaiaXJSSwiftExampleModule, NSObject);
 
-- (void)addPreviewTemplate:(NSDictionary *)aTemplate forTemplateId:(NSString *)templateId;
-
-- (void)clearPreviewTemplates;
+GAIAXJS_EXPORT_EXTERN_SYNC_METHOD(void, log:(NSString *)data);
 
 @end
-
-NS_ASSUME_NONNULL_END

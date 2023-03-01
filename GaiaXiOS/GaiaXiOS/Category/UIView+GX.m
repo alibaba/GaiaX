@@ -19,11 +19,12 @@
 #import "UIView+GX.h"
 #import "GXNode.h"
 #import "GXEvent.h"
+#import "NSArray+GX.h"
 #import <objc/runtime.h>
+#import "GXEventManager.h"
 #import "GXGradientHelper.h"
 #import "GXTemplateContext.h"
 #import "GXCornerRadiusHelper.h"
-#import "NSArray+GX.h"
 
 //基础属性
 static const void *kGXNodeKey = &kGXNodeKey;
@@ -61,39 +62,6 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 
 - (void)setGxNode:(GXNode *)gxNode{
     objc_setAssociatedObject(self, &kGXNodeKey, gxNode, OBJC_ASSOCIATION_RETAIN);
-}
-
-// gxEvents
-- (GXEvent *)gxEvent {
-    return objc_getAssociatedObject(self, &kGXEventTapKey);
-}
-
-- (void)setGxEvent:(GXEvent *)gxEvent {
-    objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
-}
-
-- (GXEvent *)getGxEvent:(GXEventType)eventType {
-    switch (eventType) {
-        case GXEventTypeTap:
-            return self.gxEvent;
-        case GXEventTypeLongPress:
-            return objc_getAssociatedObject(self, &kGXEventLongpressKey);
-        default:
-            return nil;
-    }
-}
-
-- (void)setGxEvent:(GXEventType)eventType with:(GXEvent *)gxEvent {
-    switch (eventType) {
-        case GXEventTypeTap:
-            self.gxEvent = gxEvent;
-            break;
-        case GXEventTypeLongPress:
-            objc_setAssociatedObject(self, &kGXEventLongpressKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
-            break;
-        default:
-            break;
-    }
 }
 
 //gxTrack
@@ -141,6 +109,48 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
     objc_setAssociatedObject(self, &kGXTemplateVersionKey, gxTemplateVersion, OBJC_ASSOCIATION_RETAIN);
 }
 
+// gxEvents
+- (GXEvent *)gxEvent {
+    return objc_getAssociatedObject(self, &kGXEventTapKey);
+}
+
+- (void)setGxEvent:(GXEvent *)gxEvent {
+    objc_setAssociatedObject(self, &kGXEventTapKey, gxEvent, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (GXEvent *)gxLpEvent{
+    return objc_getAssociatedObject(self, &kGXEventLongpressKey);
+}
+
+- (void)setGxLpEvent:(GXEvent *)gxLpEvent {
+    objc_setAssociatedObject(self, &kGXEventLongpressKey, gxLpEvent, OBJC_ASSOCIATION_RETAIN);
+}
+
+// 设置事件数据
+- (GXEvent *)gx_eventWithType:(GXEventType)eventType {
+    switch (eventType) {
+        case GXEventTypeTap:
+            return self.gxEvent;
+        case GXEventTypeLongPress:
+            return self.gxLpEvent;
+        default:
+            return nil;
+    }
+}
+
+- (void)gx_setEvent:(GXEvent *)gxEvent withType:(GXEventType)eventType {
+    switch (eventType) {
+        case GXEventTypeTap:
+            self.gxEvent = gxEvent;
+            break;
+        case GXEventTypeLongPress:
+            self.gxLpEvent = gxEvent;
+            break;
+        default:
+            break;
+    }
+}
+
 
 #pragma mark - method
 
@@ -172,33 +182,22 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 }
 
 //处理手势
-- (void)gx_handleGestureTap:(UIGestureRecognizer *)gesture{
+- (void)gx_handleGesture:(UIGestureRecognizer *)gesture{
     //基础信息
     GXNode *node = self.gxNode;
-    GXEvent *event = [self getGxEvent:GXEventTypeTap];
-    
-    //事件分发
-    id <GXEventProtocal> eventListener = node.templateContext.templateData.eventListener;
-    if (eventListener && [eventListener respondsToSelector:@selector(gx_onGestureEvent:)]) {
-        [eventListener gx_onGestureEvent:event];
+    //手势类型判断
+    if ([gesture isKindOfClass:[UILongPressGestureRecognizer class]]) {
+        //长按事件
+        if (gesture.state == UIGestureRecognizerStateBegan) {
+            GXEvent *event = self.gxLpEvent;
+            [TheGXEventManager fireEvent:event toNode:node];
+        }
+    } else {
+        //点击事件
+        GXEvent *event = self.gxEvent;
+        [TheGXEventManager fireEvent:event toNode:node];
     }
-    
-    //点击埋点分发
-    [node manualClickTrackEvent];
-}
 
-//处理手势
-- (void)gx_handleGestureLongpress:(UIGestureRecognizer *)gesture{
-    //基础信息
-    GXNode *node = self.gxNode;
-    GXEvent *event = [self getGxEvent:GXEventTypeLongPress];
-    
-    //事件分发
-    id <GXEventProtocal> eventListener = node.templateContext.templateData.eventListener;
-    if (eventListener && [eventListener respondsToSelector:@selector(gx_onGestureEvent:)]) {
-        [eventListener gx_onGestureEvent:event];
-    }
-    
     //点击埋点分发
     [node manualClickTrackEvent];
 }

@@ -20,6 +20,7 @@
 #import "GXEvent.h"
 #import "GXUtils.h"
 #import "UIView+GX.h"
+#import "NSArray+GX.h"
 #import "GXStretch.h"
 #import "GXBaseNode.h"
 #import "GXCommonDef.h"
@@ -30,9 +31,13 @@
 #import "NSDictionary+GX.h"
 #import "GXTemplateEngine.h"
 #import "GXTemplateContext.h"
-#import "NSArray+GX.h"
+#import "GXGridNode.h"
+#import "GXScrollNode.h"
+#import "GXRootViewNode.h"
 
 @interface GXNode ()<UIGestureRecognizerDelegate>{
+    //js是否ready
+    BOOL _isReady;
     //Stretch
     GXStretch *_stretch;
     //当前根节点
@@ -44,6 +49,9 @@
 
 //节点id
 @property(nonatomic, strong) NSString *nodeId;
+//节点类型
+@property(nonatomic, strong) NSString *type;
+@property(nonatomic, strong) NSString *subType;
 //是否模板类型
 @property(nonatomic, assign) BOOL isTemplateType;
 //模板信息
@@ -79,6 +87,10 @@
 //节点是否正在展示
 @property (nonatomic, assign) BOOL isAppear;
 
+//JS原始数据
+@property (nonatomic, strong) GXTemplateData *orignalData;
+//jsComponent
+@property (nonatomic, strong) GaiaXJSComponent *jsComponent;
 
 @end
 
@@ -233,6 +245,20 @@
 
 @implementation GXNode(Template)
 
+- (NSString *)type{
+    if (!_type) {
+        _type = [self.viewJson gx_stringForKey:@"type"];
+    }
+    return _type;
+}
+
+- (NSString *)subType{
+    if (!_subType) {
+        _subType = [self.viewJson gx_stringForKey:@"sub-type"];
+    }
+    return _subType;
+}
+
 @end
 
 
@@ -345,7 +371,7 @@
                         [resultEventArray gx_addObject:resultEvent];
                     }
                 }
-                [self bindEvent:resultEventArray];
+                [self bindEvents:resultEventArray];
             }
             //绑定埋点
             if (self.track) {
@@ -439,59 +465,57 @@
 }
 
 //事件绑定
-- (void)bindEvent:(NSArray *)events{
+- (void)bindEvents:(NSArray *)events{
     UIView *view = self.associatedView;
     
     // 绑定event
     for (int i = 0; i < events.count; i++) {
-        NSDictionary *event = [events gx_objectAtIndex:i];
-        NSString *type = [event gx_stringForKey: @"type"];
-        GXEventType eventType = [GXEvent getType:type];
-        
-        // 兜底默认为 tap 类型
-        if (eventType == GXEventTypeUnknown) {
-            eventType = GXEventTypeTap;
-        }
+        NSDictionary *eventInfo = [events gx_objectAtIndex:i];
+        GXEventType eventType = [GXEvent eventTypeWithEventInfo:eventInfo];
         
         // 获取event
-        GXEvent *gxEvent = [view getGxEvent:eventType];
+        GXEvent *gxEvent = [view gx_eventWithType:eventType];
         if (nil == gxEvent) {
             gxEvent = [[GXEvent alloc] init];
             gxEvent.templateItem = self.templateItem;
+            gxEvent.eventType = eventType;
             gxEvent.nodeId = self.nodeId;
             gxEvent.view = view;
-            gxEvent.eventType = eventType;
-            //赋值
-            [view setGxEvent:eventType with:gxEvent];
+            //绑定到view
+            [view gx_setEvent:gxEvent withType:eventType];
         }
         // 更新数据
-        [gxEvent setupEventInfo:event];
+        [gxEvent setupEventInfo:eventInfo];
         
         // 绑定事件
-        switch (eventType) {
-            case GXEventTypeTap:
-                // 点击事件
-                if (!_tap) {
-                    _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGestureTap:)];
-                    _tap.delegate = self;
-                    view.userInteractionEnabled = true;
-                    [view addGestureRecognizer:_tap];
-                }
-                break;
-            case GXEventTypeLongPress:
-                // 长按事件
-                if (!_longPress) {
-                    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGestureLongpress:)];
-                    _longPress.delegate = self;
-                    view.userInteractionEnabled = true;
-                    [view addGestureRecognizer:_longPress];
-                }
-                break;
-            default:
-                GXLog(@"[GaiaX] 不支持的事件类型：%@", type);
-                break;
+        [self bindEvent:gxEvent];
+    }
+}
+
+- (void)bindEvent:(GXEvent *)event{
+    //设置userInterface
+    UIView *view = self.associatedView;
+    if (!view.userInteractionEnabled) {
+        view.userInteractionEnabled = YES;
+    }
+    
+    //添加手势类型
+    if (event.eventType == GXEventTypeLongPress) {
+        //长按手势
+        if (!_longPress) {
+            _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
+            _longPress.delegate = self;
+            [view addGestureRecognizer:_longPress];
+        }
+    } else {
+        //tap手势
+        if (!_tap) {
+            _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
+            _tap.delegate = self;
+            [view addGestureRecognizer:_tap];
         }
     }
+    
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
@@ -564,21 +588,7 @@
 
 
 
-#pragma mark -视图出现/消失 & 埋点
-- (void)onAppear{
-    self.isAppear = YES;
-    [self manualExposureTrackEvent];
-    for (GXNode *node in self.children) {
-        [node onAppear];
-    }
-}
-
-- (void)onDisappear{
-    self.isAppear = NO;
-    for (GXNode *node in self.children) {
-        [node onDisappear];
-    }
-}
+#pragma mark - 埋点
 
 - (void)manualClickTrackEvent{
     GXTrack *track = self.associatedView.gxTrack;
@@ -600,5 +610,55 @@
     }
 }
 
+
+@end
+
+@implementation GXNode(JS)
+
+- (void)onReady{
+    //调用js事件
+    if (_jsComponent) {
+        //区分首次
+        if (!_isReady) {
+            _isReady = YES;
+            [_jsComponent onReady];
+        } else {
+            [_jsComponent onReuse];
+        }
+    }
+}
+
+- (void)onShow{
+    //处理JS
+    if (_jsComponent) {
+        [_jsComponent onShow];
+    }
+    
+    //分发子节点(透传子节点，处理曝光)
+    self.isAppear = YES;
+    [self manualExposureTrackEvent];
+    for (GXNode *node in self.children) {
+        [node onShow];
+    }
+}
+
+- (void)onHide{
+    //处理JS
+    if (_jsComponent) {
+        [_jsComponent onHide];
+    }
+    
+    //分发子节点
+    self.isAppear = NO;
+    for (GXNode *node in self.children) {
+        [node onHide];
+    }
+}
+
+- (void)onDestroy{
+    if (_jsComponent) {
+        [_jsComponent onDestroy];
+    }
+}
 
 @end

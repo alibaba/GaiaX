@@ -1,5 +1,5 @@
 //
-//  GXGridView.m
+//  GaiaEvent_Private.h
 //  GaiaXiOS
 //
 //  Copyright (c) 2021, Alibaba Group Holding Limited.
@@ -16,27 +16,21 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GXGridView.h"
-#import "UIView+GX.h"
-#import "GXNode.h"
+#ifndef GaiaEvent_Private_h
+#define GaiaEvent_Private_h
 
-@implementation GXGridView
+#import "GXEvent.h"
+#import <GaiaXJS/GaiaXJS.h>
 
-- (void)onAppear{
-    if (self.gxNode) {
-        [self.gxNode onShow];
-    }
-}
+@interface GXEvent()
 
-- (void)onDisappear{
-    if (self.gxNode) {
-        [self.gxNode onHide];
-    }
-}
+//jsComponent
+@property (nonatomic, weak, nullable) GaiaXJSComponent *jsComponent;
+//js事件
+@property (nonatomic, strong, nullable) GXJsEvent *jsEvent;
+
+- (void)creatJsEvent:(NSDictionary *_Nullable)eventInfo;
 
 @end
 
-
-@implementation GXGridViewCell
-
-@end
+#endif /* GaiaEvent_Private_h */

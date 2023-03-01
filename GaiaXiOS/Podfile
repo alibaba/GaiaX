@@ -17,6 +17,9 @@ target 'GaiaXiOS' do
     # 曲线动画
     pod 'GaiaMotionCurve'
 
+    pod 'GaiaXJS', :path =>'../GaiaXJSiOS'
+    pod 'GaiaXSocket', :path => '../GaiaXSocketiOS'
+
 end
 
 

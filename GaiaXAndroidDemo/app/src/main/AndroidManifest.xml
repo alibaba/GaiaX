@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+
+        <profileable android:shell="true" android:enabled="true"/>
+
         <activity
             android:name="com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity"
             android:screenOrientation="portrait"

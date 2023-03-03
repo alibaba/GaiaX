@@ -75,9 +75,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(path: ':GaiaXAndroidClientToStudio')
-    implementation project(path: ':GaiaXAndroidAdapter')
-    implementation project(path: ':GaiaXAndroid')
+//    implementation project(path: ':GaiaXAndroidClientToStudio')
+//    implementation project(path: ':GaiaXAndroidAdapter')
+//    implementation project(path: ':GaiaXAndroid')
+
+    implementation 'com.github.alibaba.GaiaX:GaiaX-ClientToStudio:0.4.0'
+    implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.4.0'
+    implementation 'com.github.alibaba.GaiaX:GaiaX:0.4.0'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

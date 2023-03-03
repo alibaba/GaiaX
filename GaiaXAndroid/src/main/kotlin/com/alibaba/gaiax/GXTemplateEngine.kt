@@ -46,6 +46,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.GXPropUtils
 
 /**
  * GaiaX engine class.
@@ -489,7 +490,7 @@ class GXTemplateEngine {
             if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
                 return
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX prepareView")
             }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)
@@ -497,7 +498,7 @@ class GXTemplateEngine {
                 gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
             )
             render.prepareView(gxTemplateContext)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
             }
         } catch (e: Exception) {
@@ -636,13 +637,13 @@ class GXTemplateEngine {
             GXLog.e("createViewOnlyNodeTree")
         }
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX createViewOnlyNodeTree")
             }
             val result = internalCreateViewOnlyNodeTree(
                 gxTemplateItem, gxMeasureSize, gxExtendParams
             )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
             }
             return result
@@ -694,11 +695,11 @@ class GXTemplateEngine {
             GXLog.e("createViewOnlyViewTree")
         }
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX createViewOnlyViewTree")
             }
             val result = internalCreateViewOnlyViewTree(gxTemplateContext)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
             }
             return result
@@ -727,11 +728,11 @@ class GXTemplateEngine {
             GXLog.e("bindDataOnlyNodeTree")
         }
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX bindDataOnlyNodeTree")
             }
             internalBindDataOnlyNodeTree(view, gxTemplateData, gxMeasureSize)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
             }
         } catch (e: Exception) {
@@ -786,11 +787,11 @@ class GXTemplateEngine {
             GXLog.e("bindDataOnlyViewTree")
         }
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX bindDataOnlyViewTree")
             }
             internalBindDataOnlyViewTree(view, gxTemplateData, gxMeasureSize)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.endSection()
             }
         } catch (e: Exception) {

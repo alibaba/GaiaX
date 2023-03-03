@@ -19,6 +19,8 @@
 package com.alibaba.gaiax
 
 import android.content.Context
+import android.os.Build
+import android.os.Trace
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
@@ -44,6 +46,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.GXPropUtils
 
 /**
  * GaiaX engine class.
@@ -487,11 +490,17 @@ class GXTemplateEngine {
             if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
                 return
             }
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.beginSection("GX prepareView")
+            }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)
             val gxTemplateContext = GXTemplateContext.createContext(
                 gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
             )
             render.prepareView(gxTemplateContext)
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.endSection()
+            }
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)
@@ -628,9 +637,16 @@ class GXTemplateEngine {
             GXLog.e("createViewOnlyNodeTree")
         }
         return try {
-            internalCreateViewOnlyNodeTree(
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.beginSection("GX createViewOnlyNodeTree")
+            }
+            val result = internalCreateViewOnlyNodeTree(
                 gxTemplateItem, gxMeasureSize, gxExtendParams
             )
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.endSection()
+            }
+            return result
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)
@@ -679,7 +695,14 @@ class GXTemplateEngine {
             GXLog.e("createViewOnlyViewTree")
         }
         return try {
-            internalCreateViewOnlyViewTree(gxTemplateContext)
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.beginSection("GX createViewOnlyViewTree")
+            }
+            val result = internalCreateViewOnlyViewTree(gxTemplateContext)
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.endSection()
+            }
+            return result
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)
@@ -705,7 +728,13 @@ class GXTemplateEngine {
             GXLog.e("bindDataOnlyNodeTree")
         }
         try {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.beginSection("GX bindDataOnlyNodeTree")
+            }
             internalBindDataOnlyNodeTree(view, gxTemplateData, gxMeasureSize)
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.endSection()
+            }
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)
@@ -758,7 +787,13 @@ class GXTemplateEngine {
             GXLog.e("bindDataOnlyViewTree")
         }
         try {
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.beginSection("GX bindDataOnlyViewTree")
+            }
             internalBindDataOnlyViewTree(view, gxTemplateData, gxMeasureSize)
+            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                Trace.endSection()
+            }
         } catch (e: Exception) {
             if (GXExceptionHelper.isException()) {
                 GXExceptionHelper.exception(e)

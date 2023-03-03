@@ -13,8 +13,7 @@ core = "1.9.0"
 coroutines = "1.6.4"
 curtains = "1.2.4"
 dataStore = "1.0.0"
-espressoCore = "3.4.0"
-jUnit = "1.1.4"
+cardView = "1.0.0"
 kotlin = "1.7.20"
 lifecycle = "2.5.1"
 material = "1.7.0"
@@ -22,13 +21,28 @@ profileInstaller = "1.2.2"
 testExt = "1.1.4"
 tracing = "1.1.0"
 uiAutomator = "2.2.0"
+recyclerView = "1.2.1"
+
+androidxTest = "1.4.0"
+espressoCore = "3.4.0"
+jUnit = "4.13.2"
 
 [libraries]
+
+benchmark = { group = "androidx.benchmark", name = "benchmark-junit4", version.ref = "benchmark" }
+benchmark-junit = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
+
+junit = { group = "junit", name = "junit", version.ref = "jUnit" }
+test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "testExt" }
+test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
+test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
+
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerView" }
+cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardView" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "jUnit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-benchmark-junit = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 compose-material = { group = "androidx.compose.material", name = "material" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -47,9 +61,11 @@ tracing = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "tra
 ui-automator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiAutomator" }
 viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
+
 [plugins]
 
 application = { id = "com.android.application", version.ref = "agp" }
+benchmark = { id = "androidx.benchmark", version.ref = "benchmark" }
 library = { id = "com.android.library", version.ref = "agp" }
 test = { id = "com.android.test", version.ref = "agp" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

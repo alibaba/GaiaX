@@ -14,7 +14,7 @@ include(":app")
 //include(":GaiaXAndroidClientToStudio")
 //project(":GaiaXAndroidClientToStudio").projectDir = file("../GaiaXAndroidClientToStudio")
 //
-//include(":GaiaXAndroidMicrobenchmark")
+include(":GaiaXAndroidMicrobenchmark")
 
 pluginManagement {
     repositories {

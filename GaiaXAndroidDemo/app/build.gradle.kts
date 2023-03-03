@@ -3,22 +3,6 @@ plugins {
     id("kotlin-android")
 }
 
-
-//buildscript {
-//
-//    repositories {
-//        mavenLocal()
-//        google()
-//        maven { url 'https://jitpack.io' }
-//        mavenCentral()
-//    }
-//
-//    dependencies {
-//        classpath 'com.android.tools.build:gradle:7.4.1'
-//        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
-//    }
-//}
-
 android {
     compileSdk = 33
     namespace = "com.alibaba.gaiax.demo"
@@ -114,7 +98,6 @@ dependencies {
     implementation("com.github.alibaba.GaiaX:GaiaX-Adapter:0.4.0")
     implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0")
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.airbnb.android:lottie:4.1.0")

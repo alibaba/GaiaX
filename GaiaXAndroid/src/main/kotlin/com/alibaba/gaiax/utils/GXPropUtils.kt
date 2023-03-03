@@ -21,18 +21,6 @@ package com.alibaba.gaiax.utils
  */
 object GXPropUtils {
 
-    private var isTrace: Boolean? = null
-
-    /**
-     * adb shell setprop debug.com.alibaba.gaiax.trace 1
-     */
-    fun isTrace(): Boolean {
-        if (isTrace == null) {
-            isTrace = "1" == GXSystemProp["debug.com.alibaba.gaiax.trace", "0"]
-        }
-        return  isTrace ?: false
-    }
-
     private var isLog: Boolean? = null
 
     /**
@@ -44,7 +32,6 @@ object GXPropUtils {
         }
         return isLog ?: false
     }
-
 
 
 }

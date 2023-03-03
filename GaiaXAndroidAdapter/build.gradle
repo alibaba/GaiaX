@@ -118,7 +118,7 @@ dependencies {
         if (version != null) {
             implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
         } else {
-            implementation("com.github.alibaba.GaiaX:GaiaX:0.2.9") { changing = true }
+            implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0") { changing = true }
         }
     }
 

@@ -94,9 +94,9 @@ dependencies {
 
 dependencies {
 
-    implementation("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:0.4.0")
-    implementation("com.github.alibaba.GaiaX:GaiaX-Adapter:0.4.0")
-    implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0")
+    implementation(project(":GaiaXAndroidClientToStudio"))
+    implementation(project(":GaiaXAndroidAdapter"))
+    implementation(project(":GaiaXAndroid"))
 
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.core:core-ktx:1.9.0")

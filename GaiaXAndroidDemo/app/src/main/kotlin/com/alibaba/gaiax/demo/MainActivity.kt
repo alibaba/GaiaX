@@ -22,6 +22,8 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
+import com.alibaba.gaiax.demo.list.clicklatency.NestedRecyclerActivity
+import com.alibaba.gaiax.demo.list.util.ClickTrace
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
@@ -38,8 +40,8 @@ class MainActivity : ComponentActivity() {
                         IconButton(
                             modifier = Modifier.padding(12.dp, 12.dp, 8.dp, 12.dp),
                             onClick = {
-                            fastPreview()
-                        }) {
+                                fastPreview()
+                            }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.qr_code_scanner),
                                 contentDescription = null // decorative element
@@ -121,6 +123,9 @@ class MainActivity : ComponentActivity() {
             Button(name = "Style") {
                 launchActivityWithTrace<StyleTemplateActivity>()
             }
+            Button(name = "Nested RecyclerView") {
+                launchActivityWithTrace<NestedRecyclerActivity>()
+            }
         }
     }
 
@@ -136,6 +141,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private inline fun <reified T : Activity> launchActivityWithTrace(base: Intent? = null) {
+        ClickTrace.onClickPerformed()
         val intent = Intent(this, T::class.java)
         if (base != null) {
             intent.putExtras(base)

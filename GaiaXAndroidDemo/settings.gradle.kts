@@ -2,7 +2,7 @@ rootProject.name = "GaiaXAndroidDemo"
 
 include(":app")
 
-include(":GaiaXAndroidMicrobenchmark")
+include(":microbenchmark")
 
 pluginManagement {
     repositories {

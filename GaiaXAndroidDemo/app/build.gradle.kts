@@ -97,15 +97,10 @@ dependencies {
 }
 
 dependencies {
-    implementation("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:0.4.0")
-    implementation("com.github.alibaba.GaiaX:GaiaX-Adapter:0.4.0")
-    implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0")
+    implementation(libs.gaiax)
+    implementation(libs.gaiaxadapter)
+    implementation(libs.gaiaxclienttostudio)
 
-//    implementation(project(":GaiaXAndroidClientToStudio"))
-//    implementation(project(":GaiaXAndroidAdapter"))
-//    implementation(project(":GaiaXAndroid"))
-
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.airbnb.android:lottie:4.1.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -114,9 +109,4 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.alibaba:fastjson:1.2.79")
     implementation("com.github.jenly1314:zxing-lite:2.1.1")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test:core:1.5.0")
 }

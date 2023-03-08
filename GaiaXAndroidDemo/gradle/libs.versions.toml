@@ -27,15 +27,12 @@ androidxTest = "1.4.0"
 espressoCore = "3.4.0"
 jUnit = "4.13.2"
 
+gaiax = "0.4.0"
+
 [libraries]
-
-benchmark = { group = "androidx.benchmark", name = "benchmark-junit4", version.ref = "benchmark" }
-benchmark-junit = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
-
-junit = { group = "junit", name = "junit", version.ref = "jUnit" }
-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "testExt" }
-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
+gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax" }
+gaiaxadapter = { group = "com.github.alibaba.GaiaX", name = "GaiaX-Adapter", version.ref = "gaiax" }
+gaiaxclienttostudio = { group = "com.github.alibaba.GaiaX", name = "GaiaX-ClientToStudio", version.ref = "gaiax" }
 
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerView" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardView" }
@@ -50,7 +47,7 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintLayout" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
-espresso = { group = "androidx.test.espresso", name ="espresso-core", version.ref = "espressoCore" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
@@ -61,6 +58,13 @@ tracing = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "tra
 ui-automator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiAutomator" }
 viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
+benchmark = { group = "androidx.benchmark", name = "benchmark-junit4", version.ref = "benchmark" }
+benchmark-junit = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
+
+junit = { group = "junit", name = "junit", version.ref = "jUnit" }
+test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "testExt" }
+test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
+test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
 
 [plugins]
 

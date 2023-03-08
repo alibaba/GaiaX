@@ -224,6 +224,17 @@ class GXClientToStudioMultiType {
         socketHelper?.sendGetTemplateData(templateId)
     }
 
+    fun sendMsgForJSLog(logLevel: String, logContent: String) {
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "js/console"
+        val params = JSONObject()
+        params["level"] = logLevel
+        params["data"] = logContent
+        data["params"] = params
+        socketHelper?.sendMessage(data)
+    }
+
     fun setDevTools(dev: IDevTools) {
         socketHelper?.devTools = dev
     }

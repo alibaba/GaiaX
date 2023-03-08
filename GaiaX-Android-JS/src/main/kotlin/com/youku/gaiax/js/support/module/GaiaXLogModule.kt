@@ -9,6 +9,7 @@ package com.youku.gaiax.js.support.module
 import android.util.Log
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 //import com.youku.gaiax.GaiaX
 import com.youku.gaiax.js.api.GaiaXBaseModule
 import com.youku.gaiax.js.api.annotation.GaiaXSyncMethod
@@ -36,16 +37,7 @@ class GaiaXLogModule : GaiaXBaseModule() {
         }
 
         private fun sendSocketData(level: String, data: String) {
-            val socketData = JSONObject()
-            val socketDataParams = JSONObject()
-            socketData["jsonrpc"] = "2.0"
-            socketData["method"] = "template/jsDidChangedNotification"
-            socketData["id"] = 103
-            socketData["params"] = socketDataParams
-            socketDataParams["level"] = level
-            socketDataParams["data"] = data
-//            GaiaX.instance.experiment()?.onSendStudioMsg(socketData)
-            Log.d("lms-13", "sendSocketData: todo 不发生真实发送 ${socketData.toString()}" )
+            GXClientToStudioMultiType.instance.sendMsgForJSLog(level, data)
         }
 
         private fun getLogMsg(argData: String): String = try {

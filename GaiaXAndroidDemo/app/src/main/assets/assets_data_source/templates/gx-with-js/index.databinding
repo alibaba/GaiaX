@@ -1,0 +1,17 @@
+{
+    "data":{
+        "left-image":{
+            "value":"$img"
+        },
+        "sub-title":{
+            "value":"$desc"
+        },
+        "title":{
+            "value":"$title"
+        },
+        "button-title":{
+            "value":"$button"
+        }
+    }
+
+}

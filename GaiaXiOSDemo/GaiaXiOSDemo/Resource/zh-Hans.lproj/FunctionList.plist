@@ -44,5 +44,11 @@
 		<key>class</key>
 		<string>RecycleListViewController</string>
 	</dict>
+	<dict>
+		<key>title</key>
+		<string>样式</string>
+		<key>class</key>
+		<string>StyleViewController</string>
+	</dict>
 </array>
 </plist>

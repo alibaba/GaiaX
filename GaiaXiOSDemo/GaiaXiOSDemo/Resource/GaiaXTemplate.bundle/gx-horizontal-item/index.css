@@ -32,6 +32,7 @@
   line-height:20px;
   font-size:14px;
   color: #222222;
+  fit-content: true;
 }
 
 .year {
@@ -60,6 +61,7 @@
   text-overflow: ellipsis;
   color: #999999;
   lines: 2;
+  fit-content: true;
 }
 
 .reason-view {

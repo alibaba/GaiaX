@@ -96,8 +96,10 @@ open class Node {
 
     fun safeAddChild(child: Node) {
         synchronized(Stretch::class.java) {
-            nAddChild(Stretch.ptr, rustptr, child.rustptr)
-            children.add(child)
+            if (rustptr != -1L && child.rustptr != -1L) {
+                nAddChild(Stretch.ptr, rustptr, child.rustptr)
+                children.add(child)
+            }
         }
     }
 
@@ -107,28 +109,36 @@ open class Node {
 
     fun safeSetStyle(style: Style) {
         synchronized(Stretch::class.java) {
-            nSetStyle(Stretch.ptr, rustptr, style.rustptr)
-            this.style = style
+            if (rustptr != -1L && style.rustptr != -1L) {
+                nSetStyle(Stretch.ptr, rustptr, style.rustptr)
+                this.style = style
+            }
         }
     }
 
     fun safeMarkDirty() {
         synchronized(Stretch::class.java) {
-            nMarkDirty(Stretch.ptr, rustptr)
+            if (rustptr != -1L) {
+                nMarkDirty(Stretch.ptr, rustptr)
+            }
         }
     }
 
     fun safeComputeLayout(size: Size<Float?>): Layout {
         synchronized(Stretch::class.java) {
-            val args = nComputeLayout(
-                Stretch.ptr,
-                rustptr,
-                // FIX: 修复一个奇怪的BUG，整数传入，会导致一些层级节点计算为空
-                (size.width?.minus(0.01F)) ?: Float.NaN,
-                (size.height?.minus(0.01F)) ?: Float.NaN
-            )
-            val result = Layout.fromFloatArray(args, 0)
-            return result.second
+            if (rustptr != -1L) {
+                val args = nComputeLayout(
+                    Stretch.ptr,
+                    rustptr,
+                    // FIX: 修复一个奇怪的BUG，整数传入，会导致一些层级节点计算为空
+                    (size.width?.minus(0.01F)) ?: Float.NaN,
+                    (size.height?.minus(0.01F)) ?: Float.NaN
+                )
+                val result = Layout.fromFloatArray(args, 0)
+                return result.second
+            }else {
+                throw IllegalArgumentException("rustptr is null")
+            }
         }
     }
 

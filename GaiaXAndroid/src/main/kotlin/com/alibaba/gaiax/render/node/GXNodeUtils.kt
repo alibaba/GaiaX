@@ -43,7 +43,7 @@ object GXNodeUtils {
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
-        val layout = stretchNode.computeLayout(size)
+        val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
     }
 
@@ -60,7 +60,7 @@ object GXNodeUtils {
     fun computeNodeTreeByPrepareView(gxNode: GXNode, size: Size<Float?>) {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
-        val layout = stretchNode.computeLayout(size)
+        val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByPrepareView(gxNode, layout)
     }
 

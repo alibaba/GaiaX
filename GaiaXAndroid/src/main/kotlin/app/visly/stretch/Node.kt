@@ -63,7 +63,7 @@ open class Node {
         }
     }
 
-    constructor(id: String,  style: Style) {
+    constructor(id: String, style: Style) {
         synchronized(Stretch::class.java) {
             val children: List<Node> = mutableListOf()
             this.id = id
@@ -78,11 +78,15 @@ open class Node {
 
     fun safeFree() {
         synchronized(Stretch::class.java) {
-            if (rustptr != -1L) {
-                style.free()
-                nFree(Stretch.ptr, rustptr)
-                rustptr = -1
-            }
+            style.free()
+            free()
+        }
+    }
+
+    private fun free() {
+        if (rustptr != -1L) {
+            nFree(Stretch.ptr, rustptr)
+            rustptr = -1
         }
     }
 
@@ -90,7 +94,7 @@ open class Node {
         return this.children
     }
 
-    fun addChild(child: Node) {
+    fun safeAddChild(child: Node) {
         synchronized(Stretch::class.java) {
             nAddChild(Stretch.ptr, rustptr, child.rustptr)
             children.add(child)
@@ -101,20 +105,20 @@ open class Node {
         return this.style
     }
 
-    fun setStyle(style: Style) {
+    fun safeSetStyle(style: Style) {
         synchronized(Stretch::class.java) {
             nSetStyle(Stretch.ptr, rustptr, style.rustptr)
             this.style = style
         }
     }
 
-    fun markDirty() {
+    fun safeMarkDirty() {
         synchronized(Stretch::class.java) {
             nMarkDirty(Stretch.ptr, rustptr)
         }
     }
 
-    fun computeLayout(size: Size<Float?>): Layout {
+    fun safeComputeLayout(size: Size<Float?>): Layout {
         synchronized(Stretch::class.java) {
             val args = nComputeLayout(
                 Stretch.ptr,
@@ -154,7 +158,7 @@ open class Node {
     ): FloatArray
 
     fun markDirtyAll() {
-        markDirty()
+        safeMarkDirty()
         children.forEach {
             it.markDirtyAll()
         }

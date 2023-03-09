@@ -218,7 +218,7 @@ data class Style(
 
     var rustptr: Long = -1
 
-    fun init() {
+    private fun init() {
         rustptr = nConstruct(
             display.ordinal,
             positionType.ordinal,
@@ -295,7 +295,7 @@ data class Style(
         )
     }
 
-    fun free() {
+    internal fun free() {
         if (rustptr != -1L) {
             nFree(rustptr)
             rustptr = -1
@@ -304,12 +304,16 @@ data class Style(
 
     fun safeFree() {
         synchronized(this) {
-            if (rustptr != -1L) {
-                nFree(rustptr)
-                rustptr = -1
-            }
+            free()
         }
     }
+
+    fun safeInit() {
+        synchronized(this) {
+            init()
+        }
+    }
+
 
     private external fun nFree(ptr: Long)
 

@@ -107,11 +107,14 @@ open class Node {
         return this.style
     }
 
-    fun safeSetStyle(style: Style) {
+    fun safeSetStyle(style: Style): Boolean {
         synchronized(Stretch::class.java) {
             if (rustptr != -1L && style.rustptr != -1L) {
                 nSetStyle(Stretch.ptr, rustptr, style.rustptr)
                 this.style = style
+                return true
+            } else {
+                return false
             }
         }
     }
@@ -136,7 +139,7 @@ open class Node {
                 )
                 val result = Layout.fromFloatArray(args, 0)
                 return result.second
-            }else {
+            } else {
                 throw IllegalArgumentException("rustptr is null")
             }
         }

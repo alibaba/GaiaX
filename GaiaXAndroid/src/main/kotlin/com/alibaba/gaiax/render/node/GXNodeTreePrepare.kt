@@ -119,7 +119,7 @@ object GXNodeTreePrepare {
 
                     // 建立节点的层级关系
                     gxChildNode.stretchNode.node?.let {
-                        gxNode.stretchNode.node?.addChild(it)
+                        gxNode.stretchNode.node?.safeAddChild(it)
                     }
                 }
             }
@@ -137,7 +137,7 @@ object GXNodeTreePrepare {
 
                 // 建立节点的层级关系
                 gxChildNode.stretchNode.node?.let {
-                    gxNode.stretchNode.node?.addChild(it)
+                    gxNode.stretchNode.node?.safeAddChild(it)
                 }
 
             }

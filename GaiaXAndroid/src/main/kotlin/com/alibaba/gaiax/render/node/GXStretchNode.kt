@@ -38,12 +38,12 @@ data class GXStretchNode(
             val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
             this.node = stretchNode
             this.node?.let {
-                gxNode.parentNode?.stretchNode?.node?.addChild(it)
+                gxNode.parentNode?.stretchNode?.node?.safeAddChild(it)
             }
         } else {
             val oldStyle = this.node?.getStyle()
-            this.node?.setStyle(stretchStyle)
-            this.node?.markDirty()
+            this.node?.safeSetStyle(stretchStyle)
+            this.node?.safeMarkDirty()
             oldStyle?.safeFree()
         }
     }
@@ -84,7 +84,7 @@ data class GXStretchNode(
             val visualTemplateNodeFlexBox = gxTemplateNode.visualTemplateNode?.css?.flexBox
             visualTemplateNodeFlexBox?.let { updateStyle(gxTemplateContext, it, style) }
 
-            style.init()
+            style.safeInit()
 
             return style
         }

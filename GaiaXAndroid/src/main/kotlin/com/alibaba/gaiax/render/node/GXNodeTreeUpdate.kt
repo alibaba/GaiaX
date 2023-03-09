@@ -372,10 +372,10 @@ object GXNodeTreeUpdate {
             }
 
             if (isDirty) {
-                stretchStyle.free()
-                stretchStyle.init()
-                stretchNode.setStyle(stretchStyle)
-                stretchNode.markDirty()
+                stretchStyle.safeFree()
+                stretchStyle.safeInit()
+                stretchNode.safeSetStyle(stretchStyle)
+                stretchNode.safeMarkDirty()
                 return true
             }
 
@@ -405,10 +405,10 @@ object GXNodeTreeUpdate {
             val stretchStyle = stretchNode.getStyle()
 
             if (isDirty) {
-                stretchStyle.free()
-                stretchStyle.init()
-                stretchNode.setStyle(stretchStyle)
-                stretchNode.markDirty()
+                stretchStyle.safeFree()
+                stretchStyle.safeInit()
+                stretchNode.safeSetStyle(stretchStyle)
+                stretchNode.safeMarkDirty()
                 return true
             }
 
@@ -660,10 +660,10 @@ object GXNodeTreeUpdate {
             )
 
             if (isDirty == true) {
-                stretchStyle.free()
-                stretchStyle.init()
-                stretchNode.setStyle(stretchStyle)
-                stretchNode.markDirty()
+                stretchStyle.safeFree()
+                stretchStyle.safeInit()
+                stretchNode.safeSetStyle(stretchStyle)
+                stretchNode.safeMarkDirty()
                 return true
             }
 

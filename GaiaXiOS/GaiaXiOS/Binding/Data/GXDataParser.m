@@ -63,8 +63,7 @@
             
         } else if ([obj isKindOfClass:[NSNumber class]]){
             //如果object为number类型
-            NSNumber *valueNum = (NSNumber *)obj;
-            [resultDict gx_setObject:valueNum forKey:key];
+            [resultDict gx_setObject:obj forKey:key];
             
         } else if ([obj isKindOfClass:[NSArray class]]) {
             //如果object类型为数组类型

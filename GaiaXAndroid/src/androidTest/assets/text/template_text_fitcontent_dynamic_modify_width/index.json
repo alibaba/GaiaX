@@ -1,0 +1,5 @@
+{
+  "id": "template_text_fitcontent_dynamic_modify_width",
+  "type": "gaia-template",
+  "layers": [{ "id": "title", "type": "text" }]
+}

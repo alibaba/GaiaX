@@ -176,7 +176,7 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
 
     private var lastFontLines: Int? = null
 
-    private fun setFontLines(fontLiens: Int?) {
+    fun setFontLines(fontLiens: Int?) {
         val result = fontLiens ?: 1
         if (lastFontLines != result) {
             when (result) {

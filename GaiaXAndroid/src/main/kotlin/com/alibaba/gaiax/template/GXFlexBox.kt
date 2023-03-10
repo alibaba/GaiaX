@@ -18,6 +18,7 @@ package com.alibaba.gaiax.template
 
 import app.visly.stretch.*
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.utils.GXLog
 
 /**
@@ -117,8 +118,8 @@ data class GXFlexBox(
         _position = null
     }
 
-    fun updateByExtend(extendCssData: JSONObject) {
-        val gxFlexBox = this
+    fun updateByExtend(context: GXTemplateContext, extendCssData: JSONObject) {
+        val flexBox = this
 
         extendCssData.forEach {
             val key: String = it.key
@@ -130,62 +131,102 @@ data class GXFlexBox(
                 return@forEach
             }
             when (key) {
-                GXTemplateKey.FLEXBOX_DISPLAY -> gxFlexBox.displayForExtend =
-                    GXFlexBoxConvert.display(value.toString())
-                GXTemplateKey.FLEXBOX_POSITION_TYPE -> gxFlexBox.positionTypeForExtend =
-                    GXFlexBoxConvert.positionType(value.toString())
-                GXTemplateKey.FLEXBOX_DIRECTION -> gxFlexBox.directionForExtend =
-                    GXFlexBoxConvert.direction(value.toString())
-                GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> gxFlexBox.flexDirectionForExtend =
-                    GXFlexBoxConvert.flexDirection(value.toString())
-                GXTemplateKey.FLEXBOX_FLEX_WRAP -> gxFlexBox.flexWrapForExtend =
-                    GXFlexBoxConvert.flexWrap(value.toString())
-                GXTemplateKey.FLEXBOX_OVERFLOW -> gxFlexBox.overflowForExtend =
-                    GXFlexBoxConvert.overflow(value.toString())
-                GXTemplateKey.FLEXBOX_ALIGN_ITEMS -> gxFlexBox.alignItemsForExtend =
-                    GXFlexBoxConvert.alignItems(value.toString())
-                GXTemplateKey.FLEXBOX_ALIGN_SELF -> gxFlexBox.alignSelfForExtend =
-                    GXFlexBoxConvert.alignSelf(value.toString())
-                GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> gxFlexBox.alignContentForExtend =
-                    GXFlexBoxConvert.alignContent(value.toString())
-                GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> gxFlexBox.justifyContentForExtend =
-                    GXFlexBoxConvert.justifyContent(value.toString())
-                GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (gxFlexBox.positionType == PositionType.Absolute && gxFlexBox.positionForExtend == null) {
+                GXTemplateKey.FLEXBOX_DISPLAY -> {
+                    flexBox.displayForExtend = GXFlexBoxConvert.display(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_POSITION_TYPE -> {
+                    flexBox.positionTypeForExtend =
+                        GXFlexBoxConvert.positionType(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_DIRECTION -> {
+                    flexBox.directionForExtend = GXFlexBoxConvert.direction(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> {
+                    flexBox.flexDirectionForExtend =
+                        GXFlexBoxConvert.flexDirection(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_FLEX_WRAP -> {
+                    flexBox.flexWrapForExtend = GXFlexBoxConvert.flexWrap(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_OVERFLOW -> {
+                    flexBox.overflowForExtend = GXFlexBoxConvert.overflow(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_ALIGN_ITEMS -> {
+                    flexBox.alignItemsForExtend = GXFlexBoxConvert.alignItems(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_ALIGN_SELF -> {
+                    flexBox.alignSelfForExtend =
+                        GXFlexBoxConvert.alignSelf(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> {
+                    flexBox.alignContentForExtend =
+                        GXFlexBoxConvert.alignContent(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> {
+                    flexBox.justifyContentForExtend =
+                        GXFlexBoxConvert.justifyContent(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (flexBox.positionType == PositionType.Absolute && flexBox.positionForExtend == null) {
                     positionForFinal = null
-                    gxFlexBox.positionForExtend = GXFlexBoxConvert.position2(extendCssData)
+                    flexBox.positionForExtend = GXFlexBoxConvert.position2(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (gxFlexBox.marginForExtend == null) {
+                GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (flexBox.marginForExtend == null) {
                     marginForFinal = null
-                    gxFlexBox.marginForExtend = GXFlexBoxConvert.margin(extendCssData)
+                    flexBox.marginForExtend = GXFlexBoxConvert.margin(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxFlexBox.paddingForExtend == null) {
+                GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (flexBox.paddingForExtend == null) {
                     paddingForFinal = null
-                    gxFlexBox.paddingForExtend = GXFlexBoxConvert.padding(extendCssData)
+                    flexBox.paddingForExtend = GXFlexBoxConvert.padding(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (gxFlexBox.borderForExtend == null) {
+                GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (flexBox.borderForExtend == null) {
                     borderForFinal = null
-                    gxFlexBox.borderForExtend = GXFlexBoxConvert.border(extendCssData)
+                    flexBox.borderForExtend = GXFlexBoxConvert.border(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_FLEX_BASIS -> gxFlexBox.flexBasisForExtend =
-                    GXFlexBoxConvert.flexBasis(value.toString())
-                GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (gxFlexBox.sizeForExtend == null) {
+                GXTemplateKey.FLEXBOX_FLEX_BASIS -> {
+                    flexBox.flexBasisForExtend = GXFlexBoxConvert.flexBasis(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (flexBox.sizeForExtend == null) {
                     sizeForFinal = null
-                    gxFlexBox.sizeForExtend = GXFlexBoxConvert.size2(extendCssData)
+                    flexBox.sizeForExtend = GXFlexBoxConvert.size2(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (gxFlexBox.minSizeForExtend == null) {
+                GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (flexBox.minSizeForExtend == null) {
                     minSizeForFinal = null
-                    gxFlexBox.minSizeForExtend = GXFlexBoxConvert.minSize2(extendCssData)
+                    flexBox.minSizeForExtend = GXFlexBoxConvert.minSize2(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (gxFlexBox.maxSizeForExtend == null) {
+                GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (flexBox.maxSizeForExtend == null) {
                     maxSizeForFinal = null
-                    gxFlexBox.maxSizeForExtend = GXFlexBoxConvert.maxSize2(extendCssData)
+                    flexBox.maxSizeForExtend = GXFlexBoxConvert.maxSize2(extendCssData)
+                    context.flagExtendFlexbox()
                 }
-                GXTemplateKey.FLEXBOX_ASPECT_RATIO -> gxFlexBox.aspectRatioForExtend =
-                    GXFlexBoxConvert.aspectRatio(value.toString())
-                GXTemplateKey.FLEXBOX_FLEX_GROW -> gxFlexBox.flexGrowForExtend =
-                    GXFlexBoxConvert.flexGrow(value.toString())
-                GXTemplateKey.FLEXBOX_FLEX_SHRINK -> gxFlexBox.flexShrinkForExtend =
-                    GXFlexBoxConvert.flexShrink(value.toString())
+                GXTemplateKey.FLEXBOX_ASPECT_RATIO -> {
+                    flexBox.aspectRatioForExtend = GXFlexBoxConvert.aspectRatio(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_FLEX_GROW -> {
+                    flexBox.flexGrowForExtend = GXFlexBoxConvert.flexGrow(value.toString())
+                    context.flagExtendFlexbox()
+                }
+                GXTemplateKey.FLEXBOX_FLEX_SHRINK -> {
+                    flexBox.flexShrinkForExtend = GXFlexBoxConvert.flexShrink(value.toString())
+                    context.flagExtendFlexbox()
+                }
             }
         }
     }

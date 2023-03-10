@@ -120,7 +120,7 @@ data class GXTemplateNode(
             layer.gridConfig?.updateByExtend(extendCssData)
             layer.sliderConfig?.updateByExtend(extendCssData)
             layer.progressConfig?.updateByExtend(extendCssData)
-            css.updateByExtend(extendCssData)
+            css.updateByExtend(gxTemplateContext, extendCssData)
         }
 
         visualTemplateNode?.let {

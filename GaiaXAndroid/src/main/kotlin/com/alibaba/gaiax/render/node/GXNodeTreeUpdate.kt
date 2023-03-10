@@ -506,7 +506,7 @@ object GXNodeTreeUpdate {
 
             gxFlexBox.flexGrow?.let {
                 stretchStyle.flexGrow = it
-                gxTemplateContext.isFlexGrowLayout = true
+                gxTemplateContext.flagFlexGrow()
                 isDirty = true
             }
 
@@ -562,7 +562,7 @@ object GXNodeTreeUpdate {
                 // 如果布局中存在flexGrow，那么文字在自适应的时候需要延迟处理
                 // 因为flexGrow的最终大小还受到了databinding文件中的padding、margin等动态属性的影响,
                 // 如果提前计算，会导致结果不正确
-                if (gxTemplateContext.isFlexGrowLayout) {
+                if (gxTemplateContext.isFlagFlexGrow() || gxTemplateContext.isFlagExtendFlexbox()) {
                     if (gxTemplateContext.dirtyTexts == null) {
                         gxTemplateContext.dirtyTexts = mutableSetOf()
                     }

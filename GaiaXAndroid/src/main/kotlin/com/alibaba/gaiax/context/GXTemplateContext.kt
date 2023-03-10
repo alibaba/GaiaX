@@ -95,11 +95,6 @@ class GXTemplateContext private constructor(
     var isDirty: Boolean = false
 
     /**
-     * Is exist flexGrow logic
-     */
-    var isFlexGrowLayout: Boolean = false
-
-    /**
      * A soft or weak reference to a view
      */
     var rootView: View? = null
@@ -122,6 +117,7 @@ class GXTemplateContext private constructor(
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     fun release() {
+        flags = 0
         scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false
@@ -155,7 +151,28 @@ class GXTemplateContext private constructor(
         rootNode?.resetTree(this)
     }
 
+    private var flags = 0
+
+    fun flagExtendFlexbox() {
+        flags = flags.or(FLAG_EXTEND_FLEXBOX)
+    }
+
+    fun isFlagExtendFlexbox(): Boolean {
+        return (flags and FLAG_EXTEND_FLEXBOX) != 0
+    }
+
+    fun flagFlexGrow() {
+        flags = flags.or(FLAG_FLEX_GROW_UPDATE)
+    }
+
+    fun isFlagFlexGrow(): Boolean {
+        return (flags and FLAG_FLEX_GROW_UPDATE) != 0
+    }
+
     companion object {
+
+        const val FLAG_EXTEND_FLEXBOX = 0x1
+        const val FLAG_FLEX_GROW_UPDATE = 0x2
 
         fun createContext(
             gxTemplateItem: GXTemplateEngine.GXTemplateItem,

@@ -124,7 +124,7 @@ data class GXStretchNode(
 
             flexBox.flexGrow?.let {
                 style.flexGrow = it
-                gxTemplateContext.isFlexGrowLayout = true
+                gxTemplateContext.flagFlexGrow()
             }
 
             flexBox.flexShrink?.let { style.flexShrink = it }

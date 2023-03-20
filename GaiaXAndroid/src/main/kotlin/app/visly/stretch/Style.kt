@@ -303,17 +303,16 @@ data class Style(
     }
 
     fun safeFree() {
-        synchronized(this) {
+        synchronized(Stretch::class.java) {
             free()
         }
     }
 
     fun safeInit() {
-        synchronized(this) {
+        synchronized(Stretch::class.java) {
             init()
         }
     }
-
 
     private external fun nFree(ptr: Long)
 

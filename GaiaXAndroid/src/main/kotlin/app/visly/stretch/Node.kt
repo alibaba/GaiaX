@@ -119,6 +119,24 @@ open class Node {
         }
     }
 
+
+    fun safeSetStyle(style: Style, locked: (() -> Unit)? = null): Boolean {
+        synchronized(Stretch::class.java) {
+            if (rustptr != -1L && style.rustptr != -1L) {
+                locked?.invoke()
+                if (style.rustptr == -1L) {
+                    return false
+                }
+                nSetStyle(Stretch.ptr, rustptr, style.rustptr)
+                this.style = style
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+
+
     fun safeMarkDirty() {
         synchronized(Stretch::class.java) {
             if (rustptr != -1L) {

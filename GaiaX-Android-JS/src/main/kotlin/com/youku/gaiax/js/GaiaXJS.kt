@@ -59,8 +59,8 @@ class GaiaXJS {
 
     var isDebugging: Boolean = false
 
-    val devToolsDebuggerListener: IDevTools.devToolsDebuggerListener = object : IDevTools.devToolsDebuggerListener {
-        override fun onWebsocketJSModeChanged(modeType: String) {
+    val DevToolsDebuggingTypeListener: IDevTools.DevToolsDebuggingTypeListener = object : IDevTools.DevToolsDebuggingTypeListener {
+        override fun onDevToolsJSModeChanged(modeType: String) {
             when (modeType) {
                 GXClientToStudioMultiType.JS_BREAKPOINT -> {
                     isDebugging = true

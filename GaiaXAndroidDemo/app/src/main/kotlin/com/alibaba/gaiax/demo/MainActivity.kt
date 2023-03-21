@@ -20,7 +20,7 @@ import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
-import com.alibaba.gaiax.studio.GXClientToStudio
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.lzf.easyfloat.permission.PermissionUtils
 
 
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        GXClientToStudio.instance.destroy()
+        GXClientToStudioMultiType.instance.destroy()
         super.onDestroy()
     }
 
@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
         GXTemplateEngine.instance.init(this)
 
-        GXClientToStudio.instance.init(applicationContext)
 
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
 

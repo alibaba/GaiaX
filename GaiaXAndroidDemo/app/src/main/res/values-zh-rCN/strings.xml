@@ -12,4 +12,13 @@
     <string name="business">业务</string>
     <string name="js_data">JS能力</string>
     <string name="dev_tools">GaiaX DevTools开关</string>
+    <string name="dev_tools_js_log_mode">日志模式</string>
+    <string name="dev_tools_name">DevTools</string>
+    <string name="dev_tools_gaiax_logo">gaiax logo</string>
+    <string name="dev_tools_connected_state">未连接</string>
+    <string name="dev_tools_scan_gaia_studio">扫码连接到【Gaia Studio】</string>
+    <string name="dev_tools_open_fast_preview">打开【实时预览】</string>
+    <string name="dev_tools_change_gaiax_js_mode">切换GaiaXJS调试模式</string>
+    <string name="dev_tools_close">关闭GaiaX DevTools</string>
+    <string name="dev_tools_fold">收起</string>
 </resources>

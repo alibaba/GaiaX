@@ -90,7 +90,7 @@ class GXSocket : SocketListener {
         webSocketSetting?.setReconnectWithNetworkChanged(true)
 
         //允许扫描不同的电脑
-        WebSocketHandler.registerNetworkChangedReceiver(GXClientToStudio.instance.applicationContext)
+        WebSocketHandler.registerNetworkChangedReceiver(GXClientToStudioMultiType.instance.applicationContext)
         webSocketManager = WebSocketHandler.initGeneralWebSocket(SOCKET_KEY, webSocketSetting)
         webSocketManager?.addListener(this)
     }
@@ -153,6 +153,8 @@ class GXSocket : SocketListener {
             "js/callAsync" -> gxSocketJSReceiveListener?.onCallAsyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
             "js/callPromise" -> gxSocketJSReceiveListener?.onCallPromiseFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
             "js/getLibrary" ->gxSocketJSReceiveListener?.onCallGetLibraryFromStudioWorker(socketId.toInt(),socketMethod)
+            // TODO: 关闭方式
+            "close" ->{}
 
         }
 

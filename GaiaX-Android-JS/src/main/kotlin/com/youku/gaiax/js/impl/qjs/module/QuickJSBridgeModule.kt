@@ -18,7 +18,6 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
         if (Log.isLog()) {
             Log.e("callSync() called with: jsContext = $contextPointer, argsMap = $argsMap")
         }
-//        (hostContext.runtime as GaiaXJSDebuggerRuntime).gxJSSocketClientWrapper.
         if (jsContext.pointer == contextPointer) {
             val target = JSONObject.parseObject(argsMap)
 

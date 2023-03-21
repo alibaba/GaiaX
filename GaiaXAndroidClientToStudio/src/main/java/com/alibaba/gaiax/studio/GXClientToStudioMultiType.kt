@@ -27,7 +27,7 @@ class GXClientToStudioMultiType {
 
         fun onCallPromiseFromStudioWorker(socketId: Int, params: JSONObject)
 
-        fun onCallGetLibraryFromStudioWorker(socketId: Int,methodName:String)
+        fun onCallGetLibraryFromStudioWorker(socketId: Int, methodName: String)
     }
 
     var applicationContext: Context? = null
@@ -45,6 +45,7 @@ class GXClientToStudioMultiType {
 
         override fun onSocketConnected() {
             sendInitMsg()
+
         }
 
         override fun onSocketDisconnected() {
@@ -53,6 +54,7 @@ class GXClientToStudioMultiType {
                 isWaitDisconnectMsgThenConnectGaiaStudio = false
                 toConnectGaiaStudio()
             }
+            socketHelper?.devTools?.changeDevToolsConnectedStateView()
         }
 
         override fun onStudioConnected() {
@@ -61,6 +63,7 @@ class GXClientToStudioMultiType {
             if (currentTemplateId != null) {
                 socketHelper?.sendGetTemplateData(currentTemplateId)
             }
+            socketHelper?.devTools?.changeDevToolsConnectedStateView()
         }
 
         override fun onStudioAddData(templateId: String, templateData: JSONObject) {
@@ -225,8 +228,7 @@ class GXClientToStudioMultiType {
     fun sendMsgForDisconnect() {
         val data = JSONObject()
         data["jsonrpc"] = "2.0"
-        data["method"] = "mode/get"
-        data["id"] = 304
+        data["method"] = "close"
         socketHelper?.sendMessage(data)
     }
 

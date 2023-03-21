@@ -96,6 +96,15 @@ var GaiaX${moduleName}Module = (function (_super) {
         """.trimIndent()
     }
 
+    fun buildModuleDeclareScriptForDebugger(moduleName: String): String? {
+        if (moduleName.isEmpty()) {
+            return null
+        }
+        return """
+class GaiaX${moduleName}Module extends Bridge {}; 
+        """.trimIndent()
+    }
+
     fun buildSyncMethodDeclareScript(moduleName: String, methodName: String, moduleId: Long, methodId: Long): String? {
         if (moduleName.isEmpty() || methodName.isEmpty() || moduleId < 0 || methodId < 0) {
             return null
@@ -281,6 +290,13 @@ var Props = (function () {
     return Props;
 }());
         """.trimIndent()
+    }
+
+    fun buildDebugStyle(): String {
+        return """
+            class Props {}; 
+            class Style { targetData:any }; 
+            """.trimIndent()
     }
 
 }

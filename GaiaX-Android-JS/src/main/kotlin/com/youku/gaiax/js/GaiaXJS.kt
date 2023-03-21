@@ -3,6 +3,8 @@ package com.youku.gaiax.js
 import android.content.Context
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.IDevTools
 import com.youku.gaiax.js.api.GaiaXBaseModule
 import com.youku.gaiax.js.core.GaiaXContext
 import com.youku.gaiax.js.core.GaiaXEngine
@@ -39,19 +41,50 @@ class GaiaXJS {
     }
 
     enum class GaiaXJSType {
-        QuickJS
+        GaiaXJSEngineTypeQuickJS,
+        GaiaXJSEngineTypeDebugger
     }
 
     internal var listener: Listener? = null
     internal lateinit var context: Context
 
+    //todo：需要保障一个类型的engine只注册一次(quickjs,javascriptcore,studioworker)
     private val engines = ConcurrentHashMap<Long, GaiaXEngine>()
 
     private val moduleManager: IModuleManager = GaiaXModuleManager()
 
     private var defaultEngine: GaiaXEngine? = null
 
-    var renderEngineDelegate:IRenderEngineDelegate? = null
+    var renderEngineDelegate: IRenderEngineDelegate? = null
+
+    var isDebugging: Boolean = false
+
+    val devToolsDebuggerListener: IDevTools.devToolsDebuggerListener = object : IDevTools.devToolsDebuggerListener {
+        override fun onWebsocketJSModeChanged(modeType: String) {
+            when (modeType) {
+                GXClientToStudioMultiType.JS_BREAKPOINT -> {
+                    isDebugging = true
+                    if (engines.size <= 2){
+                        if (defaultEngine!= null){
+                            if (defaultEngine?.type != GaiaXJSType.GaiaXJSEngineTypeDebugger){
+                                engines.forEach {
+                                    if (it.value.type == GaiaXJSType.GaiaXJSEngineTypeDebugger) {
+                                        defaultEngine = it.value
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        throw java.lang.IllegalArgumentException("额外的engine被注册")
+                    }
+                }
+                GXClientToStudioMultiType.JS_DEFAULT -> {
+                    isDebugging = false
+                }
+            }
+        }
+
+    }
 
     fun init(context: Context): GaiaXJS {
         this.context = context.applicationContext
@@ -66,7 +99,7 @@ class GaiaXJS {
         return this
     }
 
-    fun initRenderDelegate(renderEngineDelegate: IRenderEngineDelegate):GaiaXJS{
+    fun initRenderDelegate(renderEngineDelegate: IRenderEngineDelegate): GaiaXJS {
         this.renderEngineDelegate = renderEngineDelegate
         return this
     }
@@ -190,7 +223,11 @@ class GaiaXJS {
                 // 创建引擎
                 defaultEngine = Aop.aopTaskTime({
                     // 创建引擎
-                    createEngine(GaiaXJSType.QuickJS)
+                    if (isDebugging){
+                        createEngine(GaiaXJSType.GaiaXJSEngineTypeDebugger)
+                    }else{
+                        createEngine(GaiaXJSType.GaiaXJSEngineTypeQuickJS)
+                    }
                 }, { time ->
                     MonitorUtils.jsInitScene(MonitorUtils.TYPE_JS_CONTEXT_INIT, time)
                 })

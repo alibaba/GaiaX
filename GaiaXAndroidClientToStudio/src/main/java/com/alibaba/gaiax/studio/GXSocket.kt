@@ -26,6 +26,7 @@ class GXSocket : SocketListener {
 
     var gxSocketIsConnected = false
     var gxSocketListener: GXSocketListener? = null
+    var gxSocketJSReceiveListener: GXClientToStudioMultiType.GXSocketJSReceiveListener? = null
 
     private var updateTask: Runnable? = null
     private var lastTemplateId: String? = null
@@ -138,19 +139,20 @@ class GXSocket : SocketListener {
             }
             "template/get" -> {
                 val result = msgData.getJSONObject("result")
-                if (result != null){
+                if (result != null) {
                     obtainResultFromGetTemplate(result)
                 }
             }
             "template/didChangedNotification" -> {
                 val result = msgData.getJSONObject("params")
-                if (result != null){
+                if (result != null) {
                     obtainResultFromGetTemplate(result)
                 }
             }
-            "js/callSync" -> {}
-            "js/callAsync" -> {}
-            "js/callPromise" -> {}
+            "js/callSync" -> gxSocketJSReceiveListener?.onCallSyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callAsync" -> gxSocketJSReceiveListener?.onCallAsyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callPromise" -> gxSocketJSReceiveListener?.onCallPromiseFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/getLibrary" ->gxSocketJSReceiveListener?.onCallGetLibraryFromStudioWorker(socketId.toInt(),socketMethod)
 
         }
 
@@ -237,7 +239,7 @@ class GXSocket : SocketListener {
         val data = JSONObject()
         data["jsonrpc"] = "2.0"
         data["method"] = "template/get"
-        if (!TextUtils.isEmpty(templateId)){
+        if (!TextUtils.isEmpty(templateId)) {
             val params = JSONObject()
             params["id"] = templateId
             data["params"] = params
@@ -362,7 +364,7 @@ class GXSocket : SocketListener {
     /**
      * 处理"template/get"和"template/didChangedNotification"
      */
-    private fun obtainResultFromGetTemplate(templateData: JSONObject){
+    private fun obtainResultFromGetTemplate(templateData: JSONObject) {
         //解析根模板
         val rootTemplateId = templateData.getString("templateId")
         val rootTemplateData = templateData.getJSONObject("templateData")
@@ -377,7 +379,7 @@ class GXSocket : SocketListener {
             val subTemplateJson: JSONObject = createTemplateData(subTemplateData)
             gxSocketListener?.onStudioAddData(subTemplateId, subTemplateJson)
         }
-        gxSocketListener?.onStudioUpdate(rootTemplateId,templateJson)
+        gxSocketListener?.onStudioUpdate(rootTemplateId, templateJson)
     }
 
     private fun sendMsgForChangeMode(

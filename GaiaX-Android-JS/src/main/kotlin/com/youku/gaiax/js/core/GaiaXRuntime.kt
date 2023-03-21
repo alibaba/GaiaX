@@ -3,6 +3,7 @@ package com.youku.gaiax.js.core
 import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.core.api.IEngine
 import com.youku.gaiax.js.core.api.IRuntime
+import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerRuntime
 import com.youku.gaiax.js.impl.qjs.QuickJSRuntime
 
 internal class GaiaXRuntime(val host: GaiaXEngine, val engine: IEngine, val type: GaiaXJS.GaiaXJSType) {
@@ -46,7 +47,8 @@ internal class GaiaXRuntime(val host: GaiaXEngine, val engine: IEngine, val type
 
     private fun createRuntime(): IRuntime {
         return when (type) {
-            GaiaXJS.GaiaXJSType.QuickJS -> QuickJSRuntime.create(this, engine)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSRuntime.create(this, engine)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerRuntime.create(this, engine)
         }
     }
 

@@ -2,8 +2,12 @@ package com.youku.gaiax.js.core
 
 import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.core.api.IEngine
+import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerEngine
 import com.youku.gaiax.js.impl.qjs.QuickJSEngine
 
+/**
+ * GaiaXJS.createEngin->initEngine->
+ */
 class GaiaXEngine private constructor(val engineId: Long, val type: GaiaXJS.GaiaXJSType) {
 
     enum class State {
@@ -78,7 +82,8 @@ class GaiaXEngine private constructor(val engineId: Long, val type: GaiaXJS.Gaia
 
     private fun createEngine(): IEngine {
         return when (type) {
-            GaiaXJS.GaiaXJSType.QuickJS -> QuickJSEngine.create(this)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSEngine.create(this)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerEngine.create(this)
         }
     }
 

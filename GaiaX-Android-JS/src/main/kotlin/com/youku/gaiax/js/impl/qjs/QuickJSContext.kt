@@ -1,5 +1,6 @@
 package com.youku.gaiax.js.impl.qjs
 
+import com.alibaba.fastjson.JSONObject
 import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.core.GaiaXContext
 import com.youku.gaiax.js.core.api.IContext
@@ -95,7 +96,7 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
         }
     }
 
-    override fun evaluateJS(script: String) {
+    override fun evaluateJS(script: String, argsMap: JSONObject) {
         if (Log.isLog()) {
             Log.e("evaluateJS() called with: script = $script")
         }

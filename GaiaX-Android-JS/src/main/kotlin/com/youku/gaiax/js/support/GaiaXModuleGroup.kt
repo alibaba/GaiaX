@@ -1,6 +1,7 @@
 package com.youku.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
+import com.youku.gaiax.js.GaiaXJS
 
 internal class GaiaXModuleGroup private constructor(val name: String) {
 
@@ -38,7 +39,12 @@ internal class GaiaXModuleGroup private constructor(val name: String) {
     }
 
     private fun initModuleScript(): String {
-        return GaiaXScriptBuilder.buildModuleDeclareScript(name) ?: throw IllegalArgumentException("Module name is empty")
+        // TODO: 是否应该直接读取isDebug
+        if(GaiaXJS.instance.isDebugging){
+            return GaiaXScriptBuilder.buildModuleDeclareScriptForDebugger(name) ?: throw IllegalArgumentException("Module name is empty")
+        }else{
+            return GaiaXScriptBuilder.buildModuleDeclareScript(name) ?: throw IllegalArgumentException("Module name is empty")
+        }
     }
 
     fun invokeMethodSync(moduleId: Long, methodId: Long, args: JSONArray): Any? {

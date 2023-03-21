@@ -15,13 +15,14 @@ import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.IDevTools
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
+import com.youku.gaiax.js.GaiaXJS
 
 /**
  *  @author: shisan.lms
  *  @date: 2023-02-02
  *  Description:
  */
-class DevTools : DefaultLifecycleObserver, IDevTools {
+class DevTools : IDevTools{
     companion object {
         val TAG = "devtools"
 
@@ -37,6 +38,8 @@ class DevTools : DefaultLifecycleObserver, IDevTools {
     private var currentPreviewMode = GXClientToStudioMultiType.PREVIEW_NONE
 
     private var currentJSMode = GXClientToStudioMultiType.JS_DEFAULT
+
+    var jsDebuggerTypeListener: IDevTools.devToolsDebuggerListener? = null
 
     fun createDevToolsFloatWindow(context: Context) {
         devtoolsContext = context
@@ -152,6 +155,9 @@ class DevTools : DefaultLifecycleObserver, IDevTools {
 
     private fun launchJsDebugType() {
         currentJSMode = GXClientToStudioMultiType.JS_BREAKPOINT
+        //todo DevTools直接调用GaiaXJS合理吗？
+        jsDebuggerTypeListener = GaiaXJS.instance.devToolsDebuggerListener
+        jsDebuggerTypeListener?.onWebsocketJSModeChanged(currentJSMode)
     }
 
     private fun disconnectStudioMultiType() {

@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.text.TextUtils
 import android.util.Log
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketHandler
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.util.regex.Pattern
@@ -21,9 +20,20 @@ class GXClientToStudioMultiType {
         fun onUpdate(templateId: String, templateData: JSONObject)
     }
 
+    interface GXSocketJSReceiveListener {
+        fun onCallSyncFromStudioWorker(socketId: Int, params: JSONObject)
+
+        fun onCallAsyncFromStudioWorker(socketId: Int, params: JSONObject)
+
+        fun onCallPromiseFromStudioWorker(socketId: Int, params: JSONObject)
+
+        fun onCallGetLibraryFromStudioWorker(socketId: Int,methodName:String)
+    }
+
     var applicationContext: Context? = null
 
     var gxSocketToStudioListener: GXSocketToStudioListener? = null
+
 
     private var socketHelper: GXSocket? = null
     private var currentAddress: String? = null
@@ -237,6 +247,10 @@ class GXClientToStudioMultiType {
 
     fun setDevTools(dev: IDevTools) {
         socketHelper?.devTools = dev
+    }
+
+    fun setJSReceiverListener(listener: GXSocketJSReceiveListener) {
+        socketHelper?.gxSocketJSReceiveListener = listener
     }
 
     fun isGaiaStudioConnected(): Boolean? {

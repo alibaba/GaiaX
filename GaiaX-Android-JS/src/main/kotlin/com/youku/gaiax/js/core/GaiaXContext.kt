@@ -7,6 +7,7 @@ import com.youku.gaiax.js.core.api.ICallBridgeListener
 import com.youku.gaiax.js.core.api.IComponent
 import com.youku.gaiax.js.core.api.IContext
 import com.youku.gaiax.js.core.api.IRuntime
+import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerContext
 import com.youku.gaiax.js.impl.qjs.QuickJSContext
 import com.youku.gaiax.js.utils.Aop
 import com.youku.gaiax.js.utils.GaiaXJSTaskQueue
@@ -18,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap
  * 每个Context下的Component对应一个模板。
  * 如果模板是嵌套模板，那么Context会有多个Component。
  */
+
+// TODO: 只保留register和unregister 新增getComponentById 同时删除生命周期回调
 internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runtime: IRuntime, val type: GaiaXJS.GaiaXJSType) {
 
     internal val bridge = object : ICallBridgeListener {
@@ -115,9 +118,18 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         context?.evaluateJS(script)
     }
 
+    fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {
+        if (GaiaXJS.instance.isDebugging){
+            context?.evaluateJS(script,argsMap)
+        }else{
+            context?.evaluateJS(script)
+        }
+    }
+
     private fun createContext(): IContext {
         return when (type) {
-            GaiaXJS.GaiaXJSType.QuickJS -> QuickJSContext.create(this, host.engine, runtime)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSContext.create(this, host.engine, runtime)
+            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerContext.create(this, host.engine, runtime)
         }
     }
 
@@ -150,6 +162,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
 
     fun onDestroyComponent(id: Long) {
         components[id]?.onDestroy()
+
     }
 
     fun onLoadMoreComponent(id: Long, data: JSONObject) {

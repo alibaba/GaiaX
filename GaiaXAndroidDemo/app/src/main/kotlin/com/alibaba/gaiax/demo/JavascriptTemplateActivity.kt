@@ -2,6 +2,7 @@ package com.alibaba.gaiax.demo
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.fastjson.JSONObject
@@ -19,6 +20,8 @@ import com.youku.gaiax.js.GaiaXJS
 class JavascriptTemplateActivity : AppCompatActivity() {
 
     private var jsId: Long = 0
+
+    private var rootView:View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +41,11 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 初始化
         GXTemplateEngine.instance.init(activity)
 
+        //GaiaXJS初始化
         GaiaXJS.instance.init(activity).initListener(object : GaiaXJS.Listener {
             override fun errorLog(data: JSONObject) {
 
             }
-
             override fun monitor(
                 scene: String,
                 biz: String,
@@ -56,9 +59,8 @@ class JavascriptTemplateActivity : AppCompatActivity() {
             ) {
 //                GaiaXProxy.instance.monitor?.monitor(scene, biz, id, type, state, value)
             }
-
         })
-
+        //GaiaXJS引擎启动
         GaiaXJS.instance.startEngine { }
 
         // 模板参数
@@ -66,6 +68,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
 
         val gxJSData = AssetsUtils.parseAssetsToString(activity, jsTestDataPath)
         Log.d("lms-13", "renderTemplate1: $gxJSData")
+        // TODO: templateVersion是从GaiaXSDK获取吗？
         jsId = GaiaXJS.instance.registerComponent(bizId, templateIdForTest, "1", gxJSData.toString())
 
         // 模板绘制尺寸
@@ -81,6 +84,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         val delegate = JSRenderDelegate()
         if (view != null) {
             delegate.initDelegate(view,jsId)
+            this.rootView = view
         }
         GaiaXJS.instance.initRenderDelegate(delegate)
         // 绑定数据
@@ -100,6 +104,8 @@ class JavascriptTemplateActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        GaiaXJS.instance.onDestroyComponent(jsId)
+        if(this.rootView == null){
+            GaiaXJS.instance.onDestroyComponent(jsId)
+        }
     }
 }

@@ -10,4 +10,8 @@ interface IDevTools {
     fun getPreviewCurrentMode(): String
 
     fun getJSCurrentMode(): String
+
+    interface devToolsDebuggerListener{
+        fun onWebsocketJSModeChanged(modeType :String)
+    }
 }

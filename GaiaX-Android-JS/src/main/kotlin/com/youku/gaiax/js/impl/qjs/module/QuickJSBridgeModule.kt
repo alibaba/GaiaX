@@ -5,6 +5,7 @@ import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.api.IGaiaXCallback
 import com.youku.gaiax.js.api.IGaiaXPromise
 import com.youku.gaiax.js.core.GaiaXContext
+import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerRuntime
 import com.youku.gaiax.js.support.JSDataConvert
 import com.youku.gaiax.js.utils.Log
 import com.youku.gaiax.quickjs.BridgeModuleListener
@@ -17,7 +18,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
         if (Log.isLog()) {
             Log.e("callSync() called with: jsContext = $contextPointer, argsMap = $argsMap")
         }
-
+//        (hostContext.runtime as GaiaXJSDebuggerRuntime).gxJSSocketClientWrapper.
         if (jsContext.pointer == contextPointer) {
             val target = JSONObject.parseObject(argsMap)
 

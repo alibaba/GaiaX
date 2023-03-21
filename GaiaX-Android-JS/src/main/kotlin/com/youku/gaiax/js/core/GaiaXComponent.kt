@@ -1,6 +1,7 @@
 package com.youku.gaiax.js.core
 
 import com.alibaba.fastjson.JSONObject
+import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.core.api.IComponent
 import com.youku.gaiax.js.support.GaiaXScriptBuilder
 import com.youku.gaiax.js.utils.Aop
@@ -23,10 +24,16 @@ internal class GaiaXComponent private constructor(val jsContext: GaiaXContext, v
         get() = _id
 
     override fun initComponent() {
+
         GaiaXScriptBuilder.buildInitComponentScript(id, bizId, templateId, templateVersion, script).apply {
             jsContext.executeTask {
                 Aop.aopTaskTime({
-                    jsContext.evaluateJSWithoutTask(this)
+                    val argsMap = JSONObject()
+                    argsMap["instanceId"] = id
+                    argsMap["bizId"] = bizId
+                    argsMap["templateId"] = templateId
+                    argsMap["templateVersion"] = templateVersion
+                    jsContext.evaluateJSWithoutTask(this,argsMap)
                 }, { time ->
                     MonitorUtils.jsTemplate(MonitorUtils.TYPE_LOAD_INDEX_JS, time, templateId, bizId)
                 })

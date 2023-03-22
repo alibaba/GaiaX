@@ -160,7 +160,7 @@ class DevTools : IDevTools {
     private fun launchJsType(mode: String) {
         currentJSMode = mode
         if (jsDebuggerTypeListener == null) {
-            jsDebuggerTypeListener = GaiaXJS.instance.DevToolsDebuggingTypeListener
+            jsDebuggerTypeListener = GaiaXJS.instance.devToolsDebuggingTypeListener
         }
         jsDebuggerTypeListener?.onDevToolsJSModeChanged(currentJSMode)
     }

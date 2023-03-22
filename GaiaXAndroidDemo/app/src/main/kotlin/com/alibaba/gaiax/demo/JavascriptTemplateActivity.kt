@@ -21,7 +21,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
 
     private var jsId: Long = 0
 
-    private var rootView:View? = null
+    private var rootView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +46,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
             override fun errorLog(data: JSONObject) {
 
             }
+
             override fun monitor(
                 scene: String,
                 biz: String,
@@ -83,7 +84,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         val view = GXTemplateEngine.instance.createView(params, size)
         val delegate = JSRenderDelegate()
         if (view != null) {
-            delegate.initDelegate(view,jsId)
+            delegate.initDelegate(view, jsId)
             this.rootView = view
         }
         GaiaXJS.instance.initRenderDelegate(delegate)
@@ -104,8 +105,8 @@ class JavascriptTemplateActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(this.rootView == null){
-            GaiaXJS.instance.onDestroyComponent(jsId)
-        }
+        GaiaXJS.instance.onDestroyComponent(jsId)
+        GaiaXJS.instance.unregisterComponent(jsId)
+        GaiaXJS.instance.stopEngine()
     }
 }

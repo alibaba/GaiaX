@@ -40,7 +40,7 @@ class GaiaXJS {
         )
     }
 
-    enum class GaiaXJSType {
+    internal enum class GaiaXJSType {
         GaiaXJSEngineTypeQuickJS,
         GaiaXJSEngineTypeDebugger
     }
@@ -59,22 +59,26 @@ class GaiaXJS {
 
     var isDebugging: Boolean = false
 
-    val DevToolsDebuggingTypeListener: IDevTools.DevToolsDebuggingTypeListener = object : IDevTools.DevToolsDebuggingTypeListener {
+    val devToolsDebuggingTypeListener: IDevTools.DevToolsDebuggingTypeListener = object : IDevTools.DevToolsDebuggingTypeListener {
         override fun onDevToolsJSModeChanged(modeType: String) {
             when (modeType) {
                 GXClientToStudioMultiType.JS_BREAKPOINT -> {
                     isDebugging = true
-                    if (engines.size <= 2){
-                        if (defaultEngine!= null){
-                            if (defaultEngine?.type != GaiaXJSType.GaiaXJSEngineTypeDebugger){
+                    //切换引擎逻辑
+                    if (defaultEngine != null) {
+                        if (defaultEngine?.type != GaiaXJSType.GaiaXJSEngineTypeDebugger) {
+                            if (engines.size == 2) {
                                 engines.forEach {
                                     if (it.value.type == GaiaXJSType.GaiaXJSEngineTypeDebugger) {
                                         defaultEngine = it.value
                                     }
                                 }
+                            } else {
+                                startEngine { }
                             }
                         }
-                    }else{
+                    } else {
+                        startEngine { }
                         throw java.lang.IllegalArgumentException("额外的engine被注册")
                     }
                 }
@@ -123,6 +127,7 @@ class GaiaXJS {
         }
     }
 
+//    @SuppressWarnings("unchecked")
     private fun registerAssetsModules() {
         // all gaiax_js_modules/module_biz_name.json
         val allModules = JSONObject()
@@ -217,24 +222,26 @@ class GaiaXJS {
     }
 
     fun startEngine(complete: () -> Unit) {
-        synchronized(GaiaXJS::class.java) {
-            if (defaultEngine == null) {
-
+        val lock = if (isDebugging) {
+            GaiaXJSType.GaiaXJSEngineTypeDebugger
+        } else {
+            GaiaXJSType.GaiaXJSEngineTypeQuickJS
+        }
+        synchronized(lock) {
+            // 创建引擎
+            defaultEngine = Aop.aopTaskTime({
                 // 创建引擎
-                defaultEngine = Aop.aopTaskTime({
-                    // 创建引擎
-                    if (isDebugging){
-                        createEngine(GaiaXJSType.GaiaXJSEngineTypeDebugger)
-                    }else{
-                        createEngine(GaiaXJSType.GaiaXJSEngineTypeQuickJS)
-                    }
-                }, { time ->
-                    MonitorUtils.jsInitScene(MonitorUtils.TYPE_JS_CONTEXT_INIT, time)
-                })
+                if (isDebugging) {
+                    createEngine(GaiaXJSType.GaiaXJSEngineTypeDebugger)
+                } else {
+                    createEngine(GaiaXJSType.GaiaXJSEngineTypeQuickJS)
+                }
+            }, { time ->
+                MonitorUtils.jsInitScene(MonitorUtils.TYPE_JS_CONTEXT_INIT, time)
+            })
 
-                // 启动引擎
-                startEngine(defaultEngine, complete)
-            }
+            // 启动引擎
+            startEngine(defaultEngine, complete)
         }
     }
 

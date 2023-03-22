@@ -8,7 +8,7 @@ import com.youku.gaiax.js.impl.qjs.QuickJSEngine
 /**
  * GaiaXJS.createEngin->initEngine->
  */
-class GaiaXEngine private constructor(val engineId: Long, val type: GaiaXJS.GaiaXJSType) {
+internal class GaiaXEngine private constructor(val engineId: Long, val type: GaiaXJS.GaiaXJSType) {
 
     enum class State {
         NONE,

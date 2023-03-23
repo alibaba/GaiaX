@@ -135,6 +135,7 @@ class GXTemplateContext private constructor(
         manualTrackMap?.forEach {
             templateData?.trackListener?.onManualExposureTrackEvent(it.value)
         }
+        manualTrackMap?.clear()
     }
 
     fun initContainers() {

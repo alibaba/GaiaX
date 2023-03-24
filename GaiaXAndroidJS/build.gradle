@@ -41,7 +41,7 @@ ext.gaiax_version = version
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId 'GaiaX-Android-JS'
+            artifactId 'GaiaXAndroidJS'
         }
     }
 }
@@ -79,7 +79,7 @@ android {
 
     // https://www.jianshu.com/p/681589927f1f
     compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-Android-JS"]
+        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaXAndroidJS"]
     }
 
 //    kotlinOptions {
@@ -108,7 +108,7 @@ afterEvaluate {
                 } else {
                     groupId = 'com.github.alibaba.GaiaX'
                 }
-                artifactId = 'GaiaX-Android-JS'
+                artifactId = 'GaiaXAndroidJS'
             }
         }
     }

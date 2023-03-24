@@ -14,8 +14,8 @@ project(':GaiaXAndroidAdapter').projectDir = file('../GaiaXAndroidAdapter')
 include ':GaiaXAndroidClientToStudio'
 project(':GaiaXAndroidClientToStudio').projectDir = file('../GaiaXAndroidClientToStudio')
 
-include ':GaiaX-Android-JS'
-project(':GaiaX-Android-JS').projectDir = file('../GaiaX-Android-JS')
+include ':GaiaXAndroidJS'
+project(':GaiaXAndroidJS').projectDir = file('../GaiaXAndroidJS')
 
 include ':GaiaX-Android-QuickJS'
 project(':GaiaX-Android-QuickJS').projectDir = file('../GaiaX-Android-QuickJS')

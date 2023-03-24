@@ -168,8 +168,6 @@ class GaiaXJSManager {
         registerModule(GaiaXJSBuildInModule::class.java)
         registerModule(GaiaXJSBuildInTipsModule::class.java)
         registerModule(GaiaXJSBuildInStorageModule::class.java)
-        //todo
-        registerModule(GaiaXJSNativeLogTestModule::class.java)
     }
 
     fun onEventComponent(id: Long, type: String, data: JSONObject) {

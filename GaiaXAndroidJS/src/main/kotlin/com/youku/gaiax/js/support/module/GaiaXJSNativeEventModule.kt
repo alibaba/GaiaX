@@ -37,27 +37,28 @@ class GaiaXJSNativeEventModule : GaiaXJSBaseModule() {
         }
     }
 
-//    @GaiaXPromiseMethod
-//    fun removeEventListener(data: JSONObject, promise: IGaiaXPromise) {
-//        if (Log.isLog()) {
-//            Log.d("removeEventListener() called with: data = $data")
-//        }
-//
-//        val targetId = data.getString("targetId")
-//        val templateId = data.getString("templateId")
-//        val instanceId = data.getLong("instanceId")
-//        val eventType = data.getString("eventType")
-//        if (targetId != null && templateId != null && instanceId != null && eventType != null) {
+    @GaiaXPromiseMethod
+    fun removeEventListener(data: JSONObject, promise: IGaiaXPromise) {
+        if (Log.isLog()) {
+            Log.d("removeEventListener() called with: data = $data")
+        }
+
+        val targetId = data.getString("targetId")
+        val templateId = data.getString("templateId")
+        val instanceId = data.getLong("instanceId")
+        val eventType = data.getString("eventType")
+        if (targetId != null && templateId != null && instanceId != null && eventType != null) {
+            // TODO: remove没实现
 //            GaiaXJSManager.instance.renderEngineDelegate?.removeEventListener(
 //                targetId,
 //                instanceId,
 //                eventType
 //            )
-//            promise.resolve().invoke()
-//        } else {
-//            promise.reject().invoke()
-//        }
-//    }
+            promise.resolve().invoke()
+        } else {
+            promise.reject().invoke()
+        }
+    }
 
     override val name: String
         get() = "NativeEvent"

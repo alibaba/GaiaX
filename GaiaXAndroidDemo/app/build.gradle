@@ -78,7 +78,6 @@ dependencies {
     implementation project(path: ':GaiaXAndroidClientToStudio')
     implementation project(path: ':GaiaXAndroidAdapter')
     implementation project(path: ':GaiaXAndroid')
-    implementation project(path: ':GaiaX-Android-JS')
     implementation project(path: ':GaiaX-Android-QuickJS')
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -102,6 +101,7 @@ dependencies {
 }
 
 dependencies {
+    implementation project(path: ':GaiaXAndroidJS')
 //    三方
     implementation 'com.github.princekin-f:EasyFloat:2.0.4'
 }

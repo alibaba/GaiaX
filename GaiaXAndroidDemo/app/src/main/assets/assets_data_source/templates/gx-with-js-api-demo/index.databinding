@@ -1,0 +1,18 @@
+{
+  "data": {
+    "storage-api": { "value": "'storage api'" },
+    "getStorage": { "value": "$getStorage" },
+    "setStorage": { "value": "$setStorage" },
+    "removeStorage": { "value": "$removeStorage" },
+    "tips-api": { "value": "'tips api'" },
+    "showAlert": { "value": "$showAlert" },
+    "showDialog": { "value": "$showDialog" },
+    "dismissCustomDialog": { "value": "$dismissCustomDialog" },
+    "showToast": { "value": "$showToast" },
+    "timer-api": { "value": "'timer api'" },
+    "setInterval": { "value": "$setInterval" },
+    "clearInterval": { "value": "$clearInterval" },
+    "setTimeout": { "value": "$setTimeout" },
+    "clearTimeout": { "value": "$clearTimeout" }
+  }
+}

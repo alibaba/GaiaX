@@ -1,6 +1,6 @@
 package com.youku.gaiax.js.utils
 
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 
 
 /**
@@ -33,7 +33,7 @@ object MonitorUtils {
         if (Log.isLog()) {
             Log.d("monitor() called with: scene = $scene, biz = $biz, id = $id, type = $type, state = $state, value = $value, moduleName = $jsModuleName, apiName = $jsApiName, apiType = $jsApiType")
         }
-        GaiaXJS.instance.listener?.monitor(scene, biz, id, type, state, value, jsModuleName, jsApiName, jsApiType)
+        GaiaXJSManager.instance.listener?.monitor(scene, biz, id, type, state, value, jsModuleName, jsApiName, jsApiType)
     }
 
     fun jsInitScene(type: String, value: Long) {

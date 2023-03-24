@@ -17,7 +17,7 @@ import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.IDevTools
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 
 /**
  *  @author: shisan.lms
@@ -87,7 +87,6 @@ class DevTools : IDevTools {
 
                 rootView.findViewById<AppCompatButton>(R.id.window_btn_cancel_dev)
                     .setOnClickListener {
-
                         disconnectStudioMultiType()
                     }
 
@@ -107,7 +106,7 @@ class DevTools : IDevTools {
     }
 
     fun dismissDevTools() {
-        // TODO: 关闭DevTools
+        // TODO: 仅隐藏DevTools，未关闭DevTools
         EasyFloat.dismiss(TAG)
     }
 
@@ -160,15 +159,14 @@ class DevTools : IDevTools {
     private fun launchJsType(mode: String) {
         currentJSMode = mode
         if (jsDebuggerTypeListener == null) {
-            jsDebuggerTypeListener = GaiaXJS.instance.devToolsDebuggingTypeListener
+            jsDebuggerTypeListener = GaiaXJSManager.instance.devToolsDebuggingTypeListener
         }
         jsDebuggerTypeListener?.onDevToolsJSModeChanged(currentJSMode)
     }
 
     private fun disconnectStudioMultiType() {
-        // TODO: 关闭DevTools
         if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true) {
-            GXClientToStudioMultiType.instance.destroy()
+            GXClientToStudioMultiType.instance.sendMsgForDisconnect()
         } else {
             Toast.makeText(devtoolsAppContext, "当前未连接GaiaStudio", Toast.LENGTH_SHORT).show()
         }

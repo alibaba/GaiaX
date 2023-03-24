@@ -2,7 +2,7 @@ package com.youku.gaiax.js.support.module
 
 import android.util.Base64
 import androidx.annotation.Keep
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.annotation.GaiaXSyncMethod
 import com.youku.gaiax.js.utils.Log
 import java.net.URLDecoder
@@ -10,7 +10,7 @@ import java.net.URLEncoder
 import java.nio.charset.Charset
 
 @Keep
-class GaiaXNativeUtilModule : GaiaXBaseModule() {
+class GaiaXJSNativeUtilModule : GaiaXJSBaseModule() {
 
     @GaiaXSyncMethod
     fun base64Decode(content: String): String {

@@ -1,5 +1,7 @@
 package com.youku.gaiax.js
 
+import android.app.Activity
+import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.youku.gaiax.js.api.IGaiaXCallback
 
@@ -10,7 +12,9 @@ import com.youku.gaiax.js.api.IGaiaXCallback
  */
 interface IRenderEngineDelegate {
 
-    fun setDataToRefresh(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback)
+    fun setDataToGX(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback)
+
+    fun getDataFromGX(componentId: Long): JSONObject?
 
     fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject
 
@@ -23,5 +27,9 @@ interface IRenderEngineDelegate {
     )
 
     fun dispatcherEvent(eventParams: JSONObject)
+
+    fun getView(componentId: Long): View?
+
+    fun getActivityForDialog(): Activity?
 
 }

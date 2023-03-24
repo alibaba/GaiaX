@@ -1,7 +1,7 @@
 package com.youku.gaiax.js.core
 
+import android.text.TextUtils
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
 import com.youku.gaiax.js.core.api.IComponent
 import com.youku.gaiax.js.support.GaiaXScriptBuilder
 import com.youku.gaiax.js.utils.Aop
@@ -12,7 +12,9 @@ internal class GaiaXComponent private constructor(val jsContext: GaiaXContext, v
 
     companion object {
         fun create(jsContext: GaiaXContext, bizId: String, templateId: String, templateVersion: String, script: String): GaiaXComponent {
-            return GaiaXComponent(jsContext, bizId, templateId, templateVersion, script)
+            val checkedTemplateVersion = if (TextUtils.isEmpty(templateVersion)) "-1" else templateVersion
+            val checkedBizId = if (TextUtils.isEmpty(bizId)) "common" else bizId
+            return GaiaXComponent(jsContext, checkedBizId, templateId, checkedTemplateVersion, script)
         }
     }
 
@@ -23,7 +25,10 @@ internal class GaiaXComponent private constructor(val jsContext: GaiaXContext, v
     val id: Long
         get() = _id
 
-    override fun initComponent() {
+    /**
+     * Java组件引用创建时调用
+     */
+    internal fun initComponent() {
 
         GaiaXScriptBuilder.buildInitComponentScript(id, bizId, templateId, templateVersion, script).apply {
             jsContext.executeTask {
@@ -61,7 +66,10 @@ internal class GaiaXComponent private constructor(val jsContext: GaiaXContext, v
         GaiaXScriptBuilder.buildComponentDestroyScript(id).apply { jsContext.evaluateJS(this) }
     }
 
-    override fun destroyComponent() {
+    /**
+     * Java组件销毁时调用
+     */
+    fun destroyComponent() {
         GaiaXScriptBuilder.buildDestroyComponentScript(id).apply { jsContext.evaluateJS(this) }
     }
 

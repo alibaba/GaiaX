@@ -1,15 +1,16 @@
 package com.youku.gaiax.js.core
 
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GXJSEngineFactory
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.core.api.IEngine
 import com.youku.gaiax.js.core.api.IRuntime
 import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerRuntime
 import com.youku.gaiax.js.impl.qjs.QuickJSRuntime
 
-internal class GaiaXRuntime(val host: GaiaXEngine, val engine: IEngine, val type: GaiaXJS.GaiaXJSType) {
+internal class GaiaXRuntime(val host: GaiaXEngine, val engine: IEngine, val type: GXJSEngineFactory.GaiaXJSEngineType) {
 
     companion object {
-        fun create(host: GaiaXEngine, engine: IEngine, type: GaiaXJS.GaiaXJSType): GaiaXRuntime {
+        fun create(host: GaiaXEngine, engine: IEngine, type: GXJSEngineFactory.GaiaXJSEngineType): GaiaXRuntime {
             return GaiaXRuntime(host, engine, type)
         }
     }
@@ -47,8 +48,8 @@ internal class GaiaXRuntime(val host: GaiaXEngine, val engine: IEngine, val type
 
     private fun createRuntime(): IRuntime {
         return when (type) {
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSRuntime.create(this, engine)
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerRuntime.create(this, engine)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS -> QuickJSRuntime.create(this, engine)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerRuntime.create(this, engine)
         }
     }
 

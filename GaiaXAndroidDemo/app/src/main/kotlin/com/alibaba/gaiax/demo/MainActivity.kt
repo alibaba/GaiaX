@@ -22,6 +22,7 @@ import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.lzf.easyfloat.permission.PermissionUtils
+import com.youku.gaiax.js.GaiaXJSManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -101,6 +102,11 @@ class MainActivity : AppCompatActivity() {
                 return null
             }
         })
+
+        //GaiaXJS初始化
+        GaiaXJSManager.instance.init(this.baseContext)
+        //GaiaXJS引擎启动
+        GaiaXJSManager.instance.startEngine { }
 
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, NormalTemplateActivity::class.java)

@@ -1,15 +1,17 @@
 package com.alibaba.gaiax.demo.gaiaxjs
 
+import android.app.Activity
 import android.util.Log
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.demo.utils.UiExecutor
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.IRenderEngineDelegate
 import com.youku.gaiax.js.api.IGaiaXCallback
 import java.util.concurrent.ConcurrentHashMap
@@ -22,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap
 class JSRenderDelegate : IRenderEngineDelegate {
 
     companion object {
-        private val links: MutableMap<Long, View> = ConcurrentHashMap()
+        val links: MutableMap<Long, View> = ConcurrentHashMap()
     }
 
     private var rootView: View? = null
@@ -33,12 +35,24 @@ class JSRenderDelegate : IRenderEngineDelegate {
     }
 
 
-    override fun setDataToRefresh(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback) {
-        TODO("Not yet implemented")
+    override fun setDataToGX(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback) {
+        UiExecutor.action {
+            val cntView = if (this.rootView == null) {
+                links[componentId]
+            } else {
+                this.rootView
+            }
+            GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
+            callback.invoke()
+        }
+    }
+
+    override fun getDataFromGX(componentId: Long): JSONObject? {
+        return GXTemplateEngine.instance.getGXTemplateContext(links[componentId])?.templateData?.data
     }
 
     override fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
-        var nodeInfo : GXNode? = null
+        var nodeInfo: GXNode? = null
         if (rootView != null) {
             nodeInfo = GXTemplateEngine.instance.getGXNodeById(this.rootView, targetId)
         } else {
@@ -77,7 +91,25 @@ class JSRenderDelegate : IRenderEngineDelegate {
     }
 
     override fun dispatcherEvent(eventParams: JSONObject) {
-        GaiaXJS.instance.onEventComponent(eventParams["jsComponentId"] as Long, eventParams["type"] as String, eventParams["data"] as JSONObject)
+        GaiaXJSManager.instance.onEventComponent(
+            eventParams["jsComponentId"] as Long,
+            eventParams["type"] as String,
+            eventParams["data"] as JSONObject
+        )
+    }
+
+    override fun getView(componentId: Long): View? {
+        return rootView
+    }
+
+    override fun getActivityForDialog(): Activity? {
+        links.forEach {
+            val topContext = it.value.context as Activity
+            if (!topContext.isFinishing && !topContext.isDestroyed) {
+                return topContext
+            }
+        }
+        return null
     }
 
     fun dispatcherEvent(gestureParams: GXJSGesture) {
@@ -85,7 +117,7 @@ class JSRenderDelegate : IRenderEngineDelegate {
         if (gestureParams.jsComponentId != -1L) {
 
             gestureParams.nodeId.let { targetId ->
-                val data = targetId?.let { getNodeInfo(it,"",gestureParams.jsComponentId) }
+                val data = targetId?.let { getNodeInfo(it, "", gestureParams.jsComponentId) }
                 val type = gestureParams.gestureType
                 data?.set("timeStamp", System.currentTimeMillis())
                 if (data != null) {
@@ -239,6 +271,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
+//                        (GaiaXJSManager.instance.renderEngineDelegate as JSRenderDelegate).dispatcherEvent(it)
                         JSRenderDelegate().dispatcherEvent(it)
                     }
                 } else {

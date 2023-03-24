@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.youku.gaiax.js.utils.IdGenerator
 
 @Keep
-abstract class GaiaXBaseModule : IGaiaXModule {
+abstract class GaiaXJSBaseModule : IGaiaXModule {
 
     private val _id: Long by lazy {
         IdGenerator.genLongId()

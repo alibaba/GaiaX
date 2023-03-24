@@ -2,14 +2,14 @@ package com.youku.gaiax.js.support.module
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.IGaiaXPromise
 import com.youku.gaiax.js.api.annotation.GaiaXPromiseMethod
 import com.youku.gaiax.js.support.GaiaXNativeEventManager
 import com.youku.gaiax.js.utils.Log
 
 @Keep
-class GaiaXNativeMessageEventModule : GaiaXBaseModule() {
+class GaiaXJSNativeMessageEventModule : GaiaXJSBaseModule() {
 
     override val name: String
         get() = "NativeEvent"

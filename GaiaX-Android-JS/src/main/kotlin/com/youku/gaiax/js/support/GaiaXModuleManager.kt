@@ -1,15 +1,15 @@
 package com.youku.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 
 internal class GaiaXModuleManager : IModuleManager {
 
     val moduleGroup: MutableMap<String, GaiaXModuleGroup> = mutableMapOf()
     private val moduleGroupKey: MutableMap<Long, String> = mutableMapOf()
 
-    private var clazzs: MutableList<Class<out GaiaXBaseModule>> = mutableListOf()
-    private val clazzIds: MutableMap<Class<out GaiaXBaseModule>, Long> = mutableMapOf()
+    private var clazzs: MutableList<Class<out GaiaXJSBaseModule>> = mutableListOf()
+    private val clazzIds: MutableMap<Class<out GaiaXJSBaseModule>, Long> = mutableMapOf()
 
     override fun invokeMethodSync(moduleId: Long, methodId: Long, args: JSONArray): Any? {
         return moduleGroup[moduleGroupKey[moduleId]]?.invokeMethodSync(moduleId, methodId, args)
@@ -23,7 +23,7 @@ internal class GaiaXModuleManager : IModuleManager {
         moduleGroup[moduleGroupKey[moduleId]]?.invokePromiseMethod(moduleId, methodId, args)
     }
 
-    override fun registerModule(moduleClazz: Class<out GaiaXBaseModule>) {
+    override fun registerModule(moduleClazz: Class<out GaiaXJSBaseModule>) {
         if (!clazzs.contains(moduleClazz)) {
             clazzs.add(moduleClazz)
             val module = GaiaXModule(moduleClazz.newInstance()).also {
@@ -37,7 +37,7 @@ internal class GaiaXModuleManager : IModuleManager {
         }
     }
 
-    override fun unregisterModule(moduleClazz: Class<out GaiaXBaseModule>) {
+    override fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>) {
         if (clazzs.contains(moduleClazz)) {
             clazzs.remove(moduleClazz)
             clazzIds.remove(moduleClazz)?.let { id ->

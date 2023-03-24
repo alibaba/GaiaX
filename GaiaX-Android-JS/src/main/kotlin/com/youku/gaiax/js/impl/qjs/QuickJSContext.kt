@@ -1,7 +1,7 @@
 package com.youku.gaiax.js.impl.qjs
 
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.core.GaiaXContext
 import com.youku.gaiax.js.core.api.IContext
 import com.youku.gaiax.js.core.api.IEngine
@@ -56,8 +56,8 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
             sb.append(GaiaXScriptBuilder.buildImportScript())
             sb.append(GaiaXScriptBuilder.buildGlobalContext(host.host.host.engineId, 0))
             sb.append(GaiaXScriptBuilder.buildExtendAndAssignScript())
-            sb.append(GaiaXJS.instance.buildBootstrapScript())
-            sb.append(GaiaXJS.instance.buildModulesScript())
+            sb.append(GaiaXJSManager.instance.buildBootstrapScript())
+            sb.append(GaiaXJSManager.instance.buildModulesScript())
             sb.append(GaiaXScriptBuilder.buildStyle())
             bootstrap = sb.toString()
         }

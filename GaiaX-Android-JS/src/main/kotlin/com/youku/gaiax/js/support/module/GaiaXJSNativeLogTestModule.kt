@@ -2,7 +2,7 @@ package com.youku.gaiax.js.support.module
 
 import android.widget.Toast
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.IGaiaXCallback
 import com.youku.gaiax.js.api.annotation.GaiaXAsyncMethod
 import com.youku.gaiax.js.utils.Log
@@ -12,7 +12,7 @@ import com.youku.gaiax.js.utils.Log
  *  @date: 2022-11-17
  *  Description:
  */
-class GaiaXNativeLogTestModule : GaiaXBaseModule(){
+class GaiaXJSNativeLogTestModule : GaiaXJSBaseModule(){
     @GaiaXAsyncMethod
     fun showToast(data: JSONObject, callback: IGaiaXCallback) {
         if (Log.isLog()) {

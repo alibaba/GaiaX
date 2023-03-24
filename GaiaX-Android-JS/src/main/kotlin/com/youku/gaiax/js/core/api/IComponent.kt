@@ -2,12 +2,8 @@ package com.youku.gaiax.js.core.api
 
 import com.alibaba.fastjson.JSONObject
 
-internal interface IComponent {
+interface IComponent {
 
-    /**
-     * Java组件引用创建时调用
-     */
-    fun initComponent()
 
     /**
      * 整个生命周期内只会回调一次
@@ -33,11 +29,6 @@ internal interface IComponent {
      * 组件要销毁时调用
      */
     fun onDestroy()
-
-    /**
-     * Java组件销毁时调用
-     */
-    fun destroyComponent()
 
     /**
      * 传递事件

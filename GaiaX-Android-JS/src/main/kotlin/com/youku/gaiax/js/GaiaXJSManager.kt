@@ -5,25 +5,23 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.IDevTools
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.core.GaiaXContext
 import com.youku.gaiax.js.core.GaiaXEngine
+import com.youku.gaiax.js.core.api.IComponent
 import com.youku.gaiax.js.support.GaiaXModuleManager
 import com.youku.gaiax.js.support.IModuleManager
-import com.youku.gaiax.js.support.module.GaiaXLogModule
-import com.youku.gaiax.js.support.module.GaiaXNativeLogTestModule
-import com.youku.gaiax.js.support.module.GaiaXNativeMessageEventModule
-import com.youku.gaiax.js.support.module.GaiaXNativeUtilModule
+import com.youku.gaiax.js.support.module.*
 import com.youku.gaiax.js.utils.Aop
 import com.youku.gaiax.js.utils.IdGenerator
 import com.youku.gaiax.js.utils.Log
 import com.youku.gaiax.js.utils.MonitorUtils
-import com.youku.gaiax.provider.module.js.GaiaXNativeEventModule
-import com.youku.gaiax.provider.module.js.GaiaXNativeTargetModule
+import com.youku.gaiax.provider.module.js.GaiaXJSNativeEventModule
+import com.youku.gaiax.provider.module.js.GaiaXJSNativeTargetModule
 import java.util.concurrent.ConcurrentHashMap
 
 
-class GaiaXJS {
+class GaiaXJSManager {
 
     interface Listener {
         fun errorLog(data: JSONObject)
@@ -40,10 +38,7 @@ class GaiaXJS {
         )
     }
 
-    internal enum class GaiaXJSType {
-        GaiaXJSEngineTypeQuickJS,
-        GaiaXJSEngineTypeDebugger
-    }
+
 
     internal var listener: Listener? = null
     internal lateinit var context: Context
@@ -66,10 +61,10 @@ class GaiaXJS {
                     isDebugging = true
                     //切换引擎逻辑
                     if (defaultEngine != null) {
-                        if (defaultEngine?.type != GaiaXJSType.GaiaXJSEngineTypeDebugger) {
+                        if (defaultEngine?.type != GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger) {
                             if (engines.size == 2) {
                                 engines.forEach {
-                                    if (it.value.type == GaiaXJSType.GaiaXJSEngineTypeDebugger) {
+                                    if (it.value.type == GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger) {
                                         defaultEngine = it.value
                                     }
                                 }
@@ -90,7 +85,7 @@ class GaiaXJS {
 
     }
 
-    fun init(context: Context): GaiaXJS {
+    fun init(context: Context): GaiaXJSManager {
         this.context = context.applicationContext
 
         // 加载模块
@@ -103,12 +98,12 @@ class GaiaXJS {
         return this
     }
 
-    fun initRenderDelegate(renderEngineDelegate: IRenderEngineDelegate): GaiaXJS {
+    fun initRenderDelegate(renderEngineDelegate: IRenderEngineDelegate): GaiaXJSManager {
         this.renderEngineDelegate = renderEngineDelegate
         return this
     }
 
-    fun initListener(listener: Listener): GaiaXJS {
+    fun initListener(listener: Listener): GaiaXJSManager {
         this.listener = listener
         return this
     }
@@ -127,7 +122,7 @@ class GaiaXJS {
         }
     }
 
-//    @SuppressWarnings("unchecked")
+    //    @SuppressWarnings("unchecked")
     private fun registerAssetsModules() {
         // all gaiax_js_modules/module_biz_name.json
         val allModules = JSONObject()
@@ -149,8 +144,8 @@ class GaiaXJS {
         }
         allModules.forEach {
             val clazz = Class.forName(it.value.toString())
-            if (clazz.superclass == GaiaXBaseModule::class.java) {
-                registerModule(clazz as Class<out GaiaXBaseModule>)
+            if (clazz.superclass == GaiaXJSBaseModule::class.java) {
+                registerModule(clazz as Class<out GaiaXJSBaseModule>)
             } else {
                 throw IllegalArgumentException("Register Module $clazz Illegal")
             }
@@ -165,13 +160,16 @@ class GaiaXJS {
         synchronized(context.assets) { context.assets.list(path) }
 
     private fun registerInnerModules() {
-        registerModule(GaiaXNativeUtilModule::class.java)
-        registerModule(GaiaXNativeMessageEventModule::class.java)
-        registerModule(GaiaXLogModule::class.java)
-        registerModule(GaiaXNativeTargetModule::class.java)
-        registerModule(GaiaXNativeEventModule::class.java)
+        registerModule(GaiaXJSNativeUtilModule::class.java)
+        registerModule(GaiaXJSNativeMessageEventModule::class.java)
+        registerModule(GaiaXJSLogModule::class.java)
+        registerModule(GaiaXJSNativeTargetModule::class.java)
+        registerModule(GaiaXJSNativeEventModule::class.java)
+        registerModule(GaiaXJSBuildInModule::class.java)
+        registerModule(GaiaXJSBuildInTipsModule::class.java)
+        registerModule(GaiaXJSBuildInStorageModule::class.java)
         //todo
-        registerModule(GaiaXNativeLogTestModule::class.java)
+        registerModule(GaiaXJSNativeLogTestModule::class.java)
     }
 
     fun onEventComponent(id: Long, type: String, data: JSONObject) {
@@ -221,20 +219,32 @@ class GaiaXJS {
         defaultEngine?.runtime()?.context()?.unregisterComponent(id)
     }
 
+    fun getInstanceId(bizId: String, templateId: String): Long? {
+        return defaultEngine?.runtime()?.context()?.getInstanceId(bizId, templateId)
+    }
+
+    fun getComponentByInstanceId(instanceId: Long): IComponent? {
+        return defaultEngine?.runtime()?.context()?.getComponentByInstanceId(instanceId)
+    }
+
+    fun getComponentByBizIdTemplateId(bizId: String, templateId: String): IComponent? {
+        return defaultEngine?.runtime()?.context()?.getComponentByBizIdTemplateId(bizId, templateId)
+    }
+
     fun startEngine(complete: () -> Unit) {
         val lock = if (isDebugging) {
-            GaiaXJSType.GaiaXJSEngineTypeDebugger
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger
         } else {
-            GaiaXJSType.GaiaXJSEngineTypeQuickJS
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS
         }
         synchronized(lock) {
             // 创建引擎
             defaultEngine = Aop.aopTaskTime({
                 // 创建引擎
                 if (isDebugging) {
-                    createEngine(GaiaXJSType.GaiaXJSEngineTypeDebugger)
+                    createEngine(GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger)
                 } else {
-                    createEngine(GaiaXJSType.GaiaXJSEngineTypeQuickJS)
+                    createEngine(GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS)
                 }
             }, { time ->
                 MonitorUtils.jsInitScene(MonitorUtils.TYPE_JS_CONTEXT_INIT, time)
@@ -246,7 +256,7 @@ class GaiaXJS {
     }
 
     fun stopEngine() {
-        synchronized(GaiaXJS::class.java) {
+        synchronized(GaiaXJSManager::class.java) {
             if (defaultEngine != null) {
                 destroyEngine(defaultEngine)
                 defaultEngine = null
@@ -254,7 +264,7 @@ class GaiaXJS {
         }
     }
 
-    private fun createEngine(type: GaiaXJSType): GaiaXEngine {
+    private fun createEngine(type: GXJSEngineFactory.GaiaXJSEngineType): GaiaXEngine {
         val id = IdGenerator.genLongId()
         checkIdEngineExist(id)
         val engine = GaiaXEngine.create(id, type)
@@ -284,7 +294,7 @@ class GaiaXJS {
         }
     }
 
-    fun registerModule(moduleClazz: Class<out GaiaXBaseModule>): GaiaXJS {
+    fun registerModule(moduleClazz: Class<out GaiaXJSBaseModule>): GaiaXJSManager {
         if (Log.isLog()) {
             Log.d("registerModule() called with: moduleClazz = $moduleClazz")
         }
@@ -292,7 +302,7 @@ class GaiaXJS {
         return this
     }
 
-    private fun unregisterModule(moduleClazz: Class<out GaiaXBaseModule>) {
+    private fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>) {
         moduleManager.unregisterModule(moduleClazz)
     }
 
@@ -355,7 +365,7 @@ class GaiaXJS {
         private const val MODULE_SUFFIX = ".json"
 
         val instance by lazy {
-            return@lazy GaiaXJS()
+            return@lazy GaiaXJSManager()
         }
     }
 }

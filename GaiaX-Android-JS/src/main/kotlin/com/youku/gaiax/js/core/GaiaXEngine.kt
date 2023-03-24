@@ -1,14 +1,15 @@
 package com.youku.gaiax.js.core
 
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GXJSEngineFactory
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.core.api.IEngine
 import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerEngine
 import com.youku.gaiax.js.impl.qjs.QuickJSEngine
 
 /**
- * GaiaXJS.createEngin->initEngine->
+ * GaiaXJSManager.createEngin->initEngine->
  */
-internal class GaiaXEngine private constructor(val engineId: Long, val type: GaiaXJS.GaiaXJSType) {
+internal class GaiaXEngine private constructor(val engineId: Long, val type: GXJSEngineFactory.GaiaXJSEngineType) {
 
     enum class State {
         NONE,
@@ -23,7 +24,7 @@ internal class GaiaXEngine private constructor(val engineId: Long, val type: Gai
 
     companion object {
 
-        fun create(engineId: Long, type: GaiaXJS.GaiaXJSType): GaiaXEngine {
+        fun create(engineId: Long, type: GXJSEngineFactory.GaiaXJSEngineType): GaiaXEngine {
             return GaiaXEngine(engineId, type)
         }
     }
@@ -82,8 +83,8 @@ internal class GaiaXEngine private constructor(val engineId: Long, val type: Gai
 
     private fun createEngine(): IEngine {
         return when (type) {
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSEngine.create(this)
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerEngine.create(this)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS -> QuickJSEngine.create(this)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerEngine.create(this)
         }
     }
 

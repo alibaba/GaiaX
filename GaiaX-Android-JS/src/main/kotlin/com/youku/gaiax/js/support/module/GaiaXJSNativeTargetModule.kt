@@ -2,13 +2,13 @@ package com.youku.gaiax.provider.module.js
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.GaiaXJSManager
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.annotation.GaiaXSyncMethod
 import com.youku.gaiax.js.utils.Log
 
 @Keep
-class GaiaXNativeTargetModule : GaiaXBaseModule() {
+class GaiaXJSNativeTargetModule : GaiaXJSBaseModule() {
 
     @GaiaXSyncMethod
     fun getElementByData(data: JSONObject): JSONObject {
@@ -20,7 +20,7 @@ class GaiaXNativeTargetModule : GaiaXBaseModule() {
         val templateId = data.getString("templateId")
         val instanceId = data.getLongValue("instanceId")
 
-        val delegate = GaiaXJS.instance.renderEngineDelegate
+        val delegate = GaiaXJSManager.instance.renderEngineDelegate
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
             if (Log.isLog()) {
@@ -31,8 +31,6 @@ class GaiaXNativeTargetModule : GaiaXBaseModule() {
         } else {
             JSONObject()
         }
-
-
     }
 
     override val name: String

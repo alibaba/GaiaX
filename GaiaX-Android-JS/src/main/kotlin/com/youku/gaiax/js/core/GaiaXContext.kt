@@ -2,7 +2,8 @@ package com.youku.gaiax.js.core
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GXJSEngineFactory
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.core.api.ICallBridgeListener
 import com.youku.gaiax.js.core.api.IComponent
 import com.youku.gaiax.js.core.api.IContext
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 
 // TODO: 只保留register和unregister 新增getComponentById 同时删除生命周期回调
-internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runtime: IRuntime, val type: GaiaXJS.GaiaXJSType) {
+internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runtime: IRuntime, val type: GXJSEngineFactory.GaiaXJSEngineType) {
 
     internal val bridge = object : ICallBridgeListener {
 
@@ -29,29 +30,34 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
             if (Log.isLog()) {
                 Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            return GaiaXJS.instance.invokeSyncMethod(moduleId, methodId, args)
+            return GaiaXJSManager.instance.invokeSyncMethod(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GaiaXJS.instance.invokeAsyncMethod(moduleId, methodId, args)
+            GaiaXJSManager.instance.invokeAsyncMethod(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GaiaXJS.instance.invokePromiseMethod(moduleId, methodId, args)
+            GaiaXJSManager.instance.invokePromiseMethod(moduleId, methodId, args)
         }
     }
     private var taskQueue: GaiaXJSTaskQueue? = null
 
     private var context: IContext? = null
 
-    private val components: ConcurrentHashMap<Long, IComponent> = ConcurrentHashMap()
+    /**
+     * components = {instanceId(ComponentId), ComponentObject}
+     * bizIdMap = {BizId, TemplateIdMap = {templateId,instanceId}}
+     */
+    private val components: ConcurrentHashMap<Long, GaiaXComponent> = ConcurrentHashMap()
 
+    private val bizIdMap: ConcurrentHashMap<String, ConcurrentHashMap<String, Long>> = ConcurrentHashMap()
     fun initContext() {
         if (context == null) {
             context = createContext()
@@ -119,29 +125,57 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
     }
 
     fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {
-        if (GaiaXJS.instance.isDebugging){
-            context?.evaluateJS(script,argsMap)
-        }else{
+        if (GaiaXJSManager.instance.isDebugging) {
+            context?.evaluateJS(script, argsMap)
+        } else {
             context?.evaluateJS(script)
         }
     }
 
     private fun createContext(): IContext {
         return when (type) {
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeQuickJS -> QuickJSContext.create(this, host.engine, runtime)
-            GaiaXJS.GaiaXJSType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerContext.create(this, host.engine, runtime)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS -> QuickJSContext.create(this, host.engine, runtime)
+            GXJSEngineFactory.GaiaXJSEngineType.GaiaXJSEngineTypeDebugger -> GaiaXJSDebuggerContext.create(this, host.engine, runtime)
         }
     }
 
     fun registerComponent(bizId: String, templateId: String, templateVersion: String, script: String): Long {
         val component = GaiaXComponent.create(this, bizId, templateId, templateVersion, script)
-        components[component.id] = component
-        component.initComponent()
-        return component.id
+
+        // TODO: templateVersion相同不应该创建component 相同的名字能不能创建
+        if (getInstanceId(bizId, templateId) == null) {
+            components[component.id] = component
+            if (bizIdMap.contains(bizId)) {
+                bizIdMap[bizId]?.set(templateId, component.id)
+            } else {
+                val templateIdMap = ConcurrentHashMap<String, Long>()
+                templateIdMap[templateId] = component.id
+                bizIdMap[bizId] = templateIdMap
+            }
+            component.initComponent()
+            return component.id
+        } else {
+            Log.e("Notice! ")
+            return getInstanceId(bizId, templateId) ?: -1L
+        }
     }
 
     fun unregisterComponent(id: Long) {
+        // TODO: onDestroy 和 destroyComponent的功能重新定义
         components.remove(id)?.destroyComponent()
+    }
+
+    fun getInstanceId(bizId: String, templateId: String): Long? {
+        return bizIdMap[bizId]?.get(templateId)
+    }
+
+    fun getComponentByInstanceId(instanceId: Long): IComponent? {
+        return components[instanceId]
+    }
+
+    fun getComponentByBizIdTemplateId(bizId: String, templateId: String): IComponent? {
+        val instanceId = getInstanceId(bizId, templateId) ?: -1L
+        return components[instanceId]
     }
 
     fun onReadyComponent(id: Long) {
@@ -177,6 +211,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         components[id]?.onNativeEvent(data)
     }
 
+
     companion object {
 
         const val BOOTSTRAP_JS = "bootstrap.js"
@@ -196,7 +231,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
          */
         const val EVAL_TYPE_MODULE = 1
 
-        fun create(host: GaiaXRuntime, runtime: IRuntime, type: GaiaXJS.GaiaXJSType): GaiaXContext {
+        fun create(host: GaiaXRuntime, runtime: IRuntime, type: GXJSEngineFactory.GaiaXJSEngineType): GaiaXContext {
             return GaiaXContext(host, runtime, type)
         }
     }

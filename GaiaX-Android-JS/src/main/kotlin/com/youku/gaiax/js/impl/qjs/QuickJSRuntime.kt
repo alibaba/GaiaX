@@ -1,7 +1,7 @@
 package com.youku.gaiax.js.impl.qjs
 
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.core.GaiaXRuntime
 import com.youku.gaiax.js.core.api.IEngine
 import com.youku.gaiax.js.core.api.IRuntime
@@ -36,7 +36,7 @@ internal class QuickJSRuntime private constructor(val runtime: GaiaXRuntime, val
             if (Log.isLog()) {
                 Log.e("setPromiseRejectionHandler() called with: message = $message")
             }
-            GaiaXJS.instance.listener?.errorLog(JSONObject().apply {
+            GaiaXJSManager.instance.listener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = message
                     this["templateId"] = ""

@@ -11,11 +11,11 @@ import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 //import com.youku.gaiax.GaiaX
-import com.youku.gaiax.js.api.GaiaXBaseModule
+import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.annotation.GaiaXSyncMethod
 
 @Keep
-class GaiaXLogModule : GaiaXBaseModule() {
+class GaiaXJSLogModule : GaiaXJSBaseModule() {
 
     companion object {
         private const val TAG = "[GaiaX][JS][LOG]"

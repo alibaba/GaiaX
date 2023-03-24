@@ -1,11 +1,10 @@
 package com.youku.gaiax.js.impl.qjs.module
 
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJS
+import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.api.IGaiaXCallback
 import com.youku.gaiax.js.api.IGaiaXPromise
 import com.youku.gaiax.js.core.GaiaXContext
-import com.youku.gaiax.js.impl.qjs.GaiaXJSDebuggerRuntime
 import com.youku.gaiax.js.support.JSDataConvert
 import com.youku.gaiax.js.utils.Log
 import com.youku.gaiax.quickjs.BridgeModuleListener
@@ -50,7 +49,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
                     if (Log.isLog()) {
                         Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
                     }
-                    GaiaXJS.instance.executeTask {
+                    GaiaXJSManager.instance.executeTask {
                         val jsFunction = JSFunction(funPointer, jsContext)
                         jsFunction.dupValue()
                         jsFunction.invoke(null, arrayOfJSValues(result))
@@ -93,7 +92,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
                 override fun resolve(): IGaiaXCallback {
                     return object : IGaiaXCallback {
                         override fun invoke(result: Any?) {
-                            GaiaXJS.instance.executeTask {
+                            GaiaXJSManager.instance.executeTask {
                                 jsResolve?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -103,7 +102,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
                 override fun reject(): IGaiaXCallback {
                     return object : IGaiaXCallback {
                         override fun invoke(result: Any?) {
-                            GaiaXJS.instance.executeTask {
+                            GaiaXJSManager.instance.executeTask {
                                 jsReject?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -120,7 +119,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
 
     override fun wrapAsJSValueException(e: Exception?) {
         e?.let {
-            GaiaXJS.instance.listener?.errorLog(JSONObject().apply {
+            GaiaXJSManager.instance.listener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = e.stackTrace.toString()
                     this["templateId"] = ""

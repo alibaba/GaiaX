@@ -49,36 +49,6 @@ class GaiaXJSNativeUtilModule : GaiaXJSBaseModule() {
         return result
     }
 
-    @GaiaXSyncMethod
-    fun md5(content: String): String {
-        // TODO: 这块依赖orange的md5先移除
-//        val result = MD5Util.md5(content)
-        val result = "TODO: 这块依赖orange的md5先移除 "
-        if (Log.isLog()) {
-            Log.d("md5() called with: content = $content, result = $result")
-        }
-        return result
-    }
-
-//    @GaiaXAsyncMethod
-//    fun showToast(data: JSONObject, callback: IGaiaXCallback) {
-//        if (Log.isLog()) {
-//            Log.d("showToast() called with: data = $data, callback = $callback")
-//        }
-//        try {
-//            val title = data.getString("title") ?: ""
-//            val duration = data.getInteger("duration") ?: 3
-//            val durationType = if (duration >= 3) {
-//                Toast.LENGTH_LONG
-//            } else {
-//                Toast.LENGTH_SHORT
-//            }
-//            android.util.Log.d("lms-13",title)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//    }
-
     override val name: String
         get() = "NativeUtil"
 

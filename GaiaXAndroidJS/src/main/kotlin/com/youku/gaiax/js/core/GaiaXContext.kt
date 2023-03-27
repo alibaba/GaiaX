@@ -178,40 +178,6 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         return components[instanceId]
     }
 
-    fun onReadyComponent(id: Long) {
-        components[id]?.onReady()
-    }
-
-    fun onReuseComponent(id: Long) {
-        components[id]?.onReuse()
-    }
-
-    fun onShowComponent(id: Long) {
-        components[id]?.onShow()
-    }
-
-    fun onHiddenComponent(id: Long) {
-        components[id]?.onHide()
-    }
-
-    fun onDestroyComponent(id: Long) {
-        components[id]?.onDestroy()
-
-    }
-
-    fun onLoadMoreComponent(id: Long, data: JSONObject) {
-        components[id]?.onLoadMore(data)
-    }
-
-    fun onEventComponent(id: Long, type: String, data: JSONObject) {
-        components[id]?.onEvent(type, data)
-    }
-
-    fun onNativeEventComponent(id: Long, data: JSONObject) {
-        components[id]?.onNativeEvent(data)
-    }
-
-
     companion object {
 
         const val BOOTSTRAP_JS = "bootstrap.js"

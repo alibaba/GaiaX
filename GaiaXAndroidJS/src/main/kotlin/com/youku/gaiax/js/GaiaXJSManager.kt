@@ -171,35 +171,52 @@ class GaiaXJSManager {
     }
 
     fun onEventComponent(id: Long, type: String, data: JSONObject) {
-        defaultEngine?.runtime()?.context()?.onEventComponent(id, type, data)
+
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onEvent(type, data)
+        }
     }
 
     fun onNativeEventComponent(id: Long, data: JSONObject) {
-        defaultEngine?.runtime()?.context()?.onNativeEventComponent(id, data)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onNativeEvent(data)
+        }
     }
 
     fun onReadyComponent(id: Long) {
-        defaultEngine?.runtime()?.context()?.onReadyComponent(id)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onReady()
+        }
     }
 
     fun onReuseComponent(id: Long) {
-        defaultEngine?.runtime()?.context()?.onReuseComponent(id)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onReuse()
+        }
     }
 
     fun onShowComponent(id: Long) {
-        defaultEngine?.runtime()?.context()?.onShowComponent(id)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onShow()
+        }
     }
 
     fun onHiddenComponent(id: Long) {
-        defaultEngine?.runtime()?.context()?.onHiddenComponent(id)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onHide()
+        }
     }
 
     fun onDestroyComponent(id: Long) {
-        defaultEngine?.runtime()?.context()?.onDestroyComponent(id)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onDestroy()
+        }
     }
 
     fun onLoadMoreComponent(id: Long, data: JSONObject) {
-        defaultEngine?.runtime()?.context()?.onLoadMoreComponent(id, data)
+        defaultEngine?.runtime()?.context()?.let {
+            it.getComponentByInstanceId(id)?.onLoadMore(data)
+        }
     }
 
     fun registerComponent(

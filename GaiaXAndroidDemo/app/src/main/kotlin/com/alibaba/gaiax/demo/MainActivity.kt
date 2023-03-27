@@ -9,9 +9,19 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SwitchCompat
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.devtools.DevTools
@@ -22,58 +32,12 @@ import com.alibaba.gaiax.demo.list.util.ClickTrace
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
-import com.alibaba.gaiax.studio.GXClientToStudio
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.lzf.easyfloat.permission.PermissionUtils
 import com.youku.gaiax.js.GaiaXJSManager
 
 
-class MainActivity : AppCompatActivity() {
-
-    private val launcher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val scanResult =
-                it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
-            Log.d("MainActivity", "StartActivityForResult() called scanResult = $scanResult")
-            val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
-            intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
-            startActivity(intent)
-        }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menus, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.fastpreview -> {
-                if (Build.MODEL.contains("Android SDK") || Build.MODEL.contains("sdk_gphone64_x86_64")) {
-                    val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
-                    // 9001
-                    // 9292
-                    intent.putExtra(
-                        "GAIA_STUDIO_URL",
-                        "gaiax://gaiax/preview?url=ws://30.78.146.57:9292&id=test-template&type=auto"
-                    )
-                    launcher.launch(intent)
-                } else {
-                    val intent = Intent(MainActivity@ this, GXQRCodeActivity::class.java)
-                    launcher.launch(intent)
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onDestroy() {
-        GXClientToStudio.instance.destroy()
-        super.onDestroy()
-    }
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -89,6 +53,31 @@ class MainActivity : AppCompatActivity() {
                                 painter = painterResource(id = R.drawable.qr_code_scanner),
                                 contentDescription = null // decorative element
                             )
+                        }
+                        IconButton(
+                            modifier = Modifier.padding(6.dp, 6.dp, 4.dp, 6.dp),
+                            onClick = {
+                            }) {
+                            val status= rememberSaveable() {
+                                mutableStateOf(false)
+                            }
+                            Switch(checked = status.value, enabled = true, onCheckedChange = {
+                                status.value = if (it) {
+                                    if (PermissionUtils.checkPermission(applicationContext)) {
+                                        DevTools.instance.createDevToolsFloatWindow(
+                                            applicationContext
+                                        )
+                                    } else {
+                                        DevTools.instance.createDevToolsFloatWindow(
+                                            applicationContext
+                                        )
+                                    }
+                                    true
+                                } else {
+                                    DevTools.instance.dismissDevTools()
+                                    false
+                                }
+                            })
                         }
                     }
                 })
@@ -173,23 +162,23 @@ class MainActivity : AppCompatActivity() {
             Button(name = "Nested RecyclerView") {
                 launchActivityWithTrace<NestedRecyclerActivity>()
             }
-        }
-        findViewById<AppCompatButton>(R.id.js)?.setOnClickListener {
-            val intent = Intent(MainActivity@ this, JavascriptTemplateActivity::class.java)
-            startActivity(intent)
-        }
 
-        findViewById<SwitchCompat>(R.id.dev_tools)?.setOnCheckedChangeListener { p0, result ->
-            if (result) {
-                if (PermissionUtils.checkPermission(applicationContext)) {
-                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
-                } else {
-                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
-                }
-            } else {
-                DevTools.instance.dismissDevTools()
+            Button(name = "JS Template") {
+                launchActivityWithTrace<JavascriptTemplateActivity>()
             }
         }
+
+//        findViewById<SwitchCompat>(R.id.dev_tools)?.setOnCheckedChangeListener { p0, result ->
+//            if (result) {
+//                if (PermissionUtils.checkPermission(applicationContext)) {
+//                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
+//                } else {
+//                    DevTools.instance.createDevToolsFloatWindow(applicationContext)
+//                }
+//            } else {
+//                DevTools.instance.dismissDevTools()
+//            }
+//        }
     }
 
     @Composable
@@ -223,7 +212,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onDestroy() {
-        GXClientToStudio.instance.destroy()
+        GXClientToStudioMultiType.instance.destroy()
         super.onDestroy()
     }
 

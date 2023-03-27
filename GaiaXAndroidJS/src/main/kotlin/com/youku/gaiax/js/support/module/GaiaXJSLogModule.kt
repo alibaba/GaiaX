@@ -37,7 +37,9 @@ class GaiaXJSLogModule : GaiaXJSBaseModule() {
         }
 
         private fun sendSocketData(level: String, data: String) {
-            GXClientToStudioMultiType.instance.sendMsgForJSLog(level, data)
+            if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true){
+                GXClientToStudioMultiType.instance.sendMsgForJSLog(level, data)
+            }
         }
 
         private fun getLogMsg(argData: String): String = try {

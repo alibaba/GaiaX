@@ -97,9 +97,15 @@ dependencies {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":GaiaXAndroidJS")))
+    implementation(project(mapOf("path" to ":GaiaX-Android-QuickJS")))
+    implementation(project(mapOf("path" to ":GaiaXAndroidClientToStudio")))
     implementation(libs.gaiax)
     implementation(libs.gaiaxadapter)
-    implementation(libs.gaiaxclienttostudio)
+//    implementation(libs.gaiaxclienttostudio)
+//    implementation(libs.gaiaxjs)
+
+    implementation("com.github.princekin-f:EasyFloat:2.0.4")
 
     implementation("com.airbnb.android:lottie:4.1.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")

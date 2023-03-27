@@ -9,7 +9,7 @@
         android:id="@+id/window_gaia_logo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/gaiax_logo"
+        android:src="@drawable/gaiax_logo"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -117,15 +117,15 @@ afterEvaluate {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar"
-    implementation "com.android.support:support-annotations:28.0.0"
+    implementation "androidx.annotation:annotation:1.0.0"
     implementation 'com.alibaba:fastjson:1.2.26@jar'
 
-    if (System.getProperties().get("GaiaXDemo") == "true") {
+    if (version != null && version != "unspecified") {
         implementation project(path: ':GaiaX-Android-QuickJS')
     } else {
         implementation("com.github.alibaba.GaiaX:GaiaX-Android-QuickJS:0.0.0-SNAPSHOT@aar") { changing = true }
     }
-    if (System.getProperties().get("GaiaXDemo") == "true") {
+    if (version != null && version != "unspecified") {
         implementation project(path: ':GaiaXAndroidClientToStudio')
     } else {
         implementation("com.github.alibaba.GaiaX:GaiaX-Android-QuickJS:0.0.0-SNAPSHOT@aar") { changing = true }

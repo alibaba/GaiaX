@@ -16,7 +16,7 @@
 
 package com.alibaba.gaiax.render.node
 
-import app.visly.stretch.Size
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXLayer
@@ -28,19 +28,16 @@ import com.alibaba.gaiax.template.GXTemplateInfo
  */
 object GXNodeTreeCreator {
 
-    fun create(context: GXTemplateContext): GXNode {
+    fun create(gxTemplateContext: GXTemplateContext, rootLayout: Layout): GXNode {
         val rootNode = createNode(
-            context,
+            gxTemplateContext,
             null,
-            context.templateInfo.layer,
-            context.visualTemplateNode,
-            context.templateInfo
+            gxTemplateContext.templateInfo.layer,
+            gxTemplateContext.visualTemplateNode,
+            gxTemplateContext.templateInfo
         )
         rootNode.isRoot = true
-        GXNodeUtils.computeNodeTreeByCreateView(
-            rootNode,
-            Size(context.size.width, context.size.height)
-        )
+        GXNodeUtils.composeGXNodeByCreateView(rootNode, rootLayout)
         return rootNode
     }
 
@@ -64,24 +61,18 @@ object GXNodeTreeCreator {
         // 创建新节点
         val gxNode = GXNode()
 
-        gxNode.parentNode = gxParentNode
+        gxNode.id = gxLayer.id
 
-        // 设置ID与ID路径
-        gxNode.setIdPath(gxParentNode, gxLayer)
+        gxNode.parentNode = gxParentNode
 
         // 初始化详细数据
         gxNode.templateNode = GXTemplateNode.createNode(
-            gxLayer.id,
-            gxTemplateInfo,
-            gxVisualTemplateNode
+            gxLayer.id, gxTemplateInfo, gxVisualTemplateNode
         )
 
         // 初始化节点数据
-        gxNode.stretchNode = GXStretchNode.createNode(
-            gxTemplateContext,
-            gxNode.templateNode,
-            gxNode.id,
-            gxNode.idPath
+        gxNode.stretchNode = GXStretchNode.createEmptyNode(
+            gxTemplateContext, gxNode.templateNode, gxNode.id
         )
 
         // 构建子层级节点
@@ -93,8 +84,7 @@ object GXNodeTreeCreator {
 
                 // 创建一个空节点
                 val gxChildVisualTemplateNode = GXTemplateNode.createNode(
-                    currentLayer.id,
-                    gxTemplateInfo
+                    currentLayer.id, gxTemplateInfo
                 )
 
                 val gxChildLayer = gxChildTemplateInfo.layer
@@ -125,17 +115,12 @@ object GXNodeTreeCreator {
                     }
                     gxNode.children?.add(gxChildNode)
 
-                    // 建立节点的层级关系
-                    gxNode.stretchNode.node.addChild(gxChildNode.stretchNode.node)
                 }
             }
             // 普通子节点
             else {
                 val gxChildNode = createNode(
-                    gxTemplateContext,
-                    gxNode,
-                    currentLayer, null,
-                    gxTemplateInfo
+                    gxTemplateContext, gxNode, currentLayer, null, gxTemplateInfo
                 )
 
                 // 建立层级关系
@@ -144,8 +129,6 @@ object GXNodeTreeCreator {
                 }
                 gxNode.children?.add(gxChildNode)
 
-                // 建立节点的层级关系
-                gxNode.stretchNode.node.addChild(gxChildNode.stretchNode.node)
             }
         }
 

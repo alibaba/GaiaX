@@ -1,24 +1,22 @@
 package com.alibaba.gaiax
 
-import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsoluteLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
-import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -524,5 +522,16 @@ class GXComponentViewTest : GXBaseTest() {
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
         Assert.assertEquals(true, (rootView.child(0).clipToOutline))
+    }
+
+    @Test
+    fun template_absolutely_extend() {
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(GXMockUtils.context, "view", "template_absolutely_extend")
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        Assert.assertEquals(0, (rootView.child(0).layoutParams as AbsoluteLayout.LayoutParams).y)
     }
 }

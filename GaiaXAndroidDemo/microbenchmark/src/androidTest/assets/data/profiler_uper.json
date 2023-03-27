@@ -1,0 +1,219 @@
+{
+  "level": 2,
+  "nodes": [
+    {
+      "data": {
+        "follow": {
+          "followCount": "0",
+          "isFollow": false,
+          "isFollowed": false,
+          "isShow": true,
+          "isShowFollowButton": true,
+          "type": "USER"
+        },
+        "recReason": {
+          "title": "影视内容优秀创作者·20.6万粉丝"
+        },
+        "uploader": {
+          "desc": "青岛大姨和儿子斗智斗勇的日常。",
+          "name": "青岛大姨张大霞"
+        }
+      },
+      "level": 3,
+      "nodes": [
+        {
+          "data": {
+            "decorate": {
+              "title": "妈妈的叫起床方式是怎么实现全国统一的！",
+              "titleType": "videoname",
+              "trackInfo": {
+                "decorate_textcont": "妈妈的叫起床方式是怎么实现全国统一的！",
+                "decorate_texttype": "videoname"
+              }
+            },
+            "follow": {
+              "count": 206390,
+              "followCount": "20.6万",
+              "isFollow": false,
+              "isFollowed": false,
+              "isShow": true,
+              "isShowFollowButton": true,
+              "type": "USER"
+            },
+            "player": {
+              "playIcon": "https://gw.alicdn.com/tfs/TB1X4Q9GoY1gK0jSZFCXXcwqXXa-36-36.png",
+              "upsStream": {
+                "cdnUrl": "http://ykugc.cp31.ott.cibntv.net/6974B978B4F3D719C24D235D5/03000B0100609780CC4D8A2383CBB35EC3E532-6D47-438F-971B-897598D4CB7B.mp4?ccode=01010110&duration=24&expire=18000&psid=d0adc73c4e792ef433214c41afdf344133346&ups_client_netip=106.11.41.199&ups_ts=1620615537&ups_userid=&utid=WkkKARVLYHADAE+ONsuSQDkj&vid=XNTE1MTI2MTQzNg%3D%3D&vkey=B35076cf65b8ab14b4cbcaf1bb9d53585&operate_type=1&bc=2&dst=10&t=f9bd9144f88f32a&cug=1&si=116&eo=1&rid=200000003C98958A0E97981CB9B474E707488F6E02000000&type=mp4hd2v2",
+                "createdTime": 1620541604000,
+                "framesPerSecond": 25,
+                "height": 1280,
+                "horizontal": false,
+                "milliSeconds": 24557,
+                "mp4Domain": {
+                  "cellular": "m-vali.cp31.ott.cibntv.net",
+                  "wifi": "ykugc.cp31.ott.cibntv.net"
+                },
+                "size": 8686104,
+                "streamType": "mp4hd2",
+                "timestamp": 1620615537234,
+                "title": "妈妈的叫起床方式是怎么实现全国统一的！",
+                "uploadSource": 29,
+                "width": 720
+              },
+              "vv": "3934"
+            },
+            "poster": {
+              "headFrame": "https://m.ykimg.com/054F0301609780CD00000126360819C6",
+              "img": "https://m.ykimg.com/054F0101609780A504CD8294A48C5A8C",
+              "lBottom": { "title": "00:24" }
+            },
+            "shareInfo": {
+              "circleZone": "妈妈的叫起床方式是怎么实现全国统一的！@青岛大姨张大霞",
+              "hidden": 1,
+              "minappEnable": "true",
+              "shareCount": "0",
+              "shareLink": "http://m.youku.com/v_show/id_XNTE1MTI2MTQzNg==.html?pgcpgcid=UNzU3Mzg0MTMxNg%3D%3D",
+              "shareTitle": "妈妈的叫起床方式是怎么实现全国统一的！",
+              "subtitle": "青岛大姨张大霞的视频好棒！快来围观>>",
+              "textWeibo": "妈妈的叫起床方式是怎么实现全国统一的！|📷青岛大姨张大霞的优酷视频"
+            },
+            "summary": "00:24",
+            "title": "妈妈的叫起床方式是怎么实现全国统一的！",
+            "topics": []
+          },
+          "level": 3
+        },
+        {
+          "data": {
+            "follow": {
+              "count": 206390,
+              "followCount": "20.6万",
+              "isFollow": false,
+              "isFollowed": false,
+              "isShow": true,
+              "isShowFollowButton": true,
+              "type": "USER"
+            },
+            "like": {
+              "count": 138,
+              "isLike": false,
+              "title": "138"
+            },
+            "playCount": 6707,
+            "player": {
+              "playIcon": "https://gw.alicdn.com/tfs/TB1X4Q9GoY1gK0jSZFCXXcwqXXa-36-36.png",
+              "vv": "6707"
+            },
+            "poster": {
+              "headFrame": "https://m.ykimg.com/054F03016095FF8400000103740CABEC",
+              "img": "https://m.ykimg.com/054F01016095FF1D04CD8294A0A8B0E3",
+              "lBottom": { "title": "00:44" }
+            },
+            "summary": "00:44",
+            "title": "因为我妈的一句话，我和我爸连夜搬进狗窝！",
+            "topics": []
+          },
+          "level": 3
+        },
+        {
+          "data": {
+            "follow": {
+              "count": 206390,
+              "followCount": "20.6万",
+              "isFollow": false,
+              "isFollowed": false,
+              "isShow": true,
+              "isShowFollowButton": true,
+              "type": "USER"
+            },
+            "like": {
+              "count": 186,
+              "isLike": false,
+              "title": "186"
+            },
+            "playCount": 7822,
+            "player": {
+              "playIcon": "https://gw.alicdn.com/tfs/TB1X4Q9GoY1gK0jSZFCXXcwqXXa-36-36.png",
+              "vv": "7822"
+            },
+            "poster": {
+              "headFrame": "https://m.ykimg.com/054F03016094BDBE00000123D8050D88",
+              "img": "https://m.ykimg.com/054F01016094BD5C0785FD9232D03931",
+              "lBottom": { "title": "01:20" }
+            },
+
+            "summary": "01:20",
+            "title": "托我妈的福，女神已经把我拉黑了···",
+            "topics": []
+          },
+          "level": 3
+        },
+        {
+          "data": {
+            "follow": {
+              "count": 206390,
+              "followCount": "20.6万",
+              "isFollow": false,
+              "isFollowed": false,
+              "isShow": true,
+              "isShowFollowButton": true,
+              "type": "USER"
+            },
+            "like": {
+              "count": 236,
+              "isLike": false,
+              "title": "236"
+            },
+            "playCount": 10959,
+            "player": {
+              "playIcon": "https://gw.alicdn.com/tfs/TB1X4Q9GoY1gK0jSZFCXXcwqXXa-36-36.png",
+              "vv": "1.0万"
+            },
+            "poster": {
+              "headFrame": "https://m.ykimg.com/054F03016093CA190000012A5C0E1F90",
+              "img": "https://m.ykimg.com/054F01016093C9B507937E95AC53CEE4",
+              "lBottom": { "title": "01:12" }
+            },
+
+            "summary": "01:12",
+            "title": "本以为秀了一招绝技，没想到小丑竟是我自己···",
+            "topics": []
+          },
+          "level": 3
+        },
+        {
+          "data": {
+            "follow": {
+              "count": 206390,
+              "followCount": "20.6万",
+              "isFollow": false,
+              "isFollowed": false,
+              "isShow": true,
+              "isShowFollowButton": true,
+              "type": "USER"
+            },
+            "like": {
+              "count": 1742,
+              "isLike": false,
+              "title": "1742"
+            },
+            "playCount": 125716,
+            "player": {
+              "playIcon": "https://gw.alicdn.com/tfs/TB1X4Q9GoY1gK0jSZFCXXcwqXXa-36-36.png",
+              "vv": "12.5万"
+            },
+            "poster": {
+              "headFrame": "https://m.ykimg.com/054F0301608B7BB1000001484208224B",
+              "img": "https://m.ykimg.com/054F0101608B7B5604CD8294A34C5144",
+              "lBottom": { "title": "00:47" }
+            },
+            "summary": "00:47",
+            "title": "等会我捋捋，今天这顿打是不是白挨了？",
+            "topics": []
+          },
+          "level": 3
+        }
+      ]
+    }
+  ]
+}

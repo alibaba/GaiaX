@@ -16,7 +16,7 @@
 
 package com.alibaba.gaiax.template
 
-import android.graphics.Rect
+import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 
@@ -24,16 +24,141 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
  * @suppress
  */
 data class GXSliderConfig(
-    val scrollTimeInterval: Long,
-    val infinityScroll: Boolean,
-    val hasIndicator: Boolean,
-    val selectedIndex: Int,
-    val indicatorSelectedColor: GXColor,
-    val indicatorUnselectedColor: GXColor,
-    val indicatorMargin: Rect,
-    val indicatorPosition: GXSliderView.IndicatorPosition,
-    val indicatorClass: String?
+    internal val scrollTimeIntervalForTemplate: Long,
+    internal val infinityScrollForTemplate: Boolean,
+    internal val hasIndicatorForTemplate: Boolean,
+    internal val selectedIndexForTemplate: Int,
+    internal val indicatorSelectedColorForTemplate: GXColor,
+    internal val indicatorUnselectedColorForTemplate: GXColor,
+    internal val indicatorMarginForTemplate: Rect<GXSize>,
+    internal val indicatorPositionForTemplate: GXSliderView.IndicatorPosition,
+    internal val indicatorClassForTemplate: String?
 ) {
+    private var scrollTimeIntervalForExtend: Long? = null
+    private var infinityScrollForExtend: Boolean? = null
+    private var hasIndicatorForExtend: Boolean? = null
+    private var selectedIndexForExtend: Int? = null
+    private var indicatorSelectedColorForExtend: GXColor? = null
+    private var indicatorUnselectedColorForExtend: GXColor? = null
+    private var indicatorMarginForExtend: Rect<GXSize>? = null
+    private var indicatorPositionForExtend: GXSliderView.IndicatorPosition? = null
+    private var indicatorClassForExtend: String? = null
+
+    fun reset() {
+        scrollTimeIntervalForExtend = null
+        infinityScrollForExtend = null
+        hasIndicatorForExtend = null
+        selectedIndexForExtend = null
+        indicatorSelectedColorForExtend = null
+        indicatorUnselectedColorForExtend = null
+        indicatorMarginForExtend = null
+        indicatorPositionForExtend = null
+        indicatorClassForExtend = null
+    }
+
+    val scrollTimeInterval: Long
+        get() {
+            return scrollTimeIntervalForExtend ?: scrollTimeIntervalForTemplate
+        }
+
+    val infinityScroll: Boolean
+        get() {
+            return infinityScrollForExtend ?: infinityScrollForTemplate
+        }
+
+    val hasIndicator: Boolean
+        get() {
+            return hasIndicatorForExtend ?: hasIndicatorForTemplate
+        }
+
+    val selectedIndex: Int
+        get() {
+            return selectedIndexForExtend ?: selectedIndexForTemplate
+        }
+
+    val indicatorSelectedColor: GXColor
+        get() {
+            return indicatorSelectedColorForExtend ?: indicatorSelectedColorForTemplate
+        }
+
+    val indicatorUnselectedColor: GXColor
+        get() {
+            return indicatorUnselectedColorForExtend ?: indicatorUnselectedColorForTemplate
+        }
+
+    val indicatorMargin: Rect<GXSize>
+        get() {
+            return indicatorMarginForExtend ?: indicatorMarginForTemplate
+        }
+
+    val indicatorPosition: GXSliderView.IndicatorPosition
+        get() {
+            return indicatorPositionForExtend ?: indicatorPositionForTemplate
+        }
+
+    val indicatorClass: String?
+        get() {
+            return indicatorClassForExtend ?: indicatorClassForTemplate
+        }
+
+    fun updateByExtend(extendCssData: JSONObject) {
+        val scrollTimeInterval =
+            extendCssData.getLong(GXTemplateKey.GAIAX_LAYER_SLIDER_SCROLL_TIME_INTERVAL)
+        val infinityScroll =
+            getBoolean(extendCssData, GXTemplateKey.GAIAX_LAYER_SLIDER_INFINITY_SCROLL)
+        val hasIndicator = getBoolean(extendCssData, GXTemplateKey.GAIAX_LAYER_SLIDER_HAS_INDICATOR)
+        val selectedIndex =
+            extendCssData.getInteger(GXTemplateKey.GAIAX_LAYER_SLIDER_SELECTED_INDEX)
+        val indicatorSelectedColor =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR)
+                ?.let {
+                    GXColor.create(it)
+                }
+        val indicatorUnselectedColor =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR)
+                ?.let {
+                    GXColor.create(it)
+                }
+        val indicatorMargin =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_MARGIN)?.let {
+                GXContainerConvert.edgeInsets(it)
+            }
+        val indicatorPosition =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_POSITION)?.let {
+                GXSliderView.IndicatorPosition.fromValue(it)
+            }
+        val indicatorClass =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_CLASS)
+
+        if (scrollTimeInterval != null) {
+            scrollTimeIntervalForExtend = scrollTimeInterval
+        }
+        if (infinityScroll != null) {
+            infinityScrollForExtend = infinityScroll
+        }
+        if (hasIndicator != null) {
+            hasIndicatorForExtend = hasIndicator
+        }
+        if (selectedIndex != null) {
+            selectedIndexForExtend = selectedIndex
+        }
+        if (indicatorSelectedColor != null) {
+            indicatorSelectedColorForExtend = indicatorSelectedColor
+        }
+        if (indicatorUnselectedColor != null) {
+            indicatorUnselectedColorForExtend = indicatorUnselectedColor
+        }
+        if (indicatorMargin != null) {
+            indicatorMarginForExtend = indicatorMargin
+        }
+        if (indicatorPosition != null) {
+            indicatorPositionForExtend = indicatorPosition
+        }
+        if (indicatorClass != null) {
+            indicatorClassForExtend = indicatorClass
+        }
+    }
+
     companion object {
 
         fun create(data: JSONObject): GXSliderConfig {
@@ -56,7 +181,9 @@ data class GXSliderConfig(
             val indicatorMargin =
                 data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_MARGIN)?.let {
                     GXContainerConvert.edgeInsets(it)
-                } ?: Rect()
+                } ?: Rect<GXSize>(
+                    GXSize.Undefined, GXSize.Undefined, GXSize.Undefined, GXSize.Undefined
+                )
             val indicatorPosition =
                 GXSliderView.IndicatorPosition.fromValue(data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_POSITION))
             val indicatorClass = data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_CLASS)
@@ -74,47 +201,6 @@ data class GXSliderConfig(
             )
         }
 
-        fun create(srcConfig: GXSliderConfig, data: JSONObject): GXSliderConfig {
-            val scrollTimeInterval =
-                data.getLong(GXTemplateKey.GAIAX_LAYER_SLIDER_SCROLL_TIME_INTERVAL)
-                    ?: srcConfig.scrollTimeInterval
-            val infinityScroll = getBoolean(data, GXTemplateKey.GAIAX_LAYER_SLIDER_INFINITY_SCROLL)
-                ?: srcConfig.infinityScroll
-            val hasIndicator = getBoolean(data, GXTemplateKey.GAIAX_LAYER_SLIDER_HAS_INDICATOR)
-                ?: srcConfig.hasIndicator
-            val selectedIndex = data.getInteger(GXTemplateKey.GAIAX_LAYER_SLIDER_SELECTED_INDEX)
-                ?: srcConfig.selectedIndex
-            val indicatorSelectedColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_SELECTED_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: srcConfig.indicatorSelectedColor
-            val indicatorUnselectedColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_UNSELECTED_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: srcConfig.indicatorUnselectedColor
-            val indicatorMargin =
-                data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_MARGIN)?.let {
-                    GXContainerConvert.edgeInsets(it)
-                } ?: srcConfig.indicatorMargin
-            val indicatorPosition =
-                data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_POSITION)?.let {
-                    GXSliderView.IndicatorPosition.fromValue(it)
-                } ?: srcConfig.indicatorPosition
-            val indicatorClass = data.getString(GXTemplateKey.GAIAX_LAYER_SLIDER_INDICATOR_CLASS)
-                ?: srcConfig.indicatorClass
-
-            return GXSliderConfig(
-                scrollTimeInterval,
-                infinityScroll,
-                hasIndicator,
-                selectedIndex,
-                indicatorSelectedColor,
-                indicatorUnselectedColor,
-                indicatorMargin,
-                indicatorPosition,
-                indicatorClass
-            )
-        }
 
         private fun getBoolean(data: JSONObject, key: String): Boolean? {
             if (data.containsKey(key)) {

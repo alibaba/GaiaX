@@ -16,6 +16,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class GXComponentAnimationTest : GXBaseTest() {
@@ -74,7 +75,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(100F.dpToPx(), child.x)
         Assert.assertEquals(150F.dpToPx(), child.y)
@@ -108,7 +109,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(100F.dpToPx(), child.x)
         Assert.assertEquals(150F.dpToPx(), child.y)
@@ -140,7 +141,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
     }
@@ -171,7 +172,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
     }
@@ -206,7 +207,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(false, (rootView.child(1) as LottieAnimationView).composition == null)
     }
@@ -269,7 +270,7 @@ class GXComponentAnimationTest : GXBaseTest() {
             GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
         }
 
-        countDownLatch.await()
+        countDownLatch.await(3, TimeUnit.SECONDS)
 
         Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
 

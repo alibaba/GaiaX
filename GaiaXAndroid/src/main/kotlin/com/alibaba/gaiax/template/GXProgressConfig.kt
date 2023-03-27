@@ -22,50 +22,77 @@ import com.alibaba.fastjson.JSONObject
  * @suppress
  */
 data class GXProgressConfig(
-    val strokeColor: GXColor,
-    val trailColor: GXColor,
-    val progressType: String,
-    val animated: Boolean
+    internal val strokeColorForTemplate: GXColor,
+    internal val trailColorForTemplate: GXColor,
+    internal val progressTypeForTemplate: String,
+    internal val animatedForTemplate: Boolean
 ) {
-    companion object {
-        fun create(data: JSONObject): GXProgressConfig {
-            val strokeColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_STROKE_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: GXColor.createHex("#0000FF")
-            val trailColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TRAIL_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: GXColor.createHex("#BBBBBB")
-            val progressType = data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE) ?: "line"
-            val animated = data.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED) ?: true
-            return GXProgressConfig(
-                strokeColor,
-                trailColor,
-                progressType,
-                animated
-            )
+
+    private var strokeColorForExtend: GXColor? = null
+    private var trailColorForExtend: GXColor? = null
+    private var progressTypeForExtend: String? = null
+    private var animatedForExtend: Boolean? = null
+
+    fun reset() {
+        strokeColorForExtend = null
+        trailColorForExtend = null
+        progressTypeForExtend = null
+        animatedForExtend = null
+    }
+
+    val strokeColor: GXColor
+        get() {
+            return strokeColorForExtend ?: strokeColorForTemplate
+        }
+    val trailColor: GXColor
+        get() {
+            return trailColorForExtend ?: trailColorForTemplate
+        }
+    val progressType: String
+        get() {
+            return progressTypeForExtend ?: progressTypeForTemplate
+        }
+    val animated: Boolean
+        get() {
+            return animatedForExtend ?: animatedForTemplate
         }
 
-        fun create(srcConfig: GXProgressConfig, data: JSONObject): GXProgressConfig {
-            val strokeColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_STROKE_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: srcConfig.strokeColor
-            val trailColor =
-                data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TRAIL_COLOR)?.let {
-                    GXColor.create(it)
-                } ?: srcConfig.trailColor
-            val progressType =
-                data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE) ?: srcConfig.progressType
-            val animated =
-                data.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED) ?: srcConfig.animated
-            return GXProgressConfig(
-                strokeColor,
-                trailColor,
-                progressType,
-                animated
-            )
+    fun updateByExtend(extendCssData: JSONObject) {
+        val strokeColor =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_STROKE_COLOR)?.let {
+                GXColor.create(it)
+            }
+        val trailColor =
+            extendCssData.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TRAIL_COLOR)?.let {
+                GXColor.create(it)
+            }
+        val progressType = extendCssData.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE)
+        val animated = extendCssData.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED)
+        if (strokeColor != null) {
+            strokeColorForExtend = strokeColor
+        }
+        if (trailColor != null) {
+            trailColorForExtend = trailColor
+        }
+        if (progressType != null) {
+            progressTypeForExtend = progressType
+        }
+        if (animated != null) {
+            animatedForExtend = animated
+        }
+    }
+
+    companion object {
+        fun create(data: JSONObject): GXProgressConfig {
+            val strokeColor = data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_STROKE_COLOR)?.let {
+                GXColor.create(it)
+            } ?: GXColor.createHex("#0000FF")
+            val trailColor = data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TRAIL_COLOR)?.let {
+                GXColor.create(it)
+            } ?: GXColor.createHex("#BBBBBB")
+            val progressType = data.getString(GXTemplateKey.GAIAX_LAYER_PROGRESS_TYPE) ?: "line"
+            val animated = data.getBoolean(GXTemplateKey.GAIAX_LAYER_PROGRESS_ANIMATED) ?: true
+            return GXProgressConfig(strokeColor, trailColor, progressType, animated)
         }
     }
 }

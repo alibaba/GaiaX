@@ -10,12 +10,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.utils.GXMockUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import org.junit.Assert
@@ -59,23 +57,23 @@ class GXComponentScrollTest : GXBaseTest() {
                 childItemContainer: ViewGroup,
                 childMeasureSize: GXTemplateEngine.GXMeasureSize,
                 childTemplateItem: GXTemplateEngine.GXTemplateItem,
-                childItemPosition: Int,
-                childVisualNestTemplateNode: GXTemplateNode?,
-                childItemData: JSONObject
+                gxExtendParams: GXTemplateEngine.GXExtendParams
             ): Any? {
                 // 获取坑位View
                 val childView = if (childItemContainer.childCount != 0) {
                     childItemContainer.getChildAt(0)
                 } else {
                     GXTemplateEngine.instance.createView(
-                        childTemplateItem, childMeasureSize, childVisualNestTemplateNode
+                        childTemplateItem,
+                        childMeasureSize,
+                        gxExtendParams
                     ).apply {
                         childItemContainer.addView(this)
                     }
                 }
 
                 // 为坑位View绑定数据
-                val childTemplateData = GXTemplateEngine.GXTemplateData(childItemData)
+                val childTemplateData = GXTemplateEngine.GXTemplateData(gxExtendParams.gxItemData!!)
                 GXTemplateEngine.instance.bindData(childView, childTemplateData)
                 return null
             }
@@ -1690,5 +1688,34 @@ class GXComponentScrollTest : GXBaseTest() {
         val item2Height = rootView.child(1).height.toFloat()
 
         Assert.assertEquals(true, item1Height != item2Height)
+        Assert.assertEquals(200F.dpToPx(), rootView.height())
+    }
+
+    @Test
+    fun template_scroll_horizontal_different_item_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "scroll", "template_scroll_horizontal_different_item_height"
+        )
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply {
+                    this["height"] = "50px"
+                })
+                this.add(JSONObject().apply {
+                    this["height"] = "70px"
+                })
+            }
+        })
+        val size = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(70F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(50F.dpToPx(), rootView.child(0).child(0).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.child(1).child(0).height())
+        Assert.assertEquals(70F.dpToPx(), rootView.height())
     }
 }

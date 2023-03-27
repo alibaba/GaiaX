@@ -1,13 +1,14 @@
 package com.alibaba.gaiax
 
 import android.graphics.Color
-import android.graphics.Rect
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewpager.widget.ViewPager
+import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.customview.CustomSliderIndicatorView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
+import com.alibaba.gaiax.template.GXSize
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXMockUtils
 import org.junit.Assert
@@ -101,10 +102,10 @@ class GXComponentSliderTest : GXBaseTest() {
         Assert.assertEquals(Color.parseColor("#BBBBBB"), config?.indicatorUnselectedColor?.value())
         Assert.assertEquals(
             Rect(
-                30F.dpToPx().toInt(),
-                10F.dpToPx().toInt(),
-                30F.dpToPx().toInt(),
-                10F.dpToPx().toInt()
+                GXSize.create("30"),
+                GXSize.create("30"),
+                GXSize.create("10"),
+                GXSize.create("10")
             ), config?.indicatorMargin
         )
         Assert.assertEquals(GXSliderView.IndicatorPosition.TOP_CENTER, config?.indicatorPosition)

@@ -91,21 +91,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.airbnb.android:lottie:4.1.0'
 
-    if (System.getProperties().get("GaiaXDemo") == "true") {
-        implementation project(path: ':GaiaXAndroid')
+    if (version != null) {
+        implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
     } else {
-        println("version = " + version)
-        if (version != null) {
-            implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
-        } else {
-            implementation("com.github.alibaba.GaiaX:GaiaX:0.2.9") { changing = true }
-        }
+        implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0") { changing = true }
     }
 
     testImplementation 'junit:junit:4.13.2'

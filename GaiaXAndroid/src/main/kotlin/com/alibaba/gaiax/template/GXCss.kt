@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.context.GXTemplateContext
 
 /**
  * @suppress
@@ -24,23 +25,22 @@ import com.alibaba.fastjson.JSONObject
 data class GXCss(
     val style: GXStyle, val flexBox: GXFlexBox
 ) {
-    companion object {
-        fun create(lowPriorityCss: GXCss, highPriorityCss: GXCss?): GXCss {
-            if (highPriorityCss == null) {
-                return lowPriorityCss
-            }
-            return GXCss(
-                GXStyle.create(lowPriorityCss.style, highPriorityCss.style),
-                GXFlexBox.create(lowPriorityCss.flexBox, highPriorityCss.flexBox)
-            )
+    fun updateByExtend(gxTemplateContext: GXTemplateContext, extendCssData: JSONObject) {
+        style.updateByExtend(extendCssData)
+        flexBox.updateByExtend(gxTemplateContext, extendCssData)
+    }
+
+    fun updateByVisual(visual: GXCss?) {
+        if (visual != null) {
+            style.updateByVisual(visual.style)
+            flexBox.updateByVisual(visual.flexBox)
         }
+    }
+
+    companion object {
 
         fun create(data: JSONObject = JSONObject()): GXCss {
             return GXCss(GXStyle.create(data), GXFlexBox.create(data))
-        }
-
-        fun createByExtend(data: JSONObject = JSONObject()): GXCss {
-            return GXCss(GXStyle.createByExtend(data), GXFlexBox.createByExtend(data))
         }
     }
 }

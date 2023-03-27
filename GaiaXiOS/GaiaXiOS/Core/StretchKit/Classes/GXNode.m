@@ -115,12 +115,12 @@
 //根据nodeId获取节点树上的某个节点
 - (GXNode *)queryNodeByNodeId:(NSString *)nodeId{
     //判断nodeId有效性
-    if (!nodeId || ![nodeId isKindOfClass:[NSString class]]) {
+    if (!nodeId || ![nodeId isKindOfClass:[NSString class]] || nodeId.length <= 0) {
         return nil;
     }
     
     //判断是否为当前节点
-    if (nodeId && [nodeId isKindOfClass:[NSString class]] && [self.nodeId isEqualToString:nodeId]) {
+    if ([self.nodeId isEqualToString:nodeId]) {
         return self;
     }
     

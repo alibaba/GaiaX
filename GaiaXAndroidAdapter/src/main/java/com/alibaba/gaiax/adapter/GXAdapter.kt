@@ -35,19 +35,19 @@ class GXAdapter : GXTemplateEngine.GXIAdapter {
     @SuppressLint("InflateParams")
     override fun init(context: Context) {
         GXRegisterCenter.instance
-            .registerExtensionViewSupport(
-                GXViewKey.VIEW_TYPE_IMAGE,
-                GXAdapterImageView::class.java
-            )
+            //
             .registerExtensionLottieAnimation(object :
                 GXRegisterCenter.GXIExtensionLottieAnimation {
                 override fun create(): GXLottieAnimation {
                     return GXAdapterLottieAnimation()
                 }
             })
-            .registerExtensionViewSupport(
-                GXViewKey.VIEW_TYPE_LOTTIE
-            ) {
+            //
+            .registerExtensionViewSupport(GXViewKey.VIEW_TYPE_IMAGE) {
+                GXAdapterImageView(it)
+            }
+            //
+            .registerExtensionViewSupport(GXViewKey.VIEW_TYPE_LOTTIE) {
                 val lottieView: LottieAnimationView = LayoutInflater.from(context)
                     .inflate(R.layout.gaiax_inner_lottie_auto_play, null) as LottieAnimationView
                 lottieView.layoutParams = AbsoluteLayout.LayoutParams(

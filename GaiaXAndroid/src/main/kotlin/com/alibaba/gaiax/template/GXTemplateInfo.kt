@@ -112,9 +112,12 @@ data class GXTemplateInfo(
     }
 
     fun findLayer(id: String): GXLayer? {
-        val layer = layer
-        return findLayer(id, layer)
+        return findLayerCache[id] ?: findLayer(id, layer)?.apply {
+            findLayerCache[id] = this@apply
+        }
     }
+
+    private val findLayerCache = mutableMapOf<String, GXLayer>()
 
     private fun findLayer(id: String, layer: GXLayer): GXLayer? {
         if (id == layer.id) {
@@ -143,6 +146,13 @@ data class GXTemplateInfo(
         gxTemplateInfo.children?.forEach {
             reset(it)
         }
+    }
+
+    /**
+     * TODO 未实现
+     */
+    fun isFlexibleHeight(): Boolean {
+        return false
     }
 
     companion object {
@@ -204,6 +214,14 @@ data class GXTemplateInfo(
             val animationJson =
                 dataBindFileJson.getJSONObject(GXTemplateKey.GAIAX_ANIMATION) ?: JSONObject()
 
+            // 兼容 edge-insets
+            layerJson.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)?.let {
+                if (!cssJson.containsKey(template.id)) {
+                    cssJson[template.id] = JSONObject()
+                }
+                cssJson.getJSONObject(template.id)?.put(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, it)
+            }
+
             val expVersion: String? = layerJson.getString(GXTemplateKey.GAIAX_LAYER_EXP_VERSION)
 
             val layer = GXLayer.create(layerJson)
@@ -231,9 +249,7 @@ data class GXTemplateInfo(
         }
 
         private fun createCss(
-            value: MutableMap<String, GXCss>,
-            srcCssJson: JSONObject,
-            layer: GXLayer
+            value: MutableMap<String, GXCss>, srcCssJson: JSONObject, layer: GXLayer
         ): MutableMap<String, GXCss> {
             val layerId = layer.id
             val cssId = layer.css
@@ -257,8 +273,7 @@ data class GXTemplateInfo(
         }
 
         private fun createData(
-            expVersion: String?,
-            dataJson: JSONObject
+            expVersion: String?, dataJson: JSONObject
         ): MutableMap<String, GXDataBinding>? {
             return if (!dataJson.isEmpty()) {
                 val data: MutableMap<String, GXDataBinding> = mutableMapOf()
@@ -279,8 +294,7 @@ data class GXTemplateInfo(
         }
 
         private fun createEvent(
-            expVersion: String?,
-            eventJson: JSONObject
+            expVersion: String?, eventJson: JSONObject
         ): MutableMap<String, GXEventBinding>? {
             return if (!eventJson.isEmpty()) {
                 val value: MutableMap<String, GXEventBinding> = mutableMapOf()
@@ -302,8 +316,7 @@ data class GXTemplateInfo(
         }
 
         private fun createTrack(
-            expVersion: String?,
-            eventJson: JSONObject
+            expVersion: String?, eventJson: JSONObject
         ): MutableMap<String, GXTrackBinding>? {
             return if (!eventJson.isEmpty()) {
                 val value: MutableMap<String, GXTrackBinding> = mutableMapOf()
@@ -325,8 +338,7 @@ data class GXTemplateInfo(
         }
 
         private fun createAnimation(
-            expVersion: String?,
-            animationJson: JSONObject
+            expVersion: String?, animationJson: JSONObject
         ): MutableMap<String, GXAnimationBinding>? {
             return if (!animationJson.isEmpty()) {
                 val value: MutableMap<String, GXAnimationBinding> = mutableMapOf()
@@ -348,8 +360,7 @@ data class GXTemplateInfo(
         }
 
         private fun createConfig(
-            expVersion: String?,
-            configJson: JSONObject
+            expVersion: String?, configJson: JSONObject
         ): MutableMap<String, GXIExpression>? {
             return if (!configJson.isEmpty()) {
                 val value: MutableMap<String, GXIExpression> = mutableMapOf()
@@ -358,8 +369,7 @@ data class GXTemplateInfo(
                     val id = entry.key
                     val expression = entry.value
                     if (id != null && expression != null && id.isNotEmpty()) {
-                        GXExpressionFactory.create(expVersion, expression)
-                            ?.let { value[id] = it }
+                        GXExpressionFactory.create(expVersion, expression)?.let { value[id] = it }
                     }
                 }
                 value
@@ -379,19 +389,15 @@ data class GXTemplateInfo(
         }
 
         private fun initChildren(
-            templateInfo: GXTemplateInfo,
-            templateItem: GXTemplateEngine.GXTemplateItem
+            templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem
         ) {
             forChildrenTemplate(templateInfo.layer) {
-                val childTemplate = createTemplate(
-                    GXTemplateEngine.GXTemplateItem(
-                        templateItem.context,
-                        templateItem.bizId,
-                        it.id
-                    ).apply {
-                        this.isLocal = templateItem.isLocal
-                        this.templateVersion = templateItem.templateVersion
-                    })
+                val childTemplate = createTemplate(GXTemplateEngine.GXTemplateItem(
+                    templateItem.context, templateItem.bizId, it.id
+                ).apply {
+                    this.isLocal = templateItem.isLocal
+                    this.templateVersion = templateItem.templateVersion
+                })
                 if (templateInfo.children == null) {
                     templateInfo.children = mutableListOf()
                 }

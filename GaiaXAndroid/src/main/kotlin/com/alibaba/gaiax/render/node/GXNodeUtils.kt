@@ -23,57 +23,71 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.context.*
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.getStringExt
-import com.alibaba.gaiax.utils.getStringExtCanNull
 import kotlin.math.ceil
 import kotlin.math.max
 
 /**
  * @suppress
  */
-@Suppress("UNUSED_PARAMETER")
 object GXNodeUtils {
 
+    internal const val ITEM_PATH =
+        "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}"
+    internal const val ITEM_CONFIG =
+        "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
+
     fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
-        val layout = gxNode.stretchNode.node.computeLayout(size)
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
     }
 
     private fun composeStretchNodeByBindData(gxNode: GXNode, layout: Layout) {
-        layout.id = gxNode.stretchNode.node.id
-        layout.idPath = gxNode.stretchNode.node.idPath
-        gxNode.stretchNode.layoutByBind = layout
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        layout.id = stretchNode.id
+        gxNode.layoutByBind = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
             composeStretchNodeByBindData(childViewData, layout.children[index])
         }
     }
 
-    fun computeNodeTreeByCreateView(gxNode: GXNode, size: Size<Float?>) {
-        val layout = gxNode.stretchNode.node.computeLayout(size)
-        composeStretchNodeByCreateView(gxNode, layout)
+    fun computeNodeTreeByPrepareView(gxNode: GXNode, size: Size<Float?>) {
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        val layout = stretchNode.safeComputeLayout(size)
+        composeStretchNodeByPrepareView(gxNode, layout)
     }
 
-    private fun composeStretchNodeByCreateView(gxNode: GXNode, layout: Layout) {
-        layout.id = gxNode.stretchNode.node.id
-        layout.idPath = gxNode.stretchNode.node.idPath
-        gxNode.stretchNode.layoutByCreate = layout
+    private fun composeStretchNodeByPrepareView(gxNode: GXNode, layout: Layout) {
+        val stretchNode = gxNode.stretchNode.node
+            ?: throw IllegalArgumentException("stretch node is null, please check!")
+        layout.id = stretchNode.id
+        gxNode.stretchNode.layoutByPrepareView = layout
         gxNode.children?.forEachIndexed { index, childViewData ->
-            composeStretchNodeByCreateView(childViewData, layout.children[index])
+            composeStretchNodeByPrepareView(childViewData, layout.children[index])
         }
     }
 
-    /**
-     * 用于预计算容器的尺寸
-     */
-    fun computeContainerSizeByItemTemplate(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        containerData: JSONArray
+    fun composeGXNodeByCreateView(gxNode: GXNode, layout: Layout) {
+        gxNode.layoutByPrepare = layout
+        gxNode.children?.forEachIndexed { index, childViewData ->
+            composeGXNodeByCreateView(childViewData, layout.children[index])
+        }
+    }
+
+    fun computeScrollSize(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
     ): Size<Dimension?>? {
 
-        if (gxNode.childTemplateItems?.isEmpty() == true) {
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
             return null
         }
 
@@ -84,98 +98,129 @@ object GXNodeUtils {
         //  2.2 显示两个坑位
 
         // 1. 获取坑位的ViewPort信息
-        val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
+        val itemViewPort: Size<Float?> = computeScrollItemViewPort(gxTemplateContext, gxNode)
 
         // case 1
-        if (gxNode.childTemplateItems?.size == 1) {
+        if (templateItems.size == 1) {
 
-            // 2. 计算坑位实际宽高结果
-            val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
+            val itemTemplatePair = templateItems.firstOrNull() ?: return null
             val itemTemplateItem = itemTemplatePair.first
             val itemVisualTemplateNode = itemTemplatePair.second
 
-            val itemLayout: Layout? = computeItemLayout(
-                gxTemplateContext,
-                gxNode,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                containerData.firstOrNull() as? JSONObject ?: JSONObject()
-            )
+            // Improve: 如果之前计算过，并且内容高度都一样，那么直接使用缓存计算。在横滑容器数据量较大的情况下，会节省一些时间。
+            if (GXGlobalCache.instance.isExistForTemplateItem(itemTemplateItem)) {
+                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(itemTemplateItem)
+                return computeScrollContainerSize(
+                    gxNode, itemLayout, gxContainerData
+                )
+            }
+
+            // 2. 计算坑位实际宽高结果
+            gxContainerData.forEachIndexed { itemPosition, value ->
+                val itemData = value as JSONObject
+                val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+
+                computeScrollItemLayoutToCache(
+                    gxTemplateContext,
+                    itemData,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    itemCacheKey
+                )
+            }
 
             // 3. 计算容器期望的宽高结果
-            return computeContainerSize(gxTemplateContext, gxNode, itemLayout, containerData)
+            val maxItemLayout = gxTemplateContext.getMaxHeightLayoutForScroll()
+            val minItemLayout = gxTemplateContext.getMinHeightLayoutForScroll()
+
+            if (maxItemLayout != null && minItemLayout != null && maxItemLayout.height == minItemLayout.height) {
+                // 如果相同，代表没有不一样的高度，下次可以只计算一次
+                GXGlobalCache.instance.putLayoutForTemplateItem(itemTemplateItem, maxItemLayout)
+            }
+
+            return computeScrollContainerSize(
+                gxNode, maxItemLayout, gxContainerData
+            )
         }
         // case 2
         else {
-
-            val containerSizeList = mutableListOf<Size<Dimension?>>()
-
             // init multi type item
-            containerData.forEach { it ->
-                val itemData = it as JSONObject
-                gxNode.templateNode.resetDataCache()
-                gxNode.templateNode.getExtend(itemData)?.let { typeData ->
-                    val path =
-                        typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                    val templateId =
-                        typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                    val items = gxNode.childTemplateItems
-                    if (items != null && templateId != null) {
-                        items.firstOrNull { it.first.templateId == templateId }
-                            ?.let { itemTemplatePair ->
+            gxContainerData.forEachIndexed { itemPosition, value ->
+                val itemData = value as JSONObject
+                val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
-                                // 2. 计算坑位实际宽高结果
-                                val itemTemplateItem = itemTemplatePair.first
-                                val itemVisualTemplateNode = itemTemplatePair.second
-
-                                val itemLayout: Layout? = computeItemLayout(
-                                    gxTemplateContext,
-                                    gxNode,
-                                    itemViewPort,
-                                    itemTemplateItem,
-                                    itemVisualTemplateNode,
-                                    itemData
-                                )
-
-                                // 3. 计算容器期望的宽高结果
-                                computeContainerSize(
-                                    gxTemplateContext,
-                                    gxNode,
-                                    itemLayout,
-                                    containerData
-                                )?.apply {
-                                    containerSizeList.add(this)
-                                }
-                            }
-                    }
-                }
+                computeScrollItemLayoutForMultiItemType(
+                    gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
+                )
             }
 
-            // 找出可用中的最大高度的
-            var result: Size<Dimension?>? = null
-            containerSizeList.forEach {
-                if (result == null) {
-                    result = it
-                } else {
-                    val old = result?.height?.value
-                    val new = it.height?.value
-                    if (old != null && new != null && new > old) {
-                        result = it
-                    }
-                }
-            }
-            return result
+            // 3. 计算容器期望的宽高结果
+            val itemLayout = gxTemplateContext.getMaxHeightLayoutForScroll()
+            return computeScrollContainerSize(
+                gxNode, itemLayout, gxContainerData
+            )
         }
     }
 
-    fun computeContainerItemSize(
+    fun computeScrollAndGridItemContainerSize(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
+        itemData: JSONObject,
+        itemPosition: Int
+    ): Layout? {
+        return when {
+            gxNode.isScrollType() -> computeScrollItemContainerSize(
+                gxTemplateContext, gxNode, itemPosition, itemData
+            )
+            gxNode.isGridType() -> computeGridItemContainerSize(
+                gxTemplateContext, gxNode, itemData, itemPosition
+            )
+            else -> null
+        }
+    }
+
+    private fun computeGridItemContainerSize(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        itemData: JSONObject,
+        itemPosition: Int
+    ): Layout? {
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
+            return null
+        }
+
+        val itemTemplatePair = templateItems.firstOrNull() ?: return null
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+
+        val itemViewPort: Size<Float?> = computeGridItemViewPort(gxTemplateContext, gxNode)
+        val itemTemplateItem = itemTemplatePair.first
+        val itemVisualTemplateNode = itemTemplatePair.second
+
+        if (gxTemplateContext.gridItemLayoutCache == null) {
+            gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
+            )
+        }
+        return gxTemplateContext.gridItemLayoutCache
+    }
+
+    private fun computeScrollItemContainerSize(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        itemPosition: Int,
         itemData: JSONObject
     ): Layout? {
+        val templateItems = gxNode.childTemplateItems ?: return null
 
-        if (gxNode.childTemplateItems?.isEmpty() == true) {
+        if (templateItems.isEmpty()) {
             return null
         }
 
@@ -186,382 +231,539 @@ object GXNodeUtils {
         //  2.2 显示两个坑位
 
         // 1. 获取坑位的ViewPort信息
-        val itemViewPort: Size<Float?> = computeItemViewPort(gxTemplateContext, gxNode)
+        val itemViewPort: Size<Float?> = computeScrollAndGridItemViewPort(gxTemplateContext, gxNode)
 
         // case 1
-        if (gxNode.childTemplateItems?.size == 1) {
+        if (templateItems.size == 1) {
 
             // 2. 计算坑位实际宽高结果
-            val itemTemplatePair = gxNode.childTemplateItems?.firstOrNull() ?: return null
+            val itemTemplatePair = templateItems.firstOrNull() ?: return null
             val itemTemplateItem = itemTemplatePair.first
             val itemVisualTemplateNode = itemTemplatePair.second
 
-            return computeItemLayout(
+            val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+
+            computeScrollItemLayoutToCache(
                 gxTemplateContext,
-                gxNode,
+                itemData,
                 itemViewPort,
                 itemTemplateItem,
                 itemVisualTemplateNode,
-                itemData
+                itemCacheKey
             )
+
+            return gxTemplateContext.getLayoutForScroll(itemCacheKey)
         }
         // case 2
         else {
             // init multi type item
-            gxNode.templateNode.resetDataCache()
-            gxNode.templateNode.getExtend(itemData)?.let { typeData ->
-                val path =
-                    typeData.getStringExt("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}")
-                val templateId =
-                    typeData.getStringExtCanNull("${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}.${path}")
-                val items = gxNode.childTemplateItems
-                if (items != null && templateId != null) {
-                    items.firstOrNull { it.first.templateId == templateId }
-                        ?.let { itemTemplatePair ->
+            val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
-                            // 2. 计算坑位实际宽高结果
-                            val itemTemplateItem = itemTemplatePair.first
-                            val itemVisualTemplateNode = itemTemplatePair.second
+            computeScrollItemLayoutForMultiItemType(
+                gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey
+            )
 
-                            return computeItemLayout(
-                                gxTemplateContext,
-                                gxNode,
-                                itemViewPort,
-                                itemTemplateItem,
-                                itemVisualTemplateNode,
-                                itemData
-                            )
-
-                        }
-                }
-            }
-
-            return null
+            return gxTemplateContext.getLayoutForScroll(itemCacheKey)
         }
     }
 
-    fun computeContainerFooterItemSize(
+    fun computeSliderItemContainerSize(
         gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
         itemViewPort: Size<Float?>,
-        gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
-        gxItemVisualTemplateNode: GXTemplateNode?,
-        itemData: JSONObject
+        itemData: JSONObject,
+        itemPosition: Int
     ): Layout? {
-        when {
-            gxNode.isScrollType() -> {
-                val itemMeasureSize =
-                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData =
-                    GXTemplateEngine.GXTemplateData(itemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
-                    gxTemplateContext,
-                    gxItemTemplateItem,
-                    itemMeasureSize,
-                    itemTemplateData,
-                    gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
-            }
-            // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
-            gxNode.isGridType() -> {
-                val itemMeasureSize =
-                    GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
-                val itemTemplateData: GXTemplateEngine.GXTemplateData =
-                    GXTemplateEngine.GXTemplateData(itemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
-                    gxTemplateContext,
-                    gxItemTemplateItem,
-                    itemMeasureSize,
-                    itemTemplateData,
-                    gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
-            }
-            else -> {
-                return null
+
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
+            return null
+        }
+
+        val itemTemplatePair = templateItems.firstOrNull() ?: return null
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+        val itemTemplateItem = itemTemplatePair.first
+        val itemVisualTemplateNode = itemTemplatePair.second
+
+        if (gxTemplateContext.sliderItemLayoutCache == null) {
+            gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
+            )
+        }
+
+        return gxTemplateContext.sliderItemLayoutCache
+    }
+
+    private fun computeScrollItemLayoutForMultiItemType(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        templateItems: MutableList<Pair<GXTemplateEngine.GXTemplateItem, GXTemplateNode>>,
+        itemData: JSONObject,
+        itemViewPort: Size<Float?>,
+        itemCacheKey: String
+    ) {
+        gxNode.templateNode.resetDataCache()
+        val typeData = gxNode.templateNode.getExtend(itemData)
+        if (typeData != null) {
+            val itemConfig = "${ITEM_CONFIG}.${typeData.getStringExt(ITEM_PATH)}"
+            val templateId = typeData.getStringExt(itemConfig)
+            templateItems.firstOrNull { it.first.templateId == templateId }
+                ?.let { itemTemplatePair ->
+
+                    // 2. 计算坑位实际宽高结果
+                    val itemTemplateItem = itemTemplatePair.first
+                    val itemVisualTemplateNode = itemTemplatePair.second
+
+                    computeScrollItemLayoutToCache(
+                        gxTemplateContext,
+                        itemData,
+                        itemViewPort,
+                        itemTemplateItem,
+                        itemVisualTemplateNode,
+                        itemCacheKey
+                    )
+                }
+        }
+    }
+
+    private fun computeScrollItemLayoutToCache(
+        gxTemplateContext: GXTemplateContext,
+        gxItemData: JSONObject,
+        itemViewPort: Size<Float?>,
+        itemTemplateItem: GXTemplateEngine.GXTemplateItem,
+        itemVisualTemplateNode: GXTemplateNode,
+        itemCacheKey: String
+    ) {
+        gxTemplateContext.initLayoutForScroll()
+
+        if (!gxTemplateContext.isExistForScroll(itemCacheKey)) {
+            computeScrollItemLayout(
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                gxItemData,
+                itemCacheKey
+            )?.let { itemLayout ->
+                gxTemplateContext.putLayoutForScroll(itemCacheKey, itemLayout)
             }
         }
     }
 
-    private fun computeItemLayout(
+    fun computeGridSize(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
+    ): Size<Dimension?>? {
+
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
+            return null
+        }
+
+        val itemTemplatePair = templateItems.firstOrNull() ?: return null
+        val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
+        val itemPosition = 0
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+
+        val itemViewPort: Size<Float?> = computeGridItemViewPort(gxTemplateContext, gxNode)
+        val itemTemplateItem = itemTemplatePair.first
+        val itemVisualTemplateNode = itemTemplatePair.second
+
+        if (gxTemplateContext.gridItemLayoutCache == null) {
+            gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
+            )
+        }
+
+        return computeGridContainerSize(
+            gxTemplateContext, gxNode, gxTemplateContext.gridItemLayoutCache, gxContainerData
+        )
+    }
+
+    fun computeSliderSize(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray
+    ): Size<Dimension?>? {
+
+        val templateItems = gxNode.childTemplateItems ?: return null
+
+        if (templateItems.isEmpty()) {
+            return null
+        }
+
+        val itemTemplatePair = templateItems.firstOrNull() ?: return null
+        val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
+        val itemPosition = 0
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+
+        val itemViewPort: Size<Float?> = computeSliderItemViewPort(gxTemplateContext, gxNode)
+        val itemTemplateItem = itemTemplatePair.first
+        val itemVisualTemplateNode = itemTemplatePair.second
+
+        if (gxTemplateContext.sliderItemLayoutCache == null) {
+            gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
+                gxTemplateContext,
+                itemViewPort,
+                itemTemplateItem,
+                itemVisualTemplateNode,
+                itemData,
+                itemCacheKey
+            )
+        }
+
+        return computeSliderContainerSize(
+            gxTemplateContext.sliderItemLayoutCache
+        )
+    }
+
+    fun computeScrollAndGridFooterItemContainerSize(
         gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
+        itemViewPort: Size<Float?>,
+        gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxItemVisualTemplateNode: GXTemplateNode?,
+        itemData: JSONObject,
+        itemPosition: Int
+    ): Layout? {
+        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
+        val itemMeasureSize =
+            GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
+        val itemTemplateData = GXTemplateEngine.GXTemplateData(itemData)
+        return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
+            gxItemTemplateItem,
+            itemMeasureSize,
+            itemTemplateData,
+            gxItemVisualTemplateNode,
+            itemCacheKey
+        )
+    }
+
+    private fun computeSliderItemLayout(
+        gxTemplateContext: GXTemplateContext,
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
-        gxItemData: JSONObject
+        gxItemData: JSONObject,
+        itemCacheKey: String
     ): Layout? {
-        when {
-            gxNode.isScrollType() -> {
-                val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
-                    gxItemViewPort.width,
-                    gxItemViewPort.height
-                )
-                val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
-                    gxTemplateContext,
-                    gxItemTemplateItem,
-                    gxMeasureSize,
-                    gxTemplateData,
-                    gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+        val gxMeasureSize =
+            GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
+        return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
+            gxItemTemplateItem,
+            gxMeasureSize,
+            gxTemplateData,
+            gxItemVisualTemplateNode,
+            itemCacheKey
+        )
+    }
+
+    private fun computeScrollItemLayout(
+        gxTemplateContext: GXTemplateContext,
+        gxItemViewPort: Size<Float?>,
+        gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxItemVisualTemplateNode: GXTemplateNode?,
+        gxItemData: JSONObject,
+        itemCacheKey: String
+    ): Layout? {
+        val gxMeasureSize =
+            GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
+        return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
+            gxItemTemplateItem,
+            gxMeasureSize,
+            gxTemplateData,
+            gxItemVisualTemplateNode,
+            itemCacheKey
+        )
+    }
+
+    private fun computeGridItemLayout(
+        gxTemplateContext: GXTemplateContext,
+        gxItemViewPort: Size<Float?>,
+        gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxItemVisualTemplateNode: GXTemplateNode?,
+        gxItemData: JSONObject,
+        itemCacheKey: String
+    ): Layout? {
+        val gxMeasureSize =
+            GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
+        return computeItemLayoutByCreateAndBindNode(
+            gxTemplateContext,
+            gxItemTemplateItem,
+            gxMeasureSize,
+            gxTemplateData,
+            gxItemVisualTemplateNode,
+            itemCacheKey
+        )
+    }
+
+    fun computeScrollAndGridFooterItemViewPort(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
+    ): Size<Float?> {
+
+        // 对于坑位的视口宽高，需要分为Scroll容器和Grid容器
+
+        // 1. 对于Scroll容器，其坑位的宽高由坑位自身确定，可以直接使用未计算过的视口宽高
+        // 其坑位的高度，可以不计算
+        if (gxNode.isScrollType()) {
+            val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+                ?: throw IllegalArgumentException("Want to computeItemViewPort, but gxScrollConfig is null")
+
+            GXRegisterCenter.instance.extensionScroll?.convert(
+                GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
+                gxTemplateContext,
+                gxScrollConfig
+            )?.let {
+                return Size(it as Float, null)
             }
-            // 如果是Grid容器，那么计算第一个数据的高度，然后作为Item的高度
-            gxNode.isGridType() -> {
-                val gxMeasureSize =
-                    GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
-                val gxTemplateData: GXTemplateEngine.GXTemplateData =
-                    GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
-                    gxTemplateContext,
-                    gxItemTemplateItem,
-                    gxMeasureSize,
-                    gxTemplateData,
-                    gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+
+            val padding = gxNode.getPaddingRect()
+
+            // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
+            val left: Float = padding.left.toFloat()
+            val right = padding.right.toFloat()
+            gxTemplateContext.size.width?.let {
+                return Size(it - left - right, null)
             }
-            gxNode.isSliderType() -> {
-                val gxMeasureSize = GXTemplateEngine.GXMeasureSize(
-                    gxItemViewPort.width,
-                    gxItemViewPort.height
-                )
-                val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
-                val stretchNode = computeItemSizeByCreateAndBindNode(
-                    gxTemplateContext,
-                    gxItemTemplateItem,
-                    gxMeasureSize,
-                    gxTemplateData,
-                    gxItemVisualTemplateNode
-                ).stretchNode
-                return stretchNode.layoutByBind
+        }
+        // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
+        // 其坑位的高度，可以不计算
+        else if (gxNode.isGridType()) {
+            val containerWidth =
+                gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
+                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
+
+            val gxGridConfig = gxNode.templateNode.layer.gridConfig
+                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but gxGridConfig is null")
+
+            val padding = gxNode.getPaddingRect()
+
+            return when {
+                gxGridConfig.isVertical -> {
+                    Size(containerWidth - (padding.left + padding.right), null)
+                }
+                gxGridConfig.isHorizontal -> {
+                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                    Size(null, null)
+                }
+                else -> {
+                    Size(null, null)
+                }
+            }
+        }
+
+        return Size(null, null)
+    }
+
+    fun computeScrollAndGridItemViewPort(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
+    ): Size<Float?> {
+        if (gxNode.isScrollType()) {
+            return computeScrollItemViewPort(gxTemplateContext, gxNode)
+        }
+        if (gxNode.isGridType()) {
+            return computeGridItemViewPort(gxTemplateContext, gxNode)
+        }
+        return Size(null, null)
+    }
+
+    private fun computeScrollItemViewPort(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
+    ): Size<Float?> {
+
+        val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+            ?: throw IllegalArgumentException("Want to computeItemViewPort, but gxScrollConfig is null")
+
+        GXRegisterCenter.instance.extensionScroll?.convert(
+            GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH, gxTemplateContext, gxScrollConfig
+        )?.let {
+            return Size(it as Float, null)
+        }
+
+        val padding = gxNode.getPaddingRect()
+
+        // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
+        val left: Float = padding.left.toFloat()
+        val right = padding.right.toFloat()
+
+        gxTemplateContext.size.width?.let {
+            return Size(it - left - right, null)
+        }
+
+        return Size(null, null)
+    }
+
+    private fun computeGridItemViewPort(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
+    ): Size<Float?> {
+        val containerWidth = gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
+        ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
+
+        val gxGridConfig = gxNode.templateNode.layer.gridConfig
+            ?: throw IllegalArgumentException("Want to computeItemViewPort, but config is null")
+
+        return when {
+            gxGridConfig.isVertical -> {
+                val column = gxGridConfig.column(gxTemplateContext)
+
+                val totalItemSpacing = gxGridConfig.itemSpacing * (column - 1)
+
+                val paddingRect = gxNode.getPaddingRect()
+
+                val padding = paddingRect.left + paddingRect.right
+
+                val width = (containerWidth - totalItemSpacing - padding) * 1.0F / column
+
+                Size(width, null)
+            }
+            gxGridConfig.isHorizontal -> {
+                // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                Size(null, null)
             }
             else -> {
-                return null
+                Size(null, null)
             }
         }
     }
 
-    fun computeFooterItemViewPort(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode
+    fun computeSliderItemViewPort(
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode
     ): Size<Float?> {
-
-        // 对于坑位的视口宽高，需要分为Scroll容器和Grid容器
-
-        // 1. 对于Scroll容器，其坑位的宽高由坑位自身确定，可以直接使用未计算过的视口宽高
-        // 其坑位的高度，可以不计算
-        if (gxNode.isScrollType()) {
-            val finalScrollConfig = gxNode.templateNode.finalScrollConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
-
-            GXRegisterCenter.instance
-                .extensionScroll?.convert(
-                    GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
-                    gxTemplateContext,
-                    finalScrollConfig
-                )?.let {
-                    return Size(it as Float, null)
-                }
-
-            // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
-            val left: Float = finalScrollConfig.edgeInsets.left.toFloat()
-            val right = finalScrollConfig.edgeInsets.right.toFloat()
-            gxTemplateContext.size.width?.let {
-                return Size(it - left - right, null)
-            }
-        }
-        // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
-        // 其坑位的高度，可以不计算
-        else if (gxNode.isGridType()) {
-            val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.stretchNode.layoutByCreate?.width
-                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.finalGridConfig
-                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but finalGridConfig is null")
-
-            return when {
-                gridConfig.isVertical -> {
-                    val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
-                    Size(containerWidth - padding, null)
-                }
-                gridConfig.isHorizontal -> {
-                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                    Size(null, null)
-                }
-                else -> {
-                    Size(null, null)
+        when (val nodeWith = gxNode.templateNode.css.flexBox.sizeForDimension?.width) {
+            is Dimension.Points -> {
+                gxTemplateContext.size.width?.let {
+                    return Size(it * nodeWith.value, null)
                 }
             }
-        }
-
-        return Size(null, null)
-    }
-
-    fun computeItemViewPort(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode
-    ): Size<Float?> {
-
-        // 对于坑位的视口宽高，需要分为Scroll容器和Grid容器
-
-        // 1. 对于Scroll容器，其坑位的宽高由坑位自身确定，可以直接使用未计算过的视口宽高
-        // 其坑位的高度，可以不计算
-        if (gxNode.isScrollType()) {
-            val finalScrollConfig = gxNode.templateNode.finalScrollConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalScrollConfig is null")
-
-            GXRegisterCenter.instance
-                .extensionScroll?.convert(
-                    GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH,
-                    gxTemplateContext,
-                    finalScrollConfig
-                )?.let {
-                    return Size(it as Float, null)
-                }
-
-            // 这里不区分horizontal或者vertical，因为坑位的最大视口大小是可以直接确定的
-            val left: Float = finalScrollConfig.edgeInsets.left.toFloat()
-            val right = finalScrollConfig.edgeInsets.right.toFloat()
-            gxTemplateContext.size.width?.let {
-                return Size(it - left - right, null)
-            }
-        }
-        // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
-        // 其坑位的高度，可以不计算
-        else if (gxNode.isGridType()) {
-            val containerWidth = gxNode.stretchNode.layoutByBind?.width
-                ?: gxNode.stretchNode.layoutByCreate?.width
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
-            val gridConfig = gxNode.templateNode.finalGridConfig
-                ?: throw IllegalArgumentException("Want to computeItemViewPort, but finalGridConfig is null")
-            return when {
-                gridConfig.isVertical -> {
-                    val totalItemSpacing = gridConfig.itemSpacing *
-                            (gridConfig.column(gxTemplateContext) - 1)
-                    val padding = gridConfig.edgeInsets.left + gridConfig.edgeInsets.right
-                    val finalWidth = (containerWidth - totalItemSpacing - padding) * 1.0F /
-                            gridConfig.column(gxTemplateContext)
-                    Size(finalWidth, null)
-                }
-                gridConfig.isHorizontal -> {
-                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                    Size(null, null)
-                }
-                else -> {
-                    Size(null, null)
-                }
-            }
-        } else if (gxNode.isSliderType()) {
-            when (val nodeWith = gxNode.templateNode.finalCss?.flexBox?.sizeForStyle?.width) {
-                is Dimension.Points -> {
-                    gxTemplateContext.size.width?.let {
-                        return Size(it * nodeWith.value, null)
-                    }
-                }
-                else -> {
-                    gxTemplateContext.size.width?.let {
-                        return Size(it, null)
-                    }
+            else -> {
+                gxTemplateContext.size.width?.let {
+                    return Size(it, null)
                 }
             }
         }
         return Size(null, null)
     }
 
-    private fun computeItemSizeByCreateAndBindNode(
+    private fun computeItemLayoutByCreateAndBindNode(
         gxTemplateContext: GXTemplateContext,
-        templateItem: GXTemplateEngine.GXTemplateItem,
-        measureSize: GXTemplateEngine.GXMeasureSize,
-        templateData: GXTemplateEngine.GXTemplateData,
-        visualTemplateNode: GXTemplateNode?
-    ): GXNode {
+        gxTemplateItem: GXTemplateEngine.GXTemplateItem,
+        gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+        gxTemplateData: GXTemplateEngine.GXTemplateData,
+        gxVisualTemplateNode: GXTemplateNode?,
+        itemCacheKey: String
+    ): Layout? {
 
-        // TODO 此处待优化 容器高度计算SIZE的复用粒度问题，是一次create多次bind用完丢弃，还是多次create多次bind在坑位创建时全部复用。
-        val templateInfo = GXTemplateEngine.instance.data.getTemplateInfo(templateItem)
-        val context = GXTemplateContext.createContext(
-            templateItem,
-            measureSize,
-            templateInfo,
-            visualTemplateNode
+        val gxItemTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
+
+        val gxItemTemplateContext = GXTemplateContext.createContext(
+            gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
-        val rootNode = GXTemplateEngine.instance.render.createNode(context)
-        context.templateData = templateData
-        GXTemplateEngine.instance.render.bindNodeData(context)
-        return rootNode
+
+        if (!GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
+            GXTemplateEngine.instance.render.prepareView(gxItemTemplateContext)
+        }
+
+        gxItemTemplateContext.templateData = gxTemplateData
+
+        val gxItemRootNode =
+            GXTemplateEngine.instance.render.createViewOnlyNodeTree(gxItemTemplateContext)
+
+        GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
+
+        gxTemplateContext.initNodeForScroll()
+        gxTemplateContext.putNodeForScroll(itemCacheKey, gxItemRootNode)
+
+        return gxItemRootNode.layoutByBind
     }
 
-    private fun computeContainerSize(
+    private fun computeScrollContainerSize(
+        gxNode: GXNode, itemSize: Layout?, containerTemplateData: JSONArray
+    ): Size<Dimension?>? {
+        if (itemSize != null) {
+            val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
+                ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxScrollConfig is null")
+
+            // 如果是横向，那么高度就是坑位高度
+            if (gxScrollConfig.isHorizontal) {
+                return Size(
+                    Dimension.Points(itemSize.width), Dimension.Points(itemSize.height)
+                )
+            }
+            // 如果是竖向，那么高度就是坑位高度*行数+总间距
+            else if (gxScrollConfig.isVertical) {
+                val lines = max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
+                var containerHeight = itemSize.height
+                containerHeight *= lines
+                containerHeight += gxScrollConfig.itemSpacing * (lines - 1)
+                return Size(
+                    Dimension.Points(itemSize.width), Dimension.Points(containerHeight)
+                )
+            }
+        }
+        return null
+    }
+
+    private fun computeGridContainerSize(
         context: GXTemplateContext,
         gxNode: GXNode,
         itemSize: Layout?,
         containerTemplateData: JSONArray
     ): Size<Dimension?>? {
         if (itemSize != null) {
-            // 容器的尺寸计算需要氛围Scroll和Grid
-            if (gxNode.isScrollType()) {
-                val finalScrollConfig = gxNode.templateNode.finalScrollConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalScrollConfig is null")
+            val gxGridConfig = gxNode.templateNode.layer.gridConfig
+                ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxGridConfig is null")
 
-                // 如果是横向，那么高度就是坑位高度
-                if (finalScrollConfig.isHorizontal) {
-                    return Size(
-                        Dimension.Points(itemSize.width),
-                        Dimension.Points(itemSize.height)
-                    )
-                }
-                // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                else if (finalScrollConfig.isVertical) {
-                    val lines = max(1, ceil((containerTemplateData.size * 1.0F).toDouble()).toInt())
-                    var containerHeight = itemSize.height
-                    containerHeight *= lines
-                    containerHeight += finalScrollConfig.itemSpacing * (lines - 1)
-                    return Size(
-                        Dimension.Points(itemSize.width),
-                        Dimension.Points(containerHeight)
-                    )
-                }
-            } else if (gxNode.isGridType()) {
-                val finalGridConfig = gxNode.templateNode.finalGridConfig
-                    ?: throw IllegalArgumentException("Want to computeContainerHeight, but finalGridConfig is null")
+            // 如果是竖向，那么高度就是坑位高度*行数+总间距
+            if (gxGridConfig.isVertical) {
 
-                // 如果是竖向，那么高度就是坑位高度*行数+总间距
-                if (finalGridConfig.isVertical) {
-
-                    // 获取行数
-                    val lines = max(
-                        1,
-                        ceil((containerTemplateData.size * 1.0F / finalGridConfig.column(context)).toDouble()).toInt()
-                    )
-
-                    var containerHeight = itemSize.height
-
-                    // 计算高度
-                    containerHeight *= lines
-                    containerHeight += finalGridConfig.rowSpacing * (lines - 1)
-
-                    // 处理padding
-                    val edgeInsets = finalGridConfig.edgeInsets
-                    containerHeight += edgeInsets.top + edgeInsets.bottom
-
-                    val containerWidth = itemSize.width - edgeInsets.left - edgeInsets.right
-
-                    return Size(
-                        Dimension.Points(containerWidth),
-                        Dimension.Points(containerHeight)
-                    )
-                } else if (finalGridConfig.isHorizontal) {
-                    // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                    return null
-                }
-            } else if (gxNode.isSliderType()) {
-                return Size(
-                    Dimension.Points(itemSize.width),
-                    Dimension.Points(itemSize.height)
+                // 获取行数
+                val lines = max(
+                    1,
+                    ceil((containerTemplateData.size * 1.0F / gxGridConfig.column(context)).toDouble()).toInt()
                 )
+
+                var containerHeight = itemSize.height
+
+                // 计算高度
+                containerHeight *= lines
+                containerHeight += gxGridConfig.rowSpacing * (lines - 1)
+
+                // 处理padding
+                val padding = gxNode.getPaddingRect()
+                containerHeight += padding.top + padding.bottom
+
+                val containerWidth = itemSize.width - padding.left - padding.right
+
+                return Size(
+                    Dimension.Points(containerWidth), Dimension.Points(containerHeight)
+                )
+            } else if (gxGridConfig.isHorizontal) {
+                // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+                return null
             }
+        }
+        return null
+    }
+
+    private fun computeSliderContainerSize(
+        itemSize: Layout?
+    ): Size<Dimension?>? {
+        if (itemSize != null) {
+            return Size(Dimension.Points(itemSize.width), Dimension.Points(itemSize.height))
         }
         return null
     }

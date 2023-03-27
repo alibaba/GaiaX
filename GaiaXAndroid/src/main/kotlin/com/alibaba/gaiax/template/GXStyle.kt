@@ -22,191 +22,450 @@ import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.template.utils.GXTemplateUtils
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
  */
 data class GXStyle(
-    val fontSize: GXSize? = null,
-    val fontFamily: Typeface? = null,
-    val fontWeight: Typeface? = null,
-    val fontLines: Int? = null,
-    val fontColor: GXColor? = null,
-    val fontTextOverflow: TextUtils.TruncateAt? = null,
-    val fontTextAlign: Int? = null,
-    val backgroundColor: GXColor? = null,
-    val backgroundImage: GXLinearColor? = null,
-    val opacity: Float? = null,
-    val overflow: Boolean? = null,
-    val display: Int? = null,
-    val hidden: Int? = null,
-    val padding: Rect<GXSize>? = null,
-    val borderWidth: GXSize? = null,
-    val borderColor: GXColor? = null,
-    val borderRadius: GXRoundedCorner? = null,
-    val fontLineHeight: GXSize? = null,
-    val fontTextDecoration: Int? = null,
-    val mode: GXMode? = null,
-    val boxShadow: GXBoxShadow? = null,
-    val backdropFilter: GXBackdropFilter? = null,
-    val fitContent: Boolean? = null
+    internal var fontSizeForTemplate: GXSize? = null,
+    internal var fontFamilyForTemplate: Typeface? = null,
+    internal var fontWeightForTemplate: Typeface? = null,
+    internal var fontLinesForTemplate: Int? = null,
+    internal var fontColorForTemplate: GXColor? = null,
+    internal var fontTextOverflowForTemplate: TextUtils.TruncateAt? = null,
+    internal var fontTextAlignForTemplate: Int? = null,
+    internal var backgroundColorForTemplate: GXColor? = null,
+    internal var backgroundImageForTemplate: GXLinearColor? = null,
+    internal var opacityForTemplate: Float? = null,
+    internal var overflowForTemplate: Boolean? = null,
+    internal var displayForTemplate: Int? = null,
+    internal var hiddenForTemplate: Int? = null,
+    internal var paddingForTemplate: Rect<GXSize>? = null,
+    internal var borderWidthForTemplate: GXSize? = null,
+    internal var borderColorForTemplate: GXColor? = null,
+    internal var borderRadiusForTemplate: GXRoundedCorner? = null,
+    internal var fontLineHeightForTemplate: GXSize? = null,
+    internal var fontTextDecorationForTemplate: Int? = null,
+    internal var modeForTemplate: GXMode? = null,
+    internal var boxShadowForTemplate: GXBoxShadow? = null,
+    internal var backdropFilterForTemplate: GXBackdropFilter? = null,
+    internal var fitContentForTemplate: Boolean? = null
 ) {
 
-    fun isEmpty(): Boolean {
-        return fontSize == null &&
-                fontFamily == null &&
-                fontWeight == null &&
-                fontLines == null &&
-                fontColor == null &&
-                fontTextOverflow == null &&
-                fontTextAlign == null &&
-                backgroundColor == null &&
-                backgroundImage == null &&
-                opacity == null &&
-                overflow == null &&
-                display == null &&
-                hidden == null &&
-                padding == null &&
-                borderWidth == null &&
-                borderColor == null &&
-                borderRadius == null &&
-                fontLineHeight == null &&
-                fontTextDecoration == null &&
-                mode == null &&
-                fitContent == null &&
-                boxShadow == null
-    }
+    private var fontSizeForExtend: GXSize? = null
+    private var fontFamilyForExtend: Typeface? = null
+    private var fontWeightForExtend: Typeface? = null
+    private var fontLinesForExtend: Int? = null
+    private var fontColorForExtend: GXColor? = null
+    private var fontTextOverflowForExtend: TextUtils.TruncateAt? = null
+    private var fontTextAlignForExtend: Int? = null
+    private var backgroundColorForExtend: GXColor? = null
+    private var backgroundImageForExtend: GXLinearColor? = null
+    private var opacityForExtend: Float? = null
+    private var overflowForExtend: Boolean? = null
+    private var displayForExtend: Int? = null
+    private var hiddenForExtend: Int? = null
+    private var paddingForExtend: Rect<GXSize>? = null
+    private var borderWidthForExtend: GXSize? = null
+    private var borderColorForExtend: GXColor? = null
+    private var borderRadiusForExtend: GXRoundedCorner? = null
+    private var fontLineHeightForExtend: GXSize? = null
+    private var fontTextDecorationForExtend: Int? = null
+    private var modeForExtend: GXMode? = null
+    private var boxShadowForExtend: GXBoxShadow? = null
+    private var backdropFilterForExtend: GXBackdropFilter? = null
+    private var fitContentForExtend: Boolean? = null
+
+    val fontSize: GXSize?
+        get() {
+            return fontSizeForExtend ?: fontSizeForTemplate
+        }
+
+    val fontFamily: Typeface?
+        get() {
+            return fontFamilyForExtend ?: fontFamilyForTemplate
+        }
+
+    val fontWeight: Typeface?
+        get() {
+            return fontWeightForExtend ?: fontWeightForTemplate
+        }
+
+    val fontLines: Int?
+        get() {
+            return fontLinesForExtend ?: fontLinesForTemplate
+        }
+
+    val fontColor: GXColor?
+        get() {
+            return fontColorForExtend ?: fontColorForTemplate
+        }
+
+    val fontTextOverflow: TextUtils.TruncateAt?
+        get() {
+            return fontTextOverflowForExtend ?: fontTextOverflowForTemplate
+        }
+
+    val fontTextAlign: Int?
+        get() {
+            return fontTextAlignForExtend ?: fontTextAlignForTemplate
+        }
+
+    val backgroundColor: GXColor?
+        get() {
+            return backgroundColorForExtend ?: backgroundColorForTemplate
+        }
+
+    val backgroundImage: GXLinearColor?
+        get() {
+            return backgroundImageForExtend ?: backgroundImageForTemplate
+        }
+
+    val opacity: Float?
+        get() {
+            return opacityForExtend ?: opacityForTemplate
+        }
+
+    val overflow: Boolean?
+        get() {
+            return overflowForExtend ?: overflowForTemplate
+        }
+
+    val display: Int?
+        get() {
+            return displayForExtend ?: displayForTemplate
+        }
+
+    val hidden: Int?
+        get() {
+            return hiddenForExtend ?: hiddenForTemplate
+        }
+
+    val padding: Rect<GXSize>?
+        get() {
+            return paddingForExtend ?: paddingForTemplate
+        }
+
+    private var _paddingForAndroid: android.graphics.Rect? = null
+
+    val paddingForAndroid: android.graphics.Rect
+        get() {
+            val target = padding
+            if (target != null) {
+                if (_paddingForAndroid == null) {
+                    _paddingForAndroid = android.graphics.Rect(
+                        target.start.valueInt,
+                        target.top.valueInt,
+                        target.end.valueInt,
+                        target.bottom.valueInt
+                    )
+                }
+            }
+            return _paddingForAndroid ?: android.graphics.Rect()
+        }
+
+    val borderWidth: GXSize?
+        get() {
+            return borderWidthForExtend ?: borderWidthForTemplate
+        }
+
+    val borderColor: GXColor?
+        get() {
+            return borderColorForExtend ?: borderColorForTemplate
+        }
+
+    val borderRadius: GXRoundedCorner?
+        get() {
+            return borderRadiusForExtend ?: borderRadiusForTemplate
+        }
+
+    val fontLineHeight: GXSize?
+        get() {
+            return fontLineHeightForExtend ?: fontLineHeightForTemplate
+        }
+
+    val fontTextDecoration: Int?
+        get() {
+            return fontTextDecorationForExtend ?: fontTextDecorationForTemplate
+        }
+
+    val mode: GXMode?
+        get() {
+            return modeForExtend ?: modeForTemplate
+        }
+
+    val boxShadow: GXBoxShadow?
+        get() {
+            return boxShadowForExtend ?: boxShadowForTemplate
+        }
+
+    val backdropFilter: GXBackdropFilter?
+        get() {
+            return backdropFilterForExtend ?: backdropFilterForTemplate
+        }
+
+    val fitContent: Boolean?
+        get() {
+            return if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
+                // 对优酷的逻辑特殊兼容
+                if (fitContentForTemplate == true && fitContentForExtend == false) {
+                    true
+                } else {
+                    fitContentForExtend ?: fitContentForTemplate
+                }
+            } else {
+                fitContentForTemplate
+            }
+        }
 
     fun isEmptyStyle(): Boolean {
-        return backgroundColor == null &&
-                backgroundImage == null &&
-                opacity == null &&
-                backdropFilter == null &&
-                overflow == null &&
-                borderWidth == null &&
-                borderColor == null &&
-                borderRadius == null &&
-                boxShadow == null
+        return backgroundColor == null && backgroundImage == null && opacity == null && backdropFilter == null && overflow == null && borderWidth == null && borderColor == null && borderRadius == null && boxShadow == null
     }
 
     fun isInvisible(): Boolean {
         return display == View.INVISIBLE || display == View.GONE || hidden == View.INVISIBLE
     }
 
-    companion object {
+    fun updateByExtend(extendCssData: JSONObject) {
+        val gxStyle = this
+        val convertStyle = GXStyleConvert.instance
 
-        fun createByExtend(css: JSONObject): GXStyle {
-            if (css.isEmpty()) {
-                return GXStyle()
-            }
-            val convertStyle = GXStyleConvert.instance
-            return GXStyle(
-                fontSize = convertStyle.font(css),
-                fontFamily = convertStyle.fontFamily(css),
-                fontWeight = convertStyle.fontWeight(css),
-                fontLines = convertStyle.fontLines(css),
-                fontColor = convertStyle.fontColor(css),
-                fontTextOverflow = convertStyle.fontTextOverflow(css),
-                fontTextAlign = convertStyle.fontTextAlign(css),
-                backgroundColor = convertStyle.backgroundColor(css),
-                backgroundImage = convertStyle.backgroundImage(css),
-                mode = convertStyle.mode(css),
-                opacity = convertStyle.opacity(css),
-                borderRadius = convertStyle.borderRadius(css),
-                overflow = convertStyle.overflow(css),
-                display = convertStyle.display(css),
-                hidden = convertStyle.hidden(css),
-                padding = convertStyle.padding(css),
-                borderWidth = convertStyle.borderWidth(css),
-                borderColor = convertStyle.borderColor(css),
-                fontLineHeight = convertStyle.fontLineHeight(css),
-                fontTextDecoration = convertStyle.textDecoration(css),
-                boxShadow = convertStyle.boxShadow(css),
-                backdropFilter = convertStyle.backdropFilter(css),
-                fitContent = if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
-                    convertStyle.fitContent(css)
-                } else {
-                    null
+        extendCssData.forEach {
+            val key: String = it.key
+            val value = it.value
+            if (value == null) {
+                if (GXLog.isLog()) {
+                    GXLog.e("GXStyle.updateByExtend @forEach, key=$key, value=$value")
                 }
-            )
+                return@forEach
+            }
+            when (key) {
+                GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForExtend =
+                    convertStyle.font(value.toString())
+                GXTemplateKey.STYLE_FONT_FAMILY -> gxStyle.fontFamilyForExtend =
+                    convertStyle.fontFamily(value.toString())
+                GXTemplateKey.STYLE_FONT_WEIGHT -> gxStyle.fontWeightForExtend =
+                    convertStyle.fontWeight(value.toString())
+                GXTemplateKey.STYLE_FONT_LINES -> gxStyle.fontLinesForExtend =
+                    convertStyle.fontLines(value.toString())
+                GXTemplateKey.STYLE_FONT_COLOR -> gxStyle.fontColorForExtend =
+                    convertStyle.fontColor(value.toString())
+                GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW -> gxStyle.fontTextOverflowForExtend =
+                    convertStyle.fontTextOverflow(value.toString())
+                GXTemplateKey.STYLE_FONT_TEXT_ALIGN -> gxStyle.fontTextAlignForExtend =
+                    convertStyle.fontTextAlign(value.toString())
+                GXTemplateKey.STYLE_FONT_TEXT_DECORATION -> gxStyle.fontTextDecorationForExtend =
+                    convertStyle.textDecoration(value.toString())
+                GXTemplateKey.STYLE_BACKGROUND_COLOR -> gxStyle.backgroundColorForExtend =
+                    convertStyle.backgroundColor(value.toString())
+                GXTemplateKey.STYLE_BACKGROUND_IMAGE -> gxStyle.backgroundImageForExtend =
+                    convertStyle.backgroundImage(value.toString())
+                GXTemplateKey.STYLE_MODE -> {
+                    if (gxStyle.modeForExtend == null) {
+                        gxStyle.modeForExtend = convertStyle.mode(extendCssData)
+                    }
+                }
+                GXTemplateKey.STYLE_OPACITY -> gxStyle.opacityForTemplate =
+                    convertStyle.opacity(value.toString())
+                GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> {
+                    if (gxStyle.borderRadiusForExtend == null) {
+                        gxStyle.borderRadiusForExtend = convertStyle.borderRadius(extendCssData)
+                    }
+                }
+                GXTemplateKey.FLEXBOX_OVERFLOW -> gxStyle.overflowForExtend =
+                    convertStyle.overflow(value.toString())
+                GXTemplateKey.FLEXBOX_DISPLAY -> gxStyle.displayForExtend =
+                    convertStyle.display(value.toString())
+                GXTemplateKey.STYLE_HIDDEN -> gxStyle.hiddenForExtend =
+                    convertStyle.hidden(value.toString())
+                GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxStyle.paddingForExtend == null) gxStyle.paddingForExtend =
+                    convertStyle.padding(extendCssData)
+                GXTemplateKey.STYLE_BORDER_WIDTH -> gxStyle.borderWidthForExtend =
+                    convertStyle.borderWidth(value.toString())
+                GXTemplateKey.STYLE_BORDER_COLOR -> gxStyle.borderColorForExtend =
+                    convertStyle.borderColor(value.toString())
+                GXTemplateKey.STYLE_FONT_LINE_HEIGHT -> gxStyle.fontLineHeightForExtend =
+                    convertStyle.fontLineHeight(value.toString())
+                GXTemplateKey.STYLE_BOX_SHADOW -> gxStyle.boxShadowForExtend =
+                    convertStyle.boxShadow(value.toString())
+                GXTemplateKey.STYLE_BACKDROP_FILTER -> gxStyle.backdropFilterForExtend =
+                    convertStyle.backdropFilter(value.toString())
+                GXTemplateKey.STYLE_FIT_CONTENT -> gxStyle.fitContentForExtend =
+                    convertStyle.fitContent(value.toString())
+            }
         }
+    }
+
+    fun reset() {
+        fontSizeForExtend = null
+        fontFamilyForExtend = null
+        fontWeightForExtend = null
+        fontLinesForExtend = null
+        fontColorForExtend = null
+        fontTextOverflowForExtend = null
+        fontTextAlignForExtend = null
+        backgroundColorForExtend = null
+        backgroundImageForExtend = null
+        opacityForExtend = null
+        overflowForExtend = null
+        displayForExtend = null
+        hiddenForExtend = null
+        paddingForExtend = null
+        borderWidthForExtend = null
+        borderColorForExtend = null
+        borderRadiusForExtend = null
+        fontLineHeightForExtend = null
+        fontTextDecorationForExtend = null
+        modeForExtend = null
+        boxShadowForExtend = null
+        backdropFilterForExtend = null
+        fitContentForExtend = null
+        _paddingForAndroid = null
+    }
+
+    fun updateByVisual(visual: GXStyle) {
+        visual.fontSize?.let {
+            fontSizeForExtend = it
+        }
+        visual.fontFamily?.let {
+            fontFamilyForExtend = it
+        }
+        visual.fontWeight?.let {
+            fontWeightForExtend = it
+        }
+        visual.fontLines?.let {
+            fontLinesForExtend = it
+        }
+        visual.fontColor?.let {
+            fontColorForExtend = it
+        }
+        visual.fontTextOverflow?.let {
+            fontTextOverflowForExtend = it
+        }
+        visual.fontTextAlign?.let {
+            fontTextAlignForExtend = it
+        }
+        visual.backgroundColor?.let {
+            backgroundColorForExtend = it
+        }
+        visual.backgroundImage?.let {
+            backgroundImageForExtend = it
+        }
+        visual.mode?.let {
+            modeForExtend = it
+        }
+        visual.opacity?.let {
+            opacityForExtend = it
+        }
+        visual.overflow?.let {
+            overflowForExtend = it
+        }
+        visual.display?.let {
+            displayForExtend = it
+        }
+        visual.hidden?.let {
+            hiddenForExtend = it
+        }
+        visual.padding?.let {
+            paddingForExtend = it
+        }
+        visual.borderWidth?.let {
+            borderWidthForExtend = it
+        }
+        visual.borderColor?.let {
+            borderColorForExtend = it
+        }
+        visual.fontLineHeight?.let {
+            fontLineHeightForExtend = it
+        }
+        visual.fontTextDecoration?.let {
+            fontTextDecorationForExtend = it
+        }
+        visual.borderRadius?.let {
+            borderRadiusForExtend = it
+        }
+        visual.boxShadow?.let {
+            boxShadowForExtend = it
+        }
+        visual.backdropFilter?.let {
+            backdropFilterForExtend = it
+        }
+    }
+
+    companion object {
 
         fun create(css: JSONObject): GXStyle {
             if (css.isEmpty()) {
                 return GXStyle()
             }
-            val convertStyle = GXStyleConvert.instance
-            return GXStyle(
-                fontSize = convertStyle.font(css),
-                fontFamily = convertStyle.fontFamily(css),
-                fontWeight = convertStyle.fontWeight(css),
-                fontLines = convertStyle.fontLines(css),
-                fontColor = convertStyle.fontColor(css),
-                fontTextOverflow = convertStyle.fontTextOverflow(css),
-                fontTextAlign = convertStyle.fontTextAlign(css),
-                backgroundColor = convertStyle.backgroundColor(css),
-                backgroundImage = convertStyle.backgroundImage(css),
-                mode = convertStyle.mode(css),
-                opacity = convertStyle.opacity(css),
-                borderRadius = convertStyle.borderRadius(css),
-                overflow = convertStyle.overflow(css),
-                display = convertStyle.display(css),
-                hidden = convertStyle.hidden(css),
-                padding = convertStyle.padding(css),
-                borderWidth = convertStyle.borderWidth(css),
-                borderColor = convertStyle.borderColor(css),
-                fontLineHeight = convertStyle.fontLineHeight(css),
-                fontTextDecoration = convertStyle.textDecoration(css),
-                boxShadow = convertStyle.boxShadow(css),
-                backdropFilter = convertStyle.backdropFilter(css),
-                fitContent = convertStyle.fitContent(css)
-            )
-        }
+            val gxStyle = GXStyle()
 
-        fun create(lowPriorityStyle: GXStyle, heightPriorityStyle: GXStyle): GXStyle {
-            return GXStyle(
-                fontSize = heightPriorityStyle.fontSize ?: lowPriorityStyle.fontSize,
-                fontFamily = heightPriorityStyle.fontFamily ?: lowPriorityStyle.fontFamily,
-                fontWeight = heightPriorityStyle.fontWeight ?: lowPriorityStyle.fontWeight,
-                fontLines = heightPriorityStyle.fontLines ?: lowPriorityStyle.fontLines,
-                fontColor = heightPriorityStyle.fontColor ?: lowPriorityStyle.fontColor,
-                fontTextOverflow = heightPriorityStyle.fontTextOverflow
-                    ?: lowPriorityStyle.fontTextOverflow,
-                fontTextAlign = heightPriorityStyle.fontTextAlign ?: lowPriorityStyle.fontTextAlign,
-                backgroundColor = heightPriorityStyle.backgroundColor
-                    ?: lowPriorityStyle.backgroundColor,
-                backgroundImage = heightPriorityStyle.backgroundImage
-                    ?: lowPriorityStyle.backgroundImage,
-                mode = heightPriorityStyle.mode ?: lowPriorityStyle.mode,
-                opacity = heightPriorityStyle.opacity ?: lowPriorityStyle.opacity,
-                overflow = heightPriorityStyle.overflow ?: lowPriorityStyle.overflow,
-                display = heightPriorityStyle.display ?: lowPriorityStyle.display,
-                hidden = heightPriorityStyle.hidden ?: lowPriorityStyle.hidden,
-                padding = GXTemplateUtils.createRectGXSizeByPriority(
-                    heightPriorityStyle.padding,
-                    lowPriorityStyle.padding
-                ),
-                borderWidth = heightPriorityStyle.borderWidth ?: lowPriorityStyle.borderWidth,
-                borderColor = heightPriorityStyle.borderColor ?: lowPriorityStyle.borderColor,
-                fontLineHeight = heightPriorityStyle.fontLineHeight
-                    ?: lowPriorityStyle.fontLineHeight,
-                fontTextDecoration = heightPriorityStyle.fontTextDecoration
-                    ?: lowPriorityStyle.fontTextDecoration,
-                borderRadius = heightPriorityStyle.borderRadius ?: lowPriorityStyle.borderRadius,
-                boxShadow = heightPriorityStyle.boxShadow ?: lowPriorityStyle.boxShadow,
-                backdropFilter = heightPriorityStyle.backdropFilter
-                    ?: lowPriorityStyle.backdropFilter,
-                fitContent = if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
-                    if (lowPriorityStyle.fitContent == true && heightPriorityStyle.fitContent == false) {
-                        lowPriorityStyle.fitContent
-                    } else {
-                        heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
+            // 默认值
+            gxStyle.fontTextOverflowForTemplate = TextUtils.TruncateAt.END
+
+            val convertStyle = GXStyleConvert.instance
+
+            // 处理值
+            css.forEach {
+                val key: String = it.key
+                val value = it.value
+                if (value == null) {
+                    if (GXLog.isLog()) {
+                        GXLog.e("GXFlexBox.create @forEach, key=$key, value=$value")
                     }
-                } else {
-                    heightPriorityStyle.fitContent ?: lowPriorityStyle.fitContent
+                    return@forEach
                 }
-            )
+                when (key) {
+                    GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForTemplate =
+                        convertStyle.font(value.toString())
+                    GXTemplateKey.STYLE_FONT_FAMILY -> gxStyle.fontFamilyForTemplate =
+                        convertStyle.fontFamily(value.toString())
+                    GXTemplateKey.STYLE_FONT_WEIGHT -> gxStyle.fontWeightForTemplate =
+                        convertStyle.fontWeight(value.toString())
+                    GXTemplateKey.STYLE_FONT_LINES -> gxStyle.fontLinesForTemplate =
+                        convertStyle.fontLines(value.toString())
+                    GXTemplateKey.STYLE_FONT_COLOR -> gxStyle.fontColorForTemplate =
+                        convertStyle.fontColor(value.toString())
+                    GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW -> gxStyle.fontTextOverflowForTemplate =
+                        convertStyle.fontTextOverflow(value.toString())
+                    GXTemplateKey.STYLE_FONT_TEXT_ALIGN -> gxStyle.fontTextAlignForTemplate =
+                        convertStyle.fontTextAlign(value.toString())
+                    GXTemplateKey.STYLE_FONT_TEXT_DECORATION -> gxStyle.fontTextDecorationForTemplate =
+                        convertStyle.textDecoration(value.toString())
+                    GXTemplateKey.STYLE_BACKGROUND_COLOR -> gxStyle.backgroundColorForTemplate =
+                        convertStyle.backgroundColor(value.toString())
+                    GXTemplateKey.STYLE_BACKGROUND_IMAGE -> gxStyle.backgroundImageForTemplate =
+                        convertStyle.backgroundImage(value.toString())
+                    GXTemplateKey.STYLE_MODE -> if (gxStyle.modeForTemplate == null) gxStyle.modeForTemplate =
+                        convertStyle.mode(css)
+                    GXTemplateKey.STYLE_OPACITY -> gxStyle.opacityForTemplate =
+                        convertStyle.opacity(value.toString())
+                    GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> if (gxStyle.borderRadiusForTemplate == null) gxStyle.borderRadiusForTemplate =
+                        convertStyle.borderRadius(css)
+                    GXTemplateKey.FLEXBOX_OVERFLOW -> gxStyle.overflowForTemplate =
+                        convertStyle.overflow(value.toString())
+                    GXTemplateKey.FLEXBOX_DISPLAY -> gxStyle.displayForTemplate =
+                        convertStyle.display(value.toString())
+                    GXTemplateKey.STYLE_HIDDEN -> gxStyle.hiddenForTemplate =
+                        convertStyle.hidden(value.toString())
+                    GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxStyle.paddingForTemplate == null) gxStyle.paddingForTemplate =
+                        convertStyle.padding(css)
+                    GXTemplateKey.STYLE_BORDER_WIDTH -> gxStyle.borderWidthForTemplate =
+                        convertStyle.borderWidth(value.toString())
+                    GXTemplateKey.STYLE_BORDER_COLOR -> gxStyle.borderColorForTemplate =
+                        convertStyle.borderColor(value.toString())
+                    GXTemplateKey.STYLE_FONT_LINE_HEIGHT -> gxStyle.fontLineHeightForTemplate =
+                        convertStyle.fontLineHeight(value.toString())
+                    GXTemplateKey.STYLE_BOX_SHADOW -> gxStyle.boxShadowForTemplate =
+                        convertStyle.boxShadow(value.toString())
+                    GXTemplateKey.STYLE_BACKDROP_FILTER -> gxStyle.backdropFilterForTemplate =
+                        convertStyle.backdropFilter(value.toString())
+                    GXTemplateKey.STYLE_FIT_CONTENT -> gxStyle.fitContentForTemplate =
+                        convertStyle.fitContent(value.toString())
+                }
+            }
+            return gxStyle
         }
     }
 }

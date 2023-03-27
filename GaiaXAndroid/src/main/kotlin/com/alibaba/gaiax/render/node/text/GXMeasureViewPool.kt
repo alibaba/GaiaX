@@ -25,7 +25,6 @@ import androidx.core.util.Pools
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.GXViewKey
 import com.alibaba.gaiax.render.view.basic.GXText
-import com.alibaba.gaiax.render.view.setFontSize
 import com.alibaba.gaiax.render.view.setTextFontFamily
 import java.lang.ref.WeakReference
 
@@ -91,8 +90,7 @@ object GXMeasureViewPool {
     private fun createTv(context: Context): GXText {
         val gxText = GXViewFactory.createView<GXText>(context, GXViewKey.VIEW_TYPE_TEXT)
         gxText.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
         return gxText
     }
@@ -112,6 +110,6 @@ object GXMeasureViewPool {
         view.setLineSpacing(cacheLineSpacingExtra, cacheLineSpacingMultiplier)
         view.setSingleLine(false)
         view.maxLines = Integer.MAX_VALUE
-        view.setPadding(0, 0, 0, 0)
+        view.reset()
     }
 }

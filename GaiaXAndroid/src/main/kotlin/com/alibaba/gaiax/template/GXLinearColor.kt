@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.template
 
+import android.content.Context
 import android.graphics.Shader
 import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
@@ -29,35 +30,41 @@ class GXLinearColor(val direction: GradientDrawable.Orientation, val colors: Mut
     fun createShader(view: TextView): Shader? {
         val height = view.layoutParams.height.toFloat()
         val width = view.layoutParams.width.toFloat()
-        return if (colors.size == 1) {
-            val value = colors[0].value(view.context)
-            val result = IntArray(2)
-            result[0] = value
-            result[1] = value
-            GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
-        } else {
-            val result = IntArray(colors.size)
-            colors.forEachIndexed { index, color ->
-                result[index] = color.value(view.context)
-            }
-            GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
-        }
+        return createShader(view, width, height)
     }
 
-    fun createDrawable(): GradientDrawable {
-        return if (colors.size == 1) {
-            val value = colors[0].value()
-            val result = IntArray(2)
-            result[0] = value
-            result[1] = value
-            GXLinearColorGradientDrawable(direction, result)
-        } else {
-            val result = IntArray(colors.size)
-            colors.forEachIndexed { index, color ->
-                result[index] = color.value()
-            }
-            GXLinearColorGradientDrawable(direction, result)
+    private fun createShader(
+        view: TextView, width: Float, height: Float
+    ) = if (colors.size == 1) {
+        val value = colors[0].value(view.context)
+        val result = IntArray(2)
+        result[0] = value
+        result[1] = value
+        GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
+    } else {
+        val result = IntArray(colors.size)
+        colors.forEachIndexed { index, color ->
+            result[index] = color.value(view.context)
         }
+        GXStyleConvert.instance.createLinearGradient(width, height, direction, result)
+    }
+
+    fun createDrawable(context: Context? = null): GradientDrawable? {
+        return createDrawable()
+    }
+
+    private fun createDrawable() = if (colors.size == 1) {
+        val value = colors[0].value()
+        val result = IntArray(2)
+        result[0] = value
+        result[1] = value
+        GXLinearColorGradientDrawable(direction, result)
+    } else {
+        val result = IntArray(colors.size)
+        colors.forEachIndexed { index, color ->
+            result[index] = color.value()
+        }
+        GXLinearColorGradientDrawable(direction, result)
     }
 }
 

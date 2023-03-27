@@ -19,12 +19,12 @@ package com.alibaba.gaiax.render.node
 import android.animation.AnimatorSet
 import android.view.View
 import app.visly.stretch.Display
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
-import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
@@ -46,11 +46,6 @@ class GXNode {
      * ID
      */
     var id = ""
-
-    /**
-     * ID路径
-     */
-    var idPath = ""
 
     /**
      * 是否是根节点
@@ -87,6 +82,10 @@ class GXNode {
      */
     lateinit var stretchNode: GXStretchNode
 
+    var layoutByPrepare: Layout? = null
+
+    var layoutByBind: Layout? = null
+
     /**
      * 父节点
      */
@@ -119,7 +118,6 @@ class GXNode {
 
     fun release() {
         isAnimating = false
-        idPath = ""
         if (view is GXIRelease) {
             (view as GXIRelease).release()
         }
@@ -167,30 +165,42 @@ class GXNode {
 
     fun isNeedLottie(): Boolean {
         return templateNode.animationBinding?.type?.equals(
-            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE,
-            true
+            GXTemplateKey.GAIAX_ANIMATION_TYPE_LOTTIE, true
         ) == true
     }
 
-    fun setIdPath(parent: GXNode?, layer: GXLayer) {
-        id = layer.id
-        idPath = if (parent != null) {
-            if (idPath.isNotEmpty()) {
-                "${parent.idPath}@${idPath}@${layer.id}"
-            } else {
-                "${parent.idPath}@${layer.id}"
-            }
-        } else {
-            if (idPath.isNotEmpty()) {
-                "${idPath}@${layer.id}"
-            } else {
-                layer.id
-            }
+    /**
+     * 重置节点中的缓存
+     */
+    fun resetTree(gxTemplateContext: GXTemplateContext) {
+        reset(gxTemplateContext)
+        children?.forEach {
+            it.resetTree(gxTemplateContext)
         }
     }
 
-    override fun toString(): String {
-        return "GXNode(id='$id', idPath='$idPath', isRoot=$isRoot, isNestRoot=$isNestRoot, templateNode=$templateNode, stretchNode=$stretchNode, children=${children?.size})"
+    fun reset(gxTemplateContext: GXTemplateContext) {
+        layoutByBind = null
+        templateNode.reset()
+        stretchNode.reset(gxTemplateContext, this)
+    }
+
+    fun isNodeVisibleInTree(): Boolean {
+        return isNodeVisibleInTree(this)
+    }
+
+    private fun isNodeVisibleInTree(gxNode: GXNode): Boolean {
+        if (gxNode.stretchNode.node?.getStyle()?.display == Display.None) {
+            return false
+        }
+        gxNode.parentNode?.let {
+            return isNodeVisibleInTree(it)
+        }
+        return true
+    }
+
+    fun getPaddingRect(): android.graphics.Rect {
+        return templateNode.css.style.paddingForAndroid
     }
 
     fun initEventByRegisterCenter() {
@@ -199,28 +209,4 @@ class GXNode {
         }
     }
 
-    /**
-     * 重置节点中的缓存
-     */
-    fun reset(gxTemplateContext: GXTemplateContext) {
-        templateNode.reset()
-        stretchNode.reset(gxTemplateContext, this.templateNode)
-        children?.forEach {
-            it.reset(gxTemplateContext)
-        }
-    }
-
-    fun isNodeVisibleInTree(): Boolean {
-        return isNodeVisibleInTree(this)
-    }
-
-    private fun isNodeVisibleInTree(gxNode: GXNode): Boolean {
-        if (gxNode.stretchNode.node.getStyle().display == Display.None) {
-            return false
-        }
-        gxNode.parentNode?.let {
-            return isNodeVisibleInTree(it)
-        }
-        return true
-    }
 }

@@ -135,9 +135,7 @@ sealed class GXTestYKExpression : GXIExpression {
      * 用于逻辑运算 == != >= <= > < && || %
      */
     data class GEval(
-        val operate: String,
-        val leftValue: GXTestYKExpression,
-        val rightValue: GXTestYKExpression
+        val operate: String, val leftValue: GXTestYKExpression, val rightValue: GXTestYKExpression
     ) : GXTestYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
@@ -341,7 +339,7 @@ sealed class GXTestYKExpression : GXIExpression {
     data class GScroll(val value: String) : GXTestYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any {
-            return -1
+            return rawJson?.getIntExt("gaiax_scroll_position") ?: -1
         }
 
         override fun toString(): String {
@@ -371,7 +369,7 @@ sealed class GXTestYKExpression : GXIExpression {
                 is String -> result.length
                 is JSONArray -> result.size
                 is JSONObject -> result.size
-                else -> null
+                else -> 0
             }
         }
 
@@ -519,7 +517,9 @@ sealed class GXTestYKExpression : GXIExpression {
             }
 
             fun isExpression(expression: String): Boolean {
-                return expression.startsWith("'") && expression.endsWith("'")
+                return expression.startsWith("'") && expression.endsWith("'") && !expression.contains(
+                    " + "
+                )
             }
         }
     }
@@ -703,19 +703,14 @@ sealed class GXTestYKExpression : GXIExpression {
         companion object {
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ? "
+                ) && expression.contains(" : ") && !expression.contains(" ?: ")
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ? ") && expression.contains(
+                    " : "
+                ) && !expression.contains(" ?: ")
 
             private fun getExpressionValue(expression: String): String {
                 val startIndex = expression.indexOf("{")
@@ -793,8 +788,7 @@ sealed class GXTestYKExpression : GXIExpression {
      * 三元表达式: @{ ${data} ?: b }
      */
     data class GTernaryValue2(
-        val conditionAndTrueBranch: GXTestYKExpression,
-        val falseBranch: GXTestYKExpression
+        val conditionAndTrueBranch: GXTestYKExpression, val falseBranch: GXTestYKExpression
     ) : GXTestYKExpression() {
 
         override fun desireData(rawJson: JSON?): Any? {
@@ -851,15 +845,12 @@ sealed class GXTestYKExpression : GXIExpression {
             }
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ?: "
+                )
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ?: ")
 
             fun isExpression(expression: String): Boolean {
                 return isExp(expression) || isExp2(expression)
@@ -970,19 +961,14 @@ sealed class GXTestYKExpression : GXIExpression {
             }
 
             private fun isExp(expression: String) =
-                expression.contains("\${") &&
-                        expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.contains("\${") && expression.startsWith("@{") && expression.endsWith("}") && expression.contains(
+                    " ? "
+                ) && expression.contains(" : ") && !expression.contains(" ?: ")
 
             private fun isExp2(expression: String) =
-                expression.startsWith("@{") &&
-                        expression.endsWith("}") &&
-                        expression.contains(" ? ") &&
-                        expression.contains(" : ") &&
-                        !expression.contains(" ?: ")
+                expression.startsWith("@{") && expression.endsWith("}") && expression.contains(" ? ") && expression.contains(
+                    " : "
+                ) && !expression.contains(" ?: ")
 
 
             private fun isExp3(expression: String): Boolean {

@@ -18,13 +18,15 @@ package com.alibaba.gaiax.template
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 
 /**
  * The color wrapper class, all colors should be converted to GColor using the create method
  * @suppress
  */
-class GXColor private constructor(val type: Int, private val value: Any) {
+class GXColor private constructor(val type: Int, val value: Any) {
 
     fun valueCanNull(context: Context? = null): Int? {
         if (type == COLOR_TYPE_STATIC) {
@@ -40,8 +42,11 @@ class GXColor private constructor(val type: Int, private val value: Any) {
         return valueCanNull(context) ?: UNDEFINE_COLOR
     }
 
-    override fun toString(): String {
-        return "GXColor(type=$type, value=$value)"
+    fun createBackgroundColorDrawable(context: Context?): GXColorGradientDrawable? {
+        val color = value(context)
+        return GXColorGradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
+        )
     }
 
     companion object {
@@ -104,9 +109,7 @@ class GXColor private constructor(val type: Int, private val value: Any) {
             if (color.startsWith("rgb(") && color.endsWith(")")) {
                 val colors = color.substring("rgb(".length, color.lastIndexOf(")")).split(",")
                 return Color.rgb(
-                    colors[0].trim().toInt(),
-                    colors[1].trim().toInt(),
-                    colors[2].trim().toInt()
+                    colors[0].trim().toInt(), colors[1].trim().toInt(), colors[2].trim().toInt()
                 )
             }
             return null

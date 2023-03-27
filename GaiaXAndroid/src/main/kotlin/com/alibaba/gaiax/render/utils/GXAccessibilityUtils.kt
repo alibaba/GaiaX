@@ -34,7 +34,7 @@ object GXAccessibilityUtils {
     fun accessibilityOfImage(view: View, data: JSONObject?) {
         try {
             val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
+            if (accessibilityDesc != null) {
                 view.contentDescription = accessibilityDesc
                 view.importantForAccessibility = AppCompatImageView.IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
@@ -52,10 +52,10 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View, info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }
@@ -78,8 +78,8 @@ object GXAccessibilityUtils {
 
     fun accessibilityOfText(view: View, data: JSONObject?, content: CharSequence) {
         try {
-            val desc = data?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC) as? String
-            if (desc != null && desc.isNotBlank()) {
+            val desc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
+            if (desc != null) {
                 view.contentDescription = desc
                 view.importantForAccessibility = AppCompatTextView.IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
@@ -104,10 +104,10 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View, info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }
@@ -121,7 +121,7 @@ object GXAccessibilityUtils {
     fun accessibilityOfView(view: View, data: JSONObject?) {
         try {
             val accessibilityDesc = data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-            if (accessibilityDesc != null && accessibilityDesc.isNotEmpty()) {
+            if (accessibilityDesc != null) {
                 view.contentDescription = accessibilityDesc
                 view.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
             } else {
@@ -139,10 +139,10 @@ object GXAccessibilityUtils {
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
                 ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
                     override fun onInitializeAccessibilityNodeInfo(
-                        host: View?, info: AccessibilityNodeInfoCompat?
+                        host: View, info: AccessibilityNodeInfoCompat
                     ) {
                         super.onInitializeAccessibilityNodeInfo(host, info)
-                        info?.className = getClassNameByTraits(traits)
+                        info.className = getClassNameByTraits(traits)
                     }
                 })
             }

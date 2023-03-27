@@ -18,6 +18,7 @@ package com.alibaba.gaiax.context
 
 import android.content.Context
 import android.view.View
+import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
@@ -55,6 +56,9 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+
+    var isReuseRootNode: Boolean = false
+
     /**
      * 数据绑定计数
      */
@@ -67,14 +71,28 @@ class GXTemplateContext private constructor(
     var dirtyTexts: MutableSet<GXDirtyText>? = null
 
     /**
+     * item layout cache for item data.
+     *
+     * the cache will used to surely calculate once item layout at scroll container.
+     *
+     * if the cache be created at computeScrollSize, it will be used at createViewHolder and bindViewHolder.
+     * if the cache be created at createViewHolder, it will used at bindViewHolder.
+     *
+     * key is itemCacheKey ${itemPosition}-${itemData.hashCode()}.
+     * value is item layout.
+     */
+    var scrollItemLayoutCache: MutableMap<Any, Layout>? = null
+
+    var sliderItemLayoutCache: Layout? = null
+
+    var gridItemLayoutCache: Layout? = null
+
+    var scrollNodeCache: MutableMap<Any, GXNode>? = null
+
+    /**
      * Is dirty
      */
     var isDirty: Boolean = false
-
-    /**
-     * Is exist flexGrow logic
-     */
-    var isFlexGrowLayout: Boolean = false
 
     /**
      * A soft or weak reference to a view
@@ -98,11 +116,9 @@ class GXTemplateContext private constructor(
 
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
-    override fun toString(): String {
-        return "GXTemplateContext(context=$context, isDirty=$isDirty, size=$size, templateItem='$templateItem' rootView=$rootView)"
-    }
-
     fun release() {
+        flags = 0
+        scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false
         dirtyTexts?.clear()
@@ -112,12 +128,14 @@ class GXTemplateContext private constructor(
         visualTemplateNode = null
         rootNode?.release()
         rootNode = null
+        isReuseRootNode = false
     }
 
     fun manualExposure() {
         manualTrackMap?.forEach {
             templateData?.trackListener?.onManualExposureTrackEvent(it.value)
         }
+        manualTrackMap?.clear()
     }
 
     fun initContainers() {
@@ -131,11 +149,31 @@ class GXTemplateContext private constructor(
      */
     fun reset() {
         templateInfo.reset()
-        rootNode?.reset(this)
+        rootNode?.resetTree(this)
     }
 
+    private var flags = 0
+
+    fun flagExtendFlexbox() {
+        flags = flags.or(FLAG_EXTEND_FLEXBOX)
+    }
+
+    fun isFlagExtendFlexbox(): Boolean {
+        return (flags and FLAG_EXTEND_FLEXBOX) != 0
+    }
+
+    fun flagFlexGrow() {
+        flags = flags.or(FLAG_FLEX_GROW_UPDATE)
+    }
+
+    fun isFlagFlexGrow(): Boolean {
+        return (flags and FLAG_FLEX_GROW_UPDATE) != 0
+    }
 
     companion object {
+
+        const val FLAG_EXTEND_FLEXBOX = 0x1
+        const val FLAG_FLEX_GROW_UPDATE = 0x2
 
         fun createContext(
             gxTemplateItem: GXTemplateEngine.GXTemplateItem,

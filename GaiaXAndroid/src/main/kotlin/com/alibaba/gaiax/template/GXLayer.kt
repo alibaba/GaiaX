@@ -149,7 +149,6 @@ data class GXLayer constructor(
                     gridConfig = GXGridConfig.create(
                         data,
                         direction,
-                        edgeInsets,
                         itemSpacing,
                         rowSpacing,
                         column,
@@ -307,10 +306,6 @@ data class GXLayer constructor(
      */
     fun isCanMergeType(): Boolean =
         !isContainerType() && (GXViewKey.VIEW_TYPE_VIEW == type || type == GXViewKey.VIEW_TYPE_GAIA_TEMPLATE)
-
-    override fun toString(): String {
-        return "GXLayer(id='$id', css='$css', type='$type', subType=$subType, customNodeClass=$customNodeClass, scrollConfig=$scrollConfig, gridConfig=$gridConfig, sliderConfig=$sliderConfig, layers=$layers)"
-    }
 
 }
 

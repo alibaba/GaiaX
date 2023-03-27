@@ -1,0 +1,15 @@
+#template_darkmode_background {
+  width: 100%;
+  height: 200px;
+  background-color: gaiax_color_background_color;
+  justify-content: center;
+  align-items: center;
+}
+#container1 {
+  width: 100px;
+  height: 100px;
+  background-color: #e4e4e4;
+  border-color: #e61616;
+  border-width: 1px;
+  border-style: solid;
+}

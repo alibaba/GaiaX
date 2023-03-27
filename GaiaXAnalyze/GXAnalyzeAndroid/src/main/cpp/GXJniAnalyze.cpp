@@ -6,9 +6,9 @@
 
 static JavaVM *javaVM = nullptr;
 
-static jlong getSourceValueFromJava(string valuePath, jobject source, jobject object_in);
+static jlong getSourceValueFromJava(string valuePath, jobject source, jobject object_in,jobject jfileObject,jclass jAnalyzeJni);
 
-static jlong getFunctionValueFromJava(string valuePath, jlongArray dataPointer, jobject object_in);
+static jlong getFunctionValueFromJava(string valuePath, jlongArray dataPointer, jobject object_in,jobject jfileObject,jclass jAnalyzeJni);
 
 static jlongArray getLongArray(long *paramPointers, int paramsSize);
 
@@ -24,58 +24,6 @@ static JNIEnv *getJNIEnv() {
     return env;
 }
 
-/**
- * jstring转为string类型
- * @param env
- * @param jstr 需要转换成string的jstring类型
- * @return
- */
-std::string jstring2str(JNIEnv *env, jstring jstr) {
-    char *rtn = NULL;
-    jclass clsstring = env->FindClass("java/lang/String");
-    jstring strencode = env->NewStringUTF("UTF-8");
-    jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
-    jbyteArray barr = (jbyteArray) env->CallObjectMethod(jstr, mid, strencode);
-    jsize alen = env->GetArrayLength(barr);
-    jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
-    if (alen > 0) {
-        rtn = (char *) malloc(alen + 1);
-        memcpy(rtn, ba, alen);
-        rtn[alen] = 0;
-    }
-    env->ReleaseByteArrayElements(barr, ba, 0);
-    std::string stemp(rtn);
-    free(rtn);
-    env->DeleteLocalRef(clsstring);
-    env->DeleteLocalRef(strencode);
-    return stemp;
-}
-
-/**
- * string转为jstring类型
- * @param env
- * @param pat 需要转换为jstring的string字符串，使用时需传string.c_str()
- * @return
- */
-jstring str2jstring(JNIEnv *env, const char *pat) {
-    //定义java String类 strClass
-    jclass strClass = (env)->FindClass("java/lang/String");
-    //获取String(byte[],String)的构造器,用于将本地byte[]数组转换为一个新String
-    jmethodID ctorID = (env)->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
-    //建立byte数组
-    jbyteArray bytes = (env)->NewByteArray(strlen(pat));
-    //将char* 转换为byte数组
-    (env)->SetByteArrayRegion(bytes, 0, strlen(pat), (jbyte *) pat);
-    // 设置String, 保存语言类型,用于byte数组转换至String时的参数
-    jstring encoding = (env)->NewStringUTF("GB2312");
-    jstring res = (jstring) (env)->NewObject(strClass, ctorID, bytes, encoding);
-    //内存释放
-    env->DeleteLocalRef(bytes);
-    env->DeleteLocalRef(strClass);
-    env->DeleteLocalRef(encoding);
-    //将byte数组转换为java String,并输出
-    return res;
-}
 
 /**
  * GXAnalyze Jni子类，用于获取Java/Kotlin具体实现实例类
@@ -85,23 +33,52 @@ class GXJniAnalyze : public GXAnalyze {
 public:
     jobject globalSelf = nullptr;    //thiz
     jfieldID jfieldId = nullptr;    //判断context是否为空
+    jclass jAnalyzeJni = nullptr;
+    jobject jObjectFieldId = nullptr;
+    bool isInitJni = false;
 
     long getSourceValue(string valuePath, void *source) override {
         jobject dataSource = static_cast<jobject>(source);
-        return getSourceValueFromJava(valuePath, dataSource, globalSelf);
+        if(!isInitJni){
+            initJniClass(globalSelf);
+            isInitJni = true;
+        }
+        return getSourceValueFromJava(valuePath, dataSource, globalSelf,jObjectFieldId,jAnalyzeJni);
     }
 
     long
     getFunctionValue(string funName, long *paramPointers, int paramsSize, string source) override {
+        if(!isInitJni){
+            initJniClass(globalSelf);
+            isInitJni = true;
+        }
         return getFunctionValueFromJava(funName, getLongArray(paramPointers, paramsSize),
-                                        globalSelf);
+                                        globalSelf,jObjectFieldId,jAnalyzeJni);
     }
 
     void throwError(string message) override {
         __android_log_print(ANDROID_LOG_ERROR, "[GaiaX]",
                             "%s", message.c_str());
     }
+    void initJniClass(jobject object_in);
 };
+
+void GXJniAnalyze::initJniClass(jobject object_in) {
+    JNIEnv *env = getJNIEnv();
+    if (env != nullptr) {
+        jclass clazz;
+        jfieldID analyze_fieldID;
+        clazz = env->GetObjectClass(object_in);
+        analyze_fieldID = env->GetFieldID(clazz, "computeExtend",
+                                          "Lcom/alibaba/gaiax/analyze/GXAnalyze$IComputeExtend;");
+        jobject jobject1 = env->GetObjectField(object_in, analyze_fieldID);
+        jclass analyzeJni = env->GetObjectClass(jobject1);
+        jAnalyzeJni = static_cast<jclass>(env->NewWeakGlobalRef(analyzeJni));
+        jObjectFieldId = env->NewWeakGlobalRef(jobject1);
+        env->DeleteLocalRef(clazz);
+    }
+}
+
 
 static jlongArray getLongArray(long *paramPointers, int size) {
     JNIEnv *env = getJNIEnv();
@@ -122,30 +99,14 @@ static jlongArray getLongArray(long *paramPointers, int size) {
  * @param object_in 具体类实例，即GXJniAnalyze的this
  * @return
  */
-static jlong getSourceValueFromJava(string valuePath, jobject source, jobject object_in) {
+static jlong getSourceValueFromJava(string valuePath, jobject source, jobject object_in,jobject jfileObject,jclass jAnalyzeJni) {
     JNIEnv *env = getJNIEnv();
     if (env != nullptr) {
-        jclass clazz;
-        jfieldID analyze_fieldID;
-        clazz = env->GetObjectClass(object_in);
-        if (clazz == NULL) {
-            //throw error
-        }
-        analyze_fieldID = env->GetFieldID(clazz, "computeExtend",
-                                          "Lcom/alibaba/gaiax/analyze/GXAnalyze$IComputeExtend;");
-        if (analyze_fieldID == NULL) {
-            //throw error
-        }
-        jobject jobject1 = env->GetObjectField(object_in, analyze_fieldID);
-        jclass analyzeJni = env->GetObjectClass(jobject1);
-        jmethodID getArrId = env->GetMethodID(analyzeJni, "computeValueExpression",
-                                              "(Ljava/lang/String;Ljava/lang/Object;)J");
-        jlong res = env->CallLongMethod(jobject1, getArrId,
-                                        str2jstring(env, valuePath.c_str()),
+        jmethodID jmethodId = env->GetMethodID(jAnalyzeJni, "computeValueExpression",
+                                               "(Ljava/lang/String;Ljava/lang/Object;)J");
+        jlong res = env->CallLongMethod(jfileObject, jmethodId,
+                                        env->NewStringUTF(valuePath.c_str()),
                                         source);
-        env->DeleteLocalRef(clazz);
-        env->DeleteLocalRef(jobject1);
-        env->DeleteLocalRef(analyzeJni);
         return res;
     }
     return 0L;
@@ -158,29 +119,13 @@ static jlong getSourceValueFromJava(string valuePath, jobject source, jobject ob
  * @param object_in 具体类实例，即GXJniAnalyze的this
  * @return
  */
-static jlong getFunctionValueFromJava(string valuePath, jlongArray dataPointer, jobject object_in) {
+static jlong getFunctionValueFromJava(string valuePath, jlongArray dataPointer, jobject object_in,jobject jfileObject,jclass jAnalyzeJni) {
     JNIEnv *env = getJNIEnv();
     if (env != nullptr) {
-        jclass clazz;
-        jfieldID analyze_fieldID;
-        clazz = env->GetObjectClass(object_in);
-        if (clazz == NULL) {
-            //throw error
-        }
-        analyze_fieldID = env->GetFieldID(clazz, "computeExtend",
-                                          "Lcom/alibaba/gaiax/analyze/GXAnalyze$IComputeExtend;");
-        if (analyze_fieldID == NULL) {
-            //throw error
-        }
-        jobject jobject1 = env->GetObjectField(object_in, analyze_fieldID);
-        jclass analyzeJni = env->GetObjectClass(jobject1);
-        jmethodID getArrId = env->GetMethodID(analyzeJni, "computeFunctionExpression",
-                                              "(Ljava/lang/String;[J)J");
-        jlong res = env->CallLongMethod(jobject1, getArrId, str2jstring(env, valuePath.c_str()),
+        jmethodID jmethodId = env->GetMethodID(jAnalyzeJni, "computeFunctionExpression",
+                                               "(Ljava/lang/String;[J)J");
+        jlong res = env->CallLongMethod(jfileObject, jmethodId, env->NewStringUTF(valuePath.c_str()),
                                         dataPointer);
-        env->DeleteLocalRef(clazz);
-        env->DeleteLocalRef(jobject1);
-        env->DeleteLocalRef(analyzeJni);
         return res;
     }
     return 0L;
@@ -249,7 +194,7 @@ JNIEXPORT jlong JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_getResultNative(JNIEnv *env, jobject thiz, jobject self,
                                                          jstring expression, jobject data) {
     GXJniAnalyze *jAnalyze = getJniAnalyze(env, self);
-    long res = jAnalyze->getValue(jstring2str(env, expression), data);
+    long res = jAnalyze->getValue(env->GetStringUTFChars(expression,JNI_FALSE), data);
     return (jlong) (res);
 }
 /**
@@ -350,10 +295,10 @@ Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueString(JNIEnv
 
     jsize size = env->GetStringUTFLength(value);
     GXValue *result;
-    if(size <= 0){
+    if (size <= 0) {
         result = new GXValue(GX_TAG_STRING, "");
-    }else{
-        result = new GXValue(GX_TAG_STRING, jstring2str(env, value).c_str());
+    } else {
+        result = new GXValue(GX_TAG_STRING, env->GetStringUTFChars(value,JNI_FALSE));
     }
     return (jlong) result;
 }
@@ -405,6 +350,6 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_createValueLong(JNIEnv *env, jobject thiz,
                                                                         jlong value) {
-    GXValue *result = new GXValue(GX_TAG_LONG, (int64_t)value);
+    GXValue *result = new GXValue(GX_TAG_LONG, (int64_t) value);
     return (jlong) result;
 }

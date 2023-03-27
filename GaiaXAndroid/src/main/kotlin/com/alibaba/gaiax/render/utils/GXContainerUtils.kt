@@ -31,6 +31,14 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 
 object GXContainerUtils {
 
+    fun notifyOnResetView(gxTemplateContext: GXTemplateContext) {
+        gxTemplateContext.containers?.forEach { container ->
+            findVisibleItems(container) {
+                onResetView(it)
+            }
+        }
+    }
+
     fun notifyOnAppear(gxTemplateContext: GXTemplateContext) {
         gxTemplateContext.containers?.forEach { container ->
             findVisibleItems(container) {
@@ -47,7 +55,7 @@ object GXContainerUtils {
         }
     }
 
-    fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
+    private fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
         try {
             if (container is GXContainer) {
                 if (container.layoutManager is LinearLayoutManager) {
@@ -87,6 +95,12 @@ object GXContainerUtils {
     private fun onAppear(view: View?) {
         if (view is ViewGroup && view.childCount > 0) {
             GXTemplateEngine.instance.onAppear(view.getChildAt(0))
+        }
+    }
+
+    private fun onResetView(view: View?) {
+        if (view is ViewGroup && view.childCount > 0) {
+            GXTemplateEngine.instance.resetView(view.getChildAt(0))
         }
     }
 

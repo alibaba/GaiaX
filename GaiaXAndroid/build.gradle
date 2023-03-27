@@ -94,21 +94,15 @@ android {
 }
 
 dependencies {
-
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
 
-    if (System.getProperties().get("GaiaXDemo") == "true") {
-        implementation project(path: ':GXAnalyzeAndroid')
+    if (version != null && version != "unspecified") {
+        implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:$version") { changing = true }
     } else {
-        println("version = " + version)
-        if (version != null && version != "unspecified") {
-            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:$version") { changing = true }
-        } else {
-            implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.3.0") { changing = true }
-        }
+        implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.4.0") { changing = true }
     }
 
     testImplementation 'junit:junit:4.13.2'

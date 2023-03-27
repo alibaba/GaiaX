@@ -1,0 +1,23 @@
+{
+  "id": "profiler_uper_scroll_item",
+  "type": "gaia-template",
+  "exp-version": "V1",
+  "layers": [
+    {
+      "id": "cover-bg",
+      "type": "view",
+      "layers": [
+        { "id": "cover-img", "type": "image" },
+        {
+          "id": "play-vv-view",
+          "type": "view",
+          "layers": [
+            { "id": "play-vv-icon", "type": "image" },
+            { "id": "play-vv-text", "type": "text" }
+          ]
+        }
+      ]
+    },
+    { "id": "title", "type": "text" }
+  ]
+}

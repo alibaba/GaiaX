@@ -375,7 +375,6 @@ GXATSNode scanner(int &syn, int &p, char s[], void *p_analyze) {
                 token[count] = '\0';
                 sign = "error";
                 string errorMsg = token;
-                delete[]token;
                 analyze->throwError("unknown identifier: " + errorMsg);
                 break;
             }

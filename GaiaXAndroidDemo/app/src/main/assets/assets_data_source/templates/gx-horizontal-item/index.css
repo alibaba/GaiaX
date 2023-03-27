@@ -3,6 +3,7 @@
   height:100%;
   padding-left: 18px;
   padding-right: 18px;
+  background-color: gaiax_color;
 }
 
 #cover-img {
@@ -32,6 +33,7 @@
   line-height:20px;
   font-size:14px;
   color: #222222;
+  fit-content:true;
 }
 
 .year {

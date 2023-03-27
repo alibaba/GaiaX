@@ -28,7 +28,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXColor
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
-import com.alibaba.gaiax.utils.getStringExt
 
 class GXPropAnimationSet : GXIPropAnimation {
 
@@ -156,7 +155,7 @@ class GXPropAnimationSet : GXIPropAnimation {
             private const val KEY_VALUE_TO = "valueTo"
 
             fun create(data: JSONObject): GXPropValue? {
-                GXPropValueType.create(data.getStringExt(KEY_VALUE_TYPE))?.let {
+                GXPropValueType.create(data.getString(KEY_VALUE_TYPE) ?: "")?.let {
                     return when (it) {
                         GXPropValueType.IntType -> GXPropValueFloat.create(data)
                         GXPropValueType.FloatType -> GXPropValueFloat.create(data)
@@ -170,8 +169,8 @@ class GXPropAnimationSet : GXIPropAnimation {
         class GXPropValueColor(val valueFrom: GXColor, val valueTo: GXColor) : GXPropValue() {
             companion object {
                 fun create(data: JSONObject): GXPropValueColor? {
-                    val valueFrom = data.getStringExt(KEY_VALUE_FROM)
-                    val valueTo = data.getStringExt(KEY_VALUE_TO)
+                    val valueFrom = data.getString(KEY_VALUE_FROM) ?: ""
+                    val valueTo = data.getString(KEY_VALUE_TO) ?: ""
                     if (valueFrom.isNotEmpty() && valueFrom.isNotEmpty()) {
                         val valueFrom1 = GXColor.create(valueFrom)
                         val valueTo1 = GXColor.create(valueTo)
@@ -187,8 +186,8 @@ class GXPropAnimationSet : GXIPropAnimation {
         class GXPropValueFloat(val valueFrom: Float, val valueTo: Float) : GXPropValue() {
             companion object {
                 fun create(data: JSONObject): GXPropValueFloat? {
-                    val valueFrom = data.getStringExt(KEY_VALUE_FROM)
-                    val valueTo = data.getStringExt(KEY_VALUE_TO)
+                    val valueFrom = data.getString(KEY_VALUE_FROM) ?: ""
+                    val valueTo = data.getString(KEY_VALUE_TO) ?: ""
                     if (valueFrom.isNotEmpty() && valueFrom.isNotEmpty()) {
                         return GXPropValueFloat(valueFrom.toFloat(), valueTo.toFloat())
                     }

@@ -162,8 +162,11 @@
                 //是否为容器类型
                 BOOL isContainer = [GXNodeHelper isContainter:layerType subType:layerSubType];
                 
+                
                 //生成GXStyle
                 GXStyle *style = [self creatStyleWithNodeId:nodeId styleInfo:styleInfo];
+                // 兼容 edge-insets
+                [style updateEdgeInsets:[layerInfo objectForKey:@"edge-insets"]];
                 //创建节点实例
                 node = [[nodeClass alloc] initWithStyle:style children:nil];
                 

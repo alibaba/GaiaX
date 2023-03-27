@@ -34,7 +34,7 @@ object GXDataBindingFactory {
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()
                 for (entry in extend) {
                     if (entry.key != null && entry.value != null) {
-                        GXExpressionFactory.create(expVersion, entry.value)?.let {
+                        GXExpressionFactory.create(expVersion, entry.key, entry.value)?.let {
                             result[entry.key] = it
                         }
                     }

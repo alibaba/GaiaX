@@ -1,0 +1,19 @@
+{
+  "id": "profiler_uper_scroll",
+  "exp-version": "V1",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "row-spacing": 0,
+  "item-spacing": "9",
+  "direction": "horizontal",
+  "edge-insets": "{0,18,0,18}",
+  "line-spacing": "9",
+  "interitem-spacing": 0,
+  "layers": [
+    {
+      "id": "profiler_uper_scroll_item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

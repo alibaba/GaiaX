@@ -25,52 +25,54 @@ import com.alibaba.gaiax.template.GXFlexBox
  */
 @Suppress("UNUSED_PARAMETER")
 data class GXStretchNode(
-    val node: Node,
-    var layoutByCreate: Layout? = null,
-    var layoutByBind: Layout? = null
+    var node: Node? = null, var layoutByPrepareView: Layout? = null
 ) {
 
-    fun reset(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        resetStyle(gxTemplateContext, gxTemplateNode)
-        layoutByBind = null
+    fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        resetStyle(gxTemplateContext, gxNode)
     }
 
-    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode) {
-        val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
-        val oldStyle = node.getStyle()
-        this.node.setStyle(stretchStyle)
-        this.node.markDirty()
-        oldStyle.safeFree()
+    private fun resetStyle(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
+        val stretchStyle = createStretchStyle(gxTemplateContext, gxNode.templateNode)
+        if (this.node == null) {
+            val stretchNode = Node(gxNode.id, stretchStyle, mutableListOf())
+            this.node = stretchNode
+            this.node?.let {
+                gxNode.parentNode?.stretchNode?.node?.safeAddChild(it)
+            }
+        } else {
+            val oldStyle = this.node?.getStyle()
+            this.node?.safeSetStyle(stretchStyle)
+            this.node?.safeMarkDirty()
+            oldStyle?.safeFree()
+        }
     }
 
     fun initFinal() {
     }
 
-    override fun toString(): String {
-        return "GXStretchNode(node=$node, layout=$layoutByCreate)"
-    }
-
     fun free() {
-        layoutByCreate = null
-        node.safeFree()
+        node?.safeFree()
     }
 
     companion object {
 
+        fun createEmptyNode(
+            gxTemplateContext: GXTemplateContext, templateNode: GXTemplateNode, id: String
+        ): GXStretchNode {
+            return GXStretchNode()
+        }
+
         fun createNode(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode,
-            id: String,
-            idPath: String
+            gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode, id: String
         ): GXStretchNode {
             val stretchStyle = createStretchStyle(gxTemplateContext, gxTemplateNode)
-            val stretchNode = Node(id, idPath, stretchStyle, mutableListOf())
+            val stretchNode = Node(id, stretchStyle, mutableListOf())
             return GXStretchNode(stretchNode, null)
         }
 
         private fun createStretchStyle(
-            gxTemplateContext: GXTemplateContext,
-            gxTemplateNode: GXTemplateNode
+            gxTemplateContext: GXTemplateContext, gxTemplateNode: GXTemplateNode
         ): Style {
             val style = Style()
 
@@ -82,15 +84,13 @@ data class GXStretchNode(
             val visualTemplateNodeFlexBox = gxTemplateNode.visualTemplateNode?.css?.flexBox
             visualTemplateNodeFlexBox?.let { updateStyle(gxTemplateContext, it, style) }
 
-            style.init()
+            style.safeInit()
 
             return style
         }
 
         private fun updateStyle(
-            gxTemplateContext: GXTemplateContext,
-            flexBox: GXFlexBox,
-            style: Style
+            gxTemplateContext: GXTemplateContext, flexBox: GXFlexBox, style: Style
         ) {
             flexBox.display?.let { style.display = it }
 
@@ -114,26 +114,28 @@ data class GXStretchNode(
 
             flexBox.positionType?.let { style.positionType = it }
 
-            flexBox.positionForStyle?.let { style.position = it }
+            flexBox.positionForDimension?.let { style.position = it }
 
-            flexBox.marginForStyle?.let { style.margin = it }
+            flexBox.marginForDimension?.let { style.margin = it }
 
-            flexBox.paddingForStyle?.let { style.padding = it }
+            flexBox.paddingForDimension?.let { style.padding = it }
 
-            flexBox.borderForStyle?.let { style.border = it }
+            flexBox.borderForDimension?.let { style.border = it }
 
             flexBox.flexGrow?.let {
                 style.flexGrow = it
-                gxTemplateContext.isFlexGrowLayout = true
+                gxTemplateContext.flagFlexGrow()
             }
 
             flexBox.flexShrink?.let { style.flexShrink = it }
 
-            flexBox.sizeForStyle?.let { style.size = Size(it.width, it.height) }
+            flexBox.sizeForDimension?.let { style.size = Size(it.width, it.height) }
 
-            flexBox.minSizeForStyle?.let { style.minSize = Size(it.width, it.height) }
+            flexBox.minSizeForDimension?.let { style.minSize = Size(it.width, it.height) }
 
-            flexBox.maxSizeForStyle?.let { style.maxSize = Size(it.width, it.height) }
+            flexBox.maxSizeForDimension?.let { style.maxSize = Size(it.width, it.height) }
         }
+
+
     }
 }

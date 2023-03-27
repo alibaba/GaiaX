@@ -1104,11 +1104,6 @@ class GXComponentTextTest : GXBaseTest() {
         )
         textView.measure(widthSpec, 0)
 
-        Log.e(
-            "[GaiaX]",
-            "textView.measuredWidth=${textView.measuredWidth.toFloat()} textView.measuredHeight=${textView.measuredHeight.toFloat()}"
-        )
-
         Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
@@ -1467,5 +1462,26 @@ class GXComponentTextTest : GXBaseTest() {
 
         Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+    }
+
+    @Test
+    fun template_text_fitcontent_dynamic_modify_width() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context, "text", "template_text_fitcontent_dynamic_modify_width"
+        )
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+
+        val textView = GXText(GXMockUtils.context)
+        textView.setFontLines(3)
+        textView.text = "3218621632109361290361092601"
+        textView.setFontSize(15F.dpToPx())
+        val widthSpec = View.MeasureSpec.makeMeasureSpec(
+            200F.dpToPx().toInt(), View.MeasureSpec.AT_MOST
+        )
+        textView.measure(widthSpec, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
     }
 }

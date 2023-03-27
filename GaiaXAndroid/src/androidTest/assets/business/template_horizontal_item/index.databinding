@@ -1,0 +1,34 @@
+{
+    "data":{
+        "title":{
+            "value":"$title",
+            "extend":{
+                "fit-content":"true"
+            }
+        },
+        "year":{
+            "value":"$year",
+            "extend":{
+                "fit-content":"true"
+            }
+        },
+        "reason":{
+            "value": "$reason.text.title",
+        },
+        "top-text":{
+            "value":"$formatInfo[0]",
+            "extend":{
+                "fit-content":"true"
+            }
+        },
+        "bottom-text":{
+            "value":"$formatInfo[1]",
+            "extend":{
+                "fit-content":"true"
+            }
+        },
+        "cover-img": {
+            "value":"$img"
+        }
+    }
+}

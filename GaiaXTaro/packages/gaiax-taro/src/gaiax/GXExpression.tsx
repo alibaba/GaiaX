@@ -1,5 +1,4 @@
-import computeValuePath from './GXValuePath';
-
+import getValue from "lodash/get";
 class GXExpression {
 
     desireData(expression: any, rawJson: any): any {
@@ -123,9 +122,9 @@ class GXExpression {
             }
             // GXValue
             else if (this.isValue(exp)) {
-                const result = exp.substring(2, exp.length - 1)
+                const result = exp.substring(1)
                 if (typeof rawJson == 'object') {
-                    return computeValuePath(result, rawJson);
+                    return getValue(rawJson, result, '');
                 }
                 return '';
             }
@@ -253,11 +252,11 @@ class GXExpression {
         return false;
     }
 
-    private valueRegex = /\$\{[a-zA-Z.\[\]0-9]+\}/g;
+    private valueRegex = /\$[a-zA-Z.\[\]0-9]+/g;
     private ternaryValueRegex = /\@\{/g;
 
     private isValue(expression: string) {
-        if (expression.startsWith("${") && expression.endsWith("}")) {
+        if (expression.startsWith("$")) {
             let result = expression.match(this.valueRegex)
             if (result != null && result.length == 1) {
                 return true;

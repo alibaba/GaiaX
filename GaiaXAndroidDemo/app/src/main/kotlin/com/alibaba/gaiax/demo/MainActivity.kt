@@ -9,8 +9,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.SwitchCompat
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +25,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.devtools.DevTools
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
+import com.alibaba.gaiax.demo.gaiaxjs.JSRenderDelegate
 import com.alibaba.gaiax.demo.list.clicklatency.NestedRecyclerActivity
 import com.alibaba.gaiax.demo.list.util.ClickTrace
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
@@ -34,7 +33,7 @@ import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.lzf.easyfloat.permission.PermissionUtils
-import com.youku.gaiax.js.GaiaXJSManager
+import com.youku.gaiax.js.GXJSEngineFactory
 
 
 class MainActivity : ComponentActivity() {
@@ -58,7 +57,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(6.dp, 6.dp, 4.dp, 6.dp),
                             onClick = {
                             }) {
-                            val status= rememberSaveable() {
+                            val status = rememberSaveable() {
                                 mutableStateOf(false)
                             }
                             Switch(checked = status.value, enabled = true, onCheckedChange = {
@@ -111,9 +110,11 @@ class MainActivity : ComponentActivity() {
         })
 
         //GaiaXJS初始化
-        GaiaXJSManager.instance.init(this.baseContext)
+        GXJSEngineFactory.instance.init(this).initRenderDelegate(JSRenderDelegate())
+        //GaiaXJS设置渲染引擎
+
         //GaiaXJS引擎启动
-        GaiaXJSManager.instance.startEngine { }
+        GXJSEngineFactory.instance.startEngine()
     }
 
     private fun fastPreview() {

@@ -33,7 +33,8 @@ object MonitorUtils {
         if (Log.isLog()) {
             Log.d("monitor() called with: scene = $scene, biz = $biz, id = $id, type = $type, state = $state, value = $value, moduleName = $jsModuleName, apiName = $jsApiName, apiType = $jsApiType")
         }
-        GaiaXJSManager.instance.listener?.monitor(scene, biz, id, type, state, value, jsModuleName, jsApiName, jsApiType)
+        //todo 此处为GaiaXJSManager初始化位置
+        GaiaXJSManager.instance.errorListener?.monitor(scene, biz, id, type, state, value, jsModuleName, jsApiName, jsApiType)
     }
 
     fun jsInitScene(type: String, value: Long) {

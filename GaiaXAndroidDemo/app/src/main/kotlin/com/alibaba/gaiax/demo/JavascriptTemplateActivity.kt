@@ -8,7 +8,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.gaiaxjs.JSRenderDelegate
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
-import com.youku.gaiax.js.GaiaXJSManager
+import com.youku.gaiax.js.GXJSComponentDelegate
 
 /**
  *  @author: shisan.lms
@@ -20,7 +20,6 @@ class JavascriptTemplateActivity : AppCompatActivity() {
     private var jsApiDemoId: Long = 0
     private var jsCustomsModuleDemoId: Long = 0
 
-    private var rootView: View? = null
 
     val jsApiDemoTemplateName = "gx-with-js-api-demo"
     val jsCustomModuleTemplateName = "gx-with-js"
@@ -62,19 +61,15 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
 
-        jsCustomsModuleDemoId = GaiaXJSManager.instance.registerComponent(
-            bizId,
-            jsCustomModuleTemplateName,
-            "1",
-            getJsFileByTemplateId(templateId)
-        )
-
-        val delegate = JSRenderDelegate()
-        if (view != null) {
-            delegate.initDelegate(view, jsCustomsModuleDemoId)
-            this.rootView = view
+        if(view != null){
+            jsCustomsModuleDemoId = GXJSComponentDelegate.instance.registerComponent(
+                bizId,
+                jsCustomModuleTemplateName,
+                "1",
+                getJsFileByTemplateId(templateId),
+                view
+            )
         }
-        GaiaXJSManager.instance.initRenderDelegate(delegate)
 
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
@@ -82,7 +77,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_1).addView(view, 0)
 
-        val component = GaiaXJSManager.instance.getComponentByInstanceId(jsCustomsModuleDemoId)
+        val component = GXJSComponentDelegate.instance.getComponentByInstanceId(jsCustomsModuleDemoId)
         component?.onReady()
 
     }
@@ -104,19 +99,15 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
 
-        jsApiDemoId = GaiaXJSManager.instance.registerComponent(
-            bizId,
-            jsApiDemoTemplateName,
-            "",
-            getJsFileByTemplateId(templateId)
-        )
-
-        val delegate = JSRenderDelegate()
-        if (view != null) {
-            delegate.initDelegate(view, jsApiDemoId)
-            this.rootView = view
+        if(view != null){
+            jsApiDemoId = GXJSComponentDelegate.instance.registerComponent(
+                bizId,
+                jsApiDemoTemplateName,
+                "1",
+                getJsFileByTemplateId(templateId),
+                view
+            )
         }
-        GaiaXJSManager.instance.initRenderDelegate(delegate)
 
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
@@ -124,21 +115,21 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
 
-        val component = GaiaXJSManager.instance.getComponentByInstanceId(jsApiDemoId)
+        val component = GXJSComponentDelegate.instance.getComponentByInstanceId(jsApiDemoId)
         component?.onReady()
 
     }
 
     override fun onPause() {
         super.onPause()
-        GaiaXJSManager.instance.onHiddenComponent(jsApiDemoId)
+        GXJSComponentDelegate.instance.onHiddenComponent(jsApiDemoId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        GaiaXJSManager.instance.onDestroyComponent(jsApiDemoId)
-        GaiaXJSManager.instance.unregisterComponent(jsApiDemoId)
+//        GXJSComponentDelegate.instance.onDestroyComponent(jsApiDemoId)
+        GXJSComponentDelegate.instance.unregisterComponent(jsApiDemoId)
         //todo 直接执行停止Engine可能会导致部分异步线程任务未执行完毕
-//        GaiaXJSManager.instance.stopEngine()
+//        GXJSComponentDelegate.instance.stopEngine()
     }
 }

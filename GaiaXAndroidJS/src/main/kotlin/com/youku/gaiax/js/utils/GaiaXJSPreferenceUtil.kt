@@ -3,6 +3,7 @@ package com.youku.gaiax.js.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
+import com.youku.gaiax.js.GXJSEngineFactory
 import com.youku.gaiax.js.GaiaXJSManager
 
 /**
@@ -165,7 +166,8 @@ class GaiaXJSPreferenceUtil private constructor(context: Context?, sharePreFileN
             if (Log.isLog()) {
                 Log.d("createSharePreference() called with: fileName = [$fileName]")
             }
-            return GaiaXJSPreferenceUtil(GaiaXJSManager.instance.context, fileName)
+            // TODO: 希望从GaiaXJSManager传入 
+            return GaiaXJSPreferenceUtil(GaiaXJSManager.instance.appContext, fileName)
         }
     }
 }

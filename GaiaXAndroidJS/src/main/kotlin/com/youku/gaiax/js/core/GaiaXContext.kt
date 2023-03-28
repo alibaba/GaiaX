@@ -73,7 +73,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         context?.initPendingJob()
     }
 
-    fun startContext(complete: () -> Unit) {
+    fun startContext(complete: () -> Unit = {}) {
         // 执行初始化脚本
         executeTask {
             Aop.aopTaskTime({
@@ -125,7 +125,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
     }
 
     fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {
-        if (GaiaXJSManager.instance.isDebugging) {
+        if (host.host.isDebugging) {
             context?.evaluateJS(script, argsMap)
         } else {
             context?.evaluateJS(script)
@@ -143,21 +143,17 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         val component = GaiaXComponent.create(this, bizId, templateId, templateVersion, script)
 
         // TODO: templateVersion相同不应该创建component 相同的名字能不能创建
-        if (getInstanceId(bizId, templateId) == null) {
-            components[component.id] = component
-            if (bizIdMap.contains(bizId)) {
-                bizIdMap[bizId]?.set(templateId, component.id)
-            } else {
-                val templateIdMap = ConcurrentHashMap<String, Long>()
-                templateIdMap[templateId] = component.id
-                bizIdMap[bizId] = templateIdMap
-            }
-            component.initComponent()
-            return component.id
+        components[component.id] = component
+        if (bizIdMap.contains(bizId)) {
+            bizIdMap[bizId]?.set(templateId, component.id)
         } else {
-            Log.e("Notice! ")
-            return getInstanceId(bizId, templateId) ?: -1L
+            val templateIdMap = ConcurrentHashMap<String, Long>()
+            templateIdMap[templateId] = component.id
+            bizIdMap[bizId] = templateIdMap
         }
+        component.initComponent()
+        return component.id
+
     }
 
     fun unregisterComponent(id: Long) {
@@ -165,16 +161,7 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
         components.remove(id)?.destroyComponent()
     }
 
-    fun getInstanceId(bizId: String, templateId: String): Long? {
-        return bizIdMap[bizId]?.get(templateId)
-    }
-
     fun getComponentByInstanceId(instanceId: Long): IComponent? {
-        return components[instanceId]
-    }
-
-    fun getComponentByBizIdTemplateId(bizId: String, templateId: String): IComponent? {
-        val instanceId = getInstanceId(bizId, templateId) ?: -1L
         return components[instanceId]
     }
 

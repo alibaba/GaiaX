@@ -119,7 +119,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
 
     override fun wrapAsJSValueException(e: Exception?) {
         e?.let {
-            GaiaXJSManager.instance.listener?.errorLog(JSONObject().apply {
+            GaiaXJSManager.instance.errorListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = e.stackTrace.toString()
                     this["templateId"] = ""

@@ -17,7 +17,7 @@ import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.IDevTools
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
-import com.youku.gaiax.js.GaiaXJSManager
+import com.youku.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms
@@ -159,7 +159,7 @@ class DevTools : IDevTools {
     private fun launchJsType(mode: String) {
         currentJSMode = mode
         if (jsDebuggerTypeListener == null) {
-            jsDebuggerTypeListener = GaiaXJSManager.instance.devToolsDebuggingTypeListener
+            jsDebuggerTypeListener = GXJSEngineFactory.instance.devToolsDebuggingTypeListener
         }
         jsDebuggerTypeListener?.onDevToolsJSModeChanged(currentJSMode)
     }

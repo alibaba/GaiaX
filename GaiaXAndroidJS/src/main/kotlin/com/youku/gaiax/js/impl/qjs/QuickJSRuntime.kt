@@ -36,7 +36,7 @@ internal class QuickJSRuntime private constructor(val runtime: GaiaXRuntime, val
             if (Log.isLog()) {
                 Log.e("setPromiseRejectionHandler() called with: message = $message")
             }
-            GaiaXJSManager.instance.listener?.errorLog(JSONObject().apply {
+            GaiaXJSManager.instance.errorListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = message
                     this["templateId"] = ""

@@ -34,7 +34,7 @@ class GaiaXJSBuildInTipsModule : GaiaXJSBaseModule() {
                 Toast.LENGTH_SHORT
             }
             GaiaXJSUiExecutor.action {
-                GaiaXJSManager.instance.context.let { appContext ->
+                GaiaXJSManager.instance.appContext.let { appContext ->
                     Toast.makeText(appContext, title, durationType).show()
                 }
             }
@@ -52,8 +52,7 @@ class GaiaXJSBuildInTipsModule : GaiaXJSBaseModule() {
             val title = data.getString("title") ?: ""
             val message = data.getString("message") ?: ""
             GaiaXJSUiExecutor.action {
-                var instanceId = 2L
-                GaiaXJSManager.instance.renderEngineDelegate?.getActivityForDialog().let { context ->
+                GaiaXJSManager.instance.renderDelegate.getActivityForDialog().let { context ->
                     AlertDialog.Builder(context)
                         .setTitle(title)
                         .setMessage(message)

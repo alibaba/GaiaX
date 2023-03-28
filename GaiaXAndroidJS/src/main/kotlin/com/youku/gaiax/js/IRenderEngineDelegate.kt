@@ -12,6 +12,8 @@ import com.youku.gaiax.js.api.IGaiaXCallback
  */
 interface IRenderEngineDelegate {
 
+    fun bindComponentWithView(view: View, jsComponentId: Long)
+
     fun setDataToGX(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback)
 
     fun getDataFromGX(componentId: Long): JSONObject?

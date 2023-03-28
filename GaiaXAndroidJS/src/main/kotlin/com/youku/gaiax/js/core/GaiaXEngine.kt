@@ -9,7 +9,11 @@ import com.youku.gaiax.js.impl.qjs.QuickJSEngine
 /**
  * GaiaXJSManager.createEngin->initEngine->
  */
-internal class GaiaXEngine private constructor(val engineId: Long, val type: GXJSEngineFactory.GaiaXJSEngineType) {
+internal class GaiaXEngine private constructor(
+    val engineId: Long,
+    val type: GXJSEngineFactory.GaiaXJSEngineType,
+    val isDebugging: Boolean
+) {
 
     enum class State {
         NONE,
@@ -24,8 +28,8 @@ internal class GaiaXEngine private constructor(val engineId: Long, val type: GXJ
 
     companion object {
 
-        fun create(engineId: Long, type: GXJSEngineFactory.GaiaXJSEngineType): GaiaXEngine {
-            return GaiaXEngine(engineId, type)
+        fun create(engineId: Long, type: GXJSEngineFactory.GaiaXJSEngineType, isDebugging: Boolean = false): GaiaXEngine {
+            return GaiaXEngine(engineId, type, isDebugging)
         }
     }
 

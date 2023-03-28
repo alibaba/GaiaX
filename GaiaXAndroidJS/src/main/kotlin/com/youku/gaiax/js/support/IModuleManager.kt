@@ -9,7 +9,7 @@ internal interface IModuleManager {
 
     fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>)
 
-    fun buildModulesScript(): String
+    fun buildModulesScript(isDebugging: Boolean): String
 
     fun invokeMethodSync(moduleId: Long, methodId: Long, args: JSONArray): Any?
 

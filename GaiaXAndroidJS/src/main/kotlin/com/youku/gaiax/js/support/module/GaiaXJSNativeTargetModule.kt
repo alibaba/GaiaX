@@ -20,7 +20,7 @@ class GaiaXJSNativeTargetModule : GaiaXJSBaseModule() {
         val templateId = data.getString("templateId")
         val instanceId = data.getLongValue("instanceId")
 
-        val delegate = GaiaXJSManager.instance.renderEngineDelegate
+        val delegate = GaiaXJSManager.instance.renderDelegate
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
             if (Log.isLog()) {

@@ -48,10 +48,10 @@ internal class GaiaXModuleManager : IModuleManager {
         }
     }
 
-    override fun buildModulesScript(): String {
+    override fun buildModulesScript(isDebugging: Boolean): String {
         val script = StringBuilder()
         moduleGroup.forEach {
-            script.append(it.value.buildModuleScript())
+            script.append(it.value.buildModuleScript(isDebugging))
         }
         return script.toString()
     }

@@ -11,7 +11,7 @@ import com.alibaba.gaiax.demo.utils.UiExecutor
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.youku.gaiax.js.GaiaXJSManager
+import com.youku.gaiax.js.GXJSComponentDelegate
 import com.youku.gaiax.js.IRenderEngineDelegate
 import com.youku.gaiax.js.api.IGaiaXCallback
 import java.util.concurrent.ConcurrentHashMap
@@ -31,7 +31,11 @@ class JSRenderDelegate : IRenderEngineDelegate {
 
     fun initDelegate(view: View, jsId: Long) {
         this.rootView = view
-        links[jsId] = view
+
+    }
+
+    override fun bindComponentWithView(view: View, jsComponentId: Long) {
+        links[jsComponentId] = view
     }
 
 
@@ -70,8 +74,8 @@ class JSRenderDelegate : IRenderEngineDelegate {
     }
 
     override fun addEventListener(targetId: String, componentId: Long, eventType: String, optionCover: Boolean, optionLevel: Int) {
-        GXTemplateEngine.instance.getGXTemplateContext(rootView)?.let { gxTemplateContext ->
-            val gxNode = GXTemplateEngine.instance.getGXNodeById(rootView, targetId)
+        GXTemplateEngine.instance.getGXTemplateContext(links[componentId])?.let { gxTemplateContext ->
+            val gxNode = GXTemplateEngine.instance.getGXNodeById(links[componentId], targetId)
             GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
             gxNode?.initEventByRegisterCenter()
             var eventTypeForName = ""
@@ -91,7 +95,7 @@ class JSRenderDelegate : IRenderEngineDelegate {
     }
 
     override fun dispatcherEvent(eventParams: JSONObject) {
-        GaiaXJSManager.instance.onEventComponent(
+        GXJSComponentDelegate.instance.onEventComponent(
             eventParams["jsComponentId"] as Long,
             eventParams["type"] as String,
             eventParams["data"] as JSONObject

@@ -9,6 +9,7 @@ import com.alibaba.gaiax.demo.gaiaxjs.JSRenderDelegate
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.youku.gaiax.js.GXJSComponentDelegate
+import com.youku.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms
@@ -123,12 +124,13 @@ class JavascriptTemplateActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         GXJSComponentDelegate.instance.onHiddenComponent(jsApiDemoId)
+        GXJSComponentDelegate.instance.onHiddenComponent(jsCustomsModuleDemoId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        GXJSComponentDelegate.instance.onDestroyComponent(jsApiDemoId)
         GXJSComponentDelegate.instance.unregisterComponent(jsApiDemoId)
+        GXJSComponentDelegate.instance.unregisterComponent(jsCustomsModuleDemoId)
         //todo 直接执行停止Engine可能会导致部分异步线程任务未执行完毕
 //        GXJSComponentDelegate.instance.stopEngine()
     }

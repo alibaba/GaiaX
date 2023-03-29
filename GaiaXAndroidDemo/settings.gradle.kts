@@ -16,6 +16,9 @@ project(":GaiaX-Android-QuickJS").projectDir = file("../GaiaX-Android-QuickJS")
 include(":GaiaXAndroidClientToStudio")
 project(":GaiaXAndroidClientToStudio").projectDir = file("../GaiaXAndroidClientToStudio")
 
+include(":GaiaXAndroidJSAdapter")
+project(":GaiaXAndroidJSAdapter").projectDir = file("../GaiaXAndroidJSAdapter")
+
 pluginManagement {
     repositories {
         mavenLocal()

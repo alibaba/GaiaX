@@ -110,9 +110,9 @@ class MainActivity : ComponentActivity() {
         })
 
         //GaiaXJS初始化
-        GXJSEngineFactory.instance.init(this).initRenderDelegate(JSRenderDelegate())
-        //GaiaXJS设置渲染引擎
-
+        GXJSEngineFactory.instance.init(this)
+            //GaiaXJS设置渲染引擎
+            .initRenderDelegate(JSRenderDelegate())
         //GaiaXJS引擎启动
         GXJSEngineFactory.instance.startEngine()
     }

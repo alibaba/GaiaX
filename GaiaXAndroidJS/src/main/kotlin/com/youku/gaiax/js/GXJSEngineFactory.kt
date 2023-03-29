@@ -52,8 +52,10 @@ class GXJSEngineFactory {
      */
     internal lateinit var context: Context
 
-    //todo：需要保障一个类型的engine只注册一次(quickjs,javascriptcore,studioworker)
-    private val engines = ConcurrentHashMap<Long, GaiaXEngine>()
+    /**
+     * 一个类型的engine只注册一次(QuickJs,JavaScriptCore,StudioWorker)
+     */
+    private val engines = ConcurrentHashMap<GaiaXJSEngineType, GaiaXEngine>()
 
     internal val moduleManager: IModuleManager = GaiaXModuleManager()
 
@@ -205,45 +207,43 @@ class GXJSEngineFactory {
             defaultEngine = Aop.aopTaskTime({
                 // 创建引擎
                 if (isDebugging) {
-                    createJSEngine(GaiaXJSEngineType.GaiaXJSEngineTypeDebugger)
+                    obtainJSEngine(GaiaXJSEngineType.GaiaXJSEngineTypeDebugger)
                 } else {
-                    createJSEngine(GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS)
+                    obtainJSEngine(GaiaXJSEngineType.GaiaXJSEngineTypeQuickJS)
                 }
             }, { time ->
                 MonitorUtils.jsInitScene(MonitorUtils.TYPE_JS_CONTEXT_INIT, time)
             })
 
             // 启动引擎
-            startEngine(defaultEngine, complete)
+            startJSEngine(defaultEngine, complete)
         }
     }
 
-    private fun startEngine(engine: GaiaXEngine?, complete: () -> Unit) {
-        engine?.getId()?.let { startEngine(it, complete) }
-    }
-
-    private fun startEngine(engineId: Long, complete: () -> Unit = {}) {
-        if (engines.containsKey(engineId)) {
-            engines[engineId]?.startEngine(complete)
+    private fun startJSEngine(engine: GaiaXEngine?, complete: () -> Unit) {
+        val engineType = engine?.type
+        if (engines.containsKey(engineType)) {
+            engines[engineType]?.startEngine(complete)
         }
+
     }
 
-    private fun createJSEngine(type: GaiaXJSEngineType): GaiaXEngine {
+    private fun obtainJSEngine(type: GaiaXJSEngineType): GaiaXEngine {
         val id = IdGenerator.genLongId()
-        checkIdEngineExist(id)
-        val engine = GaiaXEngine.create(id, type, isDebugging)
-        engines[id] = engine
+        var engine = GaiaXEngine.create(id, type, isDebugging)
+        if (engines.containsKey(type)) {
+            engine = engines.getValue(type)
+        } else {
+            engines[type] = engine
+        }
         engine.initEngine()
         return engine
     }
 
     private fun destroyEngine(engine: GaiaXEngine?) {
-        engine?.getId()?.let { destroyEngine(it) }
-    }
-
-    private fun destroyEngine(engineId: Long) {
-        if (engines.containsKey(engineId)) {
-            val instance = engines.remove(engineId)
+        val engineType = engine?.type
+        if (engines.containsKey(engineType)) {
+            val instance = engines.remove(engineType)
             instance?.destroyEngine()
         }
     }
@@ -262,12 +262,6 @@ class GXJSEngineFactory {
 
     internal fun getGaiaXJSContext(): GaiaXContext? {
         return defaultEngine?.runtime()?.context()
-    }
-
-    private fun checkIdEngineExist(id: Long) {
-        if (engines.containsKey(id)) {
-            throw IllegalArgumentException("Id Engine Exist")
-        }
     }
 
     interface Listener {

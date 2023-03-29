@@ -100,6 +100,8 @@ dependencies {
     implementation(project(mapOf("path" to ":GaiaXAndroidJS")))
     implementation(project(mapOf("path" to ":GaiaX-Android-QuickJS")))
     implementation(project(mapOf("path" to ":GaiaXAndroidClientToStudio")))
+    implementation(project(mapOf("path" to ":GaiaXAndroidJSAdapter")))
+
     implementation(libs.gaiax)
     implementation(libs.gaiaxadapter)
 //    implementation(libs.gaiaxclienttostudio)

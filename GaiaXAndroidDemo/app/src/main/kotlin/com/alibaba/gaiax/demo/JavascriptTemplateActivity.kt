@@ -1,15 +1,12 @@
 package com.alibaba.gaiax.demo
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.demo.gaiaxjs.JSRenderDelegate
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.youku.gaiax.js.GXJSComponentDelegate
-import com.youku.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms

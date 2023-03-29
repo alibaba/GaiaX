@@ -1,10 +1,7 @@
 package com.alibaba.gaiax.js.adapter.modules
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.DialogInterface
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.GaiaXJSManager
 import com.youku.gaiax.js.api.GaiaXJSBaseModule
 import com.youku.gaiax.js.api.IGaiaXCallback
 import com.youku.gaiax.js.api.annotation.GaiaXAsyncMethod
@@ -31,18 +28,18 @@ class GaiaXJSBuildInCustomDialogModule : GaiaXJSBaseModule() {
         try {
             val identifierId: String = data.getString("identifierId")
             GaiaXJSUiExecutor.action(Runnable {
-                val topActivity: Activity? = GaiaXJSManager.instance.renderEngineDelegate?.getActivityForDialog()
-                if (topActivity != null) {
-//                    val dialog: Dialog = GaiaXCustomDialogView(topActivity, data, null, null)
-//                    mDialogList.put(identifierId, dialog)
-//                    dialog.setOnDismissListener(object : DialogInterface.OnDismissListener {
-//                        override fun onDismiss(dialog: DialogInterface?) {
-//                            dismissCallback.invoke(null)
-//                            mDialogList.remove(identifierId)
-//                        }
-//                    })
-//                    dialog.show()
-                }
+//                val topActivity: Activity? = GaiaXJSManager.instance.renderEngineDelegate?.getActivityForDialog()
+//                if (topActivity != null) {
+////                    val dialog: Dialog = GaiaXCustomDialogView(topActivity, data, null, null)
+////                    mDialogList.put(identifierId, dialog)
+////                    dialog.setOnDismissListener(object : DialogInterface.OnDismissListener {
+////                        override fun onDismiss(dialog: DialogInterface?) {
+////                            dismissCallback.invoke(null)
+////                            mDialogList.remove(identifierId)
+////                        }
+////                    })
+////                    dialog.show()
+//                }
             }
             )
         } catch (throwable: Throwable) {

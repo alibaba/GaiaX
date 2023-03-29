@@ -26,7 +26,7 @@ internal class GaiaXJSBuildInModule : GaiaXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            GaiaXJSManager.instance.renderDelegate.setDataToGX(
+            GaiaXJSManager.instance.renderDelegate.setDataToRenderEngine(
                 componentId,
                 templateId,
                 data,
@@ -43,7 +43,7 @@ internal class GaiaXJSBuildInModule : GaiaXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            return GaiaXJSManager.instance.renderDelegate?.getDataFromGX(componentId) ?: JSONObject()
+            return GaiaXJSManager.instance.renderDelegate?.getDataFromRenderEngine(componentId) ?: JSONObject()
         }
         return JSONObject()
     }
@@ -56,7 +56,7 @@ internal class GaiaXJSBuildInModule : GaiaXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            val data = GaiaXJSManager.instance.renderDelegate?.getDataFromGX(componentId) ?: JSONObject()
+            val data = GaiaXJSManager.instance.renderDelegate?.getDataFromRenderEngine(componentId) ?: JSONObject()
             return data.getInteger("scrollIndex") ?: -1
         }
         return -1

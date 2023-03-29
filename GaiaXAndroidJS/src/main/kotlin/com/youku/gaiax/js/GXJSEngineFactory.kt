@@ -103,6 +103,8 @@ class GXJSEngineFactory {
         //初始化GaiaXJSManager
         GaiaXJSManager.instance.appContext = this.context
 
+        initGXAdapter()?.init(this.context)
+
         // 加载模块
         Aop.aopTaskTime({
             initModules()
@@ -256,8 +258,17 @@ class GXJSEngineFactory {
         return this
     }
 
-    private fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>) {
+    fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>) {
         moduleManager.unregisterModule(moduleClazz)
+    }
+
+    private fun initGXAdapter(): GXJSIAdapter? {
+        return try {
+            val clazz = Class.forName("com.alibaba.gaiax.js.adapter.GXJSAdapter")
+            clazz.newInstance() as GXJSIAdapter
+        } catch (e: Exception) {
+            null
+        }
     }
 
     internal fun getGaiaXJSContext(): GaiaXContext? {
@@ -277,6 +288,10 @@ class GXJSEngineFactory {
             jsApiName: String = "",
             jsApiType: String = ""
         )
+    }
+
+    interface GXJSIAdapter{
+        fun init(context: Context)
     }
 
 

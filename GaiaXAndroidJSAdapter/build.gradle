@@ -1,0 +1,138 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+    }
+}
+
+buildscript {
+
+    ext.kotlin_version = '1.5.31'
+
+    repositories {
+        mavenLocal()
+        google()
+        maven { url "https://jitpack.io" }
+        mavenCentral()
+        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+android {
+
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 30
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    // https://www.jianshu.com/p/681589927f1f
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-Adapter-JS"]
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/kotlin', 'src/main/java']
+            jniLibs.srcDir 'src/main/jniLibs'
+        }
+
+        // https://stackoverflow.com/questions/26663539/configuring-res-srcdirs-for-androidtest-sourceset
+        // https://stackoverflow.com/questions/23643189/android-gradle-src-androidtest-res-layout-mylayout-xml-not-found-in-mypackage-r
+//        androidTest {
+//            java.srcDirs = ['src/androidTest/java']
+//            res.srcDirs = ['src/androidTest/res']
+//            jniLibs.srcDir 'src/main/jniLibs'
+//        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
+    implementation 'com.alibaba:fastjson:1.2.26@jar'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.airbnb.android:lottie:4.1.0'
+
+    implementation project(path: ':GaiaXAndroidJS')
+    implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0")
+//        implementation project(path: ':GaiaXAndroid')
+    implementation project(path: ':GaiaXAndroidClientToStudio')
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0') {
+        exclude group: 'javax.inject'
+    }
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+
+                if (project.hasProperty("version")) {
+                    version = project.getProperty("version")
+                } else {
+                    version = '0.0.0'
+                }
+                if (project.hasProperty("group")) {
+                    groupId = project.getProperty("group")
+                } else {
+                    groupId = 'com.github.alibaba.GaiaX'
+                }
+
+                artifactId = 'GaiaX-Adapter-JS'
+            }
+        }
+    }
+}

@@ -25,7 +25,6 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.devtools.DevTools
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
-import com.alibaba.gaiax.demo.gaiaxjs.JSRenderDelegate
 import com.alibaba.gaiax.demo.list.clicklatency.NestedRecyclerActivity
 import com.alibaba.gaiax.demo.list.util.ClickTrace
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
@@ -111,8 +110,6 @@ class MainActivity : ComponentActivity() {
 
         //GaiaXJS初始化
         GXJSEngineFactory.instance.init(this)
-            //GaiaXJS设置渲染引擎
-            .initRenderDelegate(JSRenderDelegate())
         //GaiaXJS引擎启动
         GXJSEngineFactory.instance.startEngine()
     }

@@ -74,12 +74,13 @@ class GXJSComponentDelegate {
         view: View
     ): Long {
         val componentId = GXJSEngineFactory.instance.getGaiaXJSContext()?.registerComponent(bizId, templateId, templateVersion, script) ?: -1L
-        GXJSEngineFactory.instance.renderEngineDelegate?.bindComponentWithView(view, componentId)
+        GXJSEngineFactory.instance.renderEngineDelegate?.bindComponentToView(view, componentId)
         return componentId
     }
 
     fun unregisterComponent(id: Long) {
         GXJSEngineFactory.instance.getGaiaXJSContext()?.unregisterComponent(id)
+        GXJSEngineFactory.instance.renderEngineDelegate.unbindComponentAndView(id)
     }
 
     fun getComponentByInstanceId(instanceId: Long): IComponent? {

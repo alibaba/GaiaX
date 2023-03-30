@@ -7,6 +7,7 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.youku.gaiax.js.GXJSComponentDelegate
+import com.youku.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms
@@ -115,7 +116,9 @@ class JavascriptTemplateActivity : AppCompatActivity() {
 
         val component = GXJSComponentDelegate.instance.getComponentByInstanceId(jsApiDemoId)
         component?.onReady()
-
+        component?.onReady()
+        component?.onReady()
+        component?.onDestroy()
     }
 
     override fun onPause() {
@@ -128,6 +131,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         super.onDestroy()
         GXJSComponentDelegate.instance.unregisterComponent(jsApiDemoId)
         GXJSComponentDelegate.instance.unregisterComponent(jsCustomsModuleDemoId)
+        GXJSEngineFactory.instance
         //todo 直接执行停止Engine可能会导致部分异步线程任务未执行完毕
 //        GXJSComponentDelegate.instance.stopEngine()
     }

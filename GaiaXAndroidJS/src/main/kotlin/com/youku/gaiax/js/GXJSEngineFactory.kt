@@ -275,6 +275,10 @@ class GXJSEngineFactory {
         return defaultEngine?.runtime()?.context()
     }
 
+    fun getRenderDelegate(): IRenderEngineDelegate {
+        return this.renderEngineDelegate
+    }
+
     interface Listener {
         fun errorLog(data: JSONObject)
         fun monitor(
@@ -290,7 +294,7 @@ class GXJSEngineFactory {
         )
     }
 
-    interface GXJSIAdapter{
+    interface GXJSIAdapter {
         fun init(context: Context)
     }
 

@@ -8,6 +8,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.youku.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms
@@ -132,7 +133,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
-                        GXJSRenderDelegate().dispatcherEvent(it)
+                        (GXJSEngineFactory.instance.getRenderDelegate() as GXJSRenderDelegate).dispatcherEvent(it)
                     }
                 } else {
                     jsEventParams.let {

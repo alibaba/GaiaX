@@ -66,9 +66,7 @@ internal class GaiaXComponent private constructor(val jsContext: GaiaXContext, v
         GaiaXScriptBuilder.buildComponentDestroyScript(id).apply { jsContext.evaluateJS(this) }
     }
 
-    /**
-     * Java组件销毁时调用
-     */
+    /** Java组件销毁时调用*/
     fun destroyComponent() {
         GaiaXScriptBuilder.buildComponentDestroyScript(id).apply { jsContext.evaluateJS(this) }
         GaiaXScriptBuilder.buildDestroyComponentScript(id).apply { jsContext.evaluateJS(this) }

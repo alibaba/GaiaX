@@ -20,8 +20,6 @@ import java.util.concurrent.ConcurrentHashMap
  * 每个Context下的Component对应一个模板。
  * 如果模板是嵌套模板，那么Context会有多个Component。
  */
-
-// TODO: 只保留register和unregister 新增getComponentById 同时删除生命周期回调
 internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runtime: IRuntime, val type: GXJSEngineFactory.GaiaXJSEngineType) {
 
     internal val bridge = object : ICallBridgeListener {
@@ -142,8 +140,8 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
     fun registerComponent(bizId: String, templateId: String, templateVersion: String, script: String): Long {
         val component = GaiaXComponent.create(this, bizId, templateId, templateVersion, script)
 
-        // TODO: templateVersion相同不应该创建component 相同的名字能不能创建
         components[component.id] = component
+
         if (bizIdMap.contains(bizId)) {
             bizIdMap[bizId]?.set(templateId, component.id)
         } else {
@@ -157,7 +155,6 @@ internal class GaiaXContext private constructor(val host: GaiaXRuntime, val runt
     }
 
     fun unregisterComponent(id: Long) {
-        // TODO: onDestroy 和 destroyComponent的功能重新定义
         components.remove(id)?.destroyComponent()
     }
 

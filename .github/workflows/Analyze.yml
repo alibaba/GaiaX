@@ -1,4 +1,4 @@
-name: Analyze CI
+name: analyze CI
 
 on:
   push:

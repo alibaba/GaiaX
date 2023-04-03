@@ -1,4 +1,4 @@
-name: Analyze CI
+name: android-test-case CI
 
 on:
   push:

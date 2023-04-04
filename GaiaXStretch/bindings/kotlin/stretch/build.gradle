@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 28
@@ -44,10 +42,14 @@ dependencies {
 
 def rustBasePath = "src/main/rust"
 def cargoOutputDir = "${rustBasePath}/target"
-def archTriplets = ['arm64-v8a': 'aarch64-linux-android',
-                    'armeabi-v7a': 'armv7-linux-androideabi',
-                    'x86': 'i686-linux-android']
+def archTriplets = [
+        'arm64-v8a'  : 'aarch64-linux-android',
+        'armeabi-v7a': 'armv7-linux-androideabi',
+        'x86'        : 'i686-linux-android',
+        'x86_64'     : 'x86_64-linux-android',
+]
 
+// https://gendignoux.com/blog/2022/10/24/rust-library-android.html
 archTriplets.each { arch, target ->
     // Build with cargo
     tasks.create(name: "cargo-build-${arch}", type: Exec, description: "Building core for ${arch}") {
@@ -78,65 +80,6 @@ archTriplets.each { arch, target ->
     clean.dependsOn "clean-${arch}"
 }
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'stretch-kotlin-bindings'
-
-    publishedGroupId = 'app.visly.stretch'
-    libraryName = bintrayName
-    artifact = 'stretch'
-
-    libraryDescription = 'Kotlin bindings for stretch layout engine'
-
-    siteUrl = 'https://visly.app/stretch'
-    gitUrl = 'https://github.com/vislyhq/stretch.git'
-
-    libraryVersion = '0.3.2'
-
-    developerId = 'visly'
-    developerName = 'Visly'
-    developerEmail = 'emil@visly.app'
-
-    licenseName = 'MIT'
-    licenseUrl = 'https://github.com/vislyhq/stretch/blob/master/LICENSE'
-    allLicenses = ["MIT"]
-}
-
-group = publishedGroupId
-version = libraryVersion
-
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            packaging 'aar'
-            groupId publishedGroupId
-            artifactId artifact
-            name libraryName
-            description libraryDescription
-            url siteUrl
-
-            licenses {
-                license {
-                    name licenseName
-                    url licenseUrl
-                }
-            }
-            developers {
-                developer {
-                    id developerId
-                    name developerName
-                    email developerEmail
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
-            }
-        }
-    }
-}
-
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
@@ -160,28 +103,4 @@ artifacts {
 Properties properties = new Properties()
 if (project.rootProject.file("local.properties").exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
-}
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = developerId
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        dryRun = false
-        publish = true
-        override = false
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-        }
-    }
 }

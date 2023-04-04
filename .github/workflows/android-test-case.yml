@@ -23,6 +23,6 @@ jobs:
     - name: run tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 29
+        api-level: 30
         working-directory: ./GaiaXAndroid
         script: ./gradlew connectedCheck && ./gradlew connectedAndroidTest

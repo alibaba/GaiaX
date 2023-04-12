@@ -451,8 +451,9 @@ const NSUInteger GXTextMaxWidth = 1080;
     } else if (lineNum == 1) {
         // 等于1行时，动态计算宽度
         CTLineRef lineRef = (__bridge CTLineRef)[linesRef firstObject];
-        width = CTLineGetTypographicBounds(lineRef, NULL, NULL, NULL);
-        
+        // 通过kCTLineBoundsIncludeLanguageExtents来确保不同的语言都有足够的空间
+        CGRect rect = CTLineGetBoundsWithOptions(lineRef,  kCTLineBoundsIncludeLanguageExtents);
+        width = rect.size.width;
     } else {
         // 大于1行时,行宽直接用最大宽度
         width = maxWidth;
@@ -503,8 +504,8 @@ static NSArray *GXLinesRefArray(UIFont *font,
     //增加段落 & font属性
     NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
     paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    [attrStr addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, text.length)];    
     [attrStr addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, text.length)];
-    [attrStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, text.length)];
     
     // 计算FrameRef
     CTFramesetterRef frameSetterRef = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrStr);

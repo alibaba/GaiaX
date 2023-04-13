@@ -505,8 +505,6 @@ static NSArray *GXLinesRefArray(UIFont *font,
     NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
     paraStyle.lineBreakMode = NSLineBreakByCharWrapping;
     [attrStr addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, text.length)];    
-    [attrStr addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, text.length)];
-    
     // 计算FrameRef
     CTFramesetterRef frameSetterRef = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attrStr);
     CGMutablePathRef pathRef = CGPathCreateMutable();

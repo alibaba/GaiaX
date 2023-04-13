@@ -1135,12 +1135,10 @@ object GXNodeTreeUpdate {
                     view as View, gxTemplateNode, templateData, valueData
                 )
                 if (result != null) {
-                    val data = JSONObject()
+                    val data = JSONObject().apply {
+                        this.putAll(nodeData)
+                    }
                     data[GXTemplateKey.GAIAX_VALUE] = result
-                    data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
-                        nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC]
-                    data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
-                        nodeData[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE]
                     view.onBindData(data)
                     return
                 }
@@ -1160,12 +1158,10 @@ object GXNodeTreeUpdate {
                 }
                 val result = gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
                 if (result != null) {
-                    val data = JSONObject()
+                    val data = JSONObject().apply {
+                        nodeData?.let { this.putAll(it) }
+                    }
                     data[GXTemplateKey.GAIAX_VALUE] = result
-                    data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
-                        nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-                    data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
-                        nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
                     view.onBindData(data)
                 }
                 return
@@ -1200,12 +1196,10 @@ object GXNodeTreeUpdate {
 
                 gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
                     ?.let { result ->
-                        val data = JSONObject()
+                        val data = JSONObject().apply {
+                            nodeData?.let { this.putAll(it) }
+                        }
                         data[GXTemplateKey.GAIAX_VALUE] = result
-                        data[GXTemplateKey.GAIAX_ACCESSIBILITY_DESC] =
-                            nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
-                        data[GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE] =
-                            nodeData?.get(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
                         view.onBindData(data)
                         return
                     }

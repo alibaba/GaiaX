@@ -23,12 +23,14 @@ object GXDataBindingFactory {
         val placeholder = data.getString(GXTemplateKey.GAIAX_PLACEHOLDER)
         val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
         val accessibilityEnable = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
+        val accessibilityTraits = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)
         val extend = data.getJSONObject(GXTemplateKey.GAIAX_EXTEND)
 
         val valueExp = GXExpressionFactory.create(expVersion, value)
         val placeholderExp = GXExpressionFactory.create(expVersion, placeholder)
         val accessibilityDescExp = GXExpressionFactory.create(expVersion, accessibilityDesc)
         val accessibilityEnableExp = GXExpressionFactory.create(expVersion, accessibilityEnable)
+        val accessibilityTraitsExp = GXExpressionFactory.create(expVersion, accessibilityTraits)
         val extendExp: MutableMap<String, GXIExpression>? =
             if (extend != null && extend.isNotEmpty()) {
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()
@@ -50,6 +52,7 @@ object GXDataBindingFactory {
                 placeholder = placeholderExp,
                 accessibilityDesc = accessibilityDescExp,
                 accessibilityEnable = accessibilityEnableExp,
+                accessibilityTraits = accessibilityTraitsExp,
                 extend = extendExp
             )
         } else {

@@ -71,7 +71,7 @@ open class GXDataBinding(
         }
 
         // View的无障碍朗读逻辑
-        accessibilityEnable?.value(templateData)?.let {
+        accessibilityTraits?.value(templateData)?.let {
             result = result ?: JSONObject()
             result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS, it)
         }

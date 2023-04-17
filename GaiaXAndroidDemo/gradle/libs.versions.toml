@@ -27,7 +27,7 @@ androidxTest = "1.4.0"
 espressoCore = "3.4.0"
 jUnit = "4.13.2"
 
-gaiax = "0.4.0"
+gaiax = "0.4.1"
 
 [libraries]
 gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax" }

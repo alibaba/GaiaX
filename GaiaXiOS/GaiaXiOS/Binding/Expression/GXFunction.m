@@ -28,7 +28,9 @@
     if ([func isEqualToString:@"size"]) {
         value = [self size:params];
         
-    } else if ([func isEqualToString:@"env"]){
+    }
+    // 功能被扩展能力承接走了，后续版本会被移除
+    else if ([func isEqualToString:@"env"]){
         value = [self env:params];
     }
     

@@ -109,7 +109,10 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
 
                     if (functionName == "size" && params.size == 1) {
                         return functionSize(params)
-                    } else if (functionName == "env" && params.size == 1) {
+                    }
+
+                    // 功能被扩展能力承接走了，后续版本会被移除
+                    else if (functionName == "env" && params.size == 1) {
                         return functionEnv(params)
                     }
                     return 0L

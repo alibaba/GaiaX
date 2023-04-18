@@ -207,7 +207,7 @@ We very welcome your to contribute code for the project. In you before writing a
 
 ## Tool
 
-- [Template visual build Studio](https://dl-oss-wanju.youku.com/gaia-opensource/gaia-studio/mac/Gaia%20Studio-0.1.8.dmg)
+- [Gaia Studio](https://www.yuque.com/youku-gaia/gaia-studio/iba10t#qxXg9)
 
 ## Contact us
 

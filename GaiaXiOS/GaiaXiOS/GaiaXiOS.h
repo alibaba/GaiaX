@@ -34,6 +34,7 @@ FOUNDATION_EXPORT const unsigned char GaiaXiOSVersionString[];
 
 #import <GaiaXiOS/GXLottieAniamtionProtocal.h>
 #import <GaiaXiOS/GXTemplateSourceProtocal.h>
+#import <GaiaXiOS/GXFunctionExpressionProtocol.h>
 #import <GaiaXiOS/GXBizServiceProtocol.h>
 #import <GaiaXiOS/GXImageViewProtocal.h>
 #import <GaiaXiOS/GXRootViewProtocal.h>

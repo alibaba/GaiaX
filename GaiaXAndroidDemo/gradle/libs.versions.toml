@@ -28,6 +28,7 @@ espressoCore = "3.4.0"
 jUnit = "4.13.2"
 
 gaiax = "0.4.1"
+gaiax-main="main-SNAPSHOT"
 
 [libraries]
 gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax" }

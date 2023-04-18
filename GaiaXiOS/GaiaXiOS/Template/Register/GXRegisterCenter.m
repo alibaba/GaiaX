@@ -203,3 +203,21 @@
 }
 
 @end
+
+
+@implementation GXRegisterCenter (Expression)
+
+- (void)registerFunctionExpression:(id <GXFunctionExpressionProtocol>)function {
+    if (!function || ![function conformsToProtocol:@protocol(GXFunctionExpressionProtocol)]) {
+        return;
+    }
+    self.functionExpression = function;
+}
+
+
+- (void)unregisterExpressionFunction:(id <GXFunctionExpressionProtocol>)function{
+    self.functionExpression=nil;
+}
+
+@end
+

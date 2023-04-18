@@ -6,19 +6,32 @@
 //
 
 #import "GXFunction.h"
+#import "GXRegisterCenter.h"
 
 @implementation GXFunction
 
 + (id)function:(NSString *)func params:(NSArray *)params{
+    
     //方法处理
     id value = nil;
+    
+    // 处理函数扩展逻辑
+    id functionExpression= TheGXRegisterCenter.functionExpression;
+    if (functionExpression) {
+        value = [functionExpression execute:func params:params];
+        
+        if (value != nil) {
+            return value;
+        }
+    }
+    
     if ([func isEqualToString:@"size"]) {
         value = [self size:params];
         
     } else if ([func isEqualToString:@"env"]){
         value = [self env:params];
     }
-
+    
     return value;
 }
 

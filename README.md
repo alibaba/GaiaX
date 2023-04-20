@@ -220,10 +220,10 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
     - Level7 - 无效问题会被直接Close。
 
 - 各模块负责人Github账户：
-    - GaiaXSDK - iOS - jingcheng1988 (https://github.com/jingcheng1988)
-    - GaiaXSDK - Android - biezhihua (https://github.com/biezhihua)
-    - GaiaXSDK - 表达式SDK - MXPDS6688 (https://github.com/MXPDS6688)
-    - GaiaStudio - ronghui1219 https://github.com/ronghui1219
+    - GaiaXSDK - iOS - https://github.com/jingcheng1988
+    - GaiaXSDK - Android - https://github.com/biezhihua
+    - GaiaXSDK - 表达式SDK - https://github.com/MXPDS6688
+    - GaiaStudio - https://github.com/ronghui1219
 
 # 许可证
 ```

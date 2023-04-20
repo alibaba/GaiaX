@@ -211,11 +211,11 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 - 外部接入方须从Github上按照模板提示提出ISSUE，详细的描述问题，并@负责人的Github账户。
 
 - ISSUE的处理优先级，由高到低排序,1~7：
-    - Level1 - 可被复现的BUG 
+    - Level1 - 可被复现的BUG。 
     - Level2 - 在GaiaX规划中的新增需求。
-    - Level3 - 未在GaiaX规划中的新增需求。
-    - Level4 - GaiaStdio相关问题。
-    - Level5 - 文档问题，使用问题。
+    - Level3 - GaiaStdio相关问题。
+    - Level4 - 文档问题。
+    - Level5 - 未在GaiaX规划中的新增需求。
     - Level6 - 不可被复现的BUG。
     - Level7 - 其他问题。
 

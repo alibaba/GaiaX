@@ -208,7 +208,7 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 ## 问题反馈
 
-- 外部接入方**必须**从Github上按照模板提示提出ISSUE，详细的描述问题，并@负责人的Github账户。
+- 外部接入方须从Github上按照模板提示提出ISSUE，详细的描述问题，并@负责人的Github账户。
 
 - ISSUE的处理优先级，由高到低排序,1~7：
     - Level1 - 可被复现的BUG 

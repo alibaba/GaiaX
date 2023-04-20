@@ -217,7 +217,7 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
     - Level4 - GaiaStdio相关问题。
     - Level5 - 文档问题，使用问题。
     - Level6 - 不可被复现的BUG。
-    - Level7 - 无效问题会被直接Close。
+    - Level7 - 其他问题。
 
 - 各模块负责人Github账户：
     - GaiaXSDK - iOS - https://github.com/jingcheng1988

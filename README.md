@@ -2,14 +2,14 @@
     <img src="https://gw.alicdn.com/imgextra/i2/O1CN0140Ny0n1kYMIeGmeyp_!!6000000004695-2-tps-1024-1024.png" width="250" alt="GaiaX-logo">
 </h1>
 <p align="center">
-    Dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team
+    动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案
 </p>
 
 <p align="center">
-
+    
 [![README-en](https://shields.io/badge/README-ENGLISH-blue)](README.md)
 [![README-zh](https://shields.io/badge/README-%E4%B8%AD%E6%96%87-blue)](README-ZH.md)
-[![Docs-zh](https://shields.io/badge/Docs-%E4%B8%AD%E6%96%87-blue?logo=Read%20The%20Docs)](https://youku-gaiax.github.io/)
+[![Docs-zh](https://shields.io/badge/Docs-%E4%B8%AD%E6%96%87-blue?logo=Read%20The%20Docs)](www.yuque.com/biezhihua/gaiax)
 [![GitHub release](https://img.shields.io/github/release/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/releases)
 [![GitHub Stars](https://img.shields.io/github/stars/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/alibaba/GaiaX)](https://github.com/alibaba/GaiaX/fork)
@@ -19,48 +19,47 @@
 
 </p>
 
-# Dynamic template engine
+# 动态模板引擎
 
-Dynamic template engine is a lightweight cross-platform solution for pure native dynamic card, developed by Alibaba YouKu technology team. 
+动态模板引擎是阿里巴巴优酷技术团队研发的一套轻量级的纯原生动态化卡片跨端解决方案。
 
-Besides client SDK, we provide the template visual build tool - GaiaStudio, and Demo Project - template sample and real-time preview, which supports creating templates, editing templates, real machine debugging, and real-time preview.
+除了客户端SDK外，还提供了模板可视化搭建工具Studio，以及Demo工程（包含模板示例，以及扫码预览），支持从模板创建、编辑、真机调试、预览等研发全链路技术。
 
-Dynamic template engine aims to ensure that the native experience and performance at the same time, help the client achieve low code.
+动态模板引擎的目标是在保证原生体验与性能的同时，帮助客户端开发实现低代码。
 
-## Goals
+## 目标
 
-The following goals are the way forward for our project:
+以下这些目标是我们项目前进的方向：
 
-- High performance
-- Cross-platform technology
-- Visual construction
-- Pure native rendering
+- 高性能
+- 跨端技术
+- 可视化搭建
+- 纯Native渲染
 
-## Supported Platforms
+## 支持平台
 
 - Android
 - iOS
 
-## Core Concept
+## 核心概念
 
 <p align="center">
     <img src="https://gw.alicdn.com/imgextra/i3/O1CN01Y4sMkn1Nmnc7thyzR_!!6000000001613-2-tps-3423-886.png" width="1000" alt="GaiaX-arch">
 </p>
 
-
-## The technology used
+## 使用到的技术
 
 Rust/Android/Kotlin/iOS/OC/C++/JNI/CSS/FlexBox
 
-## Usage
+## 使用方法
 
 ### Android
 
-#### Dependency
+#### 依赖 
 
-add jitpack source:
+增加jitpack源:
 ```
-// with setting.gradle
+// 方式1:在setting.gradle中增加
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -78,7 +77,7 @@ dependencyResolutionManagement {
     }
 }
 
-// with build.gradle
+// 方式2:在根build.gradle中增加
 allprojects {
     repositories {
         maven { url 'https://jitpack.io' }
@@ -90,8 +89,8 @@ allprojects {
 
 Android-Support version:
 ```
-implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:0.2.8-support'
-implementation 'com.github.alibaba.GaiaX:GaiaX:0.2.8-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:$version-support'
+implementation 'com.github.alibaba.GaiaX:GaiaX:$version-support'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
 
@@ -101,128 +100,132 @@ implementation 'com.github.alibaba.GaiaX:GaiaX-Adapter:$version'
 implementation 'com.github.alibaba.GaiaX:GaiaX:$version'
 implementation 'com.alibaba:fastjson:1.2.76'
 ```
-#### Template File
+
+#### 模板文件
 ```
-// Path used to store template resources
+// 用于存放模板资源的路径
 /assets/${templateBiz}/${templateId}
 ```
 
-#### Methods
+#### 调用方式
 ```
-// SDK usages
+// SDK使用方式
 
-// Initialization - Initializes the SDK
+// 初始化          - 初始化SDK
 GXTemplateEngine.instance.init(activity)
 
-// Build template parameters - Template information
-// activity       - context
-// templateBiz    - template biz id
-// templateId     - template id
+// 构建模板参数     - 模板信息
+// activity       - 上下文
+// templateBiz    - 业务ID
+// templateId     - 模板ID
 val item = GXTemplateEngine.GXTemplateItem(activity, "templateBiz", "templateId")
 
-// Build template parameters - Viewport size (template draw size, similar to the concept of canvas in Android)
+// 构建模板参数     - 视口大小(模板绘制尺寸，类似于Android中画布的概念)
 val size = GXTemplateEngine.GXMeasureSize(100F.dpToPx(), null)
 
-// Build template parameters - Template data
+// 构建模板参数     - 模板数据
 val dataJson = AssetsUtils.parseAssets(activity, "template-data.json")
 val data = GXTemplateEngine.GXTemplateData(dataJson)
 
-// Create template View - Creates a native View based on template parameters
+// 创建模板视图     - 根据模板参数创建出一个原生View
 val view = GXTemplateEngine.instance.createView(item, size)
 
-// Bind the view data
+// 视图绑定数据
 GXTemplateEngine.instance.bindData(view, data)
 
-// Insert the template into the container for rendering
+// 将插入模板插入到容器中进行渲染
 findViewById<ViewGroup>(R.id.template_container).addView(view, 0)
 ```
 
 ### iOS
 
 #### CocoaPods
-Add a dependency to your Podfile
+在Podfile中添加依赖
 ```
-// Dependency
+// 依赖
 pod 'GaiaXiOS'
 ```
 
-#### Template File
-Add template files to App or FrameWork
+#### 模板文件
+在App或者FrameWork中添加模板文件
 ```
-// Path used to store template resources
+// 用于存放模板资源的路径
 xxx.bundle/templateId
 ```
 
-#### Methods
+#### 调用方式
 ```
-// SDK Usages
+// SDK使用方式
 
-// Introduced header files
+// 引入头文件
 #import <GaiaXiOS/GaiaXiOS.h>
 
-//register template service
+//注册模板服务
 [TheGXRegisterCenter registerTemplateServiceWithBizId:bizId templateBundle:@"xxx.bundle"];
 
-// Build template parameters - Template information
-// activity       - context
-// templateBiz    - template biz id
-// templateId     - template id
+// 构建模板参数     - 模板信息
+// templateBiz    - 业务ID
+// templateId     - 模板ID
 GXTemplateItem *item = [[GXTemplateItem alloc] init];
 item.templateId = templateId;
 item.bizId = templateBiz;
 
-// Build template parameters - Viewport size (template draw size, similar to the concept of canvas in Android)
+// 构建模板参数     - 视口大小(模板绘制尺寸)
 CGSize size = CGSizeMake(1080, NAN);
 
-// Build template parameters - Template data
+// 构建模板参数     - 模板数据
 GXTemplateData *data = [[GXTemplateData alloc] init];
 data.data = @{@"xxx": @"xxx"};
 
-// Create template View - Creates a native View based on template parameters
+// 创建模板视图     - 根据模板参数创建出一个原生View
 UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:size];
 
-// Bind the view data
+// 视图绑定数据
 [TheGXTemplateEngine bindData:data onView:view];
 
-// Insert the template into the container for rendering
+// 将插入模板插入到容器中进行渲染
 [self.view addSubview:view];
 ```
 
-## Roadmap
+## 路线图
 
-![image](https://user-images.githubusercontent.com/6761107/179889189-addbfabc-4aab-4d04-9b81-be30ae2878bb.png)
+![image](https://user-images.githubusercontent.com/6761107/179889459-883d296e-26e0-44a2-8d02-59b2cdd59c21.png)
 
+## 如何贡献代码
 
-## Contributing
+我们非常欢迎您为项目贡献代码。在您编写代码之前，请先创建一个issue或者pull request以便我们能够讨论方案的细节与方案的合理性。您可以针对以下领域贡献代码：
 
-We very welcome your to contribute code for the project. In you before writing any code, start by creating a issue or pull request in order for us to be able to discuss details of the proposal and the rationality of the scheme. You can in the following areas contribute code:
+- 包大小
+- 运行时性能
+- 跨端一致性
+- 单元测试用例
+- 文档或者使用案例
+- 等等
 
-- Packet size
-- The run-time performance
-- Across-side consistency
-- Unit test cases
-- Document or use cases
-- And so on
-
-
-## Tool
+## 工具
 
 - [Gaia Studio](https://www.yuque.com/youku-gaia/gaia-studio/iba10t#qxXg9)
 
-## Contact us
+## 问题反馈
 
-DingTalk：
+- 外部接入方**必须**从Github上按照模板提示提出ISSUE，详细的描述问题，并@负责人的Github账户。
 
-<img src="https://gw.alicdn.com/imgextra/i3/O1CN01mmrIDM1ofvIASkhPI_!!6000000005253-2-tps-474-469.png" width="200" height="200" />
+- ISSUE的处理优先级，由高到低排序,1~7：
+    - Level1 - 可被复现的BUG 
+    - Level2 - 在GaiaX规划中的新增需求。
+    - Level3 - 未在GaiaX规划中的新增需求。
+    - Level4 - GaiaStdio相关问题。
+    - Level5 - 文档问题，使用问题。
+    - Level6 - 不可被复现的BUG。
+    - Level7 - 无效问题会被直接Close。
 
-WeChat：
+- 各模块负责人Github账户：
+    - GaiaXSDK - iOS - jingcheng1988 (https://github.com/jingcheng1988)
+    - GaiaXSDK - Android - biezhihua (https://github.com/biezhihua)
+    - GaiaXSDK - 表达式SDK - MXPDS6688 (https://github.com/MXPDS6688)
+    - GaiaStudio - ronghui1219 https://github.com/ronghui1219
 
-<img src="https://gw.alicdn.com/imgextra/i1/O1CN01LlZEeh1dLLjGAVpFn_!!6000000003719-2-tps-746-746.png" width="200" height="200" />
-
-Email:
-biezhihua@gmail.com
-
-# LICENSE
+# 许可证
 ```
 Ali-GaiaX-Project is a template dynamic develop solutions developed by Alibaba and licensed under the Apache License (Version 2.0)
 This product contains various third-party components under other open source licenses. 

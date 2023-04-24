@@ -51,6 +51,13 @@
 //修改样式属性，不影响布局
 - (void)updateNormalStyle:(NSDictionary *)styleInfo isMark:(BOOL)isMark{
     UIView *view = self.associatedView;
+    
+    //interface属性
+    NSString *enableString = [styleInfo gx_stringForKey:@"enable"];
+    if (enableString.length > 0) {
+        view.userInteractionEnabled = [enableString boolValue];
+    }
+    
     //透明度
     NSString *opacity = [styleInfo gx_stringForKey:@"opacity"];
     if (opacity.length) {

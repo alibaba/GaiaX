@@ -384,6 +384,8 @@ object GXTemplateKey {
     const val GAIAX_GESTURE_TYPE_JS_TAP = "click"
     const val GAIAX_GESTURE_TYPE_LONGPRESS = "longpress"
 
+    const val GAIAX_ENABLE = "enable"
+
     const val GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH = "view-port-width"
     const val GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT = "grid-compute-container-height"
     const val GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT =

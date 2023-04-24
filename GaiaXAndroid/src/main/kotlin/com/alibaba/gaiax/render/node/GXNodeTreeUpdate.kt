@@ -903,8 +903,17 @@ object GXNodeTreeUpdate {
             if (invisible) {
                 return
             }
-
             val targetView = gxNode.view
+
+            // view enable
+            gxNode.templateNode.getExtend(templateData)
+                ?.getBooleanValue(GXTemplateKey.GAIAX_ENABLE)
+                ?.let {
+                    targetView?.isEnabled = it
+                    if (!it) {
+                        return
+                    }
+                }
 
             // 滚动事件
             if (targetView is RecyclerView) {

@@ -318,13 +318,11 @@ class GXTemplateEngine {
 
         /**
          * 会在事件执行时，SDK内部会回调手动点击事件。
-         * https://www.yuque.com/biezhihua/gaiax/ld6iie
          */
         fun onManualClickTrackEvent(gxTrack: GXTrack) {}
 
         /**
          * 会在业务手动调用onAppear后，SDK内部会回调手动曝光事件
-         * https://www.yuque.com/biezhihua/gaiax/ld6iie
          */
         fun onManualExposureTrackEvent(gxTrack: GXTrack) {}
     }

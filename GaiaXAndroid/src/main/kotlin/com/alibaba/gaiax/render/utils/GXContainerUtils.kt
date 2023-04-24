@@ -55,7 +55,7 @@ object GXContainerUtils {
         }
     }
 
-    private fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
+    internal fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
         try {
             if (container is GXContainer) {
                 if (container.layoutManager is LinearLayoutManager) {
@@ -92,19 +92,19 @@ object GXContainerUtils {
         }
     }
 
-    private fun onAppear(view: View?) {
+    internal fun onAppear(view: View?) {
         if (view is ViewGroup && view.childCount > 0) {
             GXTemplateEngine.instance.onAppear(view.getChildAt(0))
         }
     }
 
-    private fun onResetView(view: View?) {
+    internal fun onResetView(view: View?) {
         if (view is ViewGroup && view.childCount > 0) {
             GXTemplateEngine.instance.resetView(view.getChildAt(0))
         }
     }
 
-    private fun onDisappear(view: View?) {
+    internal fun onDisappear(view: View?) {
         if (view is ViewGroup && view.childCount > 0) {
             GXTemplateEngine.instance.onDisappear(view.getChildAt(0))
         }

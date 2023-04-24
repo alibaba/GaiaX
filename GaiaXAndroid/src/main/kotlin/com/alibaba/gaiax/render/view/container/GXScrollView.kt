@@ -26,6 +26,9 @@ import androidx.annotation.Keep
 @Keep
 open class GXScrollView : GXContainer {
 
+    internal var scrollListener: OnScrollListener? = null
+    internal var trackListener: OnScrollListener? = null
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

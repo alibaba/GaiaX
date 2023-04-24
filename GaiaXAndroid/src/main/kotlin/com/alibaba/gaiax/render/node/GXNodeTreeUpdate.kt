@@ -32,6 +32,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
+import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXProgressView
@@ -39,12 +40,10 @@ import com.alibaba.gaiax.render.view.basic.GXText
 import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
+import com.alibaba.gaiax.render.view.container.GXScrollView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
-import com.alibaba.gaiax.template.GXCss
-import com.alibaba.gaiax.template.GXLayer
-import com.alibaba.gaiax.template.GXStyle
-import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.*
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
@@ -906,8 +905,7 @@ object GXNodeTreeUpdate {
             val targetView = gxNode.view
 
             // view enable
-            gxNode.templateNode.getExtend(templateData)
-                ?.getBooleanValue(GXTemplateKey.GAIAX_ENABLE)
+            gxNode.templateNode.getExtend(templateData)?.getBooleanValue(GXTemplateKey.GAIAX_ENABLE)
                 ?.let {
                     targetView?.isEnabled = it
                     if (!it) {
@@ -916,34 +914,44 @@ object GXNodeTreeUpdate {
                 }
 
             // 滚动事件
-            if (targetView is RecyclerView) {
+            if (targetView is GXScrollView) {
                 if (gxTemplateContext.templateData?.eventListener != null) {
-                    targetView.clearOnScrollListeners()
-                    targetView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-                        override fun onScrolled(
-                            recyclerView: RecyclerView, dx: Int, dy: Int
-                        ) {
-                            val gxScroll = GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
-                                this.view = recyclerView
-                                this.dx = dx
-                                this.dy = dy
+                    if (targetView.scrollListener == null) {
+                        targetView.scrollListener = object : RecyclerView.OnScrollListener() {
+                            override fun onScrolled(
+                                recyclerView: RecyclerView, dx: Int, dy: Int
+                            ) {
+                                val gxScroll = GXTemplateEngine.GXScroll().apply {
+                                    this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLLED
+                                    this.view = recyclerView
+                                    this.dx = dx
+                                    this.dy = dy
+                                }
+                                gxTemplateContext.templateData?.eventListener?.onScrollEvent(
+                                    gxScroll
+                                )
                             }
-                            gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
-                        }
 
-                        override fun onScrollStateChanged(
-                            recyclerView: RecyclerView, newState: Int
-                        ) {
-                            val gxScroll = GXTemplateEngine.GXScroll().apply {
-                                this.type = GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
-                                this.view = recyclerView
-                                this.state = newState
+                            override fun onScrollStateChanged(
+                                recyclerView: RecyclerView, newState: Int
+                            ) {
+                                val gxScroll = GXTemplateEngine.GXScroll().apply {
+                                    this.type =
+                                        GXTemplateEngine.GXScroll.TYPE_ON_SCROLL_STATE_CHANGED
+                                    this.view = recyclerView
+                                    this.state = newState
+                                }
+                                gxTemplateContext.templateData?.eventListener?.onScrollEvent(
+                                    gxScroll
+                                )
                             }
-                            gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
                         }
-                    })
+                        targetView.scrollListener?.let { targetView.addOnScrollListener(it) }
+                    }
+                } else {
+                    targetView.scrollListener?.let {
+                        targetView.removeOnScrollListener(it)
+                    }
                 }
             }
 
@@ -978,32 +986,14 @@ object GXNodeTreeUpdate {
             }
 
             val gxTrackBinding = gxTemplateNode.trackBinding
+
+            // 如果track域存在，那么是手动曝光
             if (gxTrackBinding != null) {
-                // 如果track域存在，那么不在走之前的埋点逻辑
-                // https://www.yuque.com/biezhihua/gaiax/ld6iie
-                val trackData = gxTrackBinding.track.value(templateData) as? JSONObject ?: return
-                val gxTrack = GXTemplateEngine.GXTrack().apply {
-                    this.view = view
-                    this.trackParams = trackData
-                    this.nodeId = gxTemplateNode.layer.id
-                    this.templateItem = gxTemplateContext.templateItem
-                    this.index = -1
-                }
-                if (gxTemplateContext.manualTrackMap == null) {
-                    gxTemplateContext.manualTrackMap = mutableMapOf()
-                }
-                gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId(), gxTrack)
-            } else {
-                val gxEventBinding = gxTemplateNode.eventBinding ?: return
-                val trackData = gxEventBinding.event.value(templateData) as? JSONObject ?: return
-                val gxTrack = GXTemplateEngine.GXTrack().apply {
-                    this.view = view
-                    this.trackParams = trackData
-                    this.nodeId = gxTemplateNode.layer.id
-                    this.templateItem = gxTemplateContext.templateItem
-                    this.index = -1
-                }
-                gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                doManualTrack(gxTemplateContext, gxTemplateNode, gxTrackBinding, templateData, view)
+            }
+            // 否则，是自动曝光
+            else {
+                doAutoTrack(gxTemplateContext, gxTemplateNode, templateData, view)
             }
         }
 
@@ -1349,6 +1339,70 @@ object GXNodeTreeUpdate {
             val progressView = view as? GXProgressView
             progressView?.setConfig(gxTemplateNode.layer.progressConfig)
             progressView?.onBindData(gxTemplateNode.getData(templateData))
+        }
+    }
+
+    private fun doAutoTrack(
+        gxTemplateContext: GXTemplateContext,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject,
+        view: View
+    ) {
+        val gxEventBinding = gxTemplateNode.eventBinding ?: return
+        val trackData = gxEventBinding.event.value(templateData) as? JSONObject ?: return
+        val gxTrack = GXTemplateEngine.GXTrack().apply {
+            this.view = view
+            this.trackParams = trackData
+            this.nodeId = gxTemplateNode.layer.id
+            this.templateItem = gxTemplateContext.templateItem
+            this.index = -1
+        }
+        gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+    }
+
+    private fun doManualTrack(
+        gxTemplateContext: GXTemplateContext,
+        gxTemplateNode: GXTemplateNode,
+        gxTrackBinding: GXTrackBinding,
+        templateData: JSONObject,
+        view: View
+    ) {
+        val trackData = gxTrackBinding.track.value(templateData) as? JSONObject ?: return
+        val gxTrack = GXTemplateEngine.GXTrack().apply {
+            this.view = view
+            this.trackParams = trackData
+            this.nodeId = gxTemplateNode.layer.id
+            this.templateItem = gxTemplateContext.templateItem
+            this.index = -1
+        }
+        if (gxTemplateContext.manualTrackMap == null) {
+            gxTemplateContext.manualTrackMap = mutableMapOf()
+        }
+        gxTemplateContext.manualTrackMap?.put(gxTemplateNode.getNodeId(), gxTrack)
+
+        // 如果GXScrollView设置了手动埋点，那么要处理一下内部坑位的曝光事件，当Scroll停止滚动时，需要触发曝光回调。
+        if (view is GXScrollView) {
+            if (view.trackListener == null) {
+                view.trackListener = object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(
+                        recyclerView: RecyclerView, dx: Int, dy: Int
+                    ) {
+
+                    }
+
+                    override fun onScrollStateChanged(
+                        recyclerView: RecyclerView, newState: Int
+                    ) {
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            GXContainerUtils.findVisibleItems(view) {
+                                GXContainerUtils.onAppear(it)
+                            }
+                        }
+
+                    }
+                }
+                view.trackListener?.let { view.addOnScrollListener(it) }
+            }
         }
     }
 }

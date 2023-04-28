@@ -1,0 +1,11 @@
+{
+  "exp-version": "V2",
+  "id": "template_animation_lottie_local_exp",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "target",
+      "type": "view"
+    }
+  ]
+}

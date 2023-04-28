@@ -801,7 +801,7 @@ object GXNodeTreeUpdate {
                 ) == true
                 if (isState) {
                     playAnimation(
-                        gxTemplateContext, gxNode, gxAnimationValue, gxAnimationExpression, type
+                        gxTemplateContext, gxNode, gxAnimationExpression, gxAnimationValue, type
                     )
                 }
             }

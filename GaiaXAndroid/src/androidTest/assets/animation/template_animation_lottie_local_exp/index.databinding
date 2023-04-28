@@ -1,0 +1,12 @@
+{
+  "animation": {
+    "target": {
+      "type": "'lottie'",
+      "trigger":false,
+      "lottieAnimator": {
+        "value": " true ? 'animation/lottie' : 'animation/lottie' ",
+        "loop":false
+      }
+    }
+  }
+}

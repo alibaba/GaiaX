@@ -177,7 +177,38 @@ class GXComponentAnimationTest : GXBaseTest() {
         Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
     }
 
+
     @Test
+    fun template_animation_lottie_local_exp() {
+        val countDownLatch = CountDownLatch(1)
+
+        val templateItem =
+            GXTemplateEngine.GXTemplateItem(
+                GXMockUtils.context,
+                "animation",
+                "template_animation_lottie_local_exp"
+            )
+        val gxTemplateData = GXTemplateEngine.GXTemplateData(JSONObject())
+        gxTemplateData.eventListener = object : GXTemplateEngine.GXIEventListener {
+            override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                if (gxAnimation.state == GXTemplateEngine.GXAnimation.STATE_END) {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+        val gxMeasureSize = GXTemplateEngine.GXMeasureSize(375F.dpToPx(), null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, gxMeasureSize)
+
+        uiThreadTest.runOnUiThread {
+            GXTemplateEngine.instance.bindData(rootView, gxTemplateData)
+        }
+
+        countDownLatch.await(3, TimeUnit.SECONDS)
+
+        Assert.assertEquals(true, rootView.child(1) is LottieAnimationView)
+    }
+
     fun template_animation_lottie_remote_trigger_state_true() {
         val countDownLatch = CountDownLatch(1)
 

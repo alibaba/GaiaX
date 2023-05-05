@@ -107,6 +107,10 @@ class GXAnalyzeTest {
                 this["array"] = JSONArray()
             }
         }
+        Assert.assertEquals(null, instance.getResult("env('testWrong')", null))
+        Assert.assertEquals(2L, instance.getResult("env('testWrong') > env('testWrong') ? 1 : 2", null))
+        Assert.assertEquals(false, instance.getResult("env('isiOS')", null))
+        Assert.assertEquals(true, instance.getResult("env('isAndroid')", null))
 
         Assert.assertEquals(4f, instance.getResult("size('1234')", testData))
         Assert.assertEquals(0f, instance.getResult("size(\$data.map)", testData))

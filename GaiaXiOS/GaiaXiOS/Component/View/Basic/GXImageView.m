@@ -18,6 +18,7 @@
 
 #import "GXImageView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIImage+Metadata.h>
 #import "GXFunctionDef.h"
 #import "GXCommonDef.h"
 
@@ -44,10 +45,19 @@
 - (void)gx_setImageWithURLString:(NSString *)urlString
                 placeholderImage:(UIImage *)placeholder
                        completed:(GXImageCompletionBlock)completedBlock{
+    GXWeakSelf(self);
     //urlstring是否需要encode
     [self sd_setImageWithURL:[NSURL URLWithString:urlString]
             placeholderImage:placeholder
                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image.images.count > 0 && image) { // image count > 0 means is animated image
+            GXStrongSelf(self);
+            self.animationImages = image.images;
+            self.animationDuration = image.duration;
+            self.animationRepeatCount = image.sd_imageLoopCount;
+            self.image = image.images.lastObject;
+            [self startAnimating];
+        }
         //结果回调
         if (completedBlock) {
             completedBlock(image, error, imageURL);

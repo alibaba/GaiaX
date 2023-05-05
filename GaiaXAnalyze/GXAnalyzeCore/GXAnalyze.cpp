@@ -1017,80 +1017,94 @@ long GXAnalyze::getValue(string expression, void *source) {
             GXATSNode tokenNum;
             if (token.token == "value" || token.token == "data") {
                 long res = this->getSourceValue(token.name, source);
-                GXValue *gxv = (GXValue *) res;
-                if (gxv->tag == GX_TAG_FLOAT) {
-                    tokenNum.name = to_string(gxv->float64);
-                    if (tokenNum.name.find('.') != -1) {
-                        tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    }
-                    tokenNum.token = "num";
-                } else if (gxv->tag == GX_TAG_LONG) {
-                    tokenNum.name = to_string(gxv->intNum);
-                    tokenNum.token = "long";
-                } else if (gxv->tag == GX_TAG_STRING) {
-                    tokenNum.name = gxv->str;
-                    tokenNum.token = "string";
-                } else if (gxv->tag == GX_TAG_BOOL) {
-                    if (gxv->int32 == 1) {
-                        tokenNum.name = "true";
-                    } else {
-                        tokenNum.name = "false";
-                    }
-                    tokenNum.token = "bool";
-                } else if (gxv->tag == GX_TAG_ARRAY) {
-                    tokenNum.name = to_string((long) (gxv->ptr));
-                    tokenNum.token = "array";
-                } else if (gxv->tag == GX_TAG_MAP) {
-                    tokenNum.name = to_string((long) (gxv->ptr));
-                    tokenNum.token = "map";
-                } else if (gxv->tag == GX_TAG_NULL) {
+                if (res == 0) {
                     tokenNum.name = "null";
                     tokenNum.token = "null";
+                } else {
+                    GXValue *gxv = (GXValue *) res;
+                    if (gxv->tag == GX_TAG_FLOAT) {
+                        tokenNum.name = to_string(gxv->float64);
+                        if (tokenNum.name.find('.') != -1) {
+                            tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"),
+                                                          ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"),
+                                                          ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        }
+                        tokenNum.token = "num";
+                    } else if (gxv->tag == GX_TAG_LONG) {
+                        tokenNum.name = to_string(gxv->intNum);
+                        tokenNum.token = "long";
+                    } else if (gxv->tag == GX_TAG_STRING) {
+                        tokenNum.name = gxv->str;
+                        tokenNum.token = "string";
+                    } else if (gxv->tag == GX_TAG_BOOL) {
+                        if (gxv->int32 == 1) {
+                            tokenNum.name = "true";
+                        } else {
+                            tokenNum.name = "false";
+                        }
+                        tokenNum.token = "bool";
+                    } else if (gxv->tag == GX_TAG_ARRAY) {
+                        tokenNum.name = to_string((long) (gxv->ptr));
+                        tokenNum.token = "array";
+                    } else if (gxv->tag == GX_TAG_MAP) {
+                        tokenNum.name = to_string((long) (gxv->ptr));
+                        tokenNum.token = "map";
+                    } else if (gxv->tag == GX_TAG_NULL) {
+                        tokenNum.name = "null";
+                        tokenNum.token = "null";
+                    }
+                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                        delete[] gxv->str;
+                        gxv->str = NULL;
+                    }
+                    delete gxv;
                 }
-                if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
-                    delete[] gxv->str;
-                    gxv->str = NULL;
-                }
-                delete gxv;
             } else if (token.token == "function") {
                 long res = this->getFunctionValue(token.name, nullptr, 0, "");
-                GXValue *gxv = (GXValue *) res;
-                if (gxv->tag == GX_TAG_FLOAT) {
-                    tokenNum.name = to_string(gxv->float64);
-                    if (tokenNum.name.find('.') != -1) {
-                        tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    }
-                    tokenNum.token = "num";
-                } else if (gxv->tag == GX_TAG_LONG) {
-                    tokenNum.name = to_string(gxv->intNum);
-                    tokenNum.token = "long";
-                } else if (gxv->tag == GX_TAG_STRING) {
-                    tokenNum.name = gxv->str;
-                    tokenNum.token = "string";
-                } else if (gxv->tag == GX_TAG_BOOL) {
-                    if (gxv->int32 == 1) {
-                        tokenNum.name = "true";
-                    } else {
-                        tokenNum.name = "false";
-                    }
-                    tokenNum.token = "bool";
-                } else if (gxv->tag == GX_TAG_ARRAY) {
-                    tokenNum.name = to_string((long) (gxv->ptr));
-                    tokenNum.token = "array";
-                } else if (gxv->tag == GX_TAG_MAP) {
-                    tokenNum.name = to_string((long) (gxv->ptr));
-                    tokenNum.token = "map";
-                } else if (gxv->tag == GX_TAG_NULL) {
+                if (res == 0) {
                     tokenNum.name = "null";
                     tokenNum.token = "null";
+                } else {
+                    GXValue *gxv = (GXValue *) res;
+                    if (gxv->tag == GX_TAG_FLOAT) {
+                        tokenNum.name = to_string(gxv->float64);
+                        if (tokenNum.name.find('.') != -1) {
+                            tokenNum.name = regex_replace(tokenNum.name, regex("0+?$"),
+                                                          ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            tokenNum.name = regex_replace(tokenNum.name, regex("[.]$"),
+                                                          ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        }
+                        tokenNum.token = "num";
+                    } else if (gxv->tag == GX_TAG_LONG) {
+                        tokenNum.name = to_string(gxv->intNum);
+                        tokenNum.token = "long";
+                    } else if (gxv->tag == GX_TAG_STRING) {
+                        tokenNum.name = gxv->str;
+                        tokenNum.token = "string";
+                    } else if (gxv->tag == GX_TAG_BOOL) {
+                        if (gxv->int32 == 1) {
+                            tokenNum.name = "true";
+                        } else {
+                            tokenNum.name = "false";
+                        }
+                        tokenNum.token = "bool";
+                    } else if (gxv->tag == GX_TAG_ARRAY) {
+                        tokenNum.name = to_string((long) (gxv->ptr));
+                        tokenNum.token = "array";
+                    } else if (gxv->tag == GX_TAG_MAP) {
+                        tokenNum.name = to_string((long) (gxv->ptr));
+                        tokenNum.token = "map";
+                    } else if (gxv->tag == GX_TAG_NULL) {
+                        tokenNum.name = "null";
+                        tokenNum.token = "null";
+                    }
+                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                        delete[] gxv->str;
+                        gxv->str = NULL;
+                    }
+                    delete gxv;
                 }
-                if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
-                    delete[] gxv->str;
-                    gxv->str = NULL;
-                }
-                delete gxv;
             } else {
                 tokenNum = token;
             }
@@ -1306,51 +1320,62 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                     ++paramsSize;
                 }
                 paramsTempArray.clear();
+                GXATSNode node = array[numFunction];
                 //有参数
                 long funVal = this->getFunctionValue(array[numFunction].name,
                                                      paramsStack,
                                                      paramsSize, "");
-                GXValue *fun = (GXValue *) funVal;
-                GXATSNode node = array[numFunction];
-                //取出结果
-                if (fun->tag == GX_TAG_FLOAT) {
-                    node.name = to_string(fun->float64);
-                    if (node.name.find('.') != -1) {
-                        node.name = regex_replace(node.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        node.name = regex_replace(node.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                    }
-                    node.token = "num";
-                } else if (fun->tag == GX_TAG_LONG) {
-                    node.name = to_string(fun->intNum);
-                    node.token = "long";
-                } else if (fun->tag == GX_TAG_BOOL) {
-                    if (fun->int32 == 1) {
-                        node.name = "true";
-                        node.token = "bool";
-                    } else {
-                        node.name = "false";
-                        node.token = "bool";
-                    }
-                } else if (fun->tag == GX_TAG_STRING) {
-                    node.name = fun->str;
-                    node.token = "string";
-                } else if (fun->tag == GX_TAG_MAP) {
-                    node.name = to_string((long) fun->ptr);
-                    node.token = "map";
-                } else if (fun->tag == GX_TAG_ARRAY) {
-                    node.name = to_string((long) fun->ptr);
-                    node.token = "array";
-                } else if (fun->tag == GX_TAG_NULL) {
+                if (funVal == 0) {
                     node.name = "null";
                     node.token = "null";
+                    array[numFunction] = node;
+                    res = array[numFunction];
+                } else {
+                    GXValue *fun = (GXValue *) funVal;
+                    //取出结果
+                    if (fun->tag == GX_TAG_FLOAT) {
+                        node.name = to_string(fun->float64);
+                        if (node.name.find('.') != -1) {
+                            node.name = regex_replace(node.name, regex("0+?$"),
+                                                      ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            node.name = regex_replace(node.name, regex("[.]$"),
+                                                      ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                        }
+                        node.token = "num";
+                    } else if (fun->tag == GX_TAG_LONG) {
+                        node.name = to_string(fun->intNum);
+                        node.token = "long";
+                    } else if (fun->tag == GX_TAG_BOOL) {
+                        if (fun->int32 == 1) {
+                            node.name = "true";
+                            node.token = "bool";
+                        } else {
+                            node.name = "false";
+                            node.token = "bool";
+                        }
+                    } else if (fun->tag == GX_TAG_STRING) {
+                        node.name = fun->str;
+                        node.token = "string";
+                    } else if (fun->tag == GX_TAG_MAP) {
+                        node.name = to_string((long) fun->ptr);
+                        node.token = "map";
+                    } else if (fun->tag == GX_TAG_ARRAY) {
+                        node.name = to_string((long) fun->ptr);
+                        node.token = "array";
+                    } else if (fun->tag == GX_TAG_NULL) {
+                        node.name = "null";
+                        node.token = "null";
+                    }
+                    array[numFunction] = node;
+                    res = array[numFunction];
+                    if (fun != NULL && fun->tag == GX_TAG_STRING && fun->str != NULL) {
+                        delete[] fun->str;
+                        fun->str = NULL;
+                    }
+                    if (fun != NULL) {
+                        delete fun;
+                    }
                 }
-                array[numFunction] = node;
-                res = array[numFunction];
-                if (fun->tag == GX_TAG_STRING && fun->str != NULL) {
-                    delete[] fun->str;
-                    fun->str = NULL;
-                }
-                delete fun;
                 if (isFunction) {
                     isFunction = false;
                     delete[] paramsStack;
@@ -1498,86 +1523,106 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                 GXATSNode t1;
                 if (temp == "value" || temp == "data") {
                     long res = analyze->getSourceValue(array[valueStep].name, source);
-                    GXValue *gxv = (GXValue *) res;
-                    t1.count = array[valueStep].count;
-                    if (gxv->tag == GX_TAG_FLOAT) {
-                        t1.name = to_string(gxv->float64);
-                        if (t1.name.find('.') != -1) {
-                            t1.name = regex_replace(t1.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                            t1.name = regex_replace(t1.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        }
-                        t1.token = "num";
-                    } else if (gxv->tag == GX_TAG_LONG) {
-                        t1.name = to_string(gxv->intNum);
-                        t1.token = "long";
-                    } else if (gxv->tag == GX_TAG_STRING) {
-                        t1.name = gxv->str;
-                        t1.token = "string";
-                    } else if (gxv->tag == GX_TAG_BOOL) {
-                        if (gxv->int32 == 1) {
-                            t1.name = "true";
-                        } else {
-                            t1.name = "false";
-                        }
-                        t1.token = "bool";
-                    } else if (gxv->tag == GX_TAG_ARRAY) {
-                        t1.name = to_string((long) (gxv->ptr));
-                        t1.token = "array";
-                    } else if (gxv->tag == GX_TAG_MAP) {
-                        t1.name = to_string((long) (gxv->ptr));
-                        t1.token = "map";
-                    } else if (gxv->tag == GX_TAG_NULL) {
+                    if (res == 0) {
                         t1.name = "null";
                         t1.token = "null";
+                        t1.count = array[valueStep].count;
+                        valueStack[valueSize] = t1;
+                        ++valueSize;
+                    } else {
+                        GXValue *gxv = (GXValue *) res;
+                        t1.count = array[valueStep].count;
+                        if (gxv->tag == GX_TAG_FLOAT) {
+                            t1.name = to_string(gxv->float64);
+                            if (t1.name.find('.') != -1) {
+                                t1.name = regex_replace(t1.name, regex("0+?$"),
+                                                        ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                t1.name = regex_replace(t1.name, regex("[.]$"),
+                                                        ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            }
+                            t1.token = "num";
+                        } else if (gxv->tag == GX_TAG_LONG) {
+                            t1.name = to_string(gxv->intNum);
+                            t1.token = "long";
+                        } else if (gxv->tag == GX_TAG_STRING) {
+                            t1.name = gxv->str;
+                            t1.token = "string";
+                        } else if (gxv->tag == GX_TAG_BOOL) {
+                            if (gxv->int32 == 1) {
+                                t1.name = "true";
+                            } else {
+                                t1.name = "false";
+                            }
+                            t1.token = "bool";
+                        } else if (gxv->tag == GX_TAG_ARRAY) {
+                            t1.name = to_string((long) (gxv->ptr));
+                            t1.token = "array";
+                        } else if (gxv->tag == GX_TAG_MAP) {
+                            t1.name = to_string((long) (gxv->ptr));
+                            t1.token = "map";
+                        } else if (gxv->tag == GX_TAG_NULL) {
+                            t1.name = "null";
+                            t1.token = "null";
+                        }
+                        valueStack[valueSize] = t1;
+                        ++valueSize;
+                        if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                            delete[] gxv->str;
+                            gxv->str = NULL;
+                        }
+                        delete gxv;
                     }
-                    valueStack[valueSize] = t1;
-                    ++valueSize;
-                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
-                        delete[] gxv->str;
-                        gxv->str = NULL;
-                    }
-                    delete gxv;
                 } else if (temp == "function") {
                     long res = analyze->getFunctionValue(array[valueStep].name, nullptr, 0, "");
-                    GXValue *gxv = (GXValue *) res;
-                    t1.count = array[valueStep].count;
-                    if (gxv->tag == GX_TAG_FLOAT) {
-                        t1.name = to_string(gxv->float64);
-                        if (t1.name.find('.') != -1) {
-                            t1.name = regex_replace(t1.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                            t1.name = regex_replace(t1.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                        }
-                        t1.token = "num";
-                    } else if (gxv->tag == GX_TAG_LONG) {
-                        t1.name = to_string(gxv->intNum);
-                        t1.token = "long";
-                    } else if (gxv->tag == GX_TAG_STRING) {
-                        t1.name = gxv->str;
-                        t1.token = "string";
-                    } else if (gxv->tag == GX_TAG_BOOL) {
-                        if (gxv->int32 == 1) {
-                            t1.name = "true";
-                        } else {
-                            t1.name = "false";
-                        }
-                        t1.token = "bool";
-                    } else if (gxv->tag == GX_TAG_ARRAY) {
-                        t1.name = to_string((long) (gxv->ptr));
-                        t1.token = "array";
-                    } else if (gxv->tag == GX_TAG_MAP) {
-                        t1.name = to_string((long) (gxv->ptr));
-                        t1.token = "map";
-                    } else if (gxv->tag == GX_TAG_NULL) {
+                    if (res == 0) {
                         t1.name = "null";
                         t1.token = "null";
+                        t1.count = array[valueStep].count;
+                        valueStack[valueSize] = t1;
+                        ++valueSize;
+                    } else {
+                        GXValue *gxv = (GXValue *) res;
+                        t1.count = array[valueStep].count;
+                        if (gxv->tag == GX_TAG_FLOAT) {
+                            t1.name = to_string(gxv->float64);
+                            if (t1.name.find('.') != -1) {
+                                t1.name = regex_replace(t1.name, regex("0+?$"),
+                                                        ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                t1.name = regex_replace(t1.name, regex("[.]$"),
+                                                        ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            }
+                            t1.token = "num";
+                        } else if (gxv->tag == GX_TAG_LONG) {
+                            t1.name = to_string(gxv->intNum);
+                            t1.token = "long";
+                        } else if (gxv->tag == GX_TAG_STRING) {
+                            t1.name = gxv->str;
+                            t1.token = "string";
+                        } else if (gxv->tag == GX_TAG_BOOL) {
+                            if (gxv->int32 == 1) {
+                                t1.name = "true";
+                            } else {
+                                t1.name = "false";
+                            }
+                            t1.token = "bool";
+                        } else if (gxv->tag == GX_TAG_ARRAY) {
+                            t1.name = to_string((long) (gxv->ptr));
+                            t1.token = "array";
+                        } else if (gxv->tag == GX_TAG_MAP) {
+                            t1.name = to_string((long) (gxv->ptr));
+                            t1.token = "map";
+                        } else if (gxv->tag == GX_TAG_NULL) {
+                            t1.name = "null";
+                            t1.token = "null";
+                        }
+                        valueStack[valueSize] = t1;
+                        ++valueSize;
+                        if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
+                            delete[] gxv->str;
+                            gxv->str = NULL;
+                        }
+                        delete gxv;
                     }
-                    valueStack[valueSize] = t1;
-                    ++valueSize;
-                    if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
-                        delete[] gxv->str;
-                        gxv->str = NULL;
-                    }
-                    delete gxv;
                 } else {
                     valueStack[valueSize] = array[valueStep];
                     ++valueSize;
@@ -1678,14 +1723,27 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         long funVal = analyze->getFunctionValue(valueStack[i].name,
                                                                                 paramsStack,
                                                                                 paramsSize, "");
+                                        if (funVal == 0) {
+                                            tempR.name = "null";
+                                            tempR.token = "null";
+                                            tempR.count = valueStack[i].count;
+                                            --valueSize;
+                                            isFunction = false;
+                                            paramsSize = 0;
+                                            break;
+                                        }
                                         GXValue *fun = (GXValue *) funVal;
                                         tempR.count = valueStack[i].count;
                                         //取出结果
                                         if (fun->tag == GX_TAG_FLOAT) {
                                             tempR.name = to_string(fun->float64);
                                             if (tempR.name.find('.') != -1) {
-                                                tempR.name = regex_replace(tempR.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                                                tempR.name = regex_replace(tempR.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                                tempR.name = regex_replace(tempR.name,
+                                                                           regex("0+?$"),
+                                                                           ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                                tempR.name = regex_replace(tempR.name,
+                                                                           regex("[.]$"),
+                                                                           ""); // 除了捕捉到的组以外，其他的东西均舍弃
                                             }
                                             tempR.token = "num";
                                         } else if (fun->tag == GX_TAG_LONG) {

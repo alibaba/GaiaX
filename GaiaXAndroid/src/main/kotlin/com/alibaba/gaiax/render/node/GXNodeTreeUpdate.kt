@@ -907,7 +907,7 @@ object GXNodeTreeUpdate {
 
             // view enable
             gxNode.templateNode.getExtend(templateData)
-                ?.getBooleanValue(GXTemplateKey.GAIAX_ENABLE)
+                ?.getBoolean(GXTemplateKey.GAIAX_ENABLE)
                 ?.let {
                     targetView?.isEnabled = it
                     if (!it) {

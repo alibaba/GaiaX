@@ -17,9 +17,10 @@
 //  limitations under the License.
 
 #import "GXImageNode.h"
+#import "GXRegisterCenter.h"
 #import "NSDictionary+GX.h"
-#import "GXImageView.h"
 #import "GXFunctionDef.h"
+#import "GXImageView.h"
 #import "GXCommonDef.h"
 #import "GXBizHelper.h"
 #import "GXUIhelper.h"
@@ -51,7 +52,8 @@
 - (UIView *)creatView{
     UIImageView *view = (UIImageView *)self.associatedView;
     if (!view) {
-        view = [[GXImageView alloc] initWithFrame:CGRectZero];
+        Class imgViewClass = TheGXRegisterCenter.imageViewClass;
+        view = [[imgViewClass alloc] initWithFrame:CGRectZero];
         view.gxNode = self;
         view.gxNodeId = self.nodeId;
         view.gxBizId = self.templateItem.bizId;

@@ -451,7 +451,11 @@ const NSUInteger GXTextMaxWidth = 1080;
     } else if (lineNum == 1) {
         // 等于1行时，动态计算宽度
         CTLineRef lineRef = (__bridge CTLineRef)[linesRef firstObject];
-        width = width = CTLineGetTypographicBounds(lineRef, NULL, NULL, NULL);
+        // 通过kCTLineBoundsIncludeLanguageExtents来确保不同的语言都有足够的空间
+        CGRect rect = CTLineGetBoundsWithOptions(lineRef,
+                                                 kCTLineBoundsExcludeTypographicLeading|
+                                                 kCTLineBoundsExcludeTypographicShifts);
+         width = rect.size.width;
     } else {
         // 大于1行时,行宽直接用最大宽度
         width = maxWidth;

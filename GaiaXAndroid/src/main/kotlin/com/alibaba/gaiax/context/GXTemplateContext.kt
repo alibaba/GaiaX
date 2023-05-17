@@ -118,6 +118,8 @@ class GXTemplateContext private constructor(
 
     fun release() {
         flags = 0
+        sliderItemLayoutCache = null
+        gridItemLayoutCache = null
         scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false

@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.context.clearLayoutForScroll
+import com.alibaba.gaiax.context.clearLayout
 import com.alibaba.gaiax.context.isExistNodeForScroll
 import com.alibaba.gaiax.context.obtainNodeForScroll
 import com.alibaba.gaiax.data.GXDataImpl
@@ -605,10 +605,10 @@ class GXTemplateEngine {
      * 当measure size发生变化的时候需要重新计算节点树，否则会导致bindData的传入数据不准确，引发布局错误
      */
     private fun recomputeWhenMeasureSizeChanged(
-        gxTemplateContext: GXTemplateContext, isMeasureSizeChanged: Boolean
+        gxTemplateContext: GXTemplateContext
     ) {
         val gxRootNode = gxTemplateContext.rootNode
-        if (gxRootNode != null && isMeasureSizeChanged) {
+        if (gxRootNode != null) {
 
             //
             gxTemplateContext.reset()
@@ -758,20 +758,24 @@ class GXTemplateEngine {
             return
         }
 
-        var isMeasureSizeChanged = false
-        if (gxMeasureSize != null) {
-            val oldMeasureSize = gxTemplateContext.size
-            gxTemplateContext.size = gxMeasureSize
-            isMeasureSizeChanged =
-                oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
-        }
-
-        gxTemplateContext.clearLayoutForScroll()
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
 
-        recomputeWhenMeasureSizeChanged(gxTemplateContext, isMeasureSizeChanged)
+        if (gxMeasureSize != null) {
+            val oldMeasureSize = gxTemplateContext.size
+            gxTemplateContext.size = gxMeasureSize
+
+            // 判断是否size发生了变化
+            val isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width
+                    || oldMeasureSize.height != gxMeasureSize.height
+
+            // 如果size发生了变化，需要清除layout缓存，并重新计算
+            if (isMeasureSizeChanged) {
+                gxTemplateContext.clearLayout()
+                recomputeWhenMeasureSizeChanged(gxTemplateContext)
+            }
+        }
 
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
     }

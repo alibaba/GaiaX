@@ -79,7 +79,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     private var gxTemplateContext: GXTemplateContext? = null
     private var config: GXSliderConfig? = null
 
-    var viewPager: ViewPager? = null
+    var viewPager: GXViewPager? = null
     private var indicatorView: GXSliderBaseIndicatorView? = null
 
     private var pageSize: Int = 0
@@ -92,7 +92,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     private fun initViewPager() {
-        viewPager = ViewPager(context)
+        viewPager = GXViewPager(context)
         viewPager?.addOnPageChangeListener(object :
             ViewPager.OnPageChangeListener {
             override fun onPageScrolled(

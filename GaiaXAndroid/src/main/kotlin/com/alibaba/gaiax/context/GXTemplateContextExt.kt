@@ -10,7 +10,9 @@ fun GXTemplateContext.initLayoutForScroll() {
     }
 }
 
-fun GXTemplateContext.clearLayoutForScroll() {
+fun GXTemplateContext.clearLayout() {
+    sliderItemLayoutCache = null
+    gridItemLayoutCache = null
     scrollItemLayoutCache?.clear()
 }
 

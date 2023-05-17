@@ -1,0 +1,14 @@
+{
+  "id": "template_slider_size_aspect_ratio_item",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    },
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ]
+}

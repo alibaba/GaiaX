@@ -56,6 +56,14 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    /**
+     * 视图的尺寸是否发生了变化，如果发生了变化，那么缓存需要被清空，UI需要被重建。
+     *
+     * 生命周期：
+     * bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+     * bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
+     */
+    var isMeasureSizeChanged: Boolean = false
 
     var isReuseRootNode: Boolean = false
 

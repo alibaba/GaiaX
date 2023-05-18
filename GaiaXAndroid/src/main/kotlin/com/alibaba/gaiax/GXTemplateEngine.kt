@@ -780,11 +780,11 @@ class GXTemplateEngine {
             gxTemplateContext.size = gxMeasureSize
 
             // 判断是否size发生了变化
-            val isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width
+            gxTemplateContext.isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width
                     || oldMeasureSize.height != gxMeasureSize.height
 
             // 如果size发生了变化，需要清除layout缓存，并重新计算
-            if (isMeasureSizeChanged) {
+            if (gxTemplateContext.isMeasureSizeChanged) {
                 gxTemplateContext.clearLayout()
                 recomputeWhenMeasureSizeChanged(gxTemplateContext)
             }
@@ -833,6 +833,8 @@ class GXTemplateEngine {
         gxTemplateContext.templateData = gxTemplateData
 
         render.bindViewDataOnlyViewTree(gxTemplateContext)
+
+        gxTemplateContext.isMeasureSizeChanged = false
     }
 
     /**

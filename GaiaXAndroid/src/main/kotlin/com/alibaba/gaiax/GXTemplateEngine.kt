@@ -357,7 +357,11 @@ class GXTemplateEngine {
      *    如果内部模板的宽度能够自我撑开（具备宽度）；
      *    最终产物View的宽度就是是模板通过FlexBox计算后撑开的宽度，而高度就是Measure-Height。
      */
-    data class GXMeasureSize(var width: Float?, var height: Float?)
+    data class GXMeasureSize(var width: Float?, var height: Float?) {
+        override fun toString(): String {
+            return "GXMeasureSize(width=$width, height=$height)"
+        }
+    }
 
     class GXExtendParams {
         var gxItemPosition: Int? = null
@@ -453,6 +457,11 @@ class GXTemplateEngine {
             result = 31 * result + templateId.hashCode()
             return result
         }
+
+        override fun toString(): String {
+            return "GXTemplateItem(bizId='$bizId', templateId='$templateId')"
+        }
+
 
     }
 
@@ -756,6 +765,10 @@ class GXTemplateEngine {
             }
             gxTemplateContext.isReuseRootNode = false
             return
+        }
+
+        if (GXLog.isLog()) {
+            GXLog.e("internalBindDataOnlyNodeTree gxMeasureSize=${gxMeasureSize} gxTemplateItem=${gxTemplateContext.templateItem}")
         }
 
         gxTemplateContext.templateData = gxTemplateData

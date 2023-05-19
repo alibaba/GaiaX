@@ -18,7 +18,7 @@ class GXAnalyzeTest {
 
     private var instance: GXAnalyze = GXAnalyzeWrapper.analyze
 
-    //    @Test
+    //        @Test
     fun bad_case_1() {
         val testData = JSONObject().apply {
             this["eight"] = 8F
@@ -81,6 +81,92 @@ class GXAnalyzeTest {
                 this["array"] = JSONArray()
             }
         }
+        Assert.assertEquals(100000000001F, instance.getResult("100000000000+1.0", testData))
+        Assert.assertEquals(9223372036854775802L, instance.getResult("9223372036854775801 + 1", testData))
+        Assert.assertEquals(10001L, instance.getResult("10000+1", testData))
+        Assert.assertEquals(100001L, instance.getResult("100000+1", testData))
+        Assert.assertEquals(1000001L, instance.getResult("1000000+1", testData))
+        Assert.assertEquals(10000001L, instance.getResult("10000000+1", testData))
+        Assert.assertEquals(100000001L, instance.getResult("100000000+1", testData))
+        Assert.assertEquals(1000000001L, instance.getResult("1000000000+1", testData))
+        Assert.assertEquals(10000000001L, instance.getResult("10000000000+1", testData))
+        Assert.assertEquals(100000000001L, instance.getResult("100000000000+1", testData))
+        Assert.assertEquals(1000000000001L, instance.getResult("1000000000000+1", testData))
+        Assert.assertEquals(10000000000001L, instance.getResult("10000000000000+1", testData))
+        Assert.assertEquals(100000000000001L, instance.getResult("100000000000000+1", testData))
+        Assert.assertEquals(10000000000000001L, instance.getResult("10000000000000000+1", testData))
+        Assert.assertEquals(100000000000000001L, instance.getResult("100000000000000000+1", testData))
+        Assert.assertEquals(1000000000000000001L, instance.getResult("1000000000000000000+1", testData))
+
+        Assert.assertEquals(100000000000F, instance.getResult("100000000001-1.0", testData))
+        Assert.assertEquals(9223372036854775802L, instance.getResult("9223372036854775803 - 1", testData))
+        Assert.assertEquals(10000L, instance.getResult("10001-1", testData))
+        Assert.assertEquals(100001L, instance.getResult("100002-1", testData))
+        Assert.assertEquals(1000001L, instance.getResult("1000002-1", testData))
+        Assert.assertEquals(10000001L, instance.getResult("10000002-1", testData))
+        Assert.assertEquals(100000001L, instance.getResult("100000002-1", testData))
+        Assert.assertEquals(1000000001L, instance.getResult("1000000002-1", testData))
+        Assert.assertEquals(10000000001L, instance.getResult("10000000002-1", testData))
+        Assert.assertEquals(100000000001L, instance.getResult("100000000002-1", testData))
+        Assert.assertEquals(1000000000001L, instance.getResult("1000000000002-1", testData))
+        Assert.assertEquals(10000000000001L, instance.getResult("10000000000002-1", testData))
+        Assert.assertEquals(100000000000001L, instance.getResult("100000000000002-1", testData))
+        Assert.assertEquals(10000000000000001L, instance.getResult("10000000000000002-1", testData))
+        Assert.assertEquals(100000000000000001L, instance.getResult("100000000000000002-1", testData))
+        Assert.assertEquals(1000000000000000001L, instance.getResult("1000000000000000002-1", testData))
+
+        Assert.assertEquals(200000000000F, instance.getResult("100000000000 * 2.0", testData))
+        Assert.assertEquals(20000L, instance.getResult("10000 * 2", testData))
+        Assert.assertEquals(200000L, instance.getResult("100000 * 2", testData))
+        Assert.assertEquals(2000000L, instance.getResult("1000000 * 2", testData))
+        Assert.assertEquals(20000000L, instance.getResult("10000000 * 2", testData))
+        Assert.assertEquals(200000000L, instance.getResult("100000000 * 2", testData))
+        Assert.assertEquals(2000000000L, instance.getResult("1000000000 * 2", testData))
+        Assert.assertEquals(20000000000L, instance.getResult("10000000000 * 2", testData))
+        Assert.assertEquals(200000000000L, instance.getResult("100000000000 * 2", testData))
+        Assert.assertEquals(2000000000000L, instance.getResult("1000000000000 * 2", testData))
+        Assert.assertEquals(20000000000000L, instance.getResult("10000000000000 * 2", testData))
+        Assert.assertEquals(200000000000000L, instance.getResult("100000000000000 * 2", testData))
+        Assert.assertEquals(20000000000000000L, instance.getResult("10000000000000000 * 2", testData))
+        Assert.assertEquals(200000000000000000L, instance.getResult("100000000000000000 * 2", testData))
+        Assert.assertEquals(2000000000000000000L, instance.getResult("1000000000000000000 * 2", testData))
+
+        Assert.assertEquals(62.5F, instance.getResult("125.0 / 2", testData))
+        Assert.assertEquals(5000L, instance.getResult("10000 / 2", testData))
+        Assert.assertEquals(50000L, instance.getResult("100000 / 2", testData))
+        Assert.assertEquals(500000L, instance.getResult("1000000 / 2", testData))
+        Assert.assertEquals(5000000L, instance.getResult("10000000 / 2", testData))
+        Assert.assertEquals(50000000L, instance.getResult("100000000 / 2", testData))
+        Assert.assertEquals(500000000L, instance.getResult("1000000000 / 2", testData))
+        Assert.assertEquals(5000000000L, instance.getResult("10000000000 / 2", testData))
+        Assert.assertEquals(50000000000L, instance.getResult("100000000000 / 2", testData))
+        Assert.assertEquals(500000000000L, instance.getResult("1000000000000 / 2", testData))
+        Assert.assertEquals(5000000000000L, instance.getResult("10000000000000 / 2", testData))
+        Assert.assertEquals(50000000000000L, instance.getResult("100000000000000 / 2", testData))
+        Assert.assertEquals(5000000000000000L, instance.getResult("10000000000000000 / 2", testData))
+        Assert.assertEquals(50000000000000000L, instance.getResult("100000000000000000 / 2", testData))
+        Assert.assertEquals(500000000000000000L, instance.getResult("1000000000000000000 / 2", testData))
+        Assert.assertEquals(500000.5F, instance.getResult("1000001.0 / 2", testData))
+        Assert.assertEquals(500000000000.5F, instance.getResult("1000000000001.0 / 2", testData))
+        Assert.assertEquals(500000000000000000.5F, instance.getResult("1000000000000000001.0 / 2", testData))
+
+
+        Assert.assertEquals(30L, instance.getResult("80 % 50", testData))
+        Assert.assertEquals(300L, instance.getResult("800 % 500", testData))
+        Assert.assertEquals(3000L, instance.getResult("8000 % 5000", testData))
+        Assert.assertEquals(30000L, instance.getResult("80000 % 50000", testData))
+        Assert.assertEquals(300000L, instance.getResult("800000 % 500000", testData))
+        Assert.assertEquals(3000000L, instance.getResult("8000000 % 5000000", testData))
+        Assert.assertEquals(30000000L, instance.getResult("80000000 % 50000000", testData))
+        Assert.assertEquals(300000000L, instance.getResult("800000000 % 500000000", testData))
+        Assert.assertEquals(3000000000L, instance.getResult("8000000000 % 5000000000", testData))
+        Assert.assertEquals(30000000000L, instance.getResult("80000000000 % 50000000000", testData))
+        Assert.assertEquals(300000000000L, instance.getResult("800000000000 % 500000000000", testData))
+        Assert.assertEquals(3000000000000L, instance.getResult("8000000000000 % 5000000000000", testData))
+        Assert.assertEquals(30000000000000L, instance.getResult("80000000000000 % 50000000000000", testData))
+        Assert.assertEquals(300000000000000L, instance.getResult("800000000000000 % 500000000000000", testData))
+        Assert.assertEquals(3000000000000000L, instance.getResult("8000000000000000 % 5000000000000000", testData))
+
 
         Assert.assertEquals(10000L, instance.getResult("10000", testData))
         Assert.assertEquals(10f, instance.getResult("10.000", testData))
@@ -226,7 +312,7 @@ class GXAnalyzeTest {
         Assert.assertEquals(true, instance.getResult("(1+1)>1 ? 1>0 : 2<3", testData))
         Assert.assertEquals(true, instance.getResult("5%3 == 2", testData))
         Assert.assertEquals(true, instance.getResult("0-2==-2", testData))
-        Assert.assertEquals(true, instance.getResult("1/2 == 0.5", testData))
+        Assert.assertEquals(true, instance.getResult("1.0/2 == 0.5", testData))
     }
 
     @Test

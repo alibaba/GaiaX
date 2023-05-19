@@ -752,11 +752,14 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     } else if (op == "+") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
-            float temp = stof(left.name) + stof(right.name);
-            result.name = to_string(temp);
-            result.token = "long";
             if (left.token == "num" || right.token == "num") {
+                float temp = stof(left.name) + stof(right.name);
+                result.name = to_string(temp);
                 result.token = "num";
+            }else{
+                long temp = stol(left.name) + stol(right.name);
+                result.name = to_string(temp);
+                result.token = "long";
             }
         } else if (left.token == "string" && right.token == "string") {
             result.token = "string";
@@ -801,11 +804,15 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     } else if (op == "-") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
-            float temp = stof(left.name) - stof(right.name);
-            result.name = to_string(temp);
-            result.token = "long";
+
             if (left.token == "num" || right.token == "num") {
+                float temp = stof(left.name) - stof(right.name);
+                result.name = to_string(temp);
                 result.token = "num";
+            }else{
+                long temp = stol(left.name) - stol(right.name);
+                result.name = to_string(temp);
+                result.token = "long";
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
@@ -832,11 +839,14 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     } else if (op == "*") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
-            float temp = stof(left.name) * stof(right.name);
-            result.name = to_string(temp);
-            result.token = "long";
             if (left.token == "num" || right.token == "num") {
+                float temp = stof(left.name) * stof(right.name);
+                result.name = to_string(temp);
                 result.token = "num";
+            }else{
+                long temp = stol(left.name) * stol(right.name);
+                result.name = to_string(temp);
+                result.token = "long";
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";
@@ -867,11 +877,20 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.token = "error";
                 result.name = "expressionError: divide or mod by zero";
             } else {
-                float temp = stof(left.name) / stof(right.name);
-                result.name = to_string(temp);
-                result.token = "long";
                 if (left.token == "num" || right.token == "num") {
+                    float temp = stof(left.name) / stof(right.name);
+                    result.name = to_string(temp);
                     result.token = "num";
+                }else{
+                    long temp = stol(left.name) / stol(right.name);
+                    long double tempF = stold(left.name) / stold(right.name);
+                    if(temp != tempF && (left.token == "num" || right.token == "num")){
+                        result.name = to_string(tempF);
+                        result.token = "num";
+                    }else{
+                        result.name = to_string(temp);
+                        result.token = "long";
+                    }
                 }
             }
         } else if (left.token == "null" || right.token == "null") {
@@ -903,12 +922,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.token = "error";
                 result.name = "expressionError: divide or mod by zero";
             } else {
-                float temp = stoi(left.name) % stoi(right.name);
+                long temp = stol(left.name) % stol(right.name);
                 result.name = to_string(temp);
                 result.token = "long";
-                if (left.token == "num" || right.token == "num") {
-                    result.token = "num";
-                }
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";

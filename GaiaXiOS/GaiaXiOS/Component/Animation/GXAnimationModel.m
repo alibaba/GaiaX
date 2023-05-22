@@ -124,6 +124,9 @@
             }
             NSDictionary *animatorInfo = [animators gx_objectAtIndex:i];
             if ([animatorInfo isKindOfClass:[NSDictionary class]]) {
+                if ([animatorInfo.allKeys containsObject:@"propAnimator"]) {
+                    animatorInfo = [animatorInfo objectForKey:@"propAnimator"];
+                }
                 [animator setupAnimationInfo:animatorInfo frame:frame];
             }
         }

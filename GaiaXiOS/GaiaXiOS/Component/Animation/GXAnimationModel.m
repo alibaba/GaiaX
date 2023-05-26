@@ -138,6 +138,12 @@
 - (void)setupAnimationInfo:(NSDictionary *)info frame:(CGRect)frame{
     [super setupAnimationInfo:info frame:frame];
     
+    //兼容逻辑
+    NSDictionary *tmpInfo = [info gx_dictionaryForKey:@"propAnimator"];
+    if (tmpInfo) {
+        info = tmpInfo;
+    }
+    
     self.delay = [info gx_integerForKey:@"delay"] / 1000.f;
     self.loopCount = [info gx_integerForKey:@"loopCount"];
     self.duration = [info gx_integerForKey:@"duration"] / 1000.f;

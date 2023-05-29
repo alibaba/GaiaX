@@ -151,6 +151,11 @@
     BOOL fitContent = [styleJSON gx_boolForKey:@"fit-content"];
     styleModel.fitContent = fitContent;
     
+    // flex-wrap
+    NSString *flexWrap = [styleJSON gx_stringForKey:@"flex-wrap"];
+    if (flexWrap.length) {
+        styleModel.flexWrap = [self convertFlexWrap:flexWrap];
+    }
 }
 
 

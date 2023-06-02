@@ -76,9 +76,9 @@ internal class GaiaXJSTaskQueue private constructor(val contextId: Long) {
                 when (oldMsg.arg2) {
                     WHAT_INTERVAL_TASK -> {
                         val targetFunc = oldMsg.obj as (() -> Unit)
-                        targetFunc.invoke()
                         val newMsg = createIntervalMsg(oldMsg.what, oldMsg.arg1, targetFunc)
                         taskQueue?.sendMessageDelayed(newMsg, oldMsg.arg1.toLong())
+                        targetFunc.invoke()
                     }
                     WHAT_DELAY_TASK -> {
                         val targetFunc = oldMsg.obj as (() -> Unit)

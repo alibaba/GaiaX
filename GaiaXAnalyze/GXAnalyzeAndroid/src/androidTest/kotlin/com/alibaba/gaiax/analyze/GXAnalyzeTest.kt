@@ -497,7 +497,8 @@ class GXAnalyzeTest {
                 this["array"] = JSONArray()
             }
         }
-
+        Assert.assertEquals("flex", instance.getResult("\$data.map ? 'flex' : 'none'", testData))
+        Assert.assertEquals("none", instance.getResult("\$data.map ? 'flex' : 'none'", null))
         Assert.assertEquals(null, instance.getResult("false ? \$data : null", testData))
         Assert.assertEquals(0L, instance.getResult("false ? 1 : 0", testData))
         Assert.assertEquals(1L, instance.getResult("true ? 1 : 0", testData))
@@ -726,7 +727,7 @@ class GXAnalyzeTest {
     }
 
     @Test
-    fun error_ternary_self_1_0() {
+    fun ternary_self_1_0() {
         val testData = JSONObject().apply {
             this["eight"] = 8F
             this["title"] = "gaiax"
@@ -736,6 +737,6 @@ class GXAnalyzeTest {
             }
         }
 
-        Assert.assertEquals(null, instance.getResult("\$\$ ? 1 : 0", testData))
+        Assert.assertEquals(1L, instance.getResult("\$\$ ? 1 : 0", testData))
     }
 }

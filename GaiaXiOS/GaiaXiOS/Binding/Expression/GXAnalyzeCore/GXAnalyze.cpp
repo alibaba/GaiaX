@@ -456,8 +456,7 @@ GXAnalyze::~GXAnalyze() {
 GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     string name;
-    if (((op == "?") && (left.token != "map" && left.token != "array")) ||
-        (op == ":") || (op == "?:") || (op == "==") || (op == "!=")) {
+    if ((op == "?") || (op == ":") || (op == "?:") || (op == "==") || (op == "!=")) {
         //可以返回map和array
     } else if (left.token == "map" || left.token == "array") {
         result.name = "expressionError: illegal operator '" + op + "',left operand has type of '" +

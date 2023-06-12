@@ -18,6 +18,7 @@ package com.alibaba.gaiax.demo.list.clicklatency
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.gaiax.demo.databinding.ActivityRecyclerViewBinding
 import com.alibaba.gaiax.demo.list.recyclerview.Entry

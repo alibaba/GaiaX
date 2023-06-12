@@ -19,6 +19,7 @@ package com.alibaba.gaiax.demo.list.clicklatency
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -35,6 +36,7 @@ class NestedRecyclerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNestedRvBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
         super.onCreate(savedInstanceState)
 
         val useRecyclerPools = intent.getBooleanExtra(USE_RECYCLER_POOLS, false)

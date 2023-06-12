@@ -30,6 +30,8 @@ buildscript {
 }
 
 android {
+    namespace = "com.alibaba.gaiax"
+
     compileSdkVersion 28
 
     defaultConfig {
@@ -82,7 +84,7 @@ dependencies {
     if (version != null && version != "unspecified") {
         implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:$version") { changing = true }
     } else {
-        implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.4.2") { changing = true }
+        implementation("com.github.alibaba.GaiaX:GaiaX-Analyze:0.4.3") { changing = true }
     }
 
     testImplementation 'junit:junit:4.13.2'

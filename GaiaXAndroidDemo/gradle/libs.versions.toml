@@ -1,5 +1,5 @@
 [versions]
-agp = "7.4.2"
+agp = "8.0.2"
 targetSdk = "33"
 minSdk = "21"
 compileSdk = "33"
@@ -27,7 +27,7 @@ androidxTest = "1.4.0"
 espressoCore = "3.4.0"
 jUnit = "4.13.2"
 
-gaiax = "0.4.2"
+gaiax = "0.4.3"
 gaiax-main="main-SNAPSHOT"
 
 [libraries]

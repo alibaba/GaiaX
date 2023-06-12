@@ -58,7 +58,8 @@
         </activity>
 
 
-        <activity android:name=".list.clicklatency.NestedRecyclerActivity" />
+        <activity
+            android:name=".list.clicklatency.NestedRecyclerActivity" />
 
         <activity
             android:name=".list.clicklatency.RecyclerViewActivity"

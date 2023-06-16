@@ -35,7 +35,11 @@ import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.expression.GXExtensionExpression
 import com.alibaba.gaiax.render.GXRenderImpl
-import com.alibaba.gaiax.render.node.*
+import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.node.GXNodeUtils
+import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.node.getGXNodeById
+import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -460,6 +464,10 @@ class GXTemplateEngine {
 
         override fun toString(): String {
             return "GXTemplateItem(bizId='$bizId', templateId='$templateId')"
+        }
+
+        fun key(): String {
+            return "${bizId}-${templateId}"
         }
 
 

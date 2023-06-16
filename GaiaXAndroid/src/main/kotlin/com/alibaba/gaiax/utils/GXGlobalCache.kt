@@ -6,18 +6,18 @@ import com.alibaba.gaiax.render.node.GXNode
 
 class GXGlobalCache {
     fun putLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForPrepareView[key] = value
+        layoutForPrepareView[key.key()] = value
         if (GXLog.isLog()) {
             GXLog.e("putLayoutForPrepareView key=${key.hashCode()} value=$value")
         }
     }
 
     fun getLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForPrepareView[key]
+        return layoutForPrepareView[key.key()]
     }
 
     fun isExistForPrepareView(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForPrepareView.containsKey(key)
+        return layoutForPrepareView.containsKey(key.key())
     }
 
     /**
@@ -25,10 +25,10 @@ class GXGlobalCache {
      *
      * the cache will use to reduce computation at create view step.
      */
-    private val layoutForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
+    private val layoutForPrepareView: MutableMap<String, Layout> =
         mutableMapOf()
 
-    private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
+    private val layoutForTemplateItem: MutableMap<String, Layout> =
         mutableMapOf()
 
     fun clean() {
@@ -36,16 +36,16 @@ class GXGlobalCache {
         layoutForPrepareView.clear()
     }
 
-    fun putLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForTemplateItem[key] = value
+    fun putLayoutForTemplateItem(key:  GXTemplateEngine.GXTemplateItem, value: Layout) {
+        layoutForTemplateItem[key.key()] = value
     }
 
-    fun getLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForTemplateItem[key]
+    fun getLayoutForTemplateItem(key:  GXTemplateEngine.GXTemplateItem): Layout? {
+        return layoutForTemplateItem[key.key()]
     }
 
-    fun isExistForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForTemplateItem.containsKey(key)
+    fun isExistForTemplateItem(key:  GXTemplateEngine.GXTemplateItem): Boolean {
+        return layoutForTemplateItem.containsKey(key.key())
     }
 
     companion object {

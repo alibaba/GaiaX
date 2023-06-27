@@ -397,7 +397,7 @@
     
     //数据绑定
     GXTemplateData *data = [self.items objectAtIndex:index];
-    [TheGXTemplateEngine bindData:data onView:rootView];
+    [TheGXTemplateEngine bindData:data measureSize:itemSize onRootView:rootView];
     
     return cell;
 }

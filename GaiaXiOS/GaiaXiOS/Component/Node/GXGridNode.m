@@ -117,6 +117,7 @@
     //判断是否相等，更新frame
     if (!CGRectEqualToRect(view.frame, self.frame)) {
         view.frame = self.frame;
+        [self calculateItemSize];
     }
     
     //是否可以越界显示

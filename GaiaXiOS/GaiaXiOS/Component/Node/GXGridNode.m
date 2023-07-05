@@ -117,6 +117,7 @@
     //判断是否相等，更新frame
     if (!CGRectEqualToRect(view.frame, self.frame)) {
         view.frame = self.frame;
+        [self calculateItemSize];
     }
     
     //是否可以越界显示
@@ -397,7 +398,7 @@
     
     //数据绑定
     GXTemplateData *data = [self.items objectAtIndex:index];
-    [TheGXTemplateEngine bindData:data onView:rootView];
+    [TheGXTemplateEngine bindData:data measureSize:itemSize onRootView:rootView];
     
     return cell;
 }

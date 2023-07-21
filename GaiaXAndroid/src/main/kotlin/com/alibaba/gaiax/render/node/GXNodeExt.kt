@@ -68,7 +68,7 @@ private fun GXNode.findNodeById(gxNode: GXNode, id: String): GXNode? {
 
 
 fun GXNode.getGXNodeByView(view: View): GXNode? {
-    return findNodeById(this, id)
+    return findNodeByView(this, view)
 }
 
 private fun GXNode.findNodeByView(gxNode: GXNode, view: View): GXNode? {

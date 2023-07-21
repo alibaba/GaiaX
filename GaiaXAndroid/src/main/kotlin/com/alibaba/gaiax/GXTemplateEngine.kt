@@ -39,6 +39,7 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.node.getGXNodeById
+import com.alibaba.gaiax.render.node.getGXNodeByView
 import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
@@ -867,8 +868,15 @@ class GXTemplateEngine {
      * @suppress
      * @hide
      */
-    fun getGXNodeById(targetView: View?, id: String): GXNode? {
-        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXNodeById(id)
+    fun getGXNodeById(rootView: View?, id: String): GXNode? {
+        return GXTemplateContext.getContext(rootView)?.rootNode?.getGXNodeById(id)
+    }
+
+    /**
+     *
+     */
+    fun getGXNodeByView(rootView: View?, targetView: View): GXNode? {
+        return GXTemplateContext.getContext(rootView)?.rootNode?.getGXNodeByView(targetView)
     }
 
     /**

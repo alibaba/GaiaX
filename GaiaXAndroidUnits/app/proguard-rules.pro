@@ -1,0 +1,11 @@
+-dontskipnonpubliclibraryclassmembers
+-optimizations code/removal/simple,code/removal/advanced,code/removal/variable,code/removal/exception,code/simplification/branch,code/simplification/field,code/simplification/variable
+-dontpreverify # 混淆时是否做预校验
+-ignorewarnings # 忽略警告，避免打包时某些警告出现
+-optimizationpasses 2
+-keepattributes Exceptions,Deprecated,LineNumberTable,SourceFile
+
+-keep class app.visly.stretch.*{*;}
+-keep class * implements com.youku.gaiax.api.provider.IEnvConfig { *; }
+-keep class com.youku.gaiax.provider.views.* { *; }
+-keep class com.youku.gaiax.provider.light.* { *; }

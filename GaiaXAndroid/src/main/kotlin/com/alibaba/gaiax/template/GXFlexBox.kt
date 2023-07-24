@@ -47,6 +47,9 @@ data class GXFlexBox(
     internal var maxSizeForTemplate: Size<GXSize?>? = null,
     internal var aspectRatioForTemplate: Float? = null
 ) {
+
+
+
     private var displayForExtend: Display? = null
     private var positionTypeForExtend: PositionType? = null
     private var directionForExtend: Direction? = null
@@ -389,6 +392,10 @@ data class GXFlexBox(
             }
             maxSizeForFinal = null
         }
+    }
+
+    override fun toString(): String {
+        return "GXFlexBox(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, flexGrow=$flexGrow, flexShrink=$flexShrink, aspectRatio=$aspectRatio, flexBasis=$flexBasis, maxSize=$maxSize, minSize=$minSize, size=$size, border=$border, padding=$padding, margin=$margin, position=$position)"
     }
 
     val display: Display?

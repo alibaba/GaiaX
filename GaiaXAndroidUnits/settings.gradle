@@ -2,11 +2,5 @@ rootProject.name = 'GaiaXAndroidUnits'
 
 include ':app'
 
-include ':GXAnalyzeAndroid'
-project(':GXAnalyzeAndroid').projectDir = file('../GaiaXAnalyze/GXAnalyzeAndroid')
-
 include ':GaiaXAndroid'
 project(':GaiaXAndroid').projectDir = file('../GaiaXAndroid')
-
-include ':GaiaXAndroidAdapter'
-project(':GaiaXAndroidAdapter').projectDir = file('../GaiaXAndroidAdapter')

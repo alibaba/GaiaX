@@ -424,7 +424,79 @@ data class GXFlexBox(
     }
 
     override fun toString(): String {
-        return "GXFlexBox(alignItemsForTemplate=$alignItemsForTemplate, alignSelfForTemplate=$alignSelfForTemplate, alignContentForTemplate=$alignContentForTemplate, justifyContentForTemplate=$justifyContentForTemplate, positionForTemplate=$positionForTemplate, marginForTemplate=$marginForTemplate, paddingForTemplate=$paddingForTemplate, borderForTemplate=$borderForTemplate, flexGrowForTemplate=$flexGrowForTemplate, flexShrinkForTemplate=$flexShrinkForTemplate, flexBasisForTemplate=$flexBasisForTemplate, sizeForTemplate=$sizeForTemplate, minSizeForTemplate=$minSizeForTemplate, maxSizeForTemplate=$maxSizeForTemplate, aspectRatioForTemplate=$aspectRatioForTemplate, displayForExtend=$displayForExtend, positionTypeForExtend=$positionTypeForExtend, directionForExtend=$directionForExtend, flexDirectionForExtend=$flexDirectionForExtend, flexWrapForExtend=$flexWrapForExtend, overflowForExtend=$overflowForExtend, alignItemsForExtend=$alignItemsForExtend, alignSelfForExtend=$alignSelfForExtend, alignContentForExtend=$alignContentForExtend, justifyContentForExtend=$justifyContentForExtend, positionForExtend=$positionForExtend, marginForExtend=$marginForExtend, paddingForExtend=$paddingForExtend, borderForExtend=$borderForExtend, flexGrowForExtend=$flexGrowForExtend, flexShrinkForExtend=$flexShrinkForExtend, flexBasisForExtend=$flexBasisForExtend, sizeForExtend=$sizeForExtend, minSizeForExtend=$minSizeForExtend, maxSizeForExtend=$maxSizeForExtend, aspectRatioForExtend=$aspectRatioForExtend, maxSizeForFinal=$maxSizeForFinal, minSizeForFinal=$minSizeForFinal, sizeForFinal=$sizeForFinal, borderForFinal=$borderForFinal, paddingForFinal=$paddingForFinal, marginForFinal=$marginForFinal, positionForFinal=$positionForFinal, display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, flexGrow=$flexGrow, flexShrink=$flexShrink, aspectRatio=$aspectRatio, flexBasis=$flexBasis, maxSize=$maxSize, maxSizeForDimension=$maxSizeForDimension, minSize=$minSize, minSizeForDimension=$minSizeForDimension, size=$size, sizeForDimension=$sizeForDimension, border=$border, borderForDimension=$borderForDimension, padding=$padding, paddingForDimension=$paddingForDimension, margin=$margin, marginForDimension=$marginForDimension, position=$position, positionForDimension=$positionForDimension)"
+        return "GXFlexBox(" +
+                "alignItemsForTemplate=$alignItemsForTemplate, " +
+                "alignSelfForTemplate=$alignSelfForTemplate, " +
+                "alignContentForTemplate=$alignContentForTemplate, " +
+                "justifyContentForTemplate=$justifyContentForTemplate, " +
+                "positionForTemplate=$positionForTemplate, " +
+                "marginForTemplate=$marginForTemplate, " +
+                "paddingForTemplate=$paddingForTemplate, " +
+                "borderForTemplate=$borderForTemplate, " +
+                "flexGrowForTemplate=$flexGrowForTemplate, " +
+                "flexShrinkForTemplate=$flexShrinkForTemplate, " +
+                "flexBasisForTemplate=$flexBasisForTemplate, " +
+                "sizeForTemplate=$sizeForTemplate, " +
+                "minSizeForTemplate=$minSizeForTemplate, " +
+                "maxSizeForTemplate=$maxSizeForTemplate, " +
+                "aspectRatioForTemplate=$aspectRatioForTemplate, " +
+                "displayForExtend=$displayForExtend, " +
+                "positionTypeForExtend=$positionTypeForExtend, " +
+                "directionForExtend=$directionForExtend, " +
+                "flexDirectionForExtend=$flexDirectionForExtend, " +
+                "flexWrapForExtend=$flexWrapForExtend, " +
+                "overflowForExtend=$overflowForExtend, " +
+                "alignItemsForExtend=$alignItemsForExtend, " +
+                "alignSelfForExtend=$alignSelfForExtend, " +
+                "alignContentForExtend=$alignContentForExtend, " +
+                "justifyContentForExtend=$justifyContentForExtend, " +
+                "positionForExtend=$positionForExtend, " +
+                "marginForExtend=$marginForExtend, " +
+                "paddingForExtend=$paddingForExtend, " +
+                "borderForExtend=$borderForExtend, " +
+                "flexGrowForExtend=$flexGrowForExtend, " +
+                "flexShrinkForExtend=$flexShrinkForExtend, " +
+                "flexBasisForExtend=$flexBasisForExtend, " +
+                "sizeForExtend=$sizeForExtend, " +
+                "minSizeForExtend=$minSizeForExtend, " +
+                "maxSizeForExtend=$maxSizeForExtend, " +
+                "aspectRatioForExtend=$aspectRatioForExtend, " +
+                "maxSizeForFinal=$maxSizeForFinal, " +
+                "minSizeForFinal=$minSizeForFinal, " +
+                "sizeForFinal=$sizeForFinal, " +
+                "borderForFinal=$borderForFinal, " +
+                "paddingForFinal=$paddingForFinal, " +
+                "marginForFinal=$marginForFinal, " +
+                "positionForFinal=$positionForFinal, " +
+                "display=$display, " +
+                "positionType=$positionType, " +
+                "direction=$direction, " +
+                "flexDirection=$flexDirection, " +
+                "flexWrap=$flexWrap, " +
+                "overflow=$overflow, " +
+                "alignItems=$alignItems, " +
+                "alignSelf=$alignSelf, " +
+                "alignContent=$alignContent, " +
+                "justifyContent=$justifyContent, " +
+                "flexGrow=$flexGrow, " +
+                "flexShrink=$flexShrink, " +
+                "aspectRatio=$aspectRatio, " +
+                "flexBasis=$flexBasis, " +
+                "maxSize=$maxSize, " +
+                "maxSizeForDimension=$maxSizeForDimension, " +
+                "minSize=$minSize, " +
+                "minSizeForDimension=$minSizeForDimension, " +
+                "size=$size, " +
+                "sizeForDimension=$sizeForDimension, " +
+                "border=$border, " +
+                "borderForDimension=$borderForDimension, " +
+                "padding=$padding, " +
+                "paddingForDimension=$paddingForDimension, " +
+                "margin=$margin, " +
+                "marginForDimension=$marginForDimension, " +
+                "position=$position, " +
+                "positionForDimension=$positionForDimension" +
+                ")"
     }
 
     val display: Display?

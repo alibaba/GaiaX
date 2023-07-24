@@ -26,7 +26,7 @@ object GXLog {
     private const val TAG = "Alibaba-GaiaX"
 
     fun e(tag: String?, msg: String?) {
-        longE(tag ?: TAG, msg ?: "")
+        longE(if (tag.isNullOrEmpty()) TAG else tag, msg ?: "")
     }
 
     fun e(msg: String?) {

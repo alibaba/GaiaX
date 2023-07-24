@@ -634,9 +634,13 @@ class GXTemplateEngine {
 
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
-            GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
+            GXNodeUtils.computeNodeTreeByPrepareView(gxTemplateContext, gxRootNode, size)
             gxRootNode.stretchNode.layoutByPrepareView?.let {
-                GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
+                GXGlobalCache.instance.putLayoutForPrepareView(
+                    gxTemplateContext,
+                    gxTemplateContext.templateItem,
+                    it
+                )
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
@@ -770,14 +774,20 @@ class GXTemplateEngine {
 
         if (gxTemplateContext.isReuseRootNode) {
             if (GXLog.isLog()) {
-                GXLog.e("reuse root node, skip bindDataOnlyNodeTree")
+                GXLog.e(
+                    gxTemplateContext.tag,
+                    "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree reuse root node, skip bindDataOnlyNodeTree"
+                )
             }
             gxTemplateContext.isReuseRootNode = false
             return
         }
 
         if (GXLog.isLog()) {
-            GXLog.e("internalBindDataOnlyNodeTree gxMeasureSize=${gxMeasureSize} gxTemplateItem=${gxTemplateContext.templateItem}")
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize=${gxMeasureSize} gxTemplateItem=${gxTemplateContext.templateItem}"
+            )
         }
 
         gxTemplateContext.templateData = gxTemplateData

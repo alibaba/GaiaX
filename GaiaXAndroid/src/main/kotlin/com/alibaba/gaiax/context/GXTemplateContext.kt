@@ -26,6 +26,7 @@ import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -55,6 +56,10 @@ class GXTemplateContext private constructor(
      */
     var visualTemplateNode: GXTemplateNode? = null
 ) {
+
+    var traceId: String? = UUID.randomUUID().toString()
+
+    var tag: String? = ""
 
     /**
      * 视图的尺寸是否发生了变化，如果发生了变化，那么缓存需要被清空，UI需要被重建。

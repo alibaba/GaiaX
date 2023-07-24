@@ -28,6 +28,7 @@ data class GXStretchNode(
     var node: Node? = null, var layoutByPrepareView: Layout? = null
 ) {
 
+
     fun reset(gxTemplateContext: GXTemplateContext, gxNode: GXNode) {
         resetStyle(gxTemplateContext, gxNode)
     }
@@ -53,6 +54,10 @@ data class GXStretchNode(
 
     fun free() {
         node?.safeFree()
+    }
+
+    override fun toString(): String {
+        return "GXStretchNode(node=$node, layoutByPrepareView=$layoutByPrepareView)"
     }
 
     companion object {
@@ -135,7 +140,5 @@ data class GXStretchNode(
 
             flexBox.maxSizeForDimension?.let { style.maxSize = Size(it.width, it.height) }
         }
-
-
     }
 }

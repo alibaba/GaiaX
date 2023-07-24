@@ -25,6 +25,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 data class GXCss(
     val style: GXStyle, val flexBox: GXFlexBox
 ) {
+
     fun updateByExtend(gxTemplateContext: GXTemplateContext, extendCssData: JSONObject) {
         style.updateByExtend(extendCssData)
         flexBox.updateByExtend(gxTemplateContext, extendCssData)
@@ -35,6 +36,10 @@ data class GXCss(
             style.updateByVisual(visual.style)
             flexBox.updateByVisual(visual.flexBox)
         }
+    }
+
+    override fun toString(): String {
+        return "GXCss(style=$style, flexBox=$flexBox)"
     }
 
     companion object {

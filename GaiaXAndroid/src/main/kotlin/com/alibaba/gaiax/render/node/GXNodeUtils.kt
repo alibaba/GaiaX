@@ -54,14 +54,33 @@ object GXNodeUtils {
         gxNode: GXNode,
         size: Size<Float?>
     ) {
+
+        // 预处理布局
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}"
+            )
+        }
+
+        // 输入参数
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}"
+            )
+        }
+
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
+
+        // 输出计算结果
         if (GXLog.isLog()) {
             GXLog.e(
                 gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layout=${layout}"
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}"
             )
         }
     }

@@ -389,6 +389,6 @@ data class Style(
     ): Long
 
     override fun toString(): String {
-        return "Style(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, position=$position, margin=$margin, padding=$padding, border=$border, flexGrow=$flexGrow, flexShrink=$flexShrink, flexBasis=$flexBasis, size=$size, minSize=$minSize, maxSize=$maxSize, aspectRatio=$aspectRatio, rustptr=$rustptr)"
+        return "Style(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, position=$position, margin=$margin, padding=$padding, border=$border, flexGrow=$flexGrow, flexShrink=$flexShrink, flexBasis=$flexBasis, size=$size, minSize=$minSize, maxSize=$maxSize, aspectRatio=$aspectRatio)"
     }
 }

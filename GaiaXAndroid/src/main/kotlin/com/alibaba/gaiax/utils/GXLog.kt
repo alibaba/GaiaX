@@ -23,6 +23,8 @@ import android.util.Log
  * @suppress
  */
 object GXLog {
+    private const val LOG_MAX_LENGTH = 4000
+
     private const val TAG = "Alibaba-GaiaX"
 
     fun e(tag: String?, msg: String?) {
@@ -34,7 +36,7 @@ object GXLog {
     }
 
     private fun longE(tag: String, msg: String) {
-        val maxLogSize = 1000
+        val maxLogSize = LOG_MAX_LENGTH
         for (i in 0..msg.length / maxLogSize) {
             val start = i * maxLogSize
             var end = (i + 1) * maxLogSize

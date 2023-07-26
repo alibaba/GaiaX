@@ -456,7 +456,7 @@ GXAnalyze::~GXAnalyze() {
 GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op) {
     GXATSNode result = GXATSNode(left.name, left.token, left.token);
     string name;
-    if ((op == "?") || (op == ":") || (op == "?:") || (op == "==") || (op == "!=")) {
+    if ((op == "?") || (op == ":") || (op == "?:") || (op == "==") || (op == "!=") || (op == "||") || (op == "&&")) {
         //可以返回map和array
     } else if (left.token == "map" || left.token == "array") {
         result.name = "expressionError: illegal operator '" + op + "',left operand has type of '" +
@@ -534,45 +534,20 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
-            if (left.name == "true" && (stof(right.name) != 0.0F)) {
+        } else if (left.token == "bool" && (right.token != "null")) {
+            if (left.name == "true") {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && right.token == "string") {
-            if (left.name == "true" && right.name == "true") {
+        } else if (left.token != "null" && right.token == "bool") {
+            if (right.name == "true") {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if ((left.token == "num" || left.token == "long") &&
-                   (right.token == "num" || right.token == "long")) {
-            if ((stof(left.name) != 0.0F) && (stof(right.name) != 0.0F)) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
-            if (((stof(left.name) != 0.0F) && right.name == "true") ||
-                ((left.token == "num" || left.token == "long") && right.token == "string")) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if ((left.token == "string" && right.token == "string") ||
-                   (left.token == "string" && right.token == "bool")) {
-            if (left.name == "true" && right.name == "true") {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if (left.token == "string" && (right.token == "num" || right.token == "long")) {
-            if (left.name == "true" && (stof(right.name) != 0.0F)) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
+        } else if (left.token != "null" && right.token != "null") {
+            result.name = "true";
         } else {
             result.name = "false";
         }
@@ -586,69 +561,20 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
-            if (left.name == "true" || (stof(right.name) != 0.0F)) {
+        } else if (left.token == "bool") {
+            if (left.name == "true" || right.token != "null") {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if (left.token == "bool" && right.token == "string") {
-            if (left.name == "true" || right.name == "true") {
+        } else if (right.token == "bool") {
+            if (left.token != "null" || right.name == "true") {
                 result.name = "true";
             } else {
                 result.name = "false";
             }
-        } else if ((left.token == "num" || left.token == "long") &&
-                   (right.token == "num" || right.token == "long")) {
-            if ((stof(left.name) != 0.0F) || (stof(right.name) != 0.0F)) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if ((left.token == "num" || left.token == "long") && right.token == "bool") {
-            if (((stof(left.name) != 0.0F) || right.name == "true") ||
-                (left.token == "num" || right.token == "string")) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if ((left.token == "string" && right.token == "string") ||
-                   (left.token == "string" && right.token == "bool")) {
-            if (left.name == "true" || right.name == "true") {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if (left.token == "string" && (right.token == "num" || right.token == "long")) {
-            if (left.name == "true" || (stof(right.name) != 0.0F)) {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if (left.token == "null") {
-            if ((right.token == "num" || right.token == "long")) {
-                if (stof(right.name) != 0.0F) {
-                    result.name = "true";
-                } else {
-                    result.name = "false";
-                }
-            } else if (right.name == "true") {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
-        } else if (right.token == "null") {
-            if (left.token == "num" || left.token == "long") {
-                if (stof(left.name) != 0.0F) {
-                    result.name = "true";
-                } else {
-                    result.name = "false";
-                }
-            } else if (left.name == "true") {
-                result.name = "true";
-            } else {
-                result.name = "false";
-            }
+        } else if (left.token != "null" || right.token != "null") {
+            result.name = "true";
         } else {
             result.name = "false";
         }
@@ -755,7 +681,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 float temp = stof(left.name) + stof(right.name);
                 result.name = to_string(temp);
                 result.token = "num";
-            }else{
+            } else {
                 long temp = stol(left.name) + stol(right.name);
                 result.name = to_string(temp);
                 result.token = "long";
@@ -768,21 +694,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "null";
         } else {
             if ((left.token == "num" || left.token == "long") && right.token == "string") {
-//                if (left.name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    left.name = regex_replace(left.name, e, "");
-//                    left.name = regex_replace(left.name, e2, "");
-//                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else if ((right.token == "num" || right.token == "long") && left.token == "string") {
-//                if (right.name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-//                    right.name = regex_replace(right.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-//                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else {
@@ -808,7 +722,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 float temp = stof(left.name) - stof(right.name);
                 result.name = to_string(temp);
                 result.token = "num";
-            }else{
+            } else {
                 long temp = stol(left.name) - stol(right.name);
                 result.name = to_string(temp);
                 result.token = "long";
@@ -842,7 +756,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 float temp = stof(left.name) * stof(right.name);
                 result.name = to_string(temp);
                 result.token = "num";
-            }else{
+            } else {
                 long temp = stol(left.name) * stol(right.name);
                 result.name = to_string(temp);
                 result.token = "long";
@@ -880,13 +794,13 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                     float temp = stof(left.name) / stof(right.name);
                     result.name = to_string(temp);
                     result.token = "num";
-                }else{
+                } else {
                     long temp = stol(left.name) / stol(right.name);
                     long double tempF = stold(left.name) / stold(right.name);
-                    if(temp != tempF && (left.token == "num" || right.token == "num")){
+                    if (temp != tempF && (left.token == "num" || right.token == "num")) {
                         result.name = to_string(tempF);
                         result.token = "num";
-                    }else{
+                    } else {
                         result.name = to_string(temp);
                         result.token = "long";
                     }

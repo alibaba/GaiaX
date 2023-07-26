@@ -463,12 +463,25 @@ class GXAnalyzeTest {
             this["data"] = JSONObject().apply {
                 this["map"] = JSONObject()
                 this["array"] = JSONArray()
+                this["nullobj"] = null
             }
         }
 
         Assert.assertEquals(true, instance.getResult("true || true", testData))
         Assert.assertEquals(false, instance.getResult("false || false", testData))
         Assert.assertEquals(true, instance.getResult("true || false", testData))
+        Assert.assertEquals(true, instance.getResult("\$data || false", testData))
+        Assert.assertEquals(true, instance.getResult("\$title || false", testData))
+        Assert.assertEquals(true, instance.getResult("'123' || false", testData))
+        Assert.assertEquals(true, instance.getResult("'false' || false", testData))
+        Assert.assertEquals(true, instance.getResult("0 || false", testData))
+        Assert.assertEquals(true, instance.getResult("1000 || false", testData))
+        Assert.assertEquals(true, instance.getResult("\$eight || false", testData))
+        Assert.assertEquals(true, instance.getResult("-100 || false", testData))
+        Assert.assertEquals(true, instance.getResult("-100 || -100", testData))
+        Assert.assertEquals(false, instance.getResult("\$data.nullobj || false", testData))
+
+
     }
 
     @Test
@@ -485,6 +498,22 @@ class GXAnalyzeTest {
         Assert.assertEquals(false, instance.getResult("true && false", testData))
         Assert.assertEquals(true, instance.getResult("true && true", testData))
         Assert.assertEquals(false, instance.getResult("false && false", testData))
+        Assert.assertEquals(false, instance.getResult("\$data.map && false", testData))
+        Assert.assertEquals(false, instance.getResult("false && \$data.map", testData))
+        Assert.assertEquals(true, instance.getResult("\$data.map && \$data", testData))
+        Assert.assertEquals(true, instance.getResult("100 && true", testData))
+        Assert.assertEquals(true, instance.getResult("true && 100", testData))
+        Assert.assertEquals(false, instance.getResult("100 && false", testData))
+        Assert.assertEquals(true, instance.getResult("\$data && true", testData))
+        Assert.assertEquals(true, instance.getResult("true && \$data", testData))
+        Assert.assertEquals(true, instance.getResult("'false' && true", testData))
+        Assert.assertEquals(true, instance.getResult("true && 'false'", testData))
+        Assert.assertEquals(false, instance.getResult("'true' && false", testData))
+        Assert.assertEquals(true, instance.getResult("'true' && 100", testData))
+        Assert.assertEquals(true, instance.getResult("100 && 'string'", testData))
+        Assert.assertEquals(true, instance.getResult("100 && 100", testData))
+        Assert.assertEquals(true, instance.getResult("'string' && 'string'", testData))
+
     }
 
     @Test

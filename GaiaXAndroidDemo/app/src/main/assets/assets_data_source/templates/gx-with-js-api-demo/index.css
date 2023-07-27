@@ -171,3 +171,59 @@
   background-color: #f8e71c;
   font-family: operator mono;
 }
+#message {
+  width: 45%;
+  flex-direction: column;
+}
+#message-api {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #e22d43;
+  font-size: 15px;
+  text-align: center;
+}
+#addEventListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#removeEventListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#addNativeListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#removeNativeListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}

@@ -1,6 +1,13 @@
 {
-  "type": "gaia-template",
   "id": "gx-with-js",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-with-js",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu Jul 27 2023 19:54:25 GMT+0800 (中国标准时间)",
+    "constraint-size": { "width": 375, "height": 100, "zoom": 1 },
+    "dependencies": {}
+  },
   "layers": [
     { "id": "left-image", "type": "image" },
     {

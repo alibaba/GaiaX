@@ -13,6 +13,11 @@
     "setInterval": { "value": "$setInterval" },
     "clearInterval": { "value": "$clearInterval" },
     "setTimeout": { "value": "$setTimeout" },
-    "clearTimeout": { "value": "$clearTimeout" }
+    "clearTimeout": { "value": "$clearTimeout" },
+    "message-api": { "value": "'message api'" },
+    "addEventListener": { "value": "'addEventListener'" },
+    "removeEventListener": { "value": "'removeEventListener'" },
+    "addNativeListener": { "value": "'addNativeListener'" },
+    "removeNativeListener": { "value": "'removeNativeListener'" }
   }
 }

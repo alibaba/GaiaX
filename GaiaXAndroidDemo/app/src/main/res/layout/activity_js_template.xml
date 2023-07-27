@@ -36,6 +36,11 @@
         android:layout_marginTop="20dp"
         android:text="Lifecycle Demo Template"
         android:textStyle="bold" />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/template_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="send Native Message"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/template_3"

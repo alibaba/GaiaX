@@ -1,8 +1,13 @@
 package com.alibaba.gaiax.demo
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
@@ -41,6 +46,20 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         renderJSCustomModuleDemoTemplate(this, jsCustomModuleTemplateName)
         //Demo2：js内置方法一览
         renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
+
+        sendNativeMessage()
+    }
+
+    private fun sendNativeMessage() {
+        findViewById<Button>(R.id.template_btn).setOnClickListener {
+            val nativeData: JSONObject = JSONObject()
+            nativeData["key1"] = "Native Message Value1"
+            val nativeMessageProtocol: JSONObject = JSONObject()
+            nativeMessageProtocol["userData"] = nativeData
+            nativeMessageProtocol["type"] = "CustomNotificationNameForNative"
+            GXJSComponentDelegate.instance.dispatcherNativeMessageEvent(nativeMessageProtocol)
+        }
+
     }
 
     private fun renderJSCustomModuleDemoTemplate(activity: JavascriptTemplateActivity, templateId: String) {
@@ -60,7 +79,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
 
-        if(view != null){
+        if (view != null) {
             jsCustomsModuleDemoId = GXJSComponentDelegate.instance.registerComponent(
                 bizId,
                 jsCustomModuleTemplateName,
@@ -98,7 +117,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)
 
-        if(view != null){
+        if (view != null) {
             jsApiDemoId = GXJSComponentDelegate.instance.registerComponent(
                 bizId,
                 jsApiDemoTemplateName,

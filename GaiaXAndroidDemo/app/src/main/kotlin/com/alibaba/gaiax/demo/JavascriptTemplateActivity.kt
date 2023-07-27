@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
@@ -57,7 +54,7 @@ class JavascriptTemplateActivity : AppCompatActivity() {
             val nativeMessageProtocol: JSONObject = JSONObject()
             nativeMessageProtocol["userData"] = nativeData
             nativeMessageProtocol["type"] = "CustomNotificationNameForNative"
-            GXJSComponentDelegate.instance.dispatcherNativeMessageEvent(nativeMessageProtocol)
+            GXJSComponentDelegate.instance.dispatcherNativeMessageEventToJS(nativeMessageProtocol)
         }
 
     }

@@ -3,6 +3,8 @@ package com.youku.gaiax.js
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.youku.gaiax.js.core.api.IComponent
+import com.youku.gaiax.js.support.GaiaXNativeEventManager
+import com.youku.gaiax.js.utils.TimeUtils
 
 /**
  *  @author: shisan.lms
@@ -85,5 +87,21 @@ class GXJSComponentDelegate {
 
     fun getComponentByInstanceId(instanceId: Long): IComponent? {
         return GXJSEngineFactory.instance.getGaiaXJSContext()?.getComponentByInstanceId(instanceId)
+    }
+
+    fun dispatcherNativeMessageEventToJS(data: JSONObject) {
+        GaiaXNativeEventManager.instance.eventsData.forEach { componentData ->
+            val componentId = componentData.getLongValue("instanceId")
+            if (GXJSEngineFactory.instance.getGaiaXJSContext()?.getComponentByInstanceId(componentId) != null) {
+                val result = JSONObject().apply {
+                    this.putAll(data)
+                    this.putAll(componentData)
+                    this["timestamp"] = TimeUtils.elapsedRealtime()
+                }
+                GXJSEngineFactory.instance.getGaiaXJSContext()?.let {
+                    it.getComponentByInstanceId(componentId)?.onNativeEvent(result)
+                }
+            }
+        }
     }
 }

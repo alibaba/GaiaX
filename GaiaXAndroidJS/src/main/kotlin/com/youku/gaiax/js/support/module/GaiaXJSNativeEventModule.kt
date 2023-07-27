@@ -24,7 +24,7 @@ class GaiaXJSNativeEventModule : GaiaXJSBaseModule() {
         val optionCover = data.getJSONObject("option")?.getBooleanValue("cover") ?: false
         val optionLevel = data.getJSONObject("option")?.getIntValue("level") ?: 0
         if (targetId != null && templateId != null && instanceId != null && eventType != null) {
-            GaiaXJSManager.instance.renderDelegate?.addEventListener(
+            GaiaXJSManager.instance.renderDelegate.addEventListener(
                 targetId,
                 instanceId,
                 eventType,

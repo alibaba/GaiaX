@@ -463,11 +463,6 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                       left.token + "'";
         result.token = "error";
         return result;
-    } else if (op != "?:" && (right.token == "map" || right.token == "array")) {
-        result.name = "expressionError: illegal operator '" + op + "',right operand has type of '" +
-                      right.token + "'";
-        result.token = "error";
-        return result;
     }
     //返回值都为bool
     if (op == ">") {
@@ -721,7 +716,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         } else {
             result.name = "false";
         }
-    } else if (op == "?") {
+    }
+    else if (op == "?") {
         if (left.name == "true" || ((left.name != "false" && left.token != "null"))) {
             result.name = right.name;
             result.token = right.token;
@@ -732,7 +728,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "right";
             result.name = "right";
         }
-    } else if (op == "?:") {
+    }
+    else if (op == "?:") {
         if (left.name == "true" || (left.name != "false" && left.token != "null")) {
             result.name = left.name;
             result.token = left.token;
@@ -740,7 +737,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = right.name;
             result.token = right.token;
         }
-    } else if (op == ":") {
+    }
+    else if (op == ":") {
         if (left.token == "right" && left.name == "right") {
             result.token = right.token;
             result.name = right.name;
@@ -748,7 +746,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = left.token;
             result.name = left.name;
         }
-    } else if (op == "+") {
+    }
+    else if (op == "+") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (left.token == "num" || right.token == "num") {
@@ -768,21 +767,9 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.token = "null";
         } else {
             if ((left.token == "num" || left.token == "long") && right.token == "string") {
-//                if (left.name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    left.name = regex_replace(left.name, e, "");
-//                    left.name = regex_replace(left.name, e2, "");
-//                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else if ((right.token == "num" || right.token == "long") && left.token == "string") {
-//                if (right.name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    right.name = regex_replace(right.name, e, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-//                    right.name = regex_replace(right.name, e2, ""); // 除了捕捉到的组以外，其他的东西均舍弃
-//                }
                 result.name = left.name + right.name;
                 result.token = "string";
             } else {
@@ -800,7 +787,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 }
             }
         }
-    } else if (op == "-") {
+    }
+    else if (op == "-") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
 
@@ -835,7 +823,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                         left.token;
             }
         }
-    } else if (op == "*") {
+    }
+    else if (op == "*") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (left.token == "num" || right.token == "num") {
@@ -869,7 +858,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                         left.token;
             }
         }
-    } else if (op == "/") {
+    }
+    else if (op == "/") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (stof(right.name) == 0) {
@@ -914,7 +904,8 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                         left.token;
             }
         }
-    } else if (op == "%") {
+    }
+    else if (op == "%") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (stof(right.name) == 0) {
@@ -947,6 +938,10 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                         left.token;
             }
         }
+    }
+    else{
+        result.token = "error";
+        result.name = "expressionError: wrong expression";
     }
     return result;
 }
@@ -1068,6 +1063,9 @@ long GXAnalyze::getValue(string expression, void *source) {
                     } else if (gxv->tag == GX_TAG_NULL) {
                         tokenNum.name = "null";
                         tokenNum.token = "null";
+                    }else{
+                        tokenNum.name = "null";
+                        tokenNum.token = "null";
                     }
                     if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
                         delete[] gxv->str;
@@ -1113,6 +1111,9 @@ long GXAnalyze::getValue(string expression, void *source) {
                     } else if (gxv->tag == GX_TAG_NULL) {
                         tokenNum.name = "null";
                         tokenNum.token = "null";
+                    }else{
+                        tokenNum.name = "null";
+                        tokenNum.token = "null";
                     }
                     if (gxv->tag == GX_TAG_STRING && gxv->str != NULL) {
                         delete[] gxv->str;
@@ -1152,12 +1153,6 @@ long GXAnalyze::getValue(string expression, void *source) {
                     pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (res.token == "num") {
-//                if (res.name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    res.name = regex_replace(res.name, e, "");
-//                    res.name = regex_replace(res.name, e2, "");
-//                }
                 pointer = new GXValue(GX_TAG_FLOAT, (float) atof(res.name.c_str()));
             } else if (res.token == "long") {
                 pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(res.name.c_str()));
@@ -1166,6 +1161,8 @@ long GXAnalyze::getValue(string expression, void *source) {
             } else if (res.token == "array") {
                 pointer = new GXValue(GX_TAG_ARRAY, (void *) atol(res.name.c_str()));
             } else if (res.token == "null") {
+                pointer = new GXValue(GX_TAG_NULL, 1);
+            }else{
                 pointer = new GXValue(GX_TAG_NULL, 1);
             }
             Res = (long) pointer;
@@ -1271,6 +1268,9 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                 } else if (node.token == "null") {
                     GXValue *par = new GXValue(GX_TAG_NULL, 1);
                     paramsTempArray.push_back((long) par);
+                }else{
+                    GXValue *par = new GXValue(GX_TAG_NULL, 1);
+                    paramsTempArray.push_back((long) par);
                 }
                 num1 = -1;
             } else if (cacheString[i] == 'g') {
@@ -1311,6 +1311,9 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                                 node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "null") {
+                        GXValue *par = new GXValue(GX_TAG_NULL, 1);
+                        paramsTempArray.push_back((long) par);
+                    }else{
                         GXValue *par = new GXValue(GX_TAG_NULL, 1);
                         paramsTempArray.push_back((long) par);
                     }
@@ -1380,6 +1383,9 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                     } else if (fun->tag == GX_TAG_NULL) {
                         node.name = "null";
                         node.token = "null";
+                    }else{
+                        node.name = "null";
+                        node.token = "null";
                     }
                     array[numFunction] = node;
                     res = array[numFunction];
@@ -1417,12 +1423,6 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
             pointer = new GXValue(GX_TAG_BOOL, 0);
         }
     } else if (res.token == "num") {
-//        if (res.name.find('.') != -1) {
-//            regex e("0+?$");
-//            regex e2("[.]$");
-//            res.name = regex_replace(res.name, e, "");
-//            res.name = regex_replace(res.name, e2, "");
-//        }
         pointer = new GXValue(GX_TAG_FLOAT, (float) atof(res.name.c_str()));
     } else if (res.token == "long") {
         pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(res.name.c_str()));
@@ -1431,6 +1431,8 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
     } else if (res.token == "array") {
         pointer = new GXValue(GX_TAG_ARRAY, (void *) atol(res.name.c_str()));
     } else if (res.token == "null") {
+        pointer = new GXValue(GX_TAG_NULL, 1);
+    }else{
         pointer = new GXValue(GX_TAG_NULL, 1);
     }
 
@@ -1486,12 +1488,6 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     pointer = new GXValue(GX_TAG_BOOL, 0);
                 }
             } else if (valueStack[0].token == "num") {
-//                if (valueStack[0].name.find('.') != -1) {
-//                    regex e("0+?$");
-//                    regex e2("[.]$");
-//                    valueStack[0].name = regex_replace(valueStack[0].name, e, "");
-//                    valueStack[0].name = regex_replace(valueStack[0].name, e2, "");
-//                }
                 pointer = new GXValue(GX_TAG_FLOAT, (float) atof(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "long") {
                 pointer = new GXValue(GX_TAG_LONG, (int64_t) atoll(valueStack[0].name.c_str()));
@@ -1500,6 +1496,8 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             } else if (valueStack[0].token == "array") {
                 pointer = new GXValue(GX_TAG_ARRAY, (void *) atol(valueStack[0].name.c_str()));
             } else if (valueStack[0].token == "null") {
+                pointer = new GXValue(GX_TAG_NULL, 1);
+            }else{
                 pointer = new GXValue(GX_TAG_NULL, 1);
             }
             delete[] statusStack;
@@ -1578,6 +1576,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                         } else if (gxv->tag == GX_TAG_NULL) {
                             t1.name = "null";
                             t1.token = "null";
+                        }else{
+                            t1.name = "null";
+                            t1.token = "null";
                         }
                         valueStack[valueSize] = t1;
                         ++valueSize;
@@ -1627,6 +1628,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             t1.name = to_string((long) (gxv->ptr));
                             t1.token = "map";
                         } else if (gxv->tag == GX_TAG_NULL) {
+                            t1.name = "null";
+                            t1.token = "null";
+                        }else{
                             t1.name = "null";
                             t1.token = "null";
                         }
@@ -1784,6 +1788,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         } else if (fun->tag == GX_TAG_NULL) {
                                             tempR.name = "null";
                                             tempR.token = "null";
+                                        }else{
+                                            tempR.name = "null";
+                                            tempR.token = "null";
                                         }
                                         --valueSize;
                                         isFunction = false;
@@ -1831,6 +1838,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                                     valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "null") {
+                                            GXValue *par = new GXValue(GX_TAG_NULL, 1);
+                                            paramsTempArray.push_back((long) par);
+                                        }else{
                                             GXValue *par = new GXValue(GX_TAG_NULL, 1);
                                             paramsTempArray.push_back((long) par);
                                         }

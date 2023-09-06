@@ -1,5 +1,8 @@
 #include "GXAnalyze.h"
 #include <mutex>          // std::mutex
+#include<cmath>   //c头文件
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -450,6 +453,20 @@ GXAnalyze::GXAnalyze() {
 GXAnalyze::~GXAnalyze() {
 }
 
+int countDecimalPlaces(const std::string &str) {
+    size_t decimalPos = str.find('.');
+    if (decimalPos == std::string::npos) {
+        return 0;
+    }
+    return str.length() - decimalPos - 1;
+}
+
+std::string formatFloat(double number, int precision) {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(precision) << number;
+    return oss.str();
+}
+
 /*
  * 获取两个数值计算的结果
  */
@@ -747,8 +764,10 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (left.token == "num" || right.token == "num") {
-                float temp = stof(left.name) + stof(right.name);
-                result.name = to_string(temp);
+                int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
+                double temp = stod(left.name) + stod(right.name);
+                string resNum = formatFloat(temp, n);
+                result.name = resNum;
                 result.token = "num";
             } else {
                 long temp = stol(left.name) + stol(right.name);
@@ -788,8 +807,10 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             (right.token == "num" || right.token == "long")) {
 
             if (left.token == "num" || right.token == "num") {
-                float temp = stof(left.name) - stof(right.name);
-                result.name = to_string(temp);
+                int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
+                double temp = stod(left.name) - stod(right.name);
+                string resNum = formatFloat(temp, n);
+                result.name = resNum;
                 result.token = "num";
             } else {
                 long temp = stol(left.name) - stol(right.name);
@@ -822,8 +843,11 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
             if (left.token == "num" || right.token == "num") {
-                float temp = stof(left.name) * stof(right.name);
-                result.name = to_string(temp);
+                //如果需要保留n位小数，那么输入时需要输入n位
+                int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
+                double temp = stod(left.name) * stod(right.name);
+                string resNum = formatFloat(temp, n);
+                result.name = resNum;
                 result.token = "num";
             } else {
                 long temp = stol(left.name) * stol(right.name);
@@ -860,8 +884,10 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.name = "expressionError: divide or mod by zero";
             } else {
                 if (left.token == "num" || right.token == "num") {
-                    float temp = stof(left.name) / stof(right.name);
-                    result.name = to_string(temp);
+                    int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
+                    double temp = stod(left.name) / stod(right.name);
+                    string resNum = formatFloat(temp, n);
+                    result.name = resNum;
                     result.token = "num";
                 } else {
                     long temp = stol(left.name) / stol(right.name);
@@ -904,9 +930,17 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
                 result.token = "error";
                 result.name = "expressionError: divide or mod by zero";
             } else {
-                long temp = stol(left.name) % stol(right.name);
-                result.name = to_string(temp);
-                result.token = "long";
+                if (left.token == "num" || right.token == "num") {
+                    int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
+                    double temp = fmod(stod(left.name), stod(right.name));
+                    string resNum = formatFloat(temp, n);
+                    result.name = resNum;
+                    result.token = "num";
+                } else {
+                    long temp = stol(left.name) % stol(right.name);
+                    result.name = to_string(temp);
+                    result.token = "long";
+                }
             }
         } else if (left.token == "null" || right.token == "null") {
             result.name = "null";

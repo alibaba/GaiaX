@@ -1,5 +1,5 @@
 [versions]
-agp = "8.0.2"
+agp = "8.1.1"
 targetSdk = "33"
 minSdk = "21"
 compileSdk = "33"
@@ -32,6 +32,7 @@ gaiax-debug = "main-SNAPSHOT"
 
 [libraries]
 gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax-debug" }
+gaiaxanalyze = { group = "com.github.alibaba.GaiaX", name = "GaiaX-Analyze", version.ref = "gaiax-debug" }
 gaiaxadapter = { group = "com.github.alibaba.GaiaX", name = "GaiaX-Adapter", version.ref = "gaiax-debug" }
 gaiaxclienttostudio = { group = "com.github.alibaba.GaiaX", name = "GaiaX-ClientToStudio", version.ref = "gaiax-debug" }
 

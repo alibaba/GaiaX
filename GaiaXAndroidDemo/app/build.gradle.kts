@@ -100,6 +100,7 @@ dependencies {
 dependencies {
     implementation(libs.gaiax)
     implementation(libs.gaiaxadapter)
+    implementation(libs.gaiaxanalyze)
     implementation(libs.gaiaxclienttostudio)
 
     implementation("com.airbnb.android:lottie:4.1.0")

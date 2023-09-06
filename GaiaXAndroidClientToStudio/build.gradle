@@ -7,8 +7,8 @@ allprojects {
         mavenLocal()
         google()
         maven { url "https://jitpack.io" }
-        mavenCentral()
         maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        mavenCentral()
     }
 }
 
@@ -19,9 +19,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
         maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        mavenCentral()
     }
 
     dependencies {

@@ -27,13 +27,13 @@ androidxTest = "1.4.0"
 espressoCore = "3.4.0"
 jUnit = "4.13.2"
 
-gaiax = "0.4.3"
-gaiax-main="main-SNAPSHOT"
+gaiax-release = "0.4.3"
+gaiax-debug = "main-SNAPSHOT"
 
 [libraries]
-gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax" }
-gaiaxadapter = { group = "com.github.alibaba.GaiaX", name = "GaiaX-Adapter", version.ref = "gaiax" }
-gaiaxclienttostudio = { group = "com.github.alibaba.GaiaX", name = "GaiaX-ClientToStudio", version.ref = "gaiax" }
+gaiax = { group = "com.github.alibaba.GaiaX", name = "GaiaX", version.ref = "gaiax-debug" }
+gaiaxadapter = { group = "com.github.alibaba.GaiaX", name = "GaiaX-Adapter", version.ref = "gaiax-debug" }
+gaiaxclienttostudio = { group = "com.github.alibaba.GaiaX", name = "GaiaX-ClientToStudio", version.ref = "gaiax-debug" }
 
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerView" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardView" }

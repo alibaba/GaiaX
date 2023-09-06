@@ -7,8 +7,8 @@ allprojects {
         mavenLocal()
         google()
         maven { url "https://jitpack.io" }
-        mavenCentral()
         maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        mavenCentral()
     }
 }
 
@@ -19,9 +19,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
         maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        mavenCentral()
     }
 
     dependencies {
@@ -32,11 +31,11 @@ buildscript {
 
 android {
 
-    compileSdkVersion 28
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 33
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
@@ -96,11 +95,12 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
 
-    if (version != null) {
-        implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
-    } else {
-        implementation("com.github.alibaba.GaiaX:GaiaX:0.4.2") { changing = true }
-    }
+    // if (version != null) {
+    //     implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
+    // } else {
+    //     implementation("com.github.alibaba.GaiaX:GaiaX:0.4.2") { changing = true }
+    // }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT") { changing = true }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

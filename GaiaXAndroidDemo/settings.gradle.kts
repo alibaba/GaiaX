@@ -4,9 +4,6 @@ include(":app")
 
 include(":microbenchmark")
 
-include(":GaiaXAndroid")
-project(":GaiaXAndroid").projectDir = file("../GaiaXAndroid")
-
 pluginManagement {
     repositories {
         mavenLocal()

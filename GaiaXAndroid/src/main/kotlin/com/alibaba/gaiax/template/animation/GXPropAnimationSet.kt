@@ -41,7 +41,7 @@ class GXPropAnimationSet : GXIPropAnimation {
         }
         child.propAnimatorSet?.removeAllListeners()
         child.propAnimatorSet?.addListener(object : GXDefaultAnimatorListener() {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 context.templateData?.eventListener?.onAnimationEvent(
                     GXTemplateEngine.GXAnimation().apply {
                         this.state = GXTemplateEngine.GXAnimation.STATE_START
@@ -50,11 +50,11 @@ class GXPropAnimationSet : GXIPropAnimation {
                     })
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
                 child.isAnimating = false
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 child.isAnimating = false
                 context.templateData?.eventListener?.onAnimationEvent(
                     GXTemplateEngine.GXAnimation().apply {

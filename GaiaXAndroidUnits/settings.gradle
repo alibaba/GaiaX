@@ -1,6 +1,0 @@
-rootProject.name = 'GaiaXAndroidUnits'
-
-include ':app'
-
-include ':GaiaXAndroid'
-project(':GaiaXAndroid').projectDir = file('../GaiaXAndroid')

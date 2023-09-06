@@ -149,6 +149,11 @@ object GXTemplateKey {
     const val STYLE_FIT_CONTENT = "fit-content"
 
     /**
+     * 仅对Android生效
+     */
+    const val STYLE_ONLY_ANDROID_INCLUDE_FONT_PADDING = "includeFontPadding"
+
+    /**
      * 弹性容器通过设置 display 属性的值为 flex 或 inline-flex将其定义为弹性容器。
      */
     const val FLEXBOX_DISPLAY = "display"

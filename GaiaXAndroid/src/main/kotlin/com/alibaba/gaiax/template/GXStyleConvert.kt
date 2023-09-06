@@ -500,5 +500,9 @@ class GXStyleConvert {
     fun fitContent(target: String): Boolean {
         return target.toBoolean()
     }
+
+    fun includeFontPadding(target: String): Boolean {
+        return target.toBoolean()
+    }
 }
 

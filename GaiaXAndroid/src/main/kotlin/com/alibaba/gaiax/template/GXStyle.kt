@@ -105,6 +105,7 @@ data class GXStyle(
     private var boxShadowForExtend: GXBoxShadow? = null
     private var backdropFilterForExtend: GXBackdropFilter? = null
     private var fitContentForExtend: Boolean? = null
+    private var includeFontPaddingForExtend: Boolean? = null
 
     val fontSize: GXSize?
         get() {
@@ -234,6 +235,11 @@ data class GXStyle(
             return backdropFilterForExtend ?: backdropFilterForTemplate
         }
 
+    val includeFontPadding: Boolean?
+        get() {
+            return includeFontPaddingForExtend
+        }
+
     val fitContent: Boolean?
         get() {
             return if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
@@ -344,6 +350,9 @@ data class GXStyle(
 
                 GXTemplateKey.STYLE_FIT_CONTENT -> gxStyle.fitContentForExtend =
                     convertStyle.fitContent(value.toString())
+
+                GXTemplateKey.STYLE_ONLY_ANDROID_INCLUDE_FONT_PADDING -> gxStyle.includeFontPaddingForExtend =
+                    convertStyle.includeFontPadding(value.toString())
             }
         }
     }
@@ -372,6 +381,7 @@ data class GXStyle(
         boxShadowForExtend = null
         backdropFilterForExtend = null
         fitContentForExtend = null
+        includeFontPaddingForExtend = null
         _paddingForAndroid = null
     }
 

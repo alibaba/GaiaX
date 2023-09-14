@@ -639,7 +639,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1234;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -711,7 +711,7 @@
 					"-weak_framework",
 					"\"XCTest\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1233;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSDemo.zjc1234;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

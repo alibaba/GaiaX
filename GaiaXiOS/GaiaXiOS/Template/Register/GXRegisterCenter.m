@@ -210,8 +210,8 @@
 }
 
 
-- (void)unregisterExpressionFunction:(id <GXFunctionExpressionProtocol>)function{
-    self.functionExpression=nil;
+- (void)unregisterFunctionExpression:(id <GXFunctionExpressionProtocol>)function{
+    self.functionExpression = nil;
 }
 
 @end

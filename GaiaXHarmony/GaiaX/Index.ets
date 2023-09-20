@@ -1,0 +1,1 @@
+export { gaiax } from "./src/main/ets/utils/GaiaX"

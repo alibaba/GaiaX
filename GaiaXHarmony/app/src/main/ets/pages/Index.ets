@@ -1,4 +1,5 @@
-import { GaiaXComponent } from 'gaiax'
+import { GXComponent } from 'gaiax'
+import GXParams from './Modal'
 
 @Entry
 @Component
@@ -11,7 +12,11 @@ struct Index {
         Text(this.message)
           .fontSize(28)
           .fontWeight(FontWeight.Bold)
-        GaiaXComponent()
+        GXComponent({
+          gxTemplateItem: GXParams.getGXTemplateItem(),
+          gxTemplateData: GXParams.getGXTemplateData(),
+          gxMeasureSize: GXParams.getGXMeasureSize()
+        })
       }
       .width('100%')
 

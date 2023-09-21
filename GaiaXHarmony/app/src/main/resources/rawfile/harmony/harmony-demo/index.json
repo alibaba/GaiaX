@@ -1,0 +1,11 @@
+{
+  "id": "harmony-demo",
+  "type": "gaia-template",
+  "package": {
+    "id": "harmony-demo",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu Sep 21 2023 16:12:29 GMT+0800 (China Standard Time)",
+    "dependencies": {}
+  },
+  "layers": [{ "id": "text", "type": "text" }]
+}

@@ -32,11 +32,13 @@ buildscript {
 android {
     namespace = "com.alibaba.gaiax"
 
-    compileSdkVersion 33
+    // 不能升级，否则会碰到清单文件合并错误
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        // 不能升级，否则会碰到清单文件合并错误
+        targetSdkVersion 30
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 

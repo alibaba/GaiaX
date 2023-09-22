@@ -8,30 +8,54 @@ import GXTemplateNode from './GXTemplateNode';
 import GXViewTreeCreator from './GXViewTreeCreator';
 
 @Builder
-export default function createViewForEngine(
+export default function createView(
     gxTemplateItem: GXTemplateItem,
     gxTemplateData: GXTemplateData,
     gxMeasureSize: GXMeasureSize,
     gxVisualTemplateNode?: GXTemplateNode
 ) {
-  createViewForRender(GXGenerate.createContext(gxTemplateItem, gxTemplateData, gxMeasureSize, gxVisualTemplateNode))
+  createViewForContext(GXGenerate.createContext(gxTemplateItem, gxTemplateData, gxMeasureSize, gxVisualTemplateNode))
 }
 
 @Builder
-function createViewForRender(gxTemplateContext?: GXTemplateContext) {
+function createViewForContext(gxTemplateContext?: GXTemplateContext) {
   if (gxTemplateContext == null) {
     Text("GXView is null")
   } else {
-    createNode(GXViewTreeCreator.createRootNode(gxTemplateContext))
+    createViewForNode(GXViewTreeCreator.createRootNode(gxTemplateContext))
   }
-
 }
 
 @Builder
-function createNode(gxNode?: GXNode) {
+function createViewForNode(gxNode?: GXNode) {
   if (gxNode == null) {
     Text("GXNode is null")
   } else {
-    Text("createGXView")
+    createViewByNodeTree(gxNode)
   }
+}
+
+@Builder
+function createViewByNodeTree(gxNode: GXNode) {
+  if (gxNode.gxTemplateNode.isViewType() || gxNode.gxTemplateNode.isGaiaTemplate()) {
+    Flex(createFlexOptions(gxNode)) {
+      ForEach(gxNode.gxChildren, (gxChildNode: GXNode) => {
+        createViewByNodeTree(gxChildNode)
+      }, (item, index) => index + JSON.stringify(item));
+    }.createFlexAttr(gxNode)
+  } else if (gxNode.gxTemplateNode.isTextType()) {
+    Text("text GXNode")
+  } else {
+    Text("other GXNode")
+  }
+}
+
+function createFlexOptions(gxNode: GXNode): FlexOptions {
+  return {};
+}
+
+@Extend(Flex)
+function createFlexAttr(gxNode: GXNode) {
+  .width("100%")
+  .height("auto")
 }

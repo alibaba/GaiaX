@@ -228,7 +228,6 @@ export default class GXTemplateNode {
     this.finalCss = Object.assign({}, selfFinalCss, this.gxVisualTemplateNode?.finalCss);
 
     // 获取转换后的节点样式
-    // TODO
     // this.finalStyle = GXCssConvertStyle.createViewStyleByCss(gxTemplateContext, this.layer, this.finalCss, this, gxParentNode);
   }
 
@@ -252,7 +251,7 @@ export default class GXTemplateNode {
 
   finalGXGridConfig: GXGridConfig = null;
 
-  // finalStyle: React.CSSProperties;
+  finalStyle: any;
 
   finalCss: GXJSONObject;
 

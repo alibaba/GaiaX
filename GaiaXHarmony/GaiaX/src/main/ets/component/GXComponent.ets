@@ -2,7 +2,7 @@ import GXMeasureSize from '../gaiax/GXMeasureSize';
 import { gxRawFileTemplateSource } from '../gaiax/GXRegisterCenter';
 import GXTemplateData from '../gaiax/GXTemplateData';
 import GXTemplateItem from '../gaiax/GXTemplateItem';
-import createViewForEngine from '../gaiax/GXViewBuilder';
+import createView from '../gaiax/GXViewBuilder';
 
 function Uint8ArrayToString(fileData) {
   var dataString = "";
@@ -77,7 +77,7 @@ export struct GXComponent {
 
   build() {
     if (this.reload) {
-      createViewForEngine(this.gxTemplateItem, this.gxTemplateData, this.gxMeasureSize)
+      createView(this.gxTemplateItem, this.gxTemplateData, this.gxMeasureSize)
     } else {
       Text("GXTemplate loading")
     }

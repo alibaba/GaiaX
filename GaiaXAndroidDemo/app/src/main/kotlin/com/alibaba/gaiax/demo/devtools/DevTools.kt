@@ -57,6 +57,7 @@ class DevTools : IDevTools {
                 val logoView = rootView.findViewById<ImageView>(R.id.window_gaia_logo)
                 connectedStateView = rootView.findViewById(R.id.window_btn_connected_state)
 
+                // 更新UI，当冷启重连时需要更改默认ui
                 changeDevToolsConnectedStateView()
 
 
@@ -126,6 +127,8 @@ class DevTools : IDevTools {
             Toast.makeText(devtoolsAppContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT).show()
             return
         }
+
+        // 连接成功后，将本次的websocket的url记录下来
         devtoolsAppContext?.let {
             saveInLocal(it, GX_CONNECT_URL, params.toString())
             connectReally(it, params)

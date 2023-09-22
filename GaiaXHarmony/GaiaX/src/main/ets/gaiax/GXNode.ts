@@ -12,8 +12,6 @@ export class GXNode {
 
   gxChildren: Array<GXNode> = null;
 
-  // gxView?: ReactNode = null;
-
   gxChildTemplateItems?: Map<GXTemplateItem, GXTemplateNode>;
 
   setIdPath(

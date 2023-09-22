@@ -1,3 +1,4 @@
+import hilog from '@ohos.hilog';
 import { toJSON } from './GXCssParser';
 import { GXJSONArray, GXJSONObject } from './GXJson';
 import GXTemplate from './GXTemplate';
@@ -19,6 +20,7 @@ export default class GXTemplateInfo {
 
   static createByGXTemplateItem(gxTemplateItem: GXTemplateItem): GXTemplateInfo {
     const gxTemplate = GXTemplateEngine.gxData.gxTemplateSource.getTemplate(gxTemplateItem);
+    hilog.debug(0x0000, 'gaiaxTag', 'createByGXTemplateItem %{public}s ', JSON.stringify(gxTemplate) ?? 'null');
     if (gxTemplate != null) {
       const gxTemplateInfo = this.createByGXTemplate(gxTemplate);
       const layer = gxTemplateInfo.layer;

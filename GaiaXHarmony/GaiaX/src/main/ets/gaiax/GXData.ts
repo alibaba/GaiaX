@@ -3,6 +3,7 @@ import GXTemplateInfo from './GXTemplateInfo';
 import GXIExtensionTemplateSource from './GXIExtensionTemplateSource';
 import GXIExtensionTemplateInfoSource from './GXIExtensionTemplateInfoSource';
 import GXTemplate from './GXTemplate';
+import hilog from '@ohos.hilog';
 
 class GXTemplateInfoSource implements GXIExtensionTemplateInfoSource {
   private dataCache = new Map<string, Map<string, GXTemplateInfo>>();
@@ -15,12 +16,14 @@ class GXTemplateInfoSource implements GXIExtensionTemplateInfoSource {
 
 class GXTemplateSource implements GXIExtensionTemplateSource {
   getTemplate(templateItem: GXTemplateItem): GXTemplate {
+    hilog.debug(0x0000, 'gaiaxTag', 'getTemplate %{public}s', JSON.stringify(templateItem) ?? 'null');
     return this.gxTemplateSource?.getTemplate(templateItem)
   }
 
   private gxTemplateSource?: GXIExtensionTemplateSource;
 
   register(gxTemplateSource: GXIExtensionTemplateSource) {
+    hilog.debug(0x0000, 'gaiaxTag', 'register %{public}s', JSON.stringify(gxTemplateSource) ?? 'null');
     this.gxTemplateSource = gxTemplateSource;
   }
 }

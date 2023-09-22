@@ -55,7 +55,7 @@ class GXParams {
 
 let gxParams = new GXParams();
 
-gxRegisterCenter.registerExtensionTemplateSource(gxFastPreviewTemplateSource)
+// gxRegisterCenter.registerExtensionTemplateSource(gxFastPreviewTemplateSource)
 
 // let template = {
 //   "index.css": $rawfile('harmony/harmony-demo/index.css'),

@@ -63,7 +63,7 @@ export struct GXComponent {
 
                         gxRawFileTemplateSource.addData(this.gxTemplateItem.templateId, template);
 
-                        // this.reload = true;
+                        this.reload = true;
                       }
                     });
                 }
@@ -79,7 +79,7 @@ export struct GXComponent {
     if (this.reload) {
       createViewForEngine(this.gxTemplateItem, this.gxTemplateData, this.gxMeasureSize)
     } else {
-      Text("loading template")
+      Text("GXTemplate loading")
     }
   }
 }

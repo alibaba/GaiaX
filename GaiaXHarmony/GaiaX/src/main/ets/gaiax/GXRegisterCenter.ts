@@ -22,7 +22,7 @@ export default GXRegisterCenter;
 class GXRawFileTemplateSource implements GXIExtensionTemplateSource {
   getTemplate(gxTemplateItem: GXTemplateItem): GXTemplate {
     const templateData = this.templates.get(gxTemplateItem.templateId);
-    hilog.info(0x0000, 'gaiaxTag', 'GXRawFileTemplateSource = %{public}s', JSON.stringify(templateData) ?? 'null');
+    hilog.debug(0x0000, 'gaiaxTag', 'getTemplate = %{public}s', JSON.stringify(templateData) ?? 'null');
     if (templateData != null && templateData != undefined) {
       let layer = templateData['index.json'];
       let css = templateData['index.css'];
@@ -35,12 +35,14 @@ class GXRawFileTemplateSource implements GXIExtensionTemplateSource {
   private templates = new Map<string, any>();
 
   addData(templateId: string, template: any) {
-    hilog.info(0x0000, 'gaiaxTag', 'addData %{public}s %{public}s', templateId, JSON.stringify(template) ?? 'null');
+    hilog.debug(0x0000, 'gaiaxTag', 'addData %{public}s %{public}s', templateId, JSON.stringify(template) ?? 'null');
     this.templates.set(templateId, template)
   }
 
   getData(templateId: string) {
-    return this.templates.get(templateId);
+    let template = this.templates.get(templateId);
+    hilog.debug(0x0000, 'gaiaxTag', 'getData %{public}s %{public}s', templateId, JSON.stringify(template) ?? 'null');
+    return template;
   }
 }
 

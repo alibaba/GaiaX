@@ -1,3 +1,4 @@
+import hilog from '@ohos.hilog';
 import GXMeasureSize from './GXMeasureSize';
 import GXTemplateContext from './GXTemplateContext';
 import GXTemplateData from './GXTemplateData';
@@ -12,8 +13,11 @@ class GXGenerator {
                 gxTemplateData: GXTemplateData,
                 gxMeasureSize: GXMeasureSize,
                 gxVisualTemplateNode?: GXTemplateNode) {
-    // 获取数据
+    hilog.debug(0x0000, 'gaiaxTag', 'createContext %{public}s %{public}s %{public}s', JSON.stringify(gxTemplateItem) ?? 'null', JSON.stringify(GXTemplateData) ?? 'null', JSON.stringify(gxMeasureSize) ?? 'null');
+
     let gxTemplateInfo: GXTemplateInfo = GXTemplateEngine.gxData.getTemplateInfo(gxTemplateItem);
+
+    hilog.debug(0x0000, 'gaiaxTag', 'createContext %{public}s ', JSON.stringify(gxTemplateInfo) ?? 'null');
 
     if (gxTemplateInfo == null) {
       return null;

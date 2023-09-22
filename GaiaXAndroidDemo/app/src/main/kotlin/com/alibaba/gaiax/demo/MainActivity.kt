@@ -215,6 +215,7 @@ class MainActivity : ComponentActivity() {
         }
 
     private fun autoConnect() {
+        // 自动重连时，提前初始化
         GXClientToStudioMultiType.instance.init(this)
         val result = loadInLocal(this, GX_CONNECT_URL)
         JSONObject.parseObject(result)?.let {

@@ -1,0 +1,17 @@
+#harmony-demo {
+    width: 100%;
+    height: 100px;
+    background-color: #e4e4e4;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#text {
+    width: 300px;
+    text-overflow: ellipsis;
+    text-align: center;
+    height: 50px;
+    color: #000000;
+    font-size: 15px;
+}

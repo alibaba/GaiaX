@@ -11,7 +11,6 @@ export class GXGridConfig {
   itemSpacing: string = null;
   rowSpacing: string = null;
   column: number = 1;
-
   edgeInsetsLeft: string = null;
   edgeInsetsTop: string = null;
   edgeInsetsRight: string = null;
@@ -171,7 +170,6 @@ export class GXScrollConfig {
  */
 export default class GXTemplateNode {
   forceWidthChange: boolean;
-
   imageMode: string;
 
   getExtend(gxTemplateData?: GXJSONObject): GXJSONObject {
@@ -233,41 +231,71 @@ export default class GXTemplateNode {
   }
 
   layer: GXJSONObject;
-
   css: GXJSONObject;
-
   data?: GXJSONObject;
-
   event?: GXJSONObject;
-
   animation?: GXJSONObject;
-
   gxVisualTemplateNode?: GXTemplateNode;
-
   gxScrollConfig: GXScrollConfig = null;
-
   gxGridConfig: GXGridConfig = null;
-
   finalGXScrollConfig: GXScrollConfig = null;
-
   finalGXGridConfig: GXGridConfig = null;
-
   finalStyle: any;
-
   finalCss: GXJSONObject;
 
-  getWidth(): string {
-    let width: string = this.finalCss['width'] || '';
-    if (width != '') {
-      return width.replace('px', 'vp');
+
+  textAlign() {
+    let value = this.finalCss['text-align'];
+    if (value != undefined) {
+      return value;
+    }
+    return null;
+  }
+  alignContent() {
+    let value = this.finalCss['align-content'];
+    if (value != undefined) {
+      return value;
+    }
+    return null;
+  }
+
+  alignItems() {
+    let value = this.finalCss['align-items'];
+    if (value != undefined) {
+      return value;
+    }
+    return null;
+  }
+
+  justifyContent() {
+    let value = this.finalCss['justify-content'];
+    if (value != undefined) {
+      return value;
+    }
+    return null;
+  }
+
+
+  direction(): string {
+    let value = this.finalCss['direction'];
+    if (value != undefined) {
+      return value;
+    }
+    return null;
+  }
+
+  width(): string {
+    let value: string = this.finalCss['width'];
+    if (value != undefined) {
+      return value.replace('px', 'vp');
     }
     return "auto";
   }
 
-  getHeight(): string {
-    let height: string  = this.finalCss['height'] || '';
-    if (height != '') {
-      return height.replace('px', 'vp');
+  height(): string {
+    let value: string = this.finalCss['height'];
+    if (value != undefined) {
+      return value.replace('px', 'vp');
     }
     return "auto";
   }

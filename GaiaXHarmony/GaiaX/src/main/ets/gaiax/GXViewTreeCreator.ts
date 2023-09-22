@@ -184,6 +184,8 @@ export class GXViewTreeCreator {
     gxNode.gxTemplateNode.initFinal(gxTemplateContext, gxTemplateData, null, gxParentNode);
 
     const data = gxNode.gxTemplateNode.getData(gxTemplateData);
+
+    gxNode.gxData = data;
   }
 }
 

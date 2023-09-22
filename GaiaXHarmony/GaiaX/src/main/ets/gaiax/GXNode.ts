@@ -14,6 +14,8 @@ export class GXNode {
 
   gxChildTemplateItems?: Map<GXTemplateItem, GXTemplateNode>;
 
+  gxData?: GXJSONObject;
+
   setIdPath(
     gxTemplateContext: GXTemplateContext,
     gxLayer: GXJSONObject,

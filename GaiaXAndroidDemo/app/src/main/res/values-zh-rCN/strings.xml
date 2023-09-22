@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GaiaXDemo</string>
+    <string name="fastpreview">实时预览</string>
+    <string name="normal_template">普通模板</string>
+    <string name="nest_template">嵌套模板</string>
+    <string name="container_template">容器模板</string>
+    <string name="data">数据绑定</string>
+    <string name="event">点击事件</string>
+    <string name="track">埋点事件</string>
+    <string name="remote_data_source">远程数据源</string>
+    <string name="style">样式</string>
+    <string name="business">业务</string>
+</resources>

@@ -6,9 +6,8 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -19,8 +18,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -96,12 +95,6 @@ dependencies {
     implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-
-    // if (version != null) {
-    //     implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
-    // } else {
-    //     implementation("com.github.alibaba.GaiaX:GaiaX:0.4.2") { changing = true }
-    // }
     compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT") { changing = true }
 
     testImplementation 'junit:junit:4.13.2'

@@ -18,15 +18,13 @@
         "top-text":{
             "value":"$formatInfo[0]",
             "extend":{
-                "fit-content":"true",
-                 "includeFontPadding":"false",
+                "fit-content":"true"
             }
         },
         "bottom-text":{
             "value":"$formatInfo[1]",
             "extend":{
-                "fit-content":"true",
-                "includeFontPadding":"false",
+                "fit-content":"true"
             }
         },
         "cover-img": {

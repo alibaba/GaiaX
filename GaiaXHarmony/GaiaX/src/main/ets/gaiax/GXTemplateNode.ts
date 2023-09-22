@@ -1,3 +1,4 @@
+import GXCssConvertStyle from './GXCssConvertStyle';
 import GXDataBinding from './GXDatabinding';
 import GXExpression from './GXExpression';
 import { GXJSONObject } from './GXJson';
@@ -228,7 +229,7 @@ export default class GXTemplateNode {
     this.finalCss = Object.assign({}, selfFinalCss, this.gxVisualTemplateNode?.finalCss);
 
     // 获取转换后的节点样式
-    // this.finalStyle = GXCssConvertStyle.createViewStyleByCss(gxTemplateContext, this.layer, this.finalCss, this, gxParentNode);
+    this.finalStyle = GXCssConvertStyle.createViewStyleByCss(gxTemplateContext, this.layer, this.finalCss, this, gxParentNode);
   }
 
   layer: GXJSONObject;
@@ -254,6 +255,22 @@ export default class GXTemplateNode {
   finalStyle: any;
 
   finalCss: GXJSONObject;
+
+  getWidth(): string {
+    let width: string = this.finalCss['width'] || '';
+    if (width != '') {
+      return width.replace('px', 'vp');
+    }
+    return "auto";
+  }
+
+  getHeight(): string {
+    let height: string  = this.finalCss['height'] || '';
+    if (height != '') {
+      return height.replace('px', 'vp');
+    }
+    return "auto";
+  }
 
   type(): string {
     return this.layer['type'];

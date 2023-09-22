@@ -45,6 +45,7 @@ function createViewByNodeTree(gxNode: GXNode) {
     }.createFlexAttr(gxNode)
   } else if (gxNode.gxTemplateNode.isTextType()) {
     Text("text GXNode")
+      .createTextAttr(gxNode)
   } else {
     Text("other GXNode")
   }
@@ -56,6 +57,12 @@ function createFlexOptions(gxNode: GXNode): FlexOptions {
 
 @Extend(Flex)
 function createFlexAttr(gxNode: GXNode) {
-  .width("100%")
-  .height("auto")
+  .width(gxNode.gxTemplateNode.getWidth())
+  .height(gxNode.gxTemplateNode.getHeight())
+}
+
+@Extend(Text)
+function createTextAttr(gxNode: GXNode) {
+  .width(gxNode.gxTemplateNode.getWidth())
+  .height(gxNode.gxTemplateNode.getHeight())
 }

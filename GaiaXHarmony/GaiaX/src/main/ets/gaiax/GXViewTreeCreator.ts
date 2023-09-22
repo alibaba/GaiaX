@@ -5,6 +5,7 @@ import GXTemplateInfo from './GXTemplateInfo';
 import { GXJSONArray, GXJSONObject } from './GXJson';
 import hilog from '@ohos.hilog';
 import GXTemplateItem from './GXTemplateItem';
+import GXCssConvertStyle from './GXCssConvertStyle';
 
 export class GXViewTreeCreator {
   createRootNode(gxTemplateContext: GXTemplateContext): GXNode {
@@ -30,9 +31,13 @@ export class GXViewTreeCreator {
       gxVisualTemplateNodeData
     );
 
-    hilog.debug(0x0000, 'gaiaxTag', 'createRootNode %{public}s', JSON.stringify(gxRootNode) ?? 'null');
+    const gxRootStyle = GXCssConvertStyle.createRootStyle(gxTemplateContext.gxMeasureSize, gxRootNode, gxTemplateData);
+
+    gxTemplateContext.gxRootStyle = gxRootStyle;
 
     gxTemplateContext.gxRootNode = gxRootNode;
+
+    hilog.debug(0x0000, 'gaiaxTag', 'createRootNode %{public}s', JSON.stringify(gxRootNode) ?? 'null');
 
     return gxRootNode;
   }

@@ -10,6 +10,7 @@ struct Index {
     Row() {
       Column() {
         Text(this.message)
+          .height("100vp")
           .fontSize(28)
           .fontWeight(FontWeight.Bold)
         GXComponent({

@@ -20,7 +20,7 @@ export default class GXTemplateContext {
 
   gxRootNode: GXNode;
 
-  // gxRootStyle: React.CSSProperties ;
+  gxRootStyle: any;
 
   constructor(
     gxTemplateItem: GXTemplateItem,

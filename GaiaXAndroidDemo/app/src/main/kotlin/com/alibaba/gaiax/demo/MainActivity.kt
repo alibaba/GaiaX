@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.devtools.DevTools
@@ -31,6 +32,8 @@ import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GX_CONNECT_URL
+import com.alibaba.gaiax.studio.loadInLocal
 import com.lzf.easyfloat.permission.PermissionUtils
 import com.youku.gaiax.js.GXJSEngineFactory
 
@@ -112,6 +115,8 @@ class MainActivity : ComponentActivity() {
         GXJSEngineFactory.instance.init(this)
         //GaiaXJS引擎启动
         GXJSEngineFactory.instance.startEngine()
+
+        autoConnect()
     }
 
     private fun fastPreview() {
@@ -208,6 +213,14 @@ class MainActivity : ComponentActivity() {
             intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
             startActivity(intent)
         }
+
+    private fun autoConnect() {
+        GXClientToStudioMultiType.instance.init(this)
+        val result = loadInLocal(this, GX_CONNECT_URL)
+        JSONObject.parseObject(result)?.let {
+            DevTools.instance.connectReally(this, it)
+        }
+    }
 
     override fun onDestroy() {
         GXClientToStudioMultiType.instance.destroy()

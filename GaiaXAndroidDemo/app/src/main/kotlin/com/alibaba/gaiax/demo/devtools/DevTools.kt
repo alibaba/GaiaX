@@ -10,11 +10,14 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.IDevTools
+import com.alibaba.gaiax.studio.saveInLocal
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
 import com.youku.gaiax.js.GXJSEngineFactory
@@ -53,6 +56,8 @@ class DevTools : IDevTools {
 
                 val logoView = rootView.findViewById<ImageView>(R.id.window_gaia_logo)
                 connectedStateView = rootView.findViewById(R.id.window_btn_connected_state)
+
+                changeDevToolsConnectedStateView()
 
 
                 logoView.setOnClickListener { view ->
@@ -121,9 +126,15 @@ class DevTools : IDevTools {
             Toast.makeText(devtoolsAppContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT).show()
             return
         }
-        GXClientToStudioMultiType.instance.setDevTools(this)
-        GXClientToStudioMultiType.instance.manualConnect(devtoolsAppContext!!, params)
+        devtoolsAppContext?.let {
+            saveInLocal(it, GX_CONNECT_URL, params.toString())
+            connectReally(it, params)
+        }
+    }
 
+    fun connectReally(context: Context, params: JSONObject) {
+        GXClientToStudioMultiType.instance.setDevTools(this)
+        GXClientToStudioMultiType.instance.manualConnect(context, params)
     }
 
     private fun openQRCodeActivity(context: Context) {

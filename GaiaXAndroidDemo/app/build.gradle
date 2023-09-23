@@ -84,6 +84,11 @@ dependencies {
     implementation project(path: ':GaiaXAndroidAdapter')
     implementation project(path: ':GaiaXAndroid')
     implementation project(path: ':GXAnalyzeAndroid')
+    implementation project(path: ':GaiaXAndroidJS')
+    implementation project(path: ':GaiaXAndroidQuickJS')
+    implementation project(path: ':GaiaXAndroidJSAdapter')
+
+    implementation("com.github.princekin-f:EasyFloat:2.0.4")
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'

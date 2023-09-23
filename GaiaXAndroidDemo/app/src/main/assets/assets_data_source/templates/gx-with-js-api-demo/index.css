@@ -1,0 +1,229 @@
+#gx-with-js-api-demo {
+  width: 100%;
+  flex-direction: column;
+  overflow-y: scroll;
+  align-items: stretch;
+}
+#api-type1 {
+  width: 100%;
+  justify-content: space-between;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+#storage {
+  width: 45%;
+  flex-direction: column;
+}
+#storage-api {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #e22d43;
+  font-size: 15px;
+  text-align: center;
+}
+#getStorage {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#setStorage {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  margin-top: 10px;
+  font-family: operator mono;
+}
+#removeStorage {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  margin-top: 10px;
+  font-family: operator mono;
+}
+#tips {
+  width: 45%;
+  flex-direction: column;
+}
+#tips-api {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #e22d43;
+  font-size: 15px;
+  text-align: center;
+}
+#showAlert {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#showDialog {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  margin-top: 10px;
+  font-family: operator mono;
+}
+#dismissCustomDialog {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  margin-top: 10px;
+  font-family: operator mono;
+}
+#showToast {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  text-align: center;
+  background-color: #f8e71c;
+  margin-top: 10px;
+  font-family: operator mono;
+}
+#api-type2 {
+  width: 100%;
+  justify-content: space-between;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+#timer {
+  width: 45%;
+  flex-direction: column;
+}
+#timer-api {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #e22d43;
+  font-size: 15px;
+  text-align: center;
+}
+#setInterval {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#clearInterval {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#setTimeout {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#clearTimeout {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#message {
+  width: 45%;
+  flex-direction: column;
+}
+#message-api {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #e22d43;
+  font-size: 15px;
+  text-align: center;
+}
+#addEventListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#removeEventListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#addNativeListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}
+#removeNativeListener {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 12px;
+  text-align: center;
+  background-color: #f8e71c;
+  font-family: operator mono;
+}

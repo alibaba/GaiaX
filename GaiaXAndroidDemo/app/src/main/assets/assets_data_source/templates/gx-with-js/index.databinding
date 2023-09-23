@@ -1,0 +1,8 @@
+{
+  "data": {
+    "left-image": { "value": "$img" },
+    "title": { "value": "$title" },
+    "sub-title": { "value": "$desc" },
+    "button-title": { "value": "$button" }
+  }
+}

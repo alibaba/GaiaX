@@ -12,4 +12,8 @@ object AssetsUtils {
         return JSON.parseObject(content)
     }
 
+    fun parseAssetsToString(context: Context, path: String): String {
+        return context.resources.assets.open(path).bufferedReader(Charsets.UTF_8).use { it.readText() }
+    }
+
 }

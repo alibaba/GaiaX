@@ -2,8 +2,8 @@ package com.alibaba.gaiax.studio
 
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
 import android.util.Log
-import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.studio.third.socket.java_websocket.framing.Framedata
 import com.alibaba.gaiax.studio.third.socket.websocket.SocketListener
@@ -12,6 +12,7 @@ import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketManager
 import com.alibaba.gaiax.studio.third.socket.websocket.WebSocketSetting
 import com.alibaba.gaiax.studio.third.socket.websocket.response.ErrorResponse
 import java.nio.ByteBuffer
+import java.util.concurrent.ConcurrentHashMap
 
 class GXSocket : SocketListener {
 
@@ -25,6 +26,7 @@ class GXSocket : SocketListener {
 
     var gxSocketIsConnected = false
     var gxSocketListener: GXSocketListener? = null
+    var gxSocketJSReceiveListener: GXClientToStudioMultiType.GXSocketJSReceiveListener? = null
 
     private var updateTask: Runnable? = null
     private var lastTemplateId: String? = null
@@ -37,6 +39,11 @@ class GXSocket : SocketListener {
     private var serverAddress: String? = null
 
     private val uiHandler = Handler(Looper.getMainLooper())
+
+    //管理方法id，明确接收的是来自哪个方法调用的响应 Map<Id,Method>
+    private var methodIdManager = ConcurrentHashMap<Int, String>()
+
+    var devTools: IDevTools? = null
 
     /**
      * 手动推送
@@ -83,7 +90,7 @@ class GXSocket : SocketListener {
         webSocketSetting?.setReconnectWithNetworkChanged(true)
 
         //允许扫描不同的电脑
-        WebSocketHandler.registerNetworkChangedReceiver(GXClientToStudio.instance.applicationContext)
+        WebSocketHandler.registerNetworkChangedReceiver(GXClientToStudioMultiType.instance.applicationContext)
         webSocketManager = WebSocketHandler.initGeneralWebSocket(SOCKET_KEY, webSocketSetting)
         webSocketManager?.addListener(this)
     }
@@ -117,6 +124,151 @@ class GXSocket : SocketListener {
         if (message == null || message.isEmpty()) {
             return
         }
+        Log.d(TAG, "onMessage: $message")
+        val msgData = JSONObject.parseObject(message)
+        val socketId = msgData.getString("id")
+        val socketMethod = if (msgData.containsKey("method")) msgData.getString("method") else methodIdManager[socketId.toInt()]
+
+        Log.e(TAG, "onMessage() called with: socketId = [$socketId], method = [$socketMethod]")
+        when (socketMethod) {
+            "initialized" -> {
+                gxSocketListener?.onStudioConnected()
+            }
+            "mode/get" -> {
+                responseObtainMode(socketId.toInt())
+            }
+            "template/get" -> {
+                val result = msgData.getJSONObject("result")
+                if (result != null) {
+                    obtainResultFromGetTemplate(result)
+                }
+            }
+            "template/didChangedNotification" -> {
+                val result = msgData.getJSONObject("params")
+                if (result != null) {
+                    obtainResultFromGetTemplate(result)
+                }
+            }
+            "js/callSync" -> gxSocketJSReceiveListener?.onCallSyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callAsync" -> gxSocketJSReceiveListener?.onCallAsyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callPromise" -> gxSocketJSReceiveListener?.onCallPromiseFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/getLibrary" ->gxSocketJSReceiveListener?.onCallGetLibraryFromStudioWorker(socketId.toInt(),socketMethod)
+            // TODO: 关闭方式
+            "close" ->{}
+
+        }
+
+    }
+
+    override fun <T> onMessage(bytes: ByteBuffer?, data: T) {}
+
+    override fun onPing(framedata: Framedata?) {}
+
+    override fun onPong(framedata: Framedata?) {}
+
+    /**
+     * 在GaiaX Studio中初始化成功将会持续接收
+     * initialize
+     * template/didChangedNotification
+     */
+    fun sendMsgWithFastPreviewInit() {
+        Log.e(TAG, "sendMsgWithFastPreviewInit() called")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "initialize"
+        data["id"] = 102
+        sendMessage(data)
+    }
+
+    /**
+     * 发送 ： initializeManual 初始化请求
+     * 手动推送通知：  template/didManualChangedNotification
+     */
+    fun sendMsgWithManualPushInit() {
+        Log.e(TAG, "sendMsgWithManualPushInit() called")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "initializeManual"
+        data["id"] = 101
+        sendMessage(data)
+    }
+
+    /**
+     * 发送： initialized 初始化三合一请求
+     */
+    fun sendMsgWithMultiTypeInit() {
+        Log.d(TAG, "sendMsgWithMultiTypeInit() called ")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "initialized"
+        data["id"] = 301
+        val params = JSONObject()
+        params["version"] = "2.0"
+        params["platform"] = "Android"
+        params["deviceName"] = android.os.Build.MANUFACTURER + "-" + android.os.Build.MODEL
+        params["systemName"] = "Android"
+        params["systemVersion"] = android.os.Build.VERSION.RELEASE
+        data["params"] = params
+        sendMessage(data)
+    }
+
+    private fun sendGetTemplateData104(templateId: String?) {
+        Log.e(TAG, "sendGetTemplateData104() called with: templateId = $templateId")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "template/getTemplateData"
+        val params = JSONObject()
+        params["id"] = templateId
+        data["params"] = params
+        data["id"] = 104
+        sendMessage(data)
+    }
+
+    fun sendGetTemplateData103(templateId: String?) {
+        Log.e(TAG, "sendGetTemplateData103() called with: templateId = $templateId")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "template/getTemplateData"
+        val params = JSONObject()
+        params["id"] = templateId
+        data["params"] = params
+        data["id"] = 104
+        sendMessage(data)
+    }
+
+    fun sendGetTemplateData(templateId: String?) {
+        Log.e(TAG, "sendGetTemplateData called with: templateId = $templateId")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["method"] = "template/get"
+        if (!TextUtils.isEmpty(templateId)) {
+            val params = JSONObject()
+            params["id"] = templateId
+            data["params"] = params
+        }
+        data["id"] = 103
+        sendMessage(data)
+    }
+
+    private fun createTemplateData(templateData: JSONObject): JSONObject {
+        val result = JSONObject()
+        val index_json = templateData.getString("index.json")
+        val index_css = templateData.getString("index.css")
+        val index_js = templateData.getString("index.js")
+        val index_databinding = templateData.getString("index.databinding")
+        val index_mock = templateData.getString("index.mock") ?: "{}"
+        val index_data = templateData.getString("index.data") ?: ""
+
+        result["index.mock"] = JSONObject.parseObject(index_mock)
+        result["index.databinding"] = JSONObject.parseObject(index_databinding)
+        result["index.json"] = JSONObject.parseObject(index_json)
+        result["index.css"] = index_css
+        result["index.js"] = index_js
+
+        return result
+    }
+
+    private fun fastPreviewAndPushReceivingMsgProcessor(message: String) {
         val msgData = JSONObject.parseObject(message)
         val socketId = msgData.getString("id")
         val socketMethod = msgData.getString("method")
@@ -198,84 +350,56 @@ class GXSocket : SocketListener {
         }
     }
 
-    override fun <T> onMessage(bytes: ByteBuffer?, data: T) {}
-
-    override fun onPing(framedata: Framedata?) {}
-
-    override fun onPong(framedata: Framedata?) {}
-
-    /**
-     * 在GaiaX Studio中初始化成功将会持续接收
-     * initialize
-     * template/didChangedNotification
-     */
-    fun sendMsgWithFastPreviewInit() {
-        Log.e(TAG, "sendMsgWithFastPreviewInit() called")
-        val data = JSONObject()
-        data["jsonrpc"] = "2.0"
-        data["method"] = "initialize"
-        data["id"] = 102
-        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
-    }
-
-    /**
-     * 发送 ： initializeManual 初始化请求
-     * 手动推送通知：  template/didManualChangedNotification
-     */
-    fun sendMsgWithManualPushInit() {
-        Log.e(TAG, "sendMsgWithManualPushInit() called")
-        val data = JSONObject()
-        data["jsonrpc"] = "2.0"
-        data["method"] = "initializeManual"
-        data["id"] = 101
-        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
-    }
-
-    private fun sendGetTemplateData104(templateId: String?) {
-        Log.e(TAG, "sendGetTemplateData104() called with: templateId = $templateId")
-        val data = JSONObject()
-        data["jsonrpc"] = "2.0"
-        data["method"] = "template/getTemplateData"
-        val params = JSONObject()
-        params["id"] = templateId
-        data["params"] = params
-        data["id"] = 104
-        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
-    }
-
-    fun sendGetTemplateData103(templateId: String?) {
-        Log.e(TAG, "sendGetTemplateData103() called with: templateId = $templateId")
-        val data = JSONObject()
-        data["jsonrpc"] = "2.0"
-        data["method"] = "template/getTemplateData"
-        val params = JSONObject()
-        params["id"] = templateId
-        data["params"] = params
-        data["id"] = 103
-        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
-    }
-
-    private fun createTemplateData(templateData: JSONObject): JSONObject {
-        val result = JSONObject()
-        val index_json = templateData.getString("index.json")
-        val index_css = templateData.getString("index.css")
-        val index_js = templateData.getString("index.js")
-        val index_databinding = templateData.getString("index.databinding")
-        val index_mock = templateData.getString("index.mock") ?: "{}"
-        val index_data = templateData.getString("index.data") ?: ""
-
-        result["index.mock"] = JSONObject.parseObject(index_mock)
-        result["index.databinding"] = JSONObject.parseObject(index_databinding)
-        result["index.json"] = JSONObject.parseObject(index_json)
-        result["index.css"] = index_css
-        result["index.js"] = index_js
-
-        return result
-    }
-
     fun sendMessage(data: JSONObject) {
+        if (data.containsKey("method") && data.containsKey("id")) {
+            methodIdManager[data.getIntValue("id")] = data.getString("method")
+        }
         WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
     }
+
+    private fun responseObtainMode(socketId: Int) {
+        if (devTools != null) {
+            sendMsgForChangeMode(socketId, devTools!!.getPreviewCurrentMode(), devTools!!.getJSCurrentMode())
+        }
+    }
+
+    /**
+     * 处理"template/get"和"template/didChangedNotification"
+     */
+    private fun obtainResultFromGetTemplate(templateData: JSONObject) {
+        //解析根模板
+        val rootTemplateId = templateData.getString("templateId")
+        val rootTemplateData = templateData.getJSONObject("templateData")
+        val templateJson: JSONObject = createTemplateData(rootTemplateData)
+        gxSocketListener?.onStudioAddData(rootTemplateId, templateJson)
+        //解析子模板
+        val subTemplates = templateData.getJSONArray("subTemplates")
+        subTemplates.forEach {
+            val subTemplateItem = it as JSONObject
+            val subTemplateId = subTemplateItem.getString("templateId")
+            val subTemplateData = subTemplateItem.getJSONObject("templateData")
+            val subTemplateJson: JSONObject = createTemplateData(subTemplateData)
+            gxSocketListener?.onStudioAddData(subTemplateId, subTemplateJson)
+        }
+        gxSocketListener?.onStudioUpdate(rootTemplateId, templateJson)
+    }
+
+    private fun sendMsgForChangeMode(
+        socketId: Int,
+        previewMode: String? = GXClientToStudioMultiType.PREVIEW_NONE,
+        jsMode: String? = GXClientToStudioMultiType.JS_DEFAULT
+    ) {
+        Log.d(GXSocket.TAG, "sendMsgForChangeMode() called ")
+        val data = JSONObject()
+        data["jsonrpc"] = "2.0"
+        data["id"] = socketId
+        val result = JSONObject()
+        result["preview"] = previewMode
+        result["js"] = jsMode
+        data["result"] = result
+        sendMessage(data)
+    }
+
 
     companion object {
         const val TAG = "[GaiaX][FastPreview]"

@@ -1,0 +1,52 @@
+#gx-with-js {
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  border-color: #979797;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+#left-image {
+  width: 50px;
+  height: 50px;
+  margin-left: 12px;
+  margin-right: 12px;
+  border-radius: 5px;
+}
+#middle-container {
+  height: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+}
+#title {
+  width: 100px;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #000000;
+  font-size: 15px;
+}
+#sub-title {
+  width: 100px;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #9b9b9b;
+  font-size: 15px;
+}
+#button {
+  width: 50px;
+  height: 30px;
+  border-radius: 5px;
+  background-image: linear-gradient(to bottom, #d0021b 0%, #f5a623 100%);
+  margin-left: 12px;
+  margin-right: 12px;
+}
+#button-title {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 100%;
+  color: #ffffff;
+  font-size: 15px;
+  text-align: center;
+}

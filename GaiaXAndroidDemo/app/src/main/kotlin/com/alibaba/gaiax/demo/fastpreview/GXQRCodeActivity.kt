@@ -1,11 +1,15 @@
 package com.alibaba.gaiax.demo.fastpreview
 
+import android.text.TextUtils
+import android.widget.TextView
+import com.alibaba.gaiax.demo.devtools.DevTools
 import com.google.zxing.Result
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
 import com.king.zxing.DecodeConfig
 import com.king.zxing.DecodeFormatManager
 import com.king.zxing.analyze.MultiFormatAnalyzer
+import org.w3c.dom.Text
 
 
 class GXQRCodeActivity : CaptureActivity() {
@@ -49,6 +53,10 @@ class GXQRCodeActivity : CaptureActivity() {
          * 2. 如果只是想拦截扫码结果回调自己处理逻辑，但并不想继续分析图像（即不想连扫），可通过
          * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
          */
+        var devToolsTag = intent.getStringExtra(DevTools.TAG)
+        if (!TextUtils.isEmpty(devToolsTag) && devToolsTag.equals(DevTools.TAG)){
+            DevTools.instance.connectStudioMultiType(result.toString())
+        }
         return super.onScanResultCallback(result)
     }
 

@@ -1,0 +1,61 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.cer",
+          "storePassword": "0000001BB9DA5470C2EAD2466CE2F3A9E3AADE12C25184B02E2AF17EFBAC08C65F945FB63D6D25E3C38669",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B4E42FE206DACABFE17A85A13FEEC19DBE6B67D3BF61FADED3AF650BBAA5C0543A5B888CF995E28",
+          "profile": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.p12"
+        }
+      }
+    ],
+    "compileSdkVersion": 9,
+    "compatibleSdkVersion": 9,
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "app",
+      "srcPath": "./app",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "GaiaX",
+      "srcPath": "./GaiaX",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

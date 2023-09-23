@@ -19,7 +19,19 @@ package com.alibaba.gaiax.render.node
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXCss
+import com.alibaba.gaiax.template.GXDataBinding
+import com.alibaba.gaiax.template.GXEventBinding
+import com.alibaba.gaiax.template.GXFlexBox
+import com.alibaba.gaiax.template.GXGridConfig
+import com.alibaba.gaiax.template.GXLayer
+import com.alibaba.gaiax.template.GXProgressConfig
+import com.alibaba.gaiax.template.GXScrollConfig
+import com.alibaba.gaiax.template.GXSliderConfig
+import com.alibaba.gaiax.template.GXStyle
+import com.alibaba.gaiax.template.GXTemplateInfo
+import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.template.GXTrackBinding
 import com.alibaba.gaiax.template.animation.GXAnimationBinding
 
 /**
@@ -165,6 +177,10 @@ data class GXTemplateNode(
 
     fun getNodeId(): String {
         return layer.id
+    }
+
+    override fun toString(): String {
+        return "GXTemplateNode(layer=$layer, css=$css)"
     }
 
     companion object {

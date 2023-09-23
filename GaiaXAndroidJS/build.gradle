@@ -1,50 +1,34 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
+
 
 allprojects {
     repositories {
         mavenLocal()
         google()
-        maven { url 'https://jitpack.io' }
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 
 buildscript {
+
     ext.kotlin_version = '1.5.31'
 
     repositories {
         mavenLocal()
         google()
-        maven { url 'https://jitpack.io' }
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
-//    dependencies {
-//        classpath 'com.android.tools.build:gradle:4.2.2'
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-//    }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-group = 'com.youku.android'
-version = '3.3.3.5-13-SNAPSHOT'
-ext.gaiax_version = version
-
-//apply from: 'https://gitlab.alibaba-inc.com/zhihua.bzh/build_script/raw/master/mtl-publish.gradle'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId 'GaiaXAndroidJS'
-        }
-    }
-}
 
 android {
 
@@ -53,9 +37,7 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 1
-        versionName '1.0'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -79,17 +61,24 @@ android {
 
     // https://www.jianshu.com/p/681589927f1f
     compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaXAndroidJS"]
+        kotlinOptions.freeCompilerArgs += ['-module-name', "Gaia-JS"]
     }
-
-//    kotlinOptions {
-//        jvmTarget = '1.6'
-//    }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar"
+    implementation "androidx.annotation:annotation:1.0.0"
+    implementation 'com.alibaba:fastjson:1.2.26@jar'
+
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:main-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:main-SNAPSHOT@aar") { changing = true }
 }
 
 afterEvaluate {
@@ -108,30 +97,8 @@ afterEvaluate {
                 } else {
                     groupId = 'com.github.alibaba.GaiaX'
                 }
-                artifactId = 'GaiaXAndroidJS'
+                artifactId = 'GaiaX-JS'
             }
         }
     }
-}
-
-dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar"
-    implementation "androidx.annotation:annotation:1.0.0"
-    implementation 'com.alibaba:fastjson:1.2.26@jar'
-
-    if (version != null && version != "unspecified") {
-        implementation project(path: ':GaiaX-Android-QuickJS')
-    } else {
-        implementation("com.github.alibaba.GaiaX:GaiaX-Android-QuickJS:0.0.0-SNAPSHOT@aar") { changing = true }
-    }
-    if (version != null && version != "unspecified") {
-        implementation project(path: ':GaiaXAndroidClientToStudio')
-    } else {
-        implementation("com.github.alibaba.GaiaX:GaiaX-Android-QuickJS:0.0.0-SNAPSHOT@aar") { changing = true }
-    }
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

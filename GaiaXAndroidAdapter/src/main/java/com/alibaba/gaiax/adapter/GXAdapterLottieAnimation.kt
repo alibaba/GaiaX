@@ -104,7 +104,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
         lottieView.repeatCount = loopCount
         lottieView.addAnimatorListener(object : GXDefaultAnimatorListener() {
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 gxNode.isAnimating = false
                 lottieView.removeAllAnimatorListeners()
                 lottieView.removeAllUpdateListeners()
@@ -119,7 +119,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                     })
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
                 gxTemplateContext.templateData?.eventListener?.onAnimationEvent(
                     GXTemplateEngine.GXAnimation().apply {
                         this.state = "START"
@@ -168,7 +168,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                     lottieView.setComposition(it)
                     lottieView.repeatCount = loopCount
                     lottieView.addAnimatorListener(object : GXDefaultAnimatorListener() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                        override fun onAnimationEnd(animation: Animator) {
                             gxNode.isAnimating = false
 
                             lottieView.removeAllAnimatorListeners()
@@ -186,7 +186,7 @@ internal class GXAdapterLottieAnimation : GXLottieAnimation() {
                                 })
                         }
 
-                        override fun onAnimationStart(animation: Animator?) {
+                        override fun onAnimationStart(animation: Animator) {
                             gxNode.isAnimating = true
                             gxTemplateContext.templateData?.eventListener?.onAnimationEvent(
                                 GXTemplateEngine.GXAnimation().apply {

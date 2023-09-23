@@ -6,16 +6,13 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".GaiaXDemoApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/GaiaXDemo">
+        android:theme="@style/Theme.MyApplication">
 
-        <profileable
-            android:enabled="true"
-            android:shell="true" />
+        <profileable android:shell="true" android:enabled="true"/>
 
         <activity
             android:name="com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity"
@@ -53,35 +50,14 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MyApplication.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".list.clicklatency.NestedRecyclerActivity" />
-
-        <activity
-            android:name=".list.clicklatency.RecyclerViewActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.macrobenchmark.target.RECYCLER_VIEW_ACTIVITY" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".list.clicklatency.ScrollViewActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.macrobenchmark.target.SCROLL_VIEW_ACTIVITY" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>

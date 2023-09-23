@@ -1,0 +1,13 @@
+{
+    "data":{
+        "template_slider_size_aspect_ratio_change_size":{
+            "value":"$nodes",
+            "extend": {
+                "slider-scroll-time-interval": 3000,
+                "slider-infinity-scroll": true,
+                "slider-has-indicator": true,
+                "slider-selected-index": 1
+            }
+        }
+    }
+}

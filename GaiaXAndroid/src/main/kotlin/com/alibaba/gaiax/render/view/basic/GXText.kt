@@ -31,8 +31,14 @@ import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.render.utils.GXAccessibilityUtils
-import com.alibaba.gaiax.render.view.*
+import com.alibaba.gaiax.render.view.GXIRoundCorner
+import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
+import com.alibaba.gaiax.render.view.setFontBackgroundImage
+import com.alibaba.gaiax.render.view.setFontFamilyAndFontWeight
+import com.alibaba.gaiax.render.view.setFontTextAlign
+import com.alibaba.gaiax.render.view.setFontTextOverflow
+import com.alibaba.gaiax.render.view.setTextLineHeight
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXSize
 import com.alibaba.gaiax.template.GXStyle
@@ -108,6 +114,14 @@ open class GXText : AppCompatTextView, GXIViewBindData, GXIRoundCorner {
         setFontTextLineHeight(style)
 
         setFontTextDecoration(style.fontTextDecoration)
+
+        setIncludeFontPadding(style)
+    }
+
+    private fun setIncludeFontPadding(style: GXStyle) {
+        style.includeFontPadding?.let {
+            includeFontPadding = it
+        }
     }
 
     fun reset() {

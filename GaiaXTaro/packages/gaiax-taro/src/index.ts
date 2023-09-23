@@ -17,6 +17,7 @@ export { default as GXITrackListener } from './gaiax/GXITrackListener'
 export { default as GXMeasureSize } from './gaiax/GXMeasureSize'
 export { default as GXTemplateData } from './gaiax/GXTemplateData'
 export { default as GXTemplateNode } from './gaiax/GXTemplateNode';
+export { parse as GXbinParse } from './gaiax/GXBinParser';
 
 export { GXRegisterCenterInstance } from './gaiax/GXRegisterCenterInstance'
 export { GXEngineInstance } from './gaiax/GXEngineInstance'

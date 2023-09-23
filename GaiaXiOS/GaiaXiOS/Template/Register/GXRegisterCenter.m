@@ -112,7 +112,7 @@
 
 // 注册Lottie动画的class
 - (void)registerLottieViewClass:(Class <GXLottieAniamtionProtocal>)aClass{
-    if (aClass && [aClass conformsToProtocol:@protocol(GXLottieAniamtionProtocal)]) {//&& [aClass isKindOfClass:[UIView class]] 
+    if (aClass && [aClass conformsToProtocol:@protocol(GXLottieAniamtionProtocal)]) {//&& [aClass isKindOfClass:[UIView class]]
         _lottieViewClass = aClass;
     }
 }
@@ -160,23 +160,18 @@
 - (void)registerTemplateSource:(id <GXTemplateSourceProtocal>)source {
     if (source && [source conformsToProtocol:@protocol(GXTemplateSourceProtocal)]) {
         NSInteger priority = [source priority];
-        if (priority >= 0 && priority <= 99) {
-            _isNeedSort = YES;
-            NSString *key = [NSString stringWithFormat:@"%ld", priority];
-//            GXAssert(![_kvSources objectForKey:key] , @"已经存在相同优先级的数据源，请重新设置数据源优先级");
-            [_kvSources gx_setObject:source forKey:key];
-        }
+        _isNeedSort = YES;
+        NSString *key = [NSString stringWithFormat:@"%ld", priority];
+        [_kvSources gx_setObject:source forKey:key];
     }
 }
 
 - (void)unregisterTemplateSource:(id <GXTemplateSourceProtocal>)source {
     if (source) {
         NSInteger priority = [source priority];
-        if (priority >= 0 && priority <= 99) {
-            _isNeedSort = YES;
-            NSString *key = [NSString stringWithFormat:@"%ld", priority];
-            [_kvSources removeObjectForKey:key];
-        }
+        _isNeedSort = YES;
+        NSString *key = [NSString stringWithFormat:@"%ld", priority];
+        [_kvSources removeObjectForKey:key];
     }
 }
 
@@ -203,3 +198,21 @@
 }
 
 @end
+
+
+@implementation GXRegisterCenter (Expression)
+
+- (void)registerFunctionExpression:(id <GXFunctionExpressionProtocol>)function {
+    if (!function || ![function conformsToProtocol:@protocol(GXFunctionExpressionProtocol)]) {
+        return;
+    }
+    self.functionExpression = function;
+}
+
+
+- (void)unregisterFunctionExpression:(id <GXFunctionExpressionProtocol>)function{
+    self.functionExpression = nil;
+}
+
+@end
+

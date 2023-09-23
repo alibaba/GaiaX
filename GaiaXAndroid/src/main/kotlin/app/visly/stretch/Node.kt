@@ -194,4 +194,9 @@ open class Node {
             it.markDirtyAll()
         }
     }
+
+    override fun toString(): String {
+        return "Node(id='$id', style=$style, children=$children)"
+    }
+
 }

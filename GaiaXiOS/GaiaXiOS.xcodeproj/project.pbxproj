@@ -183,6 +183,8 @@
 		8DFF8502273E69BC0014C0DA /* GXFileHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFF8500273E69BC0014C0DA /* GXFileHandler.h */; };
 		8DFF8503273E69BC0014C0DA /* GXFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF8501273E69BC0014C0DA /* GXFileHandler.m */; };
 		960DAA88A4F50DDC29631263 /* libPods-GaiaXiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */; };
+		9DAF452929EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DAF452829EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9DAF453029EE9288009EE8E6 /* GXExpressionExtendTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DAF452F29EE9288009EE8E6 /* GXExpressionExtendTest.swift */; };
 		B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B188ACE429237797005C9F62 /* GXEventTest.swift */; };
 		B1FAA68E29641D9400A67420 /* GXCssTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FAA68D29641D9400A67420 /* GXCssTest.swift */; };
 /* End PBXBuildFile section */
@@ -378,7 +380,8 @@
 		8DFF84EF273E60A80014C0DA /* GXTemplateManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXTemplateManager.m; sourceTree = "<group>"; };
 		8DFF8500273E69BC0014C0DA /* GXFileHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXFileHandler.h; sourceTree = "<group>"; };
 		8DFF8501273E69BC0014C0DA /* GXFileHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXFileHandler.m; sourceTree = "<group>"; };
-		A23EDE6F4FF3A79714BEBD6C /* Pods-GaiaXiOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		9DAF452829EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXFunctionExpressionProtocol.h; sourceTree = "<group>"; };
+		9DAF452F29EE9288009EE8E6 /* GXExpressionExtendTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXExpressionExtendTest.swift; sourceTree = "<group>"; };
 		B188ACE429237797005C9F62 /* GXEventTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXEventTest.swift; sourceTree = "<group>"; };
 		B1FAA68D29641D9400A67420 /* GXCssTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GXCssTest.swift; sourceTree = "<group>"; };
 		CA43FB5B0B95A83F4433A734 /* Pods-GaiaXiOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -428,6 +431,7 @@
 				8DDF3BB82761DFB30014E4D8 /* GXSwiftTest.swift */,
 				B188ACE429237797005C9F62 /* GXEventTest.swift */,
 				B1FAA68D29641D9400A67420 /* GXCssTest.swift */,
+				9DAF452F29EE9288009EE8E6 /* GXExpressionExtendTest.swift */,
 			);
 			path = TestCase;
 			sourceTree = "<group>";
@@ -473,6 +477,7 @@
 			children = (
 				8DCE3361283E11C900A42EF8 /* GXTemplateSourceProtocal.h */,
 				8DEFA65A27968D43003730A6 /* GXBizServiceProtocol.h */,
+				9DAF452829EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
@@ -894,7 +899,6 @@
 				1E4542E269BE8A2CC48A5DBD /* Pods-GaiaXiOS.debug.xcconfig */,
 				CA43FB5B0B95A83F4433A734 /* Pods-GaiaXiOS.release.xcconfig */,
 				8CF100DA07FB9596328219B4 /* Pods-GaiaXiOSTests.debug.xcconfig */,
-				A23EDE6F4FF3A79714BEBD6C /* Pods-GaiaXiOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -917,6 +921,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DAF452929EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h in Headers */,
 				8DFEC28D27350795001F3B74 /* UIView+GX.h in Headers */,
 				8DCE3362283E11C900A42EF8 /* GXTemplateSourceProtocal.h in Headers */,
 				8DEFA65B27968D43003730A6 /* GXBizServiceProtocol.h in Headers */,
@@ -1162,6 +1167,7 @@
 				8DBBA433278449BE00ACCFBC /* GXExpressionTest.mm in Sources */,
 				B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */,
 				8DDF3BD8276225A50014E4D8 /* GXTemplateTest.mm in Sources */,
+				9DAF453029EE9288009EE8E6 /* GXExpressionExtendTest.swift in Sources */,
 				8DF79CBA2760A9AA00A867BE /* GXEgnineTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1267,7 +1273,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = TNX2PP585H;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1288,13 +1294,12 @@
 		};
 		8D1CBD242758AA4500EC2B4D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A23EDE6F4FF3A79714BEBD6C /* Pods-GaiaXiOSTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = TNX2PP585H;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1437,7 +1442,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = TNX2PP585H;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1459,6 +1464,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1470,7 +1476,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = TNX2PP585H;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1493,6 +1499,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

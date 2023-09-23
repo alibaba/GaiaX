@@ -23,9 +23,18 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.context.*
+import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.context.getLayoutForScroll
+import com.alibaba.gaiax.context.getMaxHeightLayoutForScroll
+import com.alibaba.gaiax.context.getMinHeightLayoutForScroll
+import com.alibaba.gaiax.context.initLayoutForScroll
+import com.alibaba.gaiax.context.initNodeForScroll
+import com.alibaba.gaiax.context.isExistForScroll
+import com.alibaba.gaiax.context.putLayoutForScroll
+import com.alibaba.gaiax.context.putNodeForScroll
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
+import com.alibaba.gaiax.utils.GXLog
 import com.alibaba.gaiax.utils.getStringExt
 import kotlin.math.ceil
 import kotlin.math.max
@@ -40,11 +49,40 @@ object GXNodeUtils {
     internal const val ITEM_CONFIG =
         "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
 
-    fun computeNodeTreeByBindData(gxNode: GXNode, size: Size<Float?>) {
+    fun computeNodeTreeByBindData(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        size: Size<Float?>
+    ) {
+
+        // 预处理布局
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}"
+            )
+        }
+
+        // 输入参数
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}"
+            )
+        }
+
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByBindData(gxNode, layout)
+
+        // 输出计算结果
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}"
+            )
+        }
     }
 
     private fun composeStretchNodeByBindData(gxNode: GXNode, layout: Layout) {
@@ -57,11 +95,21 @@ object GXNodeUtils {
         }
     }
 
-    fun computeNodeTreeByPrepareView(gxNode: GXNode, size: Size<Float?>) {
+    fun computeNodeTreeByPrepareView(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        size: Size<Float?>
+    ) {
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByPrepareView(gxNode, layout)
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByPrepareView layout=${layout}"
+            )
+        }
     }
 
     private fun composeStretchNodeByPrepareView(gxNode: GXNode, layout: Layout) {
@@ -109,7 +157,10 @@ object GXNodeUtils {
 
             // Improve: 如果之前计算过，并且内容高度都一样，那么直接使用缓存计算。在横滑容器数据量较大的情况下，会节省一些时间。
             if (GXGlobalCache.instance.isExistForTemplateItem(itemTemplateItem)) {
-                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(itemTemplateItem)
+                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(
+                    gxTemplateContext,
+                    itemTemplateItem
+                )
                 return computeScrollContainerSize(
                     gxNode, itemLayout, gxContainerData
                 )
@@ -136,7 +187,11 @@ object GXNodeUtils {
 
             if (maxItemLayout != null && minItemLayout != null && maxItemLayout.height == minItemLayout.height) {
                 // 如果相同，代表没有不一样的高度，下次可以只计算一次
-                GXGlobalCache.instance.putLayoutForTemplateItem(itemTemplateItem, maxItemLayout)
+                GXGlobalCache.instance.putLayoutForTemplateItem(
+                    gxTemplateContext,
+                    itemTemplateItem,
+                    maxItemLayout
+                )
             }
 
             return computeScrollContainerSize(
@@ -173,9 +228,11 @@ object GXNodeUtils {
             gxNode.isScrollType() -> computeScrollItemContainerSize(
                 gxTemplateContext, gxNode, itemPosition, itemData
             )
+
             gxNode.isGridType() -> computeGridItemContainerSize(
                 gxTemplateContext, gxNode, itemData, itemPosition
             )
+
             else -> null
         }
     }
@@ -556,10 +613,12 @@ object GXNodeUtils {
                 gxGridConfig.isVertical -> {
                     Size(containerWidth - (padding.left + padding.right), null)
                 }
+
                 gxGridConfig.isHorizontal -> {
                     // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                     Size(null, null)
                 }
+
                 else -> {
                     Size(null, null)
                 }
@@ -630,10 +689,12 @@ object GXNodeUtils {
 
                 Size(width, null)
             }
+
             gxGridConfig.isHorizontal -> {
                 // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
                 Size(null, null)
             }
+
             else -> {
                 Size(null, null)
             }
@@ -649,6 +710,7 @@ object GXNodeUtils {
                     return Size(it * nodeWith.value, null)
                 }
             }
+
             else -> {
                 gxTemplateContext.size.width?.let {
                     return Size(it, null)

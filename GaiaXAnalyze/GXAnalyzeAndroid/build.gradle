@@ -6,9 +6,8 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -19,9 +18,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -51,11 +49,6 @@ android {
                         '-DANDROID_TOOLCHAIN=clang',
                         '-DANDROID_STL=c++_shared'
             }
-        }
-
-        ndk {
-            // support all abi armeabi-v7a arm64-v8a x86 x86_64
-            // abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
     }
 
@@ -109,15 +102,19 @@ android {
         jvmTarget = '1.8'
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         debug {
             ndk {
-                abiFilters "x86", 'armeabi-v7a', 'arm64-v8a'
+                abiFilters "x86", "x86_64", 'armeabi-v7a', 'arm64-v8a'
             }
         }
         release {
             ndk {
-                abiFilters "x86", 'armeabi-v7a', 'arm64-v8a'
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
             }
         }
     }

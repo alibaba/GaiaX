@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.context.clearLayoutForScroll
+import com.alibaba.gaiax.context.clearLayout
 import com.alibaba.gaiax.context.isExistNodeForScroll
 import com.alibaba.gaiax.context.obtainNodeForScroll
 import com.alibaba.gaiax.data.GXDataImpl
@@ -35,7 +35,12 @@ import com.alibaba.gaiax.data.assets.GXAssetsTemplate
 import com.alibaba.gaiax.data.cache.GXTemplateInfoSource
 import com.alibaba.gaiax.expression.GXExtensionExpression
 import com.alibaba.gaiax.render.GXRenderImpl
-import com.alibaba.gaiax.render.node.*
+import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.render.node.GXNodeUtils
+import com.alibaba.gaiax.render.node.GXTemplateNode
+import com.alibaba.gaiax.render.node.getGXNodeById
+import com.alibaba.gaiax.render.node.getGXNodeByView
+import com.alibaba.gaiax.render.node.getGXViewById
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.render.utils.GXIManualExposureEventListener
 import com.alibaba.gaiax.render.view.GXIViewBindData
@@ -357,7 +362,11 @@ class GXTemplateEngine {
      *    如果内部模板的宽度能够自我撑开（具备宽度）；
      *    最终产物View的宽度就是是模板通过FlexBox计算后撑开的宽度，而高度就是Measure-Height。
      */
-    data class GXMeasureSize(var width: Float?, var height: Float?)
+    data class GXMeasureSize(var width: Float?, var height: Float?) {
+        override fun toString(): String {
+            return "GXMeasureSize(width=$width, height=$height)"
+        }
+    }
 
     class GXExtendParams {
         var gxItemPosition: Int? = null
@@ -453,6 +462,15 @@ class GXTemplateEngine {
             result = 31 * result + templateId.hashCode()
             return result
         }
+
+        override fun toString(): String {
+            return "GXTemplateItem(bizId='$bizId', templateId='$templateId')"
+        }
+
+        fun key(): String {
+            return "${bizId}-${templateId}"
+        }
+
 
     }
 
@@ -605,10 +623,10 @@ class GXTemplateEngine {
      * 当measure size发生变化的时候需要重新计算节点树，否则会导致bindData的传入数据不准确，引发布局错误
      */
     private fun recomputeWhenMeasureSizeChanged(
-        gxTemplateContext: GXTemplateContext, isMeasureSizeChanged: Boolean
+        gxTemplateContext: GXTemplateContext
     ) {
         val gxRootNode = gxTemplateContext.rootNode
-        if (gxRootNode != null && isMeasureSizeChanged) {
+        if (gxRootNode != null) {
 
             //
             gxTemplateContext.reset()
@@ -616,9 +634,13 @@ class GXTemplateEngine {
 
             //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
-            GXNodeUtils.computeNodeTreeByPrepareView(gxRootNode, size)
+            GXNodeUtils.computeNodeTreeByPrepareView(gxTemplateContext, gxRootNode, size)
             gxRootNode.stretchNode.layoutByPrepareView?.let {
-                GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
+                GXGlobalCache.instance.putLayoutForPrepareView(
+                    gxTemplateContext,
+                    gxTemplateContext.templateItem,
+                    it
+                )
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
         }
@@ -752,26 +774,40 @@ class GXTemplateEngine {
 
         if (gxTemplateContext.isReuseRootNode) {
             if (GXLog.isLog()) {
-                GXLog.e("reuse root node, skip bindDataOnlyNodeTree")
+                GXLog.e(
+                    gxTemplateContext.tag,
+                    "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree reuse root node, skip bindDataOnlyNodeTree"
+                )
             }
             gxTemplateContext.isReuseRootNode = false
             return
         }
 
-        var isMeasureSizeChanged = false
-        if (gxMeasureSize != null) {
-            val oldMeasureSize = gxTemplateContext.size
-            gxTemplateContext.size = gxMeasureSize
-            isMeasureSizeChanged =
-                oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize=${gxMeasureSize} gxTemplateItem=${gxTemplateContext.templateItem}"
+            )
         }
 
-        gxTemplateContext.clearLayoutForScroll()
         gxTemplateContext.templateData = gxTemplateData
 
         processContainerItemManualExposureWhenScrollStateChanged(gxTemplateContext)
 
-        recomputeWhenMeasureSizeChanged(gxTemplateContext, isMeasureSizeChanged)
+        if (gxMeasureSize != null) {
+            val oldMeasureSize = gxTemplateContext.size
+            gxTemplateContext.size = gxMeasureSize
+
+            // 判断是否size发生了变化
+            gxTemplateContext.isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width
+                    || oldMeasureSize.height != gxMeasureSize.height
+
+            // 如果size发生了变化，需要清除layout缓存，并重新计算
+            if (gxTemplateContext.isMeasureSizeChanged) {
+                gxTemplateContext.clearLayout()
+                recomputeWhenMeasureSizeChanged(gxTemplateContext)
+            }
+        }
 
         render.bindViewDataOnlyNodeTree(gxTemplateContext)
     }
@@ -816,6 +852,8 @@ class GXTemplateEngine {
         gxTemplateContext.templateData = gxTemplateData
 
         render.bindViewDataOnlyViewTree(gxTemplateContext)
+
+        gxTemplateContext.isMeasureSizeChanged = false
     }
 
     /**
@@ -840,8 +878,15 @@ class GXTemplateEngine {
      * @suppress
      * @hide
      */
-    fun getGXNodeById(targetView: View?, id: String): GXNode? {
-        return GXTemplateContext.getContext(targetView)?.rootNode?.getGXNodeById(id)
+    fun getGXNodeById(rootView: View?, id: String): GXNode? {
+        return GXTemplateContext.getContext(rootView)?.rootNode?.getGXNodeById(id)
+    }
+
+    /**
+     *
+     */
+    fun getGXNodeByView(rootView: View?, targetView: View): GXNode? {
+        return GXTemplateContext.getContext(rootView)?.rootNode?.getGXNodeByView(targetView)
     }
 
     /**

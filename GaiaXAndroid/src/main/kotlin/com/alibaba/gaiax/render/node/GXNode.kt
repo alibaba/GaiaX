@@ -209,4 +209,8 @@ class GXNode {
         }
     }
 
+    override fun toString(): String {
+        return "GXNode(id='$id', templateNode=$templateNode, children=$children)"
+    }
+
 }

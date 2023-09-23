@@ -48,7 +48,7 @@ class GXRefactorTest : GXBaseTest() {
             val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
             GXTemplateEngine.instance.bindData(rootView, templateData)
             Assert.assertEquals(
-                Color.RED, (rootView.background as GXColorGradientDrawable).colors[0]
+                Color.RED, (rootView.background as GXColorGradientDrawable).colors!![0]
             )
         }
 
@@ -58,7 +58,7 @@ class GXRefactorTest : GXBaseTest() {
             val rootView = GXTemplateEngine.instance.createView(templateItem, size)!!
             GXTemplateEngine.instance.bindData(rootView, templateData)
             Assert.assertEquals(
-                Color.GREEN, (rootView.background as GXColorGradientDrawable).colors[0]
+                Color.GREEN, (rootView.background as GXColorGradientDrawable).colors!![0]
             )
         }
 

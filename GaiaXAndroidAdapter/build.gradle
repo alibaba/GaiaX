@@ -6,9 +6,8 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -19,9 +18,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -32,11 +30,13 @@ buildscript {
 
 android {
 
-    compileSdkVersion 28
+    // 不能升级，否则会碰到清单文件合并错误
+    compileSdkVersion 30
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 21
+        // 不能升级，否则会碰到清单文件合并错误
+        targetSdkVersion 30
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
@@ -95,12 +95,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-
-    if (version != null) {
-        implementation("com.github.alibaba.GaiaX:GaiaX:$version") { changing = true }
-    } else {
-        implementation("com.github.alibaba.GaiaX:GaiaX:0.4.0") { changing = true }
-    }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT") { changing = true }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

@@ -21,6 +21,7 @@
 #import <GaiaXiOS/GXTemplateSourceProtocal.h>
 #import <GaiaXiOS/GXBizServiceProtocol.h>
 #import <GaiaXiOS/GXImageViewProtocal.h>
+#import <GaiaXiOS/GXFunctionExpressionProtocol.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,15 +36,20 @@ typedef NS_ENUM(NSUInteger, GXNodeType) {
 
 //Support Lottie implementation corresponding to business registration
 @property (nonatomic, readonly) Class <GXLottieAniamtionProtocal> lottieViewClass;
+
 //Support ImageView implementation corresponding to business registration
 @property (nonatomic, readonly) Class <GXImageViewProtocal> imageViewClass;
+
 //Class impl supported by business capabilities
 @property (nonatomic, strong, nullable) Class <GXBizServiceProtocol> bizServiceImpl;
 
 //default template data source，priority is 50
 @property (nonatomic, strong, readonly) id <GXTemplateSourceProtocal> defaultTemplateSource;
+
 //template data source（支持注册各种数据源）//preview priority is 99
 @property (nonatomic, strong, readonly) NSArray <GXTemplateSourceProtocal> * templateSources;
+
+@property(nonatomic,strong, nullable) id <GXFunctionExpressionProtocol> functionExpression;
 
 /// singleton
 + (instancetype)defaultCenter;
@@ -73,6 +79,15 @@ typedef NS_ENUM(NSUInteger, GXNodeType) {
 /// Remove a data source
 /// @param source data source
 - (void)unregisterTemplateSource:(id <GXTemplateSourceProtocal>)source;
+
+@end
+
+@interface GXRegisterCenter (Expression)
+
+- (void)registerFunctionExpression:(id <GXFunctionExpressionProtocol>)function;
+
+
+- (void)unregisterFunctionExpression:(id <GXFunctionExpressionProtocol>)function;
 
 @end
 

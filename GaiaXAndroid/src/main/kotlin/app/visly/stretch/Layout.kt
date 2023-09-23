@@ -34,7 +34,7 @@ data class Layout(
     }
 
     override fun toString(): String {
-        return "Layout(x=$x, y=$y, width=$width, height=$height, id='$id')"
+        return "Layout(x=$x, y=$y, width=$width, height=$height, children=$children, id='$id')"
     }
 
 }

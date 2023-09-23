@@ -38,6 +38,9 @@
     BOOL _isOnShow;
     //坑位尺寸
     CGSize _itemSize;
+    //是否需要reload
+    CGFloat _tmpWidth;
+    BOOL _isNeedReload;
     //滚动事件
     GXEvent *_scrollEvent;
 }
@@ -117,6 +120,7 @@
     //判断是否相等，更新frame
     if (!CGRectEqualToRect(view.frame, self.frame)) {
         view.frame = self.frame;
+        [self calculateItemSize];
     }
     
     //是否可以越界显示
@@ -131,6 +135,9 @@
 #pragma mark - 绑定数据
 
 - (void)bindData:(NSDictionary *)data{
+    //重置标识位
+    _isNeedReload = NO;
+    
     //处理数据
     NSArray *dataArray = nil;
     NSDictionary *extend = nil;
@@ -147,10 +154,13 @@
     //处理extend
     [self handleExtend:extend isCalculate:NO];
     
-    //获取横滑容器 & 设置属性
-    GXGridView *gridView = (GXGridView *)self.associatedView;
-    [gridView reloadData];
-
+    //重新刷新布局标识
+    _isNeedReload = self.templateContext.isNeedLayout;
+    if (!_isNeedReload) {
+        GXGridView *gridView = (GXGridView *)self.associatedView;
+        [gridView reloadData];
+    }
+    
 }
 
 
@@ -212,12 +222,23 @@
         self.column = column;
     }
     
+    if (!self.templateContext.isNeedLayout && !isMark) {
+        isMark = [self shouldReLayout];
+        return isMark;
+    }
+    
+    return isMark;
+}
+
+- (BOOL)shouldReLayout {
+    BOOL isMark = NO;
+    
     //计算ItemSize
     [self calculateItemSize];
     
     //计算GridView的高度 (只有为auto时，才进行内部覆盖)
     StretchStyleSize recordSize = self.style.styleModel.recordSize;
-    if (!self.scrollEnable && (recordSize.height.dimen_type == DIM_TYPE_AUTO) && self.frame.size.width > 0) {
+    if (!self.scrollEnable && (recordSize.height.dimen_type == DIM_TYPE_AUTO) && [self currentWidth] > 0) {
         //默认高度
         CGFloat height = 0.f;
         
@@ -258,8 +279,19 @@
             isMark = YES;
         }
     }
+  
     
     return isMark;
+}
+
+- (void)updateFitContentLayout{
+    [self shouldReLayout];
+
+    //重新reload
+    GXGridView *gridView = (GXGridView *)self.associatedView;
+    if (gridView) {
+        [gridView reloadData];
+    }
 }
 
 
@@ -291,10 +323,22 @@
 - (void)calculateItemSize{
     // 获取宽度
     CGFloat extraWidth = self.contentInset.left + self.contentInset.right + (self.column - 1) * self.itemSpacing;
-    CGFloat measureWidth = floor((self.frame.size.width - extraWidth) / self.column);
-    CGFloat measureHeight = NAN;
+    CGFloat measureWidth = floor(([self currentWidth] - extraWidth) / self.column);
+    if (measureWidth <= 0) {
+        _itemSize = CGSizeZero;
+        return;
+    }
     //计算
-    _itemSize = [TheGXTemplateEngine sizeWithTemplateItem:self.subTemplateItem measureSize:CGSizeMake(measureWidth, measureHeight)];
+    _itemSize = [TheGXTemplateEngine sizeWithTemplateItem:self.subTemplateItem measureSize:CGSizeMake(measureWidth, NAN)];
+}
+
+- (CGFloat)currentWidth{
+    CGFloat width = self.frame.size.width > 0 ? self.frame.size.width : _tmpWidth;
+    return width;
+}
+
+- (void)updateTextNodes:(NSPointerArray *)textNodes{
+    [textNodes addPointer:(__bridge void *)(self)];
 }
 
 
@@ -397,7 +441,7 @@
     
     //数据绑定
     GXTemplateData *data = [self.items objectAtIndex:index];
-    [TheGXTemplateEngine bindData:data onView:rootView];
+    [TheGXTemplateEngine bindData:data measureSize:itemSize onRootView:rootView];
     
     return cell;
 }

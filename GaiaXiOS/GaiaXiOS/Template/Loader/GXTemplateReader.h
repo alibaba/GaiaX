@@ -32,6 +32,13 @@ NS_ASSUME_NONNULL_BEGIN
                                             templateVersion:(NSString * _Nullable)templateVersion;
 
 
+/// 读取二进制模板信息
+/// @param filePath  二进制文件路径
+/// @param templateId 模板id
+/// @param templateVersion 模板version
+- (NSMutableDictionary *)loadBinaryTemplateWithFilePath:(NSString *)filePath
+                                             templateId:(NSString * _Nonnull)templateId
+                                        templateVersion:(NSString * _Nullable)templateVersion;
 
 /// 读取模板信息
 /// @param templateInfo 模板具体内容

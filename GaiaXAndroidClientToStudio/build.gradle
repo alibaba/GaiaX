@@ -6,9 +6,8 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -19,9 +18,8 @@ buildscript {
     repositories {
         mavenLocal()
         google()
-        maven { url "https://jitpack.io" }
         mavenCentral()
-        maven { url 'https://mvnrepository.com/artifact/com.github.gundy/semver4j' }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
@@ -30,11 +28,11 @@ buildscript {
     }
 }
 android {
-    compileSdk 28
+    compileSdk 30
 
     defaultConfig {
         minSdk 16
-        targetSdk 28
+        targetSdk 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

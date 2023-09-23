@@ -1,30 +1,42 @@
 #!/bin/bash
 
 CUR=`pwd`
-###########
-echo "Publish GaiaX ClientToStudio"
-cd $CUR/GaiaXAndroidClientToStudio
-./gradlew build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-cd ~/.m2/repository/com/github/alibaba/GaiaX/GaiaX-ClientToStudio/main-SNAPSHOT
-ls -ll
-
-###########
-echo "Publish GaiaX Analyze"
+echo ##########################################################################
+echo "Publish GXAnalyzeAndroid"
 cd $CUR/GaiaXAnalyze/GXAnalyzeAndroid
-./gradlew build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-cd ~/.m2/repository/com/github/alibaba/GaiaX/GaiaX-Analyze/main-SNAPSHOT
-ls -ll
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
-###########
-echo "Publish GaiaX"
+echo ##########################################################################
+echo "Publish GaiaXAndroid"
 cd $CUR/GaiaXAndroid
-./gradlew build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-cd ~/.m2/repository/com/github/alibaba/GaiaX/GaiaX/main-SNAPSHOT
-ls -ll
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
-###########
-echo "Publish GaiaX Adapter"
+echo ##########################################################################
+echo "Publish GaiaXAndroidAdapter"
 cd $CUR/GaiaXAndroidAdapter
-./gradlew build -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-cd ~/.m2/repository/com/github/alibaba/GaiaX/GaiaX-Adapter/main-SNAPSHOT
-ls -ll
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
+
+echo ##########################################################################
+echo "Publish GaiaXAndroidClientToStudio"
+cd $CUR/GaiaXAndroidClientToStudio
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
+
+echo ##########################################################################
+echo "Publish GaiaXAndroidQuickJS"
+cd $CUR/GaiaXAndroidQuickJS
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
+
+echo ##########################################################################
+echo "Publish GaiaXAndroidJS"
+cd $CUR/GaiaXAndroidJS
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
+
+echo ##########################################################################
+echo "Publish GaiaXAndroidJSAdapter"
+cd $CUR/GaiaXAndroidJSAdapter
+call ./gradlew build -Pgroup="com.github.alibaba.GaiaX" -Pversion="main-SNAPSHOT" -xtest -xlint publishToMavenLocal
+
+echo ##########################################################################
+echo "Publish GaiaXAndroidDemo"
+cd $CUR/GaiaXAndroidDemo
+call ./gradlew build

@@ -89,7 +89,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.github.bumptech.glide:glide:4.12.0'
     androidTestImplementation 'com.airbnb.android:lottie:4.1.0'
-
+    androidTestImplementation("com.github.alibaba.GaiaX:GaiaX-Analyze:main-SNAPSHOT") { changing = true }
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
@@ -103,12 +103,23 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                from components.release
+
+                if (project.hasProperty("type")) {
+                    if (project.getProperty("type").equals("release")) {
+                        from components.release
+                    } else {
+                        from components.debug
+                    }
+                } else {
+                    from components.debug
+                }
+
                 if (project.hasProperty("version")) {
                     version = project.getProperty("version")
                 } else {
                     version = '0.0.0'
                 }
+
                 if (project.hasProperty("group")) {
                     groupId = project.getProperty("group")
                 } else {

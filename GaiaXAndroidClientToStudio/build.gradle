@@ -66,13 +66,23 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                from components.release
+
+                if (project.hasProperty("type")) {
+                    if (project.getProperty("type").equals("release")) {
+                        from components.release
+                    } else {
+                        from components.debug
+                    }
+                } else {
+                    from components.debug
+                }
 
                 if (project.hasProperty("version")) {
                     version = project.getProperty("version")
                 } else {
                     version = '0.0.0'
                 }
+
                 if (project.hasProperty("group")) {
                     groupId = project.getProperty("group")
                 } else {

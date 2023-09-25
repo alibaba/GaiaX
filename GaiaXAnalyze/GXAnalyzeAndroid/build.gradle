@@ -55,7 +55,6 @@ android {
     sourceSets {
         main {
             java.srcDirs = ['src/main/kotlin', 'src/main/java']
-            jniLibs.srcDir 'src/main/jniLibs'
         }
 
         // https://stackoverflow.com/questions/26244998/androidmanifest-in-androidtest-directory-being-ignored/27884436#27884436
@@ -63,16 +62,6 @@ android {
         // https://stackoverflow.com/questions/23643189/android-gradle-src-androidtest-res-layout-mylayout-xml-not-found-in-mypackage-r
         androidTest {
             java.srcDirs = ['src/androidTest/java', 'src/androidTest/kotlin']
-            res.srcDirs = ['src/androidTest/res']
-            jniLibs.srcDir 'src/androidTest/jniLibs'
-            manifest.srcFile "src/androidTest/AndroidManifest.xml"
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -116,6 +105,8 @@ android {
             ndk {
                 abiFilters 'armeabi-v7a', 'arm64-v8a'
             }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -140,7 +131,16 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                from components.release
+
+                if (project.hasProperty("type")) {
+                    if (project.getProperty("type").equals("release")) {
+                        from components.release
+                    } else {
+                        from components.debug
+                    }
+                } else {
+                    from components.debug
+                }
 
                 if (project.hasProperty("version")) {
                     version = project.getProperty("version")

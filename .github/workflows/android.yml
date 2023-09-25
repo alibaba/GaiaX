@@ -29,7 +29,7 @@ jobs:
     - name: Build Setup 3 GaiaXAndroid 
       run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 4 GaiaXAndroidAdapter 
-      run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="ebug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 5 GaiaXAndroidQuickJS 
       run: cd ./GaiaXAndroidQuickJS && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 6 GaiaXAndroidJS 

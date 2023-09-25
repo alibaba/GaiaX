@@ -91,6 +91,10 @@ open class GXImageView : AppCompatImageView, GXIImageView, GXIRelease {
         bindDesc(data)
     }
 
+    override fun onResetData() {
+        this.setImageDrawable(null)
+    }
+
     open fun bindUri(data: JSONObject?) {
         val uri = data?.getString(GXTemplateKey.GAIAX_VALUE)?.trim() ?: ""
         when {

@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 坑位间距
 @property (nonatomic, assign) CGFloat itemSpacing;
 
+- (void)updateFitContentLayout;
+
 @end
 
 NS_ASSUME_NONNULL_END

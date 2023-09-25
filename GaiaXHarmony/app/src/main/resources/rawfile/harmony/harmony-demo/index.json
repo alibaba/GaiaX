@@ -1,0 +1,10 @@
+{
+  "id": "harmony-demo",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

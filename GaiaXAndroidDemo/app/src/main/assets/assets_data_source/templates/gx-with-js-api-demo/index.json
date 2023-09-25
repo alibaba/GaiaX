@@ -1,0 +1,68 @@
+{
+  "id": "gx-with-js-api-demo",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-with-js-api-demo",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu Jul 27 2023 21:45:13 GMT+0800 (中国标准时间)",
+    "constraint-size": { "width": 375, "height": 375, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "api-type1",
+      "type": "view",
+      "layers": [
+        {
+          "id": "storage",
+          "type": "view",
+          "layers": [
+            { "id": "storage-api", "type": "text" },
+            { "id": "getStorage", "type": "text" },
+            { "id": "setStorage", "type": "text" },
+            { "id": "removeStorage", "type": "text" }
+          ]
+        },
+        {
+          "id": "tips",
+          "type": "view",
+          "layers": [
+            { "id": "tips-api", "type": "text" },
+            { "id": "showAlert", "type": "text" },
+            { "id": "showDialog", "type": "text" },
+            { "id": "dismissCustomDialog", "type": "text" },
+            { "id": "showToast", "type": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "api-type2",
+      "type": "view",
+      "layers": [
+        {
+          "id": "timer",
+          "type": "view",
+          "layers": [
+            { "id": "timer-api", "type": "text" },
+            { "id": "setInterval", "type": "text" },
+            { "id": "clearInterval", "type": "text" },
+            { "id": "setTimeout", "type": "text" },
+            { "id": "clearTimeout", "type": "text" }
+          ]
+        },
+        {
+          "id": "message",
+          "type": "view",
+          "layers": [
+            { "id": "message-api", "type": "text" },
+            { "id": "addEventListener", "type": "text" },
+            { "id": "removeEventListener", "type": "text" },
+            { "id": "addNativeListener", "type": "text" },
+            { "id": "removeNativeListener", "type": "text" }
+          ]
+        }
+      ]
+    }
+  ]
+}

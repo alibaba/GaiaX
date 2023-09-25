@@ -1,31 +1,19 @@
 {
     "data":{
         "title":{
-            "value":"$title",
-            "extend":{
-                "fit-content":"true"
-            }
+            "value":"$title"
         },
         "year":{
-            "value":"$year",
-            "extend":{
-                "fit-content":"true"
-            }
+            "value":"$year"
         },
         "reason":{
             "value": "$reason.text.title",
         },
         "top-text":{
-            "value":"$formatInfo[0]",
-            "extend":{
-                "fit-content":"true"
-            }
+            "value":"$formatInfo[0]"
         },
         "bottom-text":{
-            "value":"$formatInfo[1]",
-            "extend":{
-                "fit-content":"true"
-            }
+            "value":"$formatInfo[1]"
         },
         "cover-img": {
             "value":"$img"

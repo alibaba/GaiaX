@@ -19,6 +19,7 @@ package com.alibaba.gaiax.expression
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.analyze.GXAnalyze
 import com.alibaba.gaiax.analyze.GXArray
 import com.alibaba.gaiax.analyze.GXMap
@@ -99,9 +100,19 @@ class GXAnalyzeWrapper(private val expression: Any) : GXIExpression {
                 override fun computeFunctionExpression(
                     functionName: String, params: LongArray
                 ): Long {
+
+                    GXRegisterCenter.instance.extensionFunctionExpression?.let {
+                        it.execute(functionName, params)?.let {
+                            return it
+                        }
+                    }
+
                     if (functionName == "size" && params.size == 1) {
                         return functionSize(params)
-                    } else if (functionName == "env" && params.size == 1) {
+                    }
+
+                    // 功能被扩展能力承接走了，后续版本会被移除
+                    else if (functionName == "env" && params.size == 1) {
                         return functionEnv(params)
                     }
                     return 0L

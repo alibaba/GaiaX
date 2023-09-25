@@ -2,22 +2,38 @@ package com.alibaba.gaiax.utils
 
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.context.GXTemplateContext
 
 class GXGlobalCache {
-    fun putLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForPrepareView[key] = value
+    fun putLayoutForPrepareView(
+        gxTemplateContext: GXTemplateContext,
+        key: GXTemplateEngine.GXTemplateItem,
+        value: Layout
+    ) {
+        layoutForPrepareView[key.key()] = value
         if (GXLog.isLog()) {
-            GXLog.e("putLayoutForPrepareView key=${key.hashCode()} value=$value")
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value"
+            )
         }
     }
 
-    fun getLayoutForPrepareView(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForPrepareView[key]
+    fun getLayoutForPrepareView(
+        gxTemplateContext: GXTemplateContext,
+        key: GXTemplateEngine.GXTemplateItem
+    ): Layout? {
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}"
+            )
+        }
+        return layoutForPrepareView[key.key()]
     }
 
     fun isExistForPrepareView(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForPrepareView.containsKey(key)
+        return layoutForPrepareView.containsKey(key.key())
     }
 
     /**
@@ -25,10 +41,10 @@ class GXGlobalCache {
      *
      * the cache will use to reduce computation at create view step.
      */
-    private val layoutForPrepareView: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
+    private val layoutForPrepareView: MutableMap<String, Layout> =
         mutableMapOf()
 
-    private val layoutForTemplateItem: MutableMap<GXTemplateEngine.GXTemplateItem, Layout> =
+    private val layoutForTemplateItem: MutableMap<String, Layout> =
         mutableMapOf()
 
     fun clean() {
@@ -36,16 +52,36 @@ class GXGlobalCache {
         layoutForPrepareView.clear()
     }
 
-    fun putLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem, value: Layout) {
-        layoutForTemplateItem[key] = value
+    fun putLayoutForTemplateItem(
+        gxTemplateContext: GXTemplateContext,
+        key: GXTemplateEngine.GXTemplateItem,
+        value: Layout
+    ) {
+        layoutForTemplateItem[key.key()] = value
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key()} value=${value}"
+            )
+        }
     }
 
-    fun getLayoutForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Layout? {
-        return layoutForTemplateItem[key]
+    fun getLayoutForTemplateItem(
+        gxTemplateContext: GXTemplateContext,
+        key: GXTemplateEngine.GXTemplateItem
+    ): Layout? {
+        val value = layoutForTemplateItem[key.key()]
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key()} value=${value}"
+            )
+        }
+        return value
     }
 
     fun isExistForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForTemplateItem.containsKey(key)
+        return layoutForTemplateItem.containsKey(key.key())
     }
 
     companion object {

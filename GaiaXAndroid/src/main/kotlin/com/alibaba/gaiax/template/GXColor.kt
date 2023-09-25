@@ -42,15 +42,11 @@ class GXColor private constructor(val type: Int, val value: Any) {
         return valueCanNull(context) ?: UNDEFINE_COLOR
     }
 
-    private var _backgroundColor: GXColorGradientDrawable? = null
     fun createBackgroundColorDrawable(context: Context?): GXColorGradientDrawable? {
-        if (_backgroundColor == null) {
-            val color = value(context)
-            _backgroundColor = GXColorGradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
-            )
-        }
-        return _backgroundColor
+        val color = value(context)
+        return GXColorGradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(color, color)
+        )
     }
 
     companion object {

@@ -218,7 +218,7 @@ data class Style(
 
     var rustptr: Long = -1
 
-    fun init() {
+    private fun init() {
         rustptr = nConstruct(
             display.ordinal,
             positionType.ordinal,
@@ -295,7 +295,7 @@ data class Style(
         )
     }
 
-    fun free() {
+    internal fun free() {
         if (rustptr != -1L) {
             nFree(rustptr)
             rustptr = -1
@@ -303,11 +303,14 @@ data class Style(
     }
 
     fun safeFree() {
-        synchronized(this) {
-            if (rustptr != -1L) {
-                nFree(rustptr)
-                rustptr = -1
-            }
+        synchronized(Stretch::class.java) {
+            free()
+        }
+    }
+
+    fun safeInit() {
+        synchronized(Stretch::class.java) {
+            init()
         }
     }
 
@@ -386,6 +389,6 @@ data class Style(
     ): Long
 
     override fun toString(): String {
-        return "Style(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, position=$position, margin=$margin, padding=$padding, border=$border, flexGrow=$flexGrow, flexShrink=$flexShrink, flexBasis=$flexBasis, size=$size, minSize=$minSize, maxSize=$maxSize, aspectRatio=$aspectRatio, rustptr=$rustptr)"
+        return "Style(display=$display, positionType=$positionType, direction=$direction, flexDirection=$flexDirection, flexWrap=$flexWrap, overflow=$overflow, alignItems=$alignItems, alignSelf=$alignSelf, alignContent=$alignContent, justifyContent=$justifyContent, position=$position, margin=$margin, padding=$padding, border=$border, flexGrow=$flexGrow, flexShrink=$flexShrink, flexBasis=$flexBasis, size=$size, minSize=$minSize, maxSize=$maxSize, aspectRatio=$aspectRatio)"
     }
 }

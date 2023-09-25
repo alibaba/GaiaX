@@ -24,15 +24,15 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderView
  * @suppress
  */
 data class GXSliderConfig(
-    private val scrollTimeIntervalForTemplate: Long,
-    private val infinityScrollForTemplate: Boolean,
-    private val hasIndicatorForTemplate: Boolean,
-    private val selectedIndexForTemplate: Int,
-    private val indicatorSelectedColorForTemplate: GXColor,
-    private val indicatorUnselectedColorForTemplate: GXColor,
-    private val indicatorMarginForTemplate: Rect<GXSize>,
-    private val indicatorPositionForTemplate: GXSliderView.IndicatorPosition,
-    private val indicatorClassForTemplate: String?
+    internal val scrollTimeIntervalForTemplate: Long,
+    internal val infinityScrollForTemplate: Boolean,
+    internal val hasIndicatorForTemplate: Boolean,
+    internal val selectedIndexForTemplate: Int,
+    internal val indicatorSelectedColorForTemplate: GXColor,
+    internal val indicatorUnselectedColorForTemplate: GXColor,
+    internal val indicatorMarginForTemplate: Rect<GXSize>,
+    internal val indicatorPositionForTemplate: GXSliderView.IndicatorPosition,
+    internal val indicatorClassForTemplate: String?
 ) {
     private var scrollTimeIntervalForExtend: Long? = null
     private var infinityScrollForExtend: Boolean? = null

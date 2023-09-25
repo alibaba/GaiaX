@@ -93,6 +93,10 @@ class GXRegisterCenter {
         fun isTrue(expVersion: String?, key: String?, value: Any?): Boolean
     }
 
+    interface GXIExtensionFunctionExpression {
+        fun execute(functionName: String, params: LongArray): Long?
+    }
+
     interface GXIExtensionDataBinding {
         fun create(expVersion: String?, value: Any): GXDataBinding?
     }
@@ -225,6 +229,7 @@ class GXRegisterCenter {
     }
 
     internal var extensionBizMap: GXIExtensionBizMap? = null
+    internal var extensionFunctionExpression: GXIExtensionFunctionExpression? = null
     internal var extensionDataBinding: GXIExtensionDataBinding? = null
     internal var extensionExpression: GXIExtensionExpression? = null
     internal var extensionColor: GXIExtensionColor? = null
@@ -242,6 +247,11 @@ class GXRegisterCenter {
 
     fun registerExtensionBizMapRelation(extensionBizMap: GXIExtensionBizMap): GXRegisterCenter {
         this.extensionBizMap = extensionBizMap
+        return this
+    }
+
+    fun registerExtensionFunctionExpression(extension: GXIExtensionFunctionExpression): GXRegisterCenter {
+        this.extensionFunctionExpression = extension
         return this
     }
 
@@ -306,11 +316,6 @@ class GXRegisterCenter {
 
     fun registerExtensionScroll(extensionScroll: GXIExtensionScroll): GXRegisterCenter {
         this.extensionScroll = extensionScroll
-        return this
-    }
-
-    fun registerExtensionViewSupport(viewType: String, clazz: Class<*>): GXRegisterCenter {
-        GXViewFactory.viewSupport[viewType] = clazz
         return this
     }
 

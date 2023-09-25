@@ -1,0 +1,37 @@
+{
+  "module": {
+    "name": "app",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "AppAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "AppAbility",
+        "srcEntry": "./ets/appability/AppAbility.ts",
+        "description": "$string:AppAbility_desc",
+        "icon": "$media:icon",
+        "label": "$string:AppAbility_label",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

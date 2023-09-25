@@ -31,6 +31,13 @@
             android:layout_weight="1"
             android:text="onDisappear" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/on_resetview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="onResetView" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat

@@ -1,0 +1,14 @@
+{
+  "getStorage": "getStorage",
+  "setStorage": "setStorage",
+  "removeStorage": "removeStorage",
+  "showAlert": "showAlert",
+  "showDialog": "showCustomDialog",
+  "dismissCustomDialog": "dismissCustomDialog",
+  "showToast": "showToast",
+  "setInterval": "setInterval",
+  "clearInterval": "clearInterval",
+  "setTimeout": "setTimeout",
+  "clearTimeout": "clearTimeout",
+  "getSystemInfo": "getSystemInfo"
+}

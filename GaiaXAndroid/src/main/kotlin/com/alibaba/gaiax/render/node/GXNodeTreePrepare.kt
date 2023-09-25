@@ -38,6 +38,7 @@ object GXNodeTreePrepare {
         )
         rootNode.isRoot = true
         GXNodeUtils.computeNodeTreeByPrepareView(
+            gxTemplateContext,
             rootNode, Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
         )
         return rootNode
@@ -119,7 +120,7 @@ object GXNodeTreePrepare {
 
                     // 建立节点的层级关系
                     gxChildNode.stretchNode.node?.let {
-                        gxNode.stretchNode.node?.addChild(it)
+                        gxNode.stretchNode.node?.safeAddChild(it)
                     }
                 }
             }
@@ -137,7 +138,7 @@ object GXNodeTreePrepare {
 
                 // 建立节点的层级关系
                 gxChildNode.stretchNode.node?.let {
-                    gxNode.stretchNode.node?.addChild(it)
+                    gxNode.stretchNode.node?.safeAddChild(it)
                 }
 
             }

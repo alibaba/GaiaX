@@ -1,0 +1,112 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+buildscript {
+
+    ext.kotlin_version = '1.5.31'
+
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.2.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+android {
+
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 30
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    // https://www.jianshu.com/p/681589927f1f
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-Adapter-JS"]
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/kotlin', 'src/main/java']
+            jniLibs.srcDir 'src/main/jniLibs'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
+    implementation 'com.alibaba:fastjson:1.2.26@jar'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:main-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:main-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-JS:main-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT@aar") { changing = true }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+
+                if (project.hasProperty("version")) {
+                    version = project.getProperty("version")
+                } else {
+                    version = '0.0.0'
+                }
+                if (project.hasProperty("group")) {
+                    groupId = project.getProperty("group")
+                } else {
+                    groupId = 'com.github.alibaba.GaiaX'
+                }
+
+                artifactId = 'GaiaX-JS-Adapter'
+            }
+        }
+    }
+}

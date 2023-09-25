@@ -38,11 +38,11 @@ class GaiaXBenchmark {
     fun before() {
         GXTemplateEngine.instance.init(context)
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
-        GXRegisterCenter.instance.registerExtensionViewSupport(
-            GXViewKey.VIEW_TYPE_IMAGE, GXImageView::class.java
-        )
-        GXRegisterCenter.instance.registerExtensionCompatibility(
-            GXRegisterCenter.GXExtensionCompatibilityConfig().apply {
+        GXRegisterCenter.instance.registerExtensionViewSupport(GXViewKey.VIEW_TYPE_IMAGE) {
+            GXImageView(it)
+        }
+        GXRegisterCenter.instance.registerExtensionCompatibility(GXRegisterCenter.GXExtensionCompatibilityConfig()
+            .apply {
                 this.isPreventContainerDataSourceThrowException = true
                 this.isPreventIconFontTypefaceThrowException = true
                 this.isPreventAccessibilityThrowException = true

@@ -26,6 +26,7 @@ import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -56,6 +57,18 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var traceId: String? = UUID.randomUUID().toString()
+
+    var tag: String? = ""
+
+    /**
+     * 视图的尺寸是否发生了变化，如果发生了变化，那么缓存需要被清空，UI需要被重建。
+     *
+     * 生命周期：
+     * bindDataOnlyNodeTree(gxView, gxTemplateData, gxMeasureSize)
+     * bindDataOnlyViewTree(gxView, gxTemplateData, gxMeasureSize)
+     */
+    var isMeasureSizeChanged: Boolean = false
 
     var isReuseRootNode: Boolean = false
 
@@ -95,11 +108,6 @@ class GXTemplateContext private constructor(
     var isDirty: Boolean = false
 
     /**
-     * Is exist flexGrow logic
-     */
-    var isFlexGrowLayout: Boolean = false
-
-    /**
      * A soft or weak reference to a view
      */
     var rootView: View? = null
@@ -122,6 +130,9 @@ class GXTemplateContext private constructor(
     var containers: CopyOnWriteArraySet<GXIContainer>? = null
 
     fun release() {
+        flags = 0
+        sliderItemLayoutCache = null
+        gridItemLayoutCache = null
         scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false
@@ -139,6 +150,7 @@ class GXTemplateContext private constructor(
         manualTrackMap?.forEach {
             templateData?.trackListener?.onManualExposureTrackEvent(it.value)
         }
+        manualTrackMap?.clear()
     }
 
     fun initContainers() {
@@ -152,10 +164,31 @@ class GXTemplateContext private constructor(
      */
     fun reset() {
         templateInfo.reset()
-        rootNode?.reset(this)
+        rootNode?.resetTree(this)
+    }
+
+    private var flags = 0
+
+    fun flagExtendFlexbox() {
+        flags = flags.or(FLAG_EXTEND_FLEXBOX)
+    }
+
+    fun isFlagExtendFlexbox(): Boolean {
+        return (flags and FLAG_EXTEND_FLEXBOX) != 0
+    }
+
+    fun flagFlexGrow() {
+        flags = flags.or(FLAG_FLEX_GROW_UPDATE)
+    }
+
+    fun isFlagFlexGrow(): Boolean {
+        return (flags and FLAG_FLEX_GROW_UPDATE) != 0
     }
 
     companion object {
+
+        const val FLAG_EXTEND_FLEXBOX = 0x1
+        const val FLAG_FLEX_GROW_UPDATE = 0x2
 
         fun createContext(
             gxTemplateItem: GXTemplateEngine.GXTemplateItem,

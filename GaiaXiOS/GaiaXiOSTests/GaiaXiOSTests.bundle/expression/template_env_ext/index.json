@@ -1,0 +1,10 @@
+{
+  "id": "template_env_ext",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "text",
+      "type": "text"
+    }
+  ]
+}

@@ -1,12 +1,16 @@
 package com.alibaba.gaiax.demo
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import com.alibaba.gaiax.utils.GXDarkUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
 
 class NormalTemplateActivity : AppCompatActivity() {

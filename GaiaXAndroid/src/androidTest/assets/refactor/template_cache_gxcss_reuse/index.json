@@ -1,0 +1,11 @@
+{
+  "id": "template_cache_gxcss_reuse",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "template_cache_gxcss_reuse_container",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

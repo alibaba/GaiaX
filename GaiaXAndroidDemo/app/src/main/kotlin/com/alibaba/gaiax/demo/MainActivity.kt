@@ -11,14 +11,21 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.demo.devtools.DevTools
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
-import com.alibaba.gaiax.studio.GXClientToStudio
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GX_CONNECT_URL
+import com.alibaba.gaiax.studio.loadInLocal
+import com.lzf.easyfloat.permission.PermissionUtils
+import com.youku.gaiax.js.GXJSEngineFactory
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,11 +70,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        GXClientToStudio.instance.destroy()
-        super.onDestroy()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -76,7 +78,6 @@ class MainActivity : AppCompatActivity() {
 
         GXTemplateEngine.instance.init(this)
 
-        GXClientToStudio.instance.init(applicationContext)
 
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
 
@@ -99,6 +100,25 @@ class MainActivity : AppCompatActivity() {
                 return null
             }
         })
+
+        if (PermissionUtils.checkPermission(applicationContext)) {
+            DevTools.instance.createDevToolsFloatWindow(
+                applicationContext
+            )
+        } else {
+            DevTools.instance.createDevToolsFloatWindow(
+                applicationContext
+            )
+        }
+
+
+
+        //GaiaXJS初始化
+        GXJSEngineFactory.instance.init(this)
+        //GaiaXJS引擎启动
+        GXJSEngineFactory.instance.startEngine()
+
+        autoConnect()
 
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, NormalTemplateActivity::class.java)
@@ -134,5 +154,19 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, StyleTemplateActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun autoConnect() {
+        // 自动重连时，提前初始化
+        GXClientToStudioMultiType.instance.init(this)
+        val result = loadInLocal(this, GX_CONNECT_URL)
+        JSONObject.parseObject(result)?.let {
+            DevTools.instance.connectReally(this, it)
+        }
+    }
+
+    override fun onDestroy() {
+        GXClientToStudioMultiType.instance.destroy()
+        super.onDestroy()
     }
 }

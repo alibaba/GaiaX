@@ -47,7 +47,7 @@ object GXContainerConvert {
         val left = GXSize.create(edge[1]).valueInt
         val bottom = GXSize.create(edge[2]).valueInt
         val right = GXSize.create(edge[3]).valueInt
-        android.graphics.Rect(left, right, top, bottom)
+        android.graphics.Rect(left, top, right, bottom)
     } else {
         null
     }

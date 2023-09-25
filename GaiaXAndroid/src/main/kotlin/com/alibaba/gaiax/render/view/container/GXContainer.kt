@@ -37,17 +37,14 @@ import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawabl
  * @suppress
  */
 @Keep
-open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootView,
-    GXIRoundCorner {
+open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootView, GXIRoundCorner {
 
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     )
 
     override fun onBindData(data: JSONObject?) {
@@ -63,10 +60,8 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
         return gxTemplateContext
     }
 
-    private var lastRadius: FloatArray? = null
-
     override fun setRoundCornerRadius(radius: FloatArray) {
-        if (!this.lastRadius.contentEquals(radius) && radius.size == 8) {
+        if (radius.size == 8) {
             val tl = radius[0]
             val tr = radius[2]
             val bl = radius[4]
@@ -87,7 +82,6 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
                     this.outlineProvider = null
                 }
             }
-            this.lastRadius = radius
         }
     }
 

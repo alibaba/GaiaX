@@ -27,6 +27,7 @@ open class GXDataBinding(
     var value: GXIExpression? = null,
     val accessibilityDesc: GXIExpression? = null,
     val accessibilityEnable: GXIExpression? = null,
+    val accessibilityTraits: GXIExpression? = null,
     val placeholder: GXIExpression? = null,
     val extend: MutableMap<String, GXIExpression>? = null
 ) {
@@ -37,7 +38,8 @@ open class GXDataBinding(
     "value":"value",
     "placeholder":"placeholder",
     "accessibilityDesc":"accessibilityDesc",
-    "accessibilityEnable":"accessibilityEnable"
+    "accessibilityTraits":"button",
+    "accessibilityEnable":"accessibilityEnable",
     }
      */
     open fun getData(templateData: JSONObject): JSONObject? {
@@ -66,6 +68,12 @@ open class GXDataBinding(
         accessibilityEnable?.value(templateData)?.let {
             result = result ?: JSONObject()
             result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE, it)
+        }
+
+        // View的无障碍朗读逻辑
+        accessibilityTraits?.value(templateData)?.let {
+            result = result ?: JSONObject()
+            result?.put(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS, it)
         }
 
         // extend数据

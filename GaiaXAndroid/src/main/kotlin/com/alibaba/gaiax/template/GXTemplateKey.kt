@@ -149,6 +149,11 @@ object GXTemplateKey {
     const val STYLE_FIT_CONTENT = "fit-content"
 
     /**
+     * 仅对Android生效
+     */
+    const val STYLE_ONLY_ANDROID_INCLUDE_FONT_PADDING = "includeFontPadding"
+
+    /**
      * 弹性容器通过设置 display 属性的值为 flex 或 inline-flex将其定义为弹性容器。
      */
     const val FLEXBOX_DISPLAY = "display"
@@ -383,6 +388,8 @@ object GXTemplateKey {
     const val GAIAX_GESTURE_TYPE_TAP = "tap"
     const val GAIAX_GESTURE_TYPE_JS_TAP = "click"
     const val GAIAX_GESTURE_TYPE_LONGPRESS = "longpress"
+
+    const val GAIAX_ENABLE = "enable"
 
     const val GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH = "view-port-width"
     const val GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT = "grid-compute-container-height"

@@ -26,6 +26,7 @@ import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdate
 import com.alibaba.gaiax.utils.GXGlobalCache
+import com.alibaba.gaiax.utils.GXLog
 
 /**
  * @suppress
@@ -36,16 +37,31 @@ class GXRenderImpl {
     fun prepareView(gxTemplateContext: GXTemplateContext) {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
-        rootNode.stretchNode.layoutByCreate?.let {
-            GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext.templateItem, it)
+        rootNode.stretchNode.layoutByPrepareView?.let {
+            GXGlobalCache.instance.putLayoutForPrepareView(
+                gxTemplateContext,
+                gxTemplateContext.templateItem,
+                it
+            )
         }
         rootNode.release()
     }
 
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
         val rootLayout =
-            GXGlobalCache.instance.getLayoutForPrepareView(gxTemplateContext.templateItem)
+            GXGlobalCache.instance.getLayoutForPrepareView(
+                gxTemplateContext,
+                gxTemplateContext.templateItem
+            )
                 ?: throw IllegalArgumentException("root layout is null")
+
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=createViewOnlyNodeTree rootLayout=${rootLayout}"
+            )
+        }
+
         // Create a virtual node tree
         val rootNode = GXNodeTreeCreator.create(gxTemplateContext, rootLayout)
         gxTemplateContext.rootNode = rootNode
@@ -67,14 +83,28 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyNodeTree"
+            )
+        }
+
         // Resetting the Template Status
         gxTemplateContext.isDirty = false
 
         // Update the node tree
-        GXNodeTreeUpdate(gxTemplateContext).buildNodeLayout()
+        GXNodeTreeUpdate.buildNodeLayout(gxTemplateContext)
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyViewTree"
+            )
+        }
+
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(bindViewDataOnlyViewTree) gxTemplateContext = $gxTemplateContext")
 
@@ -82,7 +112,18 @@ class GXRenderImpl {
         GXViewTreeUpdate(gxTemplateContext, rootNode).build()
 
         // Update the view tree
-        GXNodeTreeUpdate(gxTemplateContext).buildViewStyleAndData()
+        GXNodeTreeUpdate.buildViewStyleAndData(gxTemplateContext)
+    }
+
+    fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
+        if (GXLog.isLog()) {
+            GXLog.e(
+                gxTemplateContext.tag,
+                "traceId=${gxTemplateContext.traceId} tag=resetViewDataOnlyViewTree"
+            )
+        }
+
+        GXNodeTreeUpdate.resetView(gxTemplateContext)
     }
 
 }

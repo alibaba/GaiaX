@@ -63,7 +63,7 @@ open class Node {
         }
     }
 
-    constructor(id: String,  style: Style) {
+    constructor(id: String, style: Style) {
         synchronized(Stretch::class.java) {
             val children: List<Node> = mutableListOf()
             this.id = id
@@ -78,11 +78,15 @@ open class Node {
 
     fun safeFree() {
         synchronized(Stretch::class.java) {
-            if (rustptr != -1L) {
-                style.free()
-                nFree(Stretch.ptr, rustptr)
-                rustptr = -1
-            }
+            style.free()
+            free()
+        }
+    }
+
+    private fun free() {
+        if (rustptr != -1L) {
+            nFree(Stretch.ptr, rustptr)
+            rustptr = -1
         }
     }
 
@@ -90,10 +94,12 @@ open class Node {
         return this.children
     }
 
-    fun addChild(child: Node) {
+    fun safeAddChild(child: Node) {
         synchronized(Stretch::class.java) {
-            nAddChild(Stretch.ptr, rustptr, child.rustptr)
-            children.add(child)
+            if (rustptr != -1L && child.rustptr != -1L) {
+                nAddChild(Stretch.ptr, rustptr, child.rustptr)
+                children.add(child)
+            }
         }
     }
 
@@ -101,30 +107,59 @@ open class Node {
         return this.style
     }
 
-    fun setStyle(style: Style) {
+    fun safeSetStyle(style: Style): Boolean {
         synchronized(Stretch::class.java) {
-            nSetStyle(Stretch.ptr, rustptr, style.rustptr)
-            this.style = style
+            if (rustptr != -1L && style.rustptr != -1L) {
+                nSetStyle(Stretch.ptr, rustptr, style.rustptr)
+                this.style = style
+                return true
+            } else {
+                return false
+            }
         }
     }
 
-    fun markDirty() {
+
+    fun safeSetStyle(style: Style, locked: (() -> Unit)? = null): Boolean {
         synchronized(Stretch::class.java) {
-            nMarkDirty(Stretch.ptr, rustptr)
+            if (rustptr != -1L && style.rustptr != -1L) {
+                locked?.invoke()
+                if (style.rustptr == -1L) {
+                    return false
+                }
+                nSetStyle(Stretch.ptr, rustptr, style.rustptr)
+                this.style = style
+                return true
+            } else {
+                return false
+            }
         }
     }
 
-    fun computeLayout(size: Size<Float?>): Layout {
+
+    fun safeMarkDirty() {
         synchronized(Stretch::class.java) {
-            val args = nComputeLayout(
-                Stretch.ptr,
-                rustptr,
-                // FIX: 修复一个奇怪的BUG，整数传入，会导致一些层级节点计算为空
-                (size.width?.minus(0.01F)) ?: Float.NaN,
-                (size.height?.minus(0.01F)) ?: Float.NaN
-            )
-            val result = Layout.fromFloatArray(args, 0)
-            return result.second
+            if (rustptr != -1L) {
+                nMarkDirty(Stretch.ptr, rustptr)
+            }
+        }
+    }
+
+    fun safeComputeLayout(size: Size<Float?>): Layout {
+        synchronized(Stretch::class.java) {
+            if (rustptr != -1L) {
+                val args = nComputeLayout(
+                    Stretch.ptr,
+                    rustptr,
+                    // FIX: 修复一个奇怪的BUG，整数传入，会导致一些层级节点计算为空
+                    (size.width?.minus(0.01F)) ?: Float.NaN,
+                    (size.height?.minus(0.01F)) ?: Float.NaN
+                )
+                val result = Layout.fromFloatArray(args, 0)
+                return result.second
+            } else {
+                throw IllegalArgumentException("rustptr is null")
+            }
         }
     }
 
@@ -154,9 +189,14 @@ open class Node {
     ): FloatArray
 
     fun markDirtyAll() {
-        markDirty()
+        safeMarkDirty()
         children.forEach {
             it.markDirtyAll()
         }
     }
+
+    override fun toString(): String {
+        return "Node(id='$id', style=$style, children=$children)"
+    }
+
 }

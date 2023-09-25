@@ -1,0 +1,5 @@
+//------ts start------
+//UEsDBBQAAAgIAEaBcVUG2E8+MwEAAB0CAAAIAAAAaW5kZXguanNzzs8tyM9LzSvRqOZSUCguSSxJtVKortUBcvLzgjPyy60U0krzkksy8/MUNDQVQIoUFPT1n63vf7Zm4bMVC5/N3f9sxr7nS3a9bN77ZM+sp7PnvdjQDFQENSEoNTGlEocREM07Nj2bP/npup5nHROeTuh7PqsFYsT7PT3Pp8x/OnHv04krns2Z/7St9Wn/KojUkx0NQLvBpiTn5xXn56Tq5eSnayhlFcMsVNK0hlriUFKsm5mel1+UChYILcnMKdYrBnorJD+xGOhnhZLMkhygj0Ga0zNLMkqTlBRqwbqhHvDITEklHAQvZ014Mb0fLQiwOQ9knBKy+UGppcW4LAAb/XRJ7/MpK55N34YetC6pxSVF+XgD9+mGthfLGl+2dz2bsg8esjhcBjIuv6gS7jhQKAAAUEsBAhQDFAAACAgARoFxVQbYTz4zAQAAHQIAAAgAAAAAAAAAAAAAAKSBAAAAAGluZGV4LmpzUEsFBgAAAAABAAEANgAAAFkBAAAAAA==
+//------ts end------
+
+Component({state:{},onShow:function(){},onReady:function(){console.log("js onReady"),Utils.showToast({title:"js github"})},onHide:function(){console.log("js onHide")},onReuse:function(){},onDestroy:function(){console.log("js onDestory")}});

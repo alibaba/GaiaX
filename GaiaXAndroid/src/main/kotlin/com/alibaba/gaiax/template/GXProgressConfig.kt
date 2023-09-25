@@ -22,10 +22,10 @@ import com.alibaba.fastjson.JSONObject
  * @suppress
  */
 data class GXProgressConfig(
-    private val strokeColorForTemplate: GXColor,
-    private val trailColorForTemplate: GXColor,
-    private val progressTypeForTemplate: String,
-    private val animatedForTemplate: Boolean
+    internal val strokeColorForTemplate: GXColor,
+    internal val trailColorForTemplate: GXColor,
+    internal val progressTypeForTemplate: String,
+    internal val animatedForTemplate: Boolean
 ) {
 
     private var strokeColorForExtend: GXColor? = null

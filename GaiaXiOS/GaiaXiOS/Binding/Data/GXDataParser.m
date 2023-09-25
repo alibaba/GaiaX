@@ -55,16 +55,15 @@
             id result = [self gx_handleExp:valueStr withData:dataDict];
             [resultDict gx_setObject:result forKey:key];
             
-        } else if ([obj isKindOfClass:[NSNumber class]]){
-            //如果object为number类型
-            NSNumber *valueNum = (NSNumber *)obj;
-            [resultDict gx_setObject:valueNum forKey:key];
-            
         } else if ([obj isKindOfClass:[NSDictionary class]]){
             //如果object为字典类型
             NSDictionary *valueDict = (NSDictionary *)obj;
             NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict];
             [resultDict gx_setObject:result forKey:key];
+            
+        } else if ([obj isKindOfClass:[NSNumber class]]){
+            //如果object为number类型
+            [resultDict gx_setObject:obj forKey:key];
             
         } else if ([obj isKindOfClass:[NSArray class]]) {
             //如果object类型为数组类型
@@ -85,6 +84,10 @@
                         NSMutableDictionary *result = [self gx_handleDB:valueDict withData:dataDict];
                         [resultArray gx_addObject:result];
                         
+                    } else if ([value isKindOfClass:[NSNumber class]]){
+                        //如果object为number类型
+                        [resultArray gx_addObject:value];
+
                     }
                     
                 }

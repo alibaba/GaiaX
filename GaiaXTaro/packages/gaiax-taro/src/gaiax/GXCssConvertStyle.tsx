@@ -525,7 +525,8 @@ export default class GXCssConvertStyle {
 
             // 对文字自适应进行特殊处理
             if (fitContent != null && fitContent != undefined) {
-                if (fitContent == true) {
+                // css parser 返回 attr:string
+                if (fitContent == 'true') {
                     // 如果宽度是auto并且设置的自增长，那么fitcontent之后，需要按照实际的宽度设置
                     if ((width == 'auto' || width == undefined) && flexGrow == '1') {
                         targetStyle.flexGrow = '0';
@@ -560,7 +561,7 @@ export default class GXCssConvertStyle {
                 targetStyle.lineHeight = '';
 
                 // 如果不是fitcontent=true，并且多行，那么需要手动计算一下高度，并且赋值
-                if (fitContent == false && targetStyle.height != undefined) {
+                if (fitContent == 'false' && targetStyle.height != undefined) {
                     let tmpHeight = targetStyle.height as string;
                     if (tmpHeight.endsWith('px')) {
                         targetStyle.height = parseInt(tmpHeight.substring(0, tmpHeight.indexOf('px'))) * maxLines + 'px';
@@ -571,7 +572,7 @@ export default class GXCssConvertStyle {
                     }
                 }
                 // 自适应，那么高度设置成auto
-                else if (fitContent == true) {
+                else if (fitContent == 'true') {
                     targetStyle.height = 'auto';
                 }
 

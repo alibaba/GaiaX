@@ -28,30 +28,59 @@ import com.alibaba.gaiax.utils.GXLog
  * @suppress
  */
 data class GXStyle(
-    private var fontSizeForTemplate: GXSize? = null,
-    private var fontFamilyForTemplate: Typeface? = null,
-    private var fontWeightForTemplate: Typeface? = null,
-    private var fontLinesForTemplate: Int? = null,
-    private var fontColorForTemplate: GXColor? = null,
-    private var fontTextOverflowForTemplate: TextUtils.TruncateAt? = null,
-    private var fontTextAlignForTemplate: Int? = null,
-    private var backgroundColorForTemplate: GXColor? = null,
-    private var backgroundImageForTemplate: GXLinearColor? = null,
-    private var opacityForTemplate: Float? = null,
-    private var overflowForTemplate: Boolean? = null,
-    private var displayForTemplate: Int? = null,
-    private var hiddenForTemplate: Int? = null,
-    private var paddingForTemplate: Rect<GXSize>? = null,
-    private var borderWidthForTemplate: GXSize? = null,
-    private var borderColorForTemplate: GXColor? = null,
-    private var borderRadiusForTemplate: GXRoundedCorner? = null,
-    private var fontLineHeightForTemplate: GXSize? = null,
-    private var fontTextDecorationForTemplate: Int? = null,
-    private var modeForTemplate: GXMode? = null,
-    private var boxShadowForTemplate: GXBoxShadow? = null,
-    private var backdropFilterForTemplate: GXBackdropFilter? = null,
-    private var fitContentForTemplate: Boolean? = null
+    internal var fontSizeForTemplate: GXSize? = null,
+    internal var fontFamilyForTemplate: Typeface? = null,
+    internal var fontWeightForTemplate: Typeface? = null,
+    internal var fontLinesForTemplate: Int? = null,
+    internal var fontColorForTemplate: GXColor? = null,
+    internal var fontTextOverflowForTemplate: TextUtils.TruncateAt? = null,
+    internal var fontTextAlignForTemplate: Int? = null,
+    internal var backgroundColorForTemplate: GXColor? = null,
+    internal var backgroundImageForTemplate: GXLinearColor? = null,
+    internal var opacityForTemplate: Float? = null,
+    internal var overflowForTemplate: Boolean? = null,
+    internal var displayForTemplate: Int? = null,
+    internal var hiddenForTemplate: Int? = null,
+    internal var paddingForTemplate: Rect<GXSize>? = null,
+    internal var borderWidthForTemplate: GXSize? = null,
+    internal var borderColorForTemplate: GXColor? = null,
+    internal var borderRadiusForTemplate: GXRoundedCorner? = null,
+    internal var fontLineHeightForTemplate: GXSize? = null,
+    internal var fontTextDecorationForTemplate: Int? = null,
+    internal var modeForTemplate: GXMode? = null,
+    internal var boxShadowForTemplate: GXBoxShadow? = null,
+    internal var backdropFilterForTemplate: GXBackdropFilter? = null,
+    internal var fitContentForTemplate: Boolean? = null
 ) {
+
+
+    override fun toString(): String {
+        return "GXStyle(" +
+                "fontSize=$fontSize, " +
+                "fontFamily=$fontFamily, " +
+                "fontWeight=$fontWeight, " +
+                "fontLines=$fontLines, " +
+                "fontColor=$fontColor, " +
+                "fontTextOverflow=$fontTextOverflow, " +
+                "fontTextAlign=$fontTextAlign, " +
+                "backgroundColor=$backgroundColor, " +
+                "backgroundImage=$backgroundImage, " +
+                "opacity=$opacity, " +
+                "overflow=$overflow, " +
+                "display=$display, " +
+                "hidden=$hidden, " +
+                "padding=$padding, " +
+                "borderWidth=$borderWidth, " +
+                "borderColor=$borderColor, " +
+                "borderRadius=$borderRadius, " +
+                "fontLineHeight=$fontLineHeight, " +
+                "fontTextDecoration=$fontTextDecoration, " +
+                "mode=$mode, " +
+                "boxShadow=$boxShadow, " +
+                "backdropFilter=$backdropFilter, " +
+                "fitContent=$fitContent, " +
+                "paddingForAndroid=$paddingForAndroid)"
+    }
 
     private var fontSizeForExtend: GXSize? = null
     private var fontFamilyForExtend: Typeface? = null
@@ -76,6 +105,7 @@ data class GXStyle(
     private var boxShadowForExtend: GXBoxShadow? = null
     private var backdropFilterForExtend: GXBackdropFilter? = null
     private var fitContentForExtend: Boolean? = null
+    private var includeFontPaddingForExtend: Boolean? = null
 
     val fontSize: GXSize?
         get() {
@@ -205,6 +235,11 @@ data class GXStyle(
             return backdropFilterForExtend ?: backdropFilterForTemplate
         }
 
+    val includeFontPadding: Boolean?
+        get() {
+            return includeFontPaddingForExtend
+        }
+
     val fitContent: Boolean?
         get() {
             return if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isCompatibilityDataBindingFitContent == true) {
@@ -243,50 +278,81 @@ data class GXStyle(
             when (key) {
                 GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForExtend =
                     convertStyle.font(value.toString())
+
                 GXTemplateKey.STYLE_FONT_FAMILY -> gxStyle.fontFamilyForExtend =
                     convertStyle.fontFamily(value.toString())
+
                 GXTemplateKey.STYLE_FONT_WEIGHT -> gxStyle.fontWeightForExtend =
                     convertStyle.fontWeight(value.toString())
+
                 GXTemplateKey.STYLE_FONT_LINES -> gxStyle.fontLinesForExtend =
                     convertStyle.fontLines(value.toString())
+
                 GXTemplateKey.STYLE_FONT_COLOR -> gxStyle.fontColorForExtend =
                     convertStyle.fontColor(value.toString())
+
                 GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW -> gxStyle.fontTextOverflowForExtend =
                     convertStyle.fontTextOverflow(value.toString())
+
                 GXTemplateKey.STYLE_FONT_TEXT_ALIGN -> gxStyle.fontTextAlignForExtend =
                     convertStyle.fontTextAlign(value.toString())
+
                 GXTemplateKey.STYLE_FONT_TEXT_DECORATION -> gxStyle.fontTextDecorationForExtend =
                     convertStyle.textDecoration(value.toString())
+
                 GXTemplateKey.STYLE_BACKGROUND_COLOR -> gxStyle.backgroundColorForExtend =
                     convertStyle.backgroundColor(value.toString())
+
                 GXTemplateKey.STYLE_BACKGROUND_IMAGE -> gxStyle.backgroundImageForExtend =
                     convertStyle.backgroundImage(value.toString())
-                GXTemplateKey.STYLE_MODE -> if (gxStyle.modeForExtend == null) gxStyle.modeForExtend =
-                    convertStyle.mode(extendCssData)
+
+                GXTemplateKey.STYLE_MODE -> {
+                    if (gxStyle.modeForExtend == null) {
+                        gxStyle.modeForExtend = convertStyle.mode(extendCssData)
+                    }
+                }
+
                 GXTemplateKey.STYLE_OPACITY -> gxStyle.opacityForTemplate =
                     convertStyle.opacity(value.toString())
-                GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> if (gxStyle.borderRadiusForExtend == null) gxStyle.borderRadiusForExtend =
-                    convertStyle.borderRadius(extendCssData)
+
+                GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> {
+                    if (gxStyle.borderRadiusForExtend == null) {
+                        gxStyle.borderRadiusForExtend = convertStyle.borderRadius(extendCssData)
+                    }
+                }
+
                 GXTemplateKey.FLEXBOX_OVERFLOW -> gxStyle.overflowForExtend =
                     convertStyle.overflow(value.toString())
+
                 GXTemplateKey.FLEXBOX_DISPLAY -> gxStyle.displayForExtend =
                     convertStyle.display(value.toString())
+
                 GXTemplateKey.STYLE_HIDDEN -> gxStyle.hiddenForExtend =
                     convertStyle.hidden(value.toString())
+
                 GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxStyle.paddingForExtend == null) gxStyle.paddingForExtend =
                     convertStyle.padding(extendCssData)
+
                 GXTemplateKey.STYLE_BORDER_WIDTH -> gxStyle.borderWidthForExtend =
                     convertStyle.borderWidth(value.toString())
+
                 GXTemplateKey.STYLE_BORDER_COLOR -> gxStyle.borderColorForExtend =
                     convertStyle.borderColor(value.toString())
+
                 GXTemplateKey.STYLE_FONT_LINE_HEIGHT -> gxStyle.fontLineHeightForExtend =
                     convertStyle.fontLineHeight(value.toString())
+
                 GXTemplateKey.STYLE_BOX_SHADOW -> gxStyle.boxShadowForExtend =
                     convertStyle.boxShadow(value.toString())
+
                 GXTemplateKey.STYLE_BACKDROP_FILTER -> gxStyle.backdropFilterForExtend =
                     convertStyle.backdropFilter(value.toString())
+
                 GXTemplateKey.STYLE_FIT_CONTENT -> gxStyle.fitContentForExtend =
                     convertStyle.fitContent(value.toString())
+
+                GXTemplateKey.STYLE_ONLY_ANDROID_INCLUDE_FONT_PADDING -> gxStyle.includeFontPaddingForExtend =
+                    convertStyle.includeFontPadding(value.toString())
             }
         }
     }
@@ -315,6 +381,7 @@ data class GXStyle(
         boxShadowForExtend = null
         backdropFilterForExtend = null
         fitContentForExtend = null
+        includeFontPaddingForExtend = null
         _paddingForAndroid = null
     }
 
@@ -413,48 +480,70 @@ data class GXStyle(
                 when (key) {
                     GXTemplateKey.STYLE_FONT_SIZE -> gxStyle.fontSizeForTemplate =
                         convertStyle.font(value.toString())
+
                     GXTemplateKey.STYLE_FONT_FAMILY -> gxStyle.fontFamilyForTemplate =
                         convertStyle.fontFamily(value.toString())
+
                     GXTemplateKey.STYLE_FONT_WEIGHT -> gxStyle.fontWeightForTemplate =
                         convertStyle.fontWeight(value.toString())
+
                     GXTemplateKey.STYLE_FONT_LINES -> gxStyle.fontLinesForTemplate =
                         convertStyle.fontLines(value.toString())
+
                     GXTemplateKey.STYLE_FONT_COLOR -> gxStyle.fontColorForTemplate =
                         convertStyle.fontColor(value.toString())
+
                     GXTemplateKey.STYLE_FONT_TEXT_OVERFLOW -> gxStyle.fontTextOverflowForTemplate =
                         convertStyle.fontTextOverflow(value.toString())
+
                     GXTemplateKey.STYLE_FONT_TEXT_ALIGN -> gxStyle.fontTextAlignForTemplate =
                         convertStyle.fontTextAlign(value.toString())
+
                     GXTemplateKey.STYLE_FONT_TEXT_DECORATION -> gxStyle.fontTextDecorationForTemplate =
                         convertStyle.textDecoration(value.toString())
+
                     GXTemplateKey.STYLE_BACKGROUND_COLOR -> gxStyle.backgroundColorForTemplate =
                         convertStyle.backgroundColor(value.toString())
+
                     GXTemplateKey.STYLE_BACKGROUND_IMAGE -> gxStyle.backgroundImageForTemplate =
                         convertStyle.backgroundImage(value.toString())
+
                     GXTemplateKey.STYLE_MODE -> if (gxStyle.modeForTemplate == null) gxStyle.modeForTemplate =
                         convertStyle.mode(css)
+
                     GXTemplateKey.STYLE_OPACITY -> gxStyle.opacityForTemplate =
                         convertStyle.opacity(value.toString())
+
                     GXTemplateKey.STYLE_BORDER_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_TOP_RIGHT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_LEFT_RADIUS, GXTemplateKey.STYLE_BORDER_BOTTOM_RIGHT_RADIUS -> if (gxStyle.borderRadiusForTemplate == null) gxStyle.borderRadiusForTemplate =
                         convertStyle.borderRadius(css)
+
                     GXTemplateKey.FLEXBOX_OVERFLOW -> gxStyle.overflowForTemplate =
                         convertStyle.overflow(value.toString())
+
                     GXTemplateKey.FLEXBOX_DISPLAY -> gxStyle.displayForTemplate =
                         convertStyle.display(value.toString())
+
                     GXTemplateKey.STYLE_HIDDEN -> gxStyle.hiddenForTemplate =
                         convertStyle.hidden(value.toString())
+
                     GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (gxStyle.paddingForTemplate == null) gxStyle.paddingForTemplate =
                         convertStyle.padding(css)
+
                     GXTemplateKey.STYLE_BORDER_WIDTH -> gxStyle.borderWidthForTemplate =
                         convertStyle.borderWidth(value.toString())
+
                     GXTemplateKey.STYLE_BORDER_COLOR -> gxStyle.borderColorForTemplate =
                         convertStyle.borderColor(value.toString())
+
                     GXTemplateKey.STYLE_FONT_LINE_HEIGHT -> gxStyle.fontLineHeightForTemplate =
                         convertStyle.fontLineHeight(value.toString())
+
                     GXTemplateKey.STYLE_BOX_SHADOW -> gxStyle.boxShadowForTemplate =
                         convertStyle.boxShadow(value.toString())
+
                     GXTemplateKey.STYLE_BACKDROP_FILTER -> gxStyle.backdropFilterForTemplate =
                         convertStyle.backdropFilter(value.toString())
+
                     GXTemplateKey.STYLE_FIT_CONTENT -> gxStyle.fitContentForTemplate =
                         convertStyle.fitContent(value.toString())
                 }

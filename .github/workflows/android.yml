@@ -23,16 +23,16 @@ jobs:
     - name: Build before
       run: ls -ll
     - name: Build Setup 1 GaiaXAndroidClientToStudio
-      run: cd ./GaiaXAndroidClientToStudio && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidClientToStudio && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 2 GaiaXAnalyze
-      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAnalyze/GXAnalyzeAndroid && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 3 GaiaXAndroid 
-      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroid && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 4 GaiaXAndroidAdapter 
-      run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="ebug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 5 GaiaXAndroidQuickJS 
-      run: cd ./GaiaXAndroidQuickJS && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidQuickJS && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 6 GaiaXAndroidJS 
-      run: cd ./GaiaXAndroidJS && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidJS && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
     - name: Build Setup 7 GaiaXAndroidJSAdapter 
-      run: cd ./GaiaXAndroidJSAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype="debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+      run: cd ./GaiaXAndroidJSAdapter && chmod +x ./gradlew && ./gradlew clean assembleDebug -Ptype=debug -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal

@@ -1,0 +1,20 @@
+{
+  "type": "gaia-template",
+  "id": "gx-with-js",
+  "layers": [
+    { "id": "left-image", "type": "image" },
+    {
+      "id": "middle-container",
+      "type": "view",
+      "layers": [
+        { "id": "title", "type": "text" },
+        { "id": "sub-title", "type": "text" }
+      ]
+    },
+    {
+      "id": "button",
+      "type": "view",
+      "layers": [{ "id": "button-title", "type": "text" }]
+    }
+  ]
+}

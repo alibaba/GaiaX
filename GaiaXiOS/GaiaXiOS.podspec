@@ -25,6 +25,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'GaiaMotionCurve'
 
+  s.dependency 'GaiaXJS'
 
   s.pod_target_xcconfig = { 'VALID_ARCHS' => 'arm64 armv7 x86_64' }
 

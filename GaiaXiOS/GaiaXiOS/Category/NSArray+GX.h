@@ -22,17 +22,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSArray (GX)
 
-//Safely get the value by index
-- (id)gx_objectAtIndex:(NSUInteger)index;
-
 //array to string
 - (NSString *)gx_JSONString;
 
-//string to array
-+ (NSArray *)gx_arrayFromJSONString:(NSMutableString *)jsonString;
-
 //deepCopy
 - (NSMutableArray *)gx_mutableDeepCopy;
+
+//Safely get the value by index
+- (id)gx_objectAtIndex:(NSUInteger)index;
+
+//string to array
++ (NSArray *)gx_arrayFromJSONString:(NSMutableString *)jsonString;
 
 @end
 

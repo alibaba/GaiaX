@@ -31,10 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 //view对应node
 @property(nonatomic, strong)GXNode *gxNode;
-//view对应的 tap event
-@property(nonatomic, strong)GXEvent *gxEvent;
 //view对应的track
 @property(nonatomic, strong)GXTrack *gxTrack;
+//view对应的 tap event
+@property(nonatomic, strong)GXEvent *gxEvent;
+//view对应的 long press event
+@property(nonatomic, strong)GXEvent *gxLpEvent;
 //业务id
 @property(nonatomic, strong) NSString *gxBizId;
 //节点id
@@ -56,17 +58,14 @@ NS_ASSUME_NONNULL_BEGIN
 //获取view对应的vc
 - (UIViewController *)gx_viewController;
 
-//处理点击手势
-- (void)gx_handleGestureTap:(UIGestureRecognizer *)gesture;
-
-//处理长按手势
-- (void)gx_handleGestureLongpress:(UIGestureRecognizer *)gesture;
+//处理点击手势（tap、longpress）
+- (void)gx_handleGesture:(UIGestureRecognizer *)gesture;
 
 // 获取事件数据
-- (GXEvent *)getGxEvent:(GXEventType) eventType;
+- (GXEvent * _Nullable)gx_eventWithType:(GXEventType)eventType;
 
 // 设置事件数据
-- (void)setGxEvent:(GXEventType) eventType with: (GXEvent *) gxEvent;
+- (void)gx_setEvent:(GXEvent * _Nullable)gxEvent withType:(GXEventType)eventType;
 
 
 @end

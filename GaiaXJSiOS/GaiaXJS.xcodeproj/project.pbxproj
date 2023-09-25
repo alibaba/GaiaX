@@ -1,0 +1,738 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0660CC07134E389BCFC4B266 /* libPods-GaiaXJS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E010A0793D7A14B1156FF5E9 /* libPods-GaiaXJS.a */; };
+		BD036D8126733C4F00F4905B /* GaiaXJS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD036D8026733C4F00F4905B /* GaiaXJS.bundle */; };
+		BD080D37276B35C2004DD2F9 /* GaiaXJSNativeEventManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BD080D35276B35C2004DD2F9 /* GaiaXJSNativeEventManager.h */; };
+		BD080D38276B35C2004DD2F9 /* GaiaXJSNativeEventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD080D36276B35C2004DD2F9 /* GaiaXJSNativeEventManager.m */; };
+		BD0D20CD265F447A0019D2C1 /* GaiaXJSUIViewModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0D20CB265F447A0019D2C1 /* GaiaXJSUIViewModule.h */; };
+		BD0D20CE265F447A0019D2C1 /* GaiaXJSUIViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0D20CC265F447A0019D2C1 /* GaiaXJSUIViewModule.m */; };
+		BD0D20D1265F44900019D2C1 /* GaiaXJSUITextModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0D20CF265F44900019D2C1 /* GaiaXJSUITextModule.h */; };
+		BD0D20D2265F44900019D2C1 /* GaiaXJSUITextModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0D20D0265F44900019D2C1 /* GaiaXJSUITextModule.m */; };
+		BD0D20D5265F44A40019D2C1 /* GaiaXJSUIImageModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0D20D3265F44A40019D2C1 /* GaiaXJSUIImageModule.h */; };
+		BD0D20D6265F44A40019D2C1 /* GaiaXJSUIImageModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0D20D4265F44A40019D2C1 /* GaiaXJSUIImageModule.m */; };
+		BD0D20E0265F81EA0019D2C1 /* GaiaXJSUIManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0D20DE265F81EA0019D2C1 /* GaiaXJSUIManager.h */; };
+		BD0D20E1265F81EA0019D2C1 /* GaiaXJSUIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0D20DF265F81EA0019D2C1 /* GaiaXJSUIManager.m */; };
+		BD0D20E5266A0A680019D2C1 /* GaiaXJSCModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BD0D20E3266A0A670019D2C1 /* GaiaXJSCModule.h */; };
+		BD0D20E6266A0A680019D2C1 /* GaiaXJSCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0D20E4266A0A670019D2C1 /* GaiaXJSCModule.m */; };
+		BD3EA8502923ACB200930593 /* GaiaXJSHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = BD3EA84E2923ACB200930593 /* GaiaXJSHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BD3EA8512923ACB200930593 /* GaiaXJSHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3EA84F2923ACB200930593 /* GaiaXJSHandler.m */; };
+		BD6B494228E297D600642266 /* GaiaXJSConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = BD6B494028E297D600642266 /* GaiaXJSConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BD6B494328E297D600642266 /* GaiaXJSConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B494128E297D600642266 /* GaiaXJSConfig.m */; };
+		BD7FF07B2659FCF4007BEC87 /* GaiaXJSFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = BD7FF0792659FCF4007BEC87 /* GaiaXJSFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BD7FF07C2659FCF4007BEC87 /* GaiaXJSFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7FF07A2659FCF4007BEC87 /* GaiaXJSFactory.m */; };
+		BD7FF085265A451F007BEC87 /* GaiaXJSCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = BD7FF083265A451F007BEC87 /* GaiaXJSCRuntime.h */; };
+		BD7FF086265A451F007BEC87 /* GaiaXJSCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7FF084265A451F007BEC87 /* GaiaXJSCRuntime.m */; };
+		BD81B20127EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = BD81B1FF27EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.h */; };
+		BD81B20227EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD81B20027EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.m */; };
+		BD81B20727EB4190006E8C2F /* GaiaXJSDRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = BD81B20527EB4190006E8C2F /* GaiaXJSDRuntime.h */; };
+		BD81B20827EB4190006E8C2F /* GaiaXJSDRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = BD81B20627EB4190006E8C2F /* GaiaXJSDRuntime.m */; };
+		BD81B20B27EB42DA006E8C2F /* GaiaXJSDebuggerContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BD81B20927EB42DA006E8C2F /* GaiaXJSDebuggerContext.h */; };
+		BD81B20C27EB42DA006E8C2F /* GaiaXJSDebuggerContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BD81B20A27EB42DA006E8C2F /* GaiaXJSDebuggerContext.m */; };
+		BDB8F92C268571050086B96B /* GaiaXJSNativeTargetModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BDB8F92A268571050086B96B /* GaiaXJSNativeTargetModule.h */; };
+		BDB8F92D268571060086B96B /* GaiaXJSNativeTargetModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8F92B268571050086B96B /* GaiaXJSNativeTargetModule.m */; };
+		BDBD016426C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = BDBD016226C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.h */; };
+		BDBD016526C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.m in Sources */ = {isa = PBXBuildFile; fileRef = BDBD016326C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.m */; };
+		BDF3E9E2291CEAB500384660 /* GaiaXJSModulesImplDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF3E9E1291CEAB500384660 /* GaiaXJSModulesImplDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF3E9E4291CEF0400384660 /* GaiaXJSExecPhaseImplDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF3E9E3291CEF0400384660 /* GaiaXJSExecPhaseImplDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF42262264AA6910090A231 /* GaiaXJS.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF42260264AA6910090A231 /* GaiaXJS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422B1264AA9470090A231 /* GaiaXJSRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422AF264AA9470090A231 /* GaiaXJSRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422B2264AA9470090A231 /* GaiaXJSRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422B0264AA9470090A231 /* GaiaXJSRuntime.m */; };
+		BDF422B5264AA97F0090A231 /* GaiaXJSContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422B3264AA97F0090A231 /* GaiaXJSContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422B6264AA97F0090A231 /* GaiaXJSContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422B4264AA97F0090A231 /* GaiaXJSContext.m */; };
+		BDF422B9264AA9B00090A231 /* GaiaXJSComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422B7264AA9B00090A231 /* GaiaXJSComponent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422BA264AA9B00090A231 /* GaiaXJSComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422B8264AA9B00090A231 /* GaiaXJSComponent.m */; };
+		BDF422C5264AB1CB0090A231 /* GaiaXJSModuleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422C3264AB1CB0090A231 /* GaiaXJSModuleManager.h */; };
+		BDF422C6264AB1CB0090A231 /* GaiaXJSModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422C4264AB1CB0090A231 /* GaiaXJSModuleManager.m */; };
+		BDF422C9264AB2300090A231 /* GaiaXJSHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422C7264AB2300090A231 /* GaiaXJSHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422CA264AB2300090A231 /* GaiaXJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422C8264AB2300090A231 /* GaiaXJSHelper.m */; };
+		BDF422CD264AB2970090A231 /* GaiaXJSModuleInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422CB264AB2970090A231 /* GaiaXJSModuleInfo.h */; };
+		BDF422CE264AB2970090A231 /* GaiaXJSModuleInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422CC264AB2970090A231 /* GaiaXJSModuleInfo.m */; };
+		BDF422D1264AB2A50090A231 /* GaiaXJSMethodInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422CF264AB2A50090A231 /* GaiaXJSMethodInfo.h */; };
+		BDF422D2264AB2A50090A231 /* GaiaXJSMethodInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422D0264AB2A50090A231 /* GaiaXJSMethodInfo.m */; };
+		BDF422D9264AB3200090A231 /* GaiaXJSMethodArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422D7264AB3200090A231 /* GaiaXJSMethodArgument.h */; };
+		BDF422DA264AB3200090A231 /* GaiaXJSMethodArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422D8264AB3200090A231 /* GaiaXJSMethodArgument.m */; };
+		BDF422E4264B7CF20090A231 /* GaiaXJSBuiltInModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422E2264B7CF20090A231 /* GaiaXJSBuiltInModule.m */; };
+		BDF422E5264B7CF20090A231 /* GaiaXJSBuiltInModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422E3264B7CF20090A231 /* GaiaXJSBuiltInModule.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422E7264B7ED50090A231 /* GaiaXJSDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422E6264B7ED50090A231 /* GaiaXJSDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422EA264B851F0090A231 /* GaiaXJSNativeEventModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422E8264B851F0090A231 /* GaiaXJSNativeEventModule.m */; };
+		BDF422EB264B851F0090A231 /* GaiaXJSNativeEventModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422E9264B851F0090A231 /* GaiaXJSNativeEventModule.h */; };
+		BDF422EF264BC32D0090A231 /* GaiaXJSBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422ED264BC32D0090A231 /* GaiaXJSBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDF422F0264BC32D0090A231 /* GaiaXJSBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422EE264BC32D0090A231 /* GaiaXJSBridge.m */; };
+		BDF422F8264BD4D90090A231 /* GaiaXJSCContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422F6264BD4D90090A231 /* GaiaXJSCContext.h */; };
+		BDF422F9264BD4D90090A231 /* GaiaXJSCContext.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422F7264BD4D90090A231 /* GaiaXJSCContext.m */; };
+		BDF422FE264CC92E0090A231 /* GaiaXJSNativeLoggerModule.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF422FC264CC92E0090A231 /* GaiaXJSNativeLoggerModule.h */; };
+		BDF422FF264CC92E0090A231 /* GaiaXJSNativeLoggerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF422FD264CC92E0090A231 /* GaiaXJSNativeLoggerModule.m */; };
+		BDF42302264D48080090A231 /* GaiaXJSConvert.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF42300264D48080090A231 /* GaiaXJSConvert.h */; };
+		BDF42303264D48080090A231 /* GaiaXJSConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF42301264D48080090A231 /* GaiaXJSConvert.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		4847A23FC9EAFCF6E8F44B2F /* Pods-GaiaXJS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXJS.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXJS/Pods-GaiaXJS.release.xcconfig"; sourceTree = "<group>"; };
+		B8D605B5BC5198BF7D9CA293 /* Pods-GaiaXJS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXJS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXJS/Pods-GaiaXJS.debug.xcconfig"; sourceTree = "<group>"; };
+		BD036D8026733C4F00F4905B /* GaiaXJS.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GaiaXJS.bundle; sourceTree = "<group>"; };
+		BD080D35276B35C2004DD2F9 /* GaiaXJSNativeEventManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSNativeEventManager.h; sourceTree = "<group>"; };
+		BD080D36276B35C2004DD2F9 /* GaiaXJSNativeEventManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSNativeEventManager.m; sourceTree = "<group>"; };
+		BD0D20CB265F447A0019D2C1 /* GaiaXJSUIViewModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSUIViewModule.h; sourceTree = "<group>"; };
+		BD0D20CC265F447A0019D2C1 /* GaiaXJSUIViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSUIViewModule.m; sourceTree = "<group>"; };
+		BD0D20CF265F44900019D2C1 /* GaiaXJSUITextModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSUITextModule.h; sourceTree = "<group>"; };
+		BD0D20D0265F44900019D2C1 /* GaiaXJSUITextModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSUITextModule.m; sourceTree = "<group>"; };
+		BD0D20D3265F44A40019D2C1 /* GaiaXJSUIImageModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSUIImageModule.h; sourceTree = "<group>"; };
+		BD0D20D4265F44A40019D2C1 /* GaiaXJSUIImageModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSUIImageModule.m; sourceTree = "<group>"; };
+		BD0D20DE265F81EA0019D2C1 /* GaiaXJSUIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSUIManager.h; sourceTree = "<group>"; };
+		BD0D20DF265F81EA0019D2C1 /* GaiaXJSUIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSUIManager.m; sourceTree = "<group>"; };
+		BD0D20E3266A0A670019D2C1 /* GaiaXJSCModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSCModule.h; sourceTree = "<group>"; };
+		BD0D20E4266A0A670019D2C1 /* GaiaXJSCModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSCModule.m; sourceTree = "<group>"; };
+		BD3EA84E2923ACB200930593 /* GaiaXJSHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSHandler.h; sourceTree = "<group>"; };
+		BD3EA84F2923ACB200930593 /* GaiaXJSHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSHandler.m; sourceTree = "<group>"; };
+		BD6B494028E297D600642266 /* GaiaXJSConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSConfig.h; sourceTree = "<group>"; };
+		BD6B494128E297D600642266 /* GaiaXJSConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSConfig.m; sourceTree = "<group>"; };
+		BD7FF0792659FCF4007BEC87 /* GaiaXJSFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSFactory.h; sourceTree = "<group>"; };
+		BD7FF07A2659FCF4007BEC87 /* GaiaXJSFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSFactory.m; sourceTree = "<group>"; };
+		BD7FF083265A451F007BEC87 /* GaiaXJSCRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSCRuntime.h; sourceTree = "<group>"; };
+		BD7FF084265A451F007BEC87 /* GaiaXJSCRuntime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSCRuntime.m; sourceTree = "<group>"; };
+		BD81B1FF27EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSWebSocketWrapper.h; sourceTree = "<group>"; };
+		BD81B20027EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSWebSocketWrapper.m; sourceTree = "<group>"; };
+		BD81B20527EB4190006E8C2F /* GaiaXJSDRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSDRuntime.h; sourceTree = "<group>"; };
+		BD81B20627EB4190006E8C2F /* GaiaXJSDRuntime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSDRuntime.m; sourceTree = "<group>"; };
+		BD81B20927EB42DA006E8C2F /* GaiaXJSDebuggerContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSDebuggerContext.h; sourceTree = "<group>"; };
+		BD81B20A27EB42DA006E8C2F /* GaiaXJSDebuggerContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSDebuggerContext.m; sourceTree = "<group>"; };
+		BDB8F92A268571050086B96B /* GaiaXJSNativeTargetModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSNativeTargetModule.h; sourceTree = "<group>"; };
+		BDB8F92B268571050086B96B /* GaiaXJSNativeTargetModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSNativeTargetModule.m; sourceTree = "<group>"; };
+		BDBD016226C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GaiaXJSBuiltInModule+Storage.h"; sourceTree = "<group>"; };
+		BDBD016326C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GaiaXJSBuiltInModule+Storage.m"; sourceTree = "<group>"; };
+		BDF3E9E1291CEAB500384660 /* GaiaXJSModulesImplDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSModulesImplDelegate.h; sourceTree = "<group>"; };
+		BDF3E9E3291CEF0400384660 /* GaiaXJSExecPhaseImplDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSExecPhaseImplDelegate.h; sourceTree = "<group>"; };
+		BDF4225D264AA6910090A231 /* GaiaXJS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GaiaXJS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDF42260264AA6910090A231 /* GaiaXJS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJS.h; sourceTree = "<group>"; };
+		BDF42261264AA6910090A231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BDF422AF264AA9470090A231 /* GaiaXJSRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSRuntime.h; sourceTree = "<group>"; };
+		BDF422B0264AA9470090A231 /* GaiaXJSRuntime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSRuntime.m; sourceTree = "<group>"; };
+		BDF422B3264AA97F0090A231 /* GaiaXJSContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSContext.h; sourceTree = "<group>"; };
+		BDF422B4264AA97F0090A231 /* GaiaXJSContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSContext.m; sourceTree = "<group>"; };
+		BDF422B7264AA9B00090A231 /* GaiaXJSComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSComponent.h; sourceTree = "<group>"; };
+		BDF422B8264AA9B00090A231 /* GaiaXJSComponent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSComponent.m; sourceTree = "<group>"; };
+		BDF422C3264AB1CB0090A231 /* GaiaXJSModuleManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSModuleManager.h; sourceTree = "<group>"; };
+		BDF422C4264AB1CB0090A231 /* GaiaXJSModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSModuleManager.m; sourceTree = "<group>"; };
+		BDF422C7264AB2300090A231 /* GaiaXJSHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSHelper.h; sourceTree = "<group>"; };
+		BDF422C8264AB2300090A231 /* GaiaXJSHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSHelper.m; sourceTree = "<group>"; };
+		BDF422CB264AB2970090A231 /* GaiaXJSModuleInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSModuleInfo.h; sourceTree = "<group>"; };
+		BDF422CC264AB2970090A231 /* GaiaXJSModuleInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSModuleInfo.m; sourceTree = "<group>"; };
+		BDF422CF264AB2A50090A231 /* GaiaXJSMethodInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSMethodInfo.h; sourceTree = "<group>"; };
+		BDF422D0264AB2A50090A231 /* GaiaXJSMethodInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSMethodInfo.m; sourceTree = "<group>"; };
+		BDF422D7264AB3200090A231 /* GaiaXJSMethodArgument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSMethodArgument.h; sourceTree = "<group>"; };
+		BDF422D8264AB3200090A231 /* GaiaXJSMethodArgument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSMethodArgument.m; sourceTree = "<group>"; };
+		BDF422E2264B7CF20090A231 /* GaiaXJSBuiltInModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSBuiltInModule.m; sourceTree = "<group>"; };
+		BDF422E3264B7CF20090A231 /* GaiaXJSBuiltInModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSBuiltInModule.h; sourceTree = "<group>"; };
+		BDF422E6264B7ED50090A231 /* GaiaXJSDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSDefines.h; sourceTree = "<group>"; };
+		BDF422E8264B851F0090A231 /* GaiaXJSNativeEventModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSNativeEventModule.m; sourceTree = "<group>"; };
+		BDF422E9264B851F0090A231 /* GaiaXJSNativeEventModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSNativeEventModule.h; sourceTree = "<group>"; };
+		BDF422ED264BC32D0090A231 /* GaiaXJSBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSBridge.h; sourceTree = "<group>"; };
+		BDF422EE264BC32D0090A231 /* GaiaXJSBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSBridge.m; sourceTree = "<group>"; };
+		BDF422F6264BD4D90090A231 /* GaiaXJSCContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSCContext.h; sourceTree = "<group>"; };
+		BDF422F7264BD4D90090A231 /* GaiaXJSCContext.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSCContext.m; sourceTree = "<group>"; };
+		BDF422FC264CC92E0090A231 /* GaiaXJSNativeLoggerModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXJSNativeLoggerModule.h; sourceTree = "<group>"; };
+		BDF422FD264CC92E0090A231 /* GaiaXJSNativeLoggerModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSNativeLoggerModule.m; sourceTree = "<group>"; };
+		BDF42300264D48080090A231 /* GaiaXJSConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSConvert.h; sourceTree = "<group>"; };
+		BDF42301264D48080090A231 /* GaiaXJSConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSConvert.m; sourceTree = "<group>"; };
+		E010A0793D7A14B1156FF5E9 /* libPods-GaiaXJS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXJS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BDF4225A264AA6910090A231 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0660CC07134E389BCFC4B266 /* libPods-GaiaXJS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6983E0E9333631574902CFAE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B8D605B5BC5198BF7D9CA293 /* Pods-GaiaXJS.debug.xcconfig */,
+				4847A23FC9EAFCF6E8F44B2F /* Pods-GaiaXJS.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BD036D7F26733C4F00F4905B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BD036D8026733C4F00F4905B /* GaiaXJS.bundle */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BD0D20CA265F44090019D2C1 /* uis */ = {
+			isa = PBXGroup;
+			children = (
+				BD0D20CB265F447A0019D2C1 /* GaiaXJSUIViewModule.h */,
+				BD0D20CC265F447A0019D2C1 /* GaiaXJSUIViewModule.m */,
+				BD0D20CF265F44900019D2C1 /* GaiaXJSUITextModule.h */,
+				BD0D20D0265F44900019D2C1 /* GaiaXJSUITextModule.m */,
+				BD0D20D3265F44A40019D2C1 /* GaiaXJSUIImageModule.h */,
+				BD0D20D4265F44A40019D2C1 /* GaiaXJSUIImageModule.m */,
+			);
+			path = uis;
+			sourceTree = "<group>";
+		};
+		BD0D20DC265F81EA0019D2C1 /* module */ = {
+			isa = PBXGroup;
+			children = (
+				BDF422C3264AB1CB0090A231 /* GaiaXJSModuleManager.h */,
+				BDF422C4264AB1CB0090A231 /* GaiaXJSModuleManager.m */,
+				BDF422CB264AB2970090A231 /* GaiaXJSModuleInfo.h */,
+				BDF422CC264AB2970090A231 /* GaiaXJSModuleInfo.m */,
+				BDF422CF264AB2A50090A231 /* GaiaXJSMethodInfo.h */,
+				BDF422D0264AB2A50090A231 /* GaiaXJSMethodInfo.m */,
+				BDF422D7264AB3200090A231 /* GaiaXJSMethodArgument.h */,
+				BDF422D8264AB3200090A231 /* GaiaXJSMethodArgument.m */,
+			);
+			path = module;
+			sourceTree = "<group>";
+		};
+		BD0D20DD265F81EA0019D2C1 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				BD0D20DE265F81EA0019D2C1 /* GaiaXJSUIManager.h */,
+				BD0D20DF265F81EA0019D2C1 /* GaiaXJSUIManager.m */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		BD0D20E2266A0A540019D2C1 /* jscore */ = {
+			isa = PBXGroup;
+			children = (
+				BD0D20E3266A0A670019D2C1 /* GaiaXJSCModule.h */,
+				BD0D20E4266A0A670019D2C1 /* GaiaXJSCModule.m */,
+			);
+			path = jscore;
+			sourceTree = "<group>";
+		};
+		BD7FF081265A44EC007BEC87 /* context */ = {
+			isa = PBXGroup;
+			children = (
+				BDF422B3264AA97F0090A231 /* GaiaXJSContext.h */,
+				BDF422B4264AA97F0090A231 /* GaiaXJSContext.m */,
+				BDF422F6264BD4D90090A231 /* GaiaXJSCContext.h */,
+				BDF422F7264BD4D90090A231 /* GaiaXJSCContext.m */,
+				BD81B20927EB42DA006E8C2F /* GaiaXJSDebuggerContext.h */,
+				BD81B20A27EB42DA006E8C2F /* GaiaXJSDebuggerContext.m */,
+			);
+			path = context;
+			sourceTree = "<group>";
+		};
+		BD7FF082265A44EC007BEC87 /* runtime */ = {
+			isa = PBXGroup;
+			children = (
+				BDF422AF264AA9470090A231 /* GaiaXJSRuntime.h */,
+				BDF422B0264AA9470090A231 /* GaiaXJSRuntime.m */,
+				BD7FF083265A451F007BEC87 /* GaiaXJSCRuntime.h */,
+				BD7FF084265A451F007BEC87 /* GaiaXJSCRuntime.m */,
+				BD81B20527EB4190006E8C2F /* GaiaXJSDRuntime.h */,
+				BD81B20627EB4190006E8C2F /* GaiaXJSDRuntime.m */,
+			);
+			path = runtime;
+			sourceTree = "<group>";
+		};
+		BD7FF087265A5D52007BEC87 /* component */ = {
+			isa = PBXGroup;
+			children = (
+				BDF422B7264AA9B00090A231 /* GaiaXJSComponent.h */,
+				BDF422B8264AA9B00090A231 /* GaiaXJSComponent.m */,
+			);
+			path = component;
+			sourceTree = "<group>";
+		};
+		BD81B1FE27EAB88F006E8C2F /* debugger */ = {
+			isa = PBXGroup;
+			children = (
+				BD81B1FF27EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.h */,
+				BD81B20027EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.m */,
+			);
+			path = debugger;
+			sourceTree = "<group>";
+		};
+		BDF42253264AA6900090A231 = {
+			isa = PBXGroup;
+			children = (
+				BDF4225F264AA6910090A231 /* GaiaXJS */,
+				BDF4225E264AA6910090A231 /* Products */,
+				BDF422DF264B7B970090A231 /* Frameworks */,
+				6983E0E9333631574902CFAE /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		BDF4225E264AA6910090A231 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BDF4225D264AA6910090A231 /* GaiaXJS.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BDF4225F264AA6910090A231 /* GaiaXJS */ = {
+			isa = PBXGroup;
+			children = (
+				BD036D7F26733C4F00F4905B /* Resources */,
+				BDF42289264AA7A40090A231 /* src */,
+				BDF42260264AA6910090A231 /* GaiaXJS.h */,
+				BDF42261264AA6910090A231 /* Info.plist */,
+			);
+			path = GaiaXJS;
+			sourceTree = "<group>";
+		};
+		BDF42289264AA7A40090A231 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				BDF422E6264B7ED50090A231 /* GaiaXJSDefines.h */,
+				BDF422C7264AB2300090A231 /* GaiaXJSHelper.h */,
+				BDF422C8264AB2300090A231 /* GaiaXJSHelper.m */,
+				BD7FF0792659FCF4007BEC87 /* GaiaXJSFactory.h */,
+				BD7FF07A2659FCF4007BEC87 /* GaiaXJSFactory.m */,
+				BD6B494028E297D600642266 /* GaiaXJSConfig.h */,
+				BD6B494128E297D600642266 /* GaiaXJSConfig.m */,
+				BD3EA84E2923ACB200930593 /* GaiaXJSHandler.h */,
+				BD3EA84F2923ACB200930593 /* GaiaXJSHandler.m */,
+				BD81B1FE27EAB88F006E8C2F /* debugger */,
+				BD7FF087265A5D52007BEC87 /* component */,
+				BD7FF081265A44EC007BEC87 /* context */,
+				BD7FF082265A44EC007BEC87 /* runtime */,
+				BDF422EC264BC2620090A231 /* bridge */,
+				BDF422C2264AB1A70090A231 /* wrapper */,
+				BDF3E9E1291CEAB500384660 /* GaiaXJSModulesImplDelegate.h */,
+				BDF3E9E3291CEF0400384660 /* GaiaXJSExecPhaseImplDelegate.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		BDF422C2264AB1A70090A231 /* wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				BD0D20DC265F81EA0019D2C1 /* module */,
+				BD0D20DD265F81EA0019D2C1 /* ui */,
+			);
+			path = wrapper;
+			sourceTree = "<group>";
+		};
+		BDF422DF264B7B970090A231 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E010A0793D7A14B1156FF5E9 /* libPods-GaiaXJS.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BDF422E1264B7C930090A231 /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				BD080D35276B35C2004DD2F9 /* GaiaXJSNativeEventManager.h */,
+				BD080D36276B35C2004DD2F9 /* GaiaXJSNativeEventManager.m */,
+				BDF422E9264B851F0090A231 /* GaiaXJSNativeEventModule.h */,
+				BDF422E8264B851F0090A231 /* GaiaXJSNativeEventModule.m */,
+				BDF422FC264CC92E0090A231 /* GaiaXJSNativeLoggerModule.h */,
+				BDF422FD264CC92E0090A231 /* GaiaXJSNativeLoggerModule.m */,
+				BDB8F92A268571050086B96B /* GaiaXJSNativeTargetModule.h */,
+				BDB8F92B268571050086B96B /* GaiaXJSNativeTargetModule.m */,
+				BDF422E3264B7CF20090A231 /* GaiaXJSBuiltInModule.h */,
+				BDF422E2264B7CF20090A231 /* GaiaXJSBuiltInModule.m */,
+				BDBD016226C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.h */,
+				BDBD016326C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.m */,
+			);
+			path = modules;
+			sourceTree = "<group>";
+		};
+		BDF422EC264BC2620090A231 /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				BDF42300264D48080090A231 /* GaiaXJSConvert.h */,
+				BDF42301264D48080090A231 /* GaiaXJSConvert.m */,
+				BDF422ED264BC32D0090A231 /* GaiaXJSBridge.h */,
+				BDF422EE264BC32D0090A231 /* GaiaXJSBridge.m */,
+				BD0D20E2266A0A540019D2C1 /* jscore */,
+				BD0D20CA265F44090019D2C1 /* uis */,
+				BDF422E1264B7C930090A231 /* modules */,
+			);
+			path = bridge;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BDF42258264AA6910090A231 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD3EA8502923ACB200930593 /* GaiaXJSHandler.h in Headers */,
+				BDF3E9E2291CEAB500384660 /* GaiaXJSModulesImplDelegate.h in Headers */,
+				BDF3E9E4291CEF0400384660 /* GaiaXJSExecPhaseImplDelegate.h in Headers */,
+				BD81B20727EB4190006E8C2F /* GaiaXJSDRuntime.h in Headers */,
+				BDF422C9264AB2300090A231 /* GaiaXJSHelper.h in Headers */,
+				BD6B494228E297D600642266 /* GaiaXJSConfig.h in Headers */,
+				BDF422EF264BC32D0090A231 /* GaiaXJSBridge.h in Headers */,
+				BD81B20127EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.h in Headers */,
+				BDF422E7264B7ED50090A231 /* GaiaXJSDefines.h in Headers */,
+				BDF422E5264B7CF20090A231 /* GaiaXJSBuiltInModule.h in Headers */,
+				BD080D37276B35C2004DD2F9 /* GaiaXJSNativeEventManager.h in Headers */,
+				BD7FF07B2659FCF4007BEC87 /* GaiaXJSFactory.h in Headers */,
+				BDF422B9264AA9B00090A231 /* GaiaXJSComponent.h in Headers */,
+				BD0D20D1265F44900019D2C1 /* GaiaXJSUITextModule.h in Headers */,
+				BDBD016426C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.h in Headers */,
+				BD7FF085265A451F007BEC87 /* GaiaXJSCRuntime.h in Headers */,
+				BDF422EB264B851F0090A231 /* GaiaXJSNativeEventModule.h in Headers */,
+				BDF422B5264AA97F0090A231 /* GaiaXJSContext.h in Headers */,
+				BDF422B1264AA9470090A231 /* GaiaXJSRuntime.h in Headers */,
+				BD0D20CD265F447A0019D2C1 /* GaiaXJSUIViewModule.h in Headers */,
+				BDF422D9264AB3200090A231 /* GaiaXJSMethodArgument.h in Headers */,
+				BDF42302264D48080090A231 /* GaiaXJSConvert.h in Headers */,
+				BD0D20E0265F81EA0019D2C1 /* GaiaXJSUIManager.h in Headers */,
+				BD0D20E5266A0A680019D2C1 /* GaiaXJSCModule.h in Headers */,
+				BD81B20B27EB42DA006E8C2F /* GaiaXJSDebuggerContext.h in Headers */,
+				BDF422FE264CC92E0090A231 /* GaiaXJSNativeLoggerModule.h in Headers */,
+				BD0D20D5265F44A40019D2C1 /* GaiaXJSUIImageModule.h in Headers */,
+				BDB8F92C268571050086B96B /* GaiaXJSNativeTargetModule.h in Headers */,
+				BDF422C5264AB1CB0090A231 /* GaiaXJSModuleManager.h in Headers */,
+				BDF42262264AA6910090A231 /* GaiaXJS.h in Headers */,
+				BDF422D1264AB2A50090A231 /* GaiaXJSMethodInfo.h in Headers */,
+				BDF422F8264BD4D90090A231 /* GaiaXJSCContext.h in Headers */,
+				BDF422CD264AB2970090A231 /* GaiaXJSModuleInfo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BDF4225C264AA6910090A231 /* GaiaXJS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDF42265264AA6910090A231 /* Build configuration list for PBXNativeTarget "GaiaXJS" */;
+			buildPhases = (
+				B905D0FE0092B8A2A5EAF670 /* [CP] Check Pods Manifest.lock */,
+				BDF42258264AA6910090A231 /* Headers */,
+				BDF42259264AA6910090A231 /* Sources */,
+				BDF4225A264AA6910090A231 /* Frameworks */,
+				BDF4225B264AA6910090A231 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GaiaXJS;
+			productName = GaiaXJS;
+			productReference = BDF4225D264AA6910090A231 /* GaiaXJS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BDF42254264AA6910090A231 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					BDF4225C264AA6910090A231 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+				};
+			};
+			buildConfigurationList = BDF42257264AA6910090A231 /* Build configuration list for PBXProject "GaiaXJS" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BDF42253264AA6900090A231;
+			productRefGroup = BDF4225E264AA6910090A231 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BDF4225C264AA6910090A231 /* GaiaXJS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BDF4225B264AA6910090A231 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD036D8126733C4F00F4905B /* GaiaXJS.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B905D0FE0092B8A2A5EAF670 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GaiaXJS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BDF42259264AA6910090A231 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BDF422D2264AB2A50090A231 /* GaiaXJSMethodInfo.m in Sources */,
+				BD7FF07C2659FCF4007BEC87 /* GaiaXJSFactory.m in Sources */,
+				BDF42303264D48080090A231 /* GaiaXJSConvert.m in Sources */,
+				BD6B494328E297D600642266 /* GaiaXJSConfig.m in Sources */,
+				BD3EA8512923ACB200930593 /* GaiaXJSHandler.m in Sources */,
+				BDF422CA264AB2300090A231 /* GaiaXJSHelper.m in Sources */,
+				BD81B20227EAB8D1006E8C2F /* GaiaXJSWebSocketWrapper.m in Sources */,
+				BDF422EA264B851F0090A231 /* GaiaXJSNativeEventModule.m in Sources */,
+				BD0D20E1265F81EA0019D2C1 /* GaiaXJSUIManager.m in Sources */,
+				BDF422F0264BC32D0090A231 /* GaiaXJSBridge.m in Sources */,
+				BD81B20C27EB42DA006E8C2F /* GaiaXJSDebuggerContext.m in Sources */,
+				BDF422E4264B7CF20090A231 /* GaiaXJSBuiltInModule.m in Sources */,
+				BDF422BA264AA9B00090A231 /* GaiaXJSComponent.m in Sources */,
+				BD0D20CE265F447A0019D2C1 /* GaiaXJSUIViewModule.m in Sources */,
+				BDF422B2264AA9470090A231 /* GaiaXJSRuntime.m in Sources */,
+				BDF422C6264AB1CB0090A231 /* GaiaXJSModuleManager.m in Sources */,
+				BDF422FF264CC92E0090A231 /* GaiaXJSNativeLoggerModule.m in Sources */,
+				BD0D20D2265F44900019D2C1 /* GaiaXJSUITextModule.m in Sources */,
+				BDF422B6264AA97F0090A231 /* GaiaXJSContext.m in Sources */,
+				BDB8F92D268571060086B96B /* GaiaXJSNativeTargetModule.m in Sources */,
+				BD7FF086265A451F007BEC87 /* GaiaXJSCRuntime.m in Sources */,
+				BD81B20827EB4190006E8C2F /* GaiaXJSDRuntime.m in Sources */,
+				BD0D20E6266A0A680019D2C1 /* GaiaXJSCModule.m in Sources */,
+				BDF422CE264AB2970090A231 /* GaiaXJSModuleInfo.m in Sources */,
+				BDF422DA264AB3200090A231 /* GaiaXJSMethodArgument.m in Sources */,
+				BD080D38276B35C2004DD2F9 /* GaiaXJSNativeEventManager.m in Sources */,
+				BD0D20D6265F44A40019D2C1 /* GaiaXJSUIImageModule.m in Sources */,
+				BDBD016526C3EC2700D468FC /* GaiaXJSBuiltInModule+Storage.m in Sources */,
+				BDF422F9264BD4D90090A231 /* GaiaXJSCContext.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BDF42263264AA6910090A231 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		BDF42264264AA6910090A231 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		BDF42266264AA6910090A231 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8D605B5BC5198BF7D9CA293 /* Pods-GaiaXJS.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = W4ZRQF48G9;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GaiaXJS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youku.gaiaxjs;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BDF42267264AA6910090A231 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4847A23FC9EAFCF6E8F44B2F /* Pods-GaiaXJS.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = W4ZRQF48G9;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = z;
+				INFOPLIST_FILE = GaiaXJS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = com.youku.gaiaxjs;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BDF42257264AA6910090A231 /* Build configuration list for PBXProject "GaiaXJS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDF42263264AA6910090A231 /* Debug */,
+				BDF42264264AA6910090A231 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BDF42265264AA6910090A231 /* Build configuration list for PBXNativeTarget "GaiaXJS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BDF42266264AA6910090A231 /* Debug */,
+				BDF42267264AA6910090A231 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BDF42254264AA6910090A231 /* Project object */;
+}

@@ -466,13 +466,13 @@
 
 #pragma mark - appear
 
-- (void)onAppear{
-    [super onAppear];
+- (void)onShow{
+    [super onShow];
     [self handleVisibleCells];
 }
 
-- (void)onDisappear{
-    [super onDisappear];
+- (void)onHide{
+    [super onHide];
 }
 
 - (void)handleVisibleCells{

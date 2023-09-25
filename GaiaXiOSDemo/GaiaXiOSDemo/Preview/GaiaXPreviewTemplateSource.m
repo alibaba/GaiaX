@@ -1,8 +1,4 @@
-//
-//  GaiaXPreviewTemplateSource.m
-//  GaiaXiOSDemo
-//
-//  Copyright (c) 2021, Alibaba Group Holding Limited.
+//  Copyright (c) 2023, Alibaba Group Holding Limited.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,8 +12,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GaiaXPreviewTemplateSource.h"
 
+#import "GaiaXPreviewTemplateSource.h"
+#import <GaiaXiOS/NSDictionary+GX.h>
+#import "GXTemplateItem.h"
 @interface GaiaXPreviewTemplateSource ()
 
 @property (nonatomic, strong) NSMutableDictionary *previewSource;

@@ -20,7 +20,10 @@
 #import "GXTemplateItem.h"
 #import "GXLayout.h"
 #import "GXStyle.h"
+#import "GXTemplateData.h"
+#import <GaiaXJS/GaiaXJS.h>
 
+@class GXEvent;
 @class GXTemplateContext;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -87,6 +90,9 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 
 //节点id
 @property(nonatomic, strong) NSString *nodeId;
+//节点类型
+@property(nonatomic, strong) NSString *type;
+@property(nonatomic, strong) NSString *subType;
 //是否为模板类型（根模板/嵌套子模板）
 @property(nonatomic, assign) BOOL isTemplateType;
 //模板信息
@@ -141,6 +147,8 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 
 //是否需要绑定数据
 - (BOOL)shouldBind; 
+//绑定事件
+- (void)bindEvent:(GXEvent *)event;
 //数据绑定
 - (void)bindData:(NSDictionary *)data;
 //动画绑定
@@ -161,13 +169,27 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 //是否正在显示
 @property (nonatomic, assign) BOOL isAppear;
 
-//视图出现/消失
-- (void)onAppear;
-- (void)onDisappear;
-
 //埋点处理
 - (void)manualClickTrackEvent;
 - (void)manualExposureTrackEvent;
+
+@end
+
+@interface GXNode(JS)
+
+//原始数据
+@property (nonatomic, strong) GXTemplateData *orignalData;
+//jsComponent
+@property(nonatomic, strong) GaiaXJSComponent *jsComponent;
+
+//生命周期
+- (void)onReady;
+
+- (void)onShow;
+
+- (void)onHide;
+
+- (void)onDestroy;
 
 @end
 

@@ -25,11 +25,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 //event gesture type
 typedef NS_ENUM(NSUInteger, GXEventType) {
-    GXEventTypeUnknown = 0, // Unknown event type
-    GXEventTypeTap = 1,//tap
-    GXEventTypeLongPress = 2,//long press
+    GXEventTypeTap = 0,//tap
+    GXEventTypeLongPress = 1,//long press
 };
 
+//手势类型
+typedef NS_ENUM(NSInteger, GXEventLevel) {
+    GXEventLevelCover = -1,//js覆盖native
+    GXEventLevelNative = 0,//native高于js
+    GXEventLevelJS = 1,//native低于js
+};
 
 @interface GXEvent : NSObject
 
@@ -46,13 +51,11 @@ typedef NS_ENUM(NSUInteger, GXEventType) {
 //gesture type：tap, longpress
 @property (nonatomic, assign) GXEventType eventType;
 
-// get event type
-+ (GXEventType)getType:(NSString *)eventType;
-
 //set event information
 - (void)setupEventInfo:(NSDictionary *)eventInfo;
 
-
+// get event type
++ (GXEventType)eventTypeWithEventInfo:(NSDictionary *)eventInfo;
 @end
 
 
@@ -63,6 +66,15 @@ typedef NS_ENUM(NSUInteger, GXEventType) {
 
 @end
 
+@interface GXJsEvent : NSObject
 
+//对应的GXEvent实例
+@property (nonatomic, weak) GXEvent *gxEvent;
+//js绑定手势类型
+@property (nonatomic, assign) GXEventType eventType;
+//优先级
+@property (nonatomic, assign) GXEventLevel eventLevel;
+
+@end
 
 NS_ASSUME_NONNULL_END

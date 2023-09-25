@@ -24,13 +24,13 @@
 
 - (void)onAppear{
     if (self.gxNode) {
-        [self.gxNode onAppear];
+        [self.gxNode onShow];
     }
 }
 
 - (void)onDisappear{
     if (self.gxNode) {
-        [self.gxNode onDisappear];
+        [self.gxNode onHide];
     }
 }
 

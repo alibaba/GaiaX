@@ -46,12 +46,22 @@
         return;
     }
     //绑定数据
+    [self bindData:data onRootNode:node fromJS:NO];
+}
+
+
+/// 绑定数据 -（区分js和native调用)
++ (void)bindData:(GXTemplateData *)data onRootNode:(GXNode *)node fromJS:(BOOL)fromJS {
+    node.orignalData = data;
     NSDictionary *dataDict = data.data;
-    [self gx_bindData:dataDict onNode:node];
+    [self gx_bindData:dataDict onNode:node fromJS:fromJS];
+    if (!fromJS) {
+        [node onReady];
+    }
 }
 
 //递归绑定操作
-+ (void)gx_bindData:(NSDictionary *)data onNode:(GXNode *)node{
++ (void)gx_bindData:(NSDictionary *)data onNode:(GXNode *)node fromJS:(BOOL)fromJS {
     //获取拍平节点
     NSMapTable *flatNodes = node.flatNodes;
     if (flatNodes.count > 0) {
@@ -77,7 +87,10 @@
                     }
                     
                     //③绑定数据到子模板
-                    [self gx_bindData:valueDict onNode:tmpNode];
+                    [self gx_bindData:valueDict onNode:tmpNode fromJS:fromJS];
+                    if (!fromJS) {
+                        [tmpNode onReady];
+                    }
                     
                 } else {
                     //绑定数据到节点

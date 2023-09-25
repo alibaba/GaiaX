@@ -1,8 +1,4 @@
-//
-//  GaiaXPreviewTemplateSource.h
-//  GaiaXiOSDemo
-//
-//  Copyright (c) 2021, Alibaba Group Holding Limited.
+//  Copyright (c) 2023, Alibaba Group Holding Limited.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -17,7 +13,7 @@
 //  limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <GaiaXiOS/GaiaXiOS.h>
+#import "GXTemplateSourceProtocal.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -19,6 +19,7 @@
 #import "GXEvent.h"
 #import "GXUtils.h"
 #import "NSDictionary+GX.h"
+#import "GXEvent_Private.h"
 
 @interface GXEvent ()
 
@@ -38,23 +39,68 @@
 }
 
 - (void)setupEventInfo:(NSDictionary *)eventInfo {
+    //事件类型
+    self.eventType = [GXEvent eventTypeWithEventInfo:eventInfo];
     //事件信息
     self.eventParams = eventInfo;
 }
 
-+ (GXEventType)getType:(NSString *)eventType {
-    if ([@"tap" isEqualToString:eventType]) {
-        return GXEventTypeTap;
-    } else if ([@"longpress" isEqualToString:eventType]) {
++ (GXEventType)eventTypeWithEventInfo:(NSDictionary *)eventInfo{
+    NSString *eventType = [eventInfo gx_stringForKey:@"eventType"]; //tap、longpress
+    if ([@"longpress" isEqualToString:eventType]) {
         return GXEventTypeLongPress;
     } else {
-        return GXEventTypeUnknown;
+        return GXEventTypeTap;
     }
+}
+
+
+#pragma mark - JS
+
+//创建jsEvent
+- (void)creatJsEvent:(NSDictionary *)eventInfo{
+    //js事件类型处理
+    GXEventType eventType = [GXEvent eventTypeWithEventInfo:eventInfo];
+    
+    GXJsEvent *jsEvent = self.jsEvent;
+    if (jsEvent == nil) {
+        jsEvent = [[GXJsEvent alloc] init];
+        jsEvent.gxEvent = self;
+        self.jsEvent = jsEvent;
+    }
+    
+    jsEvent.eventType = eventType;
+    jsEvent.eventLevel = [self eventLevelFrom:eventInfo];
+}
+
+//获取js和native事件优先级
+- (GXEventLevel)eventLevelFrom:(NSDictionary *)eventInfo{
+    GXEventLevel level = GXEventLevelNative;
+    
+    //事件option配置
+    NSDictionary *option = [eventInfo gx_dictionaryForKey:@"option"];
+    if (option) {
+        BOOL cover = [option gx_boolForKey:@"cover"];
+        if (cover) {
+            level = GXEventLevelCover;
+        } else {
+            NSInteger tmpLevel = [option gx_integerForKey:@"level"];
+            if (tmpLevel >= -1 && tmpLevel <= 1) {
+                level = (GXEventLevel)tmpLevel;
+            }
+        }
+    }
+    
+    return level;
 }
 
 @end
 
 
 @implementation GXEvent(Scroll)
+
+@end
+
+@implementation GXJsEvent
 
 @end

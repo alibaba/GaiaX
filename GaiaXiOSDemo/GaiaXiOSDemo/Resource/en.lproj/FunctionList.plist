@@ -50,5 +50,11 @@
 		<key>class</key>
 		<string>StyleViewController</string>
 	</dict>
+    <dict>
+        <key>title</key>
+        <string>Template With JS</string>
+        <key>class</key>
+        <string>JSViewController</string>
+    </dict>
 </array>
 </plist>

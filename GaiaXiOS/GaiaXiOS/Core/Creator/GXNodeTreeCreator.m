@@ -28,6 +28,10 @@
 #import "GXStyle.h"
 #import "GXNode.h"
 
+#import "GXJSDelegateImplManager.h"
+#import "GXEventManager.h"
+#import <GaiaXJS/GaiaXJS.h>
+
 @implementation GXNodeTreeCreator
 
 //创建节点树，并获取根节点
@@ -94,16 +98,35 @@
             if (rootNode) {
                 //layout & flatNodes
                 rootNode.flatNodes = flatNodes;
+                //处理jsContent
+                NSString *jsContent = [templateInfo gx_stringForKey:kGXComDef_KW_JS];
+                if (jsContent.length) {
+                  //注册Context
+                    TheGXJSDelegateImplManager;
+                    NSString *tmpBizId = bizId ?: @"common";
+                    NSInteger instanceId = TheGXEventManager.instanceId;
+                    //真实的version
+                    NSString *realTemplateVersion = [templateInfo gx_stringForKey:@"version"];
+                    //创建context
+                    GaiaXJSContext *context = [GaiaXJSFactory newContextByBizIdIfNeeded:bizId];
+                    //注册Component
+                    GaiaXJSComponent *jsComponent = [context newComponentWithBizId:tmpBizId
+                                                                        templateId:templateId
+                                                                   templateVersion:realTemplateVersion
+                                                                        instanceId:instanceId
+                                                                          jsString:jsContent];
+                    rootNode.jsComponent = jsComponent;
+                    //添加模板示例
+                    [TheGXEventManager addTemplate:rootNode];
+                }
             }
             
         } else {
             GXLog(@"[GaiaX] 构建节点树失败：(%@/%@)模板index.json文件异常", bizId, templateId);
-//            GXAssert(isValid, @"构建节点树失败：(%@/%@)index.json文件异常", bizId, templateId);
         }
         
     } else {
         GXLog(@"[GaiaX] 构建节点树失败：(%@/%@)模板文件为空", bizId, templateId);
-//        GXAssert([GXUtils isValidDictionary:templateInfo], @"构建节点树失败：(%@/%@)模板文件为空", bizId, templateId);
     }
     
     //赋值ctx

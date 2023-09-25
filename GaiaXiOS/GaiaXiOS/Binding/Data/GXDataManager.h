@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param node 根节点
 + (void)bindData:(GXTemplateData *)data onRootNode:(GXNode *)node;
 
+/// 绑定数据 -（区分js和native调用)
+/// @param data 原始数据
+/// @param node 根节点
+/// @param fromJS 是否是从js调用
++ (void)bindData:(GXTemplateData *)data onRootNode:(GXNode *)node fromJS:(BOOL)fromJS;
 
 /// 计算布局
 /// @param data 原始数据

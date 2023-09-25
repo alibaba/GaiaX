@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 //animation finished event
 - (void)gx_animationDidFinished:(NSDictionary *)event;
 
+//js event
+- (void)gx_onJSEvent:(NSDictionary *)eventInfo;
+
 @end
 
 NS_ASSUME_NONNULL_END

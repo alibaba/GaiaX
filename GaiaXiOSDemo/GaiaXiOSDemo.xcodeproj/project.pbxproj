@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		269C88802213603DA9119E06 /* libPods-GaiaXiOSDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */; };
 		8D0210DD278F1FF10032958A /* GaiaXPreviewTemplateSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */; };
-		8D1FD1B0279E833D00835648 /* GaiaXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1FD1AF279E833D00835648 /* GaiaXScanView.m */; };
 		8D2180DE2771AA98001401C8 /* NormalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180DD2771AA98001401C8 /* NormalViewController.m */; };
 		8D2180E12771AAA5001401C8 /* NestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E02771AAA5001401C8 /* NestViewController.m */; };
 		8D2180E42771AAB2001401C8 /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E32771AAB2001401C8 /* ContainerViewController.m */; };
@@ -25,10 +24,7 @@
 		8D5D29B0276AD6A1005FD699 /* uper.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D5D29AB276AD6A1005FD699 /* uper.json */; };
 		8D7570F828D0AF2A004AF92D /* RecycleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */; };
 		8D7570F928D0AF2A004AF92D /* RecycleTemplateListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */; };
-		8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */; };
-		8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */; };
 		8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */; };
-		8D88D4CC27883587004F1614 /* GaiaXSocketClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */; };
 		8DA5D7AD275F40DF000182C9 /* GaiaXEmptyFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA5D7AC275F40DF000182C9 /* GaiaXEmptyFile.swift */; };
 		8DA5D7B0275F411A000182C9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */; };
 		8DA5D7B2275F417F000182C9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DA5D7B1275F417F000182C9 /* libz.tbd */; };
@@ -44,16 +40,23 @@
 		8DC8F0412770A804003F5073 /* GaiaXHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DC8F0402770A804003F5073 /* GaiaXHelper.m */; };
 		8DDC0A8327D06512008CB84C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8527D06512008CB84C /* Localizable.strings */; };
 		8DDC0A8927D06949008CB84C /* FunctionList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8DDC0A8B27D06949008CB84C /* FunctionList.plist */; };
-		8DE156C2278C5CD300E1AA68 /* GaiaXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */; };
 		9D573E2E2941D94400BDF713 /* StyleViewConotroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D573E2D2941D94400BDF713 /* StyleViewConotroller.m */; };
+		BD7C2DAA29A4E7F400838273 /* GaiaXJSSwiftExampleModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DA629A4E7F400838273 /* GaiaXJSSwiftExampleModule.swift */; };
+		BD7C2DAB29A4E7F400838273 /* GaiaXJSExampleModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DA729A4E7F400838273 /* GaiaXJSExampleModule.m */; };
+		BD7C2DAC29A4E7F400838273 /* GaiaXJSSwiftExampleModule.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DA929A4E7F400838273 /* GaiaXJSSwiftExampleModule.m */; };
+		BD7C2DAF29A4E81C00838273 /* JSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DAD29A4E81C00838273 /* JSViewController.m */; };
+		BD7C2DCB29A4E9C400838273 /* GaiaXScanView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DBD29A4E9C400838273 /* GaiaXScanView.m */; };
+		BD7C2DCC29A4E9C400838273 /* GaiaXScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DBE29A4E9C400838273 /* GaiaXScanViewController.m */; };
+		BD7C2DCD29A4E9C400838273 /* GaiaXCommandCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DC329A4E9C400838273 /* GaiaXCommandCenter.m */; };
+		BD7C2DCE29A4E9C400838273 /* GaiaXDevTools.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DC429A4E9C400838273 /* GaiaXDevTools.m */; };
+		BD7C2DCF29A4E9C400838273 /* GaiaXSocketToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7C2DC629A4E9C400838273 /* GaiaXSocketToastView.m */; };
+		BD7C2DD129A5B54000838273 /* gx-with-js.json in Resources */ = {isa = PBXBuildFile; fileRef = BD7C2DD029A5B54000838273 /* gx-with-js.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8580D0337E7D6E56B21F09AC /* Pods-GaiaXiOSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		8D0210DB278F1FF10032958A /* GaiaXPreviewTemplateSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXPreviewTemplateSource.h; sourceTree = "<group>"; };
 		8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXPreviewTemplateSource.m; sourceTree = "<group>"; };
-		8D1FD1AE279E833D00835648 /* GaiaXScanView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXScanView.h; sourceTree = "<group>"; };
-		8D1FD1AF279E833D00835648 /* GaiaXScanView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanView.m; sourceTree = "<group>"; };
 		8D2180DC2771AA98001401C8 /* NormalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NormalViewController.h; sourceTree = "<group>"; };
 		8D2180DD2771AA98001401C8 /* NormalViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NormalViewController.m; sourceTree = "<group>"; };
 		8D2180DF2771AAA5001401C8 /* NestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NestViewController.h; sourceTree = "<group>"; };
@@ -79,14 +82,8 @@
 		8D7570F528D0AF2A004AF92D /* RecycleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecycleListViewController.m; sourceTree = "<group>"; };
 		8D7570F628D0AF2A004AF92D /* RecycleTemplateListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecycleTemplateListCell.h; sourceTree = "<group>"; };
 		8D7570F728D0AF2A004AF92D /* RecycleTemplateListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecycleTemplateListCell.m; sourceTree = "<group>"; };
-		8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSONRPCConstants.h; sourceTree = "<group>"; };
-		8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSONRPCConstants.m; sourceTree = "<group>"; };
-		8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketRequest.m; sourceTree = "<group>"; };
-		8D88D4C4278834AF004F1614 /* GaiaXSocketRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXSocketRequest.h; sourceTree = "<group>"; };
 		8D88D4C727883574004F1614 /* GaiaXPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXPreviewViewController.h; sourceTree = "<group>"; };
 		8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXPreviewViewController.m; sourceTree = "<group>"; };
-		8D88D4CA27883587004F1614 /* GaiaXSocketClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXSocketClient.h; sourceTree = "<group>"; };
-		8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketClient.m; sourceTree = "<group>"; };
 		8DA5D7AB275F40DF000182C9 /* GaiaXiOSDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GaiaXiOSDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		8DA5D7AC275F40DF000182C9 /* GaiaXEmptyFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaiaXEmptyFile.swift; sourceTree = "<group>"; };
 		8DA5D7AF275F411A000182C9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
@@ -115,12 +112,28 @@
 		8DDC0A8827D06882008CB84C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		8DDC0A8A27D06949008CB84C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/FunctionList.plist; sourceTree = "<group>"; };
 		8DDC0A8C27D0694E008CB84C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zh-Hans"; path = "zh-Hans.lproj/FunctionList.plist"; sourceTree = "<group>"; };
-		8DE156C0278C5CD300E1AA68 /* GaiaXScanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GaiaXScanViewController.h; sourceTree = "<group>"; };
-		8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanViewController.m; sourceTree = "<group>"; };
 		9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D573E2D2941D94400BDF713 /* StyleViewConotroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StyleViewConotroller.m; sourceTree = "<group>"; };
 		9D573E2F2941D97B00BDF713 /* StyleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StyleViewController.h; sourceTree = "<group>"; };
 		B80658C1C14A90166664E38A /* Pods-GaiaXiOSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo.release.xcconfig"; sourceTree = "<group>"; };
+		BD7C2DA629A4E7F400838273 /* GaiaXJSSwiftExampleModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GaiaXJSSwiftExampleModule.swift; sourceTree = "<group>"; };
+		BD7C2DA729A4E7F400838273 /* GaiaXJSExampleModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSExampleModule.m; sourceTree = "<group>"; };
+		BD7C2DA829A4E7F400838273 /* GaiaXJSExampleModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXJSExampleModule.h; sourceTree = "<group>"; };
+		BD7C2DA929A4E7F400838273 /* GaiaXJSSwiftExampleModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXJSSwiftExampleModule.m; sourceTree = "<group>"; };
+		BD7C2DAD29A4E81C00838273 /* JSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSViewController.m; sourceTree = "<group>"; };
+		BD7C2DAE29A4E81C00838273 /* JSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSViewController.h; sourceTree = "<group>"; };
+		BD7C2DB429A4E9C400838273 /* GaiaXTemplateSourceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXTemplateSourceInterface.h; sourceTree = "<group>"; };
+		BD7C2DBD29A4E9C400838273 /* GaiaXScanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanView.m; sourceTree = "<group>"; };
+		BD7C2DBE29A4E9C400838273 /* GaiaXScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXScanViewController.m; sourceTree = "<group>"; };
+		BD7C2DBF29A4E9C400838273 /* GaiaXScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXScanView.h; sourceTree = "<group>"; };
+		BD7C2DC029A4E9C400838273 /* GaiaXScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXScanViewController.h; sourceTree = "<group>"; };
+		BD7C2DC229A4E9C400838273 /* GaiaXSocketToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXSocketToastView.h; sourceTree = "<group>"; };
+		BD7C2DC329A4E9C400838273 /* GaiaXCommandCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXCommandCenter.m; sourceTree = "<group>"; };
+		BD7C2DC429A4E9C400838273 /* GaiaXDevTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXDevTools.m; sourceTree = "<group>"; };
+		BD7C2DC529A4E9C400838273 /* GaiaXCommandCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXCommandCenter.h; sourceTree = "<group>"; };
+		BD7C2DC629A4E9C400838273 /* GaiaXSocketToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaiaXSocketToastView.m; sourceTree = "<group>"; };
+		BD7C2DC729A4E9C400838273 /* GaiaXDevTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaiaXDevTools.h; sourceTree = "<group>"; };
+		BD7C2DD029A5B54000838273 /* gx-with-js.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "gx-with-js.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +153,9 @@
 		8D2180D82771AA5C001401C8 /* Render */ = {
 			isa = PBXGroup;
 			children = (
+				BD7C2DAE29A4E81C00838273 /* JSViewController.h */,
+				BD7C2DAD29A4E81C00838273 /* JSViewController.m */,
+				BD7C2DA529A4E7F400838273 /* NativeModules */,
 				8D2180DF2771AAA5001401C8 /* NestViewController.h */,
 				8D2180E02771AAA5001401C8 /* NestViewController.m */,
 				8D2180DC2771AA98001401C8 /* NormalViewController.h */,
@@ -177,6 +193,7 @@
 				8DDC0A8B27D06949008CB84C /* FunctionList.plist */,
 				8D5D29AB276AD6A1005FD699 /* uper.json */,
 				8D5D29AA276AD6A1005FD699 /* uper-top.json */,
+				BD7C2DD029A5B54000838273 /* gx-with-js.json */,
 				8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */,
 				8D5D29A9276AD6A1005FD699 /* recommend.json */,
 				8DC6060D2772D1F200BACC09 /* vertical-item.json */,
@@ -190,27 +207,15 @@
 		8D88D4BD2788348F004F1614 /* Preview */ = {
 			isa = PBXGroup;
 			children = (
-				8DE156CA278D20BD00E1AA68 /* Scan */,
+				BD7C2DC129A4E9C400838273 /* DevTools */,
+				BD7C2DBC29A4E9C400838273 /* Scan */,
+				BD7C2DB429A4E9C400838273 /* GaiaXTemplateSourceInterface.h */,
 				8D88D4C727883574004F1614 /* GaiaXPreviewViewController.h */,
 				8D88D4C827883574004F1614 /* GaiaXPreviewViewController.m */,
 				8D0210DB278F1FF10032958A /* GaiaXPreviewTemplateSource.h */,
 				8D0210DC278F1FF10032958A /* GaiaXPreviewTemplateSource.m */,
-				8D88D4C627883511004F1614 /* SocketClient */,
 			);
 			path = Preview;
-			sourceTree = "<group>";
-		};
-		8D88D4C627883511004F1614 /* SocketClient */ = {
-			isa = PBXGroup;
-			children = (
-				8D88D4CA27883587004F1614 /* GaiaXSocketClient.h */,
-				8D88D4CB27883587004F1614 /* GaiaXSocketClient.m */,
-				8D88D4C4278834AF004F1614 /* GaiaXSocketRequest.h */,
-				8D88D4C3278834AF004F1614 /* GaiaXSocketRequest.m */,
-				8D88D4C02788349F004F1614 /* GaiaXJSONRPCConstants.h */,
-				8D88D4C12788349F004F1614 /* GaiaXJSONRPCConstants.m */,
-			);
-			path = SocketClient;
 			sourceTree = "<group>";
 		};
 		8DB52172275A0DCF00EB8126 = {
@@ -258,17 +263,6 @@
 			path = GaiaXiOSDemo;
 			sourceTree = "<group>";
 		};
-		8DE156CA278D20BD00E1AA68 /* Scan */ = {
-			isa = PBXGroup;
-			children = (
-				8DE156C0278C5CD300E1AA68 /* GaiaXScanViewController.h */,
-				8DE156C1278C5CD300E1AA68 /* GaiaXScanViewController.m */,
-				8D1FD1AE279E833D00835648 /* GaiaXScanView.h */,
-				8D1FD1AF279E833D00835648 /* GaiaXScanView.m */,
-			);
-			path = Scan;
-			sourceTree = "<group>";
-		};
 		BADDA2347CA93853E7C3628B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,6 +273,41 @@
 				9A666F1BF3AB1AB58DEEDEE8 /* libPods-GaiaXiOSDemo.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BD7C2DA529A4E7F400838273 /* NativeModules */ = {
+			isa = PBXGroup;
+			children = (
+				BD7C2DA829A4E7F400838273 /* GaiaXJSExampleModule.h */,
+				BD7C2DA729A4E7F400838273 /* GaiaXJSExampleModule.m */,
+				BD7C2DA929A4E7F400838273 /* GaiaXJSSwiftExampleModule.m */,
+				BD7C2DA629A4E7F400838273 /* GaiaXJSSwiftExampleModule.swift */,
+			);
+			path = NativeModules;
+			sourceTree = "<group>";
+		};
+		BD7C2DBC29A4E9C400838273 /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				BD7C2DBF29A4E9C400838273 /* GaiaXScanView.h */,
+				BD7C2DBD29A4E9C400838273 /* GaiaXScanView.m */,
+				BD7C2DC029A4E9C400838273 /* GaiaXScanViewController.h */,
+				BD7C2DBE29A4E9C400838273 /* GaiaXScanViewController.m */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
+		BD7C2DC129A4E9C400838273 /* DevTools */ = {
+			isa = PBXGroup;
+			children = (
+				BD7C2DC529A4E9C400838273 /* GaiaXCommandCenter.h */,
+				BD7C2DC329A4E9C400838273 /* GaiaXCommandCenter.m */,
+				BD7C2DC729A4E9C400838273 /* GaiaXDevTools.h */,
+				BD7C2DC429A4E9C400838273 /* GaiaXDevTools.m */,
+				BD7C2DC229A4E9C400838273 /* GaiaXSocketToastView.h */,
+				BD7C2DC629A4E9C400838273 /* GaiaXSocketToastView.m */,
+			);
+			path = DevTools;
 			sourceTree = "<group>";
 		};
 		E7EF62B3BAD2B05C5011EBA1 /* Pods */ = {
@@ -301,6 +330,7 @@
 				8DB52177275A0DCF00EB8126 /* Sources */,
 				8DB52178275A0DCF00EB8126 /* Frameworks */,
 				8DB52179275A0DCF00EB8126 /* Resources */,
+				5DA9A3EB6A9C60809124B614 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -354,6 +384,7 @@
 				8D5D29AF276AD6A1005FD699 /* uper-top.json in Resources */,
 				8DB5218B275A0DD200EB8126 /* Assets.xcassets in Resources */,
 				8DB52189275A0DCF00EB8126 /* Main.storyboard in Resources */,
+				BD7C2DD129A5B54000838273 /* gx-with-js.json in Resources */,
 				8D57F1D4277312A300FF8CC3 /* subscribe-item.json in Resources */,
 				8D5D29B0276AD6A1005FD699 /* uper.json in Resources */,
 				8D5D29AD276AD6A1005FD699 /* horizontal-item.json in Resources */,
@@ -368,6 +399,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5DA9A3EB6A9C60809124B614 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSDemo/Pods-GaiaXiOSDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B26DE67764C534DA904A83BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -397,29 +445,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D88D4C22788349F004F1614 /* GaiaXJSONRPCConstants.m in Sources */,
+				BD7C2DCC29A4E9C400838273 /* GaiaXScanViewController.m in Sources */,
+				BD7C2DAF29A4E81C00838273 /* JSViewController.m in Sources */,
+				BD7C2DCE29A4E9C400838273 /* GaiaXDevTools.m in Sources */,
 				8D2180E12771AAA5001401C8 /* NestViewController.m in Sources */,
 				8D7570F828D0AF2A004AF92D /* RecycleListViewController.m in Sources */,
 				8D7570F928D0AF2A004AF92D /* RecycleTemplateListCell.m in Sources */,
 				8D88D4C927883574004F1614 /* GaiaXPreviewViewController.m in Sources */,
 				8DB52186275A0DCF00EB8126 /* ViewController.m in Sources */,
+				BD7C2DCD29A4E9C400838273 /* GaiaXCommandCenter.m in Sources */,
 				8D57F1DA2773412700FF8CC3 /* TemplateListCell.m in Sources */,
+				BD7C2DCB29A4E9C400838273 /* GaiaXScanView.m in Sources */,
 				8D57F1D727733F0B00FF8CC3 /* ListViewController.m in Sources */,
+				BD7C2DAA29A4E7F400838273 /* GaiaXJSSwiftExampleModule.swift in Sources */,
+				BD7C2DAB29A4E7F400838273 /* GaiaXJSExampleModule.m in Sources */,
 				8D2180E42771AAB2001401C8 /* ContainerViewController.m in Sources */,
+				BD7C2DCF29A4E9C400838273 /* GaiaXSocketToastView.m in Sources */,
 				8DB52180275A0DCF00EB8126 /* AppDelegate.m in Sources */,
-				8D88D4CC27883587004F1614 /* GaiaXSocketClient.m in Sources */,
 				8D2180E72771AAC3001401C8 /* DataViewController.m in Sources */,
+				BD7C2DAC29A4E7F400838273 /* GaiaXJSSwiftExampleModule.m in Sources */,
 				8DA5D7AD275F40DF000182C9 /* GaiaXEmptyFile.swift in Sources */,
 				8DB52191275A0DD200EB8126 /* main.m in Sources */,
 				8D0210DD278F1FF10032958A /* GaiaXPreviewTemplateSource.m in Sources */,
-				8DE156C2278C5CD300E1AA68 /* GaiaXScanViewController.m in Sources */,
 				8DC8F0412770A804003F5073 /* GaiaXHelper.m in Sources */,
 				8DB52183275A0DCF00EB8126 /* SceneDelegate.m in Sources */,
-				8D1FD1B0279E833D00835648 /* GaiaXScanView.m in Sources */,
 				8D2180DE2771AA98001401C8 /* NormalViewController.m in Sources */,
 				8D2180EA2771AACD001401C8 /* EventViewController.m in Sources */,
 				9D573E2E2941D94400BDF713 /* StyleViewConotroller.m in Sources */,
-				8D88D4C5278834AF004F1614 /* GaiaXSocketRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,7 +643,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = W4ZRQF48G9;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -663,7 +715,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = VY8F8V9AUC;
+				DEVELOPMENT_TEAM = W4ZRQF48G9;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

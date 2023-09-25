@@ -1,8 +1,4 @@
-//
-//  GaiaXPreviewViewController.m
-//  GaiaXiOSDemo
-//
-//  Copyright (c) 2021, Alibaba Group Holding Limited.
+//  Copyright (c) 2023, Alibaba Group Holding Limited.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,17 +12,19 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+
 #import "GaiaXPreviewViewController.h"
 #import "GaiaXPreviewTemplateSource.h"
-#import "GaiaXSocketClient.h"
+#import <GaiaXSocket/GaiaXSocket.h>
 #import <GaiaXiOS/GaiaXiOS.h>
+#import <GaiaXiOS/UIColor+GX.h>
 #import "GaiaXHelper.h"
 
-#define kScreenWidth [[UIScreen mainScreen] bounds].size.width
-#define kScreenHeight [[UIScreen mainScreen] bounds].size.height
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
 #define kStatusBarHeight [[UIApplication sharedApplication] statusBarFrame].size.height
 
-@interface GaiaXPreviewViewController ()<GaiaXSocketClientDelegate, UIGestureRecognizerDelegate> {
+@interface GaiaXPreviewViewController ()<GaiaXSocketProtocol, UIGestureRecognizerDelegate>{
     UIView *_rootView;
     NSDictionary *_mockData;
     GXTemplateItem *_templateItem;
@@ -34,146 +32,151 @@
     GaiaXPreviewTemplateSource *_previewTemplateSource;
 }
 
-@property (nonatomic) NSUInteger requestId;
-@property (nonatomic, strong) NSString *url;
-@property (nonatomic, strong) NSString *templateId;
-@property (nonatomic, strong) GaiaXSocketClient *client;
-
+@property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIView *preview;
-@property (nonatomic, strong) UIButton *statusBtn;
-
+@property (nonatomic) NSUInteger requestId;
+@property (nonatomic, weak) GaiaXSocketClient *client;
 @property (nonatomic, strong) NSDictionary *templateInfo;
-@property (nonatomic, strong) NSMutableDictionary *dependenciesTemplateInfo;
+@property (nonatomic, assign) CGSize artboardSize;
+@property (nonatomic, strong) UIView *artboardView;
 
 @end
 
 @implementation GaiaXPreviewViewController
-
-- (instancetype)initWithUrl:(NSString *)url {
-    if (self = [super init]) {
-        //decodeUrl
-        NSString *resultString  = [GaiaXHelper URLDecodedString:url];
-        //解析url的参数
-        NSDictionary *paramters =  [GaiaXHelper parameterFromUrl:resultString];
-        //参数赋值
-        _url = [paramters gx_stringForKey:@"url"];
-        _templateId = [paramters gx_stringForKey:@"id"];
-        //初始化source
-        [self registerPreviewSource];
-    }
-    return self;
-}
+@synthesize isActive;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"GaiaX预览";
-    [self.view addSubview:self.preview];
+    // Do any additional setup after loading the view.
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    //设置button按钮
-    [self setupRightButtonItem];
-    //创建socket链接
-    [self setupScoket];
-}
-
-- (void)setupScoket{
-    if (_url && [_url isKindOfClass:[NSString class]] && _url.length) {
-        // 1.创建socket对象
-        _client = [[GaiaXSocketClient alloc] initWithURL:[NSURL URLWithString:_url] delegate:self];
-        // 2.开启socket连接
-        [_client connectServer];
-    }
-}
-
-- (void)registerPreviewSource{
+    
+    [self setTitle:@"GaiaX预览"];
+    [self.view addSubview:self.containerView];
+    [self.containerView addSubview:self.preview];
+    [self.preview addSubview:self.artboardView];
+    self.artboardSize = self.artboardView.frame.size;
     _previewTemplateSource = [[GaiaXPreviewTemplateSource alloc] init];
     [TheGXRegisterCenter registerTemplateSource:_previewTemplateSource];
 }
 
-- (void)setupRightButtonItem{
-    _statusBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _statusBtn.frame = CGRectMake(0, 0, 80, 44);
-    _statusBtn.titleLabel.textAlignment = NSTextAlignmentRight;
-    _statusBtn.titleLabel.font = [UIFont systemFontOfSize:18.f];
-    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_statusBtn];
-    self.navigationItem.rightBarButtonItem = rightButtonItem;
-}
 
-- (UIView *)preview {
+- (UIView *)preview{
     if (_preview == nil) {
-        CGRect frame = CGRectMake(0, kStatusBarHeight + 44.f, kScreenWidth, kScreenHeight- (kStatusBarHeight + 44.f));
-        _preview = [[UIView alloc] initWithFrame:frame];
+        _preview = [[UIView alloc] initWithFrame:self.containerView.bounds];
+        _preview.clipsToBounds = NO;
+        _preview.layer.borderWidth = 1;
+        _preview.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.05];
+        _preview.layer.borderColor = [UIColor gx_colorWithHexString:@"#97979750"].CGColor;
+        _preview.layer.shadowColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:1] CGColor];
+        _preview.layer.shadowRadius = 4;
+        _preview.clipsToBounds = NO;
+        _preview.layer.cornerRadius = 20;
     }
     return _preview;
 }
 
-- (NSMutableDictionary *)dependenciesTemplateInfo{
-    if (_dependenciesTemplateInfo == nil) {
-        _dependenciesTemplateInfo = [NSMutableDictionary dictionary];
+- (UIView *)artboardView {
+    if (_artboardView == nil) {
+        _artboardView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.preview.bounds.size.width, self.preview.bounds.size.height-2*20)];
+        _artboardView.clipsToBounds = NO;
+        _artboardView.backgroundColor = [UIColor whiteColor];
     }
-    return _dependenciesTemplateInfo;
+    return _artboardView;
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
-    //关闭socket链接
-    [_client webSocketClose];
-    //清除预览数据源
+
+- (UIView *)containerView{
+    if (_containerView == nil) {
+        CGRect frame = CGRectMake(0, kStatusBarHeight + 44.f + 10, kScreenWidth, kScreenHeight - (kStatusBarHeight + 44.f) - 2*10);
+        if (@available(iOS 11.0, *)) {
+             UIWindow *window = UIApplication.sharedApplication.keyWindow;
+             frame.size.height -= window.safeAreaInsets.bottom;
+        }
+        _containerView.backgroundColor = [UIColor whiteColor];
+        _containerView.clipsToBounds = NO;
+        _containerView = [[UIView alloc] initWithFrame:frame];
+    }
+    return _containerView;
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[GaiaXSocketManager sharedInstance] registerListener:self];
+    self.isActive = YES;
+    _client = [GaiaXSocketManager sharedInstance].socketClient;
+    GaiaXSocketModel *request = [GaiaXSocketModel requestWithMethod:@"template/get" params:nil];
+    [_client sendRequest:request callback:^(GaiaXSocketModel * _Nonnull response) {
+        NSDictionary *result = response.result;
+        NSDictionary *data = [result gx_dictionaryForKey:@"templateData"];
+        if (data) {
+            //获取templateId
+            [self didReceiveTemplateId:[result gx_stringForKey:@"templateId"] data:data subTemplates:[result gx_arrayForKey:@"subTemplates"]];
+        }
+    }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[GaiaXSocketManager sharedInstance] unRegisterListener:self];
+    
     [TheGXRegisterCenter unregisterTemplateSource:_previewTemplateSource];
-    //清除相关依赖模板
-    _dependenciesTemplateInfo = nil;
     _previewTemplateSource = nil;
+    self.isActive = NO;
 }
 
+#pragma mark - socket协议
 
-#pragma mark -GaiaXSocketClientDelegate
-
-//socket初始化
-- (void)gaiaXSocketClientDidInitialize:(GaiaXSocketClient *)client {
-    //发起请求
-    GaiaXSocketRequest *request = [GaiaXSocketRequest requestWithRequestId:@(666) Method:@"template/getTemplateData" parameters:@{@"id":_templateId}];
-    [_client sendRequestToServer:request];
+- (NSString *)gxMessageId{
+    return @"GAIAX_AUTO_PREVIEW";
 }
 
-//socket链接成功
-- (void)gaiaXSocketClientDidConnect:(GaiaXSocketClient *)client {
-    //更新状态
-    [_statusBtn setTitle:@"已连接" forState:UIControlStateNormal];
-    [_statusBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+- (void)gxSocketClientDidConnect:(GaiaXSocketClient *)client{
 
-    // 向服务器发送初始化消息
-    if (_requestId == 0) {
-        _requestId++;
-        GaiaXSocketRequest *request = [GaiaXSocketRequest requestWithRequestId:@(_requestId) Method:@"initialize" parameters:nil];
-        [_client sendRequestToServer:request];
+    //获取client
+    self.client = client;
+}
+
+- (void)gxSocketClientDidDisConnect:(GaiaXSocketClient *)client{
+
+}
+
+- (void)gxSocketClient:(GaiaXSocketClient *)client didFailWithError:(NSError *)error{
+    //连接出错
+    
+}
+
+- (void)gxSocketClient:(GaiaXSocketClient *)client didReceiveMessage:(GaiaXSocketModel *)message{
+    NSDictionary *result = message.params;
+    if ([message.method isEqualToString:@"template/didChangedNotification"]) {
+        NSDictionary *data = [result gx_dictionaryForKey:@"templateData"];
+        //获取templateId
+        if (data != nil) {
+            [self didReceiveTemplateId:[result gx_stringForKey:@"templateId"] data:data subTemplates:[result gx_arrayForKey:@"subTemplates"]];
+        }
     }
-}
-
-//socket连接失败
-- (void)gaiaXSocketClient:(GaiaXSocketClient *)client didFailWithError:(NSError *)error {
-    //更新状态
-    [_statusBtn setTitle:@"连接失败" forState:UIControlStateNormal];
-    [_statusBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
 }
 
 //获取到模板信息
-- (void)gaiaXSocketClient:(GaiaXSocketClient *)client didReceiveTemplateInfo:(NSDictionary *)templateInfo {
-    CGFloat width = kScreenWidth;
-    CGFloat measureWidth = width;
-    CGFloat measureHeight = NAN;
+- (void)didReceiveTemplateId:(NSString *)templateId data:(NSDictionary *)templateInfo subTemplates:(NSArray *)subTemplates{
+        
+    CGFloat measureWidth = _artboardSize.width;
+    CGFloat measureHeight = _artboardSize.height;
     
     //赋值模板信息
     _templateInfo = templateInfo;
-    _templateId = [templateInfo gx_stringForKey:@"templateId"];
+    _templateId = templateId;
     
     //移除原有视图
-    [self.preview.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.artboardView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-    //读取package信息 & 嵌套关系
+    NSMutableArray *updatedTemplates = [NSMutableArray array];
+    [self handleTemlateId:templateId data:templateInfo updatedTemplates:updatedTemplates];
+    
     NSString *indexJsonStr = [templateInfo gx_stringForKey:@"index.json"];
     NSDictionary *indexJsonDict = [NSDictionary gx_dictionaryFromJSONString:indexJsonStr];
     if ([GaiaXHelper isValidDictionary:indexJsonDict]) {
-        //处理模板数据
-        [self handleTemlateInfo:templateInfo];
         //读取package, 处理size和嵌套关系
         NSDictionary *package = [indexJsonDict gx_dictionaryForKey:@"package"];
         if (package) {
@@ -182,8 +185,12 @@
                 measureWidth = [constraintSizeDict gx_floatForKey:@"width"] ?: measureWidth;
                 measureHeight = [constraintSizeDict gx_floatForKey:@"height"] ?: measureHeight;
             }
-            // 获取嵌套模板
-            [self getNestedTemplate:package];
+        }
+    }
+    
+    if (subTemplates) {
+        for (NSDictionary *subTemplate in subTemplates) {
+            [self handleTemlateId:subTemplate[@"templateId"] data:subTemplate[@"templateData"] updatedTemplates:updatedTemplates];
         }
     }
     
@@ -196,84 +203,40 @@
     _templateData.data = _mockData;
     
     //创建视图
+    measureWidth = MIN(measureWidth, _artboardSize.width);
+    measureHeight = MIN(measureHeight, _artboardSize.height);
     CGSize measureSize = CGSizeMake(measureWidth, measureHeight);
     _rootView = [TheGXTemplateEngine creatViewByTemplateItem:_templateItem measureSize:measureSize];
-    [self.preview addSubview:_rootView];
     
     //绑定数据
     [TheGXTemplateEngine bindData:_templateData onView:_rootView];
+    measureWidth = _rootView.bounds.size.width;
+    measureHeight = _rootView.bounds.size.height;
+    //添加视图
+    [self.artboardView addSubview:_rootView];
     
-    //更新位置
-    CGFloat tmpWidth = _rootView.frame.size.width;
-    CGFloat x = tmpWidth > 0 ? (width - tmpWidth) / 2.f : 0;
-    CGRect frame = _rootView.frame;
-    frame.origin.y = 50;
-    frame.origin.x = x;
-    _rootView.frame = frame;
-}
-
-//获取到嵌套模板
-- (void)gaiaXSocketClient:(GaiaXSocketClient *)client didReceiveNestedTemplateInfo:(NSDictionary *)templateInfo {
-    // 获取嵌套模板
-    NSDictionary *package = nil;
-    NSString *templateId = [templateInfo gx_stringForKey:@"templateId"];
-    NSString *indexJsonStr = [templateInfo gx_stringForKey:@"index.json"];
-    NSDictionary *indexJsonDict = [NSDictionary gx_dictionaryFromJSONString:indexJsonStr];
-    
-    //读取package信息 & 嵌套关系
-    if ([GaiaXHelper isValidDictionary:indexJsonDict]) {
-        //处理模板数据
-        [self handleTemlateInfo:templateInfo];
-        //获取依赖关系
-        package = [indexJsonDict gx_dictionaryForKey:@"package"];
-        if (package) {
-            [self getNestedTemplate:package];
-        }
-    }
-    
-    //加入依赖关系，用于请求嵌套模板
-    [self.dependenciesTemplateInfo gx_setObject:templateInfo forKey:templateId];
-    
-    // 嵌套模板获取完毕，刷新预览View
-    [self gaiaXSocketClient:_client didReceiveTemplateInfo:_templateInfo];
-}
-
-//断开连接
-- (void)gaiaXSocketClientDidDisconnect:(GaiaXSocketClient *)client {
-    //清理缓存模板信息 & 预览模板
-    [_previewTemplateSource clearPreviewTemplates];
-    _dependenciesTemplateInfo = nil;
-    _previewTemplateSource = nil;
-}
-
-#pragma mark - 嵌套模板
-
-- (void)getNestedTemplate:(NSDictionary *)package{
-    NSDictionary *dependencies = package[@"dependencies"];
-    if (dependencies && [dependencies isKindOfClass:[NSDictionary class]] && dependencies.count > 0) {
-        [dependencies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            [self sendNestedTemplateToStudio:key];
-        }];
+    CGRect frame = self.preview.frame;
+    frame.size.width = measureWidth;
+    frame.size.height = measureHeight+2*20;
+    frame.origin.x = (_artboardSize.width-measureWidth)/2;
+    frame.origin.y = (MAX(0, _artboardSize.height-measureHeight-2*20)) /5;
+    self.preview.frame = frame;
+    self.artboardView.frame  = CGRectMake(0, 20, frame.size.width, frame.size.height-2*20);
+    if (updatedTemplates.count > 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"GAIAX_TEMPLATES_UPDATED_LIST" object:nil userInfo:@{@"ids": updatedTemplates}];
     }
 }
 
-- (void)sendNestedTemplateToStudio:(NSString *)templateId{
-    if (![self.dependenciesTemplateInfo.allKeys containsObject:templateId]) {
-        GaiaXSocketRequest *request = [GaiaXSocketRequest requestWithRequestId:@(888)
-                                                                        Method:@"template/getTemplateData"
-                                                                    parameters:@{@"id":templateId}];
-        [_client sendRequestToServer:request];
-    }
-}
+
+#pragma mark - 请求嵌套模板
 
 
 
 #pragma mark - 添加模板缓存，并处理mock数据
 
-- (void)handleTemlateInfo:(NSDictionary *)templateInfo{
-    if ([GXUtils isValidDictionary:templateInfo]) {
+- (void)handleTemlateId:(NSString *)templateId data:(NSDictionary *)templateInfo updatedTemplates:(NSMutableArray *)updatedTemplates{
+    if ([GaiaXHelper isValidDictionary:templateInfo]) {
         //获取模板id
-        NSString *templateId = [templateInfo gx_stringForKey:@"templateId"];
         if (templateId.length <= 0) {
             return;
         }
@@ -282,12 +245,15 @@
         BOOL isRoot = [templateId isEqualToString:_templateId];
         
         //获取模板文件
+        NSString *indexJSStr = [templateInfo gx_stringForKey:@"index.js"];
         NSString *indexCssStr = [templateInfo gx_stringForKey:@"index.css"];
         NSString *indexJsonStr = [templateInfo gx_stringForKey:@"index.json"];
         NSString *indexMockStr = [templateInfo gx_stringForKey:@"index.mock"];
         
         NSMutableDictionary *result = [NSMutableDictionary dictionary];
-        // CSS样式解析
+        //JS解析
+        result[kGXComDef_KW_JS] = indexJSStr;
+        //CSS样式解析
         result[kGXComDef_KW_SY] = [GXUtils parserStyleString:indexCssStr];
         //视图层级解析
         NSDictionary *indexJsonDict = [NSDictionary gx_dictionaryFromJSONString:indexJsonStr];
@@ -315,7 +281,7 @@
                 //容器模板
                 NSMutableArray *nodes = [NSMutableArray array];
                 for (int i = 0; i < 10; i++) {
-                    [nodes addObject:@{@"value":@{@"data": @"'mock'"}}];
+                    [nodes addObject:@{@"data":@"mock"}];
                 }
                 [dbDict gx_setObject:@{@"value":nodes} forKey:templateId];
                 
@@ -323,7 +289,7 @@
                 //普通模板
                 NSDictionary *dependencies = [[indexJsonDict gx_dictionaryForKey:@"package"] gx_dictionaryForKey:@"dependencies"];
                 [dependencies enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                    [dbDict gx_setObject:@{@"value":@{@"data": @"'mock'"}} forKey:key];
+                    [dbDict gx_setObject:@{@"data":@"mock"} forKey:key];
                 }];
             }
             
@@ -333,15 +299,28 @@
             
             //获取数据源
             if (isRoot) {
-                _mockData = @{@"value":@{@"data": @"'mock'"}};
+                _mockData = @{@"data":@"mock"};
             }
             
         }
         
         //添加到预览缓存池
         [_previewTemplateSource addPreviewTemplate:result forTemplateId:templateId];
+        [updatedTemplates addObject:templateId];
     }
     
 }
+
+#pragma mark - 侧滑
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    return [gestureRecognizer isKindOfClass:UIScreenEdgePanGestureRecognizer.class];
+}
+
+
 
 @end

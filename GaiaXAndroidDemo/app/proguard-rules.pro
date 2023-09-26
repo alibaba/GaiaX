@@ -6,6 +6,6 @@
 -keepattributes Exceptions,Deprecated,LineNumberTable,SourceFile
 
 -keep class app.visly.stretch.*{*;}
--keep class * implements com.youku.gaiax.api.provider.IEnvConfig { *; }
--keep class com.youku.gaiax.provider.views.* { *; }
--keep class com.youku.gaiax.provider.light.* { *; }
+-keep class * implements com.alibaba.gaiax.api.provider.IEnvConfig { *; }
+-keep class com.alibaba.gaiax.provider.views.* { *; }
+-keep class com.alibaba.gaiax.provider.light.* { *; }

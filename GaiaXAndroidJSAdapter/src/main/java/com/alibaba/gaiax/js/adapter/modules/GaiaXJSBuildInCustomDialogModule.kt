@@ -2,11 +2,11 @@ package com.alibaba.gaiax.js.adapter.modules
 
 import android.app.Dialog
 import com.alibaba.fastjson.JSONObject
-import com.youku.gaiax.js.api.GaiaXJSBaseModule
-import com.youku.gaiax.js.api.IGaiaXCallback
-import com.youku.gaiax.js.api.annotation.GaiaXAsyncMethod
-import com.youku.gaiax.js.utils.GaiaXJSUiExecutor
-import com.youku.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.api.GaiaXJSBaseModule
+import com.alibaba.gaiax.js.api.IGaiaXCallback
+import com.alibaba.gaiax.js.api.annotation.GaiaXAsyncMethod
+import com.alibaba.gaiax.js.utils.GaiaXJSUiExecutor
+import com.alibaba.gaiax.js.utils.Log
 
 
 /**

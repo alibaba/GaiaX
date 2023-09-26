@@ -24,8 +24,8 @@ import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.loadInLocal
 import com.lzf.easyfloat.permission.PermissionUtils
-import com.youku.gaiax.js.GXJSEngineFactory
-
+import com.alibaba.gaiax.js.GXJSEngineFactory
+import com.lzf.easyfloat.EasyFloat
 
 
 class MainActivity : AppCompatActivity() {
@@ -66,6 +66,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+
+            R.id.devToolButton -> {
+                DevTools.instance.createDevToolsFloatWindow(
+                    this
+                )
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -106,11 +114,11 @@ class MainActivity : AppCompatActivity() {
                 applicationContext
             )
         } else {
-            DevTools.instance.createDevToolsFloatWindow(
-                applicationContext
-            )
+//            DevTools.instance.createDevToolsFloatWindow(
+//                this
+//            )
+            EasyFloat.with(this).setLayout(R.layout.layout_dev_tools).show()
         }
-
 
 
         //GaiaXJS初始化
@@ -121,6 +129,9 @@ class MainActivity : AppCompatActivity() {
         autoConnect()
 
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
+            DevTools.instance.createDevToolsFloatWindow(
+                this
+            )
             val intent = Intent(MainActivity@ this, NormalTemplateActivity::class.java)
             startActivity(intent)
         }

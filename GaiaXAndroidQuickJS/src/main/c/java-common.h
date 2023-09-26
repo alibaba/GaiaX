@@ -8,7 +8,7 @@
 #include <malloc.h>
 
 #define CLASS_NAME_ILLEGAL_STATE_EXCEPTION "java/lang/IllegalStateException"
-#define CLASS_NAME_JS_DATA_EXCEPTION "com/youku/gaiax/quickjs/JSDataException"
+#define CLASS_NAME_JS_DATA_EXCEPTION "com/alibaba/gaiax/quickjs/JSDataException"
 
 #define MSG_OOM "Out of memory"
 #define MSG_NULL_JS_RUNTIME "Null JSRuntime"

@@ -5,4 +5,8 @@
         android:id="@+id/fastpreview"
         android:title="@string/fastpreview"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/devToolButton"
+        android:title="@string/dev_tool_button"
+        app:showAsAction="ifRoom" />
 </menu>

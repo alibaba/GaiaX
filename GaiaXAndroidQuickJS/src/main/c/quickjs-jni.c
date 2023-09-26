@@ -30,7 +30,7 @@ typedef struct QJRuntime {
     PromiseRejectionData *promise_rejection_date;
 } QJRuntime;
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createRuntime(JNIEnv *env, jclass __unused clazz) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createRuntime(JNIEnv *env, jclass __unused clazz) {
 
     QJRuntime *qj_rt = malloc(sizeof(QJRuntime));
     CHECK_NULL_RET(env, qj_rt, MSG_OOM);
@@ -45,7 +45,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createRuntime(JNIEn
     return (jlong) qj_rt;
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeMallocLimit(JNIEnv *env, jclass __unused clazz, jlong runtime, jint malloc_limit) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setRuntimeMallocLimit(JNIEnv *env, jclass __unused clazz, jlong runtime, jint malloc_limit) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -54,7 +54,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeMallocLimi
 }
 
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeMaxStackSize(JNIEnv *env, jclass __unused clazz, jlong runtime, jint size) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setRuntimeMaxStackSize(JNIEnv *env, jclass __unused clazz, jlong runtime, jint size) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeMaxStackSi
     JS_SetMaxStackSize(qj_rt->rt, (size_t) size);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initStdHandlers(JNIEnv *env, jclass __unused clazz, jlong runtime) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_initStdHandlers(JNIEnv *env, jclass __unused clazz, jlong runtime) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -133,7 +133,7 @@ static int on_interrupt(JSRuntime __unused *rt, void *opaque) {
     return result;
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeInterruptHandler(JNIEnv *env, jclass __unused clazz, jlong runtime, jobject interrupt_handler) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setRuntimeInterruptHandler(JNIEnv *env, jclass __unused clazz, jlong runtime, jobject interrupt_handler) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -167,7 +167,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setRuntimeInterruptH
     }
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setPromiseRejectionHandler(JNIEnv *env, jclass __unused clazz, jlong runtime, jobject promise_rejection_handler) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setPromiseRejectionHandler(JNIEnv *env, jclass __unused clazz, jlong runtime, jobject promise_rejection_handler) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -216,7 +216,7 @@ int leak_trigger(const char *_, ...) {
 
 #endif
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyRuntime(JNIEnv *env, jclass __unused clazz, jlong runtime) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_destroyRuntime(JNIEnv *env, jclass __unused clazz, jlong runtime) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -244,7 +244,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyRuntime(JNIEn
     free(qj_rt);
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createContext(JNIEnv *env, jclass __unused clazz, jlong runtime) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createContext(JNIEnv *env, jclass __unused clazz, jlong runtime) {
 
     QJRuntime *qj_rt = (QJRuntime *) runtime;
     CHECK_NULL_RET(env, qj_rt, MSG_NULL_JS_RUNTIME);
@@ -259,7 +259,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createContext(JNIEn
     return (jlong) ctx;
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyContext(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_destroyContext(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -267,7 +267,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyContext(JNIEn
     JS_FreeContext(ctx);
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueUndefined(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueUndefined(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -282,7 +282,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueUndefine
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueNull(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueNull(JNIEnv *env, jclass __unused clazz, jlong context) {
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
 
@@ -296,7 +296,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueNull(JNI
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueBoolean(JNIEnv *env, jclass __unused clazz, jlong context, jboolean value) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueBoolean(JNIEnv *env, jclass __unused clazz, jlong context, jboolean value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -311,7 +311,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueBoolean(
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueInt(JNIEnv *env, jclass __unused clazz, jlong context, jint value) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueInt(JNIEnv *env, jclass __unused clazz, jlong context, jint value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -326,7 +326,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueInt(JNIE
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFloat64(JNIEnv *env, jclass __unused clazz, jlong context, jdouble value) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueFloat64(JNIEnv *env, jclass __unused clazz, jlong context, jdouble value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -341,7 +341,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFloat64(
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueString(JNIEnv *env, jclass __unused clazz, jlong context, jstring value) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueString(JNIEnv *env, jclass __unused clazz, jlong context, jstring value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -361,7 +361,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueString(J
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueJson(JNIEnv *env, jclass __unused clazz, jlong context, jstring value) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueJson(JNIEnv *env, jclass __unused clazz, jlong context, jstring value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -382,7 +382,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueJson(JNI
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueObject(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueObject(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -397,7 +397,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueObject(J
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueArray(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArray(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -444,21 +444,21 @@ METHOD_NAME(                                                                    
     return (jlong) result;                                                                \
 }
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferZ, jbooleanArray, jboolean, GetBooleanArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferZ, jbooleanArray, jboolean, GetBooleanArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferB, jbyteArray, jbyte, GetByteArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferB, jbyteArray, jbyte, GetByteArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferC, jcharArray, jchar, GetCharArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferC, jcharArray, jchar, GetCharArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferS, jshortArray, jshort, GetShortArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferS, jshortArray, jshort, GetShortArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferI, jintArray, jint, GetIntArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferI, jintArray, jint, GetIntArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferJ, jlongArray, jlong, GetLongArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferJ, jlongArray, jlong, GetLongArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferF, jfloatArray, jfloat, GetFloatArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferF, jfloatArray, jfloat, GetFloatArrayRegion)
 
-CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_youku_gaiax_quickjs_QuickJS_createValueArrayBufferD, jdoubleArray, jdouble, GetDoubleArrayRegion)
+CREATE_VALUE_ARRAY_BUFFER_METHOD(Java_com_alibaba_gaiax_quickjs_QuickJS_createValueArrayBufferD, jdoubleArray, jdouble, GetDoubleArrayRegion)
 
 static jlong createValueFunction(
         JNIEnv *env,
@@ -514,7 +514,7 @@ static jlong createValueFunction(
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFunction(
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueFunction(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -529,7 +529,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFunction
     return createValueFunction(env, context, js_context, JNI_FALSE, instance, method_name, method_sign, return_type, arg_types, is_callback_method);
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFunctionS(
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueFunctionS(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -554,7 +554,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueFunction
     return createValueFunction(env, context, js_context, JNI_TRUE, callee, method_name, method_sign, return_type, arg_types, JNI_FALSE);
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueJavaObject(JNIEnv *env, jclass __unused clazz, jlong context, jobject object) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValueJavaObject(JNIEnv *env, jclass __unused clazz, jlong context, jobject object) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -569,7 +569,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValueJavaObje
     return (jlong) result;
 }
 
-JNIEXPORT jlongArray JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValuePromise(JNIEnv *env, __unused jclass clazz, jlong context) {
+JNIEXPORT jlongArray JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_createValuePromise(JNIEnv *env, __unused jclass clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -617,7 +617,7 @@ JNIEXPORT jlongArray JNICALL Java_com_youku_gaiax_quickjs_QuickJS_createValuePro
     return result;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_defineValueProperty__JJIJI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index, jlong property, jint flags) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_defineValueProperty__JJIJI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index, jlong property, jint flags) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -633,7 +633,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_defineValuePrope
     return (jboolean) (JS_DefinePropertyValueUint32(ctx, *val, (uint32_t) index, *prop, flags) >= 0);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_defineValueProperty__JJLjava_lang_String_2JI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name, jlong property, jint flags) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_defineValueProperty__JJLjava_lang_String_2JI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name, jlong property, jint flags) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -656,7 +656,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_defineValuePrope
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueTag(JNIEnv *env, jclass __unused clazz, jlong value) {
+JNIEXPORT jint JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueTag(JNIEnv *env, jclass __unused clazz, jlong value) {
 
     JSValue *val = (JSValue *) value;
     CHECK_NULL_RET(env, val, MSG_NULL_JS_VALUE);
@@ -664,7 +664,7 @@ JNIEXPORT jint JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueTag(JNIEnv *
     return JS_VALUE_GET_NORM_TAG(*val);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueArray(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_isValueArray(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -675,7 +675,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueArray(JNI
     return (jboolean) JS_IsArray(ctx, *val);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueArrayBuffer(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_isValueArrayBuffer(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -686,7 +686,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueArrayBuff
     return (jboolean) JS_IsArrayBuffer(ctx, *val);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueFunction(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_isValueFunction(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -697,7 +697,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_isValueFunction(
     return (jboolean) JS_IsFunction(ctx, *val);
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_invokeValueFunction(
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_invokeValueFunction(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -737,7 +737,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_invokeValueFunction
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueProperty__JJI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueProperty__JJI(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -756,7 +756,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueProperty__J
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueProperty__JJLjava_lang_String_2(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name) {
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueProperty__JJLjava_lang_String_2(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -781,7 +781,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueProperty__J
     return (jlong) result;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setValueProperty__JJIJ(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index, jlong property) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setValueProperty__JJIJ(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jint index, jlong property) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -799,7 +799,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setValueProperty
     return (jboolean) (JS_SetPropertyUint32(ctx, *val, (uint32_t) index, *prop) >= 0);
 }
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_setValueProperty__JJLjava_lang_String_2J(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name, jlong property) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_setValueProperty__JJLjava_lang_String_2J(JNIEnv *env, jclass __unused clazz, jlong context, jlong value, jstring name, jlong property) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -856,21 +856,21 @@ METHOD_NAME(                                                                    
     return array;                                                                                           \
 }
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toBooleanArray, jbooleanArray, jboolean, 1, NewBooleanArray, GetBooleanArrayElements, ReleaseBooleanArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toBooleanArray, jbooleanArray, jboolean, 1, NewBooleanArray, GetBooleanArrayElements, ReleaseBooleanArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toByteArray, jbyteArray, jbyte, 1, NewByteArray, GetByteArrayElements, ReleaseByteArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toByteArray, jbyteArray, jbyte, 1, NewByteArray, GetByteArrayElements, ReleaseByteArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toCharArray, jcharArray, jchar, 2, NewCharArray, GetCharArrayElements, ReleaseCharArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toCharArray, jcharArray, jchar, 2, NewCharArray, GetCharArrayElements, ReleaseCharArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toShortArray, jshortArray, jshort, 2, NewShortArray, GetShortArrayElements, ReleaseShortArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toShortArray, jshortArray, jshort, 2, NewShortArray, GetShortArrayElements, ReleaseShortArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toIntArray, jintArray, jint, 4, NewIntArray, GetIntArrayElements, ReleaseIntArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toIntArray, jintArray, jint, 4, NewIntArray, GetIntArrayElements, ReleaseIntArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toLongArray, jlongArray, jlong, 8, NewLongArray, GetLongArrayElements, ReleaseLongArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toLongArray, jlongArray, jlong, 8, NewLongArray, GetLongArrayElements, ReleaseLongArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toFloatArray, jfloatArray, jfloat, 4, NewFloatArray, GetFloatArrayElements, ReleaseFloatArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toFloatArray, jfloatArray, jfloat, 4, NewFloatArray, GetFloatArrayElements, ReleaseFloatArrayElements)
 
-TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toDoubleArray, jdoubleArray, jdouble, 8, NewDoubleArray, GetDoubleArrayElements, ReleaseDoubleArrayElements)
+TO_ARRAY(Java_com_alibaba_gaiax_quickjs_QuickJS_toDoubleArray, jdoubleArray, jdouble, 8, NewDoubleArray, GetDoubleArrayElements, ReleaseDoubleArrayElements)
 
 #define CHECK_JS_TAG_RET(VAL, TARGET, TYPE)                                                        \
     do {                                                                                           \
@@ -880,7 +880,7 @@ TO_ARRAY(Java_com_youku_gaiax_quickjs_QuickJS_toDoubleArray, jdoubleArray, jdoub
         }                                                                                          \
     } while (0)
 
-JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueBoolean(JNIEnv *env, jclass __unused clazz, jlong value) {
+JNIEXPORT jboolean JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueBoolean(JNIEnv *env, jclass __unused clazz, jlong value) {
 
     JSValue *val = (JSValue *) value;
     CHECK_NULL_RET(env, val, MSG_NULL_JS_VALUE);
@@ -890,7 +890,7 @@ JNIEXPORT jboolean JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueBoolean(
     return (jboolean) (JS_VALUE_GET_BOOL(*val));
 }
 
-JNIEXPORT jint JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueInt(JNIEnv *env, jclass __unused clazz, jlong value) {
+JNIEXPORT jint JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueInt(JNIEnv *env, jclass __unused clazz, jlong value) {
 
     JSValue *val = (JSValue *) value;
     CHECK_NULL_RET(env, val, MSG_NULL_JS_VALUE);
@@ -900,7 +900,7 @@ JNIEXPORT jint JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueInt(JNIEnv *
     return (jint) (JS_VALUE_GET_INT(*val));
 }
 
-JNIEXPORT jdouble JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueFloat64(JNIEnv *env, jclass __unused clazz, jlong value) {
+JNIEXPORT jdouble JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueFloat64(JNIEnv *env, jclass __unused clazz, jlong value) {
 
     JSValue *val = (JSValue *) value;
     CHECK_NULL_RET(env, val, MSG_NULL_JS_VALUE);
@@ -910,7 +910,7 @@ JNIEXPORT jdouble JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueFloat64(J
     return (jdouble) JS_VALUE_GET_FLOAT64(*val);
 }
 
-JNIEXPORT jstring JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueString(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jstring JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueString(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -932,7 +932,7 @@ JNIEXPORT jstring JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueString(JN
     return j_str;
 }
 
-JNIEXPORT jstring JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueJsonString(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jstring JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueJsonString(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -955,7 +955,7 @@ JNIEXPORT jstring JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueJsonStrin
     return j_str;
 }
 
-JNIEXPORT jobject JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueJavaObject(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
+JNIEXPORT jobject JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getValueJavaObject(JNIEnv *env, jclass __unused clazz, jlong context, jlong value) {
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
 
@@ -965,7 +965,7 @@ JNIEXPORT jobject JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getValueJavaObjec
     return QJ_GetJavaObject(ctx, *val);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyValue(
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_destroyValue(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -979,7 +979,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_destroyValue(
     js_free_rt(JS_GetRuntime(ctx), val);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_freeValue(
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_freeValue(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -992,7 +992,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_freeValue(
     JS_FreeValue(ctx, *val);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_dupValue(
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_dupValue(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -1005,7 +1005,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_dupValue(
     JS_DupValue(ctx, *val);
 }
 
-JNIEXPORT jobject JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getException(
+JNIEXPORT jobject JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getException(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context
@@ -1013,7 +1013,7 @@ JNIEXPORT jobject JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getException(
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
 
-    jclass js_exception_class = (*env)->FindClass(env, "com/youku/gaiax/quickjs/JSException");
+    jclass js_exception_class = (*env)->FindClass(env, "com/alibaba/gaiax/quickjs/JSException");
     CHECK_NULL_RET(env, js_exception_class, "Can't find JSException");
 
     jmethodID constructor_id = (*env)->GetMethodID(env, js_exception_class, "<init>", "(ZLjava/lang/String;Ljava/lang/String;)V");
@@ -1050,7 +1050,7 @@ JNIEXPORT jobject JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getException(
     return result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getGlobalObject(
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_getGlobalObject(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context
@@ -1068,7 +1068,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_getGlobalObject(
     return (jlong) result;
 }
 
-JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_evaluate(
+JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_evaluate(
         JNIEnv *env,
         jclass __unused clazz,
         jlong context,
@@ -1108,7 +1108,7 @@ JNIEXPORT jlong JNICALL Java_com_youku_gaiax_quickjs_QuickJS_evaluate(
     return (jlong) result;
 }
 
-JNIEXPORT jint JNICALL Java_com_youku_gaiax_quickjs_QuickJS_executePendingJob(JNIEnv *env, jclass clazz, jlong context) {
+JNIEXPORT jint JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_executePendingJob(JNIEnv *env, jclass clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL_RET(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -1127,7 +1127,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void __unused *reserved) {
         return JNI_ERR;
     }
 
-    jclass interrupt_handler_clazz = (*env)->FindClass(env, "com/youku/gaiax/quickjs/JSRuntime$InterruptHandler");
+    jclass interrupt_handler_clazz = (*env)->FindClass(env, "com/alibaba/gaiax/quickjs/JSRuntime$InterruptHandler");
     if (interrupt_handler_clazz == NULL) {
         return JNI_ERR;
     }
@@ -1136,7 +1136,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void __unused *reserved) {
         return JNI_ERR;
     }
 
-    jclass promise_rejection_handler_clazz = (*env)->FindClass(env, "com/youku/gaiax/quickjs/JSRuntime$PromiseRejectionHandler");
+    jclass promise_rejection_handler_clazz = (*env)->FindClass(env, "com/alibaba/gaiax/quickjs/JSRuntime$PromiseRejectionHandler");
     if (promise_rejection_handler_clazz == NULL) {
         return JNI_ERR;
     }
@@ -1156,7 +1156,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void __unused *reserved) {
     return JNI_VERSION_1_6;
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initModuleStd(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_initModuleStd(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -1165,7 +1165,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initModuleStd(JNIEnv
     CHECK_NULL(env, std_module, MSG_OOM);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initModuleOs(JNIEnv *env, jclass __unused clazz, jlong context) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_initModuleOs(JNIEnv *env, jclass __unused clazz, jlong context) {
 
     JSContext *ctx = (JSContext *) context;
     CHECK_NULL(env, ctx, MSG_NULL_JS_CONTEXT);
@@ -1174,7 +1174,7 @@ JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initModuleOs(JNIEnv 
     CHECK_NULL(env, os_module, MSG_OOM);
 }
 
-JNIEXPORT void JNICALL Java_com_youku_gaiax_quickjs_QuickJS_initModuleBridge(JNIEnv *env, jclass clazz, jlong context, jstring module_name) {
+JNIEXPORT void JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_initModuleBridge(JNIEnv *env, jclass clazz, jlong context, jstring module_name) {
 
     // 将指针强转成结构
     JSContext *ctx = (JSContext *) context;

@@ -1,16 +1,18 @@
-package com.alibaba.gaiax.js.adapter.impl.render
+package com.alibaba.gaiax.js.adapter.impl
 
 import android.app.Activity
 import android.util.Log
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
+import com.alibaba.gaiax.js.GXJSComponentDelegate
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.youku.gaiax.js.GXJSComponentDelegate
-import com.youku.gaiax.js.IRenderEngineDelegate
-import com.youku.gaiax.js.api.IGaiaXCallback
-import com.youku.gaiax.js.utils.GaiaXJSUiExecutor
+import com.alibaba.gaiax.js.IRenderEngineDelegate
+import com.alibaba.gaiax.js.adapter.impl.render.GXJSGesture
+import com.alibaba.gaiax.js.adapter.impl.render.GXMixNodeEvent
+import com.alibaba.gaiax.js.api.IGaiaXCallback
+import com.alibaba.gaiax.js.utils.GaiaXJSUiExecutor
 import java.util.concurrent.ConcurrentHashMap
 
 /**

@@ -10,7 +10,7 @@
 int java_gaiax_method_init(JNIEnv *env) {
 
     // 查找帮助类
-    jni_gaiax_helper_class = (*env)->FindClass(env, "com/youku/gaiax/quickjs/JNIBridgeModuleHelper");
+    jni_gaiax_helper_class = (*env)->FindClass(env, "com/alibaba/gaiax/quickjs/JNIBridgeModuleHelper");
 
     // 因为jni_call_helper_class是静态的，需要包一层JNI全局引用
     jni_gaiax_helper_class = (*env)->NewGlobalRef(env, jni_gaiax_helper_class);

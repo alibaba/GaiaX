@@ -162,7 +162,7 @@ static jobject float_primitive_type;
 static jobject double_primitive_type;
 
 int java_method_init(JNIEnv *env) {
-    jni_helper_class = (*env)->FindClass(env, "com/youku/gaiax/quickjs/JNIHelper");
+    jni_helper_class = (*env)->FindClass(env, "com/alibaba/gaiax/quickjs/JNIHelper");
     jni_helper_class = (*env)->NewGlobalRef(env, jni_helper_class);
     if (jni_helper_class == NULL) return -1;
 
@@ -172,16 +172,16 @@ int java_method_init(JNIEnv *env) {
         if ((RESULT) == NULL) return -1;                                                  \
     } while (0)
 
-    GET_STATIC_METHOD(js_value_to_java_value_method, "jsValueToJavaValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;J)Ljava/lang/Object;");
-    GET_STATIC_METHOD(java_boolean_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;Z)J");
-    GET_STATIC_METHOD(java_char_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;C)J");
-    GET_STATIC_METHOD(java_byte_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;B)J");
-    GET_STATIC_METHOD(java_short_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;S)J");
-    GET_STATIC_METHOD(java_int_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;I)J");
-    GET_STATIC_METHOD(java_long_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;J)J");
-    GET_STATIC_METHOD(java_float_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;F)J");
-    GET_STATIC_METHOD(java_double_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;D)J");
-    GET_STATIC_METHOD(java_object_to_js_value_method, "javaValueToJSValue", "(Lcom/youku/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;Ljava/lang/Object;)J");
+    GET_STATIC_METHOD(js_value_to_java_value_method, "jsValueToJavaValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;J)Ljava/lang/Object;");
+    GET_STATIC_METHOD(java_boolean_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;Z)J");
+    GET_STATIC_METHOD(java_char_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;C)J");
+    GET_STATIC_METHOD(java_byte_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;B)J");
+    GET_STATIC_METHOD(java_short_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;S)J");
+    GET_STATIC_METHOD(java_int_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;I)J");
+    GET_STATIC_METHOD(java_long_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;J)J");
+    GET_STATIC_METHOD(java_float_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;F)J");
+    GET_STATIC_METHOD(java_double_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;D)J");
+    GET_STATIC_METHOD(java_object_to_js_value_method, "javaValueToJSValue", "(Lcom/alibaba/gaiax/quickjs/JSContext;Ljava/lang/reflect/Type;Ljava/lang/Object;)J");
     GET_STATIC_METHOD(is_primitive_type_method, "isPrimitiveType", "(Ljava/lang/reflect/Type;)Z");
     GET_STATIC_METHOD(is_same_type_method, "isSameType", "(Ljava/lang/reflect/Type;Ljava/lang/reflect/Type;)Z");
     GET_STATIC_METHOD(unbox_boolean_method, "unbox", "(Ljava/lang/Boolean;)Z");

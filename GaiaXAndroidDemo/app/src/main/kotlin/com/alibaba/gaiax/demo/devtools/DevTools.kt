@@ -20,7 +20,7 @@ import com.alibaba.gaiax.studio.IDevTools
 import com.alibaba.gaiax.studio.saveInLocal
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
-import com.youku.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms

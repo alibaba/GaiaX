@@ -8,7 +8,8 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.youku.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
+import com.alibaba.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms

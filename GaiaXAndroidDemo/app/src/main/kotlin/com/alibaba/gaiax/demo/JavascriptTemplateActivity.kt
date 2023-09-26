@@ -8,8 +8,8 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.utils.GXScreenUtils
-import com.youku.gaiax.js.GXJSComponentDelegate
-import com.youku.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.GXJSComponentDelegate
+import com.alibaba.gaiax.js.GXJSEngineFactory
 
 /**
  *  @author: shisan.lms

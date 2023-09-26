@@ -22,9 +22,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.Keep
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.js.GXJSEngineFactory
 import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
-import com.alibaba.gaiax.js.adapter.impl.render.GXJSRenderDelegate
-import com.youku.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
 
 @Keep
 class GXJSAdapter : GXJSEngineFactory.GXJSIAdapter {

@@ -76,6 +76,43 @@ function createViewOrTemplate(gxNode: GXNode) {
   .height(height(gxNode))
   .flexShrink(flexShrink(gxNode))
   .flexGrow(flexGrow(gxNode))
+  .margin(margin(gxNode))
+  .padding(padding(gxNode))
+  .aspectRatio(aspectRatio(gxNode))
+}
+
+function aspectRatio(gxNode: GXNode): number {
+  let aspectRatio = gxNode.gxTemplateNode.finalCss['aspect-ratio'] || null;
+  if (aspectRatio != undefined && aspectRatio != null) {
+    return Number.parseInt(aspectRatio);
+  }
+  return null;
+}
+
+function margin(gxNode: GXNode): Margin {
+  let left = gxNode.gxTemplateNode.finalCss['margin-left'];
+  let top = gxNode.gxTemplateNode.finalCss['margin-top'];
+  let right = gxNode.gxTemplateNode.finalCss['margin-right'];
+  let bottom = gxNode.gxTemplateNode.finalCss['margin-bottom'];
+  return {
+    left: left?.value?.replace('px', 'vp') || '',
+    top: top?.value?.replace('px', 'vp') || '',
+    right: right?.value?.replace('px', 'vp') || '',
+    bottom: bottom?.value?.replace('px', 'vp') || ''
+  }
+}
+
+function padding(gxNode: GXNode): Margin {
+  let left = gxNode.gxTemplateNode.finalCss['padding-left'];
+  let top = gxNode.gxTemplateNode.finalCss['padding-top'];
+  let right = gxNode.gxTemplateNode.finalCss['padding-right'];
+  let bottom = gxNode.gxTemplateNode.finalCss['padding-bottom'];
+  return {
+    left: left?.value?.replace('px', 'vp') || '',
+    top: top?.value?.replace('px', 'vp') || '',
+    right: right?.value?.replace('px', 'vp') || '',
+    bottom: bottom?.value?.replace('px', 'vp') || ''
+  }
 }
 
 /**

@@ -43,13 +43,13 @@ function createViewByNodeTree(gxNode: GXNode) {
   } else if (gxNode.gxTemplateNode.isTextType()) {
     createText(gxNode)
   } else {
-    Text("other GXNode")
+    Text('other type node')
   }
 }
 
 @Builder
 function createText(gxNode: GXNode) {
-  Text(gxNode.gxData?.value || '')
+  Text(gxNode.gxData?.value || 'text value is null')
     .key(gxNode.gxId)
     .width(width(gxNode))
     .height(height(gxNode))
@@ -60,6 +60,7 @@ function createText(gxNode: GXNode) {
 function createViewOrTemplate(gxNode: GXNode) {
   // 如果是View或者Template类型，那么创建Flex布局
   Flex({
+    wrap: flexWrap(gxNode),
     direction: flexDirection(gxNode),
     justifyContent: flexJustifyContent(gxNode),
     alignItems: flexAlignItems(gxNode),
@@ -157,6 +158,23 @@ function flexJustifyContent(gxNode: GXNode): FlexAlign {
     return FlexAlign.SpaceEvenly;
   }
   return FlexAlign.Start;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-wrap
+ * @param gxNode
+ * @returns
+ */
+function flexWrap(gxNode: GXNode): FlexWrap {
+  let value = gxNode.gxTemplateNode.finalCss['flex-wrap'];
+  if (value == "wrap") {
+    return FlexWrap.Wrap;
+  } else if (value == "wrap-reverse") {
+    return FlexWrap.WrapReverse;
+  } else if (value == "nowrap") {
+    return FlexWrap.NoWrap;
+  }
+  return FlexWrap.NoWrap;
 }
 
 /**

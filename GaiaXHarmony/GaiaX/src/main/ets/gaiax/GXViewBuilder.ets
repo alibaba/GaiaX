@@ -37,19 +37,44 @@ function createViewForNode(gxNode?: GXNode) {
 
 @Builder
 function createViewByNodeTree(gxNode: GXNode) {
+  // View or Template
   if (gxNode.gxTemplateNode.isViewType() || gxNode.gxTemplateNode.isGaiaTemplate()) {
-    Flex(createFlexOptions(gxNode)) {
-      ForEach(gxNode.gxChildren, (gxChildNode: GXNode) => {
-        createViewByNodeTree(gxChildNode)
-      }, (item, index) => index + JSON.stringify(item));
-    }.createFlexAttr(gxNode)
+    createViewOrTemplate(gxNode)
   } else if (gxNode.gxTemplateNode.isTextType()) {
-    Text(gxNode.gxData?.value || '')
-      .createTextAttr(gxNode)
-      .textAlign(textAlign(gxNode))
+    createText(gxNode)
   } else {
     Text("other GXNode")
   }
+}
+
+@Builder
+function createText(gxNode: GXNode) {
+  Text(gxNode.gxData?.value || '')
+    .key(gxNode.gxId)
+    .width(width(gxNode))
+    .height(height(gxNode))
+    .textAlign(textAlign(gxNode))
+}
+
+@Builder
+function createViewOrTemplate(gxNode: GXNode) {
+  // 如果是View或者Template类型，那么创建Flex布局
+  Flex({
+    direction: flexDirection(gxNode),
+    justifyContent: flexJustifyContent(gxNode),
+    alignItems: flexAlignItems(gxNode),
+    alignContent: flexAlignContent(gxNode),
+  }) {
+    ForEach(gxNode.gxChildren, (gxChildNode: GXNode) => {
+      // 如果有子节点，那么递归创建子View
+      createViewByNodeTree(gxChildNode);
+    }, (item: GXNode, index) => index + item.gxId);
+  }
+  .key(gxNode.gxId)
+  .width(width(gxNode))
+  .height(height(gxNode))
+  .flexShrink(flexShrink(gxNode))
+  .flexGrow(flexGrow(gxNode))
 }
 
 /**
@@ -58,31 +83,15 @@ function createViewByNodeTree(gxNode: GXNode) {
  * @returns
  */
 function textAlign(gxNode: GXNode): TextAlign {
-  let value = gxNode.gxTemplateNode.textAlign();
-  if (value != null) {
-    if (value == "start") {
-      return TextAlign.Start;
-    } else if (value == "end") {
-      return TextAlign.End;
-    } else if (value == "center") {
-      return TextAlign.Center;
-    }
+  let value = gxNode.gxTemplateNode.finalCss['text-align'];
+  if (value == "start") {
+    return TextAlign.Start;
+  } else if (value == "end") {
+    return TextAlign.End;
+  } else if (value == "center") {
+    return TextAlign.Center;
   }
   return TextAlign.Start;
-}
-
-/**
- * 创建Flex参数
- * @param gxNode
- * @returns
- */
-function createFlexOptions(gxNode: GXNode): FlexOptions {
-  return {
-    direction: direction(gxNode),
-    justifyContent: justifyContent(gxNode),
-    alignItems: alignItems(gxNode),
-    alignContent: alignContent(gxNode),
-  };
 }
 
 /**
@@ -90,44 +99,39 @@ function createFlexOptions(gxNode: GXNode): FlexOptions {
  * @param gxNode
  * @returns
  */
-function alignContent(gxNode: GXNode): FlexAlign {
-  let value = gxNode.gxTemplateNode.alignContent();
-  if (value != null) {
-    if (value == "start" || value == "flex-start") {
-      return FlexAlign.Start;
-    } else if (value == "end" || value == "flex-end") {
-      return FlexAlign.End;
-    } else if (value == "center") {
-      return FlexAlign.Center;
-    } else if (value == "space-between") {
-      return FlexAlign.SpaceBetween;
-    } else if (value == "space-around") {
-      return FlexAlign.SpaceAround;
-    } else if (value == "space-evenly") {
-      return FlexAlign.SpaceEvenly;
-    }
+function flexAlignContent(gxNode: GXNode): FlexAlign {
+  let value = gxNode.gxTemplateNode.finalCss['align-content'];
+  if (value == "start" || value == "flex-start") {
+    return FlexAlign.Start;
+  } else if (value == "end" || value == "flex-end") {
+    return FlexAlign.End;
+  } else if (value == "center") {
+    return FlexAlign.Center;
+  } else if (value == "space-between") {
+    return FlexAlign.SpaceBetween;
+  } else if (value == "space-around") {
+    return FlexAlign.SpaceAround;
+  } else if (value == "space-evenly") {
+    return FlexAlign.SpaceEvenly;
   }
   return FlexAlign.Start;
 }
-
 
 /**
  * https://developer.mozilla.org/zh-CN/docs/Web/CSS/align-items
  * @param gxNode
  * @returns
  */
-function alignItems(gxNode: GXNode): ItemAlign {
-  let value = gxNode.gxTemplateNode.alignItems();
-  if (value != null) {
-    if (value == "start") {
-      return ItemAlign.Start;
-    } else if (value == "end") {
-      return ItemAlign.End;
-    } else if (value == "center") {
-      return ItemAlign.Center;
-    } else if (value == "stretch") {
-      return ItemAlign.Stretch;
-    }
+function flexAlignItems(gxNode: GXNode): ItemAlign {
+  let value = gxNode.gxTemplateNode.finalCss['align-items'];
+  if (value == "start") {
+    return ItemAlign.Start;
+  } else if (value == "end") {
+    return ItemAlign.End;
+  } else if (value == "center") {
+    return ItemAlign.Center;
+  } else if (value == "stretch") {
+    return ItemAlign.Stretch;
   }
   return ItemAlign.Start;
 }
@@ -137,48 +141,87 @@ function alignItems(gxNode: GXNode): ItemAlign {
  * @param gxNode
  * @returns
  */
-function justifyContent(gxNode: GXNode): FlexAlign {
-  let value = gxNode.gxTemplateNode.justifyContent();
-  if (value != null) {
-    if (value == "start" || value == "flex-start") {
-      return FlexAlign.Start;
-    } else if (value == "end" || value == "flex-end") {
-      return FlexAlign.End;
-    } else if (value == "center") {
-      return FlexAlign.Center;
-    } else if (value == "space-between") {
-      return FlexAlign.SpaceBetween;
-    } else if (value == "space-around") {
-      return FlexAlign.SpaceAround;
-    } else if (value == "space-evenly") {
-      return FlexAlign.SpaceEvenly;
-    }
+function flexJustifyContent(gxNode: GXNode): FlexAlign {
+  let value = gxNode.gxTemplateNode.finalCss['justify-content'];
+  if (value == "start" || value == "flex-start") {
+    return FlexAlign.Start;
+  } else if (value == "end" || value == "flex-end") {
+    return FlexAlign.End;
+  } else if (value == "center") {
+    return FlexAlign.Center;
+  } else if (value == "space-between") {
+    return FlexAlign.SpaceBetween;
+  } else if (value == "space-around") {
+    return FlexAlign.SpaceAround;
+  } else if (value == "space-evenly") {
+    return FlexAlign.SpaceEvenly;
   }
   return FlexAlign.Start;
 }
 
-function direction(gxNode: GXNode): FlexDirection {
-  let value = gxNode.gxTemplateNode.direction();
-  if (value != null) {
-    if (value == "row") {
-      return FlexDirection.Row;
-    } else if (value == "column") {
-      return FlexDirection.Column
-    }
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-direction
+ * @param gxNode
+ * @returns
+ */
+function flexDirection(gxNode: GXNode): FlexDirection {
+  let value = gxNode.gxTemplateNode.finalCss['flex-direction'];
+  if (value == "row") {
+    return FlexDirection.Row;
+  } else if (value == "column") {
+    return FlexDirection.Column
   }
-
-  return FlexDirection.Column;
+  return FlexDirection.Row;
 }
 
-@Extend(Flex)
-function createFlexAttr(gxNode: GXNode) {
-  .width(gxNode.gxTemplateNode.width())
-  .height(gxNode.gxTemplateNode.height())
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/height
+ * @param gxNode
+ * @returns
+ */
+function height(gxNode: GXNode): Length {
+  let value: string = gxNode.gxTemplateNode.finalCss['height'];
+  if (value != undefined && value != null) {
+    return value.replace('px', 'vp');
+  }
+  return "auto";
 }
 
-@Extend(Text)
-function createTextAttr(gxNode: GXNode) {
-  .width(gxNode.gxTemplateNode.width())
-  .height(gxNode.gxTemplateNode.height())
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/width
+ * @param gxNode
+ * @returns
+ */
+function width(gxNode: GXNode): Length {
+  let value: string = gxNode.gxTemplateNode.finalCss['width'];
+  if (value != undefined && value != null) {
+    return value.replace('px', 'vp');
+  }
+  return "auto";
 }
 
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-grow
+ * @param gxNode
+ * @returns
+ */
+function flexGrow(gxNode: GXNode): number {
+  let value: string = gxNode.gxTemplateNode.finalCss['flex-grow'];
+  if (value != undefined && value != null) {
+    return Number.parseInt(value);
+  }
+  return 1;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-shrink
+ * @param gxNode
+ * @returns
+ */
+function flexShrink(gxNode: GXNode): number {
+  let value: string = gxNode.gxTemplateNode.finalCss['flex-shrink'];
+  if (value != undefined && value != null) {
+    return Number.parseInt(value);
+  }
+  return 1;
+}

@@ -243,62 +243,6 @@ export default class GXTemplateNode {
   finalStyle: any;
   finalCss: GXJSONObject;
 
-  textAlign() {
-    let value = this.finalCss['text-align'];
-    if (value != undefined && value != null) {
-      return value;
-    }
-    return null;
-  }
-
-  alignContent() {
-    let value = this.finalCss['align-content'];
-    if (value != undefined && value != null) {
-      return value;
-    }
-    return null;
-  }
-
-  alignItems() {
-    let value = this.finalCss['align-items'];
-    if (value != undefined && value != null) {
-      return value;
-    }
-    return null;
-  }
-
-  justifyContent() {
-    let value = this.finalCss['justify-content'];
-    if (value != undefined && value != null) {
-      return value;
-    }
-    return null;
-  }
-
-  direction(): string {
-    let value = this.finalCss['direction'];
-    if (value != undefined && value != null) {
-      return value;
-    }
-    return null;
-  }
-
-  width(): string {
-    let value: string = this.finalCss['width'];
-    if (value != undefined && value != null) {
-      return value.replace('px', 'vp');
-    }
-    return "auto";
-  }
-
-  height(): string {
-    let value: string = this.finalCss['height'];
-    if (value != undefined && value != null) {
-      return value.replace('px', 'vp');
-    }
-    return "auto";
-  }
-
   type(): string {
     return this.layer['type'];
   }

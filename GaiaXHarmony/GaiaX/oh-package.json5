@@ -1,10 +1,10 @@
 {
+  "license": "Apache-2.0",
+  "devDependencies": {},
+  "author": "",
   "name": "gaiax",
-  "version": "1.0.0",
   "description": "Please describe the basic information.",
   "main": "Index.ets",
-  "author": "",
-  "license": "Apache-2.0",
-  "dependencies": {
-  }
+  "version": "1.0.0",
+  "dependencies": {}
 }

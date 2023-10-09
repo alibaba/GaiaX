@@ -243,17 +243,17 @@ export default class GXTemplateNode {
   finalStyle: any;
   finalCss: GXJSONObject;
 
-
   textAlign() {
     let value = this.finalCss['text-align'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value;
     }
     return null;
   }
+
   alignContent() {
     let value = this.finalCss['align-content'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value;
     }
     return null;
@@ -261,7 +261,7 @@ export default class GXTemplateNode {
 
   alignItems() {
     let value = this.finalCss['align-items'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value;
     }
     return null;
@@ -269,16 +269,15 @@ export default class GXTemplateNode {
 
   justifyContent() {
     let value = this.finalCss['justify-content'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value;
     }
     return null;
   }
 
-
   direction(): string {
     let value = this.finalCss['direction'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value;
     }
     return null;
@@ -286,7 +285,7 @@ export default class GXTemplateNode {
 
   width(): string {
     let value: string = this.finalCss['width'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value.replace('px', 'vp');
     }
     return "auto";
@@ -294,7 +293,7 @@ export default class GXTemplateNode {
 
   height(): string {
     let value: string = this.finalCss['height'];
-    if (value != undefined) {
+    if (value != undefined && value != null) {
       return value.replace('px', 'vp');
     }
     return "auto";

@@ -3,26 +3,7 @@ import { gxRawFileTemplateSource } from '../gaiax/GXRegisterCenter';
 import GXTemplateData from '../gaiax/GXTemplateData';
 import GXTemplateItem from '../gaiax/GXTemplateItem';
 import createView from '../gaiax/GXViewBuilder';
-
-function Uint8ArrayToString(fileData) {
-  var dataString = "";
-  for (var i = 0; i < fileData.length; i++) {
-    dataString += String.fromCharCode(fileData[i]);
-  }
-
-  return dataString
-}
-
-
-function stringToUint8Array(str) {
-  var arr = [];
-  for (var i = 0, j = str.length; i < j; ++i) {
-    arr.push(str.charCodeAt(i));
-  }
-
-  var tmpUint8Array = new Uint8Array(arr);
-  return tmpUint8Array
-}
+import { loadTemplate } from '../utils/RawFileUtils';
 
 @Component
 export struct GXComponent {
@@ -33,43 +14,14 @@ export struct GXComponent {
 
   aboutToAppear() {
     try {
-      getContext()
-        .resourceManager
-        .getRawFileContent(`${this.gxTemplateItem.templateBiz}/${this.gxTemplateItem.templateId}/index.json`, (error, value) => {
-          if (error != null) {
-            console.log("error is " + error);
-          } else {
-            let indexJSON = Uint8ArrayToString(value);
-            getContext()
-              .resourceManager
-              .getRawFileContent(`${this.gxTemplateItem.templateBiz}/${this.gxTemplateItem.templateId}/index.css`, (error, value) => {
-                if (error != null) {
-                  console.log("error is " + error);
-                } else {
-                  let indexCSS = Uint8ArrayToString(value);
-                  getContext()
-                    .resourceManager
-                    .getRawFileContent(`${this.gxTemplateItem.templateBiz}/${this.gxTemplateItem.templateId}/index.databinding`, (error, value) => {
-                      if (error != null) {
-                        console.log("error is " + error);
-                      } else {
-                        let indexDataBinding = Uint8ArrayToString(value);
-
-                        let template = {
-                          "index.json": indexJSON,
-                          "index.css": indexCSS,
-                          "index.databinding": indexDataBinding,
-                        }
-
-                        gxRawFileTemplateSource.addData(this.gxTemplateItem.templateId, template);
-
-                        this.reload = true;
-                      }
-                    });
-                }
-              });
-          }
-        });
+      loadTemplate(getContext(), this.gxTemplateItem, (error, template) => {
+        if (template != null) {
+          gxRawFileTemplateSource.addData(this.gxTemplateItem.templateId, template);
+          this.reload = true;
+        } else {
+          console.log(`load template error ${error}`);
+        }
+      });
     } catch (error) {
       console.error(`callback getRawFileContent failed, error code: ${error.code}, message: ${error.message}.`)
     }

@@ -6,9 +6,9 @@
         "type": "HarmonyOS",
         "material": {
           "certpath": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.cer",
-          "storePassword": "0000001BB9DA5470C2EAD2466CE2F3A9E3AADE12C25184B02E2AF17EFBAC08C65F945FB63D6D25E3C38669",
+          "storePassword": "0000001B4802B0061DBAE89A3F5A79C7B3D4D00BDEDF55382592C3AB594FC2A7E43801860A99973ED2AD28",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B4E42FE206DACABFE17A85A13FEEC19DBE6B67D3BF61FADED3AF650BBAA5C0543A5B888CF995E28",
+          "keyPassword": "0000001B22322F9FF7606C0EC18C7204DE9EF9C9BE5216E595ADA46E62BB6DAD5507E56E1CF00142698C8A",
           "profile": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "/Users/biezhihua/.ohos/config/auto_debug_GaiaXHarmony_com.alibaba.gaiax.demo_40086000132854920.p12"

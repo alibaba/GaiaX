@@ -9,6 +9,7 @@ import GXCssConvertStyle from './GXCssConvertStyle';
 
 export class GXViewTreeCreator {
   createRootNode(gxTemplateContext: GXTemplateContext): GXNode {
+
     const gxTemplateData = gxTemplateContext.gxTemplateData.templateData as GXJSONObject;
 
     const gxTemplateInfo = gxTemplateContext.gxTemplateInfo;
@@ -59,7 +60,6 @@ export class GXViewTreeCreator {
 
     gxNode.gxTemplateNode = GXTemplateNode.create(gxLayer, gxTemplateInfo, gxVisualTemplateNode);
 
-
     if (gxNode.gxTemplateNode.isViewType() || gxNode.gxTemplateNode.isGaiaTemplate()) {
       this.createViewOrTemplateNode(
         gxTemplateContext,
@@ -78,7 +78,6 @@ export class GXViewTreeCreator {
         gxParentNode
       );
     }
-
 
     return gxNode;
   }

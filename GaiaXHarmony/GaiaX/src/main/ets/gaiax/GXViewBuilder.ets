@@ -71,6 +71,11 @@ function textAlign(gxNode: GXNode): TextAlign {
   return TextAlign.Start;
 }
 
+/**
+ * 创建Flex参数
+ * @param gxNode
+ * @returns
+ */
 function createFlexOptions(gxNode: GXNode): FlexOptions {
   return {
     direction: direction(gxNode),
@@ -151,7 +156,6 @@ function justifyContent(gxNode: GXNode): FlexAlign {
   }
   return FlexAlign.Start;
 }
-
 
 function direction(gxNode: GXNode): FlexDirection {
   let value = gxNode.gxTemplateNode.direction();

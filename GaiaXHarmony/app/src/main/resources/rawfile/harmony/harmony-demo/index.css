@@ -4,6 +4,9 @@
     background-color: #8FD6E1;
     justify-content: center;
     align-items: center;
+    border-style: solid;
+    border-color: #FF5C8D;
+    border-width: 1px;
 }
 
 #text {

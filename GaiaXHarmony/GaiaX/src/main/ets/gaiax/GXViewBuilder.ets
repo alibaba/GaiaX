@@ -63,6 +63,13 @@ function createText(gxNode: GXNode) {
     .constraintSize(constraintSize(gxNode))
     .backgroundColor(backgroundColor(gxNode))
     .textAlign(textAlign(gxNode))
+    .opacity(opacity(gxNode))
+    .border({
+      width: borderWidth(gxNode),
+      color: borderColor(gxNode),
+      radius: borderRadius(gxNode),
+      style: borderStyle(gxNode)
+    })
 }
 
 @Builder
@@ -92,6 +99,81 @@ function createViewOrTemplate(gxNode: GXNode) {
   .aspectRatio(aspectRatio(gxNode))
   .constraintSize(constraintSize(gxNode))
   .backgroundColor(backgroundColor(gxNode))
+  .opacity(opacity(gxNode))
+  .border({
+    width: borderWidth(gxNode),
+    color: borderColor(gxNode),
+    radius: borderRadius(gxNode),
+    style: borderStyle(gxNode)
+  })
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/border-style
+ * @param gxNode
+ */
+function borderStyle(gxNode: GXNode): BorderStyle {
+  let borderStyle = gxNode.gxTemplateNode.finalCss['border-style'];
+  if (borderStyle != undefined && borderStyle != null) {
+    if (borderStyle == "none") {
+      return null;
+    } else if (borderStyle == "dotted") {
+      return BorderStyle.Dotted;
+    } else if (borderStyle == "dashed") {
+      return BorderStyle.Dashed;
+    } else if (borderStyle == "solid") {
+      return BorderStyle.Solid;
+    }
+  }
+  return null;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/border-radius
+ * @param gxNode
+ */
+function borderRadius(gxNode: GXNode): string {
+  let borderRadius = gxNode.gxTemplateNode.finalCss['border-radius'];
+  if (borderRadius != undefined && borderRadius != null) {
+    return borderRadius.replace('px', 'vp');
+  }
+  return null;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/border-width
+ * @param gxNode
+ */
+function borderColor(gxNode: GXNode): string {
+  let borderColor = gxNode.gxTemplateNode.finalCss['border-color'];
+  if (borderColor != undefined && borderColor != null) {
+    return borderColor;
+  }
+  return null;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/border-width
+ * @param gxNode
+ */
+function borderWidth(gxNode: GXNode): string {
+  let borderWidth = gxNode.gxTemplateNode.finalCss['border-width'];
+  if (borderWidth != undefined && borderWidth != null) {
+    return borderWidth.replace('px', 'vp');
+  }
+  return null;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity
+ * @param gxNode
+ */
+function opacity(gxNode: GXNode): number {
+  let opacity = gxNode.gxTemplateNode.finalCss['opacity'];
+  if (opacity != undefined && opacity != null) {
+    return Number.parseInt(opacity);
+  }
+  return 1;
 }
 
 

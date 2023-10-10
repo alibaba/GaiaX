@@ -1,10 +1,9 @@
 #harmony-demo {
-    width: 100%;
+    width: 500px;
     height: 100px;
-    background-color: #e4e4e4;
+    background-color: #8FD6E1;
     justify-content: center;
     align-items: center;
-
 }
 
 #text {
@@ -14,4 +13,5 @@
     height: 50px;
     color: #000000;
     font-size: 15px;
+    background-color: #1597BB;
 }

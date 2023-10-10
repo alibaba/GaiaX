@@ -53,6 +53,15 @@ function createText(gxNode: GXNode) {
     .key(gxNode.gxId)
     .width(width(gxNode))
     .height(height(gxNode))
+    .flexBasis(flexBasis(gxNode))
+    .flexShrink(flexShrink(gxNode))
+    .flexGrow(flexGrow(gxNode))
+    .alignSelf(alignSelf(gxNode))
+    .margin(margin(gxNode))
+    .padding(padding(gxNode))
+    .aspectRatio(aspectRatio(gxNode))
+    .constraintSize(constraintSize(gxNode))
+    .backgroundColor(backgroundColor(gxNode))
     .textAlign(textAlign(gxNode))
 }
 
@@ -74,11 +83,92 @@ function createViewOrTemplate(gxNode: GXNode) {
   .key(gxNode.gxId)
   .width(width(gxNode))
   .height(height(gxNode))
+  .flexBasis(flexBasis(gxNode))
   .flexShrink(flexShrink(gxNode))
   .flexGrow(flexGrow(gxNode))
+  .alignSelf(alignSelf(gxNode))
   .margin(margin(gxNode))
   .padding(padding(gxNode))
   .aspectRatio(aspectRatio(gxNode))
+  .constraintSize(constraintSize(gxNode))
+  .backgroundColor(backgroundColor(gxNode))
+}
+
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-basis
+ * @param gxNode
+ */
+function flexBasis(gxNode: GXNode): string {
+  let flexBasis = gxNode.gxTemplateNode.finalCss['flex-basis'];
+  if (flexBasis != undefined && overflow != null) {
+    if (flexBasis == "auto") {
+      return "auto";
+    } else {
+      return flexBasis.replace('px', 'vp');
+    }
+  }
+  return "auto";
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/align-self
+ * @param gxNode
+ */
+function alignSelf(gxNode: GXNode): ItemAlign {
+  let alignSelf = gxNode.gxTemplateNode.finalCss['align-self'];
+  if (alignSelf != undefined && alignSelf != null) {
+    if (alignSelf == "auto") {
+      return ItemAlign.Auto;
+    } else if (alignSelf == "stretch") {
+      return ItemAlign.Stretch;
+    } else if (alignSelf == "center") {
+      return ItemAlign.Center;
+    } else if (alignSelf == "start") {
+      return ItemAlign.Start;
+    } else if (alignSelf == "end") {
+      return ItemAlign.End;
+    }
+  }
+  return null;
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/overflow
+ * @param gxNode
+ */
+function overflow(gxNode: GXNode): string {
+  let overflow = gxNode.gxTemplateNode.finalCss['overflow'];
+  if (overflow != undefined && overflow != null) {
+    return overflow;
+  }
+  return null;
+}
+
+function constraintSize(gxNode: GXNode): ConstraintSizeOptions {
+  let minWidth = gxNode.gxTemplateNode.finalCss['min-width'];
+  let minHeight = gxNode.gxTemplateNode.finalCss['min-height'];
+  let maxWidth = gxNode.gxTemplateNode.finalCss['max-width'];
+  let maxHeight = gxNode.gxTemplateNode.finalCss['max-height'];
+  return {
+    minWidth: minWidth?.replace('px', 'vp'),
+    minHeight: minHeight?.replace('px', 'vp'),
+    maxWidth: maxWidth?.replace('px', 'vp'),
+    maxHeight: maxHeight?.replace('px', 'vp'),
+  };
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/background-color
+ * @param gxNode
+ * @returns
+ */
+function backgroundColor(gxNode: GXNode): ResourceColor {
+  let color = gxNode.gxTemplateNode.finalCss['background-color'];
+  if (color != undefined && color != null) {
+    return color;
+  }
+  return null;
 }
 
 function aspectRatio(gxNode: GXNode): number {
@@ -95,10 +185,10 @@ function margin(gxNode: GXNode): Margin {
   let right = gxNode.gxTemplateNode.finalCss['margin-right'];
   let bottom = gxNode.gxTemplateNode.finalCss['margin-bottom'];
   return {
-    left: left?.value?.replace('px', 'vp') || '',
-    top: top?.value?.replace('px', 'vp') || '',
-    right: right?.value?.replace('px', 'vp') || '',
-    bottom: bottom?.value?.replace('px', 'vp') || ''
+    left: left?.value?.replace('px', 'vp'),
+    top: top?.value?.replace('px', 'vp'),
+    right: right?.value?.replace('px', 'vp'),
+    bottom: bottom?.value?.replace('px', 'vp')
   }
 }
 
@@ -108,10 +198,10 @@ function padding(gxNode: GXNode): Margin {
   let right = gxNode.gxTemplateNode.finalCss['padding-right'];
   let bottom = gxNode.gxTemplateNode.finalCss['padding-bottom'];
   return {
-    left: left?.value?.replace('px', 'vp') || '',
-    top: top?.value?.replace('px', 'vp') || '',
-    right: right?.value?.replace('px', 'vp') || '',
-    bottom: bottom?.value?.replace('px', 'vp') || ''
+    left: left?.value?.replace('px', 'vp'),
+    top: top?.value?.replace('px', 'vp'),
+    right: right?.value?.replace('px', 'vp'),
+    bottom: bottom?.value?.replace('px', 'vp')
   }
 }
 
@@ -265,7 +355,7 @@ function flexGrow(gxNode: GXNode): number {
   if (value != undefined && value != null) {
     return Number.parseInt(value);
   }
-  return 1;
+  return 0;
 }
 
 /**

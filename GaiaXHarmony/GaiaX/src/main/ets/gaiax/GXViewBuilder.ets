@@ -70,6 +70,8 @@ function createText(gxNode: GXNode) {
       radius: borderRadius(gxNode),
       style: borderStyle(gxNode)
     })
+    .clip(true)
+    .visibility(visibility(gxNode))
 }
 
 @Builder
@@ -106,6 +108,23 @@ function createViewOrTemplate(gxNode: GXNode) {
     radius: borderRadius(gxNode),
     style: borderStyle(gxNode)
   })
+  .visibility(visibility(gxNode))
+}
+
+/**
+ * https://developer.mozilla.org/zh-CN/docs/Web/CSS/visibility
+ * @param gxNode
+ */
+function visibility(gxNode: GXNode): Visibility {
+  let visibility = gxNode.gxTemplateNode.finalCss['visibility'];
+  if (visibility != undefined && visibility != null) {
+    if (visibility == "visible") {
+      return Visibility.Visible;
+    } else if (visibility == "hidden") {
+      return Visibility.Hidden;
+    }
+  }
+  return null;
 }
 
 /**

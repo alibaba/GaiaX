@@ -95,7 +95,14 @@ dependencies {
     implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    compileOnly("com.github.alibaba.GaiaX:GaiaX:dev-20231011-SNAPSHOT") { changing = true }
+
+    if (System.getProperties().get("isGaiaXDemo") == "true") {
+        compileOnly project(path: ':GaiaXAndroid')
+    } else if (project.hasProperty("type") && project.getProperty("type").equals("release")) {
+        compileOnly("com.github.alibaba.GaiaX:GaiaX:release-SNAPSHOT") { changing = true }
+    } else {
+        compileOnly("com.github.alibaba.GaiaX:GaiaX:dev-SNAPSHOT") { changing = true }
+    }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

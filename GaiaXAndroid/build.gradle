@@ -79,7 +79,13 @@ android {
 
 dependencies {
 
-    compileOnly("com.github.alibaba.GaiaX:GaiaX-Analyze:dev-20231011-SNAPSHOT") { changing = true }
+    if (System.getProperties().get("isGaiaXDemo") == "true") {
+        compileOnly project(path: ':GXAnalyzeAndroid')
+    } else if (project.hasProperty("type") && project.getProperty("type").equals("release")) {
+        compileOnly("com.github.alibaba.GaiaX:GaiaX-Analyze:release-SNAPSHOT") { changing = true }
+    } else {
+        compileOnly("com.github.alibaba.GaiaX:GaiaX-Analyze:dev-SNAPSHOT") { changing = true }
+    }
 
     implementation "androidx.appcompat:appcompat:1.0.0"
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -89,7 +95,13 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.github.bumptech.glide:glide:4.12.0'
     androidTestImplementation 'com.airbnb.android:lottie:4.1.0'
-    androidTestImplementation("com.github.alibaba.GaiaX:GaiaX-Analyze:dev-20231011-SNAPSHOT") { changing = true }
+
+    if (System.getProperties().get("isGaiaXDemo") == "true") {
+        androidTestImplementation project(path: ':GXAnalyzeAndroid')
+    } else {
+        androidTestImplementation("com.github.alibaba.GaiaX:GaiaX-Analyze:dev-SNAPSHOT") { changing = true }
+    }
+
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'

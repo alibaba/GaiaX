@@ -81,10 +81,10 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.26@jar'
     implementation 'androidx.appcompat:appcompat:1.0.0'
 
-    compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:main-SNAPSHOT@aar") { changing = true }
-    compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:main-SNAPSHOT@aar") { changing = true }
-    compileOnly("com.github.alibaba.GaiaX:GaiaX-JS:main-SNAPSHOT@aar") { changing = true }
-    compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:dev-20231011-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:dev-20231011-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX-JS:dev-20231011-SNAPSHOT@aar") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX:dev-20231011-SNAPSHOT@aar") { changing = true }
 }
 
 afterEvaluate {

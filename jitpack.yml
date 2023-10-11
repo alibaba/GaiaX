@@ -1,24 +1,38 @@
 jdk:
   - openjdk11
 install:
-   - echo "Publish GXAnalyzeAndroid"
+   - echo "##########################################"
+   - echo "############## Publish GXAnalyzeAndroid"
    - cd /home/jitpack/build/GaiaXAnalyze/GXAnalyzeAndroid
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroid"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroid"
    - cd /home/jitpack/build/GaiaXAndroid
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroidAdapter"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroidAdapter"
    - cd /home/jitpack/build/GaiaXAndroidAdapter
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroidClientToStudio"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroidClientToStudio"
    - cd /home/jitpack/build/GaiaXAndroidClientToStudio
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroidQuickJS"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroidQuickJS"
    - cd /home/jitpack/build/GaiaXAndroidQuickJS
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroidJS"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroidJS"
    - cd /home/jitpack/build/GaiaXAndroidJS
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
-   - echo "Publish GaiaXAndroidJSAdapter"
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
+   - echo "##########################################"
+   - echo ""############## Publish GaiaXAndroidJSAdapter"
    - cd /home/jitpack/build/GaiaXAndroidJSAdapter
-   - ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=main-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
+   - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll

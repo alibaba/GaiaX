@@ -95,7 +95,7 @@ dependencies {
     implementation "com.airbnb.android:lottie:4.1.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
-    compileOnly("com.github.alibaba.GaiaX:GaiaX:main-SNAPSHOT") { changing = true }
+    compileOnly("com.github.alibaba.GaiaX:GaiaX:dev-20231011-SNAPSHOT") { changing = true }
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'

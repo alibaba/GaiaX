@@ -4,7 +4,7 @@ import GXParams from './Modal'
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello GaiaX Demo'
+  @State message: string = 'Hello GaiaX'
 
   build() {
     Row() {

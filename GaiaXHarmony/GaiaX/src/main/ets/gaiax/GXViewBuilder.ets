@@ -108,6 +108,7 @@ function createViewOrTemplate(gxNode: GXNode) {
     radius: borderRadius(gxNode),
     style: borderStyle(gxNode)
   })
+  .clip(true)
   .visibility(visibility(gxNode))
 }
 

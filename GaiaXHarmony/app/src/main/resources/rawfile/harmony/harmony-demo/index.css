@@ -1,21 +1,44 @@
 #harmony-demo {
-    width: 500px;
-    height: 100px;
-    background-color: #8FD6E1;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
-    border-style: solid;
-    border-color: #FF5C8D;
-    border-width: 1px;
+  width: 100%;
+  background-color: #8fd6e1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #ff5c8d;
+  border-width: 1px;
+  flex-direction: column;
+  padding-left: 12px;
+  padding-right: 12px;
 }
-
+#view1 {
+  width: 100px;
+  height: 100px;
+  background-color: #50e3c2;
+}
 #text {
-    width: 300px;
-    text-overflow: ellipsis;
-    text-align: center;
-    height: 50px;
-    color: #000000;
-    font-size: 15px;
-    background-color: #1597BB;
+  width: 300px;
+  text-overflow: ellipsis;
+  text-align: center;
+  height: 50px;
+  color: #000000;
+  font-size: 15px;
+  background-color: #1597bb;
+}
+#view2 {
+  width: 100%;
+  height: 100px;
+  background-color: #4a90e2;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-color: #d0021b;
+  border-width: 1px;
+  border-style: solid;
+}
+#text2 {
+  width: 100px;
+  text-overflow: ellipsis;
+  height: 50px;
+  color: #000000;
+  font-size: 15px;
 }

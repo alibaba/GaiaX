@@ -4,7 +4,7 @@
   "package": {
     "id": "harmony-demo",
     "version": "0.0.1",
-    "modify-timestamp": "Wed Oct 11 2023 10:02:46 GMT+0800 (China Standard Time)",
+    "modify-timestamp": "Wed Oct 11 2023 10:53:14 GMT+0800 (China Standard Time)",
     "constraint-size": { "width": 500, "height": 100, "zoom": 1 },
     "dependencies": {}
   },
@@ -15,6 +15,7 @@
       "id": "view2",
       "type": "view",
       "layers": [{ "id": "text2", "type": "text" }]
-    }
+    },
+    { "id": "view3", "type": "view" }
   ]
 }

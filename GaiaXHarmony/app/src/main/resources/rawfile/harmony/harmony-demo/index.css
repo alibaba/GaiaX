@@ -2,7 +2,7 @@
   width: 100%;
   background-color: #8fd6e1;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   border-radius: 12px;
   border-style: solid;
   border-color: #ff5c8d;
@@ -12,7 +12,7 @@
   padding-right: 12px;
 }
 #view1 {
-  width: 100px;
+  width: 100%;
   height: 100px;
   background-color: #50e3c2;
 }
@@ -41,4 +41,9 @@
   height: 50px;
   color: #000000;
   font-size: 15px;
+}
+#view3 {
+  width: 100px;
+  height: 100px;
+  background-color: #e4e4e4;
 }

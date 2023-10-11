@@ -77,13 +77,14 @@ function createText(gxNode: GXNode) {
 @Builder
 function createViewOrTemplate(gxNode: GXNode) {
   // 如果是View或者Template类型，那么创建Flex布局
-  Flex({
-    wrap: flexWrap(gxNode),
-    direction: flexDirection(gxNode),
-    justifyContent: flexJustifyContent(gxNode),
-    alignItems: flexAlignItems(gxNode),
-    alignContent: flexAlignContent(gxNode),
-  }) {
+  // ({
+  //   wrap: flexWrap(gxNode),
+  //   direction: flexDirection(gxNode),
+  //   justifyContent: flexJustifyContent(gxNode),
+  //   alignItems: flexAlignItems(gxNode),
+  //   alignContent: flexAlignContent(gxNode),
+  // })
+  Column() {
     ForEach(gxNode.gxChildren, (gxChildNode: GXNode) => {
       // 如果有子节点，那么递归创建子View
       createViewByNodeTree(gxChildNode);
@@ -92,6 +93,8 @@ function createViewOrTemplate(gxNode: GXNode) {
   .key(gxNode.gxId)
   .width(width(gxNode))
   .height(height(gxNode))
+  .justifyContent(flexJustifyContent(gxNode))
+  .alignItems(HorizontalAlign.Center)
   .flexBasis(flexBasis(gxNode))
   .flexShrink(flexShrink(gxNode))
   .flexGrow(flexGrow(gxNode))
@@ -363,7 +366,7 @@ function flexAlignItems(gxNode: GXNode): ItemAlign {
   } else if (value == "stretch") {
     return ItemAlign.Stretch;
   }
-  return ItemAlign.Start;
+  return ItemAlign.Auto;
 }
 
 /**
@@ -431,7 +434,7 @@ function height(gxNode: GXNode): Length {
   if (value != undefined && value != null) {
     return value.replace('px', 'vp');
   }
-  return "auto";
+  return 'auto';
 }
 
 /**

@@ -3,8 +3,7 @@ package com.alibaba.gaiax.js.utils
 object Log {
 
     fun isLog(): Boolean {
-//        return "1" == SystemProp["debug.gaiax.js.log", "0"]
-        return true
+        return "1" == SystemProp["debug.com.alibaba.gaiax.js.log", "0"]
     }
 
     fun d(msg: String) {

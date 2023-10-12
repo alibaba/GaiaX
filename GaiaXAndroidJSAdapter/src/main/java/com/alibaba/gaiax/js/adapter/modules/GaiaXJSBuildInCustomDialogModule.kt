@@ -4,7 +4,7 @@ import android.app.Dialog
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
-import com.alibaba.gaiax.js.api.annotation.GaiaXAsyncMethod
+import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.js.utils.Log
 
@@ -20,7 +20,7 @@ class GaiaXJSBuildInCustomDialogModule : GXJSBaseModule() {
 
     var mDialogList: Map<String, Dialog>? = HashMap()
 
-    @GaiaXAsyncMethod
+    @GXAsyncMethod
     fun showCustomDialog(data: JSONObject, dismissCallback: IGXCallback) {
         if (Log.isLog()) {
             Log.d("showCustomDialog() called with data" + data.toString())
@@ -47,7 +47,7 @@ class GaiaXJSBuildInCustomDialogModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXAsyncMethod
+    @GXAsyncMethod
     fun dismissCustomDialog(identifierId: String?, dismissCallback: IGXCallback) {
         val dialog: Dialog? = mDialogList?.get(identifierId)
         if (dialog != null) {

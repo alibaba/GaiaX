@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
-import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.IDevTools
 import com.alibaba.gaiax.studio.saveInLocal
@@ -38,9 +38,9 @@ class DevTools : IDevTools {
 
     private var devtoolsAppContext: Context? = null
 
-    private var currentPreviewMode = GXClientToStudioMultiType.PREVIEW_NONE
+    private var currentPreviewMode = GXStudioClient.PREVIEW_NONE
 
-    private var currentJSMode = GXClientToStudioMultiType.JS_DEFAULT
+    private var currentJSMode = GXStudioClient.JS_DEFAULT
 
     private var connectedStateView: RadioButton? = null
 
@@ -78,14 +78,14 @@ class DevTools : IDevTools {
                 rootView.findViewById<AppCompatButton>(R.id.window_btn_js_debug)
                     .setOnClickListener {
                         val jsModeView = rootView.findViewById<RadioButton>(R.id.window_btn_js_type)
-                        if (this.currentJSMode == GXClientToStudioMultiType.JS_DEFAULT) {
+                        if (this.currentJSMode == GXStudioClient.JS_DEFAULT) {
                             launchAction(context) {
-                                launchJsType(GXClientToStudioMultiType.JS_BREAKPOINT)
+                                launchJsType(GXStudioClient.JS_BREAKPOINT)
                                 changeJSModeView(jsModeView)
                             }
                         } else {
                             launchAction(context) {
-                                launchJsType(GXClientToStudioMultiType.JS_DEFAULT)
+                                launchJsType(GXStudioClient.JS_DEFAULT)
                                 changeJSModeView(jsModeView)
                             }
                         }
@@ -108,7 +108,7 @@ class DevTools : IDevTools {
             .setTag(TAG)
             .registerCallback {}
             .show()
-        GXClientToStudioMultiType.instance.init(context)
+        GXStudioClient.instance.init(context)
     }
 
     fun dismissDevTools() {
@@ -122,7 +122,7 @@ class DevTools : IDevTools {
     fun connectStudioMultiType(result: String) {
         Log.d(TAG, "connectStudioMultiType called with scanResult: $result")
         val scanResult: String = result
-        val params = GXClientToStudioMultiType.instance.getParams(scanResult)
+        val params = GXStudioClient.instance.getParams(scanResult)
         if (params == null) {
             Toast.makeText(devtoolsAppContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT).show()
             return
@@ -136,8 +136,8 @@ class DevTools : IDevTools {
     }
 
     fun connectReally(context: Context, params: JSONObject) {
-        GXClientToStudioMultiType.instance.setDevTools(this)
-        GXClientToStudioMultiType.instance.manualConnect(context, params)
+        GXStudioClient.instance.setDevTools(this)
+        GXStudioClient.instance.manualConnect(context, params)
     }
 
     private fun openQRCodeActivity(context: Context) {
@@ -149,7 +149,7 @@ class DevTools : IDevTools {
     }
 
     private fun launchAction(context: Context, action: (Context) -> Unit) {
-        val connectedState = GXClientToStudioMultiType.instance.isGaiaStudioConnected() ?: false
+        val connectedState = GXStudioClient.instance.isGaiaStudioConnected() ?: false
         if (connectedState) {
             action(context)
         } else {
@@ -166,27 +166,27 @@ class DevTools : IDevTools {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         //修改DevTools状态
-        currentPreviewMode = GXClientToStudioMultiType.PREVIEW_AUTO
-        GXClientToStudioMultiType.instance.sendMsgForGetTemplateData("")
+        currentPreviewMode = GXStudioClient.PREVIEW_AUTO
+        GXStudioClient.instance.sendMsgForGetTemplateData("")
     }
 
     private fun launchJsType(mode: String) {
         currentJSMode = mode
 
         when (currentJSMode) {
-            GXClientToStudioMultiType.JS_BREAKPOINT -> {
+            GXStudioClient.JS_BREAKPOINT -> {
                 GXJSEngine.instance.startDebugEngine()
             }
 
-            GXClientToStudioMultiType.JS_DEFAULT -> {
+            GXStudioClient.JS_DEFAULT -> {
                 GXJSEngine.instance.stopDebugEngine()
             }
         }
     }
 
     private fun disconnectStudioMultiType() {
-        if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true) {
-            GXClientToStudioMultiType.instance.sendMsgForDisconnect()
+        if (GXStudioClient.instance.isGaiaStudioConnected() == true) {
+            GXStudioClient.instance.sendMsgForDisconnect()
         } else {
             Toast.makeText(devtoolsAppContext, "当前未连接GaiaStudio", Toast.LENGTH_SHORT).show()
         }
@@ -221,16 +221,16 @@ class DevTools : IDevTools {
     }
 
     private fun changeJSModeView(view: RadioButton) {
-        val isJsDebugMode = (this.currentJSMode == GXClientToStudioMultiType.JS_BREAKPOINT)
+        val isJsDebugMode = (this.currentJSMode == GXStudioClient.JS_BREAKPOINT)
         val viewTextArray = arrayOf("断点模式", "日志模式")
-        if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true) {
+        if (GXStudioClient.instance.isGaiaStudioConnected() == true) {
             changeRadioBtnState(view, isJsDebugMode, viewTextArray)
         }
     }
 
     override fun changeDevToolsConnectedStateView() {
         if (this.connectedStateView != null) {
-            GXClientToStudioMultiType.instance.isGaiaStudioConnected()?.let { this.changeRadioBtnState(this.connectedStateView!!, it) }
+            GXStudioClient.instance.isGaiaStudioConnected()?.let { this.changeRadioBtnState(this.connectedStateView!!, it) }
         }
     }
 

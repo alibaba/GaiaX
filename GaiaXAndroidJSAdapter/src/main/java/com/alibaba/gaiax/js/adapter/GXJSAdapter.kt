@@ -24,47 +24,44 @@ import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.js.GXJSEngine
-import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
-import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
-import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GXStudioClient
 
 @Keep
 class GXJSAdapter : GXJSEngine.IAdapter {
 
     @SuppressLint("InflateParams")
     override fun init(context: Context) {
+
+        // 注册JS事件
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
-        GXJSEngine.instance.setSocketProxy(object : GXJSEngine.ISocketProxy {
-            override fun sendMessage(data: JSONObject) {
-                GXClientToStudioMultiType.instance.sendMessage(data)
-            }
 
-            override fun sendMsgForJSLog(logLevel: String, logContent: String) {
-                if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true) {
-                    GXClientToStudioMultiType.instance.sendMsgForJSLog(logLevel, logContent)
-                }
+        // 注册Socket消息发送者
+        GXJSEngine.instance.setSocketSender(object : GXJSEngine.ISocketSender {
+            override fun onSendMsg(data: JSONObject) {
+                GXStudioClient.instance.sendMsg(data)
             }
-
         })
-        GXClientToStudioMultiType.instance.setSocketReceiverListener(object :
-            GXClientToStudioMultiType.GXSocketJSReceiveListener {
-            override fun onCallSyncFromStudioWorker(socketId: Int, params: JSONObject) {
+
+        // 注册消息接受者
+        GXStudioClient.instance.setSocketReceiver(object : GXStudioClient.ISocketReceiver {
+            override fun onReceiveCallSync(socketId: Int, params: JSONObject) {
                 GXJSEngine.instance.getSocketCallBridge()?.callSync(socketId, params)
             }
 
-            override fun onCallAsyncFromStudioWorker(socketId: Int, params: JSONObject) {
+            override fun onReceiveCallAsync(socketId: Int, params: JSONObject) {
                 GXJSEngine.instance.getSocketCallBridge()?.callAsync(socketId, params)
             }
 
-            override fun onCallPromiseFromStudioWorker(socketId: Int, params: JSONObject) {
+            override fun onReceiveCallPromise(socketId: Int, params: JSONObject) {
                 GXJSEngine.instance.getSocketCallBridge()?.callPromise(socketId, params)
             }
 
-            override fun onCallGetLibraryFromStudioWorker(socketId: Int, methodName: String) {
+            override fun onReceiveCallGetLibrary(socketId: Int, methodName: String) {
                 GXJSEngine.instance.getSocketCallBridge()?.callGetLibrary(socketId, methodName)
             }
 
         })
+
         GXJSEngine.instance.initRenderDelegate(GXJSRenderDelegate())
     }
 }

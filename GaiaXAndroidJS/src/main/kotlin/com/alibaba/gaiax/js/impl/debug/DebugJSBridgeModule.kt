@@ -22,7 +22,8 @@ import com.alibaba.gaiax.js.utils.Log
  *          b.将对应的QuickJS实现通过Websocket转交Worker实现
  */
 internal class DebugJSBridgeModule(
-    private val hostContext: GXHostContext, val debugJSContext: DebugJSContext
+    private val hostContext: GXHostContext,
+    private val debugJSContext: DebugJSContext
 ) : ISocketCallBridgeListener {
 
     enum class WebsocketJSMethodName(val methodName: String) {
@@ -118,7 +119,7 @@ internal class DebugJSBridgeModule(
             val param = JSONObject()
             param["script"] = debugJSContext.bootstrap
             message["result"] = param
-            GXJSEngine.instance.socketProxy?.sendMessage(message)
+            GXJSEngine.instance.socketSender?.onSendMsg(message)
         } else {
             throw IllegalArgumentException("initialized GaiaXStudio message is Empty")
         }
@@ -134,7 +135,7 @@ internal class DebugJSBridgeModule(
             val param = JSONObject()
             param["script"] = data
             message["params"] = param
-            GXJSEngine.instance.socketProxy?.sendMessage(message)
+            GXJSEngine.instance.socketSender?.onSendMsg(message)
         } else {
             throw java.lang.IllegalArgumentException("initialized GaiaXStudio message is Empty")
         }
@@ -153,7 +154,7 @@ internal class DebugJSBridgeModule(
         param["templateVersion"] = templateVersion
         param["bizId"] = bizId
         message["params"] = param
-        GXJSEngine.instance.socketProxy?.sendMessage(message)
+        GXJSEngine.instance.socketSender?.onSendMsg(message)
     }
 
     fun sendEvalScript(script: String) {
@@ -164,7 +165,7 @@ internal class DebugJSBridgeModule(
         val param = JSONObject()
         param["script"] = script
         message["params"] = param
-        GXJSEngine.instance.socketProxy?.sendMessage(message)
+        GXJSEngine.instance.socketSender?.onSendMsg(message)
     }
 
     fun sendWorkerMethodResult(methodName: WebsocketJSMethodName, socketId: Int, script: String) {
@@ -179,7 +180,7 @@ internal class DebugJSBridgeModule(
         }
         message["result"] = param
 
-        GXJSEngine.instance.socketProxy?.sendMessage(message)
+        GXJSEngine.instance.socketSender?.onSendMsg(message)
     }
 
 }

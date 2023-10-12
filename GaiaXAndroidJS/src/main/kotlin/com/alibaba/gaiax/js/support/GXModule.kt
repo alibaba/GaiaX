@@ -2,9 +2,9 @@ package com.alibaba.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.gaiax.js.api.IGXModule
-import com.alibaba.gaiax.js.api.annotation.GaiaXAsyncMethod
-import com.alibaba.gaiax.js.api.annotation.GaiaXPromiseMethod
-import com.alibaba.gaiax.js.api.annotation.GaiaXSyncMethod
+import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
+import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
+import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
 
@@ -42,7 +42,7 @@ internal class GXModule(nativeModule: IGXModule) {
         val classForMethods = module.javaClass
         val targetMethods = classForMethods.declaredMethods
         for (targetMethod in targetMethods) {
-            val annotation = targetMethod.getAnnotation(GaiaXPromiseMethod::class.java)
+            val annotation = targetMethod.getAnnotation(GXPromiseMethod::class.java)
             if (annotation != null) {
                 val id = IdGenerator.genLongId()
                 val methodInfo = GXMethodInfo.GaiaXPromiseMethodInfo(id, targetMethod)
@@ -55,7 +55,7 @@ internal class GXModule(nativeModule: IGXModule) {
         val classForMethods = module.javaClass
         val targetMethods = classForMethods.declaredMethods
         for (targetMethod in targetMethods) {
-            val annotation = targetMethod.getAnnotation(GaiaXAsyncMethod::class.java)
+            val annotation = targetMethod.getAnnotation(GXAsyncMethod::class.java)
             if (annotation != null) {
                 val id = IdGenerator.genLongId()
                 val methodInfo = GXMethodInfo.GaiaXAsyncMethodInfo(id, targetMethod)
@@ -68,7 +68,7 @@ internal class GXModule(nativeModule: IGXModule) {
         val classForMethods = module.javaClass
         val targetMethods = classForMethods.declaredMethods
         for (targetMethod in targetMethods) {
-            val annotation = targetMethod.getAnnotation(GaiaXSyncMethod::class.java)
+            val annotation = targetMethod.getAnnotation(GXSyncMethod::class.java)
             if (annotation != null) {
                 val id = IdGenerator.genLongId()
                 val methodInfo = GXMethodInfo.GaiaXSyncMethodInfo(id, targetMethod)

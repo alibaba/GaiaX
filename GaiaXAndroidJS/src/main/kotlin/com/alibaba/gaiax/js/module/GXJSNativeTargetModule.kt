@@ -4,13 +4,13 @@ import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.GXJSBaseModule
-import com.alibaba.gaiax.js.api.annotation.GaiaXSyncMethod
+import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
 import com.alibaba.gaiax.js.utils.Log
 
 @Keep
 class GXJSNativeTargetModule : GXJSBaseModule() {
 
-    @GaiaXSyncMethod
+    @GXSyncMethod
     fun getElementByData(data: JSONObject): JSONObject {
         if (Log.isLog()) {
             Log.d("getElementByData() called with: data = $data")

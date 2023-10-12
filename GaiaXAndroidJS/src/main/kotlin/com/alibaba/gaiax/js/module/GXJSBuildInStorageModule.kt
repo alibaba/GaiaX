@@ -3,7 +3,7 @@ package com.alibaba.gaiax.js.module
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
-import com.alibaba.gaiax.js.api.annotation.GaiaXPromiseMethod
+import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
 import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.utils.GXJSPreferenceUtil
 import com.alibaba.gaiax.js.utils.Log
@@ -21,7 +21,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
         private const val GAIAX_JS_STORAGE = "GAIAX_JS_STORAGE"
     }
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun getStorage(key: String, promise: IGXPromise) {
         val prefs = GXJSPreferenceUtil.createSharePreference(GAIAX_JS_STORAGE)
         if (prefs.contains(key)) {
@@ -44,7 +44,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun setStorage(key: String, value: Any, promise: IGXPromise) {
         val prefs = GXJSPreferenceUtil.createSharePreference(GAIAX_JS_STORAGE)
         try {
@@ -63,7 +63,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun removeStorage(key: String, promise: IGXPromise) {
         if (Log.isLog()) {
             Log.d("removeStorage() called with: key = $key")

@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.adapter.impl.render
+package com.alibaba.gaiax.js.adapter
 
 import android.view.View
 import com.alibaba.fastjson.JSONObject
@@ -8,7 +8,6 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
 import com.alibaba.gaiax.js.GXJSEngine
 
 /**

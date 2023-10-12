@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.adapter.impl
+package com.alibaba.gaiax.js.adapter
 
 import android.app.Activity
 import android.util.Log
@@ -9,17 +9,10 @@ import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.js.IRenderEngineDelegate
-import com.alibaba.gaiax.js.adapter.impl.render.GXJSGesture
-import com.alibaba.gaiax.js.adapter.impl.render.GXMixNodeEvent
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import java.util.concurrent.ConcurrentHashMap
 
-/**
- *  @author: shisan.lms
- *  @date: 2023-03-29
- *  Description:
- */
 class GXJSRenderDelegate : IRenderEngineDelegate {
 
 
@@ -36,7 +29,9 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
     }
 
 
-    override fun setDataToRenderEngine(componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback) {
+    override fun setDataToRenderEngine(
+        componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
+    ) {
         GXJSUiExecutor.action {
             val cntView = links[componentId]
             GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
@@ -61,23 +56,30 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
         }
     }
 
-    override fun addEventListener(targetId: String, componentId: Long, eventType: String, optionCover: Boolean, optionLevel: Int) {
-        GXTemplateEngine.instance.getGXTemplateContext(links[componentId])?.let { gxTemplateContext ->
-            val gxNode = GXTemplateEngine.instance.getGXNodeById(links[componentId], targetId)
-            gxNode?.initEventByRegisterCenter()
-            var eventTypeForName = ""
-            if (eventType == "click") {
-                eventTypeForName = GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+    override fun addEventListener(
+        targetId: String,
+        componentId: Long,
+        eventType: String,
+        optionCover: Boolean,
+        optionLevel: Int
+    ) {
+        GXTemplateEngine.instance.getGXTemplateContext(links[componentId])
+            ?.let { gxTemplateContext ->
+                val gxNode = GXTemplateEngine.instance.getGXNodeById(links[componentId], targetId)
+                gxNode?.initEventByRegisterCenter()
+                var eventTypeForName = ""
+                if (eventType == "click") {
+                    eventTypeForName = GXTemplateKey.GAIAX_GESTURE_TYPE_TAP
+                }
+                (gxNode?.event as? GXMixNodeEvent)?.addJSEvent(
+                    gxTemplateContext,
+                    gxNode,
+                    componentId,
+                    eventTypeForName,
+                    optionCover,
+                    optionLevel
+                )
             }
-            (gxNode?.event as? GXMixNodeEvent)?.addJSEvent(
-                gxTemplateContext,
-                gxNode,
-                componentId,
-                eventTypeForName,
-                optionCover,
-                optionLevel
-            )
-        }
 
     }
 

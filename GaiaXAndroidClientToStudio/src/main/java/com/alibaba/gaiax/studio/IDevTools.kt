@@ -10,7 +10,6 @@ package com.alibaba.gaiax.studio
  */
 interface IDevTools {
 
-
     fun getPreviewCurrentMode(): String
 
     fun getJSCurrentMode(): String

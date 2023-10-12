@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
-import com.alibaba.gaiax.js.api.annotation.GaiaXPromiseMethod
+import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
 import com.alibaba.gaiax.js.support.GXNativeEventManager
 import com.alibaba.gaiax.js.utils.Log
 
@@ -14,7 +14,7 @@ class GXJSNativeMessageEventModule : GXJSBaseModule() {
     override val name: String
         get() = "NativeEvent"
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun addNativeEventListener(data: JSONObject, promise: IGXPromise) {
         if (Log.isLog()) {
             Log.d("addNativeEventListener() called with: data = $data")
@@ -27,7 +27,7 @@ class GXJSNativeMessageEventModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun removeNativeEventListener(data: JSONObject, promise: IGXPromise) {
         if (Log.isLog()) {
             Log.d("removeNativeEventListener() called with: data = $data")

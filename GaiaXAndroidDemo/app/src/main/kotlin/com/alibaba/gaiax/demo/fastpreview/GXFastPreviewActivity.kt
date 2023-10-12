@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
-import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
 
@@ -18,7 +18,7 @@ import com.alibaba.gaiax.utils.GXScreenUtils
  * websocket的通信能力来自三方库（已导入本地websocket）
  * https://github.com/0xZhangKe/WebSocketDemo
  */
-class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudioMultiType.GXSocketToStudioListener {
+class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewListener {
 
     companion object {
         private const val TAG = "[GaiaX]"
@@ -38,22 +38,22 @@ class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudioMultiType.GXS
 
         val mode = intent.getStringExtra(GAIA_STUDIO_MODE)
 
-        if (!TextUtils.isEmpty(mode) && mode ==  GAIA_STUDIO_MODE_MULTI){
-            GXClientToStudioMultiType.instance.gxSocketToStudioListener = this
+        if (!TextUtils.isEmpty(mode) && mode == GAIA_STUDIO_MODE_MULTI) {
+            GXStudioClient.instance.fastPreviewListener = this
             return
-        }else{
+        } else {
             val url = intent.getStringExtra("GAIA_STUDIO_URL")
 
-            val params = GXClientToStudioMultiType.instance.getParams(url)
+            val params = GXStudioClient.instance.getParams(url)
             if (params == null) {
                 finish()
                 return
             }
             if ("auto" == params.getString("TYPE")) {
-                GXClientToStudioMultiType.instance.gxSocketToStudioListener = this
-                GXClientToStudioMultiType.instance.autoConnect(this, params);
+                GXStudioClient.instance.fastPreviewListener = this
+                GXStudioClient.instance.autoConnect(this, params);
             } else if ("manual" == params.getString("TYPE")) {
-                GXClientToStudioMultiType.instance.manualConnect(this, params);
+                GXStudioClient.instance.manualConnect(this, params);
                 finish()
             }
         }
@@ -62,7 +62,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXClientToStudioMultiType.GXS
 
 
     override fun onDestroy() {
-        GXClientToStudioMultiType.instance.gxSocketToStudioListener = null
+        GXStudioClient.instance.fastPreviewListener = null
         super.onDestroy()
     }
 

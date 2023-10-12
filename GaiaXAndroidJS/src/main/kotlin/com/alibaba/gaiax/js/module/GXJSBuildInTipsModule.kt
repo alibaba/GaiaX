@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
-import com.alibaba.gaiax.js.api.annotation.GaiaXAsyncMethod
+import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.js.utils.Log
 
@@ -20,7 +20,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
     override val name: String
         get() = "BuildIn"
 
-    @GaiaXAsyncMethod
+    @GXAsyncMethod
     fun showToast(data: JSONObject, callback: IGXCallback) {
         if (Log.isLog()) {
             Log.d("showToast() called with: data = $data, callback = $callback")
@@ -43,7 +43,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXAsyncMethod
+    @GXAsyncMethod
     fun showAlert(data: JSONObject, callback: IGXCallback) {
         if (Log.isLog()) {
             Log.d("showAlert() called with: data = $data, callback = $callback")

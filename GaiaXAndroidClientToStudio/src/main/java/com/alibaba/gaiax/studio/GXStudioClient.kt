@@ -14,26 +14,26 @@ import java.util.regex.Pattern
  *  @date: 2023-02-02
  *  Description: Studio扫码三合一通道
  */
-class GXClientToStudioMultiType {
-    interface GXSocketToStudioListener {
+class GXStudioClient {
+
+    interface IFastPreviewListener {
         fun onAddData(templateId: String, templateData: JSONObject)
         fun onUpdate(templateId: String, templateData: JSONObject)
     }
 
-    interface GXSocketJSReceiveListener {
-        fun onCallSyncFromStudioWorker(socketId: Int, params: JSONObject)
+    interface ISocketReceiver {
+        fun onReceiveCallSync(socketId: Int, params: JSONObject)
 
-        fun onCallAsyncFromStudioWorker(socketId: Int, params: JSONObject)
+        fun onReceiveCallAsync(socketId: Int, params: JSONObject)
 
-        fun onCallPromiseFromStudioWorker(socketId: Int, params: JSONObject)
+        fun onReceiveCallPromise(socketId: Int, params: JSONObject)
 
-        fun onCallGetLibraryFromStudioWorker(socketId: Int, methodName: String)
+        fun onReceiveCallGetLibrary(socketId: Int, methodName: String)
     }
 
     var applicationContext: Context? = null
 
-    var gxSocketToStudioListener: GXSocketToStudioListener? = null
-
+    var fastPreviewListener: IFastPreviewListener? = null
 
     private var socketHelper: GXSocket? = null
     private var currentAddress: String? = null
@@ -67,11 +67,11 @@ class GXClientToStudioMultiType {
         }
 
         override fun onStudioAddData(templateId: String, templateData: JSONObject) {
-            gxSocketToStudioListener?.onAddData(templateId, templateData)
+            fastPreviewListener?.onAddData(templateId, templateData)
         }
 
         override fun onStudioUpdate(templateId: String, templateJson: JSONObject) {
-            gxSocketToStudioListener?.onUpdate(templateId, templateJson)
+            fastPreviewListener?.onUpdate(templateId, templateJson)
         }
     }
 
@@ -183,7 +183,10 @@ class GXClientToStudioMultiType {
     }
 
     private fun tryToConnectGaiaStudio(address: String, templateId: String?, type: String) {
-        Log.e(TAG, "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]")
+        Log.e(
+            TAG,
+            "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]"
+        )
         val tmpAddress = currentAddress
         currentType = type
         currentAddress = address
@@ -211,10 +214,9 @@ class GXClientToStudioMultiType {
         socketHelper?.sendMsgWithMultiTypeInit()
     }
 
-    fun sendMessage(data: JSONObject) {
+    fun sendMsg(data: JSONObject) {
         socketHelper?.sendMessage(data)
     }
-
 
     fun sendMsgForObtainMode() {
         Log.d(GXSocket.TAG, "sendMsgForObtainMode() called ")
@@ -236,7 +238,7 @@ class GXClientToStudioMultiType {
         socketHelper?.sendGetTemplateData(templateId)
     }
 
-    fun sendMsgForJSLog(logLevel: String, logContent: String) {
+    fun sendJSLogMsg(logLevel: String, logContent: String) {
         val data = JSONObject()
         data["jsonrpc"] = "2.0"
         data["method"] = "js/console"
@@ -251,8 +253,8 @@ class GXClientToStudioMultiType {
         socketHelper?.devTools = dev
     }
 
-    fun setSocketReceiverListener(listener: GXSocketJSReceiveListener) {
-        socketHelper?.gxSocketJSReceiveListener = listener
+    fun setSocketReceiver(iSocketReceiver: ISocketReceiver) {
+        socketHelper?.socketReceiver = iSocketReceiver
     }
 
     fun isGaiaStudioConnected(): Boolean? {
@@ -270,7 +272,7 @@ class GXClientToStudioMultiType {
         const val JS_BREAKPOINT = "breakpoint"
 
         val instance by lazy {
-            GXClientToStudioMultiType()
+            GXStudioClient()
         }
     }
 }

@@ -42,7 +42,7 @@ class GXJSEngine {
         QuickJS, DebugJS
     }
 
-    internal var socketProxy: ISocketProxy? = null
+    internal var socketSender: ISocketSender? = null
 
     /**
      * 错误日志的监控实现
@@ -253,11 +253,8 @@ class GXJSEngine {
         return this.renderEngineDelegate
     }
 
-    /**
-     * 设置socket代理，用于Debug运行时与Studio通信
-     */
-    fun setSocketProxy(proxy: ISocketProxy) {
-        this.socketProxy = proxy
+    fun setSocketSender(iSocketSender: ISocketSender) {
+        this.socketSender = iSocketSender
     }
 
     fun getSocketCallBridge(): ISocketCallBridgeListener? {
@@ -434,8 +431,7 @@ class GXJSEngine {
         fun init(context: Context)
     }
 
-    interface ISocketProxy {
-        fun sendMessage(data: JSONObject)
-        fun sendMsgForJSLog(logLevel: String, logContent: String)
+    interface ISocketSender {
+        fun onSendMsg(data: JSONObject)
     }
 }

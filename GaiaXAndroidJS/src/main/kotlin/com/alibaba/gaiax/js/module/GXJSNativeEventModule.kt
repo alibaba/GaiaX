@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
-import com.alibaba.gaiax.js.api.annotation.GaiaXPromiseMethod
+import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
 import com.alibaba.gaiax.js.utils.Log
 
 @Keep
 class GXJSNativeEventModule : GXJSBaseModule() {
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun addEventListener(data: JSONObject, promise: IGXPromise) {
         if (Log.isLog()) {
             Log.d("addEventListener() called with: data = $data")
@@ -33,7 +33,7 @@ class GXJSNativeEventModule : GXJSBaseModule() {
         }
     }
 
-    @GaiaXPromiseMethod
+    @GXPromiseMethod
     fun removeEventListener(data: JSONObject, promise: IGXPromise) {
         if (Log.isLog()) {
             Log.d("removeEventListener() called with: data = $data")

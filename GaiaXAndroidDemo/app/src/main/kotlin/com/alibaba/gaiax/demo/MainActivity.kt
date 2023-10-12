@@ -21,7 +21,7 @@ import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.js.GXJSEngine
-import com.alibaba.gaiax.studio.GXClientToStudioMultiType
+import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.loadInLocal
 import com.lzf.easyfloat.EasyFloat
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun autoConnect() {
         // 自动重连时，提前初始化
-        GXClientToStudioMultiType.instance.init(this)
+        GXStudioClient.instance.init(this)
         val result = loadInLocal(this, GX_CONNECT_URL)
         JSONObject.parseObject(result)?.let {
             DevTools.instance.connectReally(this, it)
@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         GXJSEngine.instance.stopDefaultEngine()
-        GXClientToStudioMultiType.instance.destroy()
+        GXStudioClient.instance.destroy()
         super.onDestroy()
     }
 }

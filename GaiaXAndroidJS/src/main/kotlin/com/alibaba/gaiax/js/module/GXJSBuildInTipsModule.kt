@@ -52,7 +52,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
             val title = data.getString("title") ?: ""
             val message = data.getString("message") ?: ""
             GXJSUiExecutor.action {
-                GXJSEngine.Proxy.instance.renderDelegate.getActivityForDialog().let { context ->
+                GXJSEngine.instance.renderDelegate?.getActivity()?.let { context ->
                     AlertDialog.Builder(context)
                         .setTitle(title)
                         .setMessage(message)

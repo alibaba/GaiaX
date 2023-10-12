@@ -26,7 +26,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            GXJSEngine.Proxy.instance.renderDelegate.setDataToRenderEngine(
+            GXJSEngine.instance.renderDelegate?.setData(
                 componentId,
                 templateId,
                 data,
@@ -43,7 +43,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            return GXJSEngine.Proxy.instance.renderDelegate?.getDataFromRenderEngine(componentId) ?: JSONObject()
+            return GXJSEngine.instance.renderDelegate?.getData(componentId) ?: JSONObject()
         }
         return JSONObject()
     }
@@ -56,7 +56,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            val data = GXJSEngine.Proxy.instance.renderDelegate?.getDataFromRenderEngine(componentId) ?: JSONObject()
+            val data = GXJSEngine.instance.renderDelegate?.getData(componentId) ?: JSONObject()
             return data.getInteger("scrollIndex") ?: -1
         }
         return -1

@@ -20,7 +20,7 @@ class GXJSNativeTargetModule : GXJSBaseModule() {
         val templateId = data.getString("templateId")
         val instanceId = data.getLongValue("instanceId")
 
-        val delegate = GXJSEngine.Proxy.instance.renderDelegate
+        val delegate = GXJSEngine.instance.renderDelegate
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
             if (Log.isLog()) {

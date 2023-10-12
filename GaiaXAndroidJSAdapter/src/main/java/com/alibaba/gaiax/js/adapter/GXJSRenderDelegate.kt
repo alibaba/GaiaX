@@ -8,28 +8,26 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.js.IRenderEngineDelegate
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import java.util.concurrent.ConcurrentHashMap
 
-class GXJSRenderDelegate : IRenderEngineDelegate {
-
+class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
 
     companion object {
         val links: MutableMap<Long, View> = ConcurrentHashMap()
     }
 
-    override fun bindComponentToView(view: View, jsComponentId: Long) {
-        links[jsComponentId] = view
+    override fun registerComponent(view: View, componentId: Long) {
+        links[componentId] = view
     }
 
-    override fun unbindComponentAndView(jsComponentId: Long) {
-        links.remove(jsComponentId)
+    override fun unregisterComponent(componentId: Long) {
+        links.remove(componentId)
     }
 
 
-    override fun setDataToRenderEngine(
+    override fun setData(
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
     ) {
         GXJSUiExecutor.action {
@@ -39,7 +37,7 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
         }
     }
 
-    override fun getDataFromRenderEngine(componentId: Long): JSONObject? {
+    override fun getData(componentId: Long): JSONObject? {
         return GXTemplateEngine.instance.getGXTemplateContext(links[componentId])?.templateData?.data
     }
 
@@ -95,11 +93,11 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
         return links[componentId]
     }
 
-    override fun getActivityForDialog(): Activity? {
+    override fun getActivity(): Activity? {
         links.forEach {
-            val topContext = it.value.context as Activity
-            if (!topContext.isFinishing) {
-                return topContext
+            val activity = it.value.context as Activity
+            if (!activity.isFinishing) {
+                return activity
             }
         }
         return null

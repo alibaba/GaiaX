@@ -24,7 +24,7 @@ class GXJSNativeEventModule : GXJSBaseModule() {
         val optionCover = data.getJSONObject("option")?.getBooleanValue("cover") ?: false
         val optionLevel = data.getJSONObject("option")?.getIntValue("level") ?: 0
         if (targetId != null && templateId != null && instanceId != null && eventType != null) {
-            GXJSEngine.Proxy.instance.renderDelegate.addEventListener(
+            GXJSEngine.instance.renderDelegate?.addEventListener(
                 targetId, instanceId, eventType, optionCover, optionLevel
             )
             promise.resolve().invoke()

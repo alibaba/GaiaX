@@ -1,10 +1,12 @@
 package com.alibaba.gaiax.js
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
+import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
@@ -65,7 +67,7 @@ class GXJSEngine {
 
     private var debugEngine: GXHostEngine? = null
 
-    internal lateinit var renderEngineDelegate: IRenderEngineDelegate
+    internal var renderDelegate: IRenderDelegate? = null
 
     fun init(context: Context): GXJSEngine {
         this.context = context.applicationContext
@@ -77,9 +79,8 @@ class GXJSEngine {
         return this
     }
 
-    fun initRenderDelegate(renderEngineDelegate: IRenderEngineDelegate): GXJSEngine {
-        this.renderEngineDelegate = renderEngineDelegate
-        Proxy.instance.renderDelegate = renderEngineDelegate
+    fun initRenderDelegate(renderEngineDelegate: IRenderDelegate): GXJSEngine {
+        this.renderDelegate = renderEngineDelegate
         return this
     }
 
@@ -105,15 +106,15 @@ class GXJSEngine {
     private fun registerAssetsModules() {
         // all gaiax_js_modules/module_biz_name.json
         val allModules = JSONObject()
-        val assetsModules = assetsModules(GXJSEngine.GAIAX_JS_MODULES)
+        val assetsModules = assetsModules(GAIAX_JS_MODULES)
         assetsModules?.forEach { file ->
             if (Log.isLog()) {
                 Log.d("registerAssetsModules() called with: file = $file")
             }
-            if (file.startsWith(GXJSEngine.MODULE_PREFIX) && file.endsWith(GXJSEngine.MODULE_SUFFIX)) {
+            if (file.startsWith(MODULE_PREFIX) && file.endsWith(MODULE_SUFFIX)) {
                 try {
                     val bizModules =
-                        JSONObject.parseObject(assetsOpen("${GXJSEngine.GAIAX_JS_MODULES}/$file").bufferedReader(
+                        JSONObject.parseObject(assetsOpen("$GAIAX_JS_MODULES/$file").bufferedReader(
                             Charsets.UTF_8
                         ).use { it.readText() })
                     allModules.putAll(bizModules)
@@ -249,8 +250,8 @@ class GXJSEngine {
         }
     }
 
-    fun getRenderDelegate(): IRenderEngineDelegate {
-        return this.renderEngineDelegate
+    fun getRenderDelegate(): IRenderDelegate? {
+        return this.renderDelegate
     }
 
     fun setSocketSender(iSocketSender: ISocketSender) {
@@ -262,8 +263,6 @@ class GXJSEngine {
     }
 
     internal class Proxy {
-
-        internal lateinit var renderDelegate: IRenderEngineDelegate
 
         private fun gxHostContext(it: Map.Entry<EngineType, GXHostEngine>) =
             it.value.runtime()?.context()
@@ -393,7 +392,7 @@ class GXJSEngine {
                 getHostContext(it)?.registerComponent(
                     componentId, bizId, templateId, templateVersion, script
                 )
-                instance.renderEngineDelegate.bindComponentToView(view, componentId)
+                instance.renderDelegate?.registerComponent(view, componentId)
             }
             return componentId
         }
@@ -401,7 +400,7 @@ class GXJSEngine {
         fun unregisterComponent(componentId: Long) {
             instance.engines.forEach {
                 getHostContext(it)?.unregisterComponent(componentId)
-                instance.renderEngineDelegate.unbindComponentAndView(componentId)
+                instance.renderDelegate?.unregisterComponent(componentId)
             }
         }
 
@@ -417,7 +416,6 @@ class GXJSEngine {
                         }
                         component.onNativeEvent(result)
                     }
-                    instance.renderEngineDelegate.unbindComponentAndView(componentId)
                 }
             }
         }
@@ -433,5 +431,35 @@ class GXJSEngine {
 
     interface ISocketSender {
         fun onSendMsg(data: JSONObject)
+    }
+
+    interface IRenderDelegate {
+
+        fun registerComponent(view: View, componentId: Long)
+
+        fun unregisterComponent(componentId: Long)
+
+        fun setData(
+            componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
+        )
+
+        fun dispatcherEvent(eventParams: JSONObject)
+
+        fun addEventListener(
+            targetId: String,
+            componentId: Long,
+            eventType: String,
+            optionCover: Boolean,
+            optionLevel: Int
+        )
+
+        fun getData(componentId: Long): JSONObject?
+
+        fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject
+
+        fun getView(componentId: Long): View?
+
+        fun getActivity(): Activity?
+
     }
 }

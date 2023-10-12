@@ -38,7 +38,7 @@ class GXJSEngine {
         }
     }
 
-    enum class EngineType {
+    internal enum class EngineType {
         QuickJS, DebugJS
     }
 
@@ -47,7 +47,7 @@ class GXJSEngine {
     /**
      * 错误日志的监控实现
      */
-    internal var listener: IListener? = null
+    internal var logListener: ILogListener? = null
 
     /**
      * app的Context
@@ -62,6 +62,7 @@ class GXJSEngine {
     internal val moduleManager: IModuleManager = GXModuleManager()
 
     private var defaultEngine: GXHostEngine? = null
+
     private var debugEngine: GXHostEngine? = null
 
     internal lateinit var renderEngineDelegate: IRenderEngineDelegate
@@ -82,8 +83,8 @@ class GXJSEngine {
         return this
     }
 
-    fun initListener(listener: IListener): GXJSEngine {
-        this.listener = listener
+    fun initListener(listener: ILogListener): GXJSEngine {
+        this.logListener = listener
         return this
     }
 
@@ -263,25 +264,6 @@ class GXJSEngine {
         return (debugEngine?.runtime()?.context()?.realContext as? DebugJSContext)?.socketBridge
     }
 
-    interface IListener {
-        fun errorLog(data: JSONObject)
-        fun monitor(
-            scene: String,
-            biz: String = "",
-            id: String = "",
-            type: String = "",
-            state: String = "",
-            value: Long = -1L,
-            jsModuleName: String = "",
-            jsApiName: String = "",
-            jsApiType: String = ""
-        )
-    }
-
-    interface IAdapter {
-        fun init(context: Context)
-    }
-
     internal class Proxy {
 
         internal lateinit var renderDelegate: IRenderEngineDelegate
@@ -442,6 +424,14 @@ class GXJSEngine {
                 }
             }
         }
+    }
+
+    interface ILogListener {
+        fun errorLog(data: JSONObject)
+    }
+
+    interface IAdapter {
+        fun init(context: Context)
     }
 
     interface ISocketProxy {

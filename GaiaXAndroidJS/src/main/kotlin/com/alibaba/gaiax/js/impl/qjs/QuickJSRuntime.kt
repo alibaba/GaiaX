@@ -37,7 +37,7 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
             if (Log.isLog()) {
                 Log.e("setPromiseRejectionHandler() called with: message = $message")
             }
-            GXJSEngine.instance.listener?.errorLog(JSONObject().apply {
+            GXJSEngine.instance.logListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = message
                     this["templateId"] = ""

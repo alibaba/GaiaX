@@ -122,7 +122,7 @@ internal class QuickJSBridgeModule(
 
     override fun wrapAsJSValueException(e: Exception?) {
         e?.let {
-            GXJSEngine.instance.listener?.errorLog(JSONObject().apply {
+            GXJSEngine.instance.logListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = e.stackTrace.toString()
                     this["templateId"] = ""

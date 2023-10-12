@@ -38,6 +38,13 @@ class GXJSAdapter : GXJSEngine.IAdapter {
             override fun sendMessage(data: JSONObject) {
                 GXClientToStudioMultiType.instance.sendMessage(data)
             }
+
+            override fun sendMsgForJSLog(logLevel: String, logContent: String) {
+                if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true) {
+                    GXClientToStudioMultiType.instance.sendMsgForJSLog(logLevel, logContent)
+                }
+            }
+
         })
         GXClientToStudioMultiType.instance.setSocketReceiverListener(object :
             GXClientToStudioMultiType.GXSocketJSReceiveListener {

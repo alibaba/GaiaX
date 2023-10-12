@@ -436,5 +436,6 @@ class GXJSEngine {
 
     interface ISocketProxy {
         fun sendMessage(data: JSONObject)
+        fun sendMsgForJSLog(logLevel: String, logContent: String)
     }
 }

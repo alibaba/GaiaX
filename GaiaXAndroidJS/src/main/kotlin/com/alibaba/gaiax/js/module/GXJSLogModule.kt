@@ -1,16 +1,9 @@
 package com.alibaba.gaiax.js.module
 
-/**
- *  @author: shisan.lms
- *  @date: 2022-11-17
- *  Description:
- */
-
 import android.util.Log
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.studio.GXClientToStudioMultiType
-//import com.alibaba.gaiax.GaiaX
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.annotation.GaiaXSyncMethod
 
@@ -33,13 +26,10 @@ class GXJSLogModule : GXJSBaseModule() {
         private fun sendMsgLog(msg: String) {
             sendSocketData("error", msg)
             Log.e(TAG, msg)
-//            MotuJSErrorReportUtils.sendError(msg)
         }
 
         private fun sendSocketData(level: String, data: String) {
-            if (GXClientToStudioMultiType.instance.isGaiaStudioConnected() == true){
-                GXClientToStudioMultiType.instance.sendMsgForJSLog(level, data)
-            }
+            GXJSEngine.instance.socketProxy?.sendMsgForJSLog(level, data)
         }
 
         private fun getLogMsg(argData: String): String = try {

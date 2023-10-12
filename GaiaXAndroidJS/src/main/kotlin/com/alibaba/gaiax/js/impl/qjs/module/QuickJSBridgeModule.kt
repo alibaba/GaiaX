@@ -1,17 +1,19 @@
 package com.alibaba.gaiax.js.impl.qjs.module
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.GaiaXJSManager
-import com.alibaba.gaiax.js.api.IGaiaXCallback
-import com.alibaba.gaiax.js.api.IGaiaXPromise
-import com.alibaba.gaiax.js.core.GaiaXContext
+import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.api.IGXCallback
+import com.alibaba.gaiax.js.api.IGXPromise
+import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
 import com.alibaba.gaiax.quickjs.JSFunction
 
-internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, private val jsContext: JSContext) : BridgeModuleListener {
+internal class QuickJSBridgeModule(
+    private val hostContext: GXHostContext, private val jsContext: JSContext
+) : BridgeModuleListener {
 
     override fun callSync(contextPointer: Long, argsMap: String): Long {
         if (Log.isLog()) {
@@ -25,7 +27,8 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
             val methodId = target.getLongValue("methodId")
             val args = target.getJSONArray("args")
 
-            val result = hostContext.bridge.callSync(contextId, moduleId, methodId, args) ?: jsContext.createJSNull().pointer
+            val result = hostContext.bridge.callSync(contextId, moduleId, methodId, args)
+                ?: jsContext.createJSNull().pointer
 
             val jsValue = JSDataConvert.convertToJSValue(jsContext, result)
             return jsValue.pointer
@@ -44,12 +47,12 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
             val methodId = target.getLongValue("methodId")
             val args = target.getJSONArray("args")
 
-            args.add(object : IGaiaXCallback {
+            args.add(object : IGXCallback {
                 override fun invoke(result: Any?) {
                     if (Log.isLog()) {
                         Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
                     }
-                    GaiaXJSManager.instance.executeTask {
+                    GXJSEngine.Proxy.instance.executeTask {
                         val jsFunction = JSFunction(funPointer, jsContext)
                         jsFunction.dupValue()
                         jsFunction.invoke(null, arrayOfJSValues(result))
@@ -88,21 +91,21 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
                 jsResolve = resolve
                 jsReject = reject
             }
-            args.add(object : IGaiaXPromise {
-                override fun resolve(): IGaiaXCallback {
-                    return object : IGaiaXCallback {
+            args.add(object : IGXPromise {
+                override fun resolve(): IGXCallback {
+                    return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GaiaXJSManager.instance.executeTask {
+                            GXJSEngine.Proxy.instance.executeTask {
                                 jsResolve?.invoke(null, arrayOfJSValues(result))
                             }
                         }
                     }
                 }
 
-                override fun reject(): IGaiaXCallback {
-                    return object : IGaiaXCallback {
+                override fun reject(): IGXCallback {
+                    return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GaiaXJSManager.instance.executeTask {
+                            GXJSEngine.Proxy.instance.executeTask {
                                 jsReject?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -119,7 +122,7 @@ internal class QuickJSBridgeModule(private val hostContext: GaiaXContext, privat
 
     override fun wrapAsJSValueException(e: Exception?) {
         e?.let {
-            GaiaXJSManager.instance.errorListener?.errorLog(JSONObject().apply {
+            GXJSEngine.instance.listener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = e.stackTrace.toString()
                     this["templateId"] = ""

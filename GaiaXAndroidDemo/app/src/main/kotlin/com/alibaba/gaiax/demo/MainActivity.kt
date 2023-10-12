@@ -20,12 +20,12 @@ import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.loadInLocal
-import com.lzf.easyfloat.permission.PermissionUtils
-import com.alibaba.gaiax.js.GXJSEngineFactory
 import com.lzf.easyfloat.EasyFloat
+import com.lzf.easyfloat.permission.PermissionUtils
 
 
 class MainActivity : AppCompatActivity() {
@@ -122,9 +122,9 @@ class MainActivity : AppCompatActivity() {
 
 
         //GaiaXJS初始化
-        GXJSEngineFactory.instance.init(this)
+        GXJSEngine.instance.init(this)
         //GaiaXJS引擎启动
-        GXJSEngineFactory.instance.startEngine()
+        GXJSEngine.instance.startDefaultEngine()
 
         autoConnect()
 
@@ -165,6 +165,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, StyleTemplateActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<AppCompatButton>(R.id.js)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, JSTemplateActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun autoConnect() {
@@ -177,6 +182,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        GXJSEngine.instance.stopDefaultEngine()
         GXClientToStudioMultiType.instance.destroy()
         super.onDestroy()
     }

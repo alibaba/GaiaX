@@ -2,8 +2,8 @@ package com.alibaba.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.api.IGaiaXCallback
-import com.alibaba.gaiax.js.api.IGaiaXPromise
+import com.alibaba.gaiax.js.api.IGXCallback
+import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.quickjs.JSContext
 import com.alibaba.gaiax.quickjs.JSValue
 import java.lang.reflect.Type
@@ -71,8 +71,8 @@ object JSDataConvert {
             Long::class.java -> value.toString().toLong()
             Boolean::class.java -> value.toString().toBoolean()
             // 非常规
-            IGaiaXCallback::class.java -> value as IGaiaXCallback
-            IGaiaXPromise::class.java -> value as IGaiaXPromise
+            IGXCallback::class.java -> value as IGXCallback
+            IGXPromise::class.java -> value as IGXPromise
             is Types.ParameterizedTypeImpl -> {
                 if (valueType.rawType == MutableMap::class.java) {
                     val targetType = valueType.typeArguments[0]

@@ -22,17 +22,17 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.Keep
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
 import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
 
 @Keep
-class GXJSAdapter : GXJSEngineFactory.GXJSIAdapter {
+class GXJSAdapter : GXJSEngine.GXJSIAdapter {
 
     @SuppressLint("InflateParams")
     override fun init(context: Context) {
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
 
-        GXJSEngineFactory.instance.initRenderDelegate(GXJSRenderDelegate())
+        GXJSEngine.instance.initRenderDelegate(GXJSRenderDelegate())
     }
 }

@@ -2,10 +2,10 @@ package com.alibaba.gaiax.js.adapter.modules
 
 import android.app.Dialog
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.api.GaiaXJSBaseModule
-import com.alibaba.gaiax.js.api.IGaiaXCallback
+import com.alibaba.gaiax.js.api.GXJSBaseModule
+import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GaiaXAsyncMethod
-import com.alibaba.gaiax.js.utils.GaiaXJSUiExecutor
+import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.js.utils.Log
 
 
@@ -14,20 +14,20 @@ import com.alibaba.gaiax.js.utils.Log
  *  @date: 2023-03-27
  *  Description:
  */
-class GaiaXJSBuildInCustomDialogModule : GaiaXJSBaseModule() {
+class GaiaXJSBuildInCustomDialogModule : GXJSBaseModule() {
     override val name: String
         get() = "BuildIn"
 
     var mDialogList: Map<String, Dialog>? = HashMap()
 
     @GaiaXAsyncMethod
-    fun showCustomDialog(data: JSONObject, dismissCallback: IGaiaXCallback) {
+    fun showCustomDialog(data: JSONObject, dismissCallback: IGXCallback) {
         if (Log.isLog()) {
             Log.d("showCustomDialog() called with data" + data.toString())
         }
         try {
             val identifierId: String = data.getString("identifierId")
-            GaiaXJSUiExecutor.action(Runnable {
+            GXJSUiExecutor.action(Runnable {
 //                val topActivity: Activity? = GaiaXJSManager.instance.renderEngineDelegate?.getActivityForDialog()
 //                if (topActivity != null) {
 ////                    val dialog: Dialog = GaiaXCustomDialogView(topActivity, data, null, null)
@@ -48,7 +48,7 @@ class GaiaXJSBuildInCustomDialogModule : GaiaXJSBaseModule() {
     }
 
     @GaiaXAsyncMethod
-    fun dismissCustomDialog(identifierId: String?, dismissCallback: IGaiaXCallback) {
+    fun dismissCustomDialog(identifierId: String?, dismissCallback: IGXCallback) {
         val dialog: Dialog? = mDialogList?.get(identifierId)
         if (dialog != null) {
             dialog.dismiss()

@@ -10,6 +10,7 @@
     <string name="track">Track Binding</string>
     <string name="remote_data_source">Remote Data Source</string>
     <string name="style">Style</string>
+    <string name="js">JS</string>
     <string name="business">Business</string>
 
     <string name="app_notice">Macrobenchmark Target App.</string>

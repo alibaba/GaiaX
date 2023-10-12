@@ -20,7 +20,7 @@ import com.alibaba.gaiax.studio.IDevTools
 import com.alibaba.gaiax.studio.saveInLocal
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
-import com.alibaba.gaiax.js.GXJSEngineFactory
+import com.alibaba.gaiax.js.GXJSEngine
 
 /**
  *  @author: shisan.lms
@@ -172,10 +172,16 @@ class DevTools : IDevTools {
 
     private fun launchJsType(mode: String) {
         currentJSMode = mode
-        if (jsDebuggerTypeListener == null) {
-            jsDebuggerTypeListener = GXJSEngineFactory.instance.devToolsDebuggingTypeListener
+
+        when (currentJSMode) {
+            GXClientToStudioMultiType.JS_BREAKPOINT -> {
+                GXJSEngine.instance.startDebugEngine()
+            }
+
+            GXClientToStudioMultiType.JS_DEFAULT -> {
+                GXJSEngine.instance.stopDebugEngine()
+            }
         }
-        jsDebuggerTypeListener?.onDevToolsJSModeChanged(currentJSMode)
     }
 
     private fun disconnectStudioMultiType() {

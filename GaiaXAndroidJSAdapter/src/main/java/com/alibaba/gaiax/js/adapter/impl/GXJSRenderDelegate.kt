@@ -5,14 +5,14 @@ import android.util.Log
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.js.GXJSComponentDelegate
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.js.IRenderEngineDelegate
 import com.alibaba.gaiax.js.adapter.impl.render.GXJSGesture
 import com.alibaba.gaiax.js.adapter.impl.render.GXMixNodeEvent
-import com.alibaba.gaiax.js.api.IGaiaXCallback
-import com.alibaba.gaiax.js.utils.GaiaXJSUiExecutor
+import com.alibaba.gaiax.js.api.IGXCallback
+import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -36,8 +36,8 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
     }
 
 
-    override fun setDataToRenderEngine(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback) {
-        GaiaXJSUiExecutor.action {
+    override fun setDataToRenderEngine(componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback) {
+        GXJSUiExecutor.action {
             val cntView = links[componentId]
             GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
             callback.invoke()
@@ -82,7 +82,7 @@ class GXJSRenderDelegate : IRenderEngineDelegate {
     }
 
     override fun dispatcherEvent(eventParams: JSONObject) {
-        GXJSComponentDelegate.instance.onEventComponent(
+        GXJSEngine.Component.onEvent(
             eventParams["jsComponentId"] as Long,
             eventParams["type"] as String,
             eventParams["data"] as JSONObject

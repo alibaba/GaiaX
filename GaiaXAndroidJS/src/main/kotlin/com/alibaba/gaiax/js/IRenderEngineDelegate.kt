@@ -3,20 +3,17 @@ package com.alibaba.gaiax.js
 import android.app.Activity
 import android.view.View
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.api.IGaiaXCallback
+import com.alibaba.gaiax.js.api.IGXCallback
 
-/**
- *  @author: shisan.lms
- *  @date: 2023-03-06
- *  Description:
- */
 interface IRenderEngineDelegate {
 
     fun bindComponentToView(view: View, jsComponentId: Long)
 
     fun unbindComponentAndView(jsComponentId: Long)
 
-    fun setDataToRenderEngine(componentId: Long, templateId: String, data: JSONObject, callback: IGaiaXCallback)
+    fun setDataToRenderEngine(
+        componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
+    )
 
     fun getDataFromRenderEngine(componentId: Long): JSONObject?
 

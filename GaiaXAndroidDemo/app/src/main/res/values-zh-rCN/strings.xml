@@ -9,6 +9,7 @@
     <string name="track">埋点事件</string>
     <string name="remote_data_source">远程数据源</string>
     <string name="style">样式</string>
+    <string name="js">JS</string>
     <string name="business">业务</string>
     <string name="js_data">JS能力</string>
     <string name="dev_tools">GaiaX DevTools开关</string>

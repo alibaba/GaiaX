@@ -1,17 +1,18 @@
 package com.alibaba.gaiax.js.impl.qjs
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.GaiaXJSManager
-import com.alibaba.gaiax.js.core.GaiaXRuntime
-import com.alibaba.gaiax.js.core.api.IEngine
-import com.alibaba.gaiax.js.core.api.IRuntime
+import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.engine.GXHostRuntime
+import com.alibaba.gaiax.js.engine.IEngine
+import com.alibaba.gaiax.js.engine.IRuntime
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.quickjs.JSRuntime
 
-internal class QuickJSRuntime private constructor(val runtime: GaiaXRuntime, val engine: QuickJSEngine) : IRuntime {
+internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, val engine: QuickJSEngine) :
+    IRuntime {
 
     companion object {
-        fun create(runtime: GaiaXRuntime, engine: IEngine): QuickJSRuntime {
+        fun create(runtime: GXHostRuntime, engine: IEngine): QuickJSRuntime {
             return QuickJSRuntime(runtime, (engine as QuickJSEngine))
         }
     }
@@ -36,7 +37,7 @@ internal class QuickJSRuntime private constructor(val runtime: GaiaXRuntime, val
             if (Log.isLog()) {
                 Log.e("setPromiseRejectionHandler() called with: message = $message")
             }
-            GaiaXJSManager.instance.errorListener?.errorLog(JSONObject().apply {
+            GXJSEngine.instance.listener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = message
                     this["templateId"] = ""

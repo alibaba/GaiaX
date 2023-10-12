@@ -251,7 +251,7 @@ class GXClientToStudioMultiType {
         socketHelper?.devTools = dev
     }
 
-    fun setJSReceiverListener(listener: GXSocketJSReceiveListener) {
+    fun setSocketReceiverListener(listener: GXSocketJSReceiveListener) {
         socketHelper?.gxSocketJSReceiveListener = listener
     }
 

@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap
  * 每个Context下的Component对应一个模板。
  * 如果模板是嵌套模板，那么Context会有多个Component。
  */
-internal class GXHostContext private constructor(
-    val hostRuntime: GXHostRuntime, private val realRuntime: IRuntime, val type: GXJSEngine.EngineType
+internal class GXHostContext(
+    val hostRuntime: GXHostRuntime, val realRuntime: IRuntime, val type: GXJSEngine.EngineType
 ) {
 
     internal val bridge = object : ICallBridgeListener {
@@ -44,7 +44,7 @@ internal class GXHostContext private constructor(
     }
     private var taskQueue: GaiaXJSTaskQueue? = null
 
-    private var realContext: IContext? = null
+    var realContext: IContext? = null
 
     /**
      * components = {instanceId(ComponentId), ComponentObject}
@@ -127,9 +127,7 @@ internal class GXHostContext private constructor(
                 this, hostRuntime.realEngine, realRuntime
             )
 
-            GXJSEngine.EngineType.DebugJS -> DebugJSContext.create(
-                this, hostRuntime.realEngine, realRuntime
-            )
+            GXJSEngine.EngineType.DebugJS -> DebugJSContext(this)
         }
     }
 
@@ -185,7 +183,9 @@ internal class GXHostContext private constructor(
          */
         const val EVAL_TYPE_MODULE = 1
 
-        fun create(host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType): GXHostContext {
+        fun create(
+            host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType
+        ): GXHostContext {
             return GXHostContext(host, runtime, type)
         }
     }

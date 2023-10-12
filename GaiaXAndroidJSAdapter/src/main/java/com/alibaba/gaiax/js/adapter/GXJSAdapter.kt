@@ -21,18 +21,43 @@ package com.alibaba.gaiax.js.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.Keep
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.js.GXJSEngine
-import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
 import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
+import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
+import com.alibaba.gaiax.studio.GXClientToStudioMultiType
 
 @Keep
-class GXJSAdapter : GXJSEngine.GXJSIAdapter {
+class GXJSAdapter : GXJSEngine.IAdapter {
 
     @SuppressLint("InflateParams")
     override fun init(context: Context) {
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
+        GXJSEngine.instance.setSocketProxy(object : GXJSEngine.ISocketProxy {
+            override fun sendMessage(data: JSONObject) {
+                GXClientToStudioMultiType.instance.sendMessage(data)
+            }
+        })
+        GXClientToStudioMultiType.instance.setSocketReceiverListener(object :
+            GXClientToStudioMultiType.GXSocketJSReceiveListener {
+            override fun onCallSyncFromStudioWorker(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callSync(socketId, params)
+            }
 
+            override fun onCallAsyncFromStudioWorker(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callAsync(socketId, params)
+            }
+
+            override fun onCallPromiseFromStudioWorker(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callPromise(socketId, params)
+            }
+
+            override fun onCallGetLibraryFromStudioWorker(socketId: Int, methodName: String) {
+                GXJSEngine.instance.getSocketCallBridge()?.callGetLibrary(socketId, methodName)
+            }
+
+        })
         GXJSEngine.instance.initRenderDelegate(GXJSRenderDelegate())
     }
 }

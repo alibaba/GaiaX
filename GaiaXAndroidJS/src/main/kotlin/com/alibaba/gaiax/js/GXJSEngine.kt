@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
+import com.alibaba.gaiax.js.impl.debug.DebugJSContext
+import com.alibaba.gaiax.js.impl.debug.ISocketCallBridgeListener
 import com.alibaba.gaiax.js.module.GXJSBuildInModule
 import com.alibaba.gaiax.js.module.GXJSBuildInStorageModule
 import com.alibaba.gaiax.js.module.GXJSBuildInTipsModule
@@ -40,10 +42,12 @@ class GXJSEngine {
         QuickJS, DebugJS
     }
 
+    internal var socketProxy: ISocketProxy? = null
+
     /**
      * 错误日志的监控实现
      */
-    internal var listener: Listener? = null
+    internal var listener: IListener? = null
 
     /**
      * app的Context
@@ -78,7 +82,7 @@ class GXJSEngine {
         return this
     }
 
-    fun initListener(listener: Listener): GXJSEngine {
+    fun initListener(listener: IListener): GXJSEngine {
         this.listener = listener
         return this
     }
@@ -235,10 +239,10 @@ class GXJSEngine {
         moduleManager.unregisterModule(moduleClazz)
     }
 
-    private fun initGXAdapter(): GXJSIAdapter? {
+    private fun initGXAdapter(): IAdapter? {
         return try {
             val clazz = Class.forName("com.alibaba.gaiax.js.adapter.GXJSAdapter")
-            clazz.newInstance() as GXJSIAdapter
+            clazz.newInstance() as IAdapter
         } catch (e: Exception) {
             null
         }
@@ -248,7 +252,18 @@ class GXJSEngine {
         return this.renderEngineDelegate
     }
 
-    interface Listener {
+    /**
+     * 设置socket代理，用于Debug运行时与Studio通信
+     */
+    fun setSocketProxy(proxy: ISocketProxy) {
+        this.socketProxy = proxy
+    }
+
+    fun getSocketCallBridge(): ISocketCallBridgeListener? {
+        return (debugEngine?.runtime()?.context()?.realContext as? DebugJSContext)?.socketBridge
+    }
+
+    interface IListener {
         fun errorLog(data: JSONObject)
         fun monitor(
             scene: String,
@@ -263,7 +278,7 @@ class GXJSEngine {
         )
     }
 
-    interface GXJSIAdapter {
+    interface IAdapter {
         fun init(context: Context)
     }
 
@@ -427,5 +442,9 @@ class GXJSEngine {
                 }
             }
         }
+    }
+
+    interface ISocketProxy {
+        fun sendMessage(data: JSONObject)
     }
 }

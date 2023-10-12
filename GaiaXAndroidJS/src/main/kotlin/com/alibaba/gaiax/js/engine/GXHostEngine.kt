@@ -53,7 +53,7 @@ internal class GXHostEngine private constructor(
 
     private fun createEngine() = when (type) {
         GXJSEngine.EngineType.QuickJS -> QuickJSEngine.create(this)
-        GXJSEngine.EngineType.DebugJS -> DebugJSEngine.create(this)
+        GXJSEngine.EngineType.DebugJS -> DebugJSEngine(this)
     }
 
     internal fun startEngine(complete: (() -> Unit)?) {

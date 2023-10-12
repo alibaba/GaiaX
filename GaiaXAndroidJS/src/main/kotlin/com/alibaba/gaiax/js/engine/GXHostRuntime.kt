@@ -52,7 +52,7 @@ internal class GXHostRuntime(
     private fun createRuntime(): IRuntime {
         return when (type) {
             GXJSEngine.EngineType.QuickJS -> QuickJSRuntime.create(this, realEngine)
-            GXJSEngine.EngineType.DebugJS -> DebugJSRuntime.create(this, realEngine)
+            GXJSEngine.EngineType.DebugJS -> DebugJSRuntime()
         }
     }
 

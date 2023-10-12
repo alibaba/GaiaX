@@ -78,13 +78,10 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.26@jar'
 
     if (System.getProperties().get("isGaiaXDemo") == "true") {
-        compileOnly project(path: ':GaiaXAndroidClientToStudio')
         compileOnly project(path: ':GaiaXAndroidQuickJS')
     } else if (project.hasProperty("type") && project.getProperty("type").equals("release")) {
-        compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:release-SNAPSHOT@aar") { changing = true }
         compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:release-SNAPSHOT@aar") { changing = true }
     } else {
-        compileOnly("com.github.alibaba.GaiaX:GaiaX-ClientToStudio:dev-SNAPSHOT@aar") { changing = true }
         compileOnly("com.github.alibaba.GaiaX:GaiaX-QuickJS:dev-SNAPSHOT@aar") { changing = true }
     }
 }

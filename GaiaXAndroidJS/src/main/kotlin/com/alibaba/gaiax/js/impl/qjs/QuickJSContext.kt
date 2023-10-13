@@ -1,23 +1,27 @@
 package com.alibaba.gaiax.js.impl.qjs
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.GaiaXJSManager
-import com.alibaba.gaiax.js.core.GaiaXContext
-import com.alibaba.gaiax.js.core.api.IContext
-import com.alibaba.gaiax.js.core.api.IEngine
-import com.alibaba.gaiax.js.core.api.IRuntime
+import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.engine.GXHostContext
+import com.alibaba.gaiax.js.engine.IContext
+import com.alibaba.gaiax.js.engine.IEngine
+import com.alibaba.gaiax.js.engine.IRuntime
 import com.alibaba.gaiax.js.impl.qjs.module.QuickJSBridgeModule
 import com.alibaba.gaiax.js.impl.qjs.module.QuickJSTimer
-import com.alibaba.gaiax.js.support.GaiaXScriptBuilder
+import com.alibaba.gaiax.js.support.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
 
-internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine, val runtime: QuickJSRuntime) : IContext {
+internal class QuickJSContext(
+    private val hostContext: GXHostContext,
+    val engine: QuickJSEngine,
+    private val runtime: QuickJSRuntime
+) : IContext {
 
     companion object {
-        fun create(host: GaiaXContext, engine: IEngine, runtime: IRuntime): QuickJSContext {
+        fun create(host: GXHostContext, engine: IEngine, runtime: IRuntime): QuickJSContext {
             return QuickJSContext(host, engine as QuickJSEngine, runtime as QuickJSRuntime)
         }
     }
@@ -42,7 +46,7 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
             "std" -> jsContext?.initModuleStd()
             "GaiaXBridge" -> {
                 if (bridgeModule == null && jsContext != null) {
-                    bridgeModule = QuickJSBridgeModule(host, jsContext!!)
+                    bridgeModule = QuickJSBridgeModule(hostContext, jsContext!!)
                 }
                 jsContext?.registerBridgeModuleListener(bridgeModule)
                 jsContext?.initModuleBridge(module)
@@ -52,13 +56,14 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
 
     override fun initBootstrap() {
         if (bootstrap == null) {
+            val contextId = hostContext.hostRuntime.hostEngine.engineId
             val sb = StringBuilder()
-            sb.append(GaiaXScriptBuilder.buildImportScript())
-            sb.append(GaiaXScriptBuilder.buildGlobalContext(host.host.host.engineId, 0))
-            sb.append(GaiaXScriptBuilder.buildExtendAndAssignScript())
-            sb.append(GaiaXJSManager.instance.buildBootstrapScript())
-            sb.append(GaiaXJSManager.instance.buildModulesScript())
-            sb.append(GaiaXScriptBuilder.buildStyle())
+            sb.append(GXScriptBuilder.buildImportScript())
+            sb.append(GXScriptBuilder.buildGlobalContext(contextId, 0))
+            sb.append(GXScriptBuilder.buildExtendAndAssignScript())
+            sb.append(GXJSEngine.Proxy.instance.buildBootstrapScript())
+            sb.append(GXJSEngine.Proxy.instance.buildModulesScript(GXJSEngine.EngineType.QuickJS))
+            sb.append(GXScriptBuilder.buildStyle())
             bootstrap = sb.toString()
         }
     }
@@ -66,13 +71,13 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
     private val pendingTaskId = IdGenerator.genIntId()
 
     override fun initPendingJob() {
-        host.executeIntervalTask(pendingTaskId, 10) {
+        hostContext.executeIntervalTask(pendingTaskId, 10) {
             val executePendingJob = jsContext?.executePendingJob()
         }
     }
 
     override fun destroyPendingJob() {
-        host.remoteIntervalTask(pendingTaskId)
+        hostContext.remoteIntervalTask(pendingTaskId)
     }
 
     override fun startBootstrap() {
@@ -83,10 +88,18 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
 
     private fun initModuleTimer() {
         jsContext?.let { context ->
-            context.globalObject.setProperty("setTimeout", context.createJSFunction(QuickJSTimer.createSetTimeoutFunc()))
-            context.globalObject.setProperty("clearTimeout", context.createJSFunction(QuickJSTimer.createClearTimeoutFunc()))
-            context.globalObject.setProperty("setInterval", context.createJSFunction(QuickJSTimer.createSetIntervalFunc()))
-            context.globalObject.setProperty("clearInterval", context.createJSFunction(QuickJSTimer.createClearIntervalFunc()))
+            context.globalObject.setProperty(
+                "setTimeout", context.createJSFunction(QuickJSTimer.createSetTimeoutFunc())
+            )
+            context.globalObject.setProperty(
+                "clearTimeout", context.createJSFunction(QuickJSTimer.createClearTimeoutFunc())
+            )
+            context.globalObject.setProperty(
+                "setInterval", context.createJSFunction(QuickJSTimer.createSetIntervalFunc())
+            )
+            context.globalObject.setProperty(
+                "clearInterval", context.createJSFunction(QuickJSTimer.createClearIntervalFunc())
+            )
         }
     }
 
@@ -100,7 +113,7 @@ internal class QuickJSContext(val host: GaiaXContext, val engine: QuickJSEngine,
         if (Log.isLog()) {
             Log.e("evaluateJS() called with: script = $script")
         }
-        this.jsContext?.evaluate(script, "", GaiaXContext.EVAL_TYPE_MODULE, 0)
+        this.jsContext?.evaluate(script, "", GXHostContext.EVAL_TYPE_MODULE, 0)
     }
 
     override fun destroyContext() {

@@ -1,15 +1,16 @@
 package com.alibaba.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
-import com.alibaba.gaiax.js.api.GaiaXJSBaseModule
+import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.api.GXJSBaseModule
 
 internal interface IModuleManager {
 
-    fun registerModule(moduleClazz: Class<out GaiaXJSBaseModule>)
+    fun registerModule(moduleClazz: Class<out GXJSBaseModule>)
 
-    fun unregisterModule(moduleClazz: Class<out GaiaXJSBaseModule>)
+    fun unregisterModule(moduleClazz: Class<out GXJSBaseModule>)
 
-    fun buildModulesScript(isDebugging: Boolean): String
+    fun buildModulesScript(type: GXJSEngine.EngineType): String
 
     fun invokeMethodSync(moduleId: Long, methodId: Long, args: JSONArray): Any?
 

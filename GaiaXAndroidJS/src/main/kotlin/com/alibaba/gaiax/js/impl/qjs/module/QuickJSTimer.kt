@@ -1,7 +1,7 @@
 package com.alibaba.gaiax.js.impl.qjs.module
 
 import androidx.annotation.Keep
-import com.alibaba.gaiax.js.GaiaXJSManager
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.quickjs.*
@@ -26,7 +26,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GaiaXJSManager.instance.executeDelayTask(taskId, delay) {
+                GXJSEngine.Proxy.instance.executeDelayTask(taskId, delay) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }
                 return jsContext.createJSNumber(taskId)
@@ -47,7 +47,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GaiaXJSManager.instance.remoteDelayTask(taskId)
+                GXJSEngine.Proxy.instance.remoteDelayTask(taskId)
             }
             return jsContext.createJSUndefined()
         }
@@ -65,7 +65,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GaiaXJSManager.instance.remoteIntervalTask(taskId)
+                GXJSEngine.Proxy.instance.remoteIntervalTask(taskId)
             }
             return jsContext.createJSUndefined()
         }
@@ -86,7 +86,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createSetIntervalFunc() called with: contextId = $contextId, taskId = $taskId ")
                 }
-                GaiaXJSManager.instance.executeIntervalTask(taskId, interval) {
+                GXJSEngine.Proxy.instance.executeIntervalTask(taskId, interval) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }
                 return jsContext.createJSNumber(taskId)

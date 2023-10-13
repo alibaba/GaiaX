@@ -26,7 +26,7 @@ class GXSocket : SocketListener {
 
     var gxSocketIsConnected = false
     var gxSocketListener: GXSocketListener? = null
-    var gxSocketJSReceiveListener: GXClientToStudioMultiType.GXSocketJSReceiveListener? = null
+    var socketReceiver: GXStudioClient.ISocketReceiver? = null
 
     private var updateTask: Runnable? = null
     private var lastTemplateId: String? = null
@@ -90,7 +90,7 @@ class GXSocket : SocketListener {
         webSocketSetting?.setReconnectWithNetworkChanged(true)
 
         //允许扫描不同的电脑
-        WebSocketHandler.registerNetworkChangedReceiver(GXClientToStudioMultiType.instance.applicationContext)
+        WebSocketHandler.registerNetworkChangedReceiver(GXStudioClient.instance.applicationContext)
         webSocketManager = WebSocketHandler.initGeneralWebSocket(SOCKET_KEY, webSocketSetting)
         webSocketManager?.addListener(this)
     }
@@ -149,10 +149,10 @@ class GXSocket : SocketListener {
                     obtainResultFromGetTemplate(result)
                 }
             }
-            "js/callSync" -> gxSocketJSReceiveListener?.onCallSyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/callAsync" -> gxSocketJSReceiveListener?.onCallAsyncFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/callPromise" -> gxSocketJSReceiveListener?.onCallPromiseFromStudioWorker(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/getLibrary" ->gxSocketJSReceiveListener?.onCallGetLibraryFromStudioWorker(socketId.toInt(),socketMethod)
+            "js/callSync" -> socketReceiver?.onReceiveCallSync(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callAsync" -> socketReceiver?.onReceiveCallAsync(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/callPromise" -> socketReceiver?.onReceiveCallPromise(socketId.toInt(), msgData.getJSONObject("params"))
+            "js/getLibrary" ->socketReceiver?.onReceiveCallGetLibrary(socketId.toInt(),socketMethod)
             // TODO: 关闭方式
             "close" ->{}
 
@@ -386,8 +386,8 @@ class GXSocket : SocketListener {
 
     private fun sendMsgForChangeMode(
         socketId: Int,
-        previewMode: String? = GXClientToStudioMultiType.PREVIEW_NONE,
-        jsMode: String? = GXClientToStudioMultiType.JS_DEFAULT
+        previewMode: String? = GXStudioClient.PREVIEW_NONE,
+        jsMode: String? = GXStudioClient.JS_DEFAULT
     ) {
         Log.d(GXSocket.TAG, "sendMsgForChangeMode() called ")
         val data = JSONObject()

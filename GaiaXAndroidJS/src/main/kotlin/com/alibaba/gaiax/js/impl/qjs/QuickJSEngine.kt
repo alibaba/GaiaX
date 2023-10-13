@@ -1,13 +1,13 @@
 package com.alibaba.gaiax.js.impl.qjs
 
-import com.alibaba.gaiax.js.core.GaiaXEngine
-import com.alibaba.gaiax.js.core.api.IEngine
+import com.alibaba.gaiax.js.engine.GXHostEngine
+import com.alibaba.gaiax.js.engine.IEngine
 import com.alibaba.gaiax.quickjs.QuickJS
 
 /**
  * QuickJS引擎
  */
-internal class QuickJSEngine private constructor(val engine: GaiaXEngine) : IEngine {
+internal class QuickJSEngine private constructor(val engine: GXHostEngine) : IEngine {
 
     var quickJS: QuickJS? = null
 
@@ -33,7 +33,7 @@ internal class QuickJSEngine private constructor(val engine: GaiaXEngine) : IEng
 
     companion object {
 
-        fun create(engine: GaiaXEngine): QuickJSEngine {
+        fun create(engine: GXHostEngine): QuickJSEngine {
             return QuickJSEngine(engine)
         }
     }

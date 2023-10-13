@@ -21,18 +21,47 @@ package com.alibaba.gaiax.js.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.Keep
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.js.GXJSEngineFactory
-import com.alibaba.gaiax.js.adapter.impl.render.GXExtensionNodeEvent
-import com.alibaba.gaiax.js.adapter.impl.GXJSRenderDelegate
+import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.studio.GXStudioClient
 
 @Keep
-class GXJSAdapter : GXJSEngineFactory.GXJSIAdapter {
+class GXJSAdapter : GXJSEngine.IAdapter {
 
     @SuppressLint("InflateParams")
     override fun init(context: Context) {
+
+        // 注册JS事件
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
 
-        GXJSEngineFactory.instance.initRenderDelegate(GXJSRenderDelegate())
+        // 注册Socket消息发送者
+        GXJSEngine.instance.setSocketSender(object : GXJSEngine.ISocketSender {
+            override fun onSendMsg(data: JSONObject) {
+                GXStudioClient.instance.sendMsg(data)
+            }
+        })
+
+        // 注册消息接受者
+        GXStudioClient.instance.setSocketReceiver(object : GXStudioClient.ISocketReceiver {
+            override fun onReceiveCallSync(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callSync(socketId, params)
+            }
+
+            override fun onReceiveCallAsync(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callAsync(socketId, params)
+            }
+
+            override fun onReceiveCallPromise(socketId: Int, params: JSONObject) {
+                GXJSEngine.instance.getSocketCallBridge()?.callPromise(socketId, params)
+            }
+
+            override fun onReceiveCallGetLibrary(socketId: Int, methodName: String) {
+                GXJSEngine.instance.getSocketCallBridge()?.callGetLibrary(socketId, methodName)
+            }
+
+        })
+
+        GXJSEngine.instance.initRenderDelegate(GXJSRenderDelegate())
     }
 }

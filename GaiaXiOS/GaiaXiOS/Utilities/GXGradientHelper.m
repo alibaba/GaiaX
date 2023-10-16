@@ -234,17 +234,14 @@
     }
     
     //创建视图
-    CGRect bounds = layer.bounds;
-    //开启上下文
-    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, 0);
-    //绘制layer
-    [layer renderInContext:UIGraphicsGetCurrentContext()];
-    //获取新图片
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    //结束图形上下文
-    UIGraphicsEndImageContext();
+    CGSize size = layer.bounds.size;
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:size];
+    UIImage *image = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [layer renderInContext:rendererContext.CGContext];
+    }];
     
     return image;
+
 }
 
 

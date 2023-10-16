@@ -313,8 +313,6 @@ const NSUInteger GXTextMaxWidth = 1080;
     //是否更新lineHeight标志位
     BOOL shouldUpdate = NO;
     
-    NSMutableParagraphStyle *paragraphStyle = [self.attributes objectForKey:NSParagraphStyleAttributeName];
-
     //更新font
     NSString *fontSize = [styleInfo gx_stringForKey:@"font-size"];
     NSString *fontWeight = [styleInfo gx_stringForKey:@"font-weight"];
@@ -343,6 +341,7 @@ const NSUInteger GXTextMaxWidth = 1080;
     
     //更新段落信息
     if (shouldUpdate) {
+        NSMutableParagraphStyle *paragraphStyle = [self.attributes objectForKey:NSParagraphStyleAttributeName];
         if (paragraphStyle && self.numberOfLines != 1) {
             paragraphStyle.minimumLineHeight = self.lineHeight;
             paragraphStyle.maximumLineHeight = self.lineHeight;

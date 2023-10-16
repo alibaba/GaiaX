@@ -164,10 +164,11 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 }
 
 - (UIImage *)gx_snapshotImage{
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    CGSize size = self.bounds.size;
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:size];
+    UIImage *image = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [self.layer renderInContext:rendererContext.CGContext];
+    }];
     return image;
 }
 

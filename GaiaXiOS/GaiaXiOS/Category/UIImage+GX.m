@@ -101,35 +101,39 @@
     CGFloat imgWidth = newSize.width * scale;
     CGFloat imgHeight = newSize.height * scale;
 
-    //结果image
-    UIImage *newImage = nil;
-    
-    //创建context
-    CGContextRef context = CGBitmapContextCreate(NULL, imgWidth, imgHeight,
-                                               CGImageGetBitsPerComponent(self.CGImage), 0,
-                                               CGImageGetColorSpace(self.CGImage),
-                                               CGImageGetBitmapInfo(self.CGImage));
-    if (context){
-        //设置image质量
-        CGContextSetShouldAntialias(context, true);
-        CGContextSetAllowsAntialiasing(context, true);
-        CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    @try {
+        //结果image
+        UIImage *newImage = nil;
         
-        //congtext中绘图
-        UIGraphicsPushContext(context);
-        CGContextDrawImage(context, CGRectMake(0.f, 0.f, imgWidth, imgHeight), self.CGImage);
-        UIGraphicsPopContext();
+        //创建context
+        CGContextRef context = CGBitmapContextCreate(NULL, imgWidth, imgHeight,
+                                                   CGImageGetBitsPerComponent(self.CGImage), 0,
+                                                   CGImageGetColorSpace(self.CGImage),
+                                                   CGImageGetBitmapInfo(self.CGImage));
+        if (context){
+            //设置image质量
+            CGContextSetShouldAntialias(context, true);
+            CGContextSetAllowsAntialiasing(context, true);
+            CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+            
+            //congtext中绘图
+            UIGraphicsPushContext(context);
+            CGContextDrawImage(context, CGRectMake(0.f, 0.f, imgWidth, imgHeight), self.CGImage);
+            UIGraphicsPopContext();
+            
+            //从context中创建image
+            CGImageRef newImageRef = CGBitmapContextCreateImage(context);
+            newImage = [UIImage imageWithCGImage:newImageRef scale:scale orientation:self.imageOrientation];
+            
+            //释放
+            CGImageRelease(newImageRef);
+            CGContextRelease(context);
+        }
         
-        //从context中创建image
-        CGImageRef newImageRef = CGBitmapContextCreateImage(context);
-        newImage = [UIImage imageWithCGImage:newImageRef scale:scale orientation:self.imageOrientation];
-        
-        //释放
-        CGImageRelease(newImageRef);
-        CGContextRelease(context);
+        return newImage;
+    } @catch (NSException *exception) {
+        return self;
     }
-    
-    return newImage;
 }
 
 @end

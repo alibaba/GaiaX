@@ -22,21 +22,21 @@ function createViewForContext(gxTemplateContext?: GXTemplateContext) {
   if (gxTemplateContext == null) {
     Text("GXView is null")
   } else {
-    createViewForNode(GXViewTreeCreator.createRootNode(gxTemplateContext))
+    createViewTree(GXViewTreeCreator.createNodeTree(gxTemplateContext))
   }
 }
 
 @Builder
-function createViewForNode(gxNode?: GXNode) {
+function createViewTree(gxNode?: GXNode) {
   if (gxNode == null) {
     Text("GXNode is null")
   } else {
-    createViewByNodeTree(gxNode)
+    createViewTreeByNodeTree(gxNode)
   }
 }
 
 @Builder
-function createViewByNodeTree(gxNode: GXNode) {
+function createViewTreeByNodeTree(gxNode: GXNode) {
   // View or Template
   if (gxNode.gxTemplateNode.isViewType() || gxNode.gxTemplateNode.isGaiaTemplate()) {
     createViewOrTemplate(gxNode)
@@ -87,7 +87,7 @@ function createViewOrTemplate(gxNode: GXNode) {
   Column() {
     ForEach(gxNode.gxChildren, (gxChildNode: GXNode) => {
       // 如果有子节点，那么递归创建子View
-      createViewByNodeTree(gxChildNode);
+      createViewTreeByNodeTree(gxChildNode);
     }, (item: GXNode, index) => index + item.gxId);
   }
   .key(gxNode.gxId)

@@ -17,14 +17,13 @@ import com.alibaba.gaiax.utils.GXScreenUtils
  */
 class JSTemplateActivity : AppCompatActivity() {
 
-    private var jsApiDemoId: Long = 0
-    private var jsCustomsModuleDemoId: Long = 0
+    private var jsApiDemoComponentId: Long = 0
+    private var jsCustomsModuleDemoComponentId: Long = 0
 
+    private val jsApiDemoTemplateName = "gx-with-js-api-demo"
+    private val jsCustomModuleTemplateName = "gx-with-js"
 
-    val jsApiDemoTemplateName = "gx-with-js-api-demo"
-    val jsCustomModuleTemplateName = "gx-with-js"
-
-    val bizId = "assets_data_source/templates"
+    private val bizId = "assets_data_source/templates"
 
     private fun getJsFileByTemplateId(pathName: String): String {
         val jsDemoPath = "assets_data_source/templates/$pathName/index.js"
@@ -42,7 +41,7 @@ class JSTemplateActivity : AppCompatActivity() {
         renderJSCustomModuleDemoTemplate(this, jsCustomModuleTemplateName)
         //Demo2：js内置方法一览
         renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
-
+        //
         sendNativeMessage()
     }
 
@@ -53,7 +52,7 @@ class JSTemplateActivity : AppCompatActivity() {
             val nativeMessageProtocol: JSONObject = JSONObject()
             nativeMessageProtocol["userData"] = nativeData
             nativeMessageProtocol["type"] = "CustomNotificationNameForNative"
-            GXJSEngine.Component.dispatcherNativeMessageEventToJS(nativeMessageProtocol)
+            GXJSEngine.Component.dispatcherNativeMessageToJS(nativeMessageProtocol)
         }
 
     }
@@ -78,7 +77,7 @@ class JSTemplateActivity : AppCompatActivity() {
         val view = GXTemplateEngine.instance.createView(params, size)
 
         if (view != null) {
-            jsCustomsModuleDemoId = GXJSEngine.Component.registerComponent(
+            jsCustomsModuleDemoComponentId = GXJSEngine.Component.registerComponent(
                 bizId, jsCustomModuleTemplateName, "1", getJsFileByTemplateId(templateId), view
             )
         }
@@ -89,7 +88,8 @@ class JSTemplateActivity : AppCompatActivity() {
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_1).addView(view, 0)
 
-        GXJSEngine.Component.onReady(jsCustomsModuleDemoId)
+        // onReady
+        GXJSEngine.Component.onReady(jsCustomsModuleDemoComponentId)
     }
 
     private fun renderJSApiDemoTemplate(activity: JSTemplateActivity, templateId: String) {
@@ -110,7 +110,7 @@ class JSTemplateActivity : AppCompatActivity() {
         val view = GXTemplateEngine.instance.createView(params, size)
 
         if (view != null) {
-            jsApiDemoId = GXJSEngine.Component.registerComponent(
+            jsApiDemoComponentId = GXJSEngine.Component.registerComponent(
                 bizId, jsApiDemoTemplateName, "1", getJsFileByTemplateId(templateId), view
             )
         }
@@ -121,19 +121,27 @@ class JSTemplateActivity : AppCompatActivity() {
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
 
-        GXJSEngine.Component.onReady(jsApiDemoId)
-        GXJSEngine.Component.onDestroy(jsApiDemoId)
+        //
+        GXJSEngine.Component.onReady(jsApiDemoComponentId)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GXJSEngine.Component.onShow(jsApiDemoComponentId)
+        GXJSEngine.Component.onShow(jsCustomsModuleDemoComponentId)
     }
 
     override fun onPause() {
         super.onPause()
-        GXJSEngine.Component.onHide(jsApiDemoId)
-        GXJSEngine.Component.onHide(jsCustomsModuleDemoId)
+        GXJSEngine.Component.onHide(jsApiDemoComponentId)
+        GXJSEngine.Component.onHide(jsCustomsModuleDemoComponentId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        GXJSEngine.Component.unregisterComponent(jsApiDemoId)
-        GXJSEngine.Component.unregisterComponent(jsCustomsModuleDemoId)
+        GXJSEngine.Component.onDestroy(jsApiDemoComponentId)
+        GXJSEngine.Component.unregisterComponent(jsApiDemoComponentId)
+        GXJSEngine.Component.unregisterComponent(jsCustomsModuleDemoComponentId)
     }
 }

@@ -78,6 +78,9 @@ internal class GXModule(nativeModule: IGXModule) {
     }
 
     fun invokeMethodSync(methodId: Long, args: JSONArray): Any? {
+        if (Log.isLog()) {
+            Log.d("invokeMethodSync() called with: methodId = $methodId args = $args")
+        }
         try {
             return syncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {

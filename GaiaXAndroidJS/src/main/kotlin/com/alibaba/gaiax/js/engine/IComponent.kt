@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject
 
 interface IComponent {
 
-
     /**
      * 整个生命周期内只会回调一次
      */

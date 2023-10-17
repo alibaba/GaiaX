@@ -6,10 +6,10 @@ import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.js.GXJSEngine
-import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
+import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.template.GXTemplateKey
 import java.util.concurrent.ConcurrentHashMap
 
 class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
@@ -42,15 +42,15 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
     }
 
     override fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
-        var nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(links[instanceId], targetId)
-        if (nodeInfo != null) {
+        val nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(links[instanceId], targetId)
+        return if (nodeInfo != null) {
             val targetNode = JSONObject()
             targetNode["targetType"] = nodeInfo.templateNode.layer.type
             targetNode["targetSubType"] = nodeInfo.templateNode.layer.subType
             targetNode["targetId"] = targetId
-            return targetNode
+            targetNode
         } else {
-            return JSONObject()
+            JSONObject()
         }
     }
 

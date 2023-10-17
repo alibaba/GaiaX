@@ -404,7 +404,7 @@ class GXJSEngine {
             }
         }
 
-        fun dispatcherNativeMessageEventToJS(data: JSONObject) {
+        fun dispatcherNativeMessageToJS(data: JSONObject) {
             GXNativeEventManager.instance.eventsData.forEach { componentData ->
                 val componentId = componentData.getLongValue("instanceId")
                 instance.engines.forEach {

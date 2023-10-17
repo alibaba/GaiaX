@@ -5,10 +5,10 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import com.alibaba.gaiax.js.GXJSEngine
 
 /**
  *  @author: shisan.lms
@@ -93,6 +93,7 @@ class GXMixNodeEvent : GXINodeEvent {
             GXTemplateKey.GAIAX_GESTURE_TYPE_TAP -> {
                 initViewClickEventDispatcher(gestureParams)
             }
+
             GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS -> {
                 initViewLongClickEventDispatcher(gestureParams)
             }
@@ -133,7 +134,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
-                        (GXJSEngine.instance.getRenderDelegate() as GXJSRenderDelegate).dispatcherEvent(it)
+                        (GXJSEngine.instance.getRenderDelegate() as? GXJSRenderDelegate)?.dispatcherEvent(it)
                     }
                 } else {
                     jsEventParams.let {

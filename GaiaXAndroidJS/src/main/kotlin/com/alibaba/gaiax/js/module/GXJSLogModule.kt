@@ -27,9 +27,18 @@ class GXJSLogModule : GXJSBaseModule() {
             params["level"] = level
             params["data"] = msg
             data["params"] = params
-            GXJSEngine.instance.socketSender?.onSendMsg(data)
+            try {
+                if (com.alibaba.gaiax.js.utils.Log.isLog()) {
+                    com.alibaba.gaiax.js.utils.Log.d("sendJSLogMsg() called with: $data")
+                }
+                GXJSEngine.instance.socketSender?.onSendMsg(data)
+            } catch (e: Exception) {
+                if (com.alibaba.gaiax.js.utils.Log.isLog()) {
+                    com.alibaba.gaiax.js.utils.Log.d("sendJSLogMsg() called with: ${e.message}")
+                }
+                e.printStackTrace()
+            }
         }
-
     }
 
     @GXSyncMethod

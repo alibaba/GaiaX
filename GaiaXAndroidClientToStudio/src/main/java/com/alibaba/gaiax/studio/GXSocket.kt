@@ -127,34 +127,54 @@ class GXSocket : SocketListener {
         Log.d(TAG, "onMessage: $message")
         val msgData = JSONObject.parseObject(message)
         val socketId = msgData.getString("id")
-        val socketMethod = if (msgData.containsKey("method")) msgData.getString("method") else methodIdManager[socketId.toInt()]
+        val socketMethod =
+            if (msgData.containsKey("method")) msgData.getString("method") else methodIdManager[socketId.toInt()]
 
         Log.e(TAG, "onMessage() called with: socketId = [$socketId], method = [$socketMethod]")
         when (socketMethod) {
             "initialized" -> {
                 gxSocketListener?.onStudioConnected()
             }
+
             "mode/get" -> {
                 responseObtainMode(socketId.toInt())
             }
+
             "template/get" -> {
                 val result = msgData.getJSONObject("result")
                 if (result != null) {
                     obtainResultFromGetTemplate(result)
                 }
             }
+
             "template/didChangedNotification" -> {
                 val result = msgData.getJSONObject("params")
                 if (result != null) {
                     obtainResultFromGetTemplate(result)
                 }
             }
-            "js/callSync" -> socketReceiver?.onReceiveCallSync(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/callAsync" -> socketReceiver?.onReceiveCallAsync(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/callPromise" -> socketReceiver?.onReceiveCallPromise(socketId.toInt(), msgData.getJSONObject("params"))
-            "js/getLibrary" ->socketReceiver?.onReceiveCallGetLibrary(socketId.toInt(),socketMethod)
+
+            "js/callSync" -> socketReceiver?.onReceiveCallSync(
+                socketId.toInt(),
+                msgData.getJSONObject("params")
+            )
+
+            "js/callAsync" -> socketReceiver?.onReceiveCallAsync(
+                socketId.toInt(),
+                msgData.getJSONObject("params")
+            )
+
+            "js/callPromise" -> socketReceiver?.onReceiveCallPromise(
+                socketId.toInt(),
+                msgData.getJSONObject("params")
+            )
+
+            "js/getLibrary" -> socketReceiver?.onReceiveCallGetLibrary(
+                socketId.toInt(),
+                socketMethod
+            )
             // TODO: 关闭方式
-            "close" ->{}
+            "close" -> {}
 
         }
 
@@ -354,12 +374,17 @@ class GXSocket : SocketListener {
         if (data.containsKey("method") && data.containsKey("id")) {
             methodIdManager[data.getIntValue("id")] = data.getString("method")
         }
-        WebSocketHandler.getWebSocket(SOCKET_KEY).send(data.toJSONString())
+        val webSocket = WebSocketHandler.getWebSocket(SOCKET_KEY)
+        webSocket?.send(data.toJSONString())
     }
 
     private fun responseObtainMode(socketId: Int) {
         if (devTools != null) {
-            sendMsgForChangeMode(socketId, devTools!!.getPreviewCurrentMode(), devTools!!.getJSCurrentMode())
+            sendMsgForChangeMode(
+                socketId,
+                devTools!!.getPreviewCurrentMode(),
+                devTools!!.getJSCurrentMode()
+            )
         }
     }
 

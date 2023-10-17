@@ -151,6 +151,9 @@ class GXJSEngine {
     }
 
     fun stopDefaultEngine() {
+        if (Log.isLog()) {
+            Log.d("stopDefaultEngine()")
+        }
         synchronized(EngineType.QuickJS) {
             if (defaultEngine != null) {
                 destroyEngine(defaultEngine)
@@ -160,6 +163,9 @@ class GXJSEngine {
     }
 
     fun stopDebugEngine() {
+        if (Log.isLog()) {
+            Log.d("stopDebugEngine()")
+        }
         synchronized(EngineType.DebugJS) {
             if (debugEngine != null) {
                 destroyEngine(debugEngine)
@@ -168,17 +174,10 @@ class GXJSEngine {
         }
     }
 
-    fun startAllEngine() {
-        startDefaultEngine()
-        startDebugEngine()
-    }
-
-    fun stopAllEngine() {
-        stopDebugEngine()
-        stopDefaultEngine()
-    }
-
     fun startDefaultEngine(complete: (() -> Unit)? = null) {
+        if (Log.isLog()) {
+            Log.d("startDefaultEngine()")
+        }
         synchronized(EngineType.QuickJS) {
             if (debugEngine == null) {
                 // 创建引擎
@@ -191,6 +190,9 @@ class GXJSEngine {
     }
 
     fun startDebugEngine(complete: (() -> Unit)? = null) {
+        if (Log.isLog()) {
+            Log.d("startDebugEngine()")
+        }
         synchronized(EngineType.DebugJS) {
             if (debugEngine == null) {
                 // 创建引擎
@@ -392,7 +394,7 @@ class GXJSEngine {
                 getHostContext(it)?.registerComponent(
                     componentId, bizId, templateId, templateVersion, script
                 )
-                instance.renderDelegate?.registerComponent(view, componentId)
+                instance.renderDelegate?.onRegisterComponent(view, componentId)
             }
             return componentId
         }
@@ -400,7 +402,7 @@ class GXJSEngine {
         fun unregisterComponent(componentId: Long) {
             instance.engines.forEach {
                 getHostContext(it)?.unregisterComponent(componentId)
-                instance.renderDelegate?.unregisterComponent(componentId)
+                instance.renderDelegate?.onUnregisterComponent(componentId)
             }
         }
 
@@ -435,9 +437,9 @@ class GXJSEngine {
 
     interface IRenderDelegate {
 
-        fun registerComponent(view: View, componentId: Long)
+        fun onRegisterComponent(view: View, componentId: Long)
 
-        fun unregisterComponent(componentId: Long)
+        fun onUnregisterComponent(componentId: Long)
 
         fun setData(
             componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback

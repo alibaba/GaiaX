@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
@@ -69,17 +70,42 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
     var gxTemplateItem: GXTemplateEngine.GXTemplateItem? = null
     var gxMeasureSize: GXTemplateEngine.GXMeasureSize? = null
     var gxTemplateData: GXTemplateEngine.GXTemplateData? = null
+    var gxView: View? = null
+    var gxViewComponentId: Long? = null
 
     private fun forceCreate() {
-        try {
-            val view = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
-            if (view != null) {
-                GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
-                fastPreviewRoot.removeAllViews()
-                fastPreviewRoot.addView(view, 0)
+        gxTemplateData?.let { gxTemplateData ->
+            gxTemplateItem?.let { gxTemplateItem ->
+                gxMeasureSize?.let { gxMeasureSize ->
+
+                    // 创建视图
+                    gxView = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize)
+                    gxView?.let { gxView ->
+
+                        // 绑定数据
+                        GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
+                        fastPreviewRoot.addView(gxView, 0)
+
+                        // 获取模板信息
+                        val gxTemplateInfo = GXTemplateEngine.instance.getTemplateInfo(gxTemplateItem)
+                        if (gxTemplateInfo.isJsExist) {
+                            // 下一帧执行JS
+                            gxView.post {
+
+                                // 注册容器
+//                                gxViewComponentId = GXJSEngine.Component.registerComponent(
+//                                    gxTemplateItem.bizId,
+//                                    gxTemplateItem.templateId,
+//                                    gxTemplateItem.templateVersion,
+//                                    gxTemplateInfo.js,
+//                                    gxView
+//                                )
+//                                GXJSEngine.Component.onReady()
+                            }
+                        }
+                    }
+                }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -112,8 +138,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
     }
 
     override fun onUpdate(templateId: String, templateData: JSONObject) {
-        val constraintSize = templateData.getJSONObject("index.json")
-            ?.getJSONObject("package")
+        val constraintSize = templateData.getJSONObject("index.json")?.getJSONObject("package")
             ?.getJSONObject("constraint-size")
 
         var data = JSONObject()

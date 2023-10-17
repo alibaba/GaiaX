@@ -10,39 +10,40 @@ import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
+import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 
 class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
 
     companion object {
-        val links: MutableMap<Long, View> = ConcurrentHashMap()
+        val links: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
     }
 
-    override fun registerComponent(view: View, componentId: Long) {
-        links[componentId] = view
+    override fun onRegisterComponent(view: View, componentId: Long) {
+        links[componentId] = WeakReference(view)
     }
 
-    override fun unregisterComponent(componentId: Long) {
+    override fun onUnregisterComponent(componentId: Long) {
         links.remove(componentId)
     }
-
 
     override fun setData(
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
     ) {
         GXJSUiExecutor.action {
-            val cntView = links[componentId]
+            val cntView = links[componentId]?.get()
             GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
             callback.invoke()
         }
     }
 
     override fun getData(componentId: Long): JSONObject? {
-        return GXTemplateEngine.instance.getGXTemplateContext(links[componentId])?.templateData?.data
+        return GXTemplateEngine.instance.getGXTemplateContext(links[componentId]?.get())?.templateData?.data
     }
 
     override fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
-        val nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(links[instanceId], targetId)
+        val nodeInfo: GXNode? =
+            GXTemplateEngine.instance.getGXNodeById(links[instanceId]?.get(), targetId)
         return if (nodeInfo != null) {
             val targetNode = JSONObject()
             targetNode["targetType"] = nodeInfo.templateNode.layer.type
@@ -61,9 +62,10 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
         optionCover: Boolean,
         optionLevel: Int
     ) {
-        GXTemplateEngine.instance.getGXTemplateContext(links[componentId])
+        GXTemplateEngine.instance.getGXTemplateContext(links[componentId]?.get())
             ?.let { gxTemplateContext ->
-                val gxNode = GXTemplateEngine.instance.getGXNodeById(links[componentId], targetId)
+                val gxNode =
+                    GXTemplateEngine.instance.getGXNodeById(links[componentId]?.get(), targetId)
                 gxNode?.initEventByRegisterCenter()
                 var eventTypeForName = ""
                 if (eventType == "click") {
@@ -90,12 +92,12 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
     }
 
     override fun getView(componentId: Long): View? {
-        return links[componentId]
+        return links[componentId]?.get()
     }
 
     override fun getActivity(): Activity? {
         links.forEach {
-            val activity = it.value.context as Activity
+            val activity = it.value.get()?.context as Activity
             if (!activity.isFinishing) {
                 return activity
             }

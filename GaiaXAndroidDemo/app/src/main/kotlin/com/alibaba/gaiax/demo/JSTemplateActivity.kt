@@ -40,7 +40,7 @@ class JSTemplateActivity : AppCompatActivity() {
         //Demo1：业务使用方自定义module
         renderJSCustomModuleDemoTemplate(this, jsCustomModuleTemplateName)
         //Demo2：js内置方法一览
-        renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
+//        renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
         //
         sendNativeMessage()
     }

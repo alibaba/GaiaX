@@ -47,6 +47,7 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.template.GXCss
 import com.alibaba.gaiax.template.GXStyleConvert
+import com.alibaba.gaiax.template.GXTemplateInfo
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXExceptionHelper
 import com.alibaba.gaiax.utils.GXGlobalCache
@@ -528,6 +529,12 @@ class GXTemplateEngine {
         }
     }
 
+    /**
+     * To get template info
+     */
+    fun getTemplateInfo(gxTemplateItem: GXTemplateItem): GXTemplateInfo {
+        return data.getTemplateInfo(gxTemplateItem)
+    }
 
     /**
      * To create template's view with template information and template measure size.
@@ -637,9 +644,7 @@ class GXTemplateEngine {
             GXNodeUtils.computeNodeTreeByPrepareView(gxTemplateContext, gxRootNode, size)
             gxRootNode.stretchNode.layoutByPrepareView?.let {
                 GXGlobalCache.instance.putLayoutForPrepareView(
-                    gxTemplateContext,
-                    gxTemplateContext.templateItem,
-                    it
+                    gxTemplateContext, gxTemplateContext.templateItem, it
                 )
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
@@ -799,8 +804,8 @@ class GXTemplateEngine {
             gxTemplateContext.size = gxMeasureSize
 
             // 判断是否size发生了变化
-            gxTemplateContext.isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width
-                    || oldMeasureSize.height != gxMeasureSize.height
+            gxTemplateContext.isMeasureSizeChanged =
+                oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
 
             // 如果size发生了变化，需要清除layout缓存，并重新计算
             if (gxTemplateContext.isMeasureSizeChanged) {

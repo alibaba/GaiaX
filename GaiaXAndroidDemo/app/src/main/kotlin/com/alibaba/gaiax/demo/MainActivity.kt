@@ -24,7 +24,6 @@ import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.loadInLocal
-import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.permission.PermissionUtils
 
 
@@ -113,13 +112,7 @@ class MainActivity : AppCompatActivity() {
             DevTools.instance.createDevToolsFloatWindow(
                 applicationContext
             )
-        } else {
-//            DevTools.instance.createDevToolsFloatWindow(
-//                this
-//            )
-            EasyFloat.with(this).setLayout(R.layout.layout_dev_tools).show()
         }
-
 
         //GaiaXJS初始化
         GXJSEngine.instance.init(this)

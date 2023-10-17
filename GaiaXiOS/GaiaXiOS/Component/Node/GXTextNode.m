@@ -205,8 +205,53 @@ const NSUInteger GXTextMaxWidth = 1080;
         text = nil;
     }
     
-    //最终赋值
-    self.text = text;
+    //文本处理
+    NSString *result = text;
+    id <GXDataProtocal> dataList = self.templateContext.templateData.dataListener;
+    if (dataList && [dataList respondsToSelector:@selector(gx_onTextProcess:)]) {
+        //更新textData
+        GXTextData *textData = self.textData;
+        if (textData == nil) {
+            textData = [[GXTextData alloc] init];
+            textData.nodeId = self.nodeId;
+            textData.view = self.associatedView;
+            textData.styleParams = self.styleJson;
+            textData.templateId = self.templateItem.templateId;
+        }
+        textData.attributes = self.attributes;
+        textData.extendParams = extend;
+        textData.value = text;
+        //回调方法
+        NSString *tmpResult = [dataList gx_onTextProcess:textData];
+        if (tmpResult) {
+            result = tmpResult;
+        }
+    }
+    
+    // 获取string
+    if (result && [result isKindOfClass:[NSAttributedString class]]) {
+        _text = ((NSAttributedString *)result).string;
+        _isAttribute = YES;
+    } else {
+        _text = result;
+        _isAttribute = NO;
+    }
+    
+    //赋值
+    if (_isAttribute) {
+        //对于业务传进来的参数，先保留默认数据，在让attribute进行覆盖
+        NSAttributedString *attributedString = (NSAttributedString *)result;
+        self.attributedText = attributedString;
+        
+    } else {
+        //对于自身生成的富文本，直接覆盖
+        if (_text) {
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:_text attributes:self.attributes];
+            self.attributedText = attributedString;
+        } else {
+            self.attributedText = nil;
+        }
+    }
 }
 
 

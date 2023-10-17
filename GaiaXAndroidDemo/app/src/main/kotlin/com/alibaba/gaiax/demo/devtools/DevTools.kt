@@ -128,13 +128,16 @@ class DevTools : IDevTools {
             return
         }
 
-        // 连接成功后，将本次的websocket的url记录下来
+        // 自动重连：将本次的websocket的url记录下来
         devtoolsAppContext?.let {
             saveInLocal(it, GX_CONNECT_URL, params.toString())
             connectReally(it, params)
         }
     }
 
+    /**
+     * 真正重连的方法
+     */
     fun connectReally(context: Context, params: JSONObject) {
         GXStudioClient.instance.setDevTools(this)
         GXStudioClient.instance.manualConnect(context, params)

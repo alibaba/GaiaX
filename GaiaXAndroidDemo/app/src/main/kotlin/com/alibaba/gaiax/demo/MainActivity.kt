@@ -114,10 +114,10 @@ class MainActivity : AppCompatActivity() {
                 applicationContext
             )
         } else {
-//            DevTools.instance.createDevToolsFloatWindow(
-//                this
-//            )
-            EasyFloat.with(this).setLayout(R.layout.layout_dev_tools).show()
+            DevTools.instance.createDevToolsFloatWindow(
+                this
+            )
+//            EasyFloat.with(this).setLayout(R.layout.layout_dev_tools).show()
         }
 
 
@@ -126,6 +126,7 @@ class MainActivity : AppCompatActivity() {
         //GaiaXJS引擎启动
         GXJSEngine.instance.startDefaultEngine()
 
+        // 自动重连
         autoConnect()
 
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
@@ -172,6 +173,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 自动重连
+     */
     private fun autoConnect() {
         // 自动重连时，提前初始化
         GXStudioClient.instance.init(this)

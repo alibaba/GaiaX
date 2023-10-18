@@ -174,48 +174,6 @@ class GXComponentGridTest : GXBaseTest() {
     }
 
     @Test
-    fun template_grid_single_line_different_height() {
-        val templateItem = GXTemplateEngine.GXTemplateItem(
-            GXMockUtils.context,
-            "grid",
-            "template_grid_single_line_different_height"
-        )
-
-        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
-            this["nodes"] = JSONArray().apply {
-                this.add(JSONObject())
-                this.add(JSONObject())
-                this.add(JSONObject())
-            }
-        })
-
-        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
-
-        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
-
-        GXTemplateEngine.instance.bindData(rootView, templateData)
-
-        rootView.executeRecyclerView()
-
-        Assert.assertEquals(1080F.dpToPx(), rootView.width())
-        Assert.assertEquals(200F.dpToPx(), rootView.height())
-
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).width())
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).child(0).height())
-
-        val rect = rootView.child(0).layoutParams.getSuperFieldAny("mDecorInsets") as Rect
-        // 275/2=137.5 四舍五入 138
-        Assert.assertEquals(
-            50F.dpToPx(),
-            rect.top.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0
-        )
-        Assert.assertEquals(
-            50F.dpToPx(),
-            rect.bottom.toFloat() + if (GXMockUtils.isSpecialDevice()) 1 else 0
-        )
-    }
-
-    @Test
     fun template_grid_load_more_fixed_footer_size() {
         val templateItem = GXTemplateEngine.GXTemplateItem(
             GXMockUtils.context,

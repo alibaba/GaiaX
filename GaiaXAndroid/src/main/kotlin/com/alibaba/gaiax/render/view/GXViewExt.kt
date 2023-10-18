@@ -30,14 +30,23 @@ import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.basic.*
+import com.alibaba.gaiax.render.view.basic.GXIImageView
+import com.alibaba.gaiax.render.view.basic.GXIconFont
+import com.alibaba.gaiax.render.view.basic.GXShadowLayout
+import com.alibaba.gaiax.render.view.basic.GXText
+import com.alibaba.gaiax.render.view.basic.GXView
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.render.view.container.slider.GXSliderView
 import com.alibaba.gaiax.render.view.drawable.GXBlurBitmapDrawable
 import com.alibaba.gaiax.render.view.drawable.GXColorGradientDrawable
 import com.alibaba.gaiax.render.view.drawable.GXLinearColorGradientDrawable
-import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXGridConfig
+import com.alibaba.gaiax.template.GXLinearColor
+import com.alibaba.gaiax.template.GXSize
+import com.alibaba.gaiax.template.GXStyle
+import com.alibaba.gaiax.template.GXStyleConvert
+import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
  * @suppress
@@ -63,6 +72,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                         borderRadius ?: FloatArray(8) { 0F })
                 }
             }
+
             is GXText -> {
                 if (cornerRadius != null) {
                     this.setRoundCornerRadius(cornerRadius)
@@ -73,6 +83,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                         borderRadius ?: FloatArray(8) { 0F })
                 }
             }
+
             is GXIImageView -> {
                 if (cornerRadius != null) {
                     this.setRoundCornerRadius(cornerRadius)
@@ -83,6 +94,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                         borderRadius ?: FloatArray(8) { 0F })
                 }
             }
+
             is GXContainer -> {
                 if (cornerRadius != null) {
                     this.setRoundCornerRadius(cornerRadius)
@@ -93,6 +105,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                         borderRadius ?: FloatArray(8) { 0F })
                 }
             }
+
             is GXSliderView -> {
                 if (cornerRadius != null) {
                     this.setRoundCornerRadius(cornerRadius)
@@ -468,35 +481,16 @@ fun View.setGridContainerItemSpacingAndRowSpacing(
                 val spanCount = manager.spanCount
                 val orientation = manager.orientation
 
-                val containerHeight = parent.layoutParams.height
-                val itemHeight = view.layoutParams.height
-
-                // 在一行的状态下，需要特殊处理上下居中的问题
-                if (orientation == GridLayoutManager.VERTICAL && (itemCount * 1.0F / spanCount) <= 1 && itemHeight > 0 && containerHeight > 0) {
-                    val heightDiff = containerHeight - itemHeight
-                    val value = (heightDiff / 2.0F).toInt()
-                    val finalPadding = Rect(padding.left, value, padding.right, value)
-                    setSingleGridOffset(
-                        itemSpacing.toFloat(),
-                        finalPadding,
-                        orientation,
-                        spanCount,
-                        outRect,
-                        childPosition,
-                        itemCount
-                    )
-                } else {
-                    setGridOffset(
-                        itemSpacing.toFloat(),
-                        rowSpacing.toFloat(),
-                        padding,
-                        orientation,
-                        spanCount,
-                        outRect,
-                        childPosition,
-                        itemCount
-                    )
-                }
+                setGridOffset(
+                    itemSpacing.toFloat(),
+                    rowSpacing.toFloat(),
+                    padding,
+                    orientation,
+                    spanCount,
+                    outRect,
+                    childPosition,
+                    itemCount
+                )
             }
 
             private fun setSingleGridOffset(
@@ -716,9 +710,11 @@ fun View.setHorizontalScrollContainerLineSpacing(left: Int, right: Int, lineSpac
                             outRect.left = left
                             outRect.right = lineSpacing
                         }
+
                         parent.adapter!!.itemCount - 1 -> {
                             outRect.right = right
                         }
+
                         else -> {
                             outRect.right = lineSpacing
                         }

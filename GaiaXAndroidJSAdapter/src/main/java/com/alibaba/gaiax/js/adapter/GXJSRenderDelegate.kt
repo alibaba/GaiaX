@@ -13,7 +13,7 @@ import com.alibaba.gaiax.template.GXTemplateKey
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 
-class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
+class GXJSRenderDelegate {
 
     companion object {
         val instance by lazy {

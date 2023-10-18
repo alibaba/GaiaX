@@ -1,0 +1,6 @@
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/CMakeFiles/rebuild_cache.dir
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/CMakeFiles/edit_cache.dir
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/bin/CMakeFiles/rebuild_cache.dir
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/bin/CMakeFiles/edit_cache.dir
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/bin/CMakeFiles/Hello.dir
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/build/bin/CMakeFiles/sum.dir

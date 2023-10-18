@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/sum.h
+
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/src/hello.cpp
+iostream
+-
+sum.h
+/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/testNdk/src/sum.h
+

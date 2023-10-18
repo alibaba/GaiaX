@@ -1,9 +1,10 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import android.app.AlertDialog
 import android.widget.Toast
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSRenderDelegate
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
@@ -52,7 +53,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
             val title = data.getString("title") ?: ""
             val message = data.getString("message") ?: ""
             GXJSUiExecutor.action {
-                GXJSEngine.instance.renderDelegate?.getActivity()?.let { context ->
+                GXJSRenderDelegate.instance.getActivity()?.let { context ->
                     AlertDialog.Builder(context)
                         .setTitle(title)
                         .setMessage(message)

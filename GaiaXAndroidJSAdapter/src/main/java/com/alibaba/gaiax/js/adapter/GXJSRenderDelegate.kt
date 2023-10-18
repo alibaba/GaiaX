@@ -16,18 +16,21 @@ import java.util.concurrent.ConcurrentHashMap
 class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
 
     companion object {
+        val instance by lazy {
+            return@lazy GXJSRenderDelegate()
+        }
         val links: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
     }
 
-    override fun onRegisterComponent(view: View, componentId: Long) {
+    fun onRegisterComponent(view: View, componentId: Long) {
         links[componentId] = WeakReference(view)
     }
 
-    override fun onUnregisterComponent(componentId: Long) {
+    fun onUnregisterComponent(componentId: Long) {
         links.remove(componentId)
     }
 
-    override fun setData(
+    fun setData(
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
     ) {
         GXJSUiExecutor.action {
@@ -37,11 +40,11 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
         }
     }
 
-    override fun getData(componentId: Long): JSONObject? {
+    fun getData(componentId: Long): JSONObject? {
         return GXTemplateEngine.instance.getGXTemplateContext(links[componentId]?.get())?.templateData?.data
     }
 
-    override fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
+    fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
         val nodeInfo: GXNode? =
             GXTemplateEngine.instance.getGXNodeById(links[instanceId]?.get(), targetId)
         return if (nodeInfo != null) {
@@ -55,7 +58,7 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
         }
     }
 
-    override fun addEventListener(
+    fun addEventListener(
         targetId: String,
         componentId: Long,
         eventType: String,
@@ -83,7 +86,7 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
 
     }
 
-    override fun dispatcherEvent(eventParams: JSONObject) {
+    fun dispatcherEvent(eventParams: JSONObject) {
         GXJSEngine.Component.onEvent(
             eventParams["jsComponentId"] as Long,
             eventParams["type"] as String,
@@ -91,11 +94,11 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
         )
     }
 
-    override fun getView(componentId: Long): View? {
+    fun getView(componentId: Long): View? {
         return links[componentId]?.get()
     }
 
-    override fun getActivity(): Activity? {
+    fun getActivity(): Activity? {
         links.forEach {
             val activity = it.value.get()?.context as Activity
             if (!activity.isFinishing) {
@@ -127,4 +130,5 @@ class GXJSRenderDelegate : GXJSEngine.IRenderDelegate {
             }
         }
     }
+
 }

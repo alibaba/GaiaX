@@ -5,16 +5,10 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 
-/**
- *  @author: shisan.lms
- *  @date: 2023-03-29
- *  Description:
- */
 class GXMixNodeEvent : GXINodeEvent {
 
     private var gxTemplateContext: GXTemplateContext? = null
@@ -59,9 +53,7 @@ class GXMixNodeEvent : GXINodeEvent {
     }
 
     override fun addDataBindingEvent(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        templateData: JSONObject
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
     ) {
         this.gxTemplateContext = gxTemplateContext
         val eventBinding = gxNode.templateNode.eventBinding ?: return
@@ -134,7 +126,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
-                        (GXJSEngine.instance.getRenderDelegate() as? GXJSRenderDelegate)?.dispatcherEvent(it)
+                        GXJSRenderDelegate.instance.dispatcherEvent(it)
                     }
                 } else {
                     jsEventParams.let {

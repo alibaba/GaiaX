@@ -1,18 +1,13 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSRenderDelegate
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
 import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
 import com.alibaba.gaiax.js.utils.Log
 
-/**
- *  @author: shisan.lms
- *  @date: 2023-03-24
- *  Description:
- */
 internal class GXJSBuildInModule : GXJSBaseModule() {
 
     override val name: String
@@ -26,11 +21,8 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            GXJSEngine.instance.renderDelegate?.setData(
-                componentId,
-                templateId,
-                data,
-                callback
+            GXJSRenderDelegate.instance.setData(
+                componentId, templateId, data, callback
             )
         }
     }
@@ -43,7 +35,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            return GXJSEngine.instance.renderDelegate?.getData(componentId) ?: JSONObject()
+            return GXJSRenderDelegate.instance.getData(componentId) ?: JSONObject()
         }
         return JSONObject()
     }
@@ -56,7 +48,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            val data = GXJSEngine.instance.renderDelegate?.getData(componentId) ?: JSONObject()
+            val data = GXJSRenderDelegate.instance.getData(componentId) ?: JSONObject()
             return data.getInteger("scrollIndex") ?: -1
         }
         return -1

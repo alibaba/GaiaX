@@ -1,8 +1,9 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSRenderDelegate
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
@@ -24,7 +25,7 @@ class GXJSNativeEventModule : GXJSBaseModule() {
         val optionCover = data.getJSONObject("option")?.getBooleanValue("cover") ?: false
         val optionLevel = data.getJSONObject("option")?.getIntValue("level") ?: 0
         if (targetId != null && templateId != null && instanceId != null && eventType != null) {
-            GXJSEngine.instance.renderDelegate?.addEventListener(
+            GXJSRenderDelegate.instance.addEventListener(
                 targetId, instanceId, eventType, optionCover, optionLevel
             )
             promise.resolve().invoke()

@@ -14,25 +14,44 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
-
 package com.alibaba.gaiax.js.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
-import androidx.annotation.Keep
+import android.util.Log
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.modules.GXJSBuildInModule
+import com.alibaba.gaiax.js.adapter.modules.GXJSBuildInTipsModule
+import com.alibaba.gaiax.js.adapter.modules.GXJSNativeEventModule
+import com.alibaba.gaiax.js.adapter.modules.GXJSNativeTargetModule
 import com.alibaba.gaiax.studio.GXStudioClient
 
-@Keep
-class GXJSAdapter : GXJSEngine.IAdapter {
+class GXJSEngineWrapper {
 
-    @SuppressLint("InflateParams")
-    override fun init(context: Context) {
+    companion object {
+        private const val TAG = "[GaiaX][JS]"
+    }
 
-        // 注册JS事件
+    fun init(context: Context) {
+
+        // 初始化JS引擎
+        GXJSEngine.instance.init(context)
+
+        // 设置日志监听器
+        GXJSEngine.instance.setLogListener(object : GXJSEngine.ILogListener {
+            override fun errorLog(data: JSONObject) {
+                Log.d(TAG, "errorLog() called with: data = $data")
+            }
+        })
+
+        // 注册内置模块
+        GXJSEngine.instance.registerModule(GXJSBuildInTipsModule::class.java)
+        GXJSEngine.instance.registerModule(GXJSNativeTargetModule::class.java)
+        GXJSEngine.instance.registerModule(GXJSBuildInModule::class.java)
+        GXJSEngine.instance.registerModule(GXJSNativeEventModule::class.java)
+
+        // 注册GaiaX扩展JS事件
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
 
         // 注册Socket消息发送者
@@ -61,7 +80,5 @@ class GXJSAdapter : GXJSEngine.IAdapter {
             }
 
         })
-
-        GXJSEngine.instance.initRenderDelegate(GXJSRenderDelegate())
     }
 }

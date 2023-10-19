@@ -203,8 +203,8 @@ class GXJSEngineProxy {
             registerTemplateTree(gxTemplateContext, gxTemplateContext.templateInfo)
 
             // 默认使用第一个组件ID作为和Context的映射关系
-            gxTemplateContext.jsComponentIds?.takeIf { it.size > 0 }?.get(0)?.let { jsComponentId ->
-                GXJSRenderProxy.instance.links[jsComponentId] = WeakReference(gxView)
+            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+                GXJSRenderProxy.instance.jsComponentMap[jsComponentId] = WeakReference(gxView)
             }
         }
     }
@@ -214,8 +214,8 @@ class GXJSEngineProxy {
             Log.d("unregisterComponent() called with: gxView = $gxView")
         }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-            gxTemplateContext.jsComponentIds?.takeIf { it.size > 0 }?.get(0)?.let { jsComponentId ->
-                GXJSRenderProxy.instance.links.remove(jsComponentId)
+            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+                GXJSRenderProxy.instance.jsComponentMap.remove(jsComponentId)
             }
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.unregisterComponent(jsComponentId)
@@ -262,7 +262,7 @@ class GXJSEngineProxy {
      * 分发原生消息给JS
      */
     fun dispatchNativeEvent(data: JSONObject) {
-        GXJSRenderProxy.instance.eventsData.forEach { componentData ->
+        GXJSRenderProxy.instance.nativeEvents.forEach { componentData ->
             val componentId = componentData.getLongValue("instanceId")
             val result = JSONObject().apply {
                 this.putAll(data)

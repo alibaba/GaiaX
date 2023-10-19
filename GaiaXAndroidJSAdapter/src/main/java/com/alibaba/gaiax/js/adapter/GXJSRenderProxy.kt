@@ -20,25 +20,33 @@ internal class GXJSRenderProxy {
         }
     }
 
-    val links: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
+    /**
+     * JS组件ID与视图之间的映射关系
+     */
+    val jsComponentMap: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
+
+    /**
+     * native事件数据
+     */
+    val nativeEvents = CopyOnWriteArraySet<JSONObject>()
 
     fun setData(
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
     ) {
         GXJSUiExecutor.action {
-            val cntView = links[componentId]?.get()
+            val cntView = jsComponentMap[componentId]?.get()
             GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
             callback.invoke()
         }
     }
 
     fun getData(componentId: Long): JSONObject? {
-        return GXTemplateEngine.instance.getGXTemplateContext(links[componentId]?.get())?.templateData?.data
+        return GXTemplateEngine.instance.getGXTemplateContext(jsComponentMap[componentId]?.get())?.templateData?.data
     }
 
     fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
         val nodeInfo: GXNode? =
-            GXTemplateEngine.instance.getGXNodeById(links[instanceId]?.get(), targetId)
+            GXTemplateEngine.instance.getGXNodeById(jsComponentMap[instanceId]?.get(), targetId)
         return if (nodeInfo != null) {
             val targetNode = JSONObject()
             targetNode["targetType"] = nodeInfo.templateNode.layer.type
@@ -50,14 +58,14 @@ internal class GXJSRenderProxy {
         }
     }
 
-    fun addEventListener(
+    fun addGestureEventListener(
         targetId: String,
         componentId: Long,
         eventType: String,
         optionCover: Boolean,
         optionLevel: Int
     ) {
-        links[componentId]?.get()?.let { gxView ->
+        jsComponentMap[componentId]?.get()?.let { gxView ->
             GXTemplateEngine.instance.getGXTemplateContext(gxView)?.let { gxTemplateContext ->
                 val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
                 gxNode?.initEventByRegisterCenter()
@@ -77,12 +85,16 @@ internal class GXJSRenderProxy {
         }
     }
 
-    fun getView(componentId: Long): View? {
-        return links[componentId]?.get()
+    fun removeGestureEventListener(targetId: String, componentId: Long, eventType: String) {
+        jsComponentMap[componentId]?.get()?.let { gxView ->
+            val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
+            gxNode?.initEventByRegisterCenter()
+            (gxNode?.event as? GXMixNodeEvent)?.removeJSEvent(componentId, eventType)
+        }
     }
 
     fun getActivity(): Activity? {
-        links.forEach {
+        jsComponentMap.forEach {
             val activity = it.value.get()?.context as Activity
             if (!activity.isFinishing) {
                 return activity
@@ -121,27 +133,17 @@ internal class GXJSRenderProxy {
         )
     }
 
-    fun removeGestureEventListener(targetId: String, componentId: Long, eventType: String) {
-        links[componentId]?.get()?.let { gxView ->
-            val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
-            gxNode?.initEventByRegisterCenter()
-            (gxNode?.event as? GXMixNodeEvent)?.removeJSEvent(componentId, eventType)
-        }
-    }
-
-    val eventsData = CopyOnWriteArraySet<JSONObject>()
-
     fun registerNativeMessage(data: JSONObject): Boolean {
         return if (data.containsKey("type") && data.containsKey("contextId") && data.containsKey("instanceId")) {
             var alreadyRegisterMessage = false
-            for (item in eventsData) {
+            for (item in nativeEvents) {
                 if (data == item) {
                     alreadyRegisterMessage = true
                     break
                 }
             }
             if (!alreadyRegisterMessage) {
-                eventsData.add(data)
+                nativeEvents.add(data)
             }
             true
         } else {
@@ -149,11 +151,11 @@ internal class GXJSRenderProxy {
         }
     }
 
-    fun unRegisterNativeMessage(data: JSONObject): Boolean {
+    fun unregisterNativeMessage(data: JSONObject): Boolean {
         return if (data.containsKey("type") && data.containsKey("contextId") && data.containsKey("instanceId")) {
-            for (item in eventsData) {
+            for (item in nativeEvents) {
                 if (data == item) {
-                    eventsData.remove(item)
+                    nativeEvents.remove(item)
                     break
                 }
             }

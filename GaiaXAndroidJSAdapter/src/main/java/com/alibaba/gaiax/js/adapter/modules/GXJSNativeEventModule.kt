@@ -35,7 +35,7 @@ class GXJSNativeEventModule : GXJSBaseModule() {
         if (Log.isLog()) {
             Log.d("removeNativeEventListener() called with: data = $data")
         }
-        val isSuccess = GXJSRenderProxy.instance.unRegisterNativeMessage(data)
+        val isSuccess = GXJSRenderProxy.instance.unregisterNativeMessage(data)
         if (isSuccess) {
             promise.resolve().invoke()
         } else {

@@ -61,8 +61,8 @@ internal class QuickJSContext(
             sb.append(GXScriptBuilder.buildImportScript())
             sb.append(GXScriptBuilder.buildGlobalContext(contextId, 0))
             sb.append(GXScriptBuilder.buildExtendAndAssignScript())
-            sb.append(GXJSEngine.Proxy.instance.buildBootstrapScript())
-            sb.append(GXJSEngine.Proxy.instance.buildModulesScript(GXJSEngine.EngineType.QuickJS))
+            sb.append(GXJSEngine.Proxy.buildBootstrapScript())
+            sb.append(GXJSEngine.Proxy.buildModulesScript(GXJSEngine.EngineType.QuickJS))
             sb.append(GXScriptBuilder.buildStyle())
             bootstrap = sb.toString()
         }

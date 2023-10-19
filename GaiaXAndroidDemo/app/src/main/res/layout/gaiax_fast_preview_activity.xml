@@ -17,42 +17,42 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/create"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="OnCreate"
                 android:text="创建"
                 android:textSize="13dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/show"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="OnVisible"
                 android:text="显示"
                 android:textSize="13dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/hide"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="OnInvisible"
                 android:text="隐藏"
                 android:textSize="13dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/destroy"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="OnDestroy"
                 android:text="销毁"
                 android:textSize="13dp" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/reuse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="OnReuse"
                 android:text="复用"
                 android:textSize="13dp" />
 

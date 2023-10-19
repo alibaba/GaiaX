@@ -2,7 +2,7 @@ package com.alibaba.gaiax.js.impl.debug
 
 import com.alibaba.fastjson.JSONObject
 
-interface ISocketCallBridgeListener {
+interface ISocketBridgeListener {
 
     fun callSync(socketId: Int, params: JSONObject)
 

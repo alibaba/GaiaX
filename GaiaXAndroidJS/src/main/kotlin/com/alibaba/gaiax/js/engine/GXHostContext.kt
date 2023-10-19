@@ -25,21 +25,21 @@ internal class GXHostContext(
             if (Log.isLog()) {
                 Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            return GXJSEngine.Proxy.instance.invokeSyncMethod(moduleId, methodId, args)
+            return GXJSEngine.Proxy.invokeSyncMethod(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GXJSEngine.Proxy.instance.invokeAsyncMethod(moduleId, methodId, args)
+            GXJSEngine.Proxy.invokeAsyncMethod(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GXJSEngine.Proxy.instance.invokePromiseMethod(moduleId, methodId, args)
+            GXJSEngine.Proxy.invokePromiseMethod(moduleId, methodId, args)
         }
     }
     private var taskQueue: GaiaXJSTaskQueue? = null

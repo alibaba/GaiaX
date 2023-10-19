@@ -53,7 +53,7 @@ internal class DebugJSContext(
             sb.append("__globalThis.__DEV__ = true; \r\n")
             sb.append("/**bridge.ts**/\r\n")
             sb.append("/**bootstrap.ts**/\r\n")
-            sb.append(GXJSEngine.Proxy.instance.buildModulesScript(GXJSEngine.EngineType.DebugJS))
+            sb.append(GXJSEngine.Proxy.buildModulesScript(GXJSEngine.EngineType.DebugJS))
             sb.append(GXScriptBuilder.buildDebugStyle())
             bootstrap = sb.toString()
         }

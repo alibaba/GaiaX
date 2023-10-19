@@ -14,13 +14,13 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
+import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.IDevTools
 import com.alibaba.gaiax.studio.saveInLocal
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
-import com.alibaba.gaiax.js.GXJSEngine
 
 /**
  *  @author: shisan.lms
@@ -48,8 +48,7 @@ class DevTools : IDevTools {
 
     fun createDevToolsFloatWindow(context: Context) {
         devtoolsAppContext = context
-        EasyFloat.with(context)
-            .setLayout(R.layout.layout_dev_tools) { rootView ->
+        EasyFloat.with(context).setLayout(R.layout.layout_dev_tools) { rootView ->
 
                 val windowWidth = rootView.layoutParams.width
                 val windowHeight = rootView.layoutParams.height
@@ -101,13 +100,8 @@ class DevTools : IDevTools {
                         foldWindowToSmall(logoView)
                     }
 
-            }
-            .setLocation(20, 200)
-            .setShowPattern(ShowPattern.FOREGROUND)
-            .setDragEnable(true)
-            .setTag(TAG)
-            .registerCallback {}
-            .show()
+            }.setLocation(20, 200).setShowPattern(ShowPattern.FOREGROUND).setDragEnable(true)
+            .setTag(TAG).registerCallback {}.show()
         GXStudioClient.instance.init(context)
     }
 
@@ -124,7 +118,8 @@ class DevTools : IDevTools {
         val scanResult: String = result
         val params = GXStudioClient.instance.getParams(scanResult)
         if (params == null) {
-            Toast.makeText(devtoolsAppContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT).show()
+            Toast.makeText(devtoolsAppContext, "地址解析失败，请刷新二维码", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -162,7 +157,9 @@ class DevTools : IDevTools {
     private fun openFastPreviewType(context: Context) {
         //开启FastPreviewActivity
         val intent = Intent(devtoolsAppContext, GXFastPreviewActivity::class.java)
-        intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_MODE, GXFastPreviewActivity.GAIA_STUDIO_MODE_MULTI)
+        intent.putExtra(
+            GXFastPreviewActivity.GAIA_STUDIO_MODE, GXFastPreviewActivity.GAIA_STUDIO_MODE_MULTI
+        )
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
         //修改DevTools状态
@@ -175,11 +172,11 @@ class DevTools : IDevTools {
 
         when (currentJSMode) {
             GXStudioClient.JS_BREAKPOINT -> {
-                GXJSEngine.instance.startDebugEngine()
+                GXJSEngineProxy.instance.startDebugEngine()
             }
 
             GXStudioClient.JS_DEFAULT -> {
-                GXJSEngine.instance.stopDebugEngine()
+                GXJSEngineProxy.instance.stopDebugEngine()
             }
         }
     }
@@ -197,7 +194,11 @@ class DevTools : IDevTools {
         EasyFloat.updateFloat(TAG, width = 150, height = 150)
     }
 
-    private fun changeRadioBtnState(view: RadioButton, targetState: Boolean, defaultText: Array<String> = arrayOf("已连接", "未连接")) {
+    private fun changeRadioBtnState(
+        view: RadioButton,
+        targetState: Boolean,
+        defaultText: Array<String> = arrayOf("已连接", "未连接")
+    ) {
         val currentState = view.isChecked
         if (targetState == currentState) {
             //一致无变化
@@ -212,9 +213,12 @@ class DevTools : IDevTools {
                 view.text = defaultText[1]
                 view.isChecked = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    devtoolsAppContext?.resources?.getColor(R.color.viewfinder_text_color, devtoolsAppContext?.theme)?.let { view.setTextColor(it) }
+                    devtoolsAppContext?.resources?.getColor(
+                        R.color.viewfinder_text_color, devtoolsAppContext?.theme
+                    )?.let { view.setTextColor(it) }
                 } else {
-                    devtoolsAppContext?.resources?.getColor(R.color.viewfinder_text_color)?.let { view.setTextColor(it) }
+                    devtoolsAppContext?.resources?.getColor(R.color.viewfinder_text_color)
+                        ?.let { view.setTextColor(it) }
                 }
             }
         }
@@ -230,7 +234,8 @@ class DevTools : IDevTools {
 
     override fun changeDevToolsConnectedStateView() {
         if (this.connectedStateView != null) {
-            GXStudioClient.instance.isGaiaStudioConnected()?.let { this.changeRadioBtnState(this.connectedStateView!!, it) }
+            GXStudioClient.instance.isGaiaStudioConnected()
+                ?.let { this.changeRadioBtnState(this.connectedStateView!!, it) }
         }
     }
 

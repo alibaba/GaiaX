@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
 import com.alibaba.gaiax.utils.GXScreenUtils
 
 /**
@@ -52,7 +53,7 @@ class JSTemplateActivity : AppCompatActivity() {
             val nativeMessageProtocol: JSONObject = JSONObject()
             nativeMessageProtocol["userData"] = nativeData
             nativeMessageProtocol["type"] = "CustomNotificationNameForNative"
-            GXJSEngine.Component.dispatcherNativeMessageToJS(nativeMessageProtocol)
+            GXJSEngineProxy.instance.dispatchNativeEvent(nativeMessageProtocol)
         }
 
     }
@@ -77,8 +78,8 @@ class JSTemplateActivity : AppCompatActivity() {
         val view = GXTemplateEngine.instance.createView(params, size)
 
         if (view != null) {
-            jsCustomsModuleDemoComponentId = GXJSEngine.Component.registerComponent(
-                bizId, jsCustomModuleTemplateName, "1", getJsFileByTemplateId(templateId), view
+            jsCustomsModuleDemoComponentId = GXJSEngine.instance.registerComponent(
+                bizId, jsCustomModuleTemplateName, "1", getJsFileByTemplateId(templateId)
             )
         }
 
@@ -89,7 +90,7 @@ class JSTemplateActivity : AppCompatActivity() {
         findViewById<LinearLayoutCompat>(R.id.template_1).addView(view, 0)
 
         // onReady
-        GXJSEngine.Component.onReady(jsCustomsModuleDemoComponentId)
+        GXJSEngine.instance.onReady(jsCustomsModuleDemoComponentId)
     }
 
     private fun renderJSApiDemoTemplate(activity: JSTemplateActivity, templateId: String) {
@@ -110,8 +111,8 @@ class JSTemplateActivity : AppCompatActivity() {
         val view = GXTemplateEngine.instance.createView(params, size)
 
         if (view != null) {
-            jsApiDemoComponentId = GXJSEngine.Component.registerComponent(
-                bizId, jsApiDemoTemplateName, "1", getJsFileByTemplateId(templateId), view
+            jsApiDemoComponentId = GXJSEngine.instance.registerComponent(
+                bizId, jsApiDemoTemplateName, "1", getJsFileByTemplateId(templateId)
             )
         }
 
@@ -122,26 +123,26 @@ class JSTemplateActivity : AppCompatActivity() {
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
 
         //
-        GXJSEngine.Component.onReady(jsApiDemoComponentId)
+        GXJSEngine.instance.onReady(jsApiDemoComponentId)
 
     }
 
     override fun onResume() {
         super.onResume()
-        GXJSEngine.Component.onShow(jsApiDemoComponentId)
-        GXJSEngine.Component.onShow(jsCustomsModuleDemoComponentId)
+        GXJSEngine.instance.onShow(jsApiDemoComponentId)
+        GXJSEngine.instance.onShow(jsCustomsModuleDemoComponentId)
     }
 
     override fun onPause() {
         super.onPause()
-        GXJSEngine.Component.onHide(jsApiDemoComponentId)
-        GXJSEngine.Component.onHide(jsCustomsModuleDemoComponentId)
+        GXJSEngine.instance.onHide(jsApiDemoComponentId)
+        GXJSEngine.instance.onHide(jsCustomsModuleDemoComponentId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        GXJSEngine.Component.onDestroy(jsApiDemoComponentId)
-        GXJSEngine.Component.unregisterComponent(jsApiDemoComponentId)
-        GXJSEngine.Component.unregisterComponent(jsCustomsModuleDemoComponentId)
+        GXJSEngine.instance.onDestroy(jsApiDemoComponentId)
+        GXJSEngine.instance.unregisterComponent(jsApiDemoComponentId)
+        GXJSEngine.instance.unregisterComponent(jsCustomsModuleDemoComponentId)
     }
 }

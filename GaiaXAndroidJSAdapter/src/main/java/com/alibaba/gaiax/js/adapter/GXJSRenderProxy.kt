@@ -1,34 +1,26 @@
 package com.alibaba.gaiax.js.adapter
 
 import android.app.Activity
-import android.util.Log
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
-import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArraySet
 
-class GXJSRenderDelegate {
+internal class GXJSRenderProxy {
 
     companion object {
         val instance by lazy {
-            return@lazy GXJSRenderDelegate()
+            return@lazy GXJSRenderProxy()
         }
-        val links: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
     }
 
-    fun onRegisterComponent(view: View, componentId: Long) {
-        links[componentId] = WeakReference(view)
-    }
-
-    fun onUnregisterComponent(componentId: Long) {
-        links.remove(componentId)
-    }
+    val links: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
 
     fun setData(
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
@@ -65,10 +57,9 @@ class GXJSRenderDelegate {
         optionCover: Boolean,
         optionLevel: Int
     ) {
-        GXTemplateEngine.instance.getGXTemplateContext(links[componentId]?.get())
-            ?.let { gxTemplateContext ->
-                val gxNode =
-                    GXTemplateEngine.instance.getGXNodeById(links[componentId]?.get(), targetId)
+        links[componentId]?.get()?.let { gxView ->
+            GXTemplateEngine.instance.getGXTemplateContext(gxView)?.let { gxTemplateContext ->
+                val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
                 gxNode?.initEventByRegisterCenter()
                 var eventTypeForName = ""
                 if (eventType == "click") {
@@ -83,15 +74,7 @@ class GXJSRenderDelegate {
                     optionLevel
                 )
             }
-
-    }
-
-    fun dispatcherEvent(eventParams: JSONObject) {
-        GXJSEngine.Component.onEvent(
-            eventParams["jsComponentId"] as Long,
-            eventParams["type"] as String,
-            eventParams["data"] as JSONObject
-        )
+        }
     }
 
     fun getView(componentId: Long): View? {
@@ -108,8 +91,7 @@ class GXJSRenderDelegate {
         return null
     }
 
-    fun dispatcherEvent(gestureParams: GXJSGesture) {
-        Log.d("lms-13", "dispatcherEvent: GXTemplateEngine.GXGesture $gestureParams")
+    fun dispatchGestureEvent(gestureParams: GXJSGesture) {
         if (gestureParams.jsComponentId != -1L) {
 
             gestureParams.nodeId.let { targetId ->
@@ -125,10 +107,59 @@ class GXJSRenderDelegate {
                         else -> "click"
                     }
                     eventParams["data"] = data
-                    dispatcherEvent(eventParams)
+                    dispatchGestureEvent(eventParams)
                 }
             }
         }
     }
 
+    private fun dispatchGestureEvent(eventParams: JSONObject) {
+        GXJSEngineProxy.instance.onEvent(
+            eventParams["jsComponentId"] as Long,
+            eventParams["type"] as String,
+            eventParams["data"] as JSONObject
+        )
+    }
+
+    fun removeGestureEventListener(targetId: String, componentId: Long, eventType: String) {
+        links[componentId]?.get()?.let { gxView ->
+            val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
+            gxNode?.initEventByRegisterCenter()
+            (gxNode?.event as? GXMixNodeEvent)?.removeJSEvent(componentId, eventType)
+        }
+    }
+
+    val eventsData = CopyOnWriteArraySet<JSONObject>()
+
+    fun registerNativeMessage(data: JSONObject): Boolean {
+        return if (data.containsKey("type") && data.containsKey("contextId") && data.containsKey("instanceId")) {
+            var alreadyRegisterMessage = false
+            for (item in eventsData) {
+                if (data == item) {
+                    alreadyRegisterMessage = true
+                    break
+                }
+            }
+            if (!alreadyRegisterMessage) {
+                eventsData.add(data)
+            }
+            true
+        } else {
+            false
+        }
+    }
+
+    fun unRegisterNativeMessage(data: JSONObject): Boolean {
+        return if (data.containsKey("type") && data.containsKey("contextId") && data.containsKey("instanceId")) {
+            for (item in eventsData) {
+                if (data == item) {
+                    eventsData.remove(item)
+                    break
+                }
+            }
+            true
+        } else {
+            false
+        }
+    }
 }

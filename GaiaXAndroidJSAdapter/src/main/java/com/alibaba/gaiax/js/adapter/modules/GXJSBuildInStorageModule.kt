@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
@@ -8,11 +8,6 @@ import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.utils.GXJSPreferenceUtil
 import com.alibaba.gaiax.js.utils.Log
 
-/**
- *  @author: shisan.lms
- *  @date: 2023-03-24
- *  Description:
- */
 class GXJSBuildInStorageModule : GXJSBaseModule() {
     override val name: String
         get() = "BuildIn"

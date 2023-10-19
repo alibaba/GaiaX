@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import android.util.Log
 import androidx.annotation.Keep
@@ -31,7 +31,7 @@ class GXJSLogModule : GXJSBaseModule() {
                 if (com.alibaba.gaiax.js.utils.Log.isLog()) {
                     com.alibaba.gaiax.js.utils.Log.d("sendJSLogMsg() called with: $data")
                 }
-                GXJSEngine.instance.socketSender?.onSendMsg(data)
+                GXJSEngine.instance.getSocketSender()?.onSendMsg(data)
             } catch (e: Exception) {
                 if (com.alibaba.gaiax.js.utils.Log.isLog()) {
                     com.alibaba.gaiax.js.utils.Log.d("sendJSLogMsg() called with: ${e.message}")

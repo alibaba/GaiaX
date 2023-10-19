@@ -21,6 +21,7 @@ import com.alibaba.gaiax.demo.source.GXFastPreviewSource
 import com.alibaba.gaiax.demo.source.GXManualPushSource
 import com.alibaba.gaiax.demo.utils.GXExtensionMultiVersionExpression
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.loadInLocal
@@ -80,47 +81,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(findViewById(R.id.toolbar))
+        initGXTemplateEngine()
+        initGXJSEngine()
+        initGXStudio()
+        initGXDevTools()
+        initRouters()
+    }
 
-        GXTemplateEngine.instance.init(this)
-
-
-        GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
-
-        GXRegisterCenter.instance.registerExtensionException(object :
-            GXRegisterCenter.GXIExtensionException {
-            override fun exception(exception: Exception) {
-                exception.printStackTrace()
-            }
-        })
-
-        GXRegisterCenter.instance.registerExtensionTemplateSource(GXManualPushSource.instance, 101)
-            .registerExtensionTemplateSource(GXFastPreviewSource.instance, 102)
-
-        GXRegisterCenter.instance.registerExtensionFontFamily(object :
-            GXRegisterCenter.GXIExtensionFontFamily {
-            override fun fontFamily(fontFamilyName: String): Typeface? {
-                if (fontFamilyName == "iconfont") {
-                    return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
-                }
-                return null
-            }
-        })
-
-        if (PermissionUtils.checkPermission(applicationContext)) {
-            DevTools.instance.createDevToolsFloatWindow(
-                applicationContext
-            )
-        }
-
-        //GaiaXJS初始化
-        GXJSEngine.instance.init(this)
-        //GaiaXJS引擎启动
-        GXJSEngine.instance.startDefaultEngine()
-
-        autoConnect()
-
+    private fun initRouters() {
         findViewById<AppCompatButton>(R.id.normal_template)?.setOnClickListener {
             DevTools.instance.createDevToolsFloatWindow(
                 this
@@ -165,18 +134,100 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun autoConnect() {
-        // 自动重连时，提前初始化
+    private fun initGXDevTools() {
+        if (PermissionUtils.checkPermission(applicationContext)) {
+            DevTools.instance.createDevToolsFloatWindow(
+                applicationContext
+            )
+        }
+    }
+
+    private fun initGXStudio() {
+        // GXStudioClient
         GXStudioClient.instance.init(this)
+
+        // 自动重连时，提前初始化
         val result = loadInLocal(this, GX_CONNECT_URL)
         JSONObject.parseObject(result)?.let {
             DevTools.instance.connectReally(this, it)
         }
+
+        // 设置与JS模块的通信逻辑
+        // 注册Socket消息发送者
+        GXJSEngineProxy.instance.setSocketSender(object : GXJSEngine.ISocketSender {
+            override fun onSendMsg(data: JSONObject) {
+                GXStudioClient.instance.sendMsg(data)
+            }
+        })
+
+        // 设置与JS模块的通信逻辑
+        // 注册消息接受者
+        GXStudioClient.instance.setSocketReceiver(object : GXStudioClient.ISocketReceiver {
+            override fun onReceiveCallSync(socketId: Int, params: JSONObject) {
+                GXJSEngineProxy.instance.getSocketBridge()?.callSync(socketId, params)
+            }
+
+            override fun onReceiveCallAsync(socketId: Int, params: JSONObject) {
+                GXJSEngineProxy.instance.getSocketBridge()?.callAsync(socketId, params)
+            }
+
+            override fun onReceiveCallPromise(socketId: Int, params: JSONObject) {
+                GXJSEngineProxy.instance.getSocketBridge()?.callPromise(socketId, params)
+            }
+
+            override fun onReceiveCallGetLibrary(socketId: Int, methodName: String) {
+                GXJSEngineProxy.instance.getSocketBridge()?.callGetLibrary(socketId, methodName)
+            }
+
+        })
+    }
+
+    private fun initGXJSEngine() {
+        GXJSEngineProxy.instance.init(this)
+        GXJSEngineProxy.instance.startDefaultEngine()
+    }
+
+    private fun initGXTemplateEngine() {
+        GXTemplateEngine.instance.init(this)
+
+        GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
+
+        GXRegisterCenter.instance.registerExtensionException(object :
+            GXRegisterCenter.GXIExtensionException {
+            override fun exception(exception: Exception) {
+                exception.printStackTrace()
+            }
+        })
+
+        GXRegisterCenter.instance.registerExtensionTemplateSource(GXManualPushSource.instance, 101)
+            .registerExtensionTemplateSource(GXFastPreviewSource.instance, 102)
+
+        GXRegisterCenter.instance.registerExtensionFontFamily(object :
+            GXRegisterCenter.GXIExtensionFontFamily {
+            override fun fontFamily(fontFamilyName: String): Typeface? {
+                if (fontFamilyName == "iconfont") {
+                    return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")
+                }
+                return null
+            }
+        })
     }
 
     override fun onDestroy() {
-        GXJSEngine.instance.stopDefaultEngine()
-        GXStudioClient.instance.destroy()
+        destroyGXStudio()
+        destroyGXJSEngine()
+        destroyGXTemplateEngine()
         super.onDestroy()
+    }
+
+    private fun destroyGXTemplateEngine() {
+    }
+
+    private fun destroyGXJSEngine() {
+        GXJSEngineProxy.instance.stopDefaultEngine()
+    }
+
+    private fun destroyGXStudio() {
+        GXStudioClient.instance.destroy()
     }
 }

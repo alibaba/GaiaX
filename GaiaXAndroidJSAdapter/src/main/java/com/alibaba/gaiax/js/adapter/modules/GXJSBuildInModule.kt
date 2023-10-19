@@ -1,7 +1,7 @@
 package com.alibaba.gaiax.js.adapter.modules
 
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.adapter.GXJSRenderDelegate
+import com.alibaba.gaiax.js.adapter.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
@@ -21,7 +21,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            GXJSRenderDelegate.instance.setData(
+            GXJSRenderProxy.instance.setData(
                 componentId, templateId, data, callback
             )
         }
@@ -35,7 +35,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            return GXJSRenderDelegate.instance.getData(componentId) ?: JSONObject()
+            return GXJSRenderProxy.instance.getData(componentId) ?: JSONObject()
         }
         return JSONObject()
     }
@@ -48,7 +48,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
-            val data = GXJSRenderDelegate.instance.getData(componentId) ?: JSONObject()
+            val data = GXJSRenderProxy.instance.getData(componentId) ?: JSONObject()
             return data.getInteger("scrollIndex") ?: -1
         }
         return -1

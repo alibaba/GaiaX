@@ -1,26 +1,22 @@
 package com.alibaba.gaiax.js
 
 import android.content.Context
-import android.view.View
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
-import com.alibaba.gaiax.js.impl.debug.ISocketCallBridgeListener
-import com.alibaba.gaiax.js.module.GXJSBuildInStorageModule
-import com.alibaba.gaiax.js.module.GXJSLogModule
-import com.alibaba.gaiax.js.module.GXJSNativeMessageEventModule
-import com.alibaba.gaiax.js.module.GXJSNativeUtilModule
+import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
 import com.alibaba.gaiax.js.support.GXModuleManager
-import com.alibaba.gaiax.js.support.GXNativeEventManager
 import com.alibaba.gaiax.js.support.IModuleManager
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
-import com.alibaba.gaiax.js.utils.TimeUtils
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * JS引擎类，负责JS引擎的启动、关闭，自定义模块的注册等逻辑
+ */
 class GXJSEngine {
 
     companion object {
@@ -128,10 +124,7 @@ class GXJSEngine {
         synchronized(context.assets) { context.assets.list(path) }
 
     private fun registerInnerModules() {
-        registerModule(GXJSNativeUtilModule::class.java)
-        registerModule(GXJSNativeMessageEventModule::class.java)
-        registerModule(GXJSLogModule::class.java)
-        registerModule(GXJSBuildInStorageModule::class.java)
+        //
     }
 
     fun stopDefaultEngine() {
@@ -234,8 +227,12 @@ class GXJSEngine {
         this.socketSender = iSocketSender
     }
 
-    fun getSocketCallBridge(): ISocketCallBridgeListener? {
+    fun getSocketBridge(): ISocketBridgeListener? {
         return (debugEngine?.runtime()?.context()?.realContext as? DebugJSContext)?.socketBridge
+    }
+
+    fun getSocketSender(): ISocketSender? {
+        return socketSender
     }
 
     internal object Proxy {
@@ -300,103 +297,83 @@ class GXJSEngine {
     /**
      * JS组件的事件需要通过该类代理执行
      */
-    object Component {
+    private fun getHostContext(it: Map.Entry<EngineType, GXHostEngine>) =
+        it.value.runtime()?.context()
 
-        private fun getHostContext(it: Map.Entry<EngineType, GXHostEngine>) =
-            it.value.runtime()?.context()
-
-        fun onEvent(componentId: Long, type: String, data: JSONObject) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onEvent(type, data)
-            }
-        }
-
-        fun onNativeEvent(componentId: Long, data: JSONObject) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onNativeEvent(data)
-            }
-        }
-
-        fun onReady(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onReady()
-            }
-        }
-
-        fun onReuse(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onReuse()
-            }
-        }
-
-        fun onShow(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onShow()
-            }
-        }
-
-        fun onHide(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onHide()
-            }
-        }
-
-        fun onDestroy(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onDestroy()
-            }
-        }
-
-        fun onLoadMore(componentId: Long, data: JSONObject) {
-            instance.engines.forEach {
-                getHostContext(it)?.getComponent(componentId)?.onLoadMore(data)
-            }
-        }
-
-        /**
-         * 为视图注册JS组件
-         */
-        fun registerComponent(
-            bizId: String, templateId: String, templateVersion: String, script: String, view: View
-        ): Long {
-            // 为引擎注册组件的时候，不同的引擎都使用同一个组件ID
-            val componentId = IdGenerator.genLongId()
-            instance.engines.forEach {
-                getHostContext(it)?.registerComponent(
-                    componentId, bizId, templateId, templateVersion, script
-                )
-            }
-            return componentId
-        }
-
-        /**
-         * 为视图解除JS组件
-         */
-        fun unregisterComponent(componentId: Long) {
-            instance.engines.forEach {
-                getHostContext(it)?.unregisterComponent(componentId)
-            }
-        }
-
-        /**
-         * 分发原生消息给JS
-         */
-        fun dispatcherNativeMessageToJS(data: JSONObject) {
-            GXNativeEventManager.instance.eventsData.forEach { componentData ->
-                val componentId = componentData.getLongValue("instanceId")
-                instance.engines.forEach {
-                    getHostContext(it)?.getComponent(componentId)?.let { component ->
-                        val result = JSONObject().apply {
-                            this.putAll(data)
-                            this.putAll(componentData)
-                            this["timestamp"] = TimeUtils.elapsedRealtime()
-                        }
-                        component.onNativeEvent(result)
-                    }
-                }
-            }
+    fun onEvent(componentId: Long, type: String, data: JSONObject) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onEvent(type, data)
         }
     }
+
+    fun onNativeEvent(componentId: Long, data: JSONObject) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onNativeEvent(data)
+        }
+    }
+
+    fun onReady(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onReady()
+        }
+    }
+
+    fun onReuse(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onReuse()
+        }
+    }
+
+    fun onShow(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onShow()
+        }
+    }
+
+    fun onHide(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onHide()
+        }
+    }
+
+    fun onDestroy(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onDestroy()
+        }
+    }
+
+    fun onLoadMore(componentId: Long, data: JSONObject) {
+        engines.forEach {
+            getHostContext(it)?.getComponent(componentId)?.onLoadMore(data)
+        }
+    }
+
+    /**
+     * 为视图注册JS组件
+     */
+    fun registerComponent(
+        bizId: String, templateId: String, templateVersion: String, script: String
+    ): Long {
+        // 为引擎注册组件的时候，不同的引擎都使用同一个组件ID
+        val componentId = IdGenerator.genLongId()
+        engines.forEach {
+            getHostContext(it)?.registerComponent(
+                componentId, bizId, templateId, templateVersion, script
+            )
+        }
+        return componentId
+    }
+
+    /**
+     * 为视图解除JS组件
+     */
+    fun unregisterComponent(componentId: Long) {
+        engines.forEach {
+            getHostContext(it)?.unregisterComponent(componentId)
+        }
+    }
+
+
 
     interface ILogListener {
         fun errorLog(data: JSONObject)

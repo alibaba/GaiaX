@@ -9,7 +9,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
-import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
@@ -87,7 +86,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                         fastPreviewRoot.addView(gxView, 0)
 
                         // 获取模板信息
-                        val gxTemplateInfo = GXTemplateEngine.instance.getTemplateInfo(gxTemplateItem)
+                        val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
                         if (gxTemplateInfo.isJsExist) {
                             // 下一帧执行JS
                             gxView.post {

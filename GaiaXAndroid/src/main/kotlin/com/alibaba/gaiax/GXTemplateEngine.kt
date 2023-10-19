@@ -532,7 +532,7 @@ class GXTemplateEngine {
     /**
      * To get template info
      */
-    fun getTemplateInfo(gxTemplateItem: GXTemplateItem): GXTemplateInfo {
+    fun getGXTemplateInfo(gxTemplateItem: GXTemplateItem): GXTemplateInfo {
         return data.getTemplateInfo(gxTemplateItem)
     }
 

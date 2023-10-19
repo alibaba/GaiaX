@@ -9,7 +9,10 @@ import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 
-class GXMixNodeEvent : GXINodeEvent {
+/**
+ * 带有JS事件与Native事件的混合节点事件
+ */
+internal class GXMixNodeEvent : GXINodeEvent {
 
     private var gxTemplateContext: GXTemplateContext? = null
 
@@ -50,6 +53,14 @@ class GXMixNodeEvent : GXINodeEvent {
             longClickEventByJS = gxGesture
         }
         initViewEventListener(gxGesture)
+    }
+
+    fun removeJSEvent(componentId: Long, eventType: String) {
+        if (eventType == GXTemplateKey.GAIAX_GESTURE_TYPE_TAP) {
+            clickEventByJS = null
+        } else if (eventType == GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS) {
+            longClickEventByJS = null
+        }
     }
 
     override fun addDataBindingEvent(
@@ -126,7 +137,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
-                        GXJSRenderDelegate.instance.dispatcherEvent(it)
+                        GXJSRenderProxy.instance.dispatchGestureEvent(it)
                     }
                 } else {
                     jsEventParams.let {
@@ -177,14 +188,14 @@ class GXMixNodeEvent : GXINodeEvent {
     }
 }
 
-class GXExtensionNodeEvent : GXRegisterCenter.GXIExtensionNodeEvent {
+internal class GXExtensionNodeEvent : GXRegisterCenter.GXIExtensionNodeEvent {
 
     override fun create(): GXINodeEvent {
         return GXMixNodeEvent()
     }
 }
 
-class GXJSGesture : GXTemplateEngine.GXGesture() {
+internal class GXJSGesture : GXTemplateEngine.GXGesture() {
 
     var jsOptionLevel: Int = 0
 

@@ -137,7 +137,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun onReuse(gxView: View) {
+    fun onReuse(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onReuse() called with: gxView = $gxView")
         }

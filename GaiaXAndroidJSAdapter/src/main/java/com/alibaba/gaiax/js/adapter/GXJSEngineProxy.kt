@@ -126,7 +126,7 @@ class GXJSEngineProxy {
     }
 
 
-    fun onReady(gxView: View) {
+    fun onReady(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onReady() called with: gxView = $gxView")
         }
@@ -148,7 +148,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun onShow(gxView: View) {
+    fun onShow(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onShow() called with: gxView = $gxView")
         }
@@ -159,7 +159,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun onHide(gxView: View) {
+    fun onHide(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onHide() called with: gxView = $gxView")
         }
@@ -170,7 +170,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun onDestroy(gxView: View) {
+    fun onDestroy(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onDestroy() called with: gxView = $gxView")
         }
@@ -192,7 +192,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun registerComponent(gxView: View) {
+    fun registerComponent(gxView: View?) {
         if (Log.isLog()) {
             Log.d("registerComponent() called with: gxView = $gxView")
         }
@@ -209,7 +209,7 @@ class GXJSEngineProxy {
         }
     }
 
-    fun unregisterComponent(gxView: View) {
+    fun unregisterComponent(gxView: View?) {
         if (Log.isLog()) {
             Log.d("unregisterComponent() called with: gxView = $gxView")
         }

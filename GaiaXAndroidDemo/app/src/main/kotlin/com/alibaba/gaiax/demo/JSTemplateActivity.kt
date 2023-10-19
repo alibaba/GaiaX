@@ -1,24 +1,18 @@
 package com.alibaba.gaiax.demo
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
-import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
 import com.alibaba.gaiax.utils.GXScreenUtils
 
-/**
- *  @author: shisan.lms
- *  @date: 2022-11-17
- *  Description:
- */
 class JSTemplateActivity : AppCompatActivity() {
 
-    private var jsApiDemoComponentId: Long = 0
     private var jsCustomsModuleDemoComponentId: Long = 0
 
     private val jsApiDemoTemplateName = "gx-with-js-api-demo"
@@ -39,9 +33,11 @@ class JSTemplateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_js_template)
         //Demo1：业务使用方自定义module
-        renderJSCustomModuleDemoTemplate(this, jsCustomModuleTemplateName)
+        // renderJSCustomModuleDemoTemplate(this, jsCustomModuleTemplateName)
+
         //Demo2：js内置方法一览
-//        renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
+        renderJSApiDemoTemplate(this, jsApiDemoTemplateName)
+
         //
         sendNativeMessage()
     }
@@ -57,6 +53,9 @@ class JSTemplateActivity : AppCompatActivity() {
         }
 
     }
+
+    var customGXView: View? = null;
+    var apiGXView: View? = null;
 
     private fun renderJSCustomModuleDemoTemplate(
         activity: JSTemplateActivity, templateId: String
@@ -75,22 +74,19 @@ class JSTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(dataJson)
 
         // 创建模板View
-        val view = GXTemplateEngine.instance.createView(params, size)
-
-        if (view != null) {
-            jsCustomsModuleDemoComponentId = GXJSEngine.instance.registerComponent(
-                bizId, jsCustomModuleTemplateName, "1", getJsFileByTemplateId(templateId)
-            )
-        }
+        customGXView = GXTemplateEngine.instance.createView(params, size)
 
         // 绑定数据
-        GXTemplateEngine.instance.bindData(view, templateData)
+        GXTemplateEngine.instance.bindData(customGXView, templateData)
 
         // 插入模板View
-        findViewById<LinearLayoutCompat>(R.id.template_1).addView(view, 0)
+        findViewById<LinearLayoutCompat>(R.id.template_1).addView(customGXView, 0)
 
-        // onReady
-        GXJSEngine.instance.onReady(jsCustomsModuleDemoComponentId)
+        // 注册JS组件
+        GXJSEngineProxy.instance.registerComponent(customGXView)
+
+        // JS组件OnReady事件
+        GXJSEngineProxy.instance.onReady(customGXView)
     }
 
     private fun renderJSApiDemoTemplate(activity: JSTemplateActivity, templateId: String) {
@@ -108,41 +104,39 @@ class JSTemplateActivity : AppCompatActivity() {
         val templateData = GXTemplateEngine.GXTemplateData(dataJson)
 
         // 创建模板View
-        val view = GXTemplateEngine.instance.createView(params, size)
-
-        if (view != null) {
-            jsApiDemoComponentId = GXJSEngine.instance.registerComponent(
-                bizId, jsApiDemoTemplateName, "1", getJsFileByTemplateId(templateId)
-            )
-        }
+        apiGXView = GXTemplateEngine.instance.createView(params, size)
 
         // 绑定数据
-        GXTemplateEngine.instance.bindData(view, templateData)
+        GXTemplateEngine.instance.bindData(apiGXView, templateData)
 
         // 插入模板View
-        findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
+        findViewById<LinearLayoutCompat>(R.id.template_2).addView(apiGXView, 0)
 
         //
-        GXJSEngine.instance.onReady(jsApiDemoComponentId)
+        GXJSEngineProxy.instance.registerComponent(apiGXView)
+
+        //
+        GXJSEngineProxy.instance.onReady(apiGXView)
 
     }
 
     override fun onResume() {
         super.onResume()
-        GXJSEngine.instance.onShow(jsApiDemoComponentId)
-        GXJSEngine.instance.onShow(jsCustomsModuleDemoComponentId)
+        GXJSEngineProxy.instance.onShow(customGXView)
+        GXJSEngineProxy.instance.onShow(apiGXView)
     }
 
     override fun onPause() {
         super.onPause()
-        GXJSEngine.instance.onHide(jsApiDemoComponentId)
-        GXJSEngine.instance.onHide(jsCustomsModuleDemoComponentId)
+        GXJSEngineProxy.instance.onHide(customGXView)
+        GXJSEngineProxy.instance.onHide(apiGXView)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        GXJSEngine.instance.onDestroy(jsApiDemoComponentId)
-        GXJSEngine.instance.unregisterComponent(jsApiDemoComponentId)
-        GXJSEngine.instance.unregisterComponent(jsCustomsModuleDemoComponentId)
+        GXJSEngineProxy.instance.onDestroy(customGXView)
+        GXJSEngineProxy.instance.onDestroy(apiGXView)
+        GXJSEngineProxy.instance.unregisterComponent(customGXView)
+        GXJSEngineProxy.instance.unregisterComponent(apiGXView)
     }
 }

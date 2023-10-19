@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
@@ -109,7 +110,13 @@ internal class GXMixNodeEvent : GXINodeEvent {
                 dispatcherClick()
             }
         }
-        gestureParams.view?.setOnClickListener(onClickListener)
+        if (GXJSUiExecutor.isMainThread()) {
+            gestureParams.view?.setOnClickListener(onClickListener)
+        } else {
+            gestureParams.view?.post {
+                gestureParams.view?.setOnClickListener(onClickListener)
+            }
+        }
     }
 
     private fun initViewLongClickEventDispatcher(gestureParams: GXTemplateEngine.GXGesture) {
@@ -119,7 +126,13 @@ internal class GXMixNodeEvent : GXINodeEvent {
                 true
             }
         }
-        gestureParams.view?.setOnLongClickListener(onLongClickListener)
+        if (GXJSUiExecutor.isMainThread()) {
+            gestureParams.view?.setOnLongClickListener(onLongClickListener)
+        } else {
+            gestureParams.view?.post {
+                gestureParams.view?.setOnLongClickListener(onLongClickListener)
+            }
+        }
     }
 
     private fun dispatcherClick() {

@@ -45,28 +45,28 @@ class GXJSLogModule : GXJSBaseModule() {
     fun log(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("log", msg)
-        Log.d(TAG, msg)
+        Log.d(TAG, "log:msg = $msg")
     }
 
     @GXSyncMethod
     fun info(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("info", msg)
-        Log.i(TAG, msg)
+        Log.i(TAG, "log:msg = $msg")
     }
 
     @GXSyncMethod
     fun warn(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("warn", msg)
-        Log.w(TAG, msg)
+        Log.w(TAG, "log:msg = $msg")
     }
 
     @GXSyncMethod
     fun error(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("error", msg)
-        Log.e(TAG, msg)
+        Log.e(TAG, "log:msg = $msg")
     }
 
     override val name: String

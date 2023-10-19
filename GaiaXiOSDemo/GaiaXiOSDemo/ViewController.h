@@ -20,7 +20,5 @@
 
 @interface ViewController : UIViewController
 
-- (IBAction)previewAction:(id)sender;
-
 @end
 

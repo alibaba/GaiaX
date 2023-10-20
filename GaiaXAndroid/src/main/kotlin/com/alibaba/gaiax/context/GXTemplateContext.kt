@@ -17,6 +17,7 @@
 package com.alibaba.gaiax.context
 
 import android.content.Context
+import android.os.SystemClock
 import android.view.View
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXTemplateEngine
@@ -26,7 +27,6 @@ import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.template.GXTemplateInfo
-import java.util.UUID
 import java.util.concurrent.CopyOnWriteArraySet
 
 /**
@@ -57,7 +57,15 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
-    var traceId: String? = UUID.randomUUID().toString()
+    /**
+     * 用于存储JS组件ID
+     */
+    var jsComponentIds: MutableList<Long>? = null
+
+    /**
+     * 用于追踪日志
+     */
+    var traceId: String? = SystemClock.elapsedRealtimeNanos().toString()
 
     var tag: String? = ""
 

@@ -8,9 +8,6 @@ target 'GaiaXiOS' do
   
     #Pods for GaiaXiOS
         
-    # YYText
-    pod 'YYText'
-
     # SDWebImage
     pod 'SDWebImage'
 
@@ -24,9 +21,6 @@ end
 
 
 target 'GaiaXiOSTests'  do
-
-    # YYText
-    pod  'YYText'
     
     # SDWebImage
     pod  'SDWebImage'

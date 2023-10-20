@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import android.util.Base64
 import androidx.annotation.Keep

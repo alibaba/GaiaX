@@ -1,8 +1,8 @@
-package com.alibaba.gaiax.provider.module.js
+package com.alibaba.gaiax.js.adapter.modules
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.adapter.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
 import com.alibaba.gaiax.js.utils.Log
@@ -20,7 +20,7 @@ class GXJSNativeTargetModule : GXJSBaseModule() {
         val templateId = data.getString("templateId")
         val instanceId = data.getLongValue("instanceId")
 
-        val delegate = GXJSEngine.instance.renderDelegate
+        val delegate = GXJSRenderProxy.instance
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
             if (Log.isLog()) {

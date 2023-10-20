@@ -1,15 +1,18 @@
-package com.alibaba.gaiax.js.module
+package com.alibaba.gaiax.js.adapter.modules
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.js.adapter.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
-import com.alibaba.gaiax.js.support.GXNativeEventManager
 import com.alibaba.gaiax.js.utils.Log
 
+/**
+ * 从JS中监听Native发送来的消息
+ */
 @Keep
-class GXJSNativeMessageEventModule : GXJSBaseModule() {
+class GXJSNativeEventModule : GXJSBaseModule() {
 
     override val name: String
         get() = "NativeEvent"
@@ -19,7 +22,7 @@ class GXJSNativeMessageEventModule : GXJSBaseModule() {
         if (Log.isLog()) {
             Log.d("addNativeEventListener() called with: data = $data")
         }
-        val isSuccess = GXNativeEventManager.instance.registerMessage(data)
+        val isSuccess = GXJSRenderProxy.instance.registerNativeMessage(data)
         if (isSuccess) {
             promise.resolve().invoke()
         } else {
@@ -32,7 +35,7 @@ class GXJSNativeMessageEventModule : GXJSBaseModule() {
         if (Log.isLog()) {
             Log.d("removeNativeEventListener() called with: data = $data")
         }
-        val isSuccess = GXNativeEventManager.instance.unRegisterMessage(data)
+        val isSuccess = GXJSRenderProxy.instance.unregisterNativeMessage(data)
         if (isSuccess) {
             promise.resolve().invoke()
         } else {

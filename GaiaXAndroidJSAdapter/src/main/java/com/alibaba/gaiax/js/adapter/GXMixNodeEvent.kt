@@ -5,17 +5,15 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
- *  @author: shisan.lms
- *  @date: 2023-03-29
- *  Description:
+ * 带有JS事件与Native事件的混合节点事件
  */
-class GXMixNodeEvent : GXINodeEvent {
+internal class GXMixNodeEvent : GXINodeEvent {
 
     private var gxTemplateContext: GXTemplateContext? = null
 
@@ -58,10 +56,16 @@ class GXMixNodeEvent : GXINodeEvent {
         initViewEventListener(gxGesture)
     }
 
+    fun removeJSEvent(componentId: Long, eventType: String) {
+        if (eventType == GXTemplateKey.GAIAX_GESTURE_TYPE_TAP) {
+            clickEventByJS = null
+        } else if (eventType == GXTemplateKey.GAIAX_GESTURE_TYPE_LONGPRESS) {
+            longClickEventByJS = null
+        }
+    }
+
     override fun addDataBindingEvent(
-        gxTemplateContext: GXTemplateContext,
-        gxNode: GXNode,
-        templateData: JSONObject
+        gxTemplateContext: GXTemplateContext, gxNode: GXNode, templateData: JSONObject
     ) {
         this.gxTemplateContext = gxTemplateContext
         val eventBinding = gxNode.templateNode.eventBinding ?: return
@@ -106,7 +110,13 @@ class GXMixNodeEvent : GXINodeEvent {
                 dispatcherClick()
             }
         }
-        gestureParams.view?.setOnClickListener(onClickListener)
+        if (GXJSUiExecutor.isMainThread()) {
+            gestureParams.view?.setOnClickListener(onClickListener)
+        } else {
+            gestureParams.view?.post {
+                gestureParams.view?.setOnClickListener(onClickListener)
+            }
+        }
     }
 
     private fun initViewLongClickEventDispatcher(gestureParams: GXTemplateEngine.GXGesture) {
@@ -116,7 +126,13 @@ class GXMixNodeEvent : GXINodeEvent {
                 true
             }
         }
-        gestureParams.view?.setOnLongClickListener(onLongClickListener)
+        if (GXJSUiExecutor.isMainThread()) {
+            gestureParams.view?.setOnLongClickListener(onLongClickListener)
+        } else {
+            gestureParams.view?.post {
+                gestureParams.view?.setOnLongClickListener(onLongClickListener)
+            }
+        }
     }
 
     private fun dispatcherClick() {
@@ -134,7 +150,7 @@ class GXMixNodeEvent : GXINodeEvent {
                     }
 
                     jsEventParams.let {
-                        (GXJSEngine.instance.getRenderDelegate() as? GXJSRenderDelegate)?.dispatcherEvent(it)
+                        GXJSRenderProxy.instance.dispatchGestureEvent(it)
                     }
                 } else {
                     jsEventParams.let {
@@ -185,14 +201,14 @@ class GXMixNodeEvent : GXINodeEvent {
     }
 }
 
-class GXExtensionNodeEvent : GXRegisterCenter.GXIExtensionNodeEvent {
+internal class GXExtensionNodeEvent : GXRegisterCenter.GXIExtensionNodeEvent {
 
     override fun create(): GXINodeEvent {
         return GXMixNodeEvent()
     }
 }
 
-class GXJSGesture : GXTemplateEngine.GXGesture() {
+internal class GXJSGesture : GXTemplateEngine.GXGesture() {
 
     var jsOptionLevel: Int = 0
 

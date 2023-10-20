@@ -197,12 +197,13 @@ const NSUInteger GXTextMaxWidth = 1080;
         text = [data gx_stringForKey:@"value"];
         //读取扩展属性
         extend = [data gx_dictionaryForKey:@"extend"];
-        //处理扩展属性
-        if (extend || self.fitContent) {
-            [self handleExtend:extend isCalculate:YES];
-        }
     } else {
         text = nil;
+    }
+  
+    //处理扩展属性 & 计算
+    if (extend || self.fitContent) {
+        [self handleExtend:extend isCalculate:YES];
     }
     
     //文本处理
@@ -252,6 +253,7 @@ const NSUInteger GXTextMaxWidth = 1080;
             self.attributedText = nil;
         }
     }
+
 }
 
 

@@ -24,7 +24,7 @@ import com.alibaba.gaiax.js.utils.Log
 internal class DebugJSBridgeModule(
     private val hostContext: GXHostContext,
     private val debugJSContext: DebugJSContext
-) : ISocketCallBridgeListener {
+) : ISocketBridgeListener {
 
     enum class WebsocketJSMethodName(val methodName: String) {
         InitEnv("js/initJSEnv"), CreateComponent("js/createComponent"), Eval("js/eval"), CallSync("js/callSync"), CallAsync(

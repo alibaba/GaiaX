@@ -26,7 +26,6 @@
 #import "GXCommonDef.h"
 #import "GXDataParser.h"
 #import "GXFunctionDef.h"
-#import <YYText/YYText.h>
 #import "GXTemplateItem.h"
 #import "NSDictionary+GX.h"
 #import "GXTemplateEngine.h"
@@ -504,32 +503,16 @@
         //长按手势
         if (!_longPress) {
             _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
-            _longPress.delegate = self;
             [view addGestureRecognizer:_longPress];
         }
     } else {
         //tap手势
         if (!_tap) {
             _tap = [[UITapGestureRecognizer alloc] initWithTarget:view action:@selector(gx_handleGesture:)];
-            _tap.delegate = self;
             [view addGestureRecognizer:_tap];
         }
     }
     
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([touch.view isKindOfClass:[YYLabel class]]) {
-        YYLabel *label = (YYLabel *)touch.view;
-        NSAttributedString *attributedString = label.attributedText;
-        NSUInteger index = [label.textLayout textRangeAtPoint:[touch locationInView:label]].start.offset;
-        YYTextHighlight *highlight = [attributedString yy_attribute:YYTextHighlightAttributeName atIndex:index]; //获取当前文本上是否有点击事件
-        if (highlight) {
-            return NO;
-        }
-        return YES;
-    }
-    return YES;
 }
 
 //埋点绑定

@@ -2,6 +2,7 @@ package com.alibaba.gaiax.demo.fastpreview
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
+import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
@@ -34,6 +36,26 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gaiax_fast_preview_activity)
 
+        findViewById<View>(R.id.create).setOnClickListener {
+            create()
+        }
+
+        findViewById<View>(R.id.show).setOnClickListener {
+            show()
+        }
+
+        findViewById<View>(R.id.hide).setOnClickListener {
+            hide()
+        }
+
+        findViewById<View>(R.id.destroy).setOnClickListener {
+            destroy()
+        }
+
+        findViewById<View>(R.id.reuse).setOnClickListener {
+            reuse()
+        }
+
         fastPreviewRoot = findViewById(R.id.fast_preview_layout)
 
         val mode = intent.getStringExtra(GAIA_STUDIO_MODE)
@@ -57,63 +79,90 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                 finish()
             }
         }
-
     }
 
+    private fun show() {
+        Log.d(TAG, "show() called")
+
+        GXJSEngineProxy.instance.onShow(gxView)
+    }
+
+    private fun hide() {
+        Log.d(TAG, "hide() called")
+
+        GXJSEngineProxy.instance.onHide(gxView)
+    }
+
+    private fun reuse() {
+        Log.d(TAG, "reuse() called")
+
+        gxTemplateData?.let { it1 -> GXTemplateEngine.instance.bindData(gxView, it1) }
+
+        // 执行生命周期变化
+        GXJSEngineProxy.instance.onReuse(gxView)
+    }
+
+    private fun destroy() {
+        Log.d(TAG, "destroy() called")
+
+        GXJSEngineProxy.instance.onDestroy(gxView)
+
+        // 解除容器注册
+        GXJSEngineProxy.instance.unregisterComponent(gxView)
+
+        fastPreviewRoot.removeAllViews()
+    }
 
     override fun onDestroy() {
+        destroy()
         GXStudioClient.instance.fastPreviewListener = null
         super.onDestroy()
+    }
+
+    private fun create() {
+        Log.d(TAG, "create() called")
+        gxTemplateData?.let { gxTemplateData ->
+            gxTemplateItem?.let { gxTemplateItem ->
+                gxMeasureSize?.let { gxMeasureSize ->
+
+                    // 创建视图
+                    gxView = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize)
+
+                    // 绑定数据
+                    GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
+
+                    // 将数据加入页面中
+                    fastPreviewRoot.addView(gxView, 0)
+
+                    // 获取模板信息
+                    val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
+                    if (gxTemplateInfo.isJsExist) {
+                        // 下一帧执行JS
+                        gxView?.post {
+
+                            // 注册容器
+                            GXJSEngineProxy.instance.registerComponent(gxView)
+
+                            // 执行生命周期变化
+                            GXJSEngineProxy.instance.onReady(gxView)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     var gxTemplateItem: GXTemplateEngine.GXTemplateItem? = null
     var gxMeasureSize: GXTemplateEngine.GXMeasureSize? = null
     var gxTemplateData: GXTemplateEngine.GXTemplateData? = null
-
-    private fun forceCreate() {
-        try {
-            val view = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
-            if (view != null) {
-                GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
-                fastPreviewRoot.removeAllViews()
-                fastPreviewRoot.addView(view, 0)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    fun OnCreate(view: View) {
-        forceCreate()
-    }
-
-    fun OnVisible(view: View) {
-
-    }
-
-    fun OnInvisible(view: View) {
-
-    }
-
-    fun OnDestroy(view: View) {
-        fastPreviewRoot.removeAllViews()
-    }
-
-    fun OnReuse(view: View) {
-        try {
-            GXTemplateEngine.instance.bindData(view, gxTemplateData!!)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+    var gxView: View? = null
 
     override fun onAddData(templateId: String, templateData: JSONObject) {
         GXFastPreviewSource.instance.addTemplate(templateId, templateData)
     }
 
     override fun onUpdate(templateId: String, templateData: JSONObject) {
-        val constraintSize = templateData.getJSONObject("index.json")
-            ?.getJSONObject("package")
+        val constraintSize = templateData.getJSONObject("index.json")?.getJSONObject("package")
             ?.getJSONObject("constraint-size")
 
         var data = JSONObject()
@@ -139,6 +188,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         gxMeasureSize = GXTemplateEngine.GXMeasureSize(width, height)
         gxTemplateData = GXTemplateEngine.GXTemplateData(data)
 
-        forceCreate()
+        create()
     }
+
 }

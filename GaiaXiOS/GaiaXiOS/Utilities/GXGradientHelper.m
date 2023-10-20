@@ -57,6 +57,9 @@
     //设置colors
     self.colors = colors;
     
+    // 修复添加了渐变色view 手势被拦截的问题
+    self.userInteractionEnabled = NO;
+    
     //生成渐变
     CAGradientLayer *layer = (CAGradientLayer *)self.layer;
     layer.colors = [self colorRefs];

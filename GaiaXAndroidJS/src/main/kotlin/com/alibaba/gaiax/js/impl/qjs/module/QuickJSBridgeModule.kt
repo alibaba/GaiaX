@@ -52,7 +52,7 @@ internal class QuickJSBridgeModule(
                     if (Log.isLog()) {
                         Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
                     }
-                    GXJSEngine.Proxy.instance.executeTask {
+                    GXJSEngine.Proxy.executeTask {
                         val jsFunction = JSFunction(funPointer, jsContext)
                         jsFunction.dupValue()
                         jsFunction.invoke(null, arrayOfJSValues(result))
@@ -95,7 +95,7 @@ internal class QuickJSBridgeModule(
                 override fun resolve(): IGXCallback {
                     return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GXJSEngine.Proxy.instance.executeTask {
+                            GXJSEngine.Proxy.executeTask {
                                 jsResolve?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -105,7 +105,7 @@ internal class QuickJSBridgeModule(
                 override fun reject(): IGXCallback {
                     return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GXJSEngine.Proxy.instance.executeTask {
+                            GXJSEngine.Proxy.executeTask {
                                 jsReject?.invoke(null, arrayOfJSValues(result))
                             }
                         }

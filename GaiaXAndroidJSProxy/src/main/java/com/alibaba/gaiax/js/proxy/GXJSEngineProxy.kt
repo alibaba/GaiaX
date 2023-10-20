@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.gaiax.js.adapter
+package com.alibaba.gaiax.js.proxy
 
 import android.content.Context
 import android.view.View
@@ -22,14 +22,15 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.js.GXJSEngine
-import com.alibaba.gaiax.js.adapter.modules.GXJSBuildInModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSBuildInStorageModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSBuildInTipsModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSEventModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSLogModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSNativeEventModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSNativeTargetModule
-import com.alibaba.gaiax.js.adapter.modules.GXJSNativeUtilModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInStorageModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInTipsModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSEventModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSLogModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSNativeEventModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSNativeTargetModule
+import com.alibaba.gaiax.js.proxy.modules.GXJSNativeUtilModule
+import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.js.utils.TimeUtils
@@ -133,6 +134,10 @@ class GXJSEngineProxy {
 
     }
 
+    fun registerModule(moduleClazz: Class<out GXJSBaseModule>) {
+        GXJSEngine.instance.registerModule(moduleClazz)
+    }
+
     fun startDefaultEngine() {
         if (Log.isLog()) {
             Log.d("startDefaultEngine() called")
@@ -168,7 +173,6 @@ class GXJSEngineProxy {
         }
         GXJSEngine.instance.stopDebugEngine()
     }
-
 
     /**
      * 通知视图的JS组件可用

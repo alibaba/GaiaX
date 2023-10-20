@@ -8,7 +8,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.utils.AssetsUtils
-import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
+import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.utils.GXScreenUtils
 
 class JSTemplateActivity : AppCompatActivity() {

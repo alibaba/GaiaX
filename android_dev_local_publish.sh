@@ -32,8 +32,8 @@ cd $CUR/GaiaXAndroidJS
 chmod +rx ./gradlew && ./gradlew assembleDebug clean assembleDebug -Ptype="debug" -Pgroup="com.github.alibaba.GaiaX" -Pversion="dev-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
 echo "##########################################################################"
-echo "Publish GaiaXAndroidJSAdapter"
-cd $CUR/GaiaXAndroidJSAdapter
+echo "Publish GaiaXAndroidJSProxy"
+cd $CUR/GaiaXAndroidJSProxy
 chmod +rx ./gradlew && ./gradlew assembleDebug clean assembleDebug -Ptype="debug" -Pgroup="com.github.alibaba.GaiaX" -Pversion="dev-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
 echo "##########################################################################"

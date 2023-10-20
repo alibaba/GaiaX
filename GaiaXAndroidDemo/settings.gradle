@@ -20,7 +20,7 @@ project(":GaiaXAndroidJS").projectDir = file("../GaiaXAndroidJS")
 include(":GaiaXAndroidQuickJS")
 project(":GaiaXAndroidQuickJS").projectDir = file("../GaiaXAndroidQuickJS")
 
-include(":GaiaXAndroidJSAdapter")
-project(":GaiaXAndroidJSAdapter").projectDir = file("../GaiaXAndroidJSAdapter")
+include(':GaiaXAndroidJSProxy')
+project(":GaiaXAndroidJSProxy").projectDir = file("../GaiaXAndroidJSProxy")
 
 include ':GaiaXAndroidMicrobenchmark'

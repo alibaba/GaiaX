@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.adapter
+package com.alibaba.gaiax.js.proxy
 
 import android.view.View
 import com.alibaba.fastjson.JSONObject

@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.fastpreview.GXFastPreviewActivity
 import com.alibaba.gaiax.demo.fastpreview.GXQRCodeActivity
-import com.alibaba.gaiax.js.adapter.GXJSEngineProxy
+import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.studio.GX_CONNECT_URL
 import com.alibaba.gaiax.studio.IDevTools

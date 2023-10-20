@@ -41,7 +41,7 @@ android {
 
     // https://www.jianshu.com/p/681589927f1f
     compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-Adapter-JS"]
+        kotlinOptions.freeCompilerArgs += ['-module-name', "GaiaX-JS-Proxy"]
     }
 
     lintOptions {
@@ -124,7 +124,7 @@ afterEvaluate {
                     groupId = 'com.github.alibaba.GaiaX'
                 }
 
-                artifactId = 'GaiaX-JS-Adapter'
+                artifactId = 'GaiaX-JS-Proxy'
             }
         }
     }

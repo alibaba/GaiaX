@@ -86,7 +86,7 @@ dependencies {
     implementation project(path: ':GXAnalyzeAndroid')
     implementation project(path: ':GaiaXAndroidJS')
     implementation project(path: ':GaiaXAndroidQuickJS')
-    implementation project(path: ':GaiaXAndroidJSAdapter')
+    implementation project(path: ':GaiaXAndroidJSProxy')
 
     implementation("com.github.princekin-f:EasyFloat:2.0.4")
 

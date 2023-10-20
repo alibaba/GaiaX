@@ -1,8 +1,8 @@
-package com.alibaba.gaiax.js.adapter.modules
+package com.alibaba.gaiax.js.proxy.modules
 
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.adapter.GXJSRenderProxy
+import com.alibaba.gaiax.js.proxy.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod

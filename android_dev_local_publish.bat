@@ -33,8 +33,8 @@ cd %CUR%/GaiaXAndroidJS
 call .\gradlew.bat clean assembleDebug -Ptype="debug" -Pgroup="com.github.alibaba.GaiaX" -Pversion="dev-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
 echo ##########################################################################
-echo "Publish GaiaXAndroidJSAdapter"
-cd %CUR%/GaiaXAndroidJSAdapter
+echo "Publish GaiaXAndroidJSProxy"
+cd %CUR%/GaiaXAndroidJSProxy
 call .\gradlew.bat clean assembleDebug -Ptype="debug" -Pgroup="com.github.alibaba.GaiaX" -Pversion="dev-SNAPSHOT" -xtest -xlint publishToMavenLocal
 
 echo ##########################################################################

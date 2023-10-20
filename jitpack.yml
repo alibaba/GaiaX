@@ -32,7 +32,7 @@ install:
    - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
    - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll
    - echo "##########################################"
-   - echo ""############## Publish GaiaXAndroidJSAdapter"
-   - cd /home/jitpack/build/GaiaXAndroidJSAdapter
+   - echo ""############## Publish GaiaXAndroidJSProxy"
+   - cd /home/jitpack/build/GaiaXAndroidJSProxy
    - chmod +x ./gradlew && ./gradlew clean assembleRelease -Ptype=release -Pgroup=com.github.alibaba.GaiaX -Pversion=release-SNAPSHOT -xtest -xlint publishToMavenLocal
    - cd  ~/.m2/repository/com/github/alibaba/GaiaX && ll

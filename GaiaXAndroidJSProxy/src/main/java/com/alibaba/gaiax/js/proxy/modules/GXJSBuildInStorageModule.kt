@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.adapter.modules
+package com.alibaba.gaiax.js.proxy.modules
 
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule

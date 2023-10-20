@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.js.adapter.modules
+package com.alibaba.gaiax.js.proxy.modules
 
 import android.util.Base64
 import androidx.annotation.Keep

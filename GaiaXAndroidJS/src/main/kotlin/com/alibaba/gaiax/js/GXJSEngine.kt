@@ -373,8 +373,6 @@ class GXJSEngine {
         }
     }
 
-
-
     interface ILogListener {
         fun errorLog(data: JSONObject)
     }

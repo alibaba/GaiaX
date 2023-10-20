@@ -34,7 +34,7 @@ import com.alibaba.gaiax.context.putLayoutForScroll
 import com.alibaba.gaiax.context.putNodeForScroll
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 import com.alibaba.gaiax.utils.getStringExt
 import kotlin.math.ceil
 import kotlin.math.max
@@ -56,16 +56,16 @@ object GXNodeUtils {
     ) {
 
         // 预处理布局
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}"
             )
         }
 
         // 输入参数
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}"
             )
@@ -77,8 +77,8 @@ object GXNodeUtils {
         composeStretchNodeByBindData(gxNode, layout)
 
         // 输出计算结果
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}"
             )
@@ -104,8 +104,8 @@ object GXNodeUtils {
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByPrepareView(gxNode, layout)
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByPrepareView layout=${layout}"
             )

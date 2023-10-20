@@ -11,8 +11,8 @@ class GXGlobalCache {
         value: Layout
     ) {
         layoutForPrepareView[key.key()] = value
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value"
             )
@@ -23,8 +23,8 @@ class GXGlobalCache {
         gxTemplateContext: GXTemplateContext,
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}"
             )
@@ -58,8 +58,8 @@ class GXGlobalCache {
         value: Layout
     ) {
         layoutForTemplateItem[key.key()] = value
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key()} value=${value}"
             )
@@ -71,8 +71,8 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
         val value = layoutForTemplateItem[key.key()]
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key()} value=${value}"
             )

@@ -27,7 +27,15 @@ import com.alibaba.gaiax.render.node.GXINodeEvent
 import com.alibaba.gaiax.render.view.GXViewFactory
 import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
-import com.alibaba.gaiax.template.*
+import com.alibaba.gaiax.template.GXDataBinding
+import com.alibaba.gaiax.template.GXFlexBox
+import com.alibaba.gaiax.template.GXGridConfig
+import com.alibaba.gaiax.template.GXIExpression
+import com.alibaba.gaiax.template.GXScrollConfig
+import com.alibaba.gaiax.template.GXStyle
+import com.alibaba.gaiax.template.GXTemplate
+import com.alibaba.gaiax.template.GXTemplateInfo
+import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.animation.GXLottieAnimation
 
 /**
@@ -38,6 +46,38 @@ import com.alibaba.gaiax.template.animation.GXLottieAnimation
  * ```
  */
 class GXRegisterCenter {
+
+
+    /**
+     * 内部创建坑位视图可见性监听
+     */
+    interface GXIItemViewLifecycleListener {
+
+        /**
+         * 坑位创建事件，@see GXContainerViewAdapter，根据绑定数据时是否存在GXView触发
+         */
+        fun onCreate(gxView: View?)
+
+        /**
+         * 坑位可见事件，@see GXContainerViewAdapter，根据 onViewAttachedToWindow 回调
+         */
+        fun onVisible(gxView: View?)
+
+        /**
+         * 坑位不可见事件，@see GXContainerViewAdapter，根据 onViewDetachedFromWindow 回调
+         */
+        fun onInvisible(gxView: View?)
+
+        /**
+         * 坑位复用事件，@see GXContainerViewAdapter，根据绑定数据时是否存在GXView触发
+         */
+        fun onReuse(gxView: View?)
+
+        /**
+         * 坑位销毁事件，@see GXItemContainer，当触发GC回收时销毁
+         */
+        fun onDestroy(gxView: View?)
+    }
 
     /**
      * GXTemplateInfo data source interface
@@ -166,23 +206,17 @@ class GXRegisterCenter {
 
     interface GXIExtensionGrid {
         fun convert(
-            propertyName: String,
-            gxTemplateContext: GXTemplateContext,
-            gridConfig: GXGridConfig
+            propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig
         ): Any?
     }
 
     interface GXIExtensionScroll {
         fun convert(
-            propertyName: String,
-            gxTemplateContext: GXTemplateContext,
-            scrollConfig: GXScrollConfig
+            propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig
         ): Any? = null
 
         fun scrollIndex(
-            gxTemplateContext: GXTemplateContext,
-            container: GXContainer,
-            extend: JSONObject?
+            gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?
         ) {
         }
     }
@@ -244,6 +278,7 @@ class GXRegisterCenter {
     internal var extensionContainerDataUpdate: GXIExtensionContainerDataUpdate? = null
     internal var extensionContainerItemBind: GXIExtensionContainerItemBind? = null
     internal var extensionLottieAnimation: GXIExtensionLottieAnimation? = null
+    internal var gxItemViewLifecycleListener: GXIItemViewLifecycleListener? = null
 
     fun registerExtensionBizMapRelation(extensionBizMap: GXIExtensionBizMap): GXRegisterCenter {
         this.extensionBizMap = extensionBizMap
@@ -260,8 +295,7 @@ class GXRegisterCenter {
      * @param priority [0,99]
      */
     fun registerExtensionTemplateSource(
-        source: GXIExtensionTemplateSource,
-        priority: Int = 0
+        source: GXIExtensionTemplateSource, priority: Int = 0
     ): GXRegisterCenter {
         GXTemplateEngine.instance.data.templateSource.registerByPriority(source, priority)
         return this
@@ -272,8 +306,7 @@ class GXRegisterCenter {
      * @param priority [0,99]
      */
     fun registerExtensionTemplateInfoSource(
-        source: GXIExtensionTemplateInfoSource,
-        priority: Int = 0
+        source: GXIExtensionTemplateInfoSource, priority: Int = 0
     ): GXRegisterCenter {
         GXTemplateEngine.instance.data.templateInfoSource.registerByPriority(source, priority)
         return this
@@ -320,8 +353,7 @@ class GXRegisterCenter {
     }
 
     fun registerExtensionViewSupport(
-        viewType: String,
-        viewCreator: (Context) -> View
+        viewType: String, viewCreator: (Context) -> View
     ): GXRegisterCenter {
         GXViewFactory.viewCreatorSupport[viewType] = viewCreator
         return this
@@ -369,7 +401,13 @@ class GXRegisterCenter {
         return this
     }
 
+    fun registerExtensionItemViewLifecycleListener(extension: GXIItemViewLifecycleListener): GXRegisterCenter {
+        this.gxItemViewLifecycleListener = extension
+        return this
+    }
+
     fun reset() {
+        gxItemViewLifecycleListener = null
         extensionBizMap = null
         extensionDataBinding = null
         extensionExpression = null

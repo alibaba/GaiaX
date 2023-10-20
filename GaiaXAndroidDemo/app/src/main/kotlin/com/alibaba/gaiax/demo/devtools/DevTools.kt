@@ -72,6 +72,7 @@ class DevTools : IDevTools {
                 rootView.findViewById<AppCompatButton>(R.id.window_btn_fast_preview)
                     .setOnClickListener {
                         launchAction(context) { context -> openFastPreviewType(context) }
+                        foldWindowToSmall(logoView)
                     }
 
                 rootView.findViewById<AppCompatButton>(R.id.window_btn_js_debug)

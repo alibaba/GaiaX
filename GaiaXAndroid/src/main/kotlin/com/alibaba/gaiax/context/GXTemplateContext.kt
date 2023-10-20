@@ -57,6 +57,8 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    var isAppear: Boolean = false
+
     /**
      * 用于存储JS组件ID
      */
@@ -84,8 +86,6 @@ class GXTemplateContext private constructor(
      * 数据绑定计数
      */
     var bindDataCount: Int = 0
-
-    var isAppear: Boolean = false
 
     var manualTrackMap: MutableMap<String, GXTemplateEngine.GXTrack>? = null
 

@@ -10,8 +10,8 @@ object GXExceptionHelper {
 
     fun exception(msg: java.lang.Exception) {
         GXRegisterCenter.instance.extensionException?.exception(msg)
-        if (GXLog.isLog()) {
-            GXLog.e("GXExceptionHelper.exception ${msg.message}")
+        if (Log.isLog()) {
+            Log.e("GXExceptionHelper.exception ${msg.message}")
         }
     }
 }

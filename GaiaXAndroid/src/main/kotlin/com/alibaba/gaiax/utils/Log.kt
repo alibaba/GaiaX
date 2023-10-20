@@ -22,10 +22,10 @@ import android.util.Log
 /**
  * @suppress
  */
-object GXLog {
+object Log {
     private const val LOG_MAX_LENGTH = 4000
 
-    private const val TAG = "Alibaba-GaiaX"
+    private const val TAG = "[GaiaX]"
 
     fun e(tag: String?, msg: String?) {
         longE(if (tag.isNullOrEmpty()) TAG else tag, msg ?: "")

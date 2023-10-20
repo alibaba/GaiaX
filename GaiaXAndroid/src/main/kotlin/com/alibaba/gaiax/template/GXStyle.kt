@@ -22,7 +22,7 @@ import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress
@@ -270,8 +270,8 @@ data class GXStyle(
             val key: String = it.key
             val value = it.value
             if (value == null) {
-                if (GXLog.isLog()) {
-                    GXLog.e("GXStyle.updateByExtend @forEach, key=$key, value=$value")
+                if (Log.isLog()) {
+                    Log.e("GXStyle.updateByExtend @forEach, key=$key, value=$value")
                 }
                 return@forEach
             }
@@ -472,8 +472,8 @@ data class GXStyle(
                 val key: String = it.key
                 val value = it.value
                 if (value == null) {
-                    if (GXLog.isLog()) {
-                        GXLog.e("GXFlexBox.create @forEach, key=$key, value=$value")
+                    if (Log.isLog()) {
+                        Log.e("GXFlexBox.create @forEach, key=$key, value=$value")
                     }
                     return@forEach
                 }

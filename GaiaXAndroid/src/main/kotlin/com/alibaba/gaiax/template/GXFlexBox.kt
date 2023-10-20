@@ -31,7 +31,7 @@ import app.visly.stretch.Rect
 import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress
@@ -137,8 +137,8 @@ data class GXFlexBox(
             val key: String = it.key
             val value = it.value
             if (value == null) {
-                if (GXLog.isLog()) {
-                    GXLog.e("GXFlexBox.updateByExtend @forEach, key=$key, value=$value")
+                if (Log.isLog()) {
+                    Log.e("GXFlexBox.updateByExtend @forEach, key=$key, value=$value")
                 }
                 return@forEach
             }
@@ -893,8 +893,8 @@ data class GXFlexBox(
                 val key: String = it.key
                 val value = it.value
                 if (value == null) {
-                    if (GXLog.isLog()) {
-                        GXLog.e("GXFlexBox.create @forEach, key=$key, value=$value")
+                    if (Log.isLog()) {
+                        Log.e("GXFlexBox.create @forEach, key=$key, value=$value")
                     }
                     return@forEach
                 }

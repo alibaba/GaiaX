@@ -31,82 +31,85 @@ import com.alibaba.gaiax.render.view.container.slider.GXSliderViewAdapter
 
 object GXContainerUtils {
 
-    fun notifyOnResetView(gxTemplateContext: GXTemplateContext) {
+    internal fun notifyOnResetView(gxTemplateContext: GXTemplateContext) {
+        notifyView(gxTemplateContext, { container: View ->
+            //
+        }, { gxView: View ->
+            GXTemplateEngine.instance.resetView(gxView)
+        })
+    }
+
+    internal fun notifyContainerAndItemsOnAppear(gxTemplateContext: GXTemplateContext) {
+        notifyView(gxTemplateContext, { container: View ->
+            if (container is GXSliderView) {
+                container.onVisibleChanged(true)
+            }
+        }, { gxView: View ->
+            GXTemplateEngine.instance.onAppear(gxView)
+        })
+    }
+
+    internal fun notifyContainerAndItemsOnDisappear(gxTemplateContext: GXTemplateContext) {
+        notifyView(gxTemplateContext, { container: View ->
+            if (container is GXSliderView) {
+                container.onVisibleChanged(false)
+            }
+        }, { gxView: View ->
+            GXTemplateEngine.instance.onDisappear(gxView)
+        })
+    }
+
+    fun notifyView(
+        gxTemplateContext: GXTemplateContext,
+        containerCallback: ((container: View) -> Unit)? = null,
+        visibleItemViewCallback: ((itemView: View) -> Unit)? = null,
+    ) {
         gxTemplateContext.containers?.forEach { container ->
-            findVisibleItems(container) {
-                onResetView(it)
+            if (container is View) {
+                containerCallback?.invoke(container)
+            }
+            findVisibleItems(container) { view ->
+                if (view is ViewGroup && view.childCount > 0) {
+                    val gxView = view.getChildAt(0)
+                    if (gxView != null) {
+                        visibleItemViewCallback?.invoke(gxView)
+                    }
+                }
             }
         }
     }
 
-    fun notifyOnAppear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers?.forEach { container ->
-            findVisibleItems(container) {
-                onAppear(it)
-            }
-        }
-    }
-
-    fun notifyOnDisappear(gxTemplateContext: GXTemplateContext) {
-        gxTemplateContext.containers?.forEach { container ->
-            findVisibleItems(container) {
-                onDisappear(it)
-            }
-        }
-    }
 
     private fun findVisibleItems(container: GXIContainer, callBack: (holder: View) -> Unit) {
-        try {
-            if (container is GXContainer) {
-                if (container.layoutManager is LinearLayoutManager) {
-                    val layoutManager = container.layoutManager as LinearLayoutManager
-                    val firstPos = layoutManager.findFirstVisibleItemPosition()
-                    val lastPos = layoutManager.findLastVisibleItemPosition() + 1
-                    for (index in firstPos..lastPos) {
-                        (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
-                            callBack(it.itemView)
-                        }
-                    }
-                } else if (container.layoutManager is GridLayoutManager) {
-                    val layoutManager = container.layoutManager as GridLayoutManager
-                    val firstPos = layoutManager.findFirstVisibleItemPosition()
-                    val lastPos = layoutManager.findLastVisibleItemPosition() + 1
-                    for (index in firstPos..lastPos) {
-                        (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
-                            callBack(it.itemView)
-                        }
+        if (container is GXContainer) {
+            if (container.layoutManager is LinearLayoutManager) {
+                val layoutManager = container.layoutManager as LinearLayoutManager
+                val firstPos = layoutManager.findFirstVisibleItemPosition()
+                val lastPos = layoutManager.findLastVisibleItemPosition() + 1
+                for (index in firstPos..lastPos) {
+                    (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
+                        callBack(it.itemView)
                     }
                 }
-            } else if (container is GXSliderView) {
-                container.viewPager?.let { viewPager ->
-                    val adapter = viewPager.adapter
-                    if (adapter is GXSliderViewAdapter) {
-                        adapter.getItemView(viewPager.currentItem)?.let { itemView ->
-                            callBack(itemView)
-                        }
+            } else if (container.layoutManager is GridLayoutManager) {
+                val layoutManager = container.layoutManager as GridLayoutManager
+                val firstPos = layoutManager.findFirstVisibleItemPosition()
+                val lastPos = layoutManager.findLastVisibleItemPosition() + 1
+                for (index in firstPos..lastPos) {
+                    (container.findViewHolderForLayoutPosition(index) as? GXViewHolder)?.let {
+                        callBack(it.itemView)
                     }
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun onAppear(view: View?) {
-        if (view is ViewGroup && view.childCount > 0) {
-            GXTemplateEngine.instance.onAppear(view.getChildAt(0))
-        }
-    }
-
-    private fun onResetView(view: View?) {
-        if (view is ViewGroup && view.childCount > 0) {
-            GXTemplateEngine.instance.resetView(view.getChildAt(0))
-        }
-    }
-
-    private fun onDisappear(view: View?) {
-        if (view is ViewGroup && view.childCount > 0) {
-            GXTemplateEngine.instance.onDisappear(view.getChildAt(0))
+        } else if (container is GXSliderView) {
+            container.viewPager?.let { viewPager ->
+                val adapter = viewPager.adapter
+                if (adapter is GXSliderViewAdapter) {
+                    adapter.getItemView(viewPager.currentItem)?.let { itemView ->
+                        callBack(itemView)
+                    }
+                }
+            }
         }
     }
 }

@@ -19,8 +19,6 @@ Pod::Spec.new do |s|
   s.weak_frameworks = 'XCTest'
   s.vendored_libraries = 'GaiaXiOS/**/*.{a}'
 
-  s.dependency 'YYText'
-
   s.dependency 'SDWebImage'
 
   s.dependency 'GaiaMotionCurve'

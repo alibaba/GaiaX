@@ -14,6 +14,7 @@
 		8D2180E42771AAB2001401C8 /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E32771AAB2001401C8 /* ContainerViewController.m */; };
 		8D2180E72771AAC3001401C8 /* DataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E62771AAC3001401C8 /* DataViewController.m */; };
 		8D2180EA2771AACD001401C8 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D2180E92771AACD001401C8 /* EventViewController.m */; };
+		8D3E69C32AE2575200CA17AC /* driver.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D3E69C22AE2575200CA17AC /* driver.json */; };
 		8D57F1D2277300DF00FF8CC3 /* multi-scroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */; };
 		8D57F1D4277312A300FF8CC3 /* subscribe-item.json in Resources */ = {isa = PBXBuildFile; fileRef = 8D57F1D3277312A300FF8CC3 /* subscribe-item.json */; };
 		8D57F1D727733F0B00FF8CC3 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D57F1D627733F0B00FF8CC3 /* ListViewController.m */; };
@@ -67,6 +68,7 @@
 		8D2180E62771AAC3001401C8 /* DataViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataViewController.m; sourceTree = "<group>"; };
 		8D2180E82771AACD001401C8 /* EventViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		8D2180E92771AACD001401C8 /* EventViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		8D3E69C22AE2575200CA17AC /* driver.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = driver.json; sourceTree = "<group>"; };
 		8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "multi-scroll.json"; sourceTree = "<group>"; };
 		8D57F1D3277312A300FF8CC3 /* subscribe-item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "subscribe-item.json"; sourceTree = "<group>"; };
 		8D57F1D527733F0B00FF8CC3 /* ListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 			children = (
 				8DDC0A8B27D06949008CB84C /* FunctionList.plist */,
 				8D5D29AB276AD6A1005FD699 /* uper.json */,
+				8D3E69C22AE2575200CA17AC /* driver.json */,
 				8D5D29AA276AD6A1005FD699 /* uper-top.json */,
 				BD7C2DD029A5B54000838273 /* gx-with-js.json */,
 				8D57F1D1277300DF00FF8CC3 /* multi-scroll.json */,
@@ -380,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DB5218E275A0DD200EB8126 /* LaunchScreen.storyboard in Resources */,
+				8D3E69C32AE2575200CA17AC /* driver.json in Resources */,
 				8D5D29AE276AD6A1005FD699 /* recommend.json in Resources */,
 				8D5D29AF276AD6A1005FD699 /* uper-top.json in Resources */,
 				8DB5218B275A0DD200EB8126 /* Assets.xcassets in Resources */,
@@ -643,11 +647,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = W4ZRQF48G9;
+				DEVELOPMENT_TEAM = VY8F8V9AUC;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaMotionCurve\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXJS\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXiOS\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
+				);
 				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -659,6 +673,16 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaMotionCurve\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXJS\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXSocket\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXiOS\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket\"",
+					"\"${PODS_ROOT}/../../GaiaXiOS/GaiaXiOS/Core/StretchKit/Libraries\"",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -667,7 +691,6 @@
 					"-l\"GaiaXiOS\"",
 					"-l\"SDWebImage\"",
 					"-l\"SocketRocket\"",
-					"-l\"YYText\"",
 					"-l\"icucore\"",
 					"-l\"stretch\"",
 					"-framework",
@@ -715,11 +738,21 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = W4ZRQF48G9;
+				DEVELOPMENT_TEAM = VY8F8V9AUC;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaMotionCurve\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXJS\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXSocket\"",
+					"\"${PODS_ROOT}/Headers/Public/GaiaXiOS\"",
+					"\"${PODS_ROOT}/Headers/Public/SDWebImage\"",
+					"\"${PODS_ROOT}/Headers/Public/SocketRocket\"",
+				);
 				INFOPLIST_FILE = GaiaXiOSDemo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -731,6 +764,16 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaMotionCurve\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXJS\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXSocket\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GaiaXiOS\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket\"",
+					"\"${PODS_ROOT}/../../GaiaXiOS/GaiaXiOS/Core/StretchKit/Libraries\"",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -739,7 +782,6 @@
 					"-l\"GaiaXiOS\"",
 					"-l\"SDWebImage\"",
 					"-l\"SocketRocket\"",
-					"-l\"YYText\"",
 					"-l\"icucore\"",
 					"-l\"stretch\"",
 					"-framework",

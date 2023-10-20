@@ -20,10 +20,7 @@ target 'GaiaXiOSDemo' do
 
   # SDWebImage
   pod  'SDWebImage'
-  
-  # YYText
-  pod  'YYText'
-  
+    
   # 网络
   pod 'SocketRocket'
   

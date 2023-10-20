@@ -207,6 +207,7 @@
 /* Begin PBXFileReference section */
 		1E4542E269BE8A2CC48A5DBD /* Pods-GaiaXiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.debug.xcconfig"; sourceTree = "<group>"; };
 		26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29F62C23490CF61F86E3348E /* Pods-GaiaXiOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A962CC8282A9DD100335552 /* GXSliderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXSliderNode.h; sourceTree = "<group>"; };
 		8A962CC9282A9DD100335552 /* GXSliderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXSliderNode.m; sourceTree = "<group>"; };
@@ -913,6 +914,7 @@
 				1E4542E269BE8A2CC48A5DBD /* Pods-GaiaXiOS.debug.xcconfig */,
 				CA43FB5B0B95A83F4433A734 /* Pods-GaiaXiOS.release.xcconfig */,
 				8CF100DA07FB9596328219B4 /* Pods-GaiaXiOSTests.debug.xcconfig */,
+				29F62C23490CF61F86E3348E /* Pods-GaiaXiOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1051,6 +1053,7 @@
 				8D1CBD172758AA4500EC2B4D /* Sources */,
 				8D1CBD182758AA4500EC2B4D /* Frameworks */,
 				8D1CBD192758AA4500EC2B4D /* Resources */,
+				61D2ECA08F2762019A12CE0F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1071,6 +1074,7 @@
 				8DDD6B4127337C3A0042487D /* Sources */,
 				8DDD6B4227337C3A0042487D /* Frameworks */,
 				8DDD6B4327337C3A0042487D /* Resources */,
+				9C834C0D16D3903F0CB4C025 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1136,6 +1140,40 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		61D2ECA08F2762019A12CE0F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C834C0D16D3903F0CB4C025 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C161A8A17B014E43AC48A60B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1322,6 +1360,7 @@
 		};
 		8D1CBD242758AA4500EC2B4D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 29F62C23490CF61F86E3348E /* Pods-GaiaXiOSTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;

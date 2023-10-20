@@ -18,7 +18,6 @@
 
 #import "GXRichTextNode.h"
 #import "NSDictionary+GX.h"
-#import <YYText/YYText.h>
 #import "GXCacheCenter.h"
 #import "GXRichText.h"
 #import "UIColor+GX.h"
@@ -71,7 +70,7 @@
     label.clipsToBounds = self.clipsToBounds;
     
     //内边距
-    label.textContainerInset = self.gxPadding;
+    label.gxPadding = self.gxPadding;
     
     //设置圆角
     [self setupCornerRadius:label];
@@ -310,21 +309,14 @@
             NSValue *resultRangeValue = resultRanges[i];
             NSRange resultRange = [resultRangeValue rangeValue];
             
-            //tap
-            YYTextHighlight *highlight = [YYTextHighlight highlightWithBackgroundColor:nil];
-            highlight.tapAction = ^(UIView * _Nonnull containerView, NSAttributedString * _Nonnull text, NSRange range, CGRect rect) {
-                GXLog(@"[GaiaX] 点击内容：%@", text);
-            };
-            [mAttributedText yy_setTextHighlight:highlight range:resultRange];
-            
             //color
             if (highLightColor) {
-                [mAttributedText yy_setColor:highLightColor range:resultRange];
+                [mAttributedText addAttribute:NSForegroundColorAttributeName value:highLightColor range:resultRange];
             }
             
             //font
             if (highLightFont) {
-                [mAttributedText yy_setFont:highLightFont range:resultRange];
+                [mAttributedText addAttribute:NSFontAttributeName value:highLightFont range:resultRange];
             }
             
         }

@@ -83,13 +83,13 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
 
     private fun show() {
         Log.d(TAG, "show() called")
-
+        GXTemplateEngine.instance.onAppear(gxView)
         GXJSEngineProxy.instance.onShow(gxView)
     }
 
     private fun hide() {
         Log.d(TAG, "hide() called")
-
+        GXTemplateEngine.instance.onDisappear(gxView)
         GXJSEngineProxy.instance.onHide(gxView)
     }
 
@@ -120,6 +120,8 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
     }
 
     private fun create() {
+        fastPreviewRoot.removeAllViews()
+
         Log.d(TAG, "create() called")
         gxTemplateData?.let { gxTemplateData ->
             gxTemplateItem?.let { gxTemplateItem ->
@@ -137,15 +139,8 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                     // 获取模板信息
                     val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
                     if (gxTemplateInfo.isJsExist) {
-                        // 下一帧执行JS
-                        gxView?.post {
-
-                            // 注册容器
-                            GXJSEngineProxy.instance.registerComponent(gxView)
-
-                            // 执行生命周期变化
-                            GXJSEngineProxy.instance.onReady(gxView)
-                        }
+                        // 注册容器
+                        GXJSEngineProxy.instance.registerComponentAndOnReady(gxView)
                     }
                 }
             }

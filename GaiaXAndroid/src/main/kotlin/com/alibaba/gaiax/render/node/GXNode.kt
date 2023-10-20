@@ -26,6 +26,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.basic.GXShadowLayout
 import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.GXPropUtils
 
 /**
  * @suppress
@@ -210,7 +211,11 @@ class GXNode {
     }
 
     override fun toString(): String {
-        return "GXNode(id='$id', templateNode=$templateNode, children=$children)"
+        return if (GXPropUtils.isShowNodeLog()) {
+            "GXNode(id='$id', templateNode=$templateNode, children=$children)"
+        } else {
+            "GXNode(id='$id')"
+        }
     }
 
 }

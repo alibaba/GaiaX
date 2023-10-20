@@ -102,4 +102,5 @@ open class GXContainer : RecyclerView, GXIContainer, GXIViewBindData, GXIRootVie
             }
         }
     }
+
 }

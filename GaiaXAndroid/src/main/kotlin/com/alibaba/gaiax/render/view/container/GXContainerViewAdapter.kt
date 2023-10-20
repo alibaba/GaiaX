@@ -35,6 +35,7 @@ import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
 import com.alibaba.gaiax.utils.GXExceptionHelper
+import com.alibaba.gaiax.utils.Log
 import com.alibaba.gaiax.utils.getStringExt
 
 /**
@@ -201,43 +202,57 @@ class GXContainerViewAdapter(
             JSONObject()
         }
 
+        var isReuse: Boolean = false
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
-            holder.childTag = processContainerItemBind.bindViewHolder(
-                gxTemplateContext.templateData?.tag,
-                itemContainer,
-                itemMeasureSize,
-                templateItem,
-                GXTemplateEngine.GXExtendParams().apply {
-                    this.gxItemPosition = itemPosition
-                    this.gxItemData = itemData
-                    this.gxHostTemplateContext = gxTemplateContext
-                    this.gxVisualTemplateNode = visualNestTemplateNode
-                }
-            )
+            holder.childTag =
+                processContainerItemBind.bindViewHolder(gxTemplateContext.templateData?.tag,
+                    itemContainer,
+                    itemMeasureSize,
+                    templateItem,
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    })
+
+            // 这里需要处理和优酷的兼容逻辑
+            // 优酷使用了异步加载，这个时候无法直接确定View
+            // 获取坑位View
+//            val isReuse = itemContainer.childCount != 0
+//
+//            if (isReuse) {
+//                GXRegisterCenter.instance.gxViewLifecycleListener?.onReuse(gxView)
+//            } else {
+//                GXRegisterCenter.instance.gxViewLifecycleListener?.onCreate(gxView)
+//            }
         } else {
 
             // 获取坑位View
             val gxView = if (itemContainer.childCount != 0) {
+                isReuse = true
                 itemContainer.getChildAt(0)
             } else {
 
                 GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
-                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(
-                    templateItem,
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem,
                     itemMeasureSize,
                     GXTemplateEngine.GXExtendParams().apply {
                         this.gxItemPosition = itemPosition
                         this.gxItemData = itemData
                         this.gxHostTemplateContext = gxTemplateContext
                         this.gxVisualTemplateNode = visualNestTemplateNode
-                    }
-                ) ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
+                    })
+                    ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
 
                 val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
 
                 itemContainer.addView(itemView)
+
+                isReuse = false
+
                 itemView
             }
 
@@ -303,6 +318,14 @@ class GXContainerViewAdapter(
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 itemContainer.layoutParams.width = gxView.layoutParams.width
+            }
+        }
+
+        itemContainer.getChildAt(0)?.let { gxView ->
+            if (isReuse) {
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
+            } else {
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
             }
         }
     }
@@ -435,4 +458,40 @@ class GXContainerViewAdapter(
         return gxNode.layoutByBind?.width != targetWidth
     }
 
+    override fun onViewAttachedToWindow(holder: GXViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        if (Log.isLog()) {
+            Log.e("onViewAttachedToWindow $holder")
+        }
+        val view = holder.itemView
+        if (view is ViewGroup && view.childCount > 0) {
+            val gxView = view.getChildAt(0)
+            if (gxView != null) {
+                GXTemplateEngine.instance.onAppear(gxView)
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+            }
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: GXViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (Log.isLog()) {
+            Log.e("onViewDetachedFromWindow $holder")
+        }
+        val view = holder.itemView
+        if (view is ViewGroup && view.childCount > 0) {
+            val gxView = view.getChildAt(0)
+            if (gxView != null) {
+                GXTemplateEngine.instance.onDisappear(gxView)
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+            }
+        }
+    }
+
+    override fun onViewRecycled(holder: GXViewHolder) {
+        super.onViewRecycled(holder)
+        if (Log.isLog()) {
+            Log.e("onViewRecycled $holder")
+        }
+    }
 }

@@ -31,6 +31,7 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
+import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress
@@ -100,10 +101,14 @@ class GXSliderViewAdapter(
 
         itemContainer.layoutParams = itemContainerLayoutParams
 
+
+        var isReuse = false
+
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
         if (processContainerItemBind != null) {
-            processContainerItemBind.bindViewHolder(
-                gxTemplateContext.templateData?.tag,
+
+            //
+            processContainerItemBind.bindViewHolder(gxTemplateContext.templateData?.tag,
                 itemContainer,
                 itemMeasureSize,
                 templateItem,
@@ -112,14 +117,15 @@ class GXSliderViewAdapter(
                     this.gxItemData = itemData
                     this.gxHostTemplateContext = gxTemplateContext
                     this.gxVisualTemplateNode = visualNestTemplateNode
-                }
-            )
+                })
         } else {
 
             // 获取坑位View
             val gxView = if (itemContainer.childCount != 0) {
+                isReuse = true
                 itemContainer.getChildAt(0)
             } else {
+                isReuse = false
 
                 GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
@@ -201,6 +207,7 @@ class GXSliderViewAdapter(
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 itemContainer.layoutParams.width = gxView.layoutParams.width
+
             }
         }
 
@@ -208,10 +215,25 @@ class GXSliderViewAdapter(
 
         itemViewMap[getItemViewKey(position)] = itemContainer
 
+        if (Log.isLog()) {
+            Log.e("instantiateItem $container $position $itemContainer")
+        }
+
+        itemContainer.getChildAt(0)?.let { gxView ->
+            if (isReuse) {
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
+            } else {
+                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
+            }
+        }
+
         return itemContainer
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+        if (Log.isLog()) {
+            Log.e("destroyItem $container $position $obj")
+        }
         if (obj is View) {
             container.removeView(obj)
         }
@@ -246,4 +268,5 @@ class GXSliderViewAdapter(
     fun getItemView(position: Int): View? {
         return itemViewMap[getItemViewKey(position)]
     }
+
 }

@@ -83,10 +83,7 @@ class JSTemplateActivity : AppCompatActivity() {
         findViewById<LinearLayoutCompat>(R.id.template_1).addView(customGXView, 0)
 
         // 注册JS组件
-        GXJSEngineProxy.instance.registerComponent(customGXView)
-
-        // JS组件OnReady事件
-        GXJSEngineProxy.instance.onReady(customGXView)
+        GXJSEngineProxy.instance.registerComponentAndOnReady(customGXView)
     }
 
     private fun renderJSApiDemoTemplate(activity: JSTemplateActivity, templateId: String) {
@@ -113,10 +110,7 @@ class JSTemplateActivity : AppCompatActivity() {
         findViewById<LinearLayoutCompat>(R.id.template_2).addView(apiGXView, 0)
 
         //
-        GXJSEngineProxy.instance.registerComponent(apiGXView)
-
-        //
-        GXJSEngineProxy.instance.onReady(apiGXView)
+        GXJSEngineProxy.instance.registerComponentAndOnReady(apiGXView)
 
     }
 

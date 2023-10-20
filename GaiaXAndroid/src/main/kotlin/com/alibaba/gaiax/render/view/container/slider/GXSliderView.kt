@@ -33,7 +33,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.*
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 import java.util.*
 
 /**
@@ -123,8 +123,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
 
         addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
 
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView initViewPager this=${this} viewPager=${viewPager}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView initViewPager this=${this} viewPager=${viewPager}")
         }
     }
 
@@ -226,8 +226,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                 timer = Timer()
                 timerTask = object : TimerTask() {
                     override fun run() {
-                        if (GXLog.isLog()) {
-                            GXLog.e("GXSliderView timerTask this=${this@GXSliderView} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
+                        if (Log.isLog()) {
+                            Log.e("GXSliderView timerTask this=${this@GXSliderView} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
                         }
 
                         viewPager?.currentItem?.let { currentItem ->
@@ -246,14 +246,14 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
             }
         }
 
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView startTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView startTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
         }
     }
 
     private fun stopTimer() {
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView stopTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView stopTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
         }
 
         timer?.cancel()
@@ -315,8 +315,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun release() {
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView release this=${this@GXSliderView} viewPager=${viewPager}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView release this=${this@GXSliderView} viewPager=${viewPager}")
         }
 
         indicatorView = null
@@ -329,8 +329,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun onVisibleChanged(visible: Boolean) {
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView onVisibleChanged this=${this@GXSliderView} viewPager=${viewPager} visible=${visible} isAttached=${isAttached}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView onVisibleChanged this=${this@GXSliderView} viewPager=${viewPager} visible=${visible} isAttached=${isAttached}")
         }
         if (!isAttached) {
             return
@@ -345,8 +345,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     override fun onAttachedToWindow() {
         isAttached = true
         super.onAttachedToWindow()
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView onAttachedToWindow this=${this@GXSliderView} viewPager=${viewPager}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView onAttachedToWindow this=${this@GXSliderView} viewPager=${viewPager}")
         }
 
         // 只有第一个SliderView可以自动滚动，用于解决多频道轮播图同时滚动的问题
@@ -360,8 +360,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     override fun onDetachedFromWindow() {
         isAttached = false
         super.onDetachedFromWindow()
-        if (GXLog.isLog()) {
-            GXLog.e("GXSliderView onDetachedFromWindow this=${this@GXSliderView} viewPager=${viewPager}")
+        if (Log.isLog()) {
+            Log.e("GXSliderView onDetachedFromWindow this=${this@GXSliderView} viewPager=${viewPager}")
         }
     }
 }

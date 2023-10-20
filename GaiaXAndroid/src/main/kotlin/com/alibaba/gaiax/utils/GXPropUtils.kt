@@ -35,6 +35,7 @@ object GXPropUtils {
 
     private var isLog: Boolean? = null
 
+
     /**
      * adb shell setprop debug.com.alibaba.gaiax.log 1
      */
@@ -43,6 +44,15 @@ object GXPropUtils {
             isLog = "1" == GXSystemProp["debug.com.alibaba.gaiax.log", "0"]
         }
         return isLog ?: false
+    }
+
+    private var isShowNodeLog: Boolean? = null
+
+    fun isShowNodeLog(): Boolean {
+        if (isShowNodeLog == null) {
+            isShowNodeLog = "1" == GXSystemProp["debug.com.alibaba.gaiax.log.show_node_log", "0"]
+        }
+        return isShowNodeLog ?: false
     }
 
 

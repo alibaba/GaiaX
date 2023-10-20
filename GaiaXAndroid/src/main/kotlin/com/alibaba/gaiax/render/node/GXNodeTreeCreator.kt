@@ -21,7 +21,6 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.template.GXLayer
 import com.alibaba.gaiax.template.GXTemplateInfo
-import com.alibaba.gaiax.utils.GXLog
 
 /**
  * 用于创建虚拟节点树

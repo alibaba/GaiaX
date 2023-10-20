@@ -26,7 +26,7 @@ import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdate
 import com.alibaba.gaiax.utils.GXGlobalCache
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress
@@ -55,8 +55,8 @@ class GXRenderImpl {
             )
                 ?: throw IllegalArgumentException("root layout is null")
 
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=createViewOnlyNodeTree rootLayout=${rootLayout}"
             )
@@ -83,8 +83,8 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyNodeTree"
             )
@@ -98,8 +98,8 @@ class GXRenderImpl {
     }
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyViewTree"
             )
@@ -116,8 +116,8 @@ class GXRenderImpl {
     }
 
     fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=resetViewDataOnlyViewTree"
             )

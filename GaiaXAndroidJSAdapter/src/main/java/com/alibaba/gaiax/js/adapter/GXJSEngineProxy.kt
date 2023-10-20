@@ -33,6 +33,7 @@ import com.alibaba.gaiax.js.adapter.modules.GXJSNativeUtilModule
 import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.js.utils.TimeUtils
+import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.lang.ref.WeakReference
 
@@ -87,6 +88,49 @@ class GXJSEngineProxy {
         // 注册GaiaX扩展JS事件
         GXRegisterCenter.instance.registerExtensionNodeEvent(GXExtensionNodeEvent())
 
+        // 注册GaiaX视图可见监听器
+        GXRegisterCenter.instance.registerExtensionItemViewLifecycleListener(object :
+            GXRegisterCenter.GXIItemViewLifecycleListener {
+            override fun onCreate(gxView: View?) {
+                if (Log.isLog()) {
+                    Log.d("onCreate() called with: $gxView")
+                }
+                // 注册容器
+                instance.registerComponentAndOnReady(gxView)
+            }
+
+            override fun onVisible(gxView: View?) {
+                if (Log.isLog()) {
+                    Log.d("onVisible() called with: $gxView")
+                }
+                instance.onShow(gxView)
+            }
+
+            override fun onInvisible(gxView: View?) {
+                if (Log.isLog()) {
+                    Log.d("onInvisible() called with: $gxView")
+                }
+                instance.onHide(gxView)
+            }
+
+            override fun onReuse(gxView: View?) {
+                if (Log.isLog()) {
+                    Log.d("onReuse() called with: $gxView")
+                }
+                // 执行生命周期变化
+                instance.onReuse(gxView)
+            }
+
+            override fun onDestroy(gxView: View?) {
+                if (Log.isLog()) {
+                    Log.d("onDestroy() called with: $gxView")
+                }
+                instance.onDestroy(gxView)
+                instance.unregisterComponent(gxView)
+            }
+
+        })
+
     }
 
     fun startDefaultEngine() {
@@ -126,6 +170,9 @@ class GXJSEngineProxy {
     }
 
 
+    /**
+     * 通知视图的JS组件可用
+     */
     fun onReady(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onReady() called with: gxView = $gxView")
@@ -137,6 +184,9 @@ class GXJSEngineProxy {
         }
     }
 
+    /**
+     * 通知视图的JS组件复用
+     */
     fun onReuse(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onReuse() called with: gxView = $gxView")
@@ -148,35 +198,65 @@ class GXJSEngineProxy {
         }
     }
 
+    /**
+     * 通知视图的JS组件显示，如果视图是容器那么也通知其坑位JS组件显示
+     */
     fun onShow(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onShow() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+            // 通知JS组件显示
+            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onShow(jsComponentId)
+            }
+
+            // 遍历容器子视图，通知坑位销毁
+            GXContainerUtils.notifyView(gxTemplateContext) { gxView: View ->
+                onShow(gxView)
             }
         }
     }
 
+    /**
+     * 通知视图的JS组件隐藏，如果视图是容器那么也通知其坑位JS组件隐藏
+     */
     fun onHide(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onHide() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+            // 通知JS组件隐藏
+            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onHide(jsComponentId)
+            }
+
+            // 遍历容器子视图，通知坑位隐藏
+            GXContainerUtils.notifyView(gxTemplateContext) { gxView: View ->
+                onHide(gxView)
             }
         }
     }
 
+    /**
+     * 通知视图的JS组件销毁，如果视图是容器那么也通知其坑位JS组件销毁
+     */
     fun onDestroy(gxView: View?) {
         if (Log.isLog()) {
             Log.d("onDestroy() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+            // 通知JS组件销毁
+            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onDestroy(jsComponentId)
+            }
+
+            // 遍历容器子视图，通知坑位组件销毁
+            GXContainerUtils.notifyView(gxTemplateContext) { gxView: View ->
+                onDestroy(gxView)
             }
         }
     }
@@ -192,6 +272,22 @@ class GXJSEngineProxy {
         }
     }
 
+    /**
+     * 通知视图的JS组件注册和可用
+     */
+    fun registerComponentAndOnReady(gxView: View?) {
+        if (Log.isLog()) {
+            Log.d("registerComponentAndOnReady() called with: gxView = $gxView")
+        }
+        gxView?.post {
+            registerComponent(gxView)
+            onReady(gxView)
+        }
+    }
+
+    /**
+     * 通知视图的JS组件注册
+     */
     fun registerComponent(gxView: View?) {
         if (Log.isLog()) {
             Log.d("registerComponent() called with: gxView = $gxView")
@@ -202,18 +298,23 @@ class GXJSEngineProxy {
             }
             registerTemplateTree(gxTemplateContext, gxTemplateContext.templateInfo)
 
-            // 默认使用第一个组件ID作为和Context的映射关系
+            // 将注册组件ID都和跟视图做映射并保存起来
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSRenderProxy.instance.jsComponentMap[jsComponentId] = WeakReference(gxView)
             }
         }
     }
 
+    /**
+     * 通知视图的JS组件解除注册，如果视图是容器那么也通知其坑位JS组件解除注册
+     */
     fun unregisterComponent(gxView: View?) {
         if (Log.isLog()) {
             Log.d("unregisterComponent() called with: gxView = $gxView")
         }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+            // 通知JS组件解除注册
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSRenderProxy.instance.jsComponentMap.remove(jsComponentId)
             }
@@ -221,6 +322,11 @@ class GXJSEngineProxy {
                 GXJSEngine.instance.unregisterComponent(jsComponentId)
             }
             gxTemplateContext.jsComponentIds?.clear()
+
+            // 遍历容器子视图，通知坑位解除注册
+            GXContainerUtils.notifyView(gxTemplateContext) { gxView: View ->
+                unregisterComponent(gxView)
+            }
         }
     }
 
@@ -239,14 +345,22 @@ class GXJSEngineProxy {
                 templateBiz, templateId, templateVersion, script
             )
             gxTemplateContext.jsComponentIds?.add(jsComponentId)
+        } else {
+            if (Log.isLog()) {
+                Log.d("registerTemplateTree() called with: $templateId script is null")
+            }
         }
 
-        // 仅有当前模板不是容器模板时，但又是由子模板组成的时候，子模板也可以有JS代码，所以需要向下递归注册
         val children = templateInfo.children
-        if (!layer.isContainerType() && !children.isNullOrEmpty()) {
-            for (gxTemplateInfo in children) {
-                registerTemplateTree(gxTemplateContext, gxTemplateInfo)
+        // 仅有当前模板不是容器模板时，但又是由子模板组成的时候，子模板也可以有JS代码，所以需要向下递归注册
+        if (!layer.isContainerType()) {
+            if (!children.isNullOrEmpty()) {
+                for (gxTemplateInfo in children) {
+                    registerTemplateTree(gxTemplateContext, gxTemplateInfo)
+                }
             }
+        } else {
+            // 如果是容器模板，那么其子模板要独立注册
         }
     }
 
@@ -272,4 +386,5 @@ class GXJSEngineProxy {
             onNativeEvent(componentId, result)
         }
     }
+
 }

@@ -2,7 +2,7 @@ package com.alibaba.gaiax.context
 
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 
 fun GXTemplateContext.initLayoutForScroll() {
     if (scrollItemLayoutCache == null) {
@@ -21,8 +21,8 @@ fun GXTemplateContext.isExistForScroll(key: Any): Boolean {
 }
 
 fun GXTemplateContext.putLayoutForScroll(key: Any, value: Layout) {
-    if (GXLog.isLog()) {
-        GXLog.e("putLayoutForScroll key=$key value=$value")
+    if (Log.isLog()) {
+        Log.e("putLayoutForScroll key=$key value=$value")
     }
     scrollItemLayoutCache?.put(key, value)
 }
@@ -57,15 +57,15 @@ fun GXTemplateContext.isExistNodeForScroll(key: Any): Boolean {
 
 fun GXTemplateContext.obtainNodeForScroll(key: Any): GXNode? {
     val value = scrollNodeCache?.remove(key)
-    if (GXLog.isLog()) {
-        GXLog.e("obtainNodeForScroll key=${key} value=${value}")
+    if (Log.isLog()) {
+        Log.e("obtainNodeForScroll key=${key} value=${value}")
     }
     return value
 }
 
 fun GXTemplateContext.putNodeForScroll(key: Any, value: GXNode) {
     scrollNodeCache?.put(key, value)
-    if (GXLog.isLog()) {
-        GXLog.e("putNodeForScroll key=${key} value=${value}")
+    if (Log.isLog()) {
+        Log.e("putNodeForScroll key=${key} value=${value}")
     }
 }

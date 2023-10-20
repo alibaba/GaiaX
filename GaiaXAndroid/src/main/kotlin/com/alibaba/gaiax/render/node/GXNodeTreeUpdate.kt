@@ -63,7 +63,7 @@ import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
-import com.alibaba.gaiax.utils.GXLog
+import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress
@@ -71,8 +71,8 @@ import com.alibaba.gaiax.utils.GXLog
 object GXNodeTreeUpdate {
 
     fun buildNodeLayout(gxTemplateContext: GXTemplateContext) {
-        if (GXLog.isLog()) {
-            GXLog.e(
+        if (Log.isLog()) {
+            Log.e(
                 gxTemplateContext.tag,
                 "traceId=${gxTemplateContext.traceId} tag=buildNodeLayout"
             )
@@ -117,8 +117,8 @@ object GXNodeTreeUpdate {
             templateData: JSONObject,
             size: Size<Float?>
         ) {
-            if (GXLog.isLog()) {
-                GXLog.e(
+            if (Log.isLog()) {
+                Log.e(
                     gxTemplateContext.tag,
                     "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayout"
                 )
@@ -138,8 +138,8 @@ object GXNodeTreeUpdate {
         ) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
 
-                if (GXLog.isLog()) {
-                    GXLog.e(
+                if (Log.isLog()) {
+                    Log.e(
                         gxTemplateContext.tag,
                         "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayoutByDirtyText"
                     )
@@ -357,8 +357,8 @@ object GXNodeTreeUpdate {
                         isDirty = true
                     }
 
-                    if (GXLog.isLog()) {
-                        GXLog.e(
+                    if (Log.isLog()) {
+                        Log.e(
                             gxTemplateContext.tag,
                             "traceId=${gxTemplateContext.traceId} tag=updateContainerLayout containerSize=${containerSize}"
                         )

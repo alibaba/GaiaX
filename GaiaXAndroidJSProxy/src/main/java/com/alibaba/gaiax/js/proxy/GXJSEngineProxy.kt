@@ -22,6 +22,8 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.api.GXJSBaseModule
+import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
 import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInModule
 import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInStorageModule
 import com.alibaba.gaiax.js.proxy.modules.GXJSBuildInTipsModule
@@ -30,14 +32,17 @@ import com.alibaba.gaiax.js.proxy.modules.GXJSLogModule
 import com.alibaba.gaiax.js.proxy.modules.GXJSNativeEventModule
 import com.alibaba.gaiax.js.proxy.modules.GXJSNativeTargetModule
 import com.alibaba.gaiax.js.proxy.modules.GXJSNativeUtilModule
-import com.alibaba.gaiax.js.api.GXJSBaseModule
-import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.js.utils.TimeUtils
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.template.GXTemplateInfo
 import java.lang.ref.WeakReference
 
+/**
+ * JS引擎的代理增强类，封装了与GaiaX渲染库组合使用的一些常用方法。
+ *
+ * 如果外部接入方想要直接使用GXJSEngine，应该重新实现一份 GXJSEngineProxy 的功能。
+ */
 class GXJSEngineProxy {
 
     companion object {

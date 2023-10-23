@@ -21,21 +21,27 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
+import com.alibaba.gaiax.utils.Log
 import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.webp.decoder.WebpDrawable
+import com.bumptech.glide.integration.webp.decoder.WebpDrawableTransformation
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
 @Keep
 class GXAdapterImageView(context: Context) : GXImageView(context) {
 
+    private var lastUrl: String? = null
+
     private val requestListener = object : RequestListener<Drawable> {
         override fun onResourceReady(
-            resource: Drawable?,
-            model: Any?,
+            resource: Drawable,
+            model: Any,
             target: Target<Drawable>?,
-            dataSource: DataSource?,
+            dataSource: DataSource,
             isFirstResource: Boolean
         ): Boolean {
             gxTemplateContext?.let {
@@ -45,26 +51,35 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
         }
 
         override fun onLoadFailed(
-            e: GlideException?,
-            model: Any?,
-            target: Target<Drawable>?,
-            isFirstResource: Boolean
+            e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean
         ): Boolean {
             return false
         }
     }
 
     override fun bindNetUri(data: JSONObject, uri: String, placeholder: String?) {
+
+        // 如果要加载的URI和缓存一致，那么跳过这次逻辑处理
+        if (lastUrl == uri) {
+            if (Log.isLog()) {
+                Log.e("bindNetUri() called with: skip $uri")
+            }
+            return
+        } else {
+            if (Log.isLog()) {
+                Log.e("bindNetUri() called with: data = $data, uri = $uri, placeholder = $placeholder")
+            }
+        }
+
         // 占位图仅对网络图生效
         var res = 0
         placeholder?.let { resUri ->
             res = getRes(resUri)
         }
-        Glide
-            .with(context)
-            .load(uri)
-            .placeholder(res)
-            .listener(requestListener)
-            .into(this)
+        Glide.with(context).load(uri)
+            .optionalTransform(WebpDrawable::class.java, WebpDrawableTransformation(FitCenter()))
+            .placeholder(res).listener(requestListener).into(this)
+
+        this.lastUrl = uri
     }
 }

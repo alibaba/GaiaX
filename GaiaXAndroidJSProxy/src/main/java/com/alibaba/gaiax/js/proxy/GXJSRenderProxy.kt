@@ -6,9 +6,9 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
+import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
-import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
 
@@ -21,9 +21,11 @@ internal class GXJSRenderProxy {
     }
 
     /**
-     * JS组件ID与视图之间的映射关系
+     * JS组件ID与视图之间的全局映射关系.
+     * 这里使用强引用做保存，否则可能会存在被回收的情况。
+     * 由于JS运行时在一个独立的线程中，无法保存与视图相关的信息，只对外暴露了组件ID，所以当从JS线程中发生回调时，需要利用组件ID反向索引出对应的视图
      */
-    val jsComponentMap: MutableMap<Long, WeakReference<View>> = ConcurrentHashMap()
+    val jsGlobalComponentMap: MutableMap<Long, View?> = ConcurrentHashMap()
 
     /**
      * native事件数据
@@ -34,19 +36,29 @@ internal class GXJSRenderProxy {
         componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
     ) {
         GXJSUiExecutor.action {
-            val cntView = jsComponentMap[componentId]?.get()
-            GXTemplateEngine.instance.bindData(cntView, GXTemplateEngine.GXTemplateData(data))
+            val gxView = jsGlobalComponentMap[componentId]
+            if (gxView != null) {
+                GXTemplateEngine.instance.bindData(gxView, GXTemplateEngine.GXTemplateData(data))
+            } else {
+                if (Log.isLog()) {
+                    Log.d("setData() called gxView is null, $componentId $templateId")
+                }
+            }
             callback.invoke()
         }
     }
 
     fun getData(componentId: Long): JSONObject? {
-        return GXTemplateEngine.instance.getGXTemplateContext(jsComponentMap[componentId]?.get())?.templateData?.data
+        jsGlobalComponentMap[componentId]?.let { gxView ->
+            return GXTemplateEngine.instance.getGXTemplateContext(gxView)?.templateData?.data
+        }
+        return null
     }
 
-    fun getNodeInfo(targetId: String, templateId: String, instanceId: Long): JSONObject {
-        val nodeInfo: GXNode? =
-            GXTemplateEngine.instance.getGXNodeById(jsComponentMap[instanceId]?.get(), targetId)
+    fun getNodeInfo(targetId: String, templateId: String, componentId: Long): JSONObject {
+        val nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(
+            jsGlobalComponentMap[componentId], targetId
+        )
         return if (nodeInfo != null) {
             val targetNode = JSONObject()
             targetNode["targetType"] = nodeInfo.templateNode.layer.type
@@ -65,7 +77,7 @@ internal class GXJSRenderProxy {
         optionCover: Boolean,
         optionLevel: Int
     ) {
-        jsComponentMap[componentId]?.get()?.let { gxView ->
+        jsGlobalComponentMap[componentId]?.let { gxView ->
             GXTemplateEngine.instance.getGXTemplateContext(gxView)?.let { gxTemplateContext ->
                 val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
                 gxNode?.initEventByRegisterCenter()
@@ -86,7 +98,7 @@ internal class GXJSRenderProxy {
     }
 
     fun removeGestureEventListener(targetId: String, componentId: Long, eventType: String) {
-        jsComponentMap[componentId]?.get()?.let { gxView ->
+        jsGlobalComponentMap[componentId]?.let { gxView ->
             val gxNode = GXTemplateEngine.instance.getGXNodeById(gxView, targetId)
             gxNode?.initEventByRegisterCenter()
             (gxNode?.event as? GXMixNodeEvent)?.removeJSEvent(componentId, eventType)
@@ -94,9 +106,9 @@ internal class GXJSRenderProxy {
     }
 
     fun getActivity(): Activity? {
-        jsComponentMap.forEach {
-            val activity = it.value.get()?.context as Activity
-            if (!activity.isFinishing) {
+        jsGlobalComponentMap.forEach {
+            val activity = it.value?.context as? Activity
+            if (activity?.isFinishing == false) {
                 return activity
             }
         }

@@ -36,7 +36,6 @@ import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.js.utils.TimeUtils
 import com.alibaba.gaiax.render.utils.GXContainerUtils
 import com.alibaba.gaiax.template.GXTemplateInfo
-import java.lang.ref.WeakReference
 
 /**
  * JS引擎的代理增强类，封装了与GaiaX渲染库组合使用的一些常用方法。
@@ -302,14 +301,18 @@ class GXJSEngineProxy {
             Log.d("registerComponent() called with: gxView = $gxView")
         }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+            // 在GaiaX中存储JS组件ID
             if (gxTemplateContext.jsComponentIds == null) {
                 gxTemplateContext.jsComponentIds = mutableListOf()
             }
+
+            // 寻找可注册的JS组件
             registerTemplateTree(gxTemplateContext, gxTemplateContext.templateInfo)
 
-            // 将注册组件ID都和跟视图做映射并保存起来
+            // 将注册组件ID都和跟视图做全局映射
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
-                GXJSRenderProxy.instance.jsComponentMap[jsComponentId] = WeakReference(gxView)
+                GXJSRenderProxy.instance.jsGlobalComponentMap[jsComponentId] = gxView
             }
         }
     }
@@ -323,9 +326,9 @@ class GXJSEngineProxy {
         }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
-            // 通知JS组件解除注册
+            // 解除JS组件ID和视图的全局映射
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
-                GXJSRenderProxy.instance.jsComponentMap.remove(jsComponentId)
+                GXJSRenderProxy.instance.jsGlobalComponentMap.remove(jsComponentId)
             }
             gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.unregisterComponent(jsComponentId)

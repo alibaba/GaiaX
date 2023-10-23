@@ -83,6 +83,11 @@ class GXContainerViewAdapter(
     private fun createGXViewHolder(
         viewType: Int, parent: ViewGroup
     ): GXViewHolder {
+
+        if (Log.isLog()) {
+            Log.e("createGXViewHolder $viewType $parent")
+        }
+
         // 准备构建坑位容器的参数
         val templateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
@@ -165,6 +170,10 @@ class GXContainerViewAdapter(
     }
 
     private fun bindGXViewHolder(holder: GXViewHolder) {
+
+        if (Log.isLog()) {
+            Log.e("bindGXViewHolder $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
+        }
 
         val templateItem =
             holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
@@ -461,7 +470,7 @@ class GXContainerViewAdapter(
     override fun onViewAttachedToWindow(holder: GXViewHolder) {
         super.onViewAttachedToWindow(holder)
         if (Log.isLog()) {
-            Log.e("onViewAttachedToWindow $holder")
+            Log.e("onViewAttachedToWindow $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
         }
         val view = holder.itemView
         if (view is ViewGroup && view.childCount > 0) {
@@ -476,7 +485,7 @@ class GXContainerViewAdapter(
     override fun onViewDetachedFromWindow(holder: GXViewHolder) {
         super.onViewDetachedFromWindow(holder)
         if (Log.isLog()) {
-            Log.e("onViewDetachedFromWindow $holder")
+            Log.e("onViewDetachedFromWindow $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
         }
         val view = holder.itemView
         if (view is ViewGroup && view.childCount > 0) {
@@ -491,7 +500,8 @@ class GXContainerViewAdapter(
     override fun onViewRecycled(holder: GXViewHolder) {
         super.onViewRecycled(holder)
         if (Log.isLog()) {
-            Log.e("onViewRecycled $holder")
+            Log.e("onViewRecycled $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
         }
+        // 不应该在此处处理JS组件销毁的动作，因为onViewRecycled执行后holder.itemView中的view还是保持存在的。
     }
 }

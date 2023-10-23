@@ -23,11 +23,8 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
 import com.alibaba.gaiax.utils.Log
 import com.bumptech.glide.Glide
-import com.bumptech.glide.integration.webp.decoder.WebpDrawable
-import com.bumptech.glide.integration.webp.decoder.WebpDrawableTransformation
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
@@ -76,9 +73,7 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
         placeholder?.let { resUri ->
             res = getRes(resUri)
         }
-        Glide.with(context).load(uri)
-            .optionalTransform(WebpDrawable::class.java, WebpDrawableTransformation(FitCenter()))
-            .placeholder(res).listener(requestListener).into(this)
+        Glide.with(context).load(uri).placeholder(res).listener(requestListener).into(this)
 
         this.lastUrl = uri
     }

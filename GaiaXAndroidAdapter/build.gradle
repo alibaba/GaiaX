@@ -96,9 +96,6 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.5.31@jar'
     implementation 'com.alibaba:fastjson:1.2.26@jar'
 
-    // https://github.com/zjupure/GlideWebpDecoder
-    implementation "com.github.zjupure:webpdecoder:2.6.4.16.0"
-
     if (System.getProperties().get("isGaiaXDemo") == "true") {
         compileOnly project(path: ':GaiaXAndroid')
     } else if (project.hasProperty("type") && project.getProperty("type").equals("release")) {

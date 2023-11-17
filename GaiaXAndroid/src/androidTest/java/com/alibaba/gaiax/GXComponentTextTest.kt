@@ -1011,11 +1011,8 @@ class GXComponentTextTest : GXBaseTest() {
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec =
-            View.MeasureSpec.makeMeasureSpec(100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST)
-        textView.measure(widthSpec, 0)
-
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        textView.measure(0, 0)
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 
@@ -1286,12 +1283,10 @@ class GXComponentTextTest : GXBaseTest() {
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(
-            100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST
-        )
-        textView.measure(widthSpec, 0)
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
     }
 
@@ -1314,12 +1309,10 @@ class GXComponentTextTest : GXBaseTest() {
         val textView = GXText(GXMockUtils.context)
         textView.text = "HelloWorld"
         textView.setFontSize(20F.dpToPx())
-        val widthSpec = View.MeasureSpec.makeMeasureSpec(
-            100F.dpToPx().toInt(), View.MeasureSpec.AT_MOST
-        )
-        textView.measure(widthSpec, 0)
 
-        Assert.assertEquals(100F.dpToPx(), rootView.child(0).width())
+        textView.measure(0, 0)
+
+        Assert.assertEquals(textView.measuredWidth.toFloat(), rootView.child(0).width())
         Assert.assertEquals(textView.measuredHeight.toFloat(), rootView.child(0).height())
 
         GXRegisterCenter.instance.registerExtensionCompatibility(

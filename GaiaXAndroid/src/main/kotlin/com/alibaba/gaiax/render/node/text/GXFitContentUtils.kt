@@ -184,14 +184,28 @@ object GXFitContentUtils {
                     throw IllegalArgumentException("If lines = 0 or lines > 1, you must set text width")
                 }
             } else if (nodeWidth > 0) {
-                val widthSpec = View.MeasureSpec.makeMeasureSpec(
-                    nodeWidth.toInt(), View.MeasureSpec.AT_MOST
-                )
-                gxCacheText.measure(widthSpec, 0)
-                result = Size(
-                    Dimension.Points(nodeWidth),
-                    Dimension.Points(gxCacheText.measuredHeight.toFloat())
-                )
+
+                // 计算宽高
+                gxCacheText.measure(0, 0)
+                val measuredWidth = gxCacheText.measuredWidth.toFloat()
+
+                // FIX: 和iOS端保持一致
+                // 如果计算结果行数一行，并且宽度小于最大宽度，那么使用实际的宽度作为结果
+                if (gxCacheText.lineCount == 1 && measuredWidth < nodeWidth) {
+                    result = Size(
+                        Dimension.Points(measuredWidth),
+                        Dimension.Points(gxCacheText.measuredHeight.toFloat())
+                    )
+                } else {
+                    val widthSpec = View.MeasureSpec.makeMeasureSpec(
+                        nodeWidth.toInt(), View.MeasureSpec.AT_MOST
+                    )
+                    gxCacheText.measure(widthSpec, 0)
+                    result = Size(
+                        Dimension.Points(nodeWidth),
+                        Dimension.Points(gxCacheText.measuredHeight.toFloat())
+                    )
+                }
             }
         } else if (fontLines > 1) {
             // 多行状态下，需要定宽求高

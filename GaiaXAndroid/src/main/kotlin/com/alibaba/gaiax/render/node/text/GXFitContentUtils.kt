@@ -26,8 +26,8 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXStretchNode
 import com.alibaba.gaiax.render.node.GXTemplateNode
-import com.alibaba.gaiax.render.view.setFontLines
 import com.alibaba.gaiax.template.GXCss
+import com.alibaba.gaiax.template.GXSize
 import com.alibaba.gaiax.template.GXTemplateKey
 
 /**
@@ -165,15 +165,27 @@ object GXFitContentUtils {
                 nodeWidth == textLeftAndRightPadding -> {
                     Size(Dimension.Points(measuredWidth), Dimension.Points(textHeight))
                 }
+
                 measuredWidth >= nodeWidth -> {
                     Size(Dimension.Points(nodeWidth), Dimension.Points(textHeight))
                 }
+
                 else -> {
                     Size(Dimension.Points(measuredWidth), Dimension.Points(textHeight))
                 }
             }
         } else if (fontLines == 0) {
             // 多行状态下，需要定宽求高
+
+            // 如果文本和父节点都是100%，但是预计算宽度不一致，那么需要使用父节点的内部宽度
+            if ((finalFlexBox.size?.width as? GXSize.PE)?.targetName == (gxNode.parentNode?.templateNode?.css?.flexBox?.size?.width as? GXSize.PE)?.targetName
+                && gxNode.layoutByPrepare?.width != gxNode.parentNode?.layoutByPrepare?.width
+            ) {
+                gxNode.parentNode?.layoutByPrepare?.width?.let {
+                    val padding = gxNode.parentNode?.templateNode?.css?.style?.padding
+                    nodeWidth = it - (padding?.start?.valueFloat ?: 0F) - (padding?.end?.valueFloat ?: 0F)
+                }
+            }
 
             gxCacheText.setFontLines(fontLines)
 

@@ -387,7 +387,7 @@
             break;
         case GXBindTypeCalculate:{
             //数据绑定
-            if (self.data) {
+            if (self.data || self.virtualExtend) {
                 NSMutableDictionary *resultData = [GXDataParser parseData:self.data withSource:data];
                 resultData = [self mergeExtendWithResult:resultData];
                 [self calculateWithData:resultData];

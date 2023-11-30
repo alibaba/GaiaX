@@ -101,6 +101,24 @@
         }
     }
     
+    //背景URL的吸色
+    NSString *backgroundUrl = [styleInfo gx_stringForKey:@"background-url"];
+    if (backgroundUrl.length > 0) {
+        if ([backgroundUrl isEqualToString:@"null"]) {
+            _currentBgColor = self.backgroundColor;
+        } else {
+            GXWeakSelf(self)
+            [UIColor gx_colorFromUrl:backgroundUrl completion:^(UIColor * _Nonnull color) {
+                if (color) {
+                    GXStrongSelf(self);
+                    //设置颜色
+                    self -> _currentBgColor = color;
+                    [self setupNormalBackground:view];
+                }
+            }];
+        }
+    }
+    
 }
 
 //修改布局属性，影响布局

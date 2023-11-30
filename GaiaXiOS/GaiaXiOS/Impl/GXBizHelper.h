@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //用于加载颜色DesignToken
 + (UIColor *)colorFromDesignToken:(NSString *)token;
+//加载图片，并获取图片颜色
++ (void)colorFromUrl:(NSString *)url completion:(void(^)(UIColor *color))completion;
 
 //用于加载字体DesignToken
 + (UIFont *)fontFromDesignToken:(NSString *)token;

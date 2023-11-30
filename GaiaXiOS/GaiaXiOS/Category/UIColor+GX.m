@@ -18,6 +18,7 @@
 
 #import "UIColor+GX.h"
 #import "NSArray+GX.h"
+#import "GXBizHelper.h"
 #import "GXFunctionDef.h"
 
 @implementation UIColor (GX)
@@ -83,7 +84,11 @@
         } else if ([string isEqualToString:@"transparent"]) {
             color = [UIColor clearColor];//透明
         } else {
-            color = [UIColor clearColor];
+            //DesignToken
+            color = [GXBizHelper colorFromDesignToken:string];
+            if (color == nil) {
+                color = [UIColor clearColor];
+            }
         }
         
     }
@@ -138,6 +143,11 @@
                            green:green/255.0f
                             blue:blue/255.0f
                            alpha:alpha/255.0f];
+}
+
+// 通过根据url生成颜色
++ (void)gx_colorFromUrl:(NSString *)url completion:(void(^)(UIColor *color))completion{
+    [GXBizHelper colorFromUrl:url completion:completion];
 }
 
 

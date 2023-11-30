@@ -6,12 +6,12 @@
 //
 
 #import "GXFunction.h"
+#import "GXBizHelper.h"
 #import "GXRegisterCenter.h"
 
 @implementation GXFunction
 
 + (id)function:(NSString *)func params:(NSArray *)params{
-    
     //方法处理
     id value = nil;
     
@@ -19,7 +19,6 @@
     id functionExpression= TheGXRegisterCenter.functionExpression;
     if (functionExpression) {
         value = [functionExpression execute:func params:params];
-        
         if (value != nil) {
             return value;
         }
@@ -69,9 +68,15 @@
     if (value.count > 0) {
         id result = value[0];
         if (result) {
-            if ([result isKindOfClass:[NSString class]] && [[result lowercaseString] isEqualToString:@"isios"] ) {
-                //string
-                return @(YES);
+            //判断selector
+            NSString *selectorStr = (NSString *)result;
+            if (selectorStr.length) {
+                //调用表达式实现
+                SEL selector = NSSelectorFromString(selectorStr);
+                if ([GXBizHelper respondsToSelector:selector]) {
+                    result = [GXBizHelper performSelector:selector];
+                    return result;
+                }
             }
         }
     }

@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 通过16进制字符串生成颜色
 + (UIColor *)gx_colorWithHexString:(NSString *)hexString;
 
+// 通过根据url生成颜色
++ (void)gx_colorFromUrl:(NSString *)url completion:(void(^)(UIColor *color))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

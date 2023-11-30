@@ -86,6 +86,14 @@
     return color;
 }
 
+//加载图片，并获取图片颜色
++ (void)colorFromUrl:(NSString *_Nonnull)url completion:(void(^_Nonnull)(UIColor * _Nonnull color))completion {
+    Class bizServiceClass = TheGXRegisterCenter.bizServiceImpl;
+    if (bizServiceClass && [bizServiceClass respondsToSelector:@selector(colorFromUrl:completion:)]) {
+        [bizServiceClass colorFromUrl:url completion:completion];
+    }
+}
+
 //用于加载字体DesignToken
 + (UIFont *)fontFromDesignToken:(NSString *)token{
     UIFont *font = nil;

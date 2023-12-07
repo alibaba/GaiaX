@@ -57,6 +57,12 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
+    /**
+     * 当前模板的可见状态：
+     * null 未赋值，非可见非不可见
+     * true 可见
+     * false 不可见
+     */
     var isAppear: Boolean? = null
 
     /**

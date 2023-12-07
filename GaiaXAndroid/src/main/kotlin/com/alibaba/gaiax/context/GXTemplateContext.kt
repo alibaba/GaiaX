@@ -57,7 +57,7 @@ class GXTemplateContext private constructor(
     var visualTemplateNode: GXTemplateNode? = null
 ) {
 
-    var isAppear: Boolean = false
+    var isAppear: Boolean? = null
 
     /**
      * 用于存储JS组件ID

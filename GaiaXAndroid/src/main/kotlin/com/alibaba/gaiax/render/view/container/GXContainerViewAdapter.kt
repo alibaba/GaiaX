@@ -476,8 +476,10 @@ class GXContainerViewAdapter(
         if (view is ViewGroup && view.childCount > 0) {
             val gxView = view.getChildAt(0)
             if (gxView != null) {
-                GXTemplateEngine.instance.onAppear(gxView)
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+                if (gxTemplateContext.isAppear == true) {
+                    GXTemplateEngine.instance.onAppear(gxView)
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+                }
             }
         }
     }
@@ -491,8 +493,10 @@ class GXContainerViewAdapter(
         if (view is ViewGroup && view.childCount > 0) {
             val gxView = view.getChildAt(0)
             if (gxView != null) {
-                GXTemplateEngine.instance.onDisappear(gxView)
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+                if (gxTemplateContext.isAppear == false) {
+                    GXTemplateEngine.instance.onDisappear(gxView)
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+                }
             }
         }
     }

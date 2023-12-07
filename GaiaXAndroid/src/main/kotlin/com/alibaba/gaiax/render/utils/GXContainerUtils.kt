@@ -41,28 +41,36 @@ object GXContainerUtils {
 
     internal fun notifyContainerAndItemsOnAppear(gxTemplateContext: GXTemplateContext) {
         notifyView(gxTemplateContext, { container: View ->
-            if (container is GXSliderView) {
-                container.onVisibleChanged(true)
+            if (gxTemplateContext.isAppear == true) {
+                if (container is GXSliderView) {
+                    container.onVisibleChanged(true)
+                }
             }
         }, { gxView: View ->
-            GXTemplateEngine.instance.onAppear(gxView)
+            if (gxTemplateContext.isAppear == true) {
+                GXTemplateEngine.instance.onAppear(gxView)
+            }
         })
     }
 
     internal fun notifyContainerAndItemsOnDisappear(gxTemplateContext: GXTemplateContext) {
         notifyView(gxTemplateContext, { container: View ->
-            if (container is GXSliderView) {
-                container.onVisibleChanged(false)
+            if (gxTemplateContext.isAppear == false) {
+                if (container is GXSliderView) {
+                    container.onVisibleChanged(false)
+                }
             }
         }, { gxView: View ->
-            GXTemplateEngine.instance.onDisappear(gxView)
+            if (gxTemplateContext.isAppear == false) {
+                GXTemplateEngine.instance.onDisappear(gxView)
+            }
         })
     }
 
     fun notifyView(
         gxTemplateContext: GXTemplateContext,
         containerCallback: ((container: View) -> Unit)? = null,
-        visibleItemViewCallback: ((itemView: View) -> Unit)? = null,
+        itemViewCallback: ((itemView: View) -> Unit)? = null,
     ) {
         gxTemplateContext.containers?.forEach { container ->
             if (container is View) {
@@ -72,7 +80,7 @@ object GXContainerUtils {
                 if (view is ViewGroup && view.childCount > 0) {
                     val gxView = view.getChildAt(0)
                     if (gxView != null) {
-                        visibleItemViewCallback?.invoke(gxView)
+                        itemViewCallback?.invoke(gxView)
                     }
                 }
             }

@@ -176,4 +176,8 @@ internal class GXJSRenderProxy {
             false
         }
     }
+
+    fun getView(componentId: Long): View? {
+        return jsGlobalComponentMap[componentId]
+    }
 }

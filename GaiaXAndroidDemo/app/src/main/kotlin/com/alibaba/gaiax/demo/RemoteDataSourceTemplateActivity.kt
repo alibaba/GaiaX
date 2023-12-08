@@ -57,8 +57,7 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
         // 模板数据
         val templateData = GXTemplateEngine.GXTemplateData(
             AssetsUtils.parseAssets(
-                this,
-                "assets_data_source/data/vertical-item.json"
+                this, "assets_data_source/data/vertical-item.json"
             )
         )
 
@@ -88,18 +87,16 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
             Executors.newSingleThreadExecutor().execute {
                 // request server
                 val response = AssetsUtils.parseAssets(
-                    activity,
-                    "remote_data_source/api_response.json"
+                    activity, "remote_data_source/api_response.json"
                 )
 
-                // parse data
-                response.getJSONArray("assets_data_source/templates")?.forEach {
+                response.getJSONArray("templates")?.forEach {
                     val template = (it as JSONObject)
                     val templateBiz = template.getString("templateBiz")
                     val templateId = template.getString("templateId")
-                    val templateBytes = getTemplateContents(activity, templateId)
-
-                    // callback result
+                    val templateBytes = getTemplateContents(
+                        activity, templateId
+                    ) // callback result
                     callback.template(templateBiz, templateId, templateBytes)
                 }
 
@@ -111,8 +108,7 @@ class RemoteDataSourceTemplateActivity : AppCompatActivity() {
 
         // mock net
         private fun getTemplateContents(
-            activity: RemoteDataSourceTemplateActivity,
-            templateId: String
+            activity: RemoteDataSourceTemplateActivity, templateId: String
         ): ByteArray? {
             return try {
                 activity.resources?.assets?.open("remote_data_source/templates/${templateId}")

@@ -387,6 +387,13 @@ class GXJSEngine {
 
         /**
          * 当JS执行发生异常时调用
+         * {
+         *  "templateId":"test",
+         *  "templateVersion":-1,
+         *  "bizId":"fastpreview",
+         *  "message":"'data' is not defined",
+         *  "stack":"    at onReady ()\n    at call (native)\n    at <anonymous> ()\n    at <anonymous> (:5)\n    at <anonymous> (:7)\n"
+         * }
          */
         fun exception(data: JSONObject)
     }

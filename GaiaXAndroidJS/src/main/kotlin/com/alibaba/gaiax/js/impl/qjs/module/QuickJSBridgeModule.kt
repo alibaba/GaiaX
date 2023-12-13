@@ -6,6 +6,7 @@ import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.support.JSDataConvert
+import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
@@ -27,6 +28,23 @@ internal class QuickJSBridgeModule(
             val methodId = target.getLongValue("methodId")
             val args = target.getJSONArray("args")
 
+            // 处理异常 当args.data.stack存在时，说明是JS异常
+            // {"moduleId":5,"methodId":22,"timestamp":788306541,"args":[{"data":{"templateId":"test","templateVersion":-1,"bizId":"fastpreview","message":"'data' is not defined","stack":"    at onReady ()\n    at call (native)\n    at <anonymous> ()\n    at <anonymous> (:5)\n    at <anonymous> (:7)\n"}}],"contextId":9}
+            if (args.size >= 1 && args[0] is JSONObject) {
+                args.getJSONObject(0)?.let { it ->
+                    it.getJSONObject("data")?.let {
+                        if (it.containsKey("stack")) {
+                            GXJSUiExecutor.action {
+                                GXJSEngine.instance.jsExceptionListener?.exception(it)
+                            }
+                            val jsValue = JSDataConvert.convertToJSValue(jsContext, jsContext.createJSNull().pointer)
+                            return jsValue.pointer
+                        }
+                    }
+                }
+            }
+
+            //
             val result = hostContext.bridge.callSync(contextId, moduleId, methodId, args)
                 ?: jsContext.createJSNull().pointer
 

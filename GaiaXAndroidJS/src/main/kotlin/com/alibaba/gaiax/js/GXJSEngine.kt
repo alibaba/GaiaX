@@ -42,6 +42,11 @@ class GXJSEngine {
     internal var logListener: ILogListener? = null
 
     /**
+     * JS内抛出的错误
+     */
+    internal var jsExceptionListener: IJsExceptionListener? = null
+
+    /**
      * app的Context
      */
     lateinit var context: Context
@@ -70,6 +75,11 @@ class GXJSEngine {
 
     fun setLogListener(listener: ILogListener): GXJSEngine {
         this.logListener = listener
+        return this
+    }
+
+    fun setJSExceptionListener(listener: IJsExceptionListener): GXJSEngine {
+        this.jsExceptionListener = listener;
         return this
     }
 
@@ -371,6 +381,14 @@ class GXJSEngine {
         engines.forEach {
             getHostContext(it)?.unregisterComponent(componentId)
         }
+    }
+
+    interface IJsExceptionListener {
+
+        /**
+         * 当JS执行发生异常时调用
+         */
+        fun exception(data: JSONObject)
     }
 
     interface ILogListener {

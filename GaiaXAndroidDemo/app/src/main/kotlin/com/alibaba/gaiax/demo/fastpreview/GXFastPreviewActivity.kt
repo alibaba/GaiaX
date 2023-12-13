@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
+import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
@@ -139,6 +140,15 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                     // 获取模板信息
                     val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
                     if (gxTemplateInfo.isJsExist) {
+
+                        // 设置JS异常监听
+                        GXJSEngineProxy.instance.jsExceptionListener =
+                            object : GXJSEngine.IJsExceptionListener {
+                                override fun exception(data: JSONObject) {
+                                    Log.d(TAG, "exception() called with: data = $data")
+                                }
+                            }
+
                         // 注册容器
                         GXJSEngineProxy.instance.registerComponentAndOnReady(gxView)
                     }

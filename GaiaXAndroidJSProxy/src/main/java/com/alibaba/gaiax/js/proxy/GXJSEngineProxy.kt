@@ -66,6 +66,8 @@ class GXJSEngineProxy {
         return GXJSEngine.instance.getSocketBridge()
     }
 
+    var jsExceptionListener: GXJSEngine.IJsExceptionListener? = null
+
     fun init(context: Context) {
 
         // 初始化JS引擎
@@ -76,6 +78,22 @@ class GXJSEngineProxy {
             override fun errorLog(data: JSONObject) {
                 if (Log.isLog()) {
                     Log.d("errorLog() called with: data = $data")
+                }
+                GXJSEngine.instance.getSocketSender()?.let {
+                    GXJSLogModule.sendJSLogMsg("error", data.toJSONString())
+                }
+            }
+        })
+
+        // 设置异常监听器
+        GXJSEngine.instance.setJSExceptionListener(object : GXJSEngine.IJsExceptionListener {
+            override fun exception(data: JSONObject) {
+                if (Log.isLog()) {
+                    Log.d("exception() called with: data = $data")
+                }
+                jsExceptionListener?.exception(data)
+                GXJSEngine.instance.getSocketSender()?.let {
+                    GXJSLogModule.sendJSLogMsg("error", data.toJSONString())
                 }
             }
         })

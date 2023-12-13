@@ -218,7 +218,6 @@ public class WebSocketImpl implements WebSocket {
      */
     public void decode(ByteBuffer socketBuffer) {
         assert (socketBuffer.hasRemaining());
-        Log.e("[GaiaX]", "process({}): ({})");
 
         if (readyState != ReadyState.NOT_YET_CONNECTED) {
             if (readyState == ReadyState.OPEN) {
@@ -384,7 +383,6 @@ public class WebSocketImpl implements WebSocket {
         try {
             frames = draft.translateFrame(socketBuffer);
             for (Framedata f : frames) {
-                Log.e("[GaiaX]", "matched frame: {}");
                 draft.processFrame(this, f);
             }
         } catch (LimitExceededException e) {
@@ -641,7 +639,6 @@ public class WebSocketImpl implements WebSocket {
         }
         ArrayList<ByteBuffer> outgoingFrames = new ArrayList<ByteBuffer>();
         for (Framedata f : frames) {
-            Log.e("[GaiaX]", "send frame: {}");
             outgoingFrames.add(draft.createBinaryFrame(f));
         }
         write(outgoingFrames);
@@ -698,8 +695,6 @@ public class WebSocketImpl implements WebSocket {
     }
 
     private void write(ByteBuffer buf) {
-        Log.e("[GaiaX]", "write({}): {}");
-
         outQueue.add(buf);
         wsl.onWriteDemand(this);
     }

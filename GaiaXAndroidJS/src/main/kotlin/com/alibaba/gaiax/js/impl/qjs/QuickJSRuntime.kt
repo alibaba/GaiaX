@@ -34,9 +34,11 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
 
         // 设置Promise方法的异常兜底回调
         jsRuntime?.setPromiseRejectionHandler { message ->
+
             if (Log.isLog()) {
                 Log.e("setPromiseRejectionHandler() called with: message = $message")
             }
+
             GXJSEngine.instance.logListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
                     this["message"] = message

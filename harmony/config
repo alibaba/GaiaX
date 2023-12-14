@@ -1,0 +1,25 @@
+[target.aarch64-linux-android]
+ar = "/Users/biezhihua/Software/RUST_NDK/arm64/bin/aarch64-linux-android-ar"
+linker = "/Users/biezhihua/Software/RUST_NDK/arm64/bin/aarch64-linux-android-clang"
+
+[target.armv7-linux-androideabi]
+ar = "/Users/biezhihua/Software/RUST_NDK/arm/bin/arm-linux-androideabi-ar"
+linker = "/Users/biezhihua/Software/RUST_NDK/arm/bin/arm-linux-androideabi-clang"
+
+[target.i686-linux-android]
+ar = "/Users/biezhihua/Software/RUST_NDK/x86/bin/i686-linux-android-ar"
+linker = "/Users/biezhihua/Software/RUST_NDK/x86/bin/i686-linux-android-clang"
+
+
+[target.aarch64-unknown-linux-ohos]
+linker  = "/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/harmony/aarch64-unknown-linux-ohos-clang.sh"
+ar      = "/Users/biezhihua/Software/OpenHarmony/Sdk/10/native/llvm/bin/llvm-ar"
+
+[target.armv7-unknown-linux-ohos]
+linker  = "/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/harmony/armv7-unknown-linux-ohos-clang.sh"
+ar      = "/Users/biezhihua/Software/OpenHarmony/Sdk/10/native/llvm/bin/llvm-ar"
+
+
+[target.x86_64-unknown-linux-ohos]
+linker  = "/Users/biezhihua/WorkSpace/YKGAIAX/GaiaX/harmony/x86_64-unknown-linux-ohos-clang.sh"
+ar      = "/Users/biezhihua/Software/OpenHarmony/Sdk/10/native/llvm/bin/llvm-ar"

@@ -16,15 +16,15 @@ circle-ci = { repository = "vislyhq/stretch", branch = "master" }
 maintenance = { status = "experimental" }
 
 [dependencies]
-arrayvec = { version = "0.5.1", default-features = false }
-hash32 = "0.1.1"
+arrayvec = { version = "0.7.4", default-features = false }
+hash32 = "0.3.1"
 hash32-derive = "0.1.0"
-heapless = "0.5.1"
+heapless = "0.8.0"
 num-traits = { version = "0.2.10", default-features = false }
 typenum = "1.11.2"
 
 [dependencies.hashbrown]
-version = "0.6.3"
+version = "0.14.3"
 optional = true
 
 [dependencies.serde]
@@ -40,7 +40,7 @@ serde_camel_case = ["serde"]
 serde_kebab_case = ["serde"]
 
 [dev-dependencies]
-criterion = "0.3.0"
+criterion = "0.5.1"
 
 [profile.release]
 lto = true

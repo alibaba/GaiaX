@@ -10,8 +10,9 @@ name = "stretch"
 crate-type = ["cdylib"]
 
 [dependencies]
-libc = "0.2.0"
-# stretch = { path = "../.." }
+# https://docs.rs/libc/latest/libc/
+libc = "0.2.151"
+stretch = { path = "../.." }
 
 [workspace]
 members = []

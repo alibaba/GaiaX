@@ -8,7 +8,8 @@ import GXTemplateItem from './GXTemplateItem';
 import GXCssConvertStyle from './GXCssConvertStyle';
 
 export class GXViewTreeCreator {
-  createRootNode(gxTemplateContext: GXTemplateContext): GXNode {
+
+  createNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
 
     const gxTemplateData = gxTemplateContext.gxTemplateData.templateData as GXJSONObject;
 

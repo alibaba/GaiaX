@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.source        = { :git => "https://github.com/alibaba/GaiaX.git", :tag => "#{s.version}" }
 
   s.source_files  = 'GaiaXiOS/**/*.{h,m,mm,c,cpp,hpp}'
+  s.private_header_files = 'GaiaXiOS/Binding/Expression/**/*.{h,hpp}'
   s.xcconfig      = { "ENABLE_BITCODE" => "NO" }
   s.requires_arc  = true
 

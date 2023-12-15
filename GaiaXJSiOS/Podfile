@@ -7,4 +7,5 @@ target 'GaiaXJS' do
   # use_frameworks!
   
   pod 'GaiaXSocket', :path => '../GaiaXSocketiOS'
+  
 end

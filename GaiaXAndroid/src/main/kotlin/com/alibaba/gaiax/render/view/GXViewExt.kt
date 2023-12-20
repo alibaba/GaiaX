@@ -219,6 +219,7 @@ fun View.setBackgroundColorAndBackgroundImageWithRadius(style: GXStyle?) {
         }
     }
 
+    // 圆角实现
     if (background is GXColorGradientDrawable || background is GXLinearColorGradientDrawable) {
         (background as GradientDrawable).cornerRadii = style?.borderRadius?.value
     }

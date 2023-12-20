@@ -19,6 +19,8 @@ package com.alibaba.gaiax.render.view.basic
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Outline
+import android.graphics.Path
+import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.util.AttributeSet
@@ -36,6 +38,7 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.blur.GXBlurHelper
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXBackdropFilter
+
 
 /**
  * @suppress
@@ -79,6 +82,7 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
             val br = radius[6]
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (tl == tr && tr == bl && bl == br && tl > 0) {
+                    path = null
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {
                         override fun getOutline(view: View, outline: Outline) {
@@ -91,8 +95,41 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
                 } else {
                     this.clipToOutline = false
                     this.outlineProvider = null
+
+                    // 异圆角用path实现
+                    if (path == null) {
+                        path = Path()
+                    } else {
+                        path?.reset()
+                    }
+                    path?.addRoundRect(RectF(0f, 0f, this.layoutParams.width.toFloat(), this.layoutParams.height.toFloat()), radius, Path.Direction.CW)
                 }
             }
+        }
+    }
+
+    var path: Path? = null
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+    }
+
+    override fun dispatchDraw(canvas: Canvas) {
+        // 裁剪背景
+        path?.let { path ->
+            canvas.clipPath(path)
+        }
+
+        if (gxBackdropFilter != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                gxBlurHelper?.let { gxBlurHelper ->
+                    gxBlurHelper.callbackDispatchDraw(canvas) {
+                        super.dispatchDraw(canvas)
+                    }
+                }
+            }
+        } else {
+            super.dispatchDraw(canvas)
         }
     }
 
@@ -175,19 +212,6 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
         }
     }
 
-    override fun dispatchDraw(canvas: Canvas) {
-        if (gxBackdropFilter != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                gxBlurHelper?.let { gxBlurHelper ->
-                    gxBlurHelper.callbackDispatchDraw(canvas) {
-                        super.dispatchDraw(canvas)
-                    }
-                }
-            }
-        } else {
-            super.dispatchDraw(canvas)
-        }
-    }
 
     override fun release() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

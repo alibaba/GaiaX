@@ -396,6 +396,7 @@
             self.bottomRightRadius = [GXStyleHelper converSimpletValue:bottomRight];
         }
         self.cornerRadius = 0.f;
+        self.percentCornerRadius = 0.f;
         
         //更新标记
         if (!isMark) {
@@ -404,7 +405,7 @@
         
     } else if (cornerRadius) {
         //设置全圆角属性
-        self.cornerRadius = [GXStyleHelper converSimpletValue:cornerRadius];
+        [self handleBorderRadius:cornerRadius];
         self.topLeftRadius = 0.f;
         self.topRightRadius = 0.f;
         self.bottomLeftRadius = 0.f;
@@ -536,7 +537,14 @@
         //设置圆角 & 表框
         view.layer.borderColor = self.borderColor.CGColor;
         view.layer.borderWidth = self.borderWidth;
-        view.layer.cornerRadius = self.cornerRadius;
+            
+        CGFloat radius = 0.0;
+        if (self.percentCornerRadius > 0) {
+            radius = view.frame.size.height * self.percentCornerRadius;
+        } else {
+            radius = MIN(view.frame.size.height / 2.0, self.cornerRadius);
+        }
+        view.layer.cornerRadius = radius;
     }
     
 }
@@ -727,9 +735,10 @@
         NSString *borderRadius = [styleJson gx_stringForKey:@"border-radius"];
         if (borderRadius.length) {
             isNeedFlat = NO;
-            self.cornerRadius = [GXStyleHelper converSimpletValue:borderRadius];
+            [self handleBorderRadius:borderRadius];
         } else {
             self.cornerRadius = 0.f;
+            self.percentCornerRadius = 0.f;
         }
     }
     
@@ -742,6 +751,17 @@
     
 }
 
+// 处理全圆角的逻辑
+- (void)handleBorderRadius:(NSString *)borderRadius {
+    if ([borderRadius hasSuffix:@"%"]) {
+        CGFloat value = [[borderRadius substringToIndex:(borderRadius.length - 1)] floatValue] / 100.0f;
+        self.percentCornerRadius = MAX(MIN(0.5, value), 0);
+        self.cornerRadius = 0.0;
+    } else {
+        self.cornerRadius = [GXStyleHelper converSimpletValue:borderRadius];
+        self.percentCornerRadius = 0.0;
+    }
+}
 
 #pragma mark - 属性设置
 

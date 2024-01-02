@@ -28,8 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CGFloat opacity;
 // 边框宽度, 默认0
 @property (nonatomic) CGFloat borderWidth;
-// 圆角, 默认0
-@property (nonatomic) CGFloat  cornerRadius;
+// 圆角, 默认0，最大不超过50%
+@property (nonatomic) CGFloat cornerRadius;
+// 百分比圆角，最大不超过50%
+@property (nonatomic) CGFloat percentCornerRadius;
 // 超出视图截断，默认为YES
 @property (nonatomic, assign) BOOL clipsToBounds;
 // 边框颜色, 默认nil

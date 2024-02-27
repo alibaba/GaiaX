@@ -535,7 +535,7 @@
     //默认值
     CGFloat value = 0.f;
     //判断逻辑
-    if (pxValue.length) {
+    if ([GXUtils isValidString:pxValue]) {
         if ([pxValue hasSuffix:@"px"]) {
             //计算px
             value = [[pxValue substringToIndex:(pxValue.length - 2)] floatValue];
@@ -551,7 +551,7 @@
                 value = [pxValue floatValue];
             } else {
                 //token
-                //                value = [GaiaXBizHelper dimFromDesignToken:pxValue];
+                // value = [GaiaXBizHelper dimFromDesignToken:pxValue];
             }
             
             //如果为-10086，则设置默认值
@@ -559,6 +559,9 @@
                 value = 0.f;
             }
         }
+    } else if ([pxValue isKindOfClass:[NSNumber class]]) {
+        //判断是否为纯数字
+        value = [pxValue floatValue];
     }
     
     return value;
@@ -572,52 +575,9 @@
         .dimen_type = DIM_TYPE_UNDEFINED,
         .dimen_value = 0.0f
     };
-    
-    if (pxValue.length && ![pxValue isEqualToString:@"null"]) {
-        CGFloat value = 0.f;
-        if ([pxValue hasSuffix:@"px"]) {
-            //计算px
-            value = [[pxValue substringToIndex:(pxValue.length - 2)] floatValue];
-            styleDimension.dimen_value = value;
-            styleDimension.dimen_type = DIM_TYPE_POINTS;
-            
-        } else if ([pxValue hasSuffix:@"pt"]) {
-            //计算pt = px * ratio
-            value = [[pxValue substringToIndex:(pxValue.length - 2)] floatValue];
-            styleDimension.dimen_value = value * [GXUIHelper deviceRatio];
-            styleDimension.dimen_type = DIM_TYPE_POINTS;
-            
-        } else if ([pxValue hasSuffix:@"%"]) {
-            //计算%
-            value = [[pxValue substringToIndex:(pxValue.length - 1)] floatValue] / 100.0f;
-            styleDimension.dimen_value = value;
-            styleDimension.dimen_type = DIM_TYPE_PERCENT;
-            
-        } else if ([pxValue hasSuffix:@"auto"]) {
-            //计算auto
-            styleDimension.dimen_value = 0.f;
-            styleDimension.dimen_type = DIM_TYPE_AUTO;
-            
-        } else {
-            if ([GXUtils isNumber:pxValue]) {
-                //判断是否为纯数字
-                value = [pxValue floatValue];
-            } else {
-                //token
-                //                value = [GaiaXBizHelper dimFromDesignToken:pxValue];
-            }
-            
-            if (value != kGX_INVALID_DIM) {
-                styleDimension.dimen_value = value;
-                styleDimension.dimen_type = DIM_TYPE_POINTS;
-            }
-            
-        }
-    }
-    
-    return styleDimension;
+        
+    return [self convertValue:pxValue dimension:styleDimension];
 }
-
 
 //获取基础布局属性，默认值为auto
 + (StretchStyleDimension)convertAutoValue:(NSString *)pxValue{
@@ -627,50 +587,56 @@
         .dimen_value = 0.0f
     };
     
-    if (pxValue.length && ![pxValue isEqualToString:@"null"]) {
+    return [self convertValue:pxValue dimension:styleDimension];
+}
+
++ (StretchStyleDimension)convertValue:(NSString *)pxValue dimension:(StretchStyleDimension)dimension {
+    if ([GXUtils isValidString:pxValue] && ![pxValue isEqualToString:@"null"]) {
         CGFloat value = 0.f;
         if ([pxValue hasSuffix:@"px"]) {
             //计算px
             value = [[pxValue substringToIndex:(pxValue.length - 2)] floatValue];
-            styleDimension.dimen_value = value;
-            styleDimension.dimen_type = DIM_TYPE_POINTS;
+            dimension.dimen_value = value;
+            dimension.dimen_type = DIM_TYPE_POINTS;
             
         } else if ([pxValue hasSuffix:@"pt"]) {
             //计算pt = px * ratio
             value = [[pxValue substringToIndex:(pxValue.length - 2)] floatValue];
-            styleDimension.dimen_value = value * [GXUIHelper deviceRatio];
-            styleDimension.dimen_type = DIM_TYPE_POINTS;
+            dimension.dimen_value = value * [GXUIHelper deviceRatio];
+            dimension.dimen_type = DIM_TYPE_POINTS;
             
         } else if ([pxValue hasSuffix:@"%"]) {
             //计算%
             value = [[pxValue substringToIndex:(pxValue.length - 1)] floatValue] / 100.0f;
-            styleDimension.dimen_value = value;
-            styleDimension.dimen_type = DIM_TYPE_PERCENT;
+            dimension.dimen_value = value;
+            dimension.dimen_type = DIM_TYPE_PERCENT;
             
         } else if ([pxValue hasSuffix:@"auto"]) {
             //计算auto
-            styleDimension.dimen_value = 0.f;
-            styleDimension.dimen_type = DIM_TYPE_AUTO;
+            dimension.dimen_value = 0.f;
+            dimension.dimen_type = DIM_TYPE_AUTO;
             
         } else {
             if ([GXUtils isNumber:pxValue]) {
                 //判断是否为纯数字
                 value = [pxValue floatValue];
-            } else {
-                //token
-                //                value = [GaiaXBizHelper dimFromDesignToken:pxValue];
             }
+            
             if (value != kGX_INVALID_DIM) {
-                styleDimension.dimen_value = value;
-                styleDimension.dimen_type = DIM_TYPE_POINTS;
+                dimension.dimen_value = value;
+                dimension.dimen_type = DIM_TYPE_POINTS;
             }
             
         }
+    } else if ([pxValue isKindOfClass:[NSNumber class]]) {
+        CGFloat value = [pxValue floatValue];
+        if (value != kGX_INVALID_DIM) {
+            dimension.dimen_value = value;
+            dimension.dimen_type = DIM_TYPE_POINTS;
+        }
     }
     
-    return styleDimension;
+    return dimension;
 }
-
-
 
 @end

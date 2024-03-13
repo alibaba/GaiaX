@@ -5,22 +5,23 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "/Users/biezhihua/.ohos/config/auto_debug_MyApplication4_com.bzh.test_40086000132854920.cer",
-          "storePassword": "0000001A85DB8ABE4DF59E88E2316E4344AFB02656027F0D31471ADD2768FAF07E630D219752D1B4E5C6",
+          "certpath": "/Users/biezhihua/.ohos/config/default_harmony_stretch_2qOVVPaMDyVnGeTMr4oZ_MlqeOm6upV7KS1kqYq1NEY=.cer",
+          "storePassword": "0000001BAA6F8986C3D83185375A2D995FF9313326B38ADC9A7240F83D17522D7B019A8035E860B63141C6",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001ABA9E49E16C60C54745286F416365349C533930F6CCC50AAAAC6EEC7438E1563BD145884511A2",
-          "profile": "/Users/biezhihua/.ohos/config/auto_debug_MyApplication4_com.bzh.test_40086000132854920.p7b",
+          "keyPassword": "0000001BF9EE1E916673FDAA804535AF7729AFD2BC8882B223C65816E08299685662125DD136246B52C199",
+          "profile": "/Users/biezhihua/.ohos/config/default_harmony_stretch_2qOVVPaMDyVnGeTMr4oZ_MlqeOm6upV7KS1kqYq1NEY=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "/Users/biezhihua/.ohos/config/auto_debug_MyApplication4_com.bzh.test_40086000132854920.p12"
+          "storeFile": "/Users/biezhihua/.ohos/config/default_harmony_stretch_2qOVVPaMDyVnGeTMr4oZ_MlqeOm6upV7KS1kqYq1NEY=.p12"
         }
       }
     ],
-    "compileSdkVersion": 9,
-    "compatibleSdkVersion": 9,
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
+        "compileSdkVersion": "4.0.0(10)",
+        "compatibleSdkVersion": "4.0.0(10)",
+        "runtimeOS": "HarmonyOS",
       }
     ],
     "buildModeSet": [

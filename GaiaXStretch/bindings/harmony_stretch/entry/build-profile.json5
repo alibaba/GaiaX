@@ -1,24 +1,33 @@
 {
   "apiType": "stageMode",
   "buildOption": {
-    "napiLibFilterOption": {
-      "enableOverride": true
+    "arkOptions": {
+      // "apPath": "./modules.ap"  /* Profile used for profile-guided optimization (PGO), a compiler optimization technique to improve app runtime performance. */
     },
     "externalNativeOptions": {
       "path": "./src/main/cpp/CMakeLists.txt",
       "arguments": "",
       "cppFlags": "",
-      "abiFilters": [
-        "armeabi-v7a",
-        "arm64-v8a",
-        "x86_64"
-      ]
     }
   },
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "arkOptions": {
+        "obfuscation": {
+          "ruleOptions": {
+            "enable": true,
+            "files": [
+              "./obfuscation-rules.txt"
+            ]
+          }
+        }
+      }
+    },
+  ],
   "targets": [
     {
-      "name": "default",
-      "runtimeOS": "HarmonyOS"
+      "name": "default"
     },
     {
       "name": "ohosTest",

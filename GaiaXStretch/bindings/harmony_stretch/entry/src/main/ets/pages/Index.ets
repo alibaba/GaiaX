@@ -1,10 +1,10 @@
 import hilog from '@ohos.hilog';
-import testNapi from 'libentry.so'
+import testNapi from 'libentry.so';
 
 @Entry
 @Component
 struct Index {
-  @State message: string = 'Hello World'
+  @State message: string = 'Hello World';
 
   build() {
     Row() {

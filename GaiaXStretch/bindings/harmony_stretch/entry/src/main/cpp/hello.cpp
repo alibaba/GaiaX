@@ -1,14 +1,16 @@
 #include "napi/native_api.h"
 
-extern "C" void hello_from_rust();
-extern "C" int hello2_from_rust(int a, int b);
+extern "C" void println_hello_from_rusts();
+extern "C" int add_two_int_from_rust(int a, int b);
 
 static napi_value Add(napi_env env, napi_callback_info info) {
 
-    int ret = hello2_from_rust(10, 10);
+    int ret = add_two_int_from_rust(10, 15);
 
     napi_value ret2;
     napi_create_int32(env, ret, &ret2);
+
+    println_hello_from_rusts();
 
     return ret2;
 }

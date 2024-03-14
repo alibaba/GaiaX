@@ -187,9 +187,10 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 [self.view addSubview:view];
 ```
 
-## 路线图
+## 2024鸿蒙迭代路线图
 
-![image](https://user-images.githubusercontent.com/6761107/179889459-883d296e-26e0-44a2-8d02-59b2cdd59c21.png)
+![image](https://github.com/alibaba/GaiaX/assets/6761107/2ea4f5f0-9fee-4c79-8aad-66114dcc893f)
+
 
 ## 如何贡献代码
 

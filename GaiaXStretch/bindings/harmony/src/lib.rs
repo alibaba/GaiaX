@@ -5,6 +5,8 @@ use stretch::node::*;
 use stretch::number::*;
 use stretch::style::*;
 
+// https://doc.rust-lang.org/nomicon/ffi.html
+
 #[no_mangle]
 pub extern "C" fn println_hello_from_rusts() {
     println!("Hello from Rust!");

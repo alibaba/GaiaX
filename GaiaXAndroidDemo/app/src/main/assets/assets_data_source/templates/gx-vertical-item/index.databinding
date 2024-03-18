@@ -8,6 +8,11 @@
         },
         "title":{
             "value":"$title"
+        },
+        "title_group":{
+            "accessibilityDesc": "'无障碍文案'",
+            "accessibilityEnable": true,
+            "accessibilityTraits": "'header'"
         }
     }
 }

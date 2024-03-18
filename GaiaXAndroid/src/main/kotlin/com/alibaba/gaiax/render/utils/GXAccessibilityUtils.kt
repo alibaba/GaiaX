@@ -16,6 +16,7 @@
 
 package com.alibaba.gaiax.render.utils
 
+import android.os.Build
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -85,11 +86,9 @@ object GXAccessibilityUtils {
             } else {
                 view.contentDescription = null
                 if (content.isNotEmpty()) {
-                    view.importantForAccessibility =
-                        AppCompatTextView.IMPORTANT_FOR_ACCESSIBILITY_YES
+                    view.importantForAccessibility = AppCompatTextView.IMPORTANT_FOR_ACCESSIBILITY_YES
                 } else {
-                    view.importantForAccessibility =
-                        AppCompatTextView.IMPORTANT_FOR_ACCESSIBILITY_NO
+                    view.importantForAccessibility = AppCompatTextView.IMPORTANT_FOR_ACCESSIBILITY_NO
                 }
             }
 
@@ -137,14 +136,23 @@ object GXAccessibilityUtils {
             }
 
             data?.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)?.let { traits ->
-                ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
-                    override fun onInitializeAccessibilityNodeInfo(
-                        host: View, info: AccessibilityNodeInfoCompat
-                    ) {
-                        super.onInitializeAccessibilityNodeInfo(host, info)
-                        info.className = getClassNameByTraits(traits)
+
+                // 某些应用使用标题总结屏幕上显示的多组文字。如果特定的 View 元素表示一个标题，您可以通过将该元素的 android:accessibilityHeading 属性设为 true，表明它的无障碍服务用途。
+                // 无障碍服务的用户可以选择浏览标题，而不是浏览段落或字词。这种灵活性可改善文字浏览体验。
+                if ("header" == traits) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        view.isAccessibilityHeading = true
                     }
-                })
+                } else {
+                    ViewCompat.setAccessibilityDelegate(view, object : AccessibilityDelegateCompat() {
+                        override fun onInitializeAccessibilityNodeInfo(
+                            host: View, info: AccessibilityNodeInfoCompat
+                        ) {
+                            super.onInitializeAccessibilityNodeInfo(host, info)
+                            info.className = getClassNameByTraits(traits)
+                        }
+                    })
+                }
             }
         } catch (e: Exception) {
             if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventAccessibilityThrowException == false) {

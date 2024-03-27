@@ -156,7 +156,7 @@ object GXNodeUtils {
             val itemVisualTemplateNode = itemTemplatePair.second
 
             // Improve: 如果之前计算过，并且内容高度都一样，那么直接使用缓存计算。在横滑容器数据量较大的情况下，会节省一些时间。
-            if (GXGlobalCache.instance.isExistForTemplateItem(itemTemplateItem)) {
+            if (GXGlobalCache.instance.isExistForTemplateItem(gxTemplateContext.size, itemTemplateItem)) {
                 val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(
                     gxTemplateContext,
                     itemTemplateItem
@@ -735,7 +735,7 @@ object GXNodeUtils {
             gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
         )
 
-        if (!GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
+        if (!GXGlobalCache.instance.isExistForPrepareView(gxMeasureSize, gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareView(gxItemTemplateContext)
         }
 

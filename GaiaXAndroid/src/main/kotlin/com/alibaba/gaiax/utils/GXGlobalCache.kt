@@ -10,12 +10,10 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem,
         value: Layout
     ) {
-        layoutForPrepareView[key.key()] = value
+
+        layoutForPrepareView[key.key(gxTemplateContext.size)] = value
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value")
         }
     }
 
@@ -29,11 +27,14 @@ class GXGlobalCache {
                 "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}"
             )
         }
-        return layoutForPrepareView[key.key()]
+        return layoutForPrepareView[key.key(gxTemplateContext.size)]
     }
 
-    fun isExistForPrepareView(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForPrepareView.containsKey(key.key())
+    fun isExistForPrepareView(
+        gxMeasureSize: GXTemplateEngine.GXMeasureSize,
+        key: GXTemplateEngine.GXTemplateItem
+    ): Boolean {
+        return layoutForPrepareView.containsKey(key.key(gxMeasureSize))
     }
 
     /**
@@ -57,11 +58,14 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem,
         value: Layout
     ) {
-        layoutForTemplateItem[key.key()] = value
+        layoutForTemplateItem[key.key(gxTemplateContext.size)] = value
         if (Log.isLog()) {
             Log.e(
                 gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key()} value=${value}"
+                "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key(
+                    gxTemplateContext.size
+                )
+                } value=${value}"
             )
         }
     }
@@ -70,18 +74,21 @@ class GXGlobalCache {
         gxTemplateContext: GXTemplateContext,
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
-        val value = layoutForTemplateItem[key.key()]
+        val value = layoutForTemplateItem[key.key(gxTemplateContext.size)]
         if (Log.isLog()) {
             Log.e(
                 gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key()} value=${value}"
+                "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key(
+                    gxTemplateContext.size
+                )
+                } value=${value}"
             )
         }
         return value
     }
 
-    fun isExistForTemplateItem(key: GXTemplateEngine.GXTemplateItem): Boolean {
-        return layoutForTemplateItem.containsKey(key.key())
+    fun isExistForTemplateItem(gxMeasureSize: GXTemplateEngine.GXMeasureSize, key: GXTemplateEngine.GXTemplateItem): Boolean {
+        return layoutForTemplateItem.containsKey(key.key(gxMeasureSize))
     }
 
     companion object {

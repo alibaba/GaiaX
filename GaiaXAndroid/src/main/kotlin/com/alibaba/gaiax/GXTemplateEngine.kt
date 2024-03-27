@@ -464,11 +464,9 @@ class GXTemplateEngine {
             return "GXTemplateItem(bizId='$bizId', templateId='$templateId')"
         }
 
-        fun key(): String {
-            return "${bizId}-${templateId}"
+        fun key(size: GXMeasureSize): String {
+            return "${bizId}-${templateId}-${size.width}"
         }
-
-
     }
 
     internal lateinit var context: Context
@@ -502,7 +500,7 @@ class GXTemplateEngine {
             Log.e("prepareView")
         }
         try {
-            if (GXGlobalCache.instance.isExistForPrepareView(gxTemplateItem)) {
+            if (GXGlobalCache.instance.isExistForPrepareView(gxMeasureSize, gxTemplateItem)) {
                 return
             }
             if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -631,16 +629,20 @@ class GXTemplateEngine {
         val gxRootNode = gxTemplateContext.rootNode
         if (gxRootNode != null) {
 
-            //
-            gxTemplateContext.reset()
-            GXGlobalCache.instance.clean()
+            if (Log.isLog()) {
+                Log.e(
+                    gxTemplateContext.tag,
+                    "traceId=${gxTemplateContext.traceId} tag=recomputeWhenMeasureSizeChanged"
+                )
+            }
 
-            //
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxTemplateContext, gxRootNode, size)
             gxRootNode.stretchNode.layoutByPrepareView?.let {
                 GXGlobalCache.instance.putLayoutForPrepareView(
-                    gxTemplateContext, gxTemplateContext.templateItem, it
+                    gxTemplateContext,
+                    gxTemplateContext.templateItem,
+                    it
                 )
                 GXNodeUtils.composeGXNodeByCreateView(gxRootNode, it)
             }
@@ -787,7 +789,7 @@ class GXTemplateEngine {
         if (Log.isLog()) {
             Log.e(
                 gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize=${gxMeasureSize} gxTemplateItem=${gxTemplateContext.templateItem}"
+                "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize=${gxTemplateContext.size} gxTemplateItem=${gxTemplateContext.templateItem} gxMeasureSize=${gxMeasureSize} "
             )
         }
 
@@ -797,6 +799,13 @@ class GXTemplateEngine {
             val oldMeasureSize = gxTemplateContext.size
             gxTemplateContext.size = gxMeasureSize
 
+            if (Log.isLog()) {
+                Log.e(
+                    gxTemplateContext.tag,
+                    "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize update ${gxTemplateContext.size}"
+                )
+            }
+
             // 判断是否size发生了变化
             gxTemplateContext.isMeasureSizeChanged =
                 oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
@@ -804,6 +813,8 @@ class GXTemplateEngine {
             // 如果size发生了变化，需要清除layout缓存，并重新计算
             if (gxTemplateContext.isMeasureSizeChanged) {
                 gxTemplateContext.clearLayout()
+                gxTemplateContext.reset()
+                GXGlobalCache.instance.clean()
                 recomputeWhenMeasureSizeChanged(gxTemplateContext)
             }
         }
@@ -846,6 +857,14 @@ class GXTemplateEngine {
 
         if (gxMeasureSize != null) {
             gxTemplateContext.size = gxMeasureSize
+
+
+            if (Log.isLog()) {
+                Log.e(
+                    gxTemplateContext.tag,
+                    "traceId=${gxTemplateContext.traceId} tag=internalBindDataOnlyNodeTree gxMeasureSize update ${gxTemplateContext.size}"
+                )
+            }
         }
 
         gxTemplateContext.templateData = gxTemplateData

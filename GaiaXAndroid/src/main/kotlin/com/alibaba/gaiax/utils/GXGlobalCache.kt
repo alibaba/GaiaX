@@ -22,10 +22,7 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}")
         }
         return layoutForPrepareView[key.key(gxTemplateContext.size)]
     }
@@ -42,11 +39,9 @@ class GXGlobalCache {
      *
      * the cache will use to reduce computation at create view step.
      */
-    private val layoutForPrepareView: MutableMap<String, Layout> =
-        mutableMapOf()
+    private val layoutForPrepareView: MutableMap<String, Layout> = mutableMapOf()
 
-    private val layoutForTemplateItem: MutableMap<String, Layout> =
-        mutableMapOf()
+    private val layoutForTemplateItem: MutableMap<String, Layout> = mutableMapOf()
 
     fun clean() {
         layoutForTemplateItem.clear()
@@ -60,13 +55,7 @@ class GXGlobalCache {
     ) {
         layoutForTemplateItem[key.key(gxTemplateContext.size)] = value
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key(
-                    gxTemplateContext.size
-                )
-                } value=${value}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key(gxTemplateContext.size)} value=${value}")
         }
     }
 
@@ -76,13 +65,7 @@ class GXGlobalCache {
     ): Layout? {
         val value = layoutForTemplateItem[key.key(gxTemplateContext.size)]
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key(
-                    gxTemplateContext.size
-                )
-                } value=${value}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key(gxTemplateContext.size)} value=${value}")
         }
         return value
     }

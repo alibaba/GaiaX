@@ -7,16 +7,6 @@ use stretch::style::*;
 
 // https://doc.rust-lang.org/nomicon/ffi.html
 
-#[no_mangle]
-pub extern "C" fn println_hello_from_rusts() {
-    println!("Hello from Rust!");
-}
-
-#[no_mangle]
-pub extern "C" fn add_two_int_from_rust(a:i32, b:i32)-> i32 {
-    return a + b;
-}
-
 #[repr(C)]
 pub struct StretchSize {
     width: f32,
@@ -386,8 +376,8 @@ pub unsafe extern "C" fn stretch_node_compute_layout(
     let mut output = vec![];
     copy_output(&stretch, *node, &mut output);
 
-    Box::leak(stretch);
     Box::leak(node);
+    Box::leak(stretch);
 
     create_layout(output.as_ptr())
 }

@@ -1,5 +1,5 @@
 #include <jni.h>
-#include <quickjs-patch.h>
+#include <gxquickjs-patch.h>
 #include <quickjs-libc.h>
 #include <quickjs-libc.c>
 #include <string.h>

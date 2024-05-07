@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-project(quickjs)
+project(gxquickjs)
 
-file(STRINGS "quickjs/VERSION" CONFIG_VERSION)
+file(STRINGS "gxquickjs/VERSION" CONFIG_VERSION)
 
-include_directories(quickjs)
+include_directories(gxquickjs)
 
 set(COMMON_FLAGS -DCONFIG_VERSION=\"${CONFIG_VERSION}\")
 
 set(QUICKJS_LIB_SOURCES
-        quickjs-patch.c
-        quickjs/libregexp.c
-        quickjs/libunicode.c
-        quickjs/libbf.c
-        quickjs/cutils.c
+        gxquickjs-patch.c
+        gxquickjs/libregexp.c
+        gxquickjs/libunicode.c
+        gxquickjs/libbf.c
+        gxquickjs/cutils.c
         )
 
 add_library(${PROJECT_NAME} SHARED
@@ -27,5 +27,5 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-        quickjs
+        gxquickjs
         .)

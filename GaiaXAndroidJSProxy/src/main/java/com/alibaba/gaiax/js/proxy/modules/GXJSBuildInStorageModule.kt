@@ -5,7 +5,7 @@ import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
 import com.alibaba.gaiax.js.support.JSDataConvert
-import com.alibaba.gaiax.js.utils.GXJSPreferenceUtil
+import com.alibaba.gaiax.js.proxy.utils.GXJSPreferenceUtil
 import com.alibaba.gaiax.js.utils.Log
 
 class GXJSBuildInStorageModule : GXJSBaseModule() {
@@ -35,7 +35,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
             }
         } else {
             // 无值状态下，给一个undefined
-            promise.resolve().invoke("Error：Key is Empty")
+            promise.resolve().invoke()
         }
     }
 

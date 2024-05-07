@@ -116,8 +116,6 @@ static JSValue js_bridge_module_promise(JSContext *ctx, JSValueConst this_val, i
 
         jstring args_str = charToJString(env, arg_str);
 
-        __android_log_print(ANDROID_LOG_DEBUG, "lms-13", "%s", arg_str);
-
         JSValue *value = (JSValue *) (*env)->CallStaticLongMethod(env, jni_gaiax_helper_class, jni_gaiax_promise_method, (jlong) ctx, args_str);
 
         (*env)->DeleteLocalRef(env, args_str);

@@ -8,7 +8,7 @@ else ()
     option(LEAK_TRIGGER "Add a leak trigger" OFF)
 endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-add_subdirectory(../../../quickjs quickjs)
+add_subdirectory(../../../quickjs gxquickjs)
 
 #add_library(quickjs
 #        SHARED
@@ -48,5 +48,5 @@ add_library(${PROJECT_NAME} SHARED ${QUICKJS_ANDROID_SOURCES})
 target_compile_options(${PROJECT_NAME} PRIVATE ${COMMON_FLAGS})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        quickjs
+        gxquickjs
         -llog)

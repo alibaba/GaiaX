@@ -106,7 +106,7 @@ public class QuickJS implements TypeAdapter.Depot {
     }
 
     static {
-        System.loadLibrary("quickjs");
+        System.loadLibrary("gxquickjs");
         System.loadLibrary("gaiaxjs");
     }
 

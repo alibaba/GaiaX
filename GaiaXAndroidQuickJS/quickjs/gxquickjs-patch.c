@@ -1,6 +1,6 @@
-#include "quickjs/quickjs.c"
+#include "gxquickjs/quickjs.c"
 
-#include "quickjs-patch.h"
+#include "gxquickjs-patch.h"
 
 int JS_IsArrayBuffer(JSContext *ctx, JSValueConst val) {
     if (JS_VALUE_GET_TAG(val) != JS_TAG_OBJECT) {

@@ -1,9 +1,10 @@
-package com.alibaba.gaiax.js.utils
+package com.alibaba.gaiax.js.proxy.utils
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.text.TextUtils
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.utils.Log
 
 /**
  *  @author: shisan.lms

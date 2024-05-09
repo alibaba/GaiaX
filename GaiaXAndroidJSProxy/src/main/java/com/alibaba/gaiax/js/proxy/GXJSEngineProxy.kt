@@ -322,7 +322,7 @@ class GXJSEngineProxy {
 
             // 在GaiaX中存储JS组件ID
             if (gxTemplateContext.jsComponentIds == null) {
-                gxTemplateContext.jsComponentIds = mutableListOf()
+                gxTemplateContext.jsComponentIds = mutableSetOf()
             }
 
             // 寻找可注册的JS组件

@@ -68,7 +68,7 @@ class GXTemplateContext private constructor(
     /**
      * 用于存储JS组件ID
      */
-    var jsComponentIds: MutableList<Long>? = null
+    var jsComponentIds: MutableSet<Long>? = null
 
     /**
      * 用于追踪日志

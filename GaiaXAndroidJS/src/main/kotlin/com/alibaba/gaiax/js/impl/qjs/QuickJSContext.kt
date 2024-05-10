@@ -110,7 +110,7 @@ internal class QuickJSContext(
     }
 
     override fun evaluateJS(script: String, argsMap: JSONObject) {
-        if (Log.isLog()) {
+        if (Log.isScriptLog()) {
             Log.e("evaluateJS() called with: script = $script")
         }
         this.jsContext?.evaluate(script, "", GXHostContext.EVAL_TYPE_MODULE, 0)

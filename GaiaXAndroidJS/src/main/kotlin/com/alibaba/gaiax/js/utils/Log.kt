@@ -6,6 +6,10 @@ object Log {
         return "1" == SystemProp["debug.com.alibaba.gaiax.js.log", "0"]
     }
 
+    fun isScriptLog(): Boolean {
+        return "1" == SystemProp["debug.com.alibaba.gaiax.js.script.log", "0"]
+    }
+
     fun d(msg: String) {
         e(msg)
     }

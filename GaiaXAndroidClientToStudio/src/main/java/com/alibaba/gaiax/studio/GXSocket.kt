@@ -394,12 +394,12 @@ class GXSocket : SocketListener {
     private fun obtainResultFromGetTemplate(templateData: JSONObject) {
         //解析根模板
         val rootTemplateId = templateData.getString("templateId")
-        val rootTemplateData = templateData.getJSONObject("templateData")
+        val rootTemplateData = templateData.getJSONObject("templateData") ?: templateData.getJSONObject("data")
         val templateJson: JSONObject = createTemplateData(rootTemplateData)
         gxSocketListener?.onStudioAddData(rootTemplateId, templateJson)
         //解析子模板
         val subTemplates = templateData.getJSONArray("subTemplates")
-        subTemplates.forEach {
+        subTemplates?.forEach {
             val subTemplateItem = it as JSONObject
             val subTemplateId = subTemplateItem.getString("templateId")
             val subTemplateData = subTemplateItem.getJSONObject("templateData")
@@ -414,7 +414,7 @@ class GXSocket : SocketListener {
         previewMode: String? = GXStudioClient.PREVIEW_NONE,
         jsMode: String? = GXStudioClient.JS_DEFAULT
     ) {
-        Log.d(GXSocket.TAG, "sendMsgForChangeMode() called ")
+        Log.d(TAG, "sendMsgForChangeMode() called ")
         val data = JSONObject()
         data["jsonrpc"] = "2.0"
         data["id"] = socketId
@@ -427,7 +427,7 @@ class GXSocket : SocketListener {
 
 
     companion object {
-        const val TAG = "[GaiaX][FastPreview]"
+        const val TAG = "[GaiaX][Socket]"
         private const val SOCKET_KEY = "GaiaXSocket"
     }
 }

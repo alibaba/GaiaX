@@ -136,9 +136,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initGXDevTools() {
         if (PermissionUtils.checkPermission(applicationContext)) {
-            DevTools.instance.createDevToolsFloatWindow(
-                applicationContext
-            )
+            DevTools.instance.createDevToolsFloatWindow(applicationContext)
         }
     }
 

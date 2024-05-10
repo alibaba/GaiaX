@@ -2,6 +2,7 @@ package com.alibaba.gaiax.studio
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
 import com.alibaba.fastjson.JSONObject
@@ -121,6 +122,10 @@ class GXStudioClient {
         tryToConnectGaiaStudio(targetUrl, null, type)
     }
 
+
+    /**
+     * url=ws://30.50.242.154:9292&id=A&type=auto
+     */
     fun getParams(url: String?): JSONObject? {
         if (url == null || TextUtils.isEmpty(url)) {
             return null
@@ -131,43 +136,30 @@ class GXStudioClient {
             e.printStackTrace()
             return null
         }
-        Log.e(TAG, "getParams() called with:  finalUrl = [$finalUrl]")
+
+        val uri = Uri.parse(url)
+        val queryUrl = uri.getQueryParameter("url")
+        val id = uri.getQueryParameter("id")
+        val type = uri.getQueryParameter("type")
+
+        Log.e(TAG, "getParams() called with: queryUrl = [$queryUrl] id=$id type=$type")
+
         val regexUrl = "[ws://]+[\\d+.\\d+.\\d+.\\d+]+[:\\d+]*"
         val pattern = Pattern.compile(regexUrl)
-        val matcher = pattern.matcher(finalUrl)
+        val matcher = pattern.matcher(queryUrl)
         if (matcher.find()) {
             //局域网下IP
             val targetUrl = matcher.group()
-//            val templateId = parseTemplateId(finalUrl)
-            val type = parseConnectType(finalUrl)
             val result = JSONObject()
             result["URL"] = targetUrl
             result["TYPE"] = type
-//            result["TEMPLATE_ID"] = templateId
+            result["TEMPLATE_ID"] = id
             Log.e(TAG, "getParams() called with:  result = [$result]")
             return result
         } else {
             Log.e(TAG, "Can not find web url through regex.")
         }
         return null
-    }
-
-//    private fun parseConnectType(url: String): String {
-//        try {
-//            return url.split("&".toRegex()).toTypedArray()[2].split("=".toRegex()).toTypedArray()[1]
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//        return ""
-//    }
-
-    private fun parseConnectType(url: String): String {
-        try {
-            return url.split("&".toRegex()).toTypedArray()[1].split("=".toRegex()).toTypedArray()[1]
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return ""
     }
 
     private fun isConnectVpn(context: Context): Boolean {
@@ -183,10 +175,7 @@ class GXStudioClient {
     }
 
     private fun tryToConnectGaiaStudio(address: String, templateId: String?, type: String) {
-        Log.e(
-            TAG,
-            "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]"
-        )
+        Log.e(TAG, "tryToConnectGaiaStudio() called with: address = [$address], templateId = [$templateId], type = [$type]")
         val tmpAddress = currentAddress
         currentType = type
         currentAddress = address
@@ -262,7 +251,7 @@ class GXStudioClient {
     }
 
     companion object {
-        const val TAG = "[GXStudioMulti]"
+        const val TAG = "[GaiaX][Studio]"
 
         const val PREVIEW_AUTO = "auto"
         const val PREVIEW_MANUAL = "manual"

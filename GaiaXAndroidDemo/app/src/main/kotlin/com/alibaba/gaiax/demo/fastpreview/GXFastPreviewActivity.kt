@@ -1,5 +1,6 @@
 package com.alibaba.gaiax.demo.fastpreview
 
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -15,6 +16,7 @@ import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
+
 
 /**
  * 通过websocket链接gaia studio

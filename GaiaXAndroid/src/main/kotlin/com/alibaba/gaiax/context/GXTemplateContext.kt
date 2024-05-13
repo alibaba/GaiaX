@@ -51,6 +51,7 @@ class GXTemplateContext private constructor(
      * Raw data of the template associated with the current view: root template, nested template, and child template
      */
     val templateInfo: GXTemplateInfo,
+
     /**
      * A virtual node for nested templates
      */
@@ -75,6 +76,9 @@ class GXTemplateContext private constructor(
      */
     var traceId: String? = SystemClock.elapsedRealtimeNanos().toString()
 
+    /**
+     * 日志TAG
+     */
     var tag: String? = ""
 
     /**

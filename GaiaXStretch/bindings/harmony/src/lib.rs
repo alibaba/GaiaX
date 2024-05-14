@@ -358,7 +358,7 @@ pub unsafe extern "C" fn stretch_node_compute_layout(
     node: *mut c_void,
     width: f32,
     height: f32,
-    create_layout: fn(*const f32) -> *mut c_void,
+    create_layout: fn(*const f32, i32) -> *mut c_void,
 ) -> *mut c_void {
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
@@ -379,7 +379,7 @@ pub unsafe extern "C" fn stretch_node_compute_layout(
     Box::leak(node);
     Box::leak(stretch);
 
-    create_layout(output.as_ptr())
+    create_layout(output.as_ptr(), output.len() as i32)
 }
 
 fn copy_output(stretch: &Stretch, node: Node, output: &mut Vec<f32>) {

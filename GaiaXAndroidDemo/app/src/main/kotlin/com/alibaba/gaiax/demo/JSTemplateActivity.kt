@@ -44,9 +44,9 @@ class JSTemplateActivity : AppCompatActivity() {
 
     private fun sendNativeMessage() {
         findViewById<Button>(R.id.template_btn).setOnClickListener {
-            val nativeData: JSONObject = JSONObject()
+            val nativeData = JSONObject()
             nativeData["key1"] = "Native Message Value1"
-            val nativeMessageProtocol: JSONObject = JSONObject()
+            val nativeMessageProtocol = JSONObject()
             nativeMessageProtocol["userData"] = nativeData
             nativeMessageProtocol["type"] = "CustomNotificationNameForNative"
             GXJSEngineProxy.instance.dispatchNativeEvent(nativeMessageProtocol)
@@ -57,9 +57,7 @@ class JSTemplateActivity : AppCompatActivity() {
     var customGXView: View? = null;
     var apiGXView: View? = null;
 
-    private fun renderJSCustomModuleDemoTemplate(
-        activity: JSTemplateActivity, templateId: String
-    ) {
+    private fun renderJSCustomModuleDemoTemplate(activity: JSTemplateActivity, templateId: String) {
         // 初始化
         GXTemplateEngine.instance.init(activity)
 

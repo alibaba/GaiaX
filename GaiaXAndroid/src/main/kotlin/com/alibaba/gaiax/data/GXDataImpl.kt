@@ -48,10 +48,7 @@ class GXDataImpl(val context: Context) {
      */
     class GXTemplateSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateSource {
 
-        data class Value(
-            val priority: Int,
-            val source: GXRegisterCenter.GXIExtensionTemplateSource
-        ) {
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXIExtensionTemplateSource) {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (javaClass != other?.javaClass) return false
@@ -68,14 +65,21 @@ class GXDataImpl(val context: Context) {
             }
         }
 
-        private val dataSource: PriorityQueue<Value> =
-            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
         private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
 
         override fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate {
-            dataSourceSorted.forEach { it ->
-                it.source.getTemplate(gxTemplateItem)?.let { return it }
+
+            // 如果是页面数据源，那么走独立的逻辑
+            if (gxTemplateItem.isPageMode) {
+                GXRegisterCenter.instance.pageSource?.getTemplate(gxTemplateItem)?.let { return it }
+            } else {
+                dataSourceSorted.forEach { it ->
+                    it.source.getTemplate(gxTemplateItem)?.let { return it }
+                }
             }
+
+            // 未倒找数据源则直接抛出异常，默认会被最外层捕获。
             throw IllegalArgumentException("Not found target gxTemplate, templateItem = $gxTemplateItem")
         }
 
@@ -89,8 +93,7 @@ class GXDataImpl(val context: Context) {
             this.dataSource.remove(needRemove)
             this.dataSource.add(Value(priority, source))
 
-            val dataSource: PriorityQueue<Value> =
-                PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+            val dataSource: PriorityQueue<Value> = PriorityQueue(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
             dataSource.addAll(this.dataSource)
             dataSourceSorted.clear()
             while (dataSource.isNotEmpty()) {
@@ -107,13 +110,9 @@ class GXDataImpl(val context: Context) {
     /**
      * @suppress
      */
-    class GXTemplateInfoSource(val context: Context) :
-        GXRegisterCenter.GXIExtensionTemplateInfoSource {
+    class GXTemplateInfoSource(val context: Context) : GXRegisterCenter.GXIExtensionTemplateInfoSource {
 
-        data class Value(
-            val priority: Int,
-            val source: GXRegisterCenter.GXIExtensionTemplateInfoSource
-        ) {
+        data class Value(val priority: Int, val source: GXRegisterCenter.GXIExtensionTemplateInfoSource) {
             override fun equals(other: Any?): Boolean {
                 if (this === other) return true
                 if (javaClass != other?.javaClass) return false
@@ -130,8 +129,7 @@ class GXDataImpl(val context: Context) {
             }
         }
 
-        private val dataSource: PriorityQueue<Value> =
-            PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
+        private val dataSource: PriorityQueue<Value> = PriorityQueue<Value>(11) { o1, o2 -> (o2?.priority ?: 0) - (o1?.priority ?: 0) }
 
         private val dataSourceSorted: MutableList<Value> = mutableListOf<Value>()
 
@@ -142,10 +140,7 @@ class GXDataImpl(val context: Context) {
             throw IllegalArgumentException("Not found target gxTemplateInfo, templateItem = $gxTemplateItem")
         }
 
-        fun registerByPriority(
-            source: GXRegisterCenter.GXIExtensionTemplateInfoSource,
-            priority: Int
-        ) {
+        fun registerByPriority(source: GXRegisterCenter.GXIExtensionTemplateInfoSource, priority: Int) {
             var needRemove: Value? = null
             this.dataSource.forEach {
                 if (it.priority == priority) {

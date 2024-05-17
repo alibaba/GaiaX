@@ -442,6 +442,11 @@ class GXTemplateEngine {
          */
         var isLocal: Boolean = false
 
+        /**
+         * 是否是页面模式，如果是页面模式，那么仅从指定的数据源读取模板数据
+         */
+        var isPageMode: Boolean = false
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false

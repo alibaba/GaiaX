@@ -59,11 +59,19 @@
             android:layout_height="wrap_content"
             android:text="@string/style"
             android:textColor="@color/black" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/js"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/js"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/page_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/page"
             android:textColor="@color/black" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

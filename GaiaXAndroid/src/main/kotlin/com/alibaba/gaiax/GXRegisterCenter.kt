@@ -105,6 +105,19 @@ class GXRegisterCenter {
         fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate?
     }
 
+    /**
+     * 页面模板数据源，需要配合 GXTemplateItem.isPageMode=true使用
+     */
+    interface GXIExtensionPageTemplateSource {
+
+        /**
+         * To get GXTemplate from data source
+         *
+         * @see GXTemplate
+         */
+        fun getTemplate(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplate?
+    }
+
     interface GXIExtensionContainerItemBind {
         fun bindViewHolder(
             tag: Any?,
@@ -280,6 +293,11 @@ class GXRegisterCenter {
     internal var extensionLottieAnimation: GXIExtensionLottieAnimation? = null
     internal var gxItemViewLifecycleListener: GXIItemViewLifecycleListener? = null
 
+    /**
+     * 页面数据源
+     */
+    internal var pageSource: GXRegisterCenter.GXIExtensionPageTemplateSource? = null
+
     fun registerExtensionBizMapRelation(extensionBizMap: GXIExtensionBizMap): GXRegisterCenter {
         this.extensionBizMap = extensionBizMap
         return this
@@ -288,6 +306,10 @@ class GXRegisterCenter {
     fun registerExtensionFunctionExpression(extension: GXIExtensionFunctionExpression): GXRegisterCenter {
         this.extensionFunctionExpression = extension
         return this
+    }
+
+    fun setExtensionPageTemplateSource(source: GXIExtensionPageTemplateSource) {
+        pageSource = source
     }
 
     /**

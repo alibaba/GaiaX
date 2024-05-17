@@ -1,0 +1,22 @@
+{
+  "id": "gx-vertical-item",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-vertical-item",
+    "version": "0.0.1",
+    "modify-timestamp": "Mon Mar 18 2024 10:52:40 GMT+0800 (China Standard Time)",
+    "constraint-size": { "width": 100, "height": 667, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [
+    { "id": "cover-img", "class": "cover-img", "type": "image" },
+    {
+      "id": "title_group",
+      "type": "view",
+      "layers": [
+        { "id": "title", "class": "title", "type": "text" },
+        { "id": "sub-title", "class": "sub-title", "type": "text" }
+      ]
+    }
+  ]
+}

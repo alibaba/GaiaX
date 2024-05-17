@@ -30,15 +30,13 @@ import com.lzf.easyfloat.permission.PermissionUtils
 
 class MainActivity : AppCompatActivity() {
 
-    private val launcher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val scanResult =
-                it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
-            Log.d("MainActivity", "StartActivityForResult() called scanResult = $scanResult")
-            val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
-            intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
-            startActivity(intent)
-        }
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val scanResult = it.data?.getStringExtra("SCAN_RESULT") ?: return@registerForActivityResult
+        Log.d("MainActivity", "StartActivityForResult() called scanResult = $scanResult")
+        val intent = Intent(MainActivity@ this, GXFastPreviewActivity::class.java)
+        intent.putExtra(GXFastPreviewActivity.GAIA_STUDIO_URL, scanResult)
+        startActivity(intent)
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -132,6 +130,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(MainActivity@ this, JSTemplateActivity::class.java)
             startActivity(intent)
         }
+
+        findViewById<AppCompatButton>(R.id.page_template)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, PageTemplateActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initGXDevTools() {
@@ -190,8 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         GXRegisterCenter.instance.registerExtensionExpression(GXExtensionMultiVersionExpression())
 
-        GXRegisterCenter.instance.registerExtensionException(object :
-            GXRegisterCenter.GXIExtensionException {
+        GXRegisterCenter.instance.registerExtensionException(object : GXRegisterCenter.GXIExtensionException {
             override fun exception(exception: Exception) {
                 exception.printStackTrace()
             }
@@ -200,8 +202,7 @@ class MainActivity : AppCompatActivity() {
         GXRegisterCenter.instance.registerExtensionTemplateSource(GXManualPushSource.instance, 101)
             .registerExtensionTemplateSource(GXFastPreviewSource.instance, 102)
 
-        GXRegisterCenter.instance.registerExtensionFontFamily(object :
-            GXRegisterCenter.GXIExtensionFontFamily {
+        GXRegisterCenter.instance.registerExtensionFontFamily(object : GXRegisterCenter.GXIExtensionFontFamily {
             override fun fontFamily(fontFamilyName: String): Typeface? {
                 if (fontFamilyName == "iconfont") {
                     return Typeface.createFromAsset(assets, "$fontFamilyName.ttf")

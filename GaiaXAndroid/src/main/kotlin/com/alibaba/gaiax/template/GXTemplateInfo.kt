@@ -392,12 +392,14 @@ data class GXTemplateInfo(
             templateInfo: GXTemplateInfo, templateItem: GXTemplateEngine.GXTemplateItem
         ) {
             forChildrenTemplate(templateInfo.layer) {
-                val childTemplate = createTemplate(GXTemplateEngine.GXTemplateItem(
+                val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
                     templateItem.context, templateItem.bizId, it.id
                 ).apply {
                     this.isLocal = templateItem.isLocal
                     this.templateVersion = templateItem.templateVersion
-                })
+                    this.isPageMode = templateItem.isPageMode
+                }
+                val childTemplate = createTemplate(gxTemplateItem)
                 if (templateInfo.children == null) {
                     templateInfo.children = mutableListOf()
                 }

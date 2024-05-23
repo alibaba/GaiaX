@@ -91,12 +91,15 @@ object GXNodeTreeCreator {
 
                 // 容器模板下的子模板
                 if (gxNode.isContainerType() && gxChildTemplateInfo.isTemplate()) {
+                    val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
+                        gxTemplateContext.context,
+                        gxTemplateContext.templateItem.bizId,
+                        gxChildLayer.id
+                    ).apply {
+                        this.isPageMode = gxTemplateContext.templateItem.isPageMode
+                    }
                     gxNode.addChildTemplateItems(
-                        GXTemplateEngine.GXTemplateItem(
-                            gxTemplateContext.context,
-                            gxTemplateContext.templateItem.bizId,
-                            gxChildLayer.id
-                        ), gxChildVisualTemplateNode
+                        gxTemplateItem, gxChildVisualTemplateNode
                     )
                 }
                 // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
@@ -119,9 +122,7 @@ object GXNodeTreeCreator {
             }
             // 普通子节点
             else {
-                val gxChildNode = createNode(
-                    gxTemplateContext, gxNode, currentLayer, null, gxTemplateInfo
-                )
+                val gxChildNode = createNode(gxTemplateContext, gxNode, currentLayer, null, gxTemplateInfo)
 
                 // 建立层级关系
                 if (gxNode.children == null) {

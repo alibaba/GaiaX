@@ -456,9 +456,12 @@ class GXContainerViewAdapter(
         val footer = extend?.getJSONObject(GAIAX_CONTAINER_FOOTER)
         if (footer != null) {
             val templateId = footer.getString(GXTemplateKey.GAIAX_LAYER_ID)
-            footerTemplateItem = GXTemplateEngine.GXTemplateItem(
+            val gxTemplateItem = GXTemplateEngine.GXTemplateItem(
                 gxTemplateContext.context, gxTemplateContext.templateItem.bizId, templateId
-            )
+            ).apply {
+                this.isPageMode = gxTemplateContext.templateItem.isPageMode
+            }
+            footerTemplateItem = gxTemplateItem
             footerTypeHasMore = footer.getBoolean(GXTemplateKey.GAIAX_CONTAINER_HAS_MORE) ?: false
         }
     }

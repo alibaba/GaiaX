@@ -5,6 +5,16 @@ use stretch::node::*;
 use stretch::number::*;
 use stretch::style::*;
 
+extern crate libc;
+use libc::c_char;
+use std::ffi::CString;
+
+extern "C" {
+    fn hilog_debug(message: *const c_char);
+    fn hilog_info(message: *const c_char);
+    fn hilog_error(message: *const c_char);
+}
+
 // https://doc.rust-lang.org/nomicon/ffi.html
 
 #[repr(C)]
@@ -74,6 +84,8 @@ pub unsafe extern "C" fn stretch_style_create(
 
     aspect_ratio: f32,
 ) -> *mut c_void {
+    hilog_debug_wrapper_str("stretch_style_create");
+
     Box::into_raw(Box::new(Style {
         display: match display {
             0 => Display::Flex,
@@ -203,17 +215,23 @@ pub unsafe extern "C" fn stretch_style_free(style: *mut c_void) {
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_init() -> *mut c_void {
+    hilog_debug_wrapper_str("stretch_init");
+
     let stretch = stretch::node::Stretch::new();
     Box::into_raw(Box::new(stretch)) as *mut c_void
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_free(stretch: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_free");
+
     let _stretch = Box::from_raw(stretch as *mut Stretch);
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_create(stretch: *mut c_void, style: *mut c_void) -> *mut c_void {
+    hilog_debug_wrapper_str("stretch_node_create");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let style = Box::from_raw(style as *mut Style);
     let node = stretch.new_node(*style, &[]).unwrap();
@@ -226,6 +244,8 @@ pub unsafe extern "C" fn stretch_node_create(stretch: *mut c_void, style: *mut c
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_free(stretch: *mut c_void, node: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_node_free");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
 
@@ -249,10 +269,7 @@ pub unsafe extern "C" fn stretch_node_set_measure(
             *node,
             Some(stretch::node::MeasureFunc::Boxed(Box::new(move |constraint| {
                 let size = measure(swift_ptr, constraint.width.or_else(f32::NAN), constraint.height.or_else(f32::NAN));
-                Size{
-                    width:size.width,
-                    height:size.height,
-                }
+                Size { width: size.width, height: size.height }
             }))),
         )
         .unwrap();
@@ -263,6 +280,8 @@ pub unsafe extern "C" fn stretch_node_set_measure(
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_set_style(stretch: *mut c_void, node: *mut c_void, style: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_node_set_style");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
     let style = Box::from_raw(style as *mut Style);
@@ -276,6 +295,8 @@ pub unsafe extern "C" fn stretch_node_set_style(stretch: *mut c_void, node: *mut
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_dirty(stretch: *mut c_void, node: *mut c_void) -> bool {
+    hilog_debug_wrapper_str("stretch_node_dirty");
+
     let stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
     let dirty = stretch.dirty(*node).unwrap();
@@ -288,6 +309,8 @@ pub unsafe extern "C" fn stretch_node_dirty(stretch: *mut c_void, node: *mut c_v
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_mark_dirty(stretch: *mut c_void, node: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_node_mark_dirty");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
 
@@ -299,6 +322,8 @@ pub unsafe extern "C" fn stretch_node_mark_dirty(stretch: *mut c_void, node: *mu
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_add_child(stretch: *mut c_void, node: *mut c_void, child: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_node_add_child");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
     let child = Box::from_raw(child as *mut Node);
@@ -317,6 +342,8 @@ pub unsafe extern "C" fn stretch_node_replace_child_at_index(
     index: usize,
     child: *mut c_void,
 ) {
+    hilog_debug_wrapper_str("stretch_node_replace_child_at_index");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
     let child = Box::from_raw(child as *mut Node);
@@ -330,6 +357,8 @@ pub unsafe extern "C" fn stretch_node_replace_child_at_index(
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_remove_child(stretch: *mut c_void, node: *mut c_void, child: *mut c_void) {
+    hilog_debug_wrapper_str("stretch_node_remove_child");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
     let child = Box::from_raw(child as *mut Node);
@@ -343,6 +372,8 @@ pub unsafe extern "C" fn stretch_node_remove_child(stretch: *mut c_void, node: *
 
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_remove_child_at_index(stretch: *mut c_void, node: *mut c_void, index: usize) {
+    hilog_debug_wrapper_str("stretch_node_remove_child_at_index");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
 
@@ -352,6 +383,8 @@ pub unsafe extern "C" fn stretch_node_remove_child_at_index(stretch: *mut c_void
     Box::leak(node);
 }
 
+
+
 #[no_mangle]
 pub unsafe extern "C" fn stretch_node_compute_layout(
     stretch: *mut c_void,
@@ -360,6 +393,8 @@ pub unsafe extern "C" fn stretch_node_compute_layout(
     height: f32,
     create_layout: fn(*const f32, i32) -> *mut c_void,
 ) -> *mut c_void {
+    hilog_debug_wrapper_str("stretch_node_compute_layout");
+
     let mut stretch = Box::from_raw(stretch as *mut Stretch);
     let node = Box::from_raw(node as *mut Node);
 
@@ -379,12 +414,21 @@ pub unsafe extern "C" fn stretch_node_compute_layout(
     Box::leak(node);
     Box::leak(stretch);
 
+    
+    hilog_debug_wrapper_string(format!("create_layout ptr={:?} len={}",output.as_ptr(), output.len() ));
+
+
     create_layout(output.as_ptr(), output.len() as i32)
 }
 
 fn copy_output(stretch: &Stretch, node: Node, output: &mut Vec<f32>) {
+    
+
     let layout = stretch.layout(node).unwrap();
     let children = stretch.children(node).unwrap();
+
+    hilog_debug_wrapper_string(format!("stretch_copy_output x={} y={} width={} height={} children={}",
+                layout.location.x, layout.location.y, layout.size.width, layout.size.height,children.len() ));
 
     output.push(layout.location.x);
     output.push(layout.location.y);
@@ -394,5 +438,33 @@ fn copy_output(stretch: &Stretch, node: Node, output: &mut Vec<f32>) {
 
     for child in &children {
         copy_output(stretch, *child, output);
+    }
+}
+
+pub fn hilog_debug_wrapper_str(log: &str) {
+    let message = CString::new(log).expect("CString::new failed");
+    unsafe {
+        hilog_debug(message.as_ptr());
+    }
+}
+
+pub fn hilog_debug_wrapper_string(log: String) {
+    let message = CString::new(log).expect("CString::new failed");
+    unsafe {
+        hilog_debug(message.as_ptr());
+    }
+}
+
+pub fn hilog_info_wrapper(log: &str) {
+    let message = CString::new(log).expect("CString::new failed");
+    unsafe {
+        hilog_info(message.as_ptr());
+    }
+}
+
+pub fn hilog_error_wrapper(log: &str) {
+    let message = CString::new(log).expect("CString::new failed");
+    unsafe {
+        hilog_error(message.as_ptr());
     }
 }

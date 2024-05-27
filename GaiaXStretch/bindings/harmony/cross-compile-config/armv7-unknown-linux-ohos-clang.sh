@@ -1,7 +1,7 @@
 #!/bin/sh
-exec /Users/biezhihua/Software/OpenHarmony/Sdk/10/native/llvm/bin/clang \
+exec /Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/openharmony/native/llvm/bin/clang \
   -target arm-linux-ohos \
-  --sysroot=/Users/biezhihua/Software/OpenHarmony/Sdk/10/native/sysroot \
+  --sysroot=/Applications/DevEco-Studio.app/Contents/sdk/HarmonyOS-NEXT-DB1/openharmony/native/sysroot \
   -D__MUSL__ \
   -march=armv7-a \
   -mfloat-abi=softfp \

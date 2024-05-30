@@ -10,7 +10,6 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem,
         value: Layout
     ) {
-
         layoutForPrepareView[key.key(gxTemplateContext.size)] = value
         if (Log.isLog()) {
             Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value")

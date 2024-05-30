@@ -512,7 +512,7 @@ class GXTemplateEngine {
             if (GXGlobalCache.instance.isExistForPrepareView(gxMeasureSize, gxTemplateItem)) {
                 return
             }
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX prepareView")
             }
             val templateInfo = data.getTemplateInfo(gxTemplateItem)
@@ -520,7 +520,7 @@ class GXTemplateEngine {
                 gxTemplateItem, gxMeasureSize, templateInfo, gxVisualTemplateNode
             )
             render.prepareView(gxTemplateContext)
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.endSection()
             }
         } catch (e: Exception) {
@@ -719,11 +719,11 @@ class GXTemplateEngine {
             Log.e("createViewOnlyViewTree")
         }
         return try {
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX createViewOnlyViewTree")
             }
             val result = internalCreateViewOnlyViewTree(gxTemplateContext)
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.endSection()
             }
             return result
@@ -752,11 +752,11 @@ class GXTemplateEngine {
             Log.e("bindDataOnlyNodeTree")
         }
         try {
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX bindDataOnlyNodeTree")
             }
             internalBindDataOnlyNodeTree(view, gxTemplateData, gxMeasureSize)
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.endSection()
             }
         } catch (e: Exception) {
@@ -768,9 +768,7 @@ class GXTemplateEngine {
         }
     }
 
-    private fun internalBindDataOnlyNodeTree(
-        view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null
-    ) {
+    private fun internalBindDataOnlyNodeTree(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
         val gxTemplateContext = GXTemplateContext.getContext(view)
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
 
@@ -822,11 +820,11 @@ class GXTemplateEngine {
             Log.e("bindDataOnlyViewTree")
         }
         try {
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX bindDataOnlyViewTree")
             }
             internalBindDataOnlyViewTree(view, gxTemplateData, gxMeasureSize)
-            if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (GXPropUtils.isTrace()) {
                 Trace.endSection()
             }
         } catch (e: Exception) {

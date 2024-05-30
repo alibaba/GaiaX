@@ -44,10 +44,8 @@ import kotlin.math.max
  */
 object GXNodeUtils {
 
-    internal const val ITEM_PATH =
-        "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}"
-    internal const val ITEM_CONFIG =
-        "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
+    internal const val ITEM_PATH = "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}"
+    internal const val ITEM_CONFIG = "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
 
     fun computeNodeTreeByBindData(
         gxTemplateContext: GXTemplateContext,
@@ -57,31 +55,24 @@ object GXNodeUtils {
 
         // 预处理布局
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}")
         }
 
         // 输入参数
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}")
         }
 
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
+
         val layout = stretchNode.safeComputeLayout(size)
+
         composeStretchNodeByBindData(gxNode, layout)
 
         // 输出计算结果
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}")
         }
     }
 
@@ -105,10 +96,7 @@ object GXNodeUtils {
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByPrepareView(gxNode, layout)
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByPrepareView layout=${layout}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByPrepareView layout=${layout}")
         }
     }
 

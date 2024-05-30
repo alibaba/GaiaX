@@ -38,28 +38,17 @@ class GXRenderImpl {
         val rootNode = GXNodeTreePrepare.create(gxTemplateContext)
         gxTemplateContext.rootNode = rootNode
         rootNode.stretchNode.layoutByPrepareView?.let {
-            GXGlobalCache.instance.putLayoutForPrepareView(
-                gxTemplateContext,
-                gxTemplateContext.templateItem,
-                it
-            )
+            GXGlobalCache.instance.putLayoutForPrepareView(gxTemplateContext, gxTemplateContext.templateItem, it)
         }
         rootNode.release()
     }
 
     fun createViewOnlyNodeTree(gxTemplateContext: GXTemplateContext): GXNode {
-        val rootLayout =
-            GXGlobalCache.instance.getLayoutForPrepareView(
-                gxTemplateContext,
-                gxTemplateContext.templateItem
-            )
-                ?: throw IllegalArgumentException("root layout is null")
+        val rootLayout = GXGlobalCache.instance.getLayoutForPrepareView(gxTemplateContext, gxTemplateContext.templateItem)
+            ?: throw IllegalArgumentException("root layout is null")
 
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=createViewOnlyNodeTree rootLayout=${rootLayout}"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=createViewOnlyNodeTree rootLayout=${rootLayout}")
         }
 
         // Create a virtual node tree
@@ -84,10 +73,7 @@ class GXRenderImpl {
 
     fun bindViewDataOnlyNodeTree(gxTemplateContext: GXTemplateContext) {
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyNodeTree"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyNodeTree")
         }
 
         // Resetting the Template Status
@@ -99,10 +85,7 @@ class GXRenderImpl {
 
     fun bindViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyViewTree"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=bindViewDataOnlyViewTree")
         }
 
         val rootNode = gxTemplateContext.rootNode
@@ -117,10 +100,7 @@ class GXRenderImpl {
 
     fun resetViewDataOnlyViewTree(gxTemplateContext: GXTemplateContext) {
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=resetViewDataOnlyViewTree"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=resetViewDataOnlyViewTree")
         }
 
         GXNodeTreeUpdate.resetView(gxTemplateContext)

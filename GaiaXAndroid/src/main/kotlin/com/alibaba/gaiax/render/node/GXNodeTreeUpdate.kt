@@ -72,16 +72,15 @@ object GXNodeTreeUpdate {
 
     fun buildNodeLayout(gxTemplateContext: GXTemplateContext) {
         if (Log.isLog()) {
-            Log.e(
-                gxTemplateContext.tag,
-                "traceId=${gxTemplateContext.traceId} tag=buildNodeLayout"
-            )
+            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=buildNodeLayout")
         }
 
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildNodeLayout)")
-        val templateData =
-            gxTemplateContext.templateData?.data ?: throw IllegalArgumentException("Data is null")
+
+        val templateData = gxTemplateContext.templateData?.data
+            ?: throw IllegalArgumentException("Data is null")
+
         val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
 
         // 更新布局
@@ -94,8 +93,9 @@ object GXNodeTreeUpdate {
     fun buildViewStyleAndData(gxTemplateContext: GXTemplateContext) {
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildViewStyle)")
-        val templateData =
-            gxTemplateContext.templateData?.data ?: throw IllegalArgumentException("Data is null")
+
+        val templateData = gxTemplateContext.templateData?.data
+            ?: throw IllegalArgumentException("Data is null")
 
         // 更新样式
         Style.updateNodeTreeStyleAndData(gxTemplateContext, rootNode, templateData)
@@ -118,10 +118,7 @@ object GXNodeTreeUpdate {
             size: Size<Float?>
         ) {
             if (Log.isLog()) {
-                Log.e(
-                    gxTemplateContext.tag,
-                    "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayout"
-                )
+                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayout")
             }
 
             // 更新布局
@@ -139,10 +136,7 @@ object GXNodeTreeUpdate {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
 
                 if (Log.isLog()) {
-                    Log.e(
-                        gxTemplateContext.tag,
-                        "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayoutByDirtyText"
-                    )
+                    Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayoutByDirtyText")
                 }
 
                 var isTextDirty = false
@@ -358,10 +352,7 @@ object GXNodeTreeUpdate {
                     }
 
                     if (Log.isLog()) {
-                        Log.e(
-                            gxTemplateContext.tag,
-                            "traceId=${gxTemplateContext.traceId} tag=updateContainerLayout containerSize=${containerSize}"
-                        )
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateContainerLayout containerSize=${containerSize}")
                     }
                 }
 

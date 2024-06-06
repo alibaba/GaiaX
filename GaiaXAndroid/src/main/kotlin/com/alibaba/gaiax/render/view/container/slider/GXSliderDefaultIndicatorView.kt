@@ -64,8 +64,7 @@ class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         setMeasuredDimension(
-            ((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH
-                    + (indicatorCount - 1) * INDICATOR_SPACING).toInt(),
+            ((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH + (indicatorCount - 1) * INDICATOR_SPACING).toInt(),
             INDICATOR_HEIGHT.toInt()
         )
     }

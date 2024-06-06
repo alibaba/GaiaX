@@ -376,17 +376,13 @@ class GXComponentGridTest : GXBaseTest() {
                 gxTemplateContext: GXTemplateContext,
                 gridConfig: GXGridConfig
             ): Any? {
-                if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue(
-                        "responsive-enable"
-                    )
-                ) {
+                if (propertyName == GXTemplateKey.GAIAX_LAYER_COLUMN && gridConfig.data.getBooleanValue("responsive-enable")) {
                     if (gridConfig.column == 2) {
                         return 3
                     }
                 }
                 return null
             }
-
         })
 
         val templateItem = GXTemplateEngine.GXTemplateItem(
@@ -1210,10 +1206,7 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx(), rootView.height())
         Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
-        Assert.assertEquals(
-            false,
-            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
-        )
+        Assert.assertEquals(false, (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally())
     }
 
     @Test

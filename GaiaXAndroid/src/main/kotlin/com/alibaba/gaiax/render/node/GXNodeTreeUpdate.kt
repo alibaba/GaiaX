@@ -325,12 +325,12 @@ object GXNodeTreeUpdate {
             val flexGrow = gxFlexBox.flexGrow
 
             if (gxNode.isScrollType()) {
+
                 val gxScrollConfig = gxNode.templateNode.layer.scrollConfig
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but gxScrollConfig is null")
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
-                var isComputeContainerHeight =
-                    gxScrollConfig.isHorizontal && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+                var isComputeContainerHeight = gxScrollConfig.isHorizontal && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
                 // 对计算结果进行处理
                 GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
@@ -343,9 +343,7 @@ object GXNodeTreeUpdate {
                 }
 
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeScrollSize(
-                        gxTemplateContext, gxNode, containerData
-                    )
+                    val containerSize = GXNodeUtils.computeScrollSize(gxTemplateContext, gxNode, containerData)
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
                         isDirty = true

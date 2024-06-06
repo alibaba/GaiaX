@@ -41,9 +41,7 @@ import com.alibaba.gaiax.utils.getStringExt
 /**
  * @suppress
  */
-class GXContainerViewAdapter(
-    val gxTemplateContext: GXTemplateContext, private val gxContainer: GXContainer
-) : RecyclerView.Adapter<GXViewHolder>() {
+class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private val gxContainer: GXContainer) : RecyclerView.Adapter<GXViewHolder>() {
 
     private var position: Int = 0
 
@@ -80,9 +78,7 @@ class GXContainerViewAdapter(
         }
     }
 
-    private fun createGXViewHolder(
-        viewType: Int, parent: ViewGroup
-    ): GXViewHolder {
+    private fun createGXViewHolder(viewType: Int, parent: ViewGroup): GXViewHolder {
 
         if (Log.isLog()) {
             Log.e("createGXViewHolder $viewType $parent")
@@ -143,9 +139,7 @@ class GXContainerViewAdapter(
             containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
         }
 
-        return FrameLayout.LayoutParams(
-            itemContainerWidth, itemContainerHeight
-        )
+        return FrameLayout.LayoutParams(itemContainerWidth, itemContainerHeight)
     }
 
     private fun getVisualNestTemplateNode(gxTemplateItem: GXTemplateEngine.GXTemplateItem): GXTemplateNode? {
@@ -409,8 +403,7 @@ class GXContainerViewAdapter(
                 gxNode.templateNode.resetDataCache()
                 val typeData = gxNode.templateNode.getExtend(itemData)
                 if (typeData != null) {
-                    val itemConfig =
-                        "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
+                    val itemConfig = "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
                     val templateId = typeData.getStringExt(itemConfig)
                     return items.firstOrNull { it.first.templateId == templateId }?.first
                 }

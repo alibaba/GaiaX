@@ -1,0 +1,18 @@
+{
+  "id": "gx-scroll",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "item-spacing": 7,
+  "direction": "horizontal",
+  "edge-insets": "{0,18,0,18}",
+  "line-spacing": 7,
+  "package": {
+    "id": "gx-scroll",
+    "version": "0.0.1",
+    "modify-timestamp": "Tue May 21 2024 18:54:43 GMT+0800 (中国标准时间)",
+    "dependencies": { "gx-scroll-item": "0.0.0" }
+  },
+  "layers": [
+    { "id": "gx-scroll-item", "type": "gaia-template", "sub-type": "custom" }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "event": { "yk-topic-item": {
+    "value": "$data.action"
+  } },
+  "data": {
+    "userIcon": { "value": "$data.img" },
+    "name": {
+        "value": "$data.title" ,
+        "extend": {
+            "width": "'150px'",
+            "background-color": "'red'"
+        }
+    },
+    "description": {
+        "value": "$data.desc"
+    },
+    "follow-text": {
+      "value": "$data.isFollow ? '已关注' : '关注'",
+      "extend": { "color": "$data.isFollow ? '#9d9fa8' : '#24a5ff'" }
+    }
+  }
+}

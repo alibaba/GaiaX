@@ -1,0 +1,16 @@
+{
+  "id": "template_merge_empty_node_with_padding",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view",
+      "layers": [
+        {
+          "id": "text1",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "data": {
+    "header-title": { "value": "'这是一个header标题'",
+     "extend": {
+        "background-color": "'red'",
+        "width": "'200px'"
+     }
+    },
+    "yk-topic-item": {
+       "value": "$$",
+       "extend": {
+        "background-color": "'red'"
+       }
+    }
+  }
+}

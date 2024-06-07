@@ -1,0 +1,12 @@
+{
+  "event": { "damai_followfans_avatar": "avatarAction" },
+  "data": {
+    "followfans_avatar_image": {
+      "value": "${objectImg}",
+      "placeholder": "uikit_user_default_icon"
+    },
+    "followfans_avatar_icon": {
+      "value": "@{${performFilmVipDO} ? @{eval(memberFlag + ${performFilmVipDO.memberFlag} != 'memberFlag0') ? @{eval(memberFlag + ${performFilmVipDO.memberFlag} == 'memberFlag10') ? 'https://gw.alicdn.com/imgextra/i1/O1CN01eg7Eb81auCyzEspel_!!6000000003389-2-tps-71-71.png' : 'https://gw.alicdn.com/imgextra/i4/O1CN01MBLIcs2558uRfIGS1_!!6000000007474-2-tps-71-71.png'} : @{eval(vtag + ${vtag} == 'vtag1') ? @{eval('' + ${objectType} == '2') ? 'https://gw.alicdn.com/imgextra/i2/O1CN01cqLnUd1eXXqTHhdEM_!!6000000003881-2-tps-71-71.png' : 'https://gw.alicdn.com/imgextra/i3/O1CN01of0Ypf1bQj6L1CU4J_!!6000000003460-2-tps-71-71.png' } : '' }} : @{eval(vtag + ${vtag} == 'vtag1') ? @{eval('' + ${objectType} == '2') ? 'https://gw.alicdn.com/imgextra/i2/O1CN01cqLnUd1eXXqTHhdEM_!!6000000003881-2-tps-71-71.png' : 'https://gw.alicdn.com/imgextra/i3/O1CN01of0Ypf1bQj6L1CU4J_!!6000000003460-2-tps-71-71.png' } : '' }}"
+    }
+  }
+}

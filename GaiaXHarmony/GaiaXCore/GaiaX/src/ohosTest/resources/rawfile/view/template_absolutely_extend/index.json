@@ -1,0 +1,5 @@
+{
+  "id": "template_absolutely_extend",
+  "type": "gaia-template",
+  "layers": [{ "id": "target", "type": "view" }]
+}

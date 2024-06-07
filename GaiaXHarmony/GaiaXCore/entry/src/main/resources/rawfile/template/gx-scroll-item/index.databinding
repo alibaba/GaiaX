@@ -1,0 +1,11 @@
+{
+  "event": {
+    "gx-scroll-item": [
+      { "type": "'tap'", "params": { "value": "'click event'" } }
+    ]
+  },
+  "data": {
+    "cover-img": { "value": "$img" },
+    "title": { "value": "$title" }
+  }
+}

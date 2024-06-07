@@ -1,0 +1,11 @@
+#template_width_flex_grow {
+  width: 100%;
+  background-color: primaryBackground;
+}
+#container1 {
+  height: 100px;
+  flex-grow:1;
+  background-color: #e4e4e4;
+  flex-direction: column;
+  justify-content: space-between;
+}

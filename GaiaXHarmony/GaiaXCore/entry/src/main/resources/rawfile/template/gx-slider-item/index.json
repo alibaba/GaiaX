@@ -1,0 +1,11 @@
+{
+  "id": "gx-slider-item",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-slider-item",
+    "version": "0.0.1",
+    "modify-timestamp": "Wed May 22 2024 16:56:51 GMT+0800 (中国标准时间)",
+    "dependencies": {}
+  },
+  "layers": [{ "id": "img", "type": "image" }]
+}

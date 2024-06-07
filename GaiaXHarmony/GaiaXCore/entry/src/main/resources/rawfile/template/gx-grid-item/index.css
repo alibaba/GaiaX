@@ -1,0 +1,16 @@
+#gx-grid-item {
+  width: 100%;
+  background-color: #e4e4e4;
+  flex-direction: column;
+}
+#img {
+  width: 100%;
+  aspect-ratio: 1;
+}
+#title {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 30px;
+  color: #000000;
+  font-size: 15px;
+}

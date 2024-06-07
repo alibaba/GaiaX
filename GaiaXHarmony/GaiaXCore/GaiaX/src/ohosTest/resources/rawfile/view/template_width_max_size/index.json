@@ -1,0 +1,10 @@
+{
+  "id": "template_width_max_size",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "container1",
+      "type": "view"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "module": {
+    "name": "GaiaX_test",
+    "type": "feature",
+    "description": "$string:module_test_desc",
+    "mainElement": "TestAbility",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:test_pages",
+    "abilities": [
+      {
+        "name": "TestAbility",
+        "srcEntry": "./ets/testability/TestAbility.ets",
+        "description": "$string:TestAbility_desc",
+        "icon": "$media:icon",
+        "label": "$string:TestAbility_label",
+        "exported": true,
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background",
+        "skills": [
+          {
+            "actions": [
+              "action.system.home"
+            ],
+            "entities": [
+              "entity.system.home"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "GXAbility",
+        "srcEntry": "./ets/testability/GXAbility.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility1",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility2",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility3",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility4",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility5",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility6",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility7",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility8",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility9",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility10",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility11",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility12",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility13",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility14",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility15",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility16",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility17",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility18",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility19",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      },
+      {
+        "name": "GXAbility20",
+        "srcEntry": "./ets/testability/GXAbilities.ets",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background"
+      }
+    ]
+  }
+}

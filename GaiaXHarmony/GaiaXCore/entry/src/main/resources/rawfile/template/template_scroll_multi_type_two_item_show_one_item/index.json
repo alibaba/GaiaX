@@ -1,0 +1,21 @@
+{
+  "id": "template_scroll_multi_type_two_item_show_one_item",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "line-spacing": 9,
+  "interitem-spacing": 12,
+  "direction": "horizontal",
+  "edge-insets": "{0,0,0,0}",
+  "layers": [
+    {
+      "id": "template_scroll_multi_type_item_0",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    },
+    {
+      "id": "template_scroll_multi_type_item_1",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

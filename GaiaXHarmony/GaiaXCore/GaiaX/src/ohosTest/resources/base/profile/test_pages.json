@@ -1,0 +1,6 @@
+{
+  "src": [
+    "testability/pages/Index",
+    "testability/pages/GXIndex"
+  ]
+}

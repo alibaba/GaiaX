@@ -1,0 +1,18 @@
+{
+  "id": "yk-nest-item",
+  "type": "gaia-template",
+  "package": {
+    "id": "yk-nest-item",
+    "version": "0.0.1",
+    "modify-timestamp": "Wed May 15 2024 15:43:02 GMT+0800 (中国标准时间)",
+    "dependencies": { "yk-topic-item": "0.0.0" }
+  },
+  "layers": [
+    {
+      "id": "header",
+      "type": "view",
+      "layers": [{ "id": "header-title", "type": "text" }]
+    },
+    { "id": "yk-topic-item", "type": "gaia-template", "sub-type": "custom" }
+  ]
+}

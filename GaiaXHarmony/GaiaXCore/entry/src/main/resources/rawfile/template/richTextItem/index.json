@@ -1,0 +1,12 @@
+{
+  "id": "richTextItem",
+  "type": "gaia-template",
+  "package": {
+    "id": "richTextItem",
+    "version": "0.0.1",
+    "modify-timestamp": "Tue Jun 04 2024 10:15:27 GMT+0800 (中国标准时间)",
+    "constraint-size": { "width": 375, "height": 100, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [{ "id": "title", "type": "richtext" },{ "id": "desc", "type": "text" }]
+}

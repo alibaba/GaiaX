@@ -1,0 +1,14 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "gaiaxcoreharmony": "file:../GaiaX",
+    "gxstretch": "file:../../GXStretchBinding/GXStretch/build/default/outputs/default/GXStretch.har",
+    "GaiaXAnalyze": "file:../../GaiaXAnalyze/GaiaXAnalyzeHarmony/GaiaXAnalyze/build/default/outputs/default/GaiaXAnalyze.har"
+  }
+}
+

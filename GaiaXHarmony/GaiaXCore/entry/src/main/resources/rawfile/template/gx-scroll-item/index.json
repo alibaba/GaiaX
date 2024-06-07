@@ -1,0 +1,29 @@
+{
+  "id": "gx-scroll-item",
+  "type": "gaia-template",
+  "package": {
+    "id": "gx-scroll-item",
+    "version": "0.0.1",
+    "modify-timestamp": "Tue May 21 2024 18:54:37 GMT+0800 (中国标准时间)",
+    "constraint-size": { "width": 154, "height": 124, "zoom": 1 },
+    "dependencies": {}
+  },
+  "layers": [
+    {
+      "id": "cover-bg",
+      "type": "view",
+      "layers": [
+        { "id": "cover-img", "type": "image" },
+        {
+          "id": "play-vv-view",
+          "type": "view",
+          "layers": [
+            { "id": "play-vv-icon", "type": "image" },
+            { "id": "play-vv-text", "type": "text" }
+          ]
+        }
+      ]
+    },
+    { "id": "title", "type": "text" }
+  ]
+}

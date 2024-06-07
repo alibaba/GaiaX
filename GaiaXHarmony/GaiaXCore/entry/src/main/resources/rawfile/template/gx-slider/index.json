@@ -1,0 +1,18 @@
+{
+  "id": "gx-slider",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "item-spacing": 10,
+  "slider-has-indicator": true,
+  "slider-infinity-scroll": true,
+  "slider-scroll-time-interval": 3000,
+  "package": {
+    "id": "gx-slider",
+    "version": "0.0.1",
+    "modify-timestamp": "Wed May 22 2024 16:56:59 GMT+0800 (中国标准时间)",
+    "dependencies": { "gx-slider-item": "0.0.0" }
+  },
+  "layers": [
+    { "id": "gx-slider-item", "type": "gaia-template", "sub-type": "custom" }
+  ]
+}

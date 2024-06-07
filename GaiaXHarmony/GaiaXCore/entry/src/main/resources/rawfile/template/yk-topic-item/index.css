@@ -1,0 +1,57 @@
+#yk-topic-item {
+  width: 100%;
+  height: 74px;
+  align-items: center;
+  flex-direction: row;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+#userIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 7px;
+  mode: aspectFill;
+  background-color: #e4e4e4;
+}
+#textView {
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 48px;
+}
+#name {
+  height: 20px;
+  font-size: 16px;
+  color: #333333;
+  font-weight: 500;
+  fit-content: true;
+}
+#description {
+  height: 20px;
+  font-size: 12px;
+  color: #999999;
+}
+#follow {
+  overflow: hidden;
+  margin-top: 0px;
+  height: 30px;
+  width: 60px;
+  margin-left: 0px;
+  border-color: #979797;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 15px;
+  background-color: red;
+}
+#follow-text {
+  color: #24a5ff;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  text-align: center;
+  width: 60px;
+}

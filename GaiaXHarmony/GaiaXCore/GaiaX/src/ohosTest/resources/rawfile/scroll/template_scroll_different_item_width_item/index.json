@@ -1,0 +1,5 @@
+{
+  "id": "template_scroll_different_item_width_item",
+  "type": "gaia-template",
+  "layers": [{ "id": "test", "type": "view" }]
+}

@@ -1,0 +1,41 @@
+#damai_followfans_avatar {
+  width: 100%;
+  height: 100%;
+  background-color: primaryBackground;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+#followfans_avatar_image {
+  border-radius: 20px;
+  background-color: primaryFillColor;
+  flex-grow: 1;
+  mode: aspectFill;
+  width: 40px;
+  height: 40px;
+  border-color: #0000000d;
+  border-width: 0.5px;
+  border-style: solid;
+}
+#followfans_avatar_icon {
+  width: 13px;
+  height: 13px;
+  border-radius: 0px;
+  background-color: primaryFillColor;
+  mode: aspectFill;
+  align-self: flex-end;
+  position: absolute;
+}
+#bottom_view {
+  width: 100%;
+  height: 32px;
+  position: absolute;
+  bottom: 0px;
+  background-image: linear-gradient(to bottom, #00000000 50%, #000000b3 100%);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-direction: row;
+}

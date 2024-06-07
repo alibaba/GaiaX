@@ -1,0 +1,19 @@
+#template_merge_empty_node_with_padding {
+  width: 100%;
+  height: 100px;
+  background-color: primaryBackground;
+}
+#container1 {
+  padding-left:10px;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+#text1 {
+  width: 100%;
+  text-overflow: ellipsis;
+  height: 20px;
+  color: #000000;
+  font-size: 15px;
+}

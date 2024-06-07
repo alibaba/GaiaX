@@ -1,0 +1,21 @@
+{
+  "id": "gx-grid",
+  "type": "gaia-template",
+  "sub-type": "grid",
+  "row-spacing": 9,
+  "item-spacing": 12,
+  "edge-insets": "{0,0,0,0}",
+  "column": 3,
+  "exp-version": "V2",
+  "line-spacing": 12,
+  "interitem-spacing": 9,
+  "package": {
+    "id": "gx-grid",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu May 23 2024 10:00:28 GMT+0800 (中国标准时间)",
+    "dependencies": { "gx-grid-item": "0.0.0" }
+  },
+  "layers": [
+    { "id": "gx-grid-item", "type": "gaia-template", "sub-type": "custom" }
+  ]
+}

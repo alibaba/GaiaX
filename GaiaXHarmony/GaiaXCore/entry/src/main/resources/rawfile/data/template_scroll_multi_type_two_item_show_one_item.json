@@ -1,0 +1,32 @@
+{
+  "nodes": [
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "largeItemHeight": "200px"
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "largeItemHeight": "200px"
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "largeItemHeight": "200px"
+    },
+    {
+      "type": 0
+    },
+    {
+      "type": 1,
+      "largeItemHeight": "200px"
+    }
+  ]
+}

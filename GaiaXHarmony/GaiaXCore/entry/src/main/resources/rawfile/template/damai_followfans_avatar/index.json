@@ -1,0 +1,14 @@
+{
+  "id": "damai_followfans_avatar",
+  "type": "gaia-template",
+  "package": {
+    "id": "damai_followfans_avatar",
+    "version": "0.0.1",
+    "modify-timestamp": "Tue Mar 22 2022 15:12:45 GMT+0800 (中国标准时间)",
+    "dependencies": {}
+  },
+  "layers": [
+    { "id": "followfans_avatar_image", "type": "image" },
+    { "id": "followfans_avatar_icon", "type": "image" }
+  ]
+}

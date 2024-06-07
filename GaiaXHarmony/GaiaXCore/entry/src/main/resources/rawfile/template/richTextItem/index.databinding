@@ -1,0 +1,11 @@
+{
+  "data": {
+    "title": {
+      "extend": { "highlight-tag": "'@'", "highlight-color": "'red'" },
+      "value": "$title"
+    },
+        "desc": {
+          "value": "$desc"
+        }
+  }
+}

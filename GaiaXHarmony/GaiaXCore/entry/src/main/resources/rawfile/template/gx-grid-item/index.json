@@ -1,0 +1,15 @@
+{
+  "id": "gx-grid-item",
+  "type": "gaia-template",
+  "exp-version": "V2",
+  "package": {
+    "id": "gx-grid-item",
+    "version": "0.0.1",
+    "modify-timestamp": "Thu May 23 2024 10:00:28 GMT+0800 (中国标准时间)",
+    "dependencies": {}
+  },
+  "layers": [
+    { "id": "img", "type": "image" },
+    { "id": "title", "type": "text" }
+  ]
+}

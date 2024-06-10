@@ -20,14 +20,15 @@ enum InjectType {
 
 export class GXImageBuilderParams {
   url: ResourceStr | null = null
+  viewWidth: number | null = null
+  viewHeight: number | null = null
+  imageFit: ImageFit = ImageFit.Fill
   placeHolder: ResourceStr | null = null
+  // 回调
   onComplete: () => void = () => {
   }
   onError: () => void = () => {
   }
-  imageFit: ImageFit = ImageFit.Fill
-  viewWidth: number | null = null
-  viewHeight: number | null = null
 
   constructor(url: ResourceStr | null, placeHolder: ResourceStr | null, imageFit: ImageFit, viewWidth: number,
     viewHeight: number, onComplete: () => void, onError: () => void) {
@@ -43,14 +44,22 @@ export class GXImageBuilderParams {
 
 export class GXInjector {
   static instance = new GXInjector();
-
+  // 注册图片组件Map
   injectorMap: Record<number, WrappedBuilder<[GXImageBuilderParams]>> = {};
 
+   /**
+    * 注册Image
+    * @param builder
+    */
   registerImage( builder: WrappedBuilder<[GXImageBuilderParams]>) {
     this.injectorMap[InjectType.image] = builder
   }
 
-  injectedImage():WrappedBuilder<[GXImageBuilderParams]>|null {
+  /**
+   * 获取注册的Image
+   * @returns Image
+   */
+  injectedImage():WrappedBuilder<[GXImageBuilderParams]> | null {
     if (this.injectorMap[InjectType.image]) {
       return this.injectorMap[InjectType.image]
     } else {

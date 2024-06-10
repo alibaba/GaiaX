@@ -41,7 +41,7 @@ export enum GXTemplateFileType {
   dataFile
 }
 
-// 文件类型
+// 事件类型
 export enum GXEventType {
   click,
   longPress,

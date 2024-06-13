@@ -312,6 +312,10 @@ class GXRegisterCenter {
         pageSource = source
     }
 
+    fun getExtensionPageTemplateSource(): GXIExtensionPageTemplateSource? {
+        return pageSource
+    }
+
     /**
      * @param source
      * @param priority [0,99]

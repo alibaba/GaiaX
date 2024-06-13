@@ -40,6 +40,7 @@
 
 - Android
 - iOS
+- Harmony
 
 ## 核心概念
 
@@ -185,6 +186,53 @@ UIView *view = [TheGXTemplateEngine creatViewByTemplateItem:item measureSize:siz
 
 // 将插入模板插入到容器中进行渲染
 [self.view addSubview:view];
+```
+
+### Harmony
+
+#### 依赖管理
+在oh-package.json5文件中中添加依赖
+```
+// 依赖
+"dependencies": {
+  "GaiaxHarmony": "",
+}
+```
+
+#### 模板文件
+在项目rawfile目录
+```
+// 用于存放模板资源的路径
+src/main/resouces/rawfile/xxxx
+```
+
+#### 调用方式
+```
+// SDK使用方式
+
+// 引入头文件
+import { GXTemplateItem } from 'GaiaxHarmony/src/main/ets/context/GXTemplateItem';
+import { GXTemplateData } from 'GaiaxHarmony/src/main/ets/context/GXTemplateData';
+import { GXComponent } from 'GaiaxHarmony/src/main/ets/components/GXComponent';
+import { Size } from 'gxstretch';
+
+// 构建模板参数     - 模板信息
+templateItem = new GXTemplateItem('bizId', 'templateId', 'templateVersion')
+
+// 构建模板参数     - 模板数据
+templateData = new GXTemplateData();
+templateData.data = @{@"xxx": @"xxx"};
+
+// 构建模板参数     - 视口大小(模板绘制尺寸)
+measureSize: Size<number> = new Size(NaN, NaN);
+
+// 创建模板视图    
+GXComponent({
+    templateItem: this.templateItem,
+    templateData: this.templateData,
+    measureSize: this.measureSize
+})
+
 ```
 
 ## 2024鸿蒙迭代路线图

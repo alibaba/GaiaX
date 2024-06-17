@@ -103,9 +103,12 @@ class GXSliderViewAdapter(
 
 
         var isReuse = false
+        val pageMode = templateItem.isPageMode
 
+        // 如果有扩展的容器绑定，那么使用扩展的容器绑定
+        // 并且不是page模式
         val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
-        if (processContainerItemBind != null) {
+        if (processContainerItemBind != null && !pageMode) {
 
             //
             processContainerItemBind.bindViewHolder(gxTemplateContext.templateData?.tag,
@@ -188,22 +191,16 @@ class GXSliderViewAdapter(
 
                 this.dataListener = object : GXTemplateEngine.GXIDataListener {
                     override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
-                        return gxTemplateContext.templateData?.dataListener?.onTextProcess(
-                            gxTextData
-                        )
+                        return gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
                     }
                 }
             }
 
             if (gxView != null) {
 
-                GXTemplateEngine.instance.bindDataOnlyNodeTree(
-                    gxView, gxTemplateData, itemMeasureSize
-                )
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, itemMeasureSize)
 
-                GXTemplateEngine.instance.bindDataOnlyViewTree(
-                    gxView, gxTemplateData, itemMeasureSize
-                )
+                GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, itemMeasureSize)
 
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 itemContainer.layoutParams.width = gxView.layoutParams.width
@@ -221,9 +218,17 @@ class GXSliderViewAdapter(
 
         itemContainer.getChildAt(0)?.let { gxView ->
             if (isReuse) {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
+                }
             } else {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
+                }
             }
         }
 

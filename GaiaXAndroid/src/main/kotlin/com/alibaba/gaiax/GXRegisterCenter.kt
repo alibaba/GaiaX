@@ -49,6 +49,14 @@ class GXRegisterCenter {
 
 
     /**
+     * 用于页面GaiaX监听内部创建坑位视图可见性监听
+     */
+    interface GXIPageItemViewLifecycleListener : GXIItemViewLifecycleListener {
+
+    }
+
+
+    /**
      * 内部创建坑位视图可见性监听
      */
     interface GXIItemViewLifecycleListener {
@@ -218,20 +226,13 @@ class GXRegisterCenter {
     }
 
     interface GXIExtensionGrid {
-        fun convert(
-            propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig
-        ): Any?
+        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, gridConfig: GXGridConfig): Any?
     }
 
     interface GXIExtensionScroll {
-        fun convert(
-            propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig
-        ): Any? = null
+        fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any? = null
 
-        fun scrollIndex(
-            gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?
-        ) {
-        }
+        fun scrollIndex(gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?) {}
     }
 
     interface GXIExtensionLottieAnimation {
@@ -292,6 +293,7 @@ class GXRegisterCenter {
     internal var extensionContainerItemBind: GXIExtensionContainerItemBind? = null
     internal var extensionLottieAnimation: GXIExtensionLottieAnimation? = null
     internal var gxItemViewLifecycleListener: GXIItemViewLifecycleListener? = null
+    internal var gxPageItemViewLifecycleListener: GXIPageItemViewLifecycleListener? = null
 
     /**
      * 页面数据源
@@ -432,8 +434,15 @@ class GXRegisterCenter {
         return this
     }
 
+    fun registerExtensionPageItemViewLifecycleListener(extension: GXIPageItemViewLifecycleListener): GXRegisterCenter {
+        this.gxPageItemViewLifecycleListener = extension
+        return this
+    }
+
+
     fun reset() {
         gxItemViewLifecycleListener = null
+        gxPageItemViewLifecycleListener = null
         extensionBizMap = null
         extensionDataBinding = null
         extensionExpression = null

@@ -53,6 +53,20 @@ class GXRegisterCenter {
      */
     interface GXIPageItemViewLifecycleListener : GXIItemViewLifecycleListener {
 
+        override fun onCreate(gxView: View?) {
+        }
+
+        override fun onVisible(gxView: View?) {
+        }
+
+        override fun onInvisible(gxView: View?) {
+        }
+
+        override fun onReuse(gxView: View?) {
+        }
+
+        override fun onDestroy(gxView: View?) {
+        }
     }
 
 

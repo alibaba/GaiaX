@@ -24,7 +24,7 @@ object GXDataBindingFactory {
         val accessibilityDesc = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_DESC)
         val accessibilityEnable = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_ENABLE)
         val accessibilityTraits = data.getString(GXTemplateKey.GAIAX_ACCESSIBILITY_TRAITS)
-        val extend = data.getJSONObject(GXTemplateKey.GAIAX_EXTEND)
+        val extend = data[GXTemplateKey.GAIAX_EXTEND]
 
         val valueExp = GXExpressionFactory.create(expVersion, value)
         val placeholderExp = GXExpressionFactory.create(expVersion, placeholder)
@@ -32,15 +32,26 @@ object GXDataBindingFactory {
         val accessibilityEnableExp = GXExpressionFactory.create(expVersion, accessibilityEnable)
         val accessibilityTraitsExp = GXExpressionFactory.create(expVersion, accessibilityTraits)
         val extendExp: MutableMap<String, GXIExpression>? =
-            if (extend != null && extend.isNotEmpty()) {
+            if (extend != null) {
                 val result: MutableMap<String, GXIExpression> = mutableMapOf()
-                for (entry in extend) {
-                    if (entry.key != null && entry.value != null) {
-                        GXExpressionFactory.create(expVersion, entry.key, entry.value)?.let {
-                            result[entry.key] = it
+
+                // as json obj
+                if (extend is JSONObject && extend.isNotEmpty()) {
+                    for (entry in extend) {
+                        if (entry.key != null && entry.value != null) {
+                            GXExpressionFactory.create(expVersion, entry.key, entry.value)?.let {
+                                result[entry.key] = it
+                            }
                         }
                     }
                 }
+                // as string
+                else {
+                    GXExpressionFactory.create(expVersion, GXTemplateKey.GAIAX_EXTEND, extend)?.let {
+                        result[GXTemplateKey.GAIAX_EXTEND] = it
+                    }
+                }
+
                 result
             } else {
                 null
@@ -54,7 +65,9 @@ object GXDataBindingFactory {
                 accessibilityEnable = accessibilityEnableExp,
                 accessibilityTraits = accessibilityTraitsExp,
                 extend = extendExp
-            )
+            ).apply {
+                this.expVersion = expVersion
+            }
         } else {
             null
         }

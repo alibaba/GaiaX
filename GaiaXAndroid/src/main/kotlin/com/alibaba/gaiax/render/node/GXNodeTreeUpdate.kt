@@ -576,11 +576,7 @@ object GXNodeTreeUpdate {
                     if (gxTemplateContext.dirtyTexts == null) {
                         gxTemplateContext.dirtyTexts = mutableSetOf()
                     }
-                    gxTemplateContext.dirtyTexts?.add(
-                        GXDirtyText(
-                            gxTemplateContext, gxNode, templateData
-                        )
-                    )
+                    gxTemplateContext.dirtyTexts?.add(GXDirtyText(gxTemplateContext, gxNode, templateData))
                     return null
                 }
 

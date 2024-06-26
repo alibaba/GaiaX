@@ -51,7 +51,6 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         }
                         scroller.targetPosition = scrollIndex
                         recyclerView.layoutManager?.startSmoothScroll(scroller)
-                        return
                     } else {
                         val smooth = extend?.getBooleanValue(GXTemplateKey.GAIAX_SCROLL_ANIMATED) ?: false
                         if (smooth) {
@@ -59,19 +58,19 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         } else {
                             recyclerView.scrollToPosition(scrollIndex)
                         }
-                        return
                     }
                 } else {
                     // no process
                 }
+                return
             }
 
             // scroll item to position
             gxTemplateContext.templateData?.scrollIndex?.let {
                 if (it != -1) {
                     recyclerView.scrollToPosition(it)
-                    return
                 }
+                return
             }
         }
     }

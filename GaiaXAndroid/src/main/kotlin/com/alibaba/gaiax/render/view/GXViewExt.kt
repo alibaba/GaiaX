@@ -26,7 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
@@ -68,9 +67,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -79,9 +76,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -90,9 +85,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -101,9 +94,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -112,9 +103,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
         }
@@ -409,9 +398,7 @@ fun View.setGridContainerDirection(
     val column: Int = config.column(context)
     val scrollEnable: Boolean = config.scrollEnable
     if (this is RecyclerView) {
-        val needForceRefresh =
-            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
-                ?: false
+        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
             val target = object : GridLayoutManager(this.context, column, direction, false) {
@@ -460,9 +447,7 @@ fun View.setScrollContainerPadding(padding: Rect) {
 /**
  * @suppress
  */
-fun View.setGridContainerItemSpacingAndRowSpacing(
-    padding: Rect, itemSpacing: Int, rowSpacing: Int
-) {
+fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: Int, rowSpacing: Int) {
     if (this is RecyclerView) {
         if (this.itemDecorationCount > 0) {
             this.removeItemDecorationAt(0)

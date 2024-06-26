@@ -13,7 +13,7 @@
   },
   "extend": {
     "holding-offset": false,
-    "scroll-gravity": "'center'",
+    "scroll-position": "'center'",
     "scroll-animated": true,
     "scroll-index": 0
   },

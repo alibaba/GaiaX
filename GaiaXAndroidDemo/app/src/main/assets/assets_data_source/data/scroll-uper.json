@@ -12,10 +12,10 @@
     }
   },
   "extend": {
-    "holding-offset": true,
+    "holding-offset": false,
     "scroll-gravity": "'center'",
     "scroll-animated": true,
-    "scroll-index": 5
+    "scroll-index": 0
   },
   "nodes": [
     {

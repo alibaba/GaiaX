@@ -34,11 +34,13 @@ class ScrollTemplateActivity : AppCompatActivity() {
             Log.d(TAG, "scrollIndex() called with: extend = $extend")
 
             val recyclerView = container as RecyclerView
+
+            // holding offset
             val holdingOffset = extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
             if (holdingOffset) {
-                val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_GRAVITY)
                 val scrollIndex = extend?.getInteger(GXTemplateKey.GAIAX_SCROLL_INDEX) ?: -1
                 if (scrollIndex != -1) {
+                    val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_GRAVITY)
                     if (scrollGravity != null) {
                         // 默认是平滑滚动的
                         val scroller = when (scrollGravity) {
@@ -49,6 +51,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         }
                         scroller.targetPosition = scrollIndex
                         recyclerView.layoutManager?.startSmoothScroll(scroller)
+                        return
                     } else {
                         val smooth = extend?.getBooleanValue(GXTemplateKey.GAIAX_SCROLL_ANIMATED) ?: false
                         if (smooth) {
@@ -56,13 +59,19 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         } else {
                             recyclerView.scrollToPosition(scrollIndex)
                         }
+                        return
                     }
                 } else {
                     // no process
                 }
-            } else {
-                // when again bind data, should be scroll to position 0
-                recyclerView.scrollToPosition(0)
+            }
+
+            // scroll item to position
+            gxTemplateContext.templateData?.scrollIndex?.let {
+                if (it != -1) {
+                    recyclerView.scrollToPosition(it)
+                    return
+                }
             }
         }
     }
@@ -89,7 +98,9 @@ class ScrollTemplateActivity : AppCompatActivity() {
 
         // 模板数据
         val data = AssetsUtils.parseAssets(activity, "assets_data_source/data/scroll-uper.json")
-        val templateData = GXTemplateEngine.GXTemplateData(data)
+        val templateData = GXTemplateEngine.GXTemplateData(data).apply {
+            this.scrollIndex = 1
+        }
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
@@ -103,6 +114,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
                     if (it >= 0) {
                         val extend = templateData.data.getJSONObject("extend")
                         extend["scroll-index"] = it
+                        extend["holding-offset"] = true
                         GXTemplateEngine.instance.bindData(view, templateData)
                     }
                 }

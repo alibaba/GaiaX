@@ -404,7 +404,7 @@ object GXTemplateKey {
     /**
      * center/left/right
      */
-    const val GAIAX_SCROLL_GRAVITY = "scroll-gravity"
+    const val GAIAX_SCROLL_POSITION = "scroll-position"
     const val GAIAX_SCROLL_INDEX = "scroll-index"
     const val GAIAX_SCROLL_ANIMATED = "scroll-animated"
     const val GAIAX_DATABINDING_ITEM_TYPE = "item-type"

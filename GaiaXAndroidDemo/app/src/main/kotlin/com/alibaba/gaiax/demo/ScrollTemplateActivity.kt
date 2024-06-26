@@ -40,7 +40,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
             if (holdingOffset) {
                 val scrollIndex = extend?.getInteger(GXTemplateKey.GAIAX_SCROLL_INDEX) ?: -1
                 if (scrollIndex != -1) {
-                    val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_GRAVITY)
+                    val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_POSITION)
                     if (scrollGravity != null) {
                         // 默认是平滑滚动的
                         val scroller = when (scrollGravity) {

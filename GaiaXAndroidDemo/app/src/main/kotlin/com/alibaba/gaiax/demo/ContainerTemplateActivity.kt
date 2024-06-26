@@ -14,11 +14,11 @@ class ContainerTemplateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_container_template)
 
         renderTemplate1(this)
-//        renderTemplate2(this)
-//        renderTemplate3(this)
-//        renderTemplate4(this)
-//        renderTemplate5(this)
-//        renderTemplate6(this)
+        renderTemplate2(this)
+        renderTemplate3(this)
+        renderTemplate4(this)
+        renderTemplate5(this)
+        renderTemplate6(this)
     }
 
     private fun renderTemplate1(activity: ContainerTemplateActivity) {

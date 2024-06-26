@@ -4,10 +4,7 @@
             "value": "$data.img"
         },
         "title": {
-            "value": "$data.title",
-            "extend": {
-                "display": "int($data.title) > 3 ? 'flex' : 'none' ",
-            }
+            "value": "$data.title"
         }
     },
     "event": {

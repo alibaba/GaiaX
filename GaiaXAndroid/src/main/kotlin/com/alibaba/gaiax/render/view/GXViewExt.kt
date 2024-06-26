@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.GXRegisterCenter
@@ -435,9 +436,7 @@ fun View.setGridContainerDirection(
  */
 fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
     if (this is RecyclerView) {
-        val needForceRefresh =
-            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
-                ?: false
+        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
         if (this.layoutManager == null) {
             this.layoutManager = LinearLayoutManager(this.context, direction, false)
         } else if (needForceRefresh) {
@@ -446,7 +445,6 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
             this.layoutManager = tmp
             tmp.orientation = direction
         }
-
     }
 }
 

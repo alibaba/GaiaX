@@ -26,6 +26,13 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/scroll_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="scroll template"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nest_template"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

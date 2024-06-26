@@ -1,0 +1,16 @@
+{
+  "id": "gx-content-uper-scroll2",
+  "type": "gaia-template",
+  "sub-type": "scroll",
+  "direction": "horizontal",
+  "edge-insets": "{0,18,0,18}",
+  "item-spacing": 7,
+  "row-spacing": 0,
+  "layers": [
+    {
+      "type": "gaia-template",
+      "id": "gx-content-uper-scroll-item2",
+      "sub-type": "custom"
+    }
+  ]
+}

@@ -48,6 +48,9 @@
             android:name=".ContainerTemplateActivity"
             android:exported="true" />
         <activity
+            android:name=".ScrollTemplateActivity"
+            android:exported="true" />
+        <activity
             android:name=".NestTemplateActivity"
             android:exported="true" />
         <activity

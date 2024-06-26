@@ -106,6 +106,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        findViewById<AppCompatButton>(R.id.scroll_template)?.setOnClickListener {
+            val intent = Intent(MainActivity@ this, ScrollTemplateActivity::class.java)
+            startActivity(intent)
+        }
+
         findViewById<AppCompatButton>(R.id.databinding)?.setOnClickListener {
             val intent = Intent(MainActivity@ this, DataTemplateActivity::class.java)
             startActivity(intent)

@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
@@ -14,11 +16,102 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.demo.utils.AssetsUtils
 import com.alibaba.gaiax.render.utils.GXGravitySmoothScroller
 import com.alibaba.gaiax.render.view.container.GXContainer
+import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXScreenUtils
+import com.alibaba.gaiax.utils.getStringExtCanNull
 
 
 class ScrollTemplateActivity : AppCompatActivity() {
+
+
+    /**
+     * 有些偏业务的对比逻辑，交给业务处理不够友好，在这里特殊处理一下
+     */
+    open class GaiaXDefaultDiffCallBack(
+        protected val oldDatas: JSONArray,
+        protected val newDatas: JSONArray
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int {
+            return oldDatas.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newDatas.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            if (oldItemPosition == newItemPosition) {
+                val oldData = oldDatas.getJSONObject(oldItemPosition)
+                val newData = newDatas.getJSONObject(newItemPosition)
+                if (oldData != null && newData != null) {
+
+                    // 若是普通的柏拉图坑位结构，尝试判断唯一标识
+                    var oldId = oldData.getString("id")
+                    var newId = newData.getString("id")
+                    if (oldId != null && newId != null && oldId == newId) {
+                        return true
+                    }
+
+                    oldId = oldData.getString("contentId")
+                    newId = newData.getString("contentId")
+                    if (oldId != null && newId != null && oldId == newId) {
+                        return true
+                    }
+
+                    // 若是自定义数据结构，判断标题
+                    var oldTitle = oldData.getString("title")
+                    var newTitle = newData.getString("title")
+                    if (oldTitle != null && newTitle != null && oldTitle == newTitle) {
+                        return true
+                    }
+
+                    // 若是普通的柏拉图坑位结构，尝试判断标题
+                    oldTitle = oldData.getStringExtCanNull("data.title")
+                    newTitle = newData.getStringExtCanNull("data.title")
+                    if (oldTitle != null && newTitle != null && oldTitle == newTitle) {
+                        return true
+                    }
+
+                    // 若是指定的的柏拉图坑位结构，尝试判断标题
+                    oldTitle = oldData.getStringExtCanNull("text.title")
+                    newTitle = newData.getStringExtCanNull("text.title")
+                    if (oldTitle != null && newTitle != null && oldTitle == newTitle) {
+                        return true
+                    }
+
+                    // 增加一个对于位置的判定，如果位置相同，认为是同一个item
+                    // 在优酷中，坑位不会变化、移动，所以同一位置的position相同，可以认为是同一个item
+                    val old_gx_position = oldData.getString("gaiax_scroll_position")
+                    val new_gx_position = newData.getString("gaiax_scroll_position")
+                    if (old_gx_position != null && new_gx_position != null && old_gx_position == new_gx_position) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            // 在相同坑位的状态下，认为数据都不相同，需要进行坑位级别的刷新
+            return false
+        }
+
+    }
+
+    class GXExtensionContainerDataUpdate : GXRegisterCenter.GXIExtensionContainerDataUpdate {
+        override fun update(
+            gxTemplateContext: GXTemplateContext,
+            gxContainerViewAdapter: GXContainerViewAdapter,
+            old: JSONArray,
+            new: JSONArray
+        ) {
+            val diffCallBack = GaiaXDefaultDiffCallBack(old, new)
+            val diffResult = DiffUtil.calculateDiff(diffCallBack, true)
+            diffResult.dispatchUpdatesTo(gxContainerViewAdapter)
+        }
+    }
 
     companion object {
         private const val TAG = "ContainerTemplateActivi"
@@ -81,6 +174,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scroll_template)
 
         GXRegisterCenter.instance.registerExtensionScroll(GXExtensionScroll())
+//        GXRegisterCenter.instance.registerExtensionContainerDataUpdate(GXExtensionContainerDataUpdate())
         renderTemplate1(this)
     }
 

@@ -4,7 +4,7 @@
             "value": "$data.img"
         },
         "title": {
-            "value": "$data.title"
+            "value": "$price"
         }
     },
     "event": {

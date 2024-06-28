@@ -93,18 +93,8 @@ open class GXDataBinding(
             val result: JSONObject = JSONObject()
             for (entry in extend) {
                 if (entry.key == GXTemplateKey.GAIAX_EXTEND) {
-                    val extend = entry.value.value(templateData) as? JSONObject
-                    extend?.let {
-                        for (e in extend) {
-                            if (e.key != null && e.value != null) {
-                                GXExpressionFactory.create(this.expVersion, e.key, e.value)?.let { it ->
-                                    it.value(templateData)?.let {
-                                        result[e.key] = it
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    val extend = entry.value.value(templateData) as? JSONObject ?: JSONObject()
+                    result.putAll(extend)
                 } else {
                     result[entry.key] = entry.value.value(templateData)
                 }

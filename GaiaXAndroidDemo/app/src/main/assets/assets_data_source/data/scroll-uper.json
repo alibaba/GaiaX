@@ -3,7 +3,7 @@
     "holding-offset": "true",
     "scroll-animated": "true",
     "scroll-index": 0,
-    "scroll-position": "'center'"
+    "scroll-position": "center"
   },
   "nodes": [
     {

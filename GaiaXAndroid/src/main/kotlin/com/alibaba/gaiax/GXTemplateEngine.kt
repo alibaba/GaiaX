@@ -443,7 +443,7 @@ class GXTemplateEngine {
         var isLocal: Boolean = false
 
         /**
-         * 是否是页面模式，如果是页面模式，那么仅从指定的数据源读取模板数据
+         * 页面模式状态下，数据源有自己的里的逻辑， scroll的创建也有独立的逻辑。
          */
         var isPageMode: Boolean = false
 

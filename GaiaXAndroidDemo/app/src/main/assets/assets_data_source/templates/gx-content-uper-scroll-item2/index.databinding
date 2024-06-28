@@ -1,0 +1,15 @@
+{
+    "data": {
+        "cover-img": {
+            "value": "$data.img"
+        },
+        "title": {
+            "value": "$price"
+        }
+    },
+    "event": {
+        "cover-img": {
+            "value": "$data"
+        }
+    }
+}

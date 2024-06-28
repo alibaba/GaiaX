@@ -18,6 +18,7 @@ package com.alibaba.gaiax.template
 
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.template.factory.GXExpressionFactory
 
 /**
  * 只能通过GXTemplateNode来调用
@@ -31,6 +32,8 @@ open class GXDataBinding(
     val placeholder: GXIExpression? = null,
     val extend: MutableMap<String, GXIExpression>? = null
 ) {
+
+    var expVersion: String? = null
 
     /**
      * 获取数据绑定的计算结果，其数据结构如下：
@@ -86,13 +89,28 @@ open class GXDataBinding(
     }
 
     open fun getExtend(templateData: JSON?): JSONObject? {
-        var result: JSONObject? = null
         if (extend != null) {
+            val result: JSONObject = JSONObject()
             for (entry in extend) {
-                result = result ?: JSONObject()
-                result[entry.key] = entry.value.value(templateData)
+                if (entry.key == GXTemplateKey.GAIAX_EXTEND) {
+                    val extend = entry.value.value(templateData) as? JSONObject
+                    extend?.let {
+                        for (e in extend) {
+                            if (e.key != null && e.value != null) {
+                                GXExpressionFactory.create(this.expVersion, e.key, e.value)?.let { it ->
+                                    it.value(templateData)?.let {
+                                        result[e.key] = it
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    result[entry.key] = entry.value.value(templateData)
+                }
             }
+            return result
         }
-        return result
+        return null
     }
 }

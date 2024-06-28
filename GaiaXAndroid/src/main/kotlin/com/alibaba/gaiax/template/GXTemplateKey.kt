@@ -397,7 +397,27 @@ object GXTemplateKey {
 
     const val GAIAX_ICONFONT_FONT_FAMILY_DEFAULT_NAME = "iconfont"
 
+    /**
+     * 重新绑定数据时是否scroll不变化
+     */
     const val GAIAX_DATABINDING_HOLDING_OFFSET = "holding-offset"
+    
+    /**
+     * 仅在holding-offset为true时生效
+     * center/left/right
+     */
+    const val GAIAX_SCROLL_POSITION = "scroll-position"
+
+    /**
+     * 仅在holding-offset为true时生效
+     */
+    const val GAIAX_SCROLL_INDEX = "scroll-index"
+
+    /**
+     * 仅在holding-offset为true时生效
+     */
+    const val GAIAX_SCROLL_ANIMATED = "scroll-animated"
+
     const val GAIAX_DATABINDING_ITEM_TYPE = "item-type"
     const val GAIAX_DATABINDING_ITEM_TYPE_PATH = "path"
     const val GAIAX_DATABINDING_ITEM_TYPE_CONFIG = "config"

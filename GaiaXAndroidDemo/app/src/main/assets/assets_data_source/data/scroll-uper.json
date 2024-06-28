@@ -1,0 +1,75 @@
+{
+  "extend": {
+    "holding-offset": "true",
+    "scroll-animated": "true",
+    "scroll-index": 0,
+    "scroll-position": "'center'"
+  },
+  "nodes": [
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "corner": "首3月每月12元",
+      "descMore": "首3月每月12元，第4个月起25元/月",
+      "oldPrice": "￥25",
+      "price": "12",
+      "selected": "false",
+      "time": "连续包月",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "corner": "618大促5折",
+      "oldPrice": "￥258",
+      "price": "128",
+      "priceDesc": "加赠1个月SVIP",
+      "selected": "true",
+      "time": "年卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "138",
+      "priceMore": "23.00元/月",
+      "selected": "false",
+      "time": "半年卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "descMore": "会员特惠购1",
+      "price": "68",
+      "priceMore": "￥22.67元/月",
+      "selected": "false",
+      "time": "连续包季",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "corner": "超值！低至4折",
+      "price": "78",
+      "priceMore": "618购后赢免单",
+      "selected": "false",
+      "time": "季卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "30",
+      "selected": "false",
+      "time": "月卡",
+      "unit": "￥"
+    }
+  ]
+}

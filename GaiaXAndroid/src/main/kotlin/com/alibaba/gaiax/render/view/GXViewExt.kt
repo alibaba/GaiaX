@@ -67,9 +67,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -78,9 +76,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -89,9 +85,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -100,9 +94,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
 
@@ -111,9 +103,7 @@ fun View.setRoundCornerRadiusAndRoundCornerBorder(style: GXStyle?) {
                     this.setRoundCornerRadius(cornerRadius)
                 }
                 if (borderColor != null && borderWidth != null) {
-                    this.setRoundCornerBorder(borderColor,
-                        borderWidth,
-                        borderRadius ?: FloatArray(8) { 0F })
+                    this.setRoundCornerBorder(borderColor, borderWidth, borderRadius ?: FloatArray(8) { 0F })
                 }
             }
         }
@@ -408,9 +398,7 @@ fun View.setGridContainerDirection(
     val column: Int = config.column(context)
     val scrollEnable: Boolean = config.scrollEnable
     if (this is RecyclerView) {
-        val needForceRefresh =
-            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
-                ?: false
+        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
         if (this.layoutManager == null || needForceRefresh) {
             this.layoutManager = null
             val target = object : GridLayoutManager(this.context, column, direction, false) {
@@ -435,9 +423,7 @@ fun View.setGridContainerDirection(
  */
 fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
     if (this is RecyclerView) {
-        val needForceRefresh =
-            (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F)
-                ?: false
+        val needForceRefresh = (this.adapter as? GXContainerViewAdapter)?.isNeedForceRefresh(layout?.width ?: 0F) ?: false
         if (this.layoutManager == null) {
             this.layoutManager = LinearLayoutManager(this.context, direction, false)
         } else if (needForceRefresh) {
@@ -446,7 +432,6 @@ fun View.setScrollContainerDirection(direction: Int, layout: Layout?) {
             this.layoutManager = tmp
             tmp.orientation = direction
         }
-
     }
 }
 
@@ -462,9 +447,7 @@ fun View.setScrollContainerPadding(padding: Rect) {
 /**
  * @suppress
  */
-fun View.setGridContainerItemSpacingAndRowSpacing(
-    padding: Rect, itemSpacing: Int, rowSpacing: Int
-) {
+fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: Int, rowSpacing: Int) {
     if (this is RecyclerView) {
         if (this.itemDecorationCount > 0) {
             this.removeItemDecorationAt(0)

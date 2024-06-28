@@ -1,0 +1,9 @@
+{
+    "data": {
+        "gx-content-uper-scroll2":{
+            "value":"$nodes",
+            "extend": "$extend"
+        }
+    },
+    "event": {}
+}

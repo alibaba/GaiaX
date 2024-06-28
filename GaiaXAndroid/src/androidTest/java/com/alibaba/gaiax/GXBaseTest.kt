@@ -50,15 +50,11 @@ open class GXBaseTest {
 
     class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
 
-        override fun scrollIndex(
-            gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?
-        ) {
+        override fun scrollIndex(gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?) {
             // scroll item to position
             gxTemplateContext.templateData?.scrollIndex?.let { scrollPosition ->
                 if (scrollPosition <= 0) {
-                    val holdingOffset =
-                        extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET)
-                            ?: false
+                    val holdingOffset = extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
                     if (holdingOffset) {
                         // no process
                     } else {
@@ -73,13 +69,8 @@ open class GXBaseTest {
             }
         }
 
-        override fun convert(
-            propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig
-        ): Any? {
-            Log.d(
-                TAG,
-                "convertProcessing() called with: propertyName = $propertyName, context = $gxTemplateContext, scrollConfig = $scrollConfig"
-            )
+        override fun convert(propertyName: String, gxTemplateContext: GXTemplateContext, scrollConfig: GXScrollConfig): Any? {
+            Log.d(TAG, "convertProcessing() called with: propertyName = $propertyName, context = $gxTemplateContext, scrollConfig = $scrollConfig")
             if (propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_VIEW_PORT_WIDTH) {
                 val responsiveRule = scrollConfig.data.getString("responsive-rule") ?: return null
                 val padding = gxTemplateContext.rootNode?.getPaddingRect()

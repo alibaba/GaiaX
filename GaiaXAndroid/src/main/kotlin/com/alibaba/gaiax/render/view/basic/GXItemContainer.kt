@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.annotation.Keep
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.utils.Log
 
 @Keep
@@ -24,7 +25,13 @@ open class GXItemContainer : LinearLayout {
         }
         // 在ItemView被GC回收时，要通知视图被销毁，可以用于解除JS组件
         getChildAt(0)?.let { gxView ->
-            GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
+            GXTemplateContext.getContext(gxView)?.let {
+                if (it.templateItem.isPageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
+                }
+            }
         }
     }
 }

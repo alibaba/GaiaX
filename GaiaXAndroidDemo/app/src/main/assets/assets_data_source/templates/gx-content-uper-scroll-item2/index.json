@@ -1,0 +1,20 @@
+{
+  "id": "gx-content-uper-scroll-item2",
+  "layers": [
+    {
+      "id": "cover-bg",
+      "type": "view",
+      "layers": [
+        {
+          "id": "cover-img",
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ],
+  "type": "gaia-template"
+}

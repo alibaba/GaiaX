@@ -357,7 +357,10 @@ static napi_value GXGetValue(napi_env env, napi_callback_info info) {
     GXValue *gXValue = new GXValue(GX_TAG_NULL, 0);
     if (cppResult == 0) {
         // 返回的是无效的地址，后续无法再进行地址反解析，当前取值失败
-        callJSErrorLog("返回的是无效的地址，后续无法再进行地址反解析");
+        callJSLog("返回的是无效的地址，后续无法再进行地址反解析,直接返回token");
+        napi_create_string_utf8(env, token.c_str(), NAPI_AUTO_LENGTH, &result);
+        callJSLog("GX_TAG_STRING");
+        return result;
     } else {
         gXValue = reinterpret_cast<GXValue *>(cppResult);
         callJSLog(("cppResult 获取成功, tag:" + std::to_string(gXValue->tag)).c_str());

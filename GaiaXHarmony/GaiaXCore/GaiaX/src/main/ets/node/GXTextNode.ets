@@ -122,12 +122,10 @@ export default class GXTextNode extends GXViewNode {
         let size = style.size;
         // 宽
         const width: number = result?.[0];
-        size.width.type = 0;
-        size.width.value = width;
+        size.width = new DimPoints(width);
         // 高
         const height: number = result?.[1];
-        size.height.type = 0;
-        size.height.value = height;
+        size.width = new DimPoints(height);
         style.size = size;
 
         // 释放rust的指针，重置状态

@@ -24,17 +24,26 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import androidx.annotation.Keep
 import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.render.view.*
+import com.alibaba.gaiax.render.view.GXIContainer
+import com.alibaba.gaiax.render.view.GXIRelease
+import com.alibaba.gaiax.render.view.GXIRootView
+import com.alibaba.gaiax.render.view.GXIRoundCorner
+import com.alibaba.gaiax.render.view.GXIViewBindData
+import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
 import com.alibaba.gaiax.utils.Log
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 /**
  * @suppress
@@ -148,18 +157,23 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
             IndicatorPosition.TOP_LEFT -> {
                 layoutParams.gravity = Gravity.TOP or Gravity.LEFT
             }
+
             IndicatorPosition.TOP_CENTER -> {
                 layoutParams.gravity = Gravity.TOP or Gravity.CENTER
             }
+
             IndicatorPosition.TOP_RIGHT -> {
                 layoutParams.gravity = Gravity.TOP or Gravity.RIGHT
             }
+
             IndicatorPosition.BOTTOM_LEFT -> {
                 layoutParams.gravity = Gravity.BOTTOM or Gravity.LEFT
             }
+
             IndicatorPosition.BOTTOM_CENTER -> {
                 layoutParams.gravity = Gravity.BOTTOM or Gravity.CENTER
             }
+
             else -> {
                 // BOTTOM_RIGHT
                 layoutParams.gravity = Gravity.BOTTOM or Gravity.RIGHT
@@ -325,6 +339,28 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
         // 只有第一个SliderView可以自动滚动，用于解决多频道轮播图同时滚动的问题
         if (SHOWN_VIEW_COUNT > 0) {
             SHOWN_VIEW_COUNT--
+        }
+
+        // 释放当前显示的View
+        viewPager?.let {
+            val adapter = it.adapter
+            if (adapter is GXSliderViewAdapter) {
+                adapter.getItemView(it.currentItem)?.let { itemView ->
+                    (itemView as? ViewGroup)?.getChildAt(0)?.let { gxView ->
+                        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                            if (Log.isLog()) {
+                                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=GXSliderView.release GXSliderView=$this gxView=$gxView")
+                            }
+                            GXTemplateEngine.instance.destroyView(gxView)
+                            if (gxTemplateContext.templateItem.isPageMode) {
+                                GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
+                            } else {
+                                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

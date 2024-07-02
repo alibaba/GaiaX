@@ -13,7 +13,7 @@
       "corner": "首3月每月12元",
       "descMore": "首3月每月12元，第4个月起25元/月",
       "oldPrice": "￥25",
-      "price": "12",
+      "price": "0",
       "selected": "false",
       "time": "连续包月",
       "unit": "￥"
@@ -24,7 +24,7 @@
       },
       "corner": "618大促5折",
       "oldPrice": "￥258",
-      "price": "128",
+      "price": "1",
       "priceDesc": "加赠1个月SVIP",
       "selected": "true",
       "time": "年卡",
@@ -34,7 +34,7 @@
       "data": {
         "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
       },
-      "price": "138",
+      "price": "2",
       "priceMore": "23.00元/月",
       "selected": "false",
       "time": "半年卡",
@@ -45,7 +45,7 @@
         "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
       },
       "descMore": "会员特惠购1",
-      "price": "68",
+      "price": "3",
       "priceMore": "￥22.67元/月",
       "selected": "false",
       "time": "连续包季",
@@ -56,7 +56,7 @@
         "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
       },
       "corner": "超值！低至4折",
-      "price": "78",
+      "price": "4",
       "priceMore": "618购后赢免单",
       "selected": "false",
       "time": "季卡",
@@ -66,7 +66,43 @@
       "data": {
         "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
       },
-      "price": "30",
+      "price": "5",
+      "selected": "false",
+      "time": "月卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "6",
+      "selected": "false",
+      "time": "月卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "7",
+      "selected": "false",
+      "time": "月卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "8",
+      "selected": "false",
+      "time": "月卡",
+      "unit": "￥"
+    },
+    {
+      "data": {
+        "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF"
+      },
+      "price": "9",
       "selected": "false",
       "time": "月卡",
       "unit": "￥"

@@ -18,20 +18,4 @@ open class GXItemContainer : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context, attrs, defStyleAttr
     )
-
-    fun finalize() {
-        if (Log.isLog()) {
-            Log.e("finalize")
-        }
-        // 在ItemView被GC回收时，要通知视图被销毁，可以用于解除JS组件
-        getChildAt(0)?.let { gxView ->
-            GXTemplateContext.getContext(gxView)?.let {
-                if (it.templateItem.isPageMode) {
-                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
-                } else {
-                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
-                }
-            }
-        }
-    }
 }

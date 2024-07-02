@@ -212,18 +212,24 @@ class GXSliderViewAdapter(
 
         itemViewMap[getItemViewKey(position)] = itemContainer
 
-        if (Log.isLog()) {
-            Log.e("instantiateItem $container $position $itemContainer")
-        }
-
         itemContainer.getChildAt(0)?.let { gxView ->
             if (isReuse) {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.reuse $container $position $itemContainer")
+                    }
+                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
                 } else {
                     GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
                 }
             } else {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.create $container $position $itemContainer")
+                    }
+                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
                 } else {
@@ -240,7 +246,24 @@ class GXSliderViewAdapter(
             Log.e("destroyItem $container $position $obj")
         }
         if (obj is View) {
-            container.removeView(obj)
+            val itemContainer = obj as ViewGroup
+
+            container.removeView(itemContainer)
+
+            itemContainer.getChildAt(0)?.let { gxView ->
+                GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+
+                    if (Log.isLog()) {
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=destroyItem $container $position $itemContainer")
+                    }
+
+                    if (gxTemplateContext.templateItem.isPageMode) {
+                        GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
+                    } else {
+                        GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
+                    }
+                }
+            }
         }
         itemViewMap.remove(getItemViewKey(position))
     }

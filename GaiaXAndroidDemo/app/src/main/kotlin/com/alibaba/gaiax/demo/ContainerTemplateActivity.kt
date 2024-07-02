@@ -1,6 +1,7 @@
 package com.alibaba.gaiax.demo
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.alibaba.gaiax.GXTemplateEngine
@@ -21,6 +22,23 @@ class ContainerTemplateActivity : AppCompatActivity() {
         renderTemplate6(this)
     }
 
+    var render1View: View? = null
+    var render2View: View? = null
+    var render3View: View? = null
+    var render4View: View? = null
+    var render5View: View? = null
+    var render6View: View? = null
+
+    override fun onDestroy() {
+        GXTemplateEngine.instance.destroyView(render1View)
+        GXTemplateEngine.instance.destroyView(render2View)
+        GXTemplateEngine.instance.destroyView(render3View)
+        GXTemplateEngine.instance.destroyView(render4View)
+        GXTemplateEngine.instance.destroyView(render5View)
+        GXTemplateEngine.instance.destroyView(render6View)
+        super.onDestroy()
+    }
+
     private fun renderTemplate1(activity: ContainerTemplateActivity) {
         // 初始化
         GXTemplateEngine.instance.init(activity)
@@ -36,7 +54,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render1View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 
@@ -64,7 +82,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render2View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 
@@ -92,7 +110,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render3View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 
@@ -116,7 +134,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render4View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 
@@ -140,13 +158,14 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render5View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_5).addView(view, 0)
     }
+
 
     private fun renderTemplate6(activity: ContainerTemplateActivity) {
         // 初始化
@@ -169,7 +188,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
-
+        render6View = view
         // 绑定数据
         GXTemplateEngine.instance.bindData(view, templateData)
 

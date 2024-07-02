@@ -2,6 +2,7 @@ package com.alibaba.gaiax.demo
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -114,7 +115,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "ContainerTemplateActivi"
+        private const val TAG = "[GaiaX][Demo]"
     }
 
     class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
@@ -172,11 +173,33 @@ class ScrollTemplateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scroll_template)
+        GXRegisterCenter.instance.registerExtensionItemViewLifecycleListener(object : GXRegisterCenter.GXIItemViewLifecycleListener {
+            override fun onCreate(gxView: View?) {
+                Log.d(TAG, "onCreate() called with: gxView = $gxView")
+            }
 
+            override fun onVisible(gxView: View?) {
+                Log.d(TAG, "onVisible() called with: gxView = $gxView")
+            }
+
+            override fun onInvisible(gxView: View?) {
+                Log.d(TAG, "onInvisible() called with: gxView = $gxView")
+            }
+
+            override fun onReuse(gxView: View?) {
+                Log.d(TAG, "onReuse() called with: gxView = $gxView")
+            }
+
+            override fun onDestroy(gxView: View?) {
+                Log.d(TAG, "onDestroy() called with: gxView = $gxView")
+            }
+
+        })
         GXRegisterCenter.instance.registerExtensionScroll(GXExtensionScroll())
-//        GXRegisterCenter.instance.registerExtensionContainerDataUpdate(GXExtensionContainerDataUpdate())
         renderTemplate1(this)
     }
+
+    var templateView: View? = null
 
     private fun renderTemplate1(activity: ScrollTemplateActivity) {
         // 初始化
@@ -197,6 +220,8 @@ class ScrollTemplateActivity : AppCompatActivity() {
 
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
+
+        templateView = view
 
         templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
 
@@ -231,6 +256,11 @@ class ScrollTemplateActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onDestroy() {
+        GXTemplateEngine.instance.destroyView(templateView)
+        super.onDestroy()
     }
 
 }

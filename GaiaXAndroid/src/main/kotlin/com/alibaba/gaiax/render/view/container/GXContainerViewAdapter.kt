@@ -170,7 +170,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
     private fun bindGXViewHolder(holder: GXViewHolder) {
 
         if (Log.isLog()) {
-            Log.e("bindGXViewHolder $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
+            Log.e("bindGXViewHolder $holder ${holder.itemView} ")
         }
 
         val templateItem =
@@ -305,7 +305,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
                 }
             }
 
-            if (gxView != null) {
+            gxView?.let {
 
                 GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, itemMeasureSize)
 
@@ -318,12 +318,22 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
         itemContainer.getChildAt(0)?.let { gxView ->
             if (isReuse) {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=createGXViewHolder.reuse $holder ${holder.itemView} $gxView")
+                    }
+                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
                 } else {
                     GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
                 }
             } else {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=createGXViewHolder.create $holder ${holder.itemView} $gxView")
+                    }
+                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
                 } else {
@@ -465,19 +475,20 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
     override fun onViewAttachedToWindow(holder: GXViewHolder) {
         super.onViewAttachedToWindow(holder)
-        if (Log.isLog()) {
-            Log.e("onViewAttachedToWindow $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
-        }
         val view = holder.itemView
-        if (view is ViewGroup && view.childCount > 0) {
-            val gxView = view.getChildAt(0)
-            if (gxView != null) {
-                if (gxTemplateContext.isAppear == true) {
-                    GXTemplateEngine.instance.onAppear(gxView)
-                    if (gxTemplateContext.templateItem.isPageMode) {
-                        GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onVisible(gxView)
-                    } else {
-                        GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+        if (view is ViewGroup) {
+            view.getChildAt(0)?.let { gxView ->
+                GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                    if (Log.isLog()) {
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewAttachedToWindow $holder ${holder.itemView} $gxView")
+                    }
+                    if (gxTemplateContext.isAppear == true) {
+                        GXTemplateEngine.instance.onAppear(gxView)
+                        if (gxTemplateContext.templateItem.isPageMode) {
+                            GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onVisible(gxView)
+                        } else {
+                            GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+                        }
                     }
                 }
             }
@@ -486,19 +497,20 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
     override fun onViewDetachedFromWindow(holder: GXViewHolder) {
         super.onViewDetachedFromWindow(holder)
-        if (Log.isLog()) {
-            Log.e("onViewDetachedFromWindow $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
-        }
         val view = holder.itemView
-        if (view is ViewGroup && view.childCount > 0) {
-            val gxView = view.getChildAt(0)
-            if (gxView != null) {
-                if (gxTemplateContext.isAppear == false) {
-                    GXTemplateEngine.instance.onDisappear(gxView)
-                    if (gxTemplateContext.templateItem.isPageMode) {
-                        GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onInvisible(gxView)
-                    } else {
-                        GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+        if (view is ViewGroup) {
+            view.getChildAt(0)?.let { gxView ->
+                GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                    if (Log.isLog()) {
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewDetachedFromWindow $holder ${holder.itemView} $gxView")
+                    }
+                    if (gxTemplateContext.isAppear == false) {
+                        GXTemplateEngine.instance.onDisappear(gxView)
+                        if (gxTemplateContext.templateItem.isPageMode) {
+                            GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onInvisible(gxView)
+                        } else {
+                            GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+                        }
                     }
                 }
             }
@@ -507,9 +519,24 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
     override fun onViewRecycled(holder: GXViewHolder) {
         super.onViewRecycled(holder)
-        if (Log.isLog()) {
-            Log.e("onViewRecycled $holder ${holder.itemView} ${(holder.itemView as ViewGroup).childCount}")
+        val view = holder.itemView
+        if (view is ViewGroup && view.childCount > 0) {
+            view.getChildAt(0)?.let { gxView ->
+                GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                    if (Log.isLog()) {
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewRecycled $holder ${holder.itemView} $gxView")
+                    }
+
+                    // 此处不调用，因为回收之后可能还会被复用
+                    // GXTemplateEngine.instance.destroyView(gxView)
+
+                    if (gxTemplateContext.templateItem.isPageMode) {
+                        GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
+                    } else {
+                        GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
+                    }
+                }
+            }
         }
-        // 不应该在此处处理JS组件销毁的动作，因为onViewRecycled执行后holder.itemView中的view还是保持存在的。
     }
 }

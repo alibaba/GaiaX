@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIContainer
@@ -49,6 +50,12 @@ object GXContainerUtils {
         }, { gxView: View ->
             if (gxTemplateContext.isAppear == true) {
                 GXTemplateEngine.instance.onAppear(gxView)
+
+                if (gxTemplateContext.templateItem.isPageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onVisible(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onVisible(gxView)
+                }
             }
         })
     }
@@ -63,6 +70,12 @@ object GXContainerUtils {
         }, { gxView: View ->
             if (gxTemplateContext.isAppear == false) {
                 GXTemplateEngine.instance.onDisappear(gxView)
+
+                if (gxTemplateContext.templateItem.isPageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onInvisible(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onInvisible(gxView)
+                }
             }
         })
     }

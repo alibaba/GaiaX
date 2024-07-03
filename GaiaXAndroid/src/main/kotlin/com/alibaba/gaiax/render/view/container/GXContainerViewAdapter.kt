@@ -512,24 +512,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
     override fun onViewRecycled(holder: GXViewHolder) {
         super.onViewRecycled(holder)
-        val view = holder.itemView
-        if (view is ViewGroup && view.childCount > 0) {
-            view.getChildAt(0)?.let { gxView ->
-                GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                    if (Log.isLog()) {
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewRecycled $holder ${holder.itemView} $gxView")
-                    }
-
-                    // 此处不调用，因为回收之后可能还会被复用
-                    // GXTemplateEngine.instance.destroyView(gxView)
-
-                    if (gxTemplateContext.templateItem.isPageMode) {
-                        GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
-                    } else {
-                        GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
-                    }
-                }
-            }
-        }
+        // 此处不处理销毁逻辑，相同类型的Item，回收之后还会被复用
     }
 }

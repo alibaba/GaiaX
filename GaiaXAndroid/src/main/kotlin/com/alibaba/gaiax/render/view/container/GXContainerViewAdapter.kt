@@ -43,10 +43,6 @@ import com.alibaba.gaiax.utils.getStringExt
  */
 class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private val gxContainer: GXContainer) : RecyclerView.Adapter<GXViewHolder>() {
 
-    companion object {
-        private val GX_SCROLL_POSITION = "gaiax_scroll_position"
-    }
-
     private var position: Int = 0
 
     lateinit var gxNode: GXNode
@@ -208,9 +204,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
         } else {
             JSONObject()
         }
-
-        // 添加扩展数据
-        itemData[GX_SCROLL_POSITION] = itemPosition
 
         val pageMode = templateItem.isPageMode
         var isReuse = false

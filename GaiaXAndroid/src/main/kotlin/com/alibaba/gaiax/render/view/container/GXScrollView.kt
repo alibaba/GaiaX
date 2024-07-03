@@ -69,12 +69,14 @@ open class GXScrollView : GXContainer, GXIRelease {
                         if (Log.isLog()) {
                             Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=GXScrollView.release GXScrollView=$this gxView=$gxView")
                         }
-                        GXTemplateEngine.instance.destroyView(gxView)
+
                         if (gxTemplateContext.templateItem.isPageMode) {
                             GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
                         } else {
                             GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
                         }
+
+                        GXTemplateEngine.instance.destroyView(gxView)
                     }
                 }
             }

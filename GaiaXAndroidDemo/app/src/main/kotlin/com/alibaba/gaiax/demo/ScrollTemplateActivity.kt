@@ -233,7 +233,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         val extend = templateData.data.getJSONObject("extend")
                         extend["scroll-index"] = it
                         extend["holding-offset"] = true
-                        extend["scroll-position"] = "right"
+                        extend["scroll-position"] = "center"
                         GXTemplateEngine.instance.bindData(view, templateData)
                     }
                 }

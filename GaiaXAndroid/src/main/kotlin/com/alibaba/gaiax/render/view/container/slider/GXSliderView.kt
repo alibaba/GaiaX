@@ -351,12 +351,13 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                             if (Log.isLog()) {
                                 Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=GXSliderView.release GXSliderView=$this gxView=$gxView")
                             }
-                            GXTemplateEngine.instance.destroyView(gxView)
+
                             if (gxTemplateContext.templateItem.isPageMode) {
                                 GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
                             } else {
-                                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onDestroy(gxView)
                             }
+
+                            GXTemplateEngine.instance.destroyView(gxView)
                         }
                     }
                 }

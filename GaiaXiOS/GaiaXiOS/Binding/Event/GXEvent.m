@@ -46,7 +46,7 @@
 }
 
 + (GXEventType)eventTypeWithEventInfo:(NSDictionary *)eventInfo{
-    NSString *eventType = [eventInfo gx_stringForKey:@"type"]; //tap、longpress
+    NSString *eventType = [eventInfo gx_stringForKey:@"eventType"] ?: [eventInfo gx_stringForKey:@"type"]; //tap、longpress
     if ([@"longpress" isEqualToString:eventType]) {
         return GXEventTypeLongPress;
     } else {

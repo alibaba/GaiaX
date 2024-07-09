@@ -2,8 +2,17 @@ name: iOS publish CI
 
 on:
   push:
+    paths:
+      - 'GaiaXiOS/**'
+      - 'GaiaXJSiOS/**'
+      - 'GaiaXSocketiOS/**'
+      - 'GaiaXStretch/**'
     branches: ["main"]
   pull_request:
+      - 'GaiaXiOS/**'
+      - 'GaiaXJSiOS/**'
+      - 'GaiaXSocketiOS/**'
+      - 'GaiaXStretch/**'
     branches: ["main"]
 
 jobs:

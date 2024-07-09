@@ -54,13 +54,18 @@ static JSValue js_bridge_module_sync(JSContext *ctx, JSValueConst this_val, int 
 
         (*env)->DeleteLocalRef(env, args_str);
 
-        // 增加引用计数
-        JS_DupValue(ctx, *value);
-
-        RELEASE_ENV(bridge_vm);
-
         if (value != NULL) {
+
+            // 增加引用计数
+            JS_DupValue(ctx, *value);
+
+            RELEASE_ENV(bridge_vm);
+
             return *value;
+        } else {
+            RELEASE_ENV(bridge_vm);
+
+            return JS_UNDEFINED;
         }
     }
     return JS_UNDEFINED;
@@ -120,12 +125,18 @@ static JSValue js_bridge_module_promise(JSContext *ctx, JSValueConst this_val, i
 
         (*env)->DeleteLocalRef(env, args_str);
 
-        JS_DupValue(ctx, *value);
-
-        RELEASE_ENV(bridge_vm);
-
         if (value != NULL) {
+
+            // 增加引用计数
+            JS_DupValue(ctx, *value);
+
+            RELEASE_ENV(bridge_vm);
+
             return *value;
+        } else {
+            RELEASE_ENV(bridge_vm);
+
+            return JS_UNDEFINED;
         }
     }
 

@@ -182,7 +182,6 @@
 		8DFF84F1273E60A80014C0DA /* GXTemplateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF84EF273E60A80014C0DA /* GXTemplateManager.m */; };
 		8DFF8502273E69BC0014C0DA /* GXFileHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DFF8500273E69BC0014C0DA /* GXFileHandler.h */; };
 		8DFF8503273E69BC0014C0DA /* GXFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF8501273E69BC0014C0DA /* GXFileHandler.m */; };
-		960DAA88A4F50DDC29631263 /* libPods-GaiaXiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */; };
 		9DAF452929EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 9DAF452829EE7E6F009EE8E6 /* GXFunctionExpressionProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9DAF453029EE9288009EE8E6 /* GXExpressionExtendTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DAF452F29EE9288009EE8E6 /* GXExpressionExtendTest.swift */; };
 		B188ACE529237797005C9F62 /* GXEventTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B188ACE429237797005C9F62 /* GXEventTest.swift */; };
@@ -208,7 +207,6 @@
 		1E4542E269BE8A2CC48A5DBD /* Pods-GaiaXiOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOS.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS.debug.xcconfig"; sourceTree = "<group>"; };
 		26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		29F62C23490CF61F86E3348E /* Pods-GaiaXiOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.release.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GaiaXiOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A962CC8282A9DD100335552 /* GXSliderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXSliderNode.h; sourceTree = "<group>"; };
 		8A962CC9282A9DD100335552 /* GXSliderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXSliderNode.m; sourceTree = "<group>"; };
 		8CF100DA07FB9596328219B4 /* Pods-GaiaXiOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -415,7 +413,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DFEC2BE27350BBA001F3B74 /* libstretch.a in Frameworks */,
-				960DAA88A4F50DDC29631263 /* libPods-GaiaXiOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -925,7 +922,6 @@
 				8DF79CAC2760A05800A867BE /* libsqlite3.tbd */,
 				8DF79CAA2760A04A00A867BE /* libz.tbd */,
 				26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */,
-				5D8EA6C49DAEB4EA87E7B1A6 /* libPods-GaiaXiOS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1074,7 +1070,6 @@
 				8DDD6B4127337C3A0042487D /* Sources */,
 				8DDD6B4227337C3A0042487D /* Frameworks */,
 				8DDD6B4327337C3A0042487D /* Resources */,
-				9C834C0D16D3903F0CB4C025 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1091,6 +1086,7 @@
 		8DDD6B3C27337C3A0042487D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					8D1CBD1A2758AA4500EC2B4D = {
@@ -1155,23 +1151,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9C834C0D16D3903F0CB4C025 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GaiaXiOS/Pods-GaiaXiOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C161A8A17B014E43AC48A60B /* [CP] Check Pods Manifest.lock */ = {
@@ -1337,16 +1316,20 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TNX2PP585H;
+				DEVELOPMENT_TEAM = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACH_O_TYPE = mh_bundle;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1364,16 +1347,19 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = TNX2PP585H;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACH_O_TYPE = mh_bundle;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1516,7 +1502,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1528,6 +1514,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=\"${PODS_ROOT}/Headers/Public/GaiaXSocket/GaiaXSocket.modulemap\"",
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -1552,7 +1544,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1564,6 +1556,11 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MARKETING_VERSION = 1.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=\"${PODS_ROOT}/Headers/Public/GaiaXSocket/GaiaXSocket.modulemap\"",
+				);
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alibaba.GaiaXiOS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

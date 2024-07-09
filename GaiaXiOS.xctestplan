@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "31C24D2B-1BE4-4469-94A7-E4004A1F2F1E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:GaiaXiOS.xcodeproj",
+          "identifier" : "8DDD6B4427337C3A0042487D",
+          "name" : "GaiaXiOS"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:GaiaXiOS.xcodeproj",
+        "identifier" : "8D1CBD1A2758AA4500EC2B4D",
+        "name" : "GaiaXiOSTests"
+      }
+    }
+  ],
+  "version" : 1
+}

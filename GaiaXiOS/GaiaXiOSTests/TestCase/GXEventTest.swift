@@ -52,12 +52,12 @@ final class GXEventTest: XCTestCase {
         
         XCTAssertTrue(targetView != nil, "target view is nil")
 
-        let tapEvent = targetView?.getGxEvent(.tap)
+        let tapEvent = targetView?.gx_event(with: .tap)
         XCTAssertTrue(tapEvent?.eventType == .tap)
         XCTAssertTrue(tapEvent?.view == targetView)
         XCTAssertTrue(tapEvent?.nodeId == "target")
         
-        let longPressEvent = targetView?.getGxEvent(.longPress)
+        let longPressEvent = targetView?.gx_event(with: .longPress)
         XCTAssertTrue(longPressEvent?.eventType == .longPress)
         XCTAssertTrue(longPressEvent?.view == targetView)
         XCTAssertTrue(longPressEvent?.nodeId == "target")

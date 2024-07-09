@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../GaiaXiOS.xctestplan">
+   </FileRef>
+   <FileRef
       location = "group:GaiaXiOS.xcodeproj">
    </FileRef>
    <FileRef

@@ -1,10 +1,8 @@
 package com.alibaba.gaiax.js
 
 import android.content.Context
-import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
-import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
 import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
@@ -12,7 +10,6 @@ import com.alibaba.gaiax.js.support.GXModuleManager
 import com.alibaba.gaiax.js.support.IModuleManager
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * JS引擎类，负责JS引擎的启动、关闭，自定义模块的注册等逻辑
@@ -51,16 +48,11 @@ class GXJSEngine {
      */
     lateinit var context: Context
 
-    /**
-     * 一个类型的engine只注册一次(QuickJs,JavaScriptCore,StudioWorker)
-     */
-    private val engines = ConcurrentHashMap<EngineType, GXHostEngine>()
-
     internal val moduleManager: IModuleManager = GXModuleManager()
 
-    private var defaultEngine: GXHostEngine? = null
+    internal var quickJSEngine: GXHostEngine? = null
 
-    private var debugEngine: GXHostEngine? = null
+    internal var debugEngine: GXHostEngine? = null
 
     /**
      * JS引擎初始化
@@ -85,12 +77,6 @@ class GXJSEngine {
 
     private fun initModules() {
         try {
-            registerInnerModules()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        try {
             registerAssetsModules()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -107,10 +93,7 @@ class GXJSEngine {
             }
             if (file.startsWith(MODULE_PREFIX) && file.endsWith(MODULE_SUFFIX)) {
                 try {
-                    val bizModules =
-                        JSONObject.parseObject(assetsOpen("$GAIAX_JS_MODULES/$file").bufferedReader(
-                            Charsets.UTF_8
-                        ).use { it.readText() })
+                    val bizModules = JSONObject.parseObject(assetsOpen("$GAIAX_JS_MODULES/$file").bufferedReader(Charsets.UTF_8).use { it.readText() })
                     allModules.putAll(bizModules)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -127,39 +110,10 @@ class GXJSEngine {
         }
     }
 
-    private fun assetsOpen(file: String) =
-        synchronized(context.assets) { context.assets.open(file) }
+    private fun assetsOpen(file: String) = synchronized(context.assets) { context.assets.open(file) }
 
-    private fun assetsModules(path: String): Array<out String>? =
-        synchronized(context.assets) { context.assets.list(path) }
+    private fun assetsModules(path: String): Array<out String>? = synchronized(context.assets) { context.assets.list(path) }
 
-    private fun registerInnerModules() {
-        //
-    }
-
-    fun stopDefaultEngine() {
-        if (Log.isLog()) {
-            Log.d("stopDefaultEngine()")
-        }
-        synchronized(EngineType.QuickJS) {
-            if (defaultEngine != null) {
-                destroyEngine(defaultEngine)
-                defaultEngine = null
-            }
-        }
-    }
-
-    fun stopDebugEngine() {
-        if (Log.isLog()) {
-            Log.d("stopDebugEngine()")
-        }
-        synchronized(EngineType.DebugJS) {
-            if (debugEngine != null) {
-                destroyEngine(debugEngine)
-                debugEngine = null
-            }
-        }
-    }
 
     fun startDefaultEngine(complete: (() -> Unit)? = null) {
         if (Log.isLog()) {
@@ -168,10 +122,10 @@ class GXJSEngine {
         synchronized(EngineType.QuickJS) {
             if (debugEngine == null) {
                 // 创建引擎
-                defaultEngine = obtainJSEngine(EngineType.QuickJS)
+                quickJSEngine = createJSEngine(EngineType.QuickJS)
 
                 // 启动引擎
-                startJSEngine(defaultEngine, complete)
+                quickJSEngine?.startEngine(complete)
             }
         }
     }
@@ -183,39 +137,43 @@ class GXJSEngine {
         synchronized(EngineType.DebugJS) {
             if (debugEngine == null) {
                 // 创建引擎
-                debugEngine = obtainJSEngine(EngineType.DebugJS)
+                debugEngine = createJSEngine(EngineType.DebugJS)
 
                 // 启动引擎
-                startJSEngine(debugEngine, complete)
+                debugEngine?.startEngine(complete)
             }
         }
     }
 
-    private fun startJSEngine(engine: GXHostEngine?, complete: (() -> Unit)?) {
-        val engineType = engine?.type
-        if (engines.containsKey(engineType)) {
-            engines[engineType]?.startEngine(complete)
+    fun stopDefaultEngine() {
+        if (Log.isLog()) {
+            Log.d("stopDefaultEngine()")
+        }
+        synchronized(EngineType.QuickJS) {
+            if (quickJSEngine != null) {
+                quickJSEngine?.destroyEngine()
+                quickJSEngine = null
+            }
         }
     }
 
-    private fun obtainJSEngine(type: EngineType): GXHostEngine {
-        val id = IdGenerator.genLongId()
-        var engine = GXHostEngine.create(id, type)
-        if (engines.containsKey(type)) {
-            engine = engines.getValue(type)
-        } else {
-            engines[type] = engine
+    fun stopDebugEngine() {
+        if (Log.isLog()) {
+            Log.d("stopDebugEngine()")
         }
+        synchronized(EngineType.DebugJS) {
+            if (debugEngine != null) {
+                debugEngine?.destroyEngine()
+                debugEngine = null
+            }
+        }
+    }
+
+    private fun createJSEngine(type: EngineType): GXHostEngine {
+        val id = IdGenerator.genLongId()
+        val engine = GXHostEngine.create(id, type)
         engine.initEngine()
         return engine
-    }
-
-    private fun destroyEngine(engine: GXHostEngine?) {
-        val engineType = engine?.type
-        if (engines.containsKey(engineType)) {
-            val instance = engines.remove(engineType)
-            instance?.destroyEngine()
-        }
     }
 
     /**
@@ -245,132 +203,54 @@ class GXJSEngine {
         return socketSender
     }
 
-    internal object Proxy {
-
-        private fun gxHostContext(it: Map.Entry<EngineType, GXHostEngine>) =
-            it.value.runtime()?.context()
-
-        private fun moduleManager() = instance.moduleManager
-
-        fun remoteDelayTask(taskId: Int) {
-            instance.engines.forEach {
-                gxHostContext(it)?.remoteDelayTask(taskId)
-            }
-        }
-
-        fun executeDelayTask(taskId: Int, delay: Long, function: () -> Unit) {
-            instance.engines.forEach {
-                gxHostContext(it)?.executeDelayTask(taskId, delay, function)
-            }
-        }
-
-        fun executeTask(func: () -> Unit) {
-            instance.engines.forEach {
-                gxHostContext(it)?.executeTask(func)
-            }
-        }
-
-        fun executeIntervalTask(taskId: Int, interval: Long, func: () -> Unit) {
-            instance.engines.forEach {
-                gxHostContext(it)?.executeIntervalTask(taskId, interval, func)
-            }
-        }
-
-        fun remoteIntervalTask(taskId: Int) {
-            instance.engines.forEach {
-                gxHostContext(it)?.remoteIntervalTask(taskId)
-            }
-        }
-
-        internal fun invokeSyncMethod(moduleId: Long, methodId: Long, args: JSONArray): Any? {
-            return moduleManager().invokeMethodSync(moduleId, methodId, args)
-        }
-
-        internal fun invokeAsyncMethod(moduleId: Long, methodId: Long, args: JSONArray) {
-            moduleManager().invokeMethodAsync(moduleId, methodId, args)
-        }
-
-        internal fun invokePromiseMethod(moduleId: Long, methodId: Long, args: JSONArray) {
-            moduleManager().invokePromiseMethod(moduleId, methodId, args)
-        }
-
-        internal fun buildModulesScript(type: EngineType): String {
-            return moduleManager().buildModulesScript(type)
-        }
-
-        internal fun buildBootstrapScript(): String {
-            return GXJSEngine.instance.context.resources.assets.open(GXHostContext.BOOTSTRAP_JS)
-                .bufferedReader(Charsets.UTF_8).use { it.readText() }
-        }
-    }
-
-    /**
-     * JS组件的事件需要通过该类代理执行
-     */
-    private fun getHostContext(it: Map.Entry<EngineType, GXHostEngine>) =
-        it.value.runtime()?.context()
-
     fun onEvent(componentId: Long, type: String, data: JSONObject) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onEvent(type, data)
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onEvent(type, data)
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onEvent(type, data)
     }
 
     fun onNativeEvent(componentId: Long, data: JSONObject) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onNativeEvent(data)
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onNativeEvent(data)
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onNativeEvent(data)
     }
 
     fun onReady(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onReady()
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onReady()
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onReady()
     }
 
     fun onReuse(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onReuse()
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onReuse()
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onReuse()
     }
 
     fun onShow(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onShow()
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onShow()
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onShow()
     }
 
     fun onHide(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onHide()
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onHide()
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onHide()
     }
 
     fun onDestroy(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onDestroy()
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onDestroy()
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onDestroy()
     }
 
     fun onLoadMore(componentId: Long, data: JSONObject) {
-        engines.forEach {
-            getHostContext(it)?.getComponent(componentId)?.onLoadMore(data)
-        }
+        quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
+        debugEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
     }
 
     /**
      * 为视图注册JS组件
      */
-    fun registerComponent(
-        bizId: String, templateId: String, templateVersion: String, script: String
-    ): Long {
+    fun registerComponent(bizId: String, templateId: String, templateVersion: String, script: String): Long {
         // 为引擎注册组件的时候，不同的引擎都使用同一个组件ID
         val componentId = IdGenerator.genLongId()
-        engines.forEach {
-            getHostContext(it)?.registerComponent(
-                componentId, bizId, templateId, templateVersion, script
-            )
-        }
+        quickJSEngine?.runtime()?.context()?.registerComponent(componentId, bizId, templateId, templateVersion, script)
+        debugEngine?.runtime()?.context()?.registerComponent(componentId, bizId, templateId, templateVersion, script)
         return componentId
     }
 
@@ -378,9 +258,8 @@ class GXJSEngine {
      * 为视图解除JS组件
      */
     fun unregisterComponent(componentId: Long) {
-        engines.forEach {
-            getHostContext(it)?.unregisterComponent(componentId)
-        }
+        quickJSEngine?.runtime()?.context()?.unregisterComponent(componentId)
+        debugEngine?.runtime()?.context()?.unregisterComponent(componentId)
     }
 
     interface IJsExceptionListener {

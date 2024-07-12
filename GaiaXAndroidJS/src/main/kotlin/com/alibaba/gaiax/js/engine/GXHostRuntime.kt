@@ -4,14 +4,10 @@ import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSRuntime
 import com.alibaba.gaiax.js.impl.qjs.QuickJSRuntime
 
-internal class GXHostRuntime(
-    val hostEngine: GXHostEngine, val realEngine: IEngine, val type: GXJSEngine.EngineType
-) {
+internal class GXHostRuntime(val hostEngine: GXHostEngine, val realEngine: IEngine, val type: GXJSEngine.EngineType) {
 
     companion object {
-        fun create(
-            hostEngine: GXHostEngine, engine: IEngine, type: GXJSEngine.EngineType
-        ): GXHostRuntime {
+        fun create(hostEngine: GXHostEngine, engine: IEngine, type: GXJSEngine.EngineType): GXHostRuntime {
             return GXHostRuntime(hostEngine, engine, type)
         }
     }
@@ -59,5 +55,4 @@ internal class GXHostRuntime(
     fun context(): GXHostContext? {
         return hostContext
     }
-
 }

@@ -10,6 +10,7 @@ import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.utils.Log
 
 /**
+ * 从JS运行时中调用某个Module的方法时，会从这里中转到HostContext中
  *  @author: shisan.lms
  *  @date: 2023-03-15
  *  Description:
@@ -21,14 +22,14 @@ import com.alibaba.gaiax.js.utils.Log
  *          a.对callSync/Async/Promise的方法执行Native对应的原生方法
  *          b.将对应的QuickJS实现通过Websocket转交Worker实现
  */
-internal class DebugJSBridgeModule(
-    private val hostContext: GXHostContext, private val debugJSContext: DebugJSContext
-) : ISocketBridgeListener {
+internal class DebugJSBridgeModule(private val hostContext: GXHostContext, private val debugJSContext: DebugJSContext) : ISocketBridgeListener {
 
     enum class WebsocketJSMethodName(val methodName: String) {
-        InitEnv("js/initJSEnv"), CreateComponent("js/createComponent"), Eval("js/eval"), CallSync("js/callSync"), CallAsync(
-            "js/callAsync"
-        ),
+        InitEnv("js/initJSEnv"),
+        CreateComponent("js/createComponent"),
+        Eval("js/eval"),
+        CallSync("js/callSync"),
+        CallAsync("js/callAsync"),
         CallPromise("js/callPromise")
     }
 
@@ -58,9 +59,7 @@ internal class DebugJSBridgeModule(
                     } else {
                         "Bridge.invokeCallback(${callBackId})"
                     }
-                    this@DebugJSBridgeModule.sendWorkerMethodResult(
-                        WebsocketJSMethodName.CallAsync, socketId, script
-                    )
+                    this@DebugJSBridgeModule.sendWorkerMethodResult(WebsocketJSMethodName.CallAsync, socketId, script)
                 }
 
             }
@@ -83,9 +82,7 @@ internal class DebugJSBridgeModule(
                         } else {
                             "Bridge.invokePromiseSuccess(${callBackId})"
                         }
-                        this@DebugJSBridgeModule.sendWorkerMethodResult(
-                            WebsocketJSMethodName.CallPromise, socketId, script
-                        )
+                        this@DebugJSBridgeModule.sendWorkerMethodResult(WebsocketJSMethodName.CallPromise, socketId, script)
                     }
                 }
             }
@@ -98,9 +95,7 @@ internal class DebugJSBridgeModule(
                         } else {
                             "Bridge.invokePromiseFailure(${callBackId})"
                         }
-                        this@DebugJSBridgeModule.sendWorkerMethodResult(
-                            WebsocketJSMethodName.CallPromise, socketId, script
-                        )
+                        this@DebugJSBridgeModule.sendWorkerMethodResult(WebsocketJSMethodName.CallPromise, socketId, script)
                     }
                 }
             }
@@ -188,5 +183,4 @@ internal class DebugJSBridgeModule(
         }
         GXJSEngine.instance.socketSender?.onSendMsg(message)
     }
-
 }

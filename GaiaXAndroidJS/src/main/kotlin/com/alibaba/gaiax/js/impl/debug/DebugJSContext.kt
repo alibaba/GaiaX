@@ -45,15 +45,11 @@ internal class DebugJSContext(
     override fun initBootstrap() {
         if (bootstrap == null) {
             val sb = StringBuilder()
-            sb.append(
-                GXScriptBuilder.buildGlobalContext(
-                    hostContext.hostRuntime.hostEngine.engineId, 10
-                )
-            )
+            sb.append(GXScriptBuilder.buildGlobalContext(hostContext.hostRuntime.hostEngine.engineId, 10))
             sb.append("__globalThis.__DEV__ = true; \r\n")
             sb.append("/**bridge.ts**/\r\n")
             sb.append("/**bootstrap.ts**/\r\n")
-            sb.append(GXJSEngine.Proxy.buildModulesScript(GXJSEngine.EngineType.DebugJS))
+            sb.append(GXJSEngine.instance.moduleManager.buildModulesScript(GXJSEngine.EngineType.DebugJS))
             sb.append(GXScriptBuilder.buildDebugStyle())
             bootstrap = sb.toString()
         }

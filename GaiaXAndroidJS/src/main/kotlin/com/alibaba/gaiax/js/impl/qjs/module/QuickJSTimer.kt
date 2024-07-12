@@ -26,7 +26,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GXJSEngine.Proxy.executeDelayTask(taskId, delay) {
+                gxHostContext()?.executeDelayTask(taskId, delay) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }
                 return jsContext.createJSNumber(taskId)
@@ -34,6 +34,9 @@ internal object QuickJSTimer {
             return jsContext.createJSUndefined()
         }
     }
+
+    private fun gxHostContext() = GXJSEngine.instance.quickJSEngine?.runtime()?.context()
+
 
     @Keep
     class ClearTimeout : JSFunctionCallback {
@@ -47,7 +50,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GXJSEngine.Proxy.remoteDelayTask(taskId)
+                gxHostContext()?.remoteDelayTask(taskId)
             }
             return jsContext.createJSUndefined()
         }
@@ -65,7 +68,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
                 }
-                GXJSEngine.Proxy.remoteIntervalTask(taskId)
+                gxHostContext()?.remoteIntervalTask(taskId)
             }
             return jsContext.createJSUndefined()
         }
@@ -86,7 +89,7 @@ internal object QuickJSTimer {
                 if (Log.isLog()) {
                     Log.e("createSetIntervalFunc() called with: contextId = $contextId, taskId = $taskId ")
                 }
-                GXJSEngine.Proxy.executeIntervalTask(taskId, interval) {
+                gxHostContext()?.executeIntervalTask(taskId, interval) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }
                 return jsContext.createJSNumber(taskId)

@@ -13,38 +13,37 @@ import java.util.concurrent.ConcurrentHashMap
  * 每个Context下的Component对应一个模板。
  * 如果模板是嵌套模板，那么Context会有多个Component。
  */
-internal class GXHostContext(
-    val hostRuntime: GXHostRuntime, val realRuntime: IRuntime, val type: GXJSEngine.EngineType
-) {
+internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IRuntime, val type: GXJSEngine.EngineType) {
 
+    /**
+     * 用于从JS运行时调用Module代码的的桥接
+     */
     internal val bridge = object : ICallBridgeListener {
 
-        override fun callSync(
-            contextId: Long, moduleId: Long, methodId: Long, args: JSONArray
-        ): Any? {
+        override fun callSync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray): Any? {
             if (Log.isLog()) {
                 Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            return GXJSEngine.Proxy.invokeSyncMethod(moduleId, methodId, args)
+            return GXJSEngine.instance.moduleManager.invokeMethodSync(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GXJSEngine.Proxy.invokeAsyncMethod(moduleId, methodId, args)
+            GXJSEngine.instance.moduleManager.invokeMethodAsync(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
                 Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
-            GXJSEngine.Proxy.invokePromiseMethod(moduleId, methodId, args)
+            GXJSEngine.instance.moduleManager.invokePromiseMethod(moduleId, methodId, args)
         }
     }
     private var taskQueue: GaiaXJSTaskQueue? = null
 
-    var realContext: IContext? = null
+    internal var realContext: IContext? = null
 
     /**
      * components = {instanceId(ComponentId), ComponentObject}
@@ -52,8 +51,7 @@ internal class GXHostContext(
      */
     private val components: ConcurrentHashMap<Long, GXHostComponent> = ConcurrentHashMap()
 
-    private val bizIdMap: ConcurrentHashMap<String, ConcurrentHashMap<String, Long>> =
-        ConcurrentHashMap()
+    private val bizIdMap: ConcurrentHashMap<String, ConcurrentHashMap<String, Long>> = ConcurrentHashMap()
 
     fun initContext() {
         if (realContext == null) {
@@ -139,8 +137,7 @@ internal class GXHostContext(
         script: String
     ): Long {
 
-        val component =
-            GXHostComponent.create(this, componentId, bizId, templateId, templateVersion, script)
+        val component = GXHostComponent.create(this, componentId, bizId, templateId, templateVersion, script)
 
         components[component.id] = component
 
@@ -183,9 +180,7 @@ internal class GXHostContext(
          */
         const val EVAL_TYPE_MODULE = 1
 
-        fun create(
-            host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType
-        ): GXHostContext {
+        fun create(host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType): GXHostContext {
             return GXHostContext(host, runtime, type)
         }
     }

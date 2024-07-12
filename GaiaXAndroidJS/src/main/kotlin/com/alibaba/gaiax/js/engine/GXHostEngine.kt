@@ -5,11 +5,15 @@ import com.alibaba.gaiax.js.impl.debug.DebugJSEngine
 import com.alibaba.gaiax.js.impl.qjs.QuickJSEngine
 
 /**
- * Engine -> Runtime -> Context -> Component
+ * 带有Host前缀的都是封装层，内部存有`realEngine`，其实现时`DebugJSEngine`或者`QuickJSEngine`。
+ *
+ * SDK        -> JSRuntime   -> JSContext   -> JSComponent
+ *
+ * HostEngine -> HostRuntime -> HostContext -> HostComponent
+ *     |              |              |              |
+ * RealEngine -> RealRuntime -> RealContext -> RealComponent
  */
-internal class GXHostEngine private constructor(
-    val engineId: Long, val type: GXJSEngine.EngineType
-) {
+internal class GXHostEngine private constructor(val engineId: Long, val type: GXJSEngine.EngineType) {
 
     enum class State {
         NONE, INIT_START, INIT_END, RUNNING_START, RUNNING_END, DESTROY_START, DESTROY_END,

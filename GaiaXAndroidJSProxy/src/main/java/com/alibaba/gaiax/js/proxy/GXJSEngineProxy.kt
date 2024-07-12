@@ -360,9 +360,7 @@ class GXJSEngineProxy {
         }
     }
 
-    private fun registerTemplateTree(
-        gxTemplateContext: GXTemplateContext, templateInfo: GXTemplateInfo
-    ) {
+    private fun registerTemplateTree(gxTemplateContext: GXTemplateContext, templateInfo: GXTemplateInfo) {
         val templateBiz = templateInfo.template.biz
         val templateId = templateInfo.template.id
         val templateVersion = templateInfo.template.version.toString()
@@ -374,6 +372,9 @@ class GXJSEngineProxy {
             val jsComponentId = GXJSEngine.instance.registerComponent(
                 templateBiz, templateId, templateVersion, script
             )
+            if (gxTemplateContext.rootJSComponentId == null) {
+                gxTemplateContext.rootJSComponentId = jsComponentId
+            }
             gxTemplateContext.jsComponentIds?.add(jsComponentId)
         } else {
             if (Log.isLog()) {

@@ -61,8 +61,8 @@ internal class QuickJSContext(
             sb.append(GXScriptBuilder.buildImportScript())
             sb.append(GXScriptBuilder.buildGlobalContext(contextId, 0))
             sb.append(GXScriptBuilder.buildExtendAndAssignScript())
-            sb.append(GXJSEngine.Proxy.buildBootstrapScript())
-            sb.append(GXJSEngine.Proxy.buildModulesScript(GXJSEngine.EngineType.QuickJS))
+            sb.append(GXJSEngine.instance.context.resources.assets.open(GXHostContext.BOOTSTRAP_JS).bufferedReader(Charsets.UTF_8).use { it.readText() })
+            sb.append(GXJSEngine.instance.moduleManager.buildModulesScript(GXJSEngine.EngineType.QuickJS))
             sb.append(GXScriptBuilder.buildStyle())
             bootstrap = sb.toString()
         }
@@ -88,18 +88,10 @@ internal class QuickJSContext(
 
     private fun initModuleTimer() {
         jsContext?.let { context ->
-            context.globalObject.setProperty(
-                "setTimeout", context.createJSFunction(QuickJSTimer.createSetTimeoutFunc())
-            )
-            context.globalObject.setProperty(
-                "clearTimeout", context.createJSFunction(QuickJSTimer.createClearTimeoutFunc())
-            )
-            context.globalObject.setProperty(
-                "setInterval", context.createJSFunction(QuickJSTimer.createSetIntervalFunc())
-            )
-            context.globalObject.setProperty(
-                "clearInterval", context.createJSFunction(QuickJSTimer.createClearIntervalFunc())
-            )
+            context.globalObject.setProperty("setTimeout", context.createJSFunction(QuickJSTimer.createSetTimeoutFunc()))
+            context.globalObject.setProperty("clearTimeout", context.createJSFunction(QuickJSTimer.createClearTimeoutFunc()))
+            context.globalObject.setProperty("setInterval", context.createJSFunction(QuickJSTimer.createSetIntervalFunc()))
+            context.globalObject.setProperty("clearInterval", context.createJSFunction(QuickJSTimer.createClearIntervalFunc()))
         }
     }
 

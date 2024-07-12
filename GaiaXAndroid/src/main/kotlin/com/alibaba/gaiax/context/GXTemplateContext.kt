@@ -72,6 +72,11 @@ class GXTemplateContext private constructor(
     var jsComponentIds: MutableSet<Long>? = null
 
     /**
+     * 根节点JS组件ID
+     */
+    var rootJSComponentId: Long? = null
+
+    /**
      * 用于追踪日志
      */
     var traceId: String? = SystemClock.elapsedRealtimeNanos().toString()

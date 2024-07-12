@@ -12,9 +12,10 @@ import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
 import com.alibaba.gaiax.quickjs.JSFunction
 
-internal class QuickJSBridgeModule(
-    private val hostContext: GXHostContext, private val jsContext: JSContext
-) : BridgeModuleListener {
+/**
+ * 从JS运行时中调用某个Module的方法时，会从这里中转到HostContext中
+ */
+internal class QuickJSBridgeModule(private val hostContext: GXHostContext, private val jsContext: JSContext) : BridgeModuleListener {
 
     override fun callSync(contextPointer: Long, argsMap: String): Long {
         if (Log.isLog()) {
@@ -77,7 +78,7 @@ internal class QuickJSBridgeModule(
                     if (Log.isLog()) {
                         Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
                     }
-                    GXJSEngine.Proxy.executeTask {
+                    gxHostContext()?.executeTask {
                         val jsFunction = JSFunction(funPointer, jsContext)
                         jsFunction.dupValue()
                         jsFunction.invoke(null, arrayOfJSValues(result))
@@ -120,7 +121,7 @@ internal class QuickJSBridgeModule(
                 override fun resolve(): IGXCallback {
                     return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GXJSEngine.Proxy.executeTask {
+                            gxHostContext()?.executeTask {
                                 jsResolve?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -130,7 +131,7 @@ internal class QuickJSBridgeModule(
                 override fun reject(): IGXCallback {
                     return object : IGXCallback {
                         override fun invoke(result: Any?) {
-                            GXJSEngine.Proxy.executeTask {
+                            gxHostContext()?.executeTask {
                                 jsReject?.invoke(null, arrayOfJSValues(result))
                             }
                         }
@@ -144,6 +145,8 @@ internal class QuickJSBridgeModule(
         }
         return jsContext.createJSUndefined().pointer
     }
+
+    private fun gxHostContext() = GXJSEngine.instance.quickJSEngine?.runtime()?.context()
 
     override fun wrapAsJSValueException(e: Exception?) {
         e?.let {

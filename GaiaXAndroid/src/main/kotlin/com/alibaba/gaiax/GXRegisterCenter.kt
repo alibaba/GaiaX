@@ -76,9 +76,24 @@ class GXRegisterCenter {
     interface GXIItemViewLifecycleListener {
 
         /**
-         * 坑位创建事件，@see GXContainerViewAdapter，根据绑定数据时是否存在GXView触发
+         * 坑位创建事件，当坑位View创建成功时调用，此时还未绑定数据；与onReuse互斥。
          */
         fun onCreate(gxView: View?)
+
+        /**
+         * 坑位复用事件，当坑位的View被复用时调用，此时还未绑定数据；与onCreate互斥。
+         */
+        fun onReuse(gxView: View?)
+
+        /**
+         * 坑位开始事件，当坑位准备绑定数据时调用
+         */
+        fun onStart(gxView: View?, gxTemplateData: GXTemplateEngine.GXTemplateData)
+
+        /**
+         * 坑位数据绑定结束事件，当坑位数据绑定结束时调用
+         */
+        fun onStarted(gxView: View?)
 
         /**
          * 坑位可见事件，@see GXContainerViewAdapter，根据 onViewAttachedToWindow 回调
@@ -89,11 +104,6 @@ class GXRegisterCenter {
          * 坑位不可见事件，@see GXContainerViewAdapter，根据 onViewDetachedFromWindow 回调
          */
         fun onInvisible(gxView: View?)
-
-        /**
-         * 坑位复用事件，@see GXContainerViewAdapter，根据绑定数据时是否存在GXView触发
-         */
-        fun onReuse(gxView: View?)
 
         /**
          * 坑位销毁事件，@see GXItemContainer，当触发GC回收时销毁

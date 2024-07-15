@@ -148,6 +148,30 @@ class GXSliderViewAdapter(
                 itemView
             }
 
+            if (isReuse) {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.reuse $container $position $itemContainer")
+                    }
+                }
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
+                }
+            } else {
+                if (Log.isLog()) {
+                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.create $container $position $itemContainer")
+                    }
+                }
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
+                }
+            }
+
             // 为坑位View绑定数据
             val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
                 this.eventListener = object : GXTemplateEngine.GXIEventListener {
@@ -198,6 +222,12 @@ class GXSliderViewAdapter(
 
             if (gxView != null) {
 
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
+                }
+
                 GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, itemMeasureSize)
 
                 GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, itemMeasureSize)
@@ -205,38 +235,17 @@ class GXSliderViewAdapter(
                 // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
                 itemContainer.layoutParams.width = gxView.layoutParams.width
 
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStarted(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStarted(gxView)
+                }
             }
         }
 
         container.addView(itemContainer)
 
         itemViewMap[getItemViewKey(position)] = itemContainer
-
-        itemContainer.getChildAt(0)?.let { gxView ->
-            if (isReuse) {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.reuse $container $position $itemContainer")
-                    }
-                }
-                if (pageMode) {
-                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
-                } else {
-                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
-                }
-            } else {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.create $container $position $itemContainer")
-                    }
-                }
-                if (pageMode) {
-                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
-                } else {
-                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
-                }
-            }
-        }
 
         return itemContainer
     }

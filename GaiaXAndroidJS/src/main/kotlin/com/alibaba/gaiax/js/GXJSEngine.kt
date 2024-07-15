@@ -84,7 +84,7 @@ class GXJSEngine {
     }
 
     private fun registerAssetsModules() {
-        // all gaiax_js_modules/module_biz_name.json
+        // all assist/gaiax_js_modules/module_biz_name.json
         val allModules = JSONObject()
         val assetsModules = assetsModules(GAIAX_JS_MODULES)
         assetsModules?.forEach { file ->

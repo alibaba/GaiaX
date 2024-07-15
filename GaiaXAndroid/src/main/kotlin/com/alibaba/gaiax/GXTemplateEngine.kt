@@ -745,9 +745,7 @@ class GXTemplateEngine {
      * @suppress
      * @hide
      */
-    fun bindDataOnlyNodeTree(
-        view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null
-    ) {
+    fun bindDataOnlyNodeTree(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
         if (Log.isLog()) {
             Log.e("bindDataOnlyNodeTree")
         }

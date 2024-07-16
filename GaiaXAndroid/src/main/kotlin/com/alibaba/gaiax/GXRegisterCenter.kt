@@ -53,6 +53,12 @@ class GXRegisterCenter {
      */
     interface GXIPageItemViewLifecycleListener : GXIItemViewLifecycleListener {
 
+        override fun onStart(gxView: View?, gxTemplateData: GXTemplateEngine.GXTemplateData) {
+        }
+
+        override fun onStarted(gxView: View?) {
+        }
+
         override fun onCreate(gxView: View?) {
         }
 

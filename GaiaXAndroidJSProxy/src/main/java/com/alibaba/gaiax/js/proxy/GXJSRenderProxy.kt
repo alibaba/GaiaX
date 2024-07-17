@@ -32,13 +32,15 @@ internal class GXJSRenderProxy {
      */
     val nativeEvents = CopyOnWriteArraySet<JSONObject>()
 
-    fun setData(
-        componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback
-    ) {
+    fun setData(componentId: Long, templateId: String, data: JSONObject, callback: IGXCallback) {
         GXJSUiExecutor.action {
             val gxView = jsGlobalComponentMap[componentId]
-            if (gxView != null) {
-                GXTemplateEngine.instance.bindData(gxView, GXTemplateEngine.GXTemplateData(data))
+            val gxTemplateContext = GXTemplateEngine.instance.getGXTemplateContext(gxView)
+            if (gxTemplateContext != null) {
+                gxTemplateContext.templateData?.let {
+                    it.data = data
+                    GXTemplateEngine.instance.bindData(gxView, it)
+                }
             } else {
                 if (Log.isLog()) {
                     Log.d("setData() called gxView is null, $componentId $templateId")

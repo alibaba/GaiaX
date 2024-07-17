@@ -380,7 +380,7 @@ class GXTemplateEngine {
         /**
          * Template data, used to bind data to the view
          */
-        val data: JSONObject
+        var data: JSONObject
     ) {
 
         var tag: Any? = null

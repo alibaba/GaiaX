@@ -20,6 +20,7 @@ import android.content.Context
 import android.view.View
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.GXJSBaseModule
@@ -142,6 +143,12 @@ class GXJSEngineProxy {
                 }
                 // 执行生命周期变化
                 instance.onReuse(gxView)
+            }
+
+            override fun onStart(gxView: View?, gxTemplateData: GXTemplateEngine.GXTemplateData) {
+            }
+
+            override fun onStarted(gxView: View?) {
             }
 
             override fun onDestroy(gxView: View?) {

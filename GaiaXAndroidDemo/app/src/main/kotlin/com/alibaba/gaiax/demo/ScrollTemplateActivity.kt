@@ -190,6 +190,13 @@ class ScrollTemplateActivity : AppCompatActivity() {
                 Log.d(TAG, "onReuse() called with: gxView = $gxView")
             }
 
+            override fun onStart(gxView: View?, gxTemplateData: GXTemplateEngine.GXTemplateData) {
+
+            }
+
+            override fun onStarted(gxView: View?) {
+            }
+
             override fun onDestroy(gxView: View?) {
                 Log.d(TAG, "onDestroy() called with: gxView = $gxView")
             }

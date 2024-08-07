@@ -315,12 +315,13 @@ object GXNodeTreeUpdate {
                 var isComputeContainerHeight = gxScrollConfig.isHorizontal && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
                 // 对计算结果进行处理
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                val gxParams = GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.GAIAX_CUSTOM_PROPERTY_SCROLL_COMPUTE_CONTAINER_HEIGHT,
                     isComputeContainerHeight
                 ).apply {
                     this.flexBox = gxFlexBox
-                })?.let {
+                }
+                GXRegisterCenter.instance.extensionDynamicProperty?.convert(gxParams)?.let {
                     isComputeContainerHeight = it as Boolean
                 }
 
@@ -341,39 +342,35 @@ object GXNodeTreeUpdate {
                 val gxGridConfig = gxNode.templateNode.layer.gridConfig
                     ?: throw IllegalArgumentException("Want to updateContainerLayout, but gxGridConfig is null")
 
-                var isComputeContainerHeight =
-                    gxGridConfig.isVertical && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
+                // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
+                var isComputeContainerHeight = gxGridConfig.isVertical && flexGrow == null && (height == null || height == Dimension.Auto || height == Dimension.Undefined)
 
                 // 对计算结果进行处理
-                GXRegisterCenter.instance.extensionDynamicProperty?.convert(GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
+                val gxParams = GXRegisterCenter.GXIExtensionDynamicProperty.GXParams(
                     GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT,
                     isComputeContainerHeight
                 ).apply {
                     this.gridConfig = gxGridConfig
                     this.flexBox = gxFlexBox
-                })?.let {
+                }
+                GXRegisterCenter.instance.extensionDynamicProperty?.convert(gxParams)?.let {
                     isComputeContainerHeight = it as Boolean
                 }
 
                 // 当容器节点不是flexGrow时，且容器节点的高度设置，或者是默认，或者是未定义，需要主动计算高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeGridSize(
-                        gxTemplateContext, gxNode, containerData
-                    )
+                    val containerSize = GXNodeUtils.computeGridSize(gxTemplateContext, gxNode, containerData)
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
                         isDirty = true
                     }
                 }
             } else if (gxNode.isSliderType()) {
-                val isComputeContainerHeight =
-                    height == null || height == Dimension.Auto || height == Dimension.Undefined
+                val isComputeContainerHeight = height == null || height == Dimension.Auto || height == Dimension.Undefined
 
                 // 容器节点没有设置高度
                 if (isComputeContainerHeight) {
-                    val containerSize = GXNodeUtils.computeSliderSize(
-                        gxTemplateContext, gxNode, containerData
-                    )
+                    val containerSize = GXNodeUtils.computeSliderSize(gxTemplateContext, gxNode, containerData)
                     containerSize?.height?.let {
                         gxFlexBox.sizeForDimension?.height = it
                         isDirty = true

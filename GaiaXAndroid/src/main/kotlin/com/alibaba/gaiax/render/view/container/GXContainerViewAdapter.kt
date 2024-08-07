@@ -94,9 +94,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
         val itemViewPort = getItemViewPort(isFooterItem)
 
-        val itemContainerSize = getItemContainerSize(
-            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
-        )
+        val itemContainerSize = getItemContainerSize(isFooterItem, templateItem, visualNestTemplateNode, itemViewPort)
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
@@ -363,9 +361,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
                 position
             )
         } else {
-            GXNodeUtils.computeScrollAndGridItemContainerSize(
-                gxTemplateContext, gxNode, itemData, position
-            )
+            GXNodeUtils.computeScrollAndGridItemContainerSize(gxTemplateContext, gxNode, itemData, position)
         }
     }
 

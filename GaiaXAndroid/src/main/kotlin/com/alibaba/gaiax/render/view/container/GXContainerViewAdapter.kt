@@ -167,8 +167,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
             Log.e("bindGXViewHolder $holder ${holder.itemView} ")
         }
 
-        val templateItem =
-            holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
+        val templateItem = holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
 
         val isFooterItem = templateItem == footerTemplateItem
 
@@ -178,9 +177,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
         val itemMeasureSize = getMeasureSize(itemViewPort)
 
-        val itemContainerSize = getItemContainerSize(
-            isFooterItem, templateItem, visualNestTemplateNode, itemViewPort
-        )
+        val itemContainerSize = getItemContainerSize(isFooterItem, templateItem, visualNestTemplateNode, itemViewPort)
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
@@ -370,9 +367,7 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
     )
 
     private fun getItemViewPort(isFooterItem: Boolean) =
-        if (isFooterItem) GXNodeUtils.computeScrollAndGridFooterItemViewPort(
-            gxTemplateContext, gxNode
-        )
+        if (isFooterItem) GXNodeUtils.computeScrollAndGridFooterItemViewPort(gxTemplateContext, gxNode)
         else GXNodeUtils.computeScrollAndGridItemViewPort(gxTemplateContext, gxNode)
 
     override fun getItemViewType(position: Int): Int {

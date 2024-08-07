@@ -690,9 +690,7 @@ class GXTemplateEngine {
     ): GXTemplateContext {
         val gxTemplateInfo = data.getTemplateInfo(gxTemplateItem)
 
-        val gxTemplateContext = GXTemplateContext.createContext(
-            gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxExtendParams?.gxVisualTemplateNode
-        )
+        val gxTemplateContext = GXTemplateContext.createContext(gxTemplateItem, gxMeasureSize, gxTemplateInfo, gxExtendParams?.gxVisualTemplateNode)
 
         val gxHostTemplateContext = gxExtendParams?.gxHostTemplateContext
         if (gxHostTemplateContext != null) {
@@ -712,9 +710,7 @@ class GXTemplateEngine {
      * @suppress
      * @hide
      */
-    fun createViewOnlyViewTree(
-        gxTemplateContext: GXTemplateContext
-    ): View? {
+    fun createViewOnlyViewTree(gxTemplateContext: GXTemplateContext): View? {
         if (Log.isLog()) {
             Log.e("createViewOnlyViewTree")
         }

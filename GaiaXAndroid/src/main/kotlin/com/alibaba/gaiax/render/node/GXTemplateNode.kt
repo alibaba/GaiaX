@@ -75,7 +75,7 @@ data class GXTemplateNode(
         return dataCache
     }
 
-    fun getExtend(templateData: JSON?): JSONObject? {
+    fun getExtend(templateData: JSON? = null): JSONObject? {
         if (dataExtendCache == null) {
             dataExtendCache = dataBinding?.getExtend(templateData)
         }

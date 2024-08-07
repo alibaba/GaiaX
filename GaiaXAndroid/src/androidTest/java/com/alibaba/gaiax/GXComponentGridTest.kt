@@ -1239,10 +1239,7 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(200F.dpToPx(), rootView.height())
         Assert.assertEquals(true, (rootView as? RecyclerView)?.layoutManager?.canScrollVertically())
-        Assert.assertEquals(
-            false,
-            (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally()
-        )
+        Assert.assertEquals(false, (rootView as? RecyclerView)?.layoutManager?.canScrollHorizontally())
     }
 
     @Test
@@ -1280,14 +1277,8 @@ class GXComponentGridTest : GXBaseTest() {
         Assert.assertEquals(1080F.dpToPx(), rootView.child(1).width())
         Assert.assertEquals(100F.dpToPx(), rootView.child(1).height())
 
-        Assert.assertEquals(
-            true,
-            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollVertically()
-        )
-        Assert.assertEquals(
-            false,
-            (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollHorizontally()
-        )
+        Assert.assertEquals(true, (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollVertically())
+        Assert.assertEquals(false, (rootView.child(1) as? RecyclerView)?.layoutManager?.canScrollHorizontally())
     }
 
     @Test
@@ -1316,10 +1307,7 @@ class GXComponentGridTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(
-            Color.parseColor("#e4e4e4"),
-            (rootView?.background as? GradientDrawable)?.colors?.get(0)
-        )
+        Assert.assertEquals(Color.parseColor("#e4e4e4"), (rootView?.background as? GradientDrawable)?.colors?.get(0))
     }
 
     @Test
@@ -1427,5 +1415,8 @@ class GXComponentGridTest : GXBaseTest() {
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
         Assert.assertEquals(100F.dpToPx() * 2 + 200F.dpToPx(), rootView.height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(0).height())
+        Assert.assertEquals(200F.dpToPx(), rootView.child(1).height())
+        Assert.assertEquals(100F.dpToPx(), rootView.child(2).height())
     }
 }

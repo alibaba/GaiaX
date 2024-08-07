@@ -230,8 +230,22 @@ object GXNodeUtils {
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        if (gxTemplateContext.gridItemLayoutCache == null) {
-            gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+        val assumptionItemsSameHeight = gxNode.templateNode.getExtend()?.getBoolean(GXTemplateKey.GAIAX_GRID_EXTEND_ITEM_SAME_HEIGHT) ?: true
+
+        if (assumptionItemsSameHeight) {
+            if (gxTemplateContext.gridItemLayoutCache == null) {
+                gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+                    gxTemplateContext,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    itemData,
+                    itemCacheKey
+                )
+            }
+            return gxTemplateContext.gridItemLayoutCache
+        } else {
+            return computeGridItemLayout(
                 gxTemplateContext,
                 itemViewPort,
                 itemTemplateItem,
@@ -240,7 +254,6 @@ object GXNodeUtils {
                 itemCacheKey
             )
         }
-        return gxTemplateContext.gridItemLayoutCache
     }
 
     private fun computeScrollItemContainerSize(
@@ -531,9 +544,8 @@ object GXNodeUtils {
             gxItemTemplateItem,
             itemMeasureSize,
             itemTemplateData,
-            gxItemVisualTemplateNode,
-            itemCacheKey
-        )
+            gxItemVisualTemplateNode
+        )?.layoutByBind
     }
 
     private fun computeSliderItemLayout(
@@ -551,9 +563,8 @@ object GXNodeUtils {
             gxItemTemplateItem,
             gxMeasureSize,
             gxTemplateData,
-            gxItemVisualTemplateNode,
-            itemCacheKey
-        )
+            gxItemVisualTemplateNode
+        )?.layoutByBind
     }
 
     private fun computeScrollItemLayout(
@@ -572,8 +583,10 @@ object GXNodeUtils {
             gxMeasureSize,
             gxTemplateData,
             gxItemVisualTemplateNode,
-            itemCacheKey
-        )
+        )?.apply {
+            gxTemplateContext.initNodeForScroll()
+            gxTemplateContext.putNodeForScroll(itemCacheKey, this)
+        }?.layoutByBind
     }
 
     private fun computeGridItemLayout(
@@ -591,9 +604,8 @@ object GXNodeUtils {
             gxItemTemplateItem,
             gxMeasureSize,
             gxTemplateData,
-            gxItemVisualTemplateNode,
-            itemCacheKey
-        )
+            gxItemVisualTemplateNode
+        )?.layoutByBind
     }
 
     fun computeScrollAndGridFooterItemViewPort(
@@ -758,15 +770,12 @@ object GXNodeUtils {
         gxTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxMeasureSize: GXTemplateEngine.GXMeasureSize,
         gxTemplateData: GXTemplateEngine.GXTemplateData,
-        gxVisualTemplateNode: GXTemplateNode?,
-        itemCacheKey: String
-    ): Layout? {
+        gxVisualTemplateNode: GXTemplateNode?
+    ): GXNode? {
 
         val gxItemTemplateInfo = GXTemplateEngine.instance.data.getTemplateInfo(gxTemplateItem)
 
-        val gxItemTemplateContext = GXTemplateContext.createContext(
-            gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode
-        )
+        val gxItemTemplateContext = GXTemplateContext.createContext(gxTemplateItem, gxMeasureSize, gxItemTemplateInfo, gxVisualTemplateNode)
 
         if (!GXGlobalCache.instance.isExistForPrepareView(gxMeasureSize, gxTemplateItem)) {
             GXTemplateEngine.instance.render.prepareView(gxItemTemplateContext)
@@ -778,10 +787,7 @@ object GXNodeUtils {
 
         GXTemplateEngine.instance.render.bindViewDataOnlyNodeTree(gxItemTemplateContext)
 
-        gxTemplateContext.initNodeForScroll()
-        gxTemplateContext.putNodeForScroll(itemCacheKey, gxItemRootNode)
-
-        return gxItemRootNode.layoutByBind
+        return gxItemRootNode
     }
 
     private fun computeScrollContainerSize(

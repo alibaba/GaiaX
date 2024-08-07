@@ -62,16 +62,12 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
         return childNode.view?.also { targetView ->
             if (childNode.isNeedShadow()) {
                 childNode.boxLayoutView?.let { shadowView ->
-                    GXViewLayoutParamsUtils.updateLayoutParams(
-                        shadowView, childLayout, mergeX, mergeY
-                    )
+                    GXViewLayoutParamsUtils.updateLayoutParams(shadowView, childLayout, mergeX, mergeY)
                 }
             }
             if (childNode.isNeedLottie()) {
                 childNode.lottieView?.let { lottieView ->
-                    GXViewLayoutParamsUtils.updateLayoutParams(
-                        lottieView, childLayout, mergeX, mergeY
-                    )
+                    GXViewLayoutParamsUtils.updateLayoutParams(lottieView, childLayout, mergeX, mergeY)
                 }
             }
 

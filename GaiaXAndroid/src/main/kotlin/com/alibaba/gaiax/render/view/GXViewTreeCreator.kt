@@ -66,9 +66,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
         if (childNode.isNeedShadow()) {
             GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_SHADOW_LAYOUT, null)
                 .apply {
-                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                        childNode, childLayout, mergeX, mergeY
-                    )
+                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(childNode, childLayout, mergeX, mergeY)
                     childNode.boxLayoutView = this as GXShadowLayout
                     if (parentMergeView is ViewGroup) {
                         parentMergeView.addView(this)
@@ -79,9 +77,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
         // Child nodes
         val childView =
             GXViewFactory.createView<View>(context.context, childType, childViewType).apply {
-                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                    childNode, childLayout, mergeX, mergeY
-                )
+                this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(childNode, childLayout, mergeX, mergeY)
                 childNode.view = this
                 if (parentMergeView is ViewGroup) {
                     parentMergeView.addView(this)
@@ -92,9 +88,7 @@ class GXViewTreeCreator(gxTemplateContext: GXTemplateContext, rootNode: GXNode) 
         if (childNode.isNeedLottie()) {
             GXViewFactory.createView<View>(context.context, GXViewKey.VIEW_TYPE_LOTTIE, null)
                 .apply {
-                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(
-                        childNode, childLayout, mergeX, mergeY
-                    )
+                    this.layoutParams = GXViewLayoutParamsUtils.createLayoutParams(childNode, childLayout, mergeX, mergeY)
                     childNode.lottieView = this
                     if (parentMergeView is ViewGroup) {
                         parentMergeView.addView(this)

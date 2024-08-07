@@ -1371,14 +1371,8 @@ class GXComponentGridTest : GXBaseTest() {
 
         rootView.executeRecyclerView()
 
-        Assert.assertEquals(
-            true,
-            rootView.child(0).foreground is GXRoundCornerBorderGradientDrawable
-        )
-        Assert.assertEquals(
-            0F,
-            (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0)
-        )
+        Assert.assertEquals(true, rootView.child(0).foreground is GXRoundCornerBorderGradientDrawable)
+        Assert.assertEquals(0F, (rootView.child(0).foreground as? GradientDrawable)?.cornerRadii?.get(0))
     }
 
     @Test
@@ -1405,5 +1399,33 @@ class GXComponentGridTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(true, (rootView.child(0).clipToOutline))
+    }
+
+    @Test
+    fun template_grid_1_column_compute_height() {
+        val templateItem = GXTemplateEngine.GXTemplateItem(
+            GXMockUtils.context,
+            "grid",
+            "template_grid_1_column_compute_height"
+        )
+
+        val templateData = GXTemplateEngine.GXTemplateData(JSONObject().apply {
+            this["nodes"] = JSONArray().apply {
+                this.add(JSONObject().apply { this["height"] = 100 })
+                this.add(JSONObject().apply { this["height"] = 200 })
+                this.add(JSONObject().apply { this["height"] = 100 })
+            }
+        })
+
+        val size = GXTemplateEngine.GXMeasureSize(MOCK_SCREEN_WIDTH, null)
+
+        val rootView = GXTemplateEngine.instance.createView(templateItem, size)
+
+        GXTemplateEngine.instance.bindData(rootView, templateData)
+
+        rootView.executeRecyclerView()
+
+        Assert.assertEquals(1080F.dpToPx(), rootView.width())
+        Assert.assertEquals(100F.dpToPx() * 2 + 200F.dpToPx(), rootView.height())
     }
 }

@@ -454,9 +454,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
         }
         val decoration = object : RecyclerView.ItemDecoration() {
 
-            override fun getItemOffsets(
-                outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-            ) {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
 
                 val manager: GridLayoutManager = parent.layoutManager as GridLayoutManager
@@ -583,8 +581,7 @@ fun View.setGridContainerItemSpacingAndRowSpacing(padding: Rect, itemSpacing: In
                         }
                     }
                 } else {
-                    val totalSpace: Float =
-                        itemSpacing * (spanCount - 1) + (padding.top + padding.bottom) // 总共的padding值
+                    val totalSpace: Float = itemSpacing * (spanCount - 1) + (padding.top + padding.bottom) // 总共的padding值
                     val eachSpace = totalSpace / spanCount // 分配给每个item的padding值
                     val column = childPosition % spanCount // 列数
                     val row = childPosition / spanCount // 行数
@@ -634,9 +631,7 @@ fun View.setVerticalScrollContainerLineSpacing(lineSpacing: Int) {
             return
         }
         val decoration = object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-            ) {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
                     val childLayoutPosition = parent.getChildLayoutPosition(view)
@@ -659,9 +654,7 @@ fun View.setHorizontalScrollContainerLineSpacing(lineSpacing: Int) {
             return
         }
         val decoration = object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-            ) {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
                     val childLayoutPosition = parent.getChildLayoutPosition(view)
@@ -684,9 +677,7 @@ fun View.setHorizontalScrollContainerLineSpacing(left: Int, right: Int, lineSpac
             return
         }
         val decoration = object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-            ) {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.adapter != null) {
                     when (parent.getChildLayoutPosition(view)) {

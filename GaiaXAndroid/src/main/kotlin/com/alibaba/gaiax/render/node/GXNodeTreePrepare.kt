@@ -69,14 +69,10 @@ object GXNodeTreePrepare {
         gxNode.id = gxLayer.id
 
         // 初始化详细数据
-        gxNode.templateNode = GXTemplateNode.createNode(
-            gxLayer.id, gxTemplateInfo, gxVisualTemplateNode
-        )
+        gxNode.templateNode = GXTemplateNode.createNode(gxLayer.id, gxTemplateInfo, gxVisualTemplateNode)
 
         // 初始化节点数据
-        gxNode.stretchNode = GXStretchNode.createNode(
-            gxTemplateContext, gxNode.templateNode, gxNode.id
-        )
+        gxNode.stretchNode = GXStretchNode.createNode(gxTemplateContext, gxNode.templateNode, gxNode.id)
 
         // 构建子层级节点
         gxLayer.layers.forEach { currentLayer ->
@@ -86,9 +82,7 @@ object GXNodeTreePrepare {
                     ?: throw IllegalArgumentException("Child template not found, id = ${currentLayer.id}")
 
                 // 创建一个空节点
-                val gxChildVisualTemplateNode = GXTemplateNode.createNode(
-                    currentLayer.id, gxTemplateInfo
-                )
+                val gxChildVisualTemplateNode = GXTemplateNode.createNode(currentLayer.id, gxTemplateInfo)
 
                 val gxChildLayer = gxChildTemplateInfo.layer
 
@@ -101,9 +95,7 @@ object GXNodeTreePrepare {
                     ).apply {
                         this.isPageMode = gxTemplateContext.templateItem.isPageMode
                     }
-                    gxNode.addChildTemplateItems(
-                        gxTemplateItem, gxChildVisualTemplateNode
-                    )
+                    gxNode.addChildTemplateItems(gxTemplateItem, gxChildVisualTemplateNode)
                 }
                 // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                 else {
@@ -129,9 +121,7 @@ object GXNodeTreePrepare {
             }
             // 普通子节点
             else {
-                val gxChildNode = createNode(
-                    gxTemplateContext, gxNode, currentLayer, null, gxTemplateInfo
-                )
+                val gxChildNode = createNode(gxTemplateContext, gxNode, currentLayer, null, gxTemplateInfo)
 
                 // 建立层级关系
                 if (gxNode.children == null) {
@@ -143,7 +133,6 @@ object GXNodeTreePrepare {
                 gxChildNode.stretchNode.node?.let {
                     gxNode.stretchNode.node?.safeAddChild(it)
                 }
-
             }
         }
 

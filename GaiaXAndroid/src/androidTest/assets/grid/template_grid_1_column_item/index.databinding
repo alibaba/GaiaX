@@ -1,0 +1,9 @@
+{
+    "data": {
+        "template_grid_1_column_item": {
+            "extend": {
+                "height" : "$height"
+            }
+        }
+    }
+}

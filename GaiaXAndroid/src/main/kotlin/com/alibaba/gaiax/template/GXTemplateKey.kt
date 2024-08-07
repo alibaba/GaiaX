@@ -24,6 +24,11 @@ package com.alibaba.gaiax.template
 object GXTemplateKey {
 
     /**
+     * gird组件的扩展属性， 用于标记是否所有的item高度都一样
+     */
+    const val GAIAX_GRID_EXTEND_ITEM_SAME_HEIGHT: String = "itemSameHeight"
+
+    /**
      * https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter
      */
     const val STYLE_BACKDROP_FILTER = "backdrop-filter"

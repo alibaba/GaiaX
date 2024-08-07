@@ -1,0 +1,10 @@
+{
+    "data": {
+        "template_grid_1_column_compute_height": {
+            "value":"$nodes",
+            "extend": {
+                "itemSameHeight": false
+            }
+        }
+    }
+}

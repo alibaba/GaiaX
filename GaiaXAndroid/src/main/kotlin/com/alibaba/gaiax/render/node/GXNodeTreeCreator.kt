@@ -98,9 +98,7 @@ object GXNodeTreeCreator {
                     ).apply {
                         this.isPageMode = gxTemplateContext.templateItem.isPageMode
                     }
-                    gxNode.addChildTemplateItems(
-                        gxTemplateItem, gxChildVisualTemplateNode
-                    )
+                    gxNode.addChildTemplateItems(gxTemplateItem, gxChildVisualTemplateNode)
                 }
                 // 普通模板嵌套的子模板根节点，可能是普通模板也可能是容器模板
                 else {

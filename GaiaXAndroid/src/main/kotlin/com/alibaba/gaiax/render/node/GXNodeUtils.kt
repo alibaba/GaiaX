@@ -32,6 +32,7 @@ import com.alibaba.gaiax.context.initNodeForScroll
 import com.alibaba.gaiax.context.isExistForScroll
 import com.alibaba.gaiax.context.putLayoutForScroll
 import com.alibaba.gaiax.context.putNodeForScroll
+import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
 import com.alibaba.gaiax.utils.Log
@@ -384,7 +385,12 @@ object GXNodeUtils {
         }
     }
 
-    fun computeGridSize(gxTemplateContext: GXTemplateContext, gxNode: GXNode, gxContainerData: JSONArray): Size<Dimension?>? {
+    fun computeGridSize(
+        gxTemplateContext: GXTemplateContext,
+        gxNode: GXNode,
+        gxTemplateData: JSONObject,
+        gxContainerData: JSONArray
+    ): Size<Dimension?>? {
 
         val templateItems = gxNode.childTemplateItems ?: return null
 
@@ -401,18 +407,77 @@ object GXNodeUtils {
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        if (gxTemplateContext.gridItemLayoutCache == null) {
-            gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                gxTemplateContext,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
-            )
-        }
+        return computeGridContainerSize(gxTemplateContext, gxNode, gxContainerData) { gxGridConfig: GXGridConfig, lines: Int ->
+            if (gxGridConfig.column == 1) {
 
-        return computeGridContainerSize(gxTemplateContext, gxNode, gxTemplateContext.gridItemLayoutCache, gxContainerData)
+                var height = 0F
+
+                // 假设所有的item的高度都是一样的
+                val assumptionItemsSameHeight = gxNode.templateNode.getExtend(gxTemplateData)?.getBoolean(GXTemplateKey.GAIAX_GRID_EXTEND_ITEM_SAME_HEIGHT) ?: true
+
+                if (assumptionItemsSameHeight) {
+
+                    // 计算一个缓存，然后乘以行数
+
+                    if (gxTemplateContext.gridItemLayoutCache == null) {
+                        gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+                            gxTemplateContext,
+                            itemViewPort,
+                            itemTemplateItem,
+                            itemVisualTemplateNode,
+                            itemData,
+                            itemCacheKey
+                        )
+                    }
+
+                    gxTemplateContext.gridItemLayoutCache?.let {
+                        height = it.height * lines
+                    }
+                } else {
+
+                    // 对于1列的情况，计算每个item的高度，然后相加
+
+                    gxContainerData.forEachIndexed { itemPosition, value ->
+                        val childItemData = value as JSONObject
+                        val childItemCacheKey = "${itemPosition}-${childItemData.hashCode()}"
+
+                        computeGridItemLayout(
+                            gxTemplateContext,
+                            itemViewPort,
+                            itemTemplateItem,
+                            itemVisualTemplateNode,
+                            childItemData,
+                            childItemCacheKey
+                        )?.let {
+                            height += it.height
+                        }
+                    }
+                }
+
+                return@computeGridContainerSize height
+            } else {
+
+                // 对于非1列的情况，计算一个缓存，然后乘以行数
+
+                if (gxTemplateContext.gridItemLayoutCache == null) {
+                    gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
+                        gxTemplateContext,
+                        itemViewPort,
+                        itemTemplateItem,
+                        itemVisualTemplateNode,
+                        itemData,
+                        itemCacheKey
+                    )
+                }
+
+                gxTemplateContext.gridItemLayoutCache?.let {
+                    return@computeGridContainerSize it.height * lines
+                }
+            }
+
+            // no reach
+            return@computeGridContainerSize 0F
+        }
     }
 
     fun computeSliderSize(
@@ -745,38 +810,32 @@ object GXNodeUtils {
     }
 
     private fun computeGridContainerSize(
-        context: GXTemplateContext,
+        gxTemplateContext: GXTemplateContext,
         gxNode: GXNode,
-        itemSize: Layout?,
-        containerTemplateData: JSONArray
+        gxContainerData: JSONArray,
+        computeGridVerticalHeight: (gxGridConfig: GXGridConfig, lines: Int) -> Float
     ): Size<Dimension?>? {
-        if (itemSize != null) {
-            val gxGridConfig = gxNode.templateNode.layer.gridConfig
-                ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxGridConfig is null")
+        val gxGridConfig = gxNode.templateNode.layer.gridConfig
+            ?: throw IllegalArgumentException("Want to computeContainerHeight, but gxGridConfig is null")
 
-            // 如果是竖向，那么高度就是坑位高度*行数+总间距
-            if (gxGridConfig.isVertical) {
+        // 如果是竖向，那么高度就是坑位高度*行数+总间距
+        if (gxGridConfig.isVertical) {
 
-                // 获取行数
-                val lines = max(1, ceil((containerTemplateData.size * 1.0F / gxGridConfig.column(context)).toDouble()).toInt())
+            // 获取行数
+            val lines = max(1, ceil((gxContainerData.size * 1.0F / gxGridConfig.column(gxTemplateContext)).toDouble()).toInt())
 
-                var containerHeight = itemSize.height
+            var containerHeight = computeGridVerticalHeight(gxGridConfig, lines)
 
-                // 计算高度
-                containerHeight *= lines
-                containerHeight += gxGridConfig.rowSpacing * (lines - 1)
+            containerHeight += gxGridConfig.rowSpacing * (lines - 1)
 
-                // 处理padding
-                val padding = gxNode.getPaddingRect()
-                containerHeight += padding.top + padding.bottom
+            // 处理padding
+            val padding = gxNode.getPaddingRect()
+            containerHeight += padding.top + padding.bottom
 
-                val containerWidth = itemSize.width - padding.left - padding.right
-
-                return Size(Dimension.Points(containerWidth), Dimension.Points(containerHeight))
-            } else if (gxGridConfig.isHorizontal) {
-                // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
-                return null
-            }
+            return Size(null, Dimension.Points(containerHeight))
+        } else if (gxGridConfig.isHorizontal) {
+            // TODO: Grid横向处理不支持，此种情况暂时不做处理，很少见
+            return null
         }
         return null
     }

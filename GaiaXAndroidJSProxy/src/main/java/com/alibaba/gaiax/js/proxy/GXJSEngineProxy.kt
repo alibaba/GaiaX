@@ -45,6 +45,18 @@ import com.alibaba.gaiax.template.GXTemplateInfo
  */
 class GXJSEngineProxy {
 
+    class GXTemplateContextExtArg {
+        /**
+         * 用于存储JS组件ID
+         */
+        var jsComponentIds: MutableSet<Long> = mutableSetOf()
+
+        /**
+         * 根节点JS组件ID
+         */
+        var rootJSComponentId: Long? = null
+    }
+
     companion object {
         private const val TAG = "[GaiaX][JS]"
 
@@ -210,8 +222,8 @@ class GXJSEngineProxy {
         if (Log.isLog()) {
             Log.d("onReady() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onReady(jsComponentId)
             }
         }
@@ -224,8 +236,8 @@ class GXJSEngineProxy {
         if (Log.isLog()) {
             Log.d("onReuse() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onReuse(jsComponentId)
             }
         }
@@ -241,7 +253,7 @@ class GXJSEngineProxy {
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件显示
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onShow(jsComponentId)
             }
 
@@ -262,7 +274,7 @@ class GXJSEngineProxy {
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件隐藏
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onHide(jsComponentId)
             }
 
@@ -283,7 +295,7 @@ class GXJSEngineProxy {
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件销毁
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onDestroy(jsComponentId)
             }
 
@@ -298,8 +310,8 @@ class GXJSEngineProxy {
         if (Log.isLog()) {
             Log.d("onLoadMore() called with: gxView = $gxView")
         }
-        GXTemplateContext.getContext(gxView)?.let {
-            it.jsComponentIds?.forEach { jsComponentId ->
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onLoadMore(jsComponentId, data)
             }
         }
@@ -328,15 +340,15 @@ class GXJSEngineProxy {
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 在GaiaX中存储JS组件ID
-            if (gxTemplateContext.jsComponentIds == null) {
-                gxTemplateContext.jsComponentIds = mutableSetOf()
+            if (gxTemplateContext.extArg == null) {
+                gxTemplateContext.extArg = GXTemplateContextExtArg()
             }
 
             // 寻找可注册的JS组件
             registerTemplateTree(gxTemplateContext, gxTemplateContext.templateInfo)
 
             // 将注册组件ID都和跟视图做全局映射
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSRenderProxy.instance.jsGlobalComponentMap[jsComponentId] = gxView
             }
         }
@@ -352,13 +364,13 @@ class GXJSEngineProxy {
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 解除JS组件ID和视图的全局映射
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSRenderProxy.instance.jsGlobalComponentMap.remove(jsComponentId)
             }
-            gxTemplateContext.jsComponentIds?.forEach { jsComponentId ->
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.unregisterComponent(jsComponentId)
             }
-            gxTemplateContext.jsComponentIds?.clear()
+            gxExtJSArg(gxTemplateContext)?.jsComponentIds?.clear()
 
             // 遍历容器子视图，通知坑位解除注册
             GXContainerUtils.notifyView(gxTemplateContext) { gxView: View ->
@@ -379,10 +391,13 @@ class GXJSEngineProxy {
             val jsComponentId = GXJSEngine.instance.registerComponent(
                 templateBiz, templateId, templateVersion, script
             )
-            if (gxTemplateContext.rootJSComponentId == null) {
-                gxTemplateContext.rootJSComponentId = jsComponentId
+            gxExtJSArg(gxTemplateContext)?.let {
+                if (it.rootJSComponentId == null) {
+                    it.rootJSComponentId = jsComponentId
+                }
+                it.jsComponentIds.add(jsComponentId)
             }
-            gxTemplateContext.jsComponentIds?.add(jsComponentId)
+
         } else {
             if (Log.isLog()) {
                 Log.d("registerTemplateTree() called with: $templateId script is null")
@@ -401,6 +416,8 @@ class GXJSEngineProxy {
             // 如果是容器模板，那么其子模板要独立注册
         }
     }
+
+    private fun gxExtJSArg(gxTemplateContext: GXTemplateContext) = (gxTemplateContext.extArg as? GXTemplateContextExtArg)
 
     fun onEvent(componentId: Long, type: String, data: JSONObject) {
         GXJSEngine.instance.onEvent(componentId, type, data)

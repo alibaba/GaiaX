@@ -58,9 +58,7 @@ internal class GXJSRenderProxy {
     }
 
     fun getNodeInfo(targetId: String, templateId: String, componentId: Long): JSONObject {
-        val nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(
-            jsGlobalComponentMap[componentId], targetId
-        )
+        val nodeInfo: GXNode? = GXTemplateEngine.instance.getGXNodeById(jsGlobalComponentMap[componentId], targetId)
         return if (nodeInfo != null) {
             val targetNode = JSONObject()
             targetNode["targetType"] = nodeInfo.templateNode.layer.type

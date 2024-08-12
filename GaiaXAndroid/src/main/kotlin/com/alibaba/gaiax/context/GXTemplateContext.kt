@@ -67,14 +67,9 @@ class GXTemplateContext private constructor(
     var isAppear: Boolean? = null
 
     /**
-     * 用于存储JS组件ID
+     * 用于存储额外参数
      */
-    var jsComponentIds: MutableSet<Long>? = null
-
-    /**
-     * 根节点JS组件ID
-     */
-    var rootJSComponentId: Long? = null
+    var extArg: Any? = null
 
     /**
      * 用于追踪日志

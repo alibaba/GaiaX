@@ -45,6 +45,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
                         }
                     }
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     if (Log.isLog()) {
                         Log.e("callSync() called with: e = $e")
                     }

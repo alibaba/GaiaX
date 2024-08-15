@@ -80,6 +80,9 @@ class GXJSEngine {
             registerAssetsModules()
         } catch (e: Exception) {
             e.printStackTrace()
+            if (Log.isLog()) {
+                Log.d("initModules() called with: e = $e")
+            }
         }
     }
 
@@ -97,15 +100,27 @@ class GXJSEngine {
                     allModules.putAll(bizModules)
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    if (Log.isLog()) {
+                        Log.d("registerAssetsModules() called with: e = $e")
+                    }
                 }
             }
         }
         allModules.forEach {
-            val clazz = Class.forName(it.value.toString())
-            if (clazz.superclass == GXJSBaseModule::class.java) {
-                registerModule(clazz as Class<out GXJSBaseModule>)
-            } else {
-                throw IllegalArgumentException("Register Module $clazz Illegal")
+            try {
+                Class.forName(it.value.toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+                if (Log.isLog()) {
+                    Log.d("registerAssetsModules() called with: e = $e")
+                }
+                null
+            }?.let { clazz ->
+                if (clazz.superclass == GXJSBaseModule::class.java) {
+                    registerModule(clazz as Class<out GXJSBaseModule>)
+                } else {
+                    throw IllegalArgumentException("Register Module $clazz Illegal")
+                }
             }
         }
     }

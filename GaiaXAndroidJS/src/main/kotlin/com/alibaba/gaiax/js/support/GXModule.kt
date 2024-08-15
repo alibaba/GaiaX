@@ -84,10 +84,10 @@ internal class GXModule(nativeModule: IGXModule) {
         try {
             return syncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
+            e.printStackTrace()
             if (Log.isLog()) {
                 Log.d("invokeMethodSync() called with: exception message = ${e.message}")
             }
-            e.printStackTrace()
         }
         return null
     }
@@ -96,10 +96,10 @@ internal class GXModule(nativeModule: IGXModule) {
         try {
             asyncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
+            e.printStackTrace()
             if (Log.isLog()) {
                 Log.d("invokeMethodAsync() called with: exception message = ${e.message}")
             }
-            e.printStackTrace()
         }
     }
 
@@ -107,10 +107,10 @@ internal class GXModule(nativeModule: IGXModule) {
         try {
             promiseMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
+            e.printStackTrace()
             if (Log.isLog()) {
                 Log.d("invokePromiseMethod() called with: exception message = ${e.message}")
             }
-            e.printStackTrace()
         }
     }
 

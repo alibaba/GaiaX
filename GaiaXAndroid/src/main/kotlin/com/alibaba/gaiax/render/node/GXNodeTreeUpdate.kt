@@ -969,9 +969,7 @@ object GXNodeTreeUpdate {
             }
         }
 
-        private fun resetViewData(
-            gxNode: GXNode
-        ) {
+        private fun resetViewData(gxNode: GXNode) {
             gxNode.templateNode.dataBinding ?: return
             val view = gxNode.view ?: return
             if (view is GXIViewBindData) {
@@ -1059,23 +1057,17 @@ object GXNodeTreeUpdate {
             }
         }
 
-        private fun bindIconFont(
-            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
-        ) {
+        private fun bindIconFont(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
             val nodeData = gxTemplateNode.getData(templateData)
             view.onBindData(nodeData)
         }
 
-        private fun bindImage(
-            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
-        ) {
+        private fun bindImage(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
             val nodeData = gxTemplateNode.getData(templateData)
             view.onBindData(nodeData)
         }
 
-        private fun bindView(
-            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
-        ) {
+        private fun bindView(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
             val nodeData = gxTemplateNode.getData(templateData)
             view.onBindData(nodeData)
         }
@@ -1171,16 +1163,12 @@ object GXNodeTreeUpdate {
             view.onBindData(nodeData)
         }
 
-        private fun bindCustom(
-            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
-        ) {
+        private fun bindCustom(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
             val data = gxTemplateNode.getData(templateData)
             view.onBindData(data)
         }
 
-        private fun bindCommonViewCss(
-            gxView: View, gxCss: GXCss, gxNode: GXNode
-        ) {
+        private fun bindCommonViewCss(gxView: View, gxCss: GXCss, gxNode: GXNode) {
 
             gxView.setDisplay(gxCss.style.display)
 
@@ -1199,9 +1187,7 @@ object GXNodeTreeUpdate {
             }
         }
 
-        private fun bindContainerViewCss(
-            gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
-        ) {
+        private fun bindContainerViewCss(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
             if (gxNode.isContainerType()) {
                 if (gxNode.isGridType()) {
                     bindGridContainerCSS(gxTemplateContext, view, gxNode)
@@ -1211,9 +1197,7 @@ object GXNodeTreeUpdate {
             }
         }
 
-        private fun bindGridContainerCSS(
-            gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode
-        ) {
+        private fun bindGridContainerCSS(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
             gxNode.templateNode.layer.gridConfig?.let {
                 view.setGridContainerDirection(
                     gxTemplateContext, it, gxNode.layoutByBind
@@ -1224,23 +1208,17 @@ object GXNodeTreeUpdate {
             }
         }
 
-        private fun bindScrollContainerCSS(
-            view: View, gxNode: GXNode
-        ) {
+        private fun bindScrollContainerCSS(view: View, gxNode: GXNode) {
             gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 
-                view.setScrollContainerDirection(
-                    scrollConfig.direction, gxNode.layoutByBind
-                )
+                view.setScrollContainerDirection(scrollConfig.direction, gxNode.layoutByBind)
 
                 val padding = gxNode.getPaddingRect()
                 val lineSpacing = scrollConfig.itemSpacing
                 if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
                     // 设置边距
                     if (padding.top == 0 && padding.bottom == 0) {
-                        view.setHorizontalScrollContainerLineSpacing(
-                            padding.left, padding.right, lineSpacing
-                        )
+                        view.setHorizontalScrollContainerLineSpacing(padding.left, padding.right, lineSpacing)
                     } else {
                         if (lineSpacing != 0) {
                             view.setHorizontalScrollContainerLineSpacing(lineSpacing)
@@ -1297,9 +1275,7 @@ object GXNodeTreeUpdate {
             container.onBindData(templateData)
         }
 
-        private fun bindProgress(
-            view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject
-        ) {
+        private fun bindProgress(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
             val progressView = view as? GXProgressView
             progressView?.setConfig(gxTemplateNode.layer.progressConfig)
             progressView?.onBindData(gxTemplateNode.getData(templateData))

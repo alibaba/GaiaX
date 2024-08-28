@@ -67,9 +67,7 @@ class GXStyleConvert {
 
     fun padding(cssJson: JSONObject): Rect<GXSize>? {
         var result: Rect<GXSize>? = null
-        val edgeInsets = GXContainerConvert.edgeInsets(
-            cssJson.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS)
-        )
+        val edgeInsets = GXContainerConvert.edgeInsets(cssJson.getString(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS))
 
         cssJson.getString(GXTemplateKey.FLEXBOX_PADDING)?.also {
             val size = GXSize.create(it)

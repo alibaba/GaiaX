@@ -83,11 +83,8 @@ data class GXLayer constructor(
         }
 
         private fun createLayer(data: JSONObject): GXLayer {
-            val id = data.getString(GXTemplateKey.GAIAX_LAYER_ID) ?: throw IllegalArgumentException(
-                "Layer must have id property"
-            )
-            val type = data.getString(GXTemplateKey.GAIAX_LAYER_TYPE)
-                ?: throw IllegalArgumentException("Layer must have type property")
+            val id = data.getString(GXTemplateKey.GAIAX_LAYER_ID) ?: throw IllegalArgumentException("Layer must have id property")
+            val type = data.getString(GXTemplateKey.GAIAX_LAYER_TYPE) ?: throw IllegalArgumentException("Layer must have type property")
             val css = data.getString(GXTemplateKey.GAIAX_LAYER_CLASS)
             val subType = data.getString(GXTemplateKey.GAIAX_LAYER_SUB_TYPE)
             val viewClass = data.getString(GXTemplateKey.GAIAX_LAYER_CUSTOM_VIEW_CLASS)

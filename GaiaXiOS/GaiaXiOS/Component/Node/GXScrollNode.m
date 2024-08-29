@@ -37,6 +37,8 @@
     //区分坑位的type & config
     NSDictionary *_config;
     NSString *_expression;
+    //是否每种坑位只计算一次
+    BOOL _itemSameHeight;
 }
 
 //数据源
@@ -337,7 +339,11 @@
             }
         }
         //计算itemSize
-        itemSize = [TheGXTemplateEngine sizeWithTemplateItem:templateItem measureSize:itemMeasurSize data:data];
+        if (_itemSameHeight) {
+            itemSize = [TheGXTemplateEngine sizeWithTemplateItem:templateItem measureSize:itemMeasurSize];
+        } else {
+            itemSize = [TheGXTemplateEngine sizeWithTemplateItem:templateItem measureSize:itemMeasurSize data:data];
+        }
         //获取高度
         CGFloat itemHeight = itemSize.height;
         if (itemHeight > _containerHeight) {
@@ -557,13 +563,18 @@
 //获取坑位类型 & 表达式
 - (void)parserItemType{
     NSDictionary *dataDict = self.data;
-    if (dataDict && [dataDict isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *itemType = [[dataDict gx_dictionaryForKey:@"extend"] gx_dictionaryForKey:@"item-type"];
-        if (itemType) {
-            //获取path
-            _expression = [itemType gx_stringForKey:@"path"];
-            //获取config
-            _config = [itemType gx_dictionaryForKey:@"config"];
+    if ([GXUtils isValidDictionary:dataDict]) {
+        NSDictionary *extend = [dataDict gx_dictionaryForKey:@"extend"];
+        if (extend.count > 0) {
+            NSDictionary *itemType = [extend gx_dictionaryForKey:@"item-type"];
+            if (itemType) {
+                //获取path
+                _expression = [itemType gx_stringForKey:@"path"];
+                //获取config
+                _config = [itemType gx_dictionaryForKey:@"config"];
+            }
+            //计算次数的优化项
+            _itemSameHeight = [extend gx_boolForKey:@"itemSameHeight"];
         }
     }
 }

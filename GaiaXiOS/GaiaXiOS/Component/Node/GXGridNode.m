@@ -36,18 +36,20 @@
     BOOL _hasInit;
     //是否正在展示
     BOOL _isOnShow;
-    //坑位尺寸
-    CGSize _itemSize;
     //是否需要reload
     CGFloat _tmpWidth;
     BOOL _isNeedReload;
     //滚动事件
     GXEvent *_scrollEvent;
+    // 是否同样的高度
+    BOOL _itemSameHeight;
 }
 
 // 数据源
 @property (nonatomic, strong) NSArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *items;
+// 坑位Size数组
+@property (nonatomic, strong) NSArray *sizeValues;
 // 坑位模板的item信息
 @property (nonatomic, strong) GXTemplateItem *subTemplateItem;
 
@@ -247,13 +249,23 @@
         CGFloat bottomPadding = self.contentInset.bottom;
         //行间距
         CGFloat rowSpace = self.rowSpacing;
-        //itemSize
-        CGSize itemSize = _itemSize;
         
         //计算容器高度
         NSInteger itemCount = self.items.count;
         int totalRow = ceil(((CGFloat)itemCount) / self.column); //行
-        int centerHeiht = totalRow > 0 ? (totalRow * itemSize.height + (totalRow - 1) * rowSpace) : 0;
+        int centerHeiht = 0;
+        if (!_itemSameHeight && self.column == 1) {
+            CGFloat tmpHeight = 0;
+            for (int i = 0; i < self.sizeValues.count; i++) {
+                CGSize size = [[self.sizeValues gx_objectAtIndex:i] CGSizeValue];
+                tmpHeight += size.height;
+            }
+            centerHeiht = totalRow > 0 ? (tmpHeight + (totalRow - 1) * rowSpace) : 0;
+        } else {
+            NSValue *sizeValue = [self.sizeValues firstObject];
+            CGSize itemSize = sizeValue ? [sizeValue CGSizeValue] : CGSizeZero;
+            centerHeiht = totalRow > 0 ? (totalRow * itemSize.height + (totalRow - 1) * rowSpace) : 0;
+        }
         height = topPadding + bottomPadding + centerHeiht;
 
         //更新style
@@ -321,15 +333,44 @@
 
 //计算坑位size
 - (void)calculateItemSize{
+    NSMutableArray *tmpSizeValues = [NSMutableArray array];
     // 获取宽度
     CGFloat extraWidth = self.contentInset.left + self.contentInset.right + (self.column - 1) * self.itemSpacing;
     CGFloat measureWidth = floor(([self currentWidth] - extraWidth) / self.column);
+    CGFloat measureHeight = NAN;
     if (measureWidth <= 0) {
-        _itemSize = CGSizeZero;
+        for (int i = 0; i < self.items.count; i++) {
+            [tmpSizeValues gx_addObject:[NSValue valueWithCGSize:CGSizeZero]];
+        }
+        self.sizeValues = tmpSizeValues;
         return;
     }
     //计算
-    _itemSize = [TheGXTemplateEngine sizeWithTemplateItem:self.subTemplateItem measureSize:CGSizeMake(measureWidth, NAN)];
+    if (self.column == 1 && !_itemSameHeight) { // 列数为1，高度不一致，每个都计算
+        CGSize itemMeasurSize = CGSizeMake(measureWidth, measureHeight);
+        for (int i = 0; i < self.items.count; i++) {
+            CGSize itemSize = CGSizeZero;
+            //获取坑位类型
+            GXTemplateItem *templateItem = self.subTemplateItem;
+            //计算itemSize
+            GXTemplateData *data = [self.items gx_objectAtIndex:i];
+            itemSize = [TheGXTemplateEngine sizeWithTemplateItem:templateItem measureSize:itemMeasurSize data:data];
+            // 过滤，避免宽高为负数
+            CGSize newSize = CGSizeMake(MAX(0, itemSize.width), MAX(0, itemSize.height));
+            //添加到数组中
+            [tmpSizeValues gx_addObject:[NSValue valueWithCGSize:newSize]];
+        }
+    } else {
+        CGSize itemSize = [TheGXTemplateEngine sizeWithTemplateItem:self.subTemplateItem measureSize:CGSizeMake(measureWidth, measureHeight)];
+        // 过滤，避免宽高为负数
+        CGSize newSize = CGSizeMake(MAX(0, itemSize.width), MAX(0, itemSize.height));
+        //添加到数组中
+        for (int i = 0; i < self.items.count; i++) {
+            [tmpSizeValues gx_addObject:[NSValue valueWithCGSize:newSize]];
+        }
+    }
+    
+    self.sizeValues = tmpSizeValues;
 }
 
 - (CGFloat)currentWidth{
@@ -381,6 +422,17 @@
         edgeInsets.right = (CGFloat) padding.right.dimen_value;
     }
     self.contentInset = edgeInsets;
+    
+    //获取坑位类型
+    _itemSameHeight = YES;
+    NSDictionary *dataDict = self.data;
+    if ([GXUtils isValidDictionary:dataDict]) {
+        id tmpObjc = [[dataDict gx_dictionaryForKey:@"extend"] objectForKey:@"itemSameHeight"];
+        //计算次数的优化项
+        if (tmpObjc) {
+            _itemSameHeight = [tmpObjc boolValue];
+        }
+    }
 }
 
 //获取坑位类型
@@ -418,16 +470,21 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return _itemSize;
+    NSValue *sizeValue = [self.sizeValues gx_objectAtIndex:indexPath.item];
+    CGSize itemSize = sizeValue ? [sizeValue CGSizeValue] : CGSizeZero;
+    return itemSize;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //重用标识
     NSString *identifier = self.subTemplateItem.templateId;
     GXGridViewCell *cell = (GXGridViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    
+    //获取坑位size
+    NSValue *value = [self.sizeValues gx_objectAtIndex:indexPath.item];
+    CGSize itemSize = [value CGSizeValue];
         
     //获取视图
-    CGSize itemSize = _itemSize;
     GXRootView *rootView = cell.rootView;
     if (!rootView) {
         rootView = (GXRootView *)[TheGXTemplateEngine creatViewByTemplateItem:_subTemplateItem measureSize:itemSize];

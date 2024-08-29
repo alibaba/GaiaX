@@ -295,6 +295,26 @@ const NSUInteger GXTextMaxWidth = 1080;
         self.textAlignment = [GXUIHelper convertTextAlignment:textAlign];
         paragraphStyle.alignment = self.textAlignment;
     }
+    
+    //lineBreakMode  (ellipsis, clip)
+    NSString *textOverflow = [styleInfo gx_stringForKey:@"text-overflow"];
+    if (textOverflow) {
+        self.lineBreakMode = [self parserLineBreakMode:textOverflow];
+        paragraphStyle.lineBreakMode = self.lineBreakMode;
+    }
+    
+    //textDecoration
+    NSString *textDecoration = [styleInfo gx_stringForKey:@"text-decoration"];
+    if (textDecoration) {
+        // 重置
+        [self.attributes removeObjectForKey:NSStrikethroughStyleAttributeName];
+        [self.attributes removeObjectForKey:NSUnderlineStyleAttributeName];
+        //删除线 / 下划线
+        self.textDecoration = [self parserTextDecoration:textDecoration];
+        if (self.textDecoration.length) {
+            [self.attributes setObject:@(NSUnderlineStyleSingle) forKey:self.textDecoration];
+        }
+    }
         
     //更新text-color
     NSString *color = [styleInfo gx_stringForKey:@"background-image"] ?: [styleInfo gx_stringForKey:@"color"];
@@ -662,20 +682,14 @@ static NSArray *GXLinesRefArray(UIFont *font,
     
     //lineBreakMode  (ellipsis, clip)
     NSString *textOverflow = [styleJson gx_stringForKey:@"text-overflow"];
-    if ([textOverflow isEqualToString:@"clip"]) {
-        self.lineBreakMode = NSLineBreakByClipping;
-    } else  if ([textOverflow isEqualToString:@"middle"]) {
-        self.lineBreakMode = NSLineBreakByTruncatingMiddle;
-    } else {
-        self.lineBreakMode = NSLineBreakByTruncatingTail;
+    if (textOverflow) {
+        self.lineBreakMode = [self parserLineBreakMode:textOverflow];
     }
     
     //删除线属性
     NSString *textDecoration = [styleJson gx_stringForKey:@"text-decoration"];
-    if ([textDecoration isEqualToString:@"line-through"]) {
-        self.textDecoration = NSStrikethroughStyleAttributeName;
-    } else if ([textDecoration isEqualToString:@"underline"]) {
-        self.textDecoration = NSUnderlineStyleAttributeName;
+    if (textDecoration) {
+        self.textDecoration = [self parserTextDecoration:textDecoration];
     }
     
     //富文本信息
@@ -734,6 +748,31 @@ static NSArray *GXLinesRefArray(UIFont *font,
         //边距设置为0
         self.gxPadding = UIEdgeInsetsZero;
     }
+}
+
+
+//lineBreakMode  (ellipsis, clip)
+- (NSLineBreakMode)parserLineBreakMode:(NSString *)value {
+    NSLineBreakMode lineBreakMode = NSLineBreakByTruncatingTail;
+    if ([value isEqualToString:@"clip"]) {
+        lineBreakMode = NSLineBreakByClipping;
+    } else  if ([value isEqualToString:@"middle"]) {
+        lineBreakMode = NSLineBreakByTruncatingMiddle;
+    } else {
+        lineBreakMode = NSLineBreakByTruncatingTail;
+    }
+    return lineBreakMode;
+}
+
+//删除线属性
+- (NSString *)parserTextDecoration:(NSString *)value {
+    NSString *textDecoration = nil;
+    if ([value isEqualToString:@"line-through"]) {
+        textDecoration = NSStrikethroughStyleAttributeName;
+    } else if ([value isEqualToString:@"underline"]) {
+        textDecoration = NSUnderlineStyleAttributeName;
+    }
+    return textDecoration;
 }
 
 

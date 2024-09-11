@@ -60,7 +60,7 @@ class GXBlurHelper(private val host: GXView) {
         val width = host.layoutParams.width
         val height = host.layoutParams.height
 
-        if (radius == 0f || width == 0 && height == 0) {
+        if (radius == 0f || width <= 0 && height <= 0) {
             innerRelease()
             return false
         }
@@ -90,7 +90,7 @@ class GXBlurHelper(private val host: GXView) {
                     return false
                 }
                 r = true
-            } catch (e: OutOfMemoryError) {
+            } catch (e: Exception) {
                 // Bitmap.createBitmap() may cause OOM error
                 // Simply ignore and fallback
             } finally {

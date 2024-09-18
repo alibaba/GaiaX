@@ -6,57 +6,76 @@
 
 using namespace std;
 
-static mutex mtx;                                                   //锁，避免多线程读写导致的线程不安全问题发生
-static vector<vector<char> > grammarProduct;                        //文法grammarProduct[S]产生式 ，~为空字
-static unordered_map<char, set<char> > terminalSymbolMap;           //终结符(char)terminal symbol,及它的first集合(set<char>)
-static unordered_map<char, set<char> > nonTerminalSymbolMap;        //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
-static unordered_map<string, string> gotoTable;                     //初始化最终产物，可根据该表格找到规约或递进的结果
-static bool isInit = false;                                         //判断是否已经进行过初始化
-static unordered_map<string, char> terminal;                        //终结符集合
-static unordered_map<string, char> nonTerminal;                     //非终结符集合
-static vector<string> grammarFormula;                               //每层文法式的集合
-struct Closure {                                                    //闭包CLOSURE
-    vector<vector<char> > project;                                  //项目集
-    vector<set<char> > outlook;                                     //展望串
-    unordered_map<char, int> go;                                    // GO函数
+static mutex mtx; //锁，避免多线程读写导致的线程不安全问题发生
+static vector<vector<char> > grammarProduct; //文法grammarProduct[S]产生式 ，~为空字
+static unordered_map<char, set<char> > terminalSymbolMap; //终结符(char)terminal symbol,及它的first集合(set<char>)
+static unordered_map<char, set<char> > nonTerminalSymbolMap; //非终结符(char)non-terminal symbol，及它的first集合(set<char>)
+static unordered_map<string, string> gotoTable; //初始化最终产物，可根据该表格找到规约或递进的结果
+static bool isInit = false; //判断是否已经进行过初始化
+static unordered_map<string, char> terminal; //终结符集合
+static unordered_map<string, char> nonTerminal; //非终结符集合
+static vector<string> grammarFormula; //每层文法式的集合
+struct Closure {
+    //闭包CLOSURE
+    vector<vector<char> > project; //项目集
+    vector<set<char> > outlook; //展望串
+    unordered_map<char, int> go; // GO函数
 };
-static vector<Closure> closureArray;                                //闭包集合
-static unordered_map<char, string> wordToSymbol;                    //key:word value:symbol
-static unordered_map<string, string> cache;                         //表达式缓存
+
+static vector<Closure> closureArray; //闭包集合
+static unordered_map<char, string> wordToSymbol; //key:word value:symbol
+static unordered_map<string, string> cache; //表达式缓存
+
 /*
  * 存放终结符完整词汇的string集合
  */
-static string terminalWord[] = {"true", "false", "null", "value", "num", "string", "data", "id",
-                                ",", "function", "long",
-                                "(", ")", "!", "-", "+", "%", "/", "*", ">", "<", ">=", "<=", "==",
-                                "!=",
-                                "&&", "||", "?", ":", "?:", "error", "#", "~"};
+static string terminalWord[] = {
+    "true", "false", "null", "value", "num", "string", "data", "id",
+    ",", "function", "long", "(", ")", "!", "-", "+",
+    "%", "/", "*", ">", "<", ">=", "<=", "==", "!=",
+    "&&", "||", "?", ":", "?:", "error", "#", "~"
+};
+
 /*
  * 存放终结符标识符的char集合
  */
-static char terminalSymbol[] = {'t', 'f', 'n', 'v', 'u', 's', 'd', 'i', ',', 'a', 'o', '(', ')',
-                                '!', '-',
-                                '+', '%',
-                                '/', '*', '>', '<', 'l', 'b', '=', 'p', '&', '@', '?', ':', 'y',
-                                'e', '#',
-                                '~'};
+static char terminalSymbol[] = {
+    't', 'f', 'n', 'v', 'u', 's', 'd', 'i',
+    ',', 'a', 'o', '(', ')', '!', '-', '+',
+    '%', '/', '*', '>', '<', 'l', 'b', '=', 'p',
+    '&', '@', '?', ':', 'y', 'e', '#', '~'
+};
 /*
  * 存放非终结符完整词汇的string集合
  */
-static string nonTerminalWord[] = {"S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr",
-                                   "Two",
-                                   "P", "One"};
+static string nonTerminalWord[] = {
+    "S", "Ten", "L", "Nin", "Eig", "Sev", "Six", "Fiv", "Fou", "Thr",
+    "Two",
+    "P", "One"
+};
 /*
  * 存放非终结符标识符的char集合
  */
 static char nonTerminalSymbol[] = {'S', 'T', 'L', 'N', 'E', 'D', 'F', 'G', 'H', 'U', 'Y', 'P', 'O'};
+
 /*
  * 表达式语法集合
  */
-static string grammar[] = {"S->T", "T->TyN|L:N|N", "L->N?N", "N->N@E|E", "E->E&D|D", "D->DpF|D=F|F",
-                           "F->F>G|F<G|FlG|FbG|G", "G->G+H|G-H|H", "H->H*U|H/U|H%U|U",
-                           "U->+Y|-Y|!Y|Y", "Y->(T)|i(P)|O|~", "P->O,P|O|~",
-                           "O->t|f|n|v|u|s|d|a|o"};
+static string grammar[] = {
+    "S->T",
+    "T->TyN|L:N|N",
+    "L->N?N",
+    "N->N@E|E",
+    "E->E&D|D",
+    "D->DpF|D=F|F",
+    "F->F>G|F<G|FlG|FbG|G",
+    "G->G+H|G-H|H",
+    "H->H*U|H/U|H%U|U",
+    "U->+Y|-Y|!Y|Y",
+    "Y->(T)|i(P)|O|~",
+    "P->O,P|O|~",
+    "O->t|f|n|v|u|s|d|a|o"
+};
 
 /*
  * 判断word是否为终结符
@@ -96,7 +115,7 @@ void getGrammarProduct() {
     char chX;
     set<char> m;
     nonTerminalSymbolMap['M'] = m;
-    for (auto temp : grammarFormula) {
+    for (auto temp: grammarFormula) {
         for (int y = 0; y < temp.length(); y++) {
             symbol = temp[y];
             if (symbol == '|') {
@@ -133,7 +152,7 @@ void getGrammarProduct() {
     grammarProduct.insert(grammarProduct.begin(), value);
 
     //去掉ts中的非终结符
-    for (auto &it : nonTerminalSymbolMap) {
+    for (auto &it: nonTerminalSymbolMap) {
         unordered_map<char, set<char> >::iterator iter;
         iter = terminalSymbolMap.find(it.first);
         if (iter != terminalSymbolMap.end())
@@ -144,8 +163,9 @@ void getGrammarProduct() {
 /*
  * 初始化：获取First集
  */
-void getFirst() { //得到First集合
-    for (auto &it : terminalSymbolMap)
+void getFirst() {
+    //得到First集合
+    for (auto &it: terminalSymbolMap)
         it.second.insert(it.first);
 
     //求非终结符的First集合
@@ -156,14 +176,12 @@ void getFirst() { //得到First集合
             break;
         r++;
         change = 0;
-        for (auto &it : nonTerminalSymbolMap) {
+        for (auto &it: nonTerminalSymbolMap) {
             for (unsigned int i = 0; i < grammarProduct.size(); i++) {
                 if (grammarProduct[i][0] == it.first) {
                     unsigned int size = it.second.size();
-                    unordered_map<char, set<char> >::iterator iter = terminalSymbolMap.find(
-                            grammarProduct[i][1]);
-                    if (terminalSymbolMap.find(grammarProduct[i][1]) != terminalSymbolMap.end() ||
-                        grammarProduct[i][1] == '~') {
+                    unordered_map<char, set<char> >::iterator iter = terminalSymbolMap.find(grammarProduct[i][1]);
+                    if (terminalSymbolMap.find(grammarProduct[i][1]) != terminalSymbolMap.end() || grammarProduct[i][1] == '~') {
                         it.second.insert(grammarProduct[i][1]);
                         if (it.second.size() > size)
                             change = 1;
@@ -171,9 +189,8 @@ void getFirst() { //得到First集合
                         unsigned int col = 1;
                         while (1) {
                             int flag = 0;
-                            unordered_map<char, set<char> >::iterator itt = nonTerminalSymbolMap.find(
-                                    grammarProduct[i][col]);
-                            for (auto &iter : itt->second) {
+                            unordered_map<char, set<char> >::iterator itt = nonTerminalSymbolMap.find(grammarProduct[i][col]);
+                            for (auto &iter: itt->second) {
                                 if (iter == '~')
                                     flag = 1;
                                 else
@@ -184,8 +201,7 @@ void getFirst() { //得到First集合
                                 if (grammarProduct[i].size() <= col) {
                                     it.second.insert('~');
                                     break;
-                                } else if (terminalSymbolMap.find(grammarProduct[i][col]) !=
-                                           terminalSymbolMap.end()) {
+                                } else if (terminalSymbolMap.find(grammarProduct[i][col]) != terminalSymbolMap.end()) {
                                     it.second.insert(grammarProduct[i][col]);
                                     break;
                                 } else {
@@ -225,15 +241,13 @@ void getClosure() {
                 if (closureArray[i].project[j][k] == ' ') {
                     if (k == closureArray[i].project[j].size() - 1)
                         break;
-                    for (unsigned int x = 0;
-                         x < grammarProduct.size(); x++) {
+                    for (unsigned int x = 0; x < grammarProduct.size(); x++) {
                         if (grammarProduct[x][0] ==
                             closureArray[i].project[j][k + 1]) {
                             vector<char> vec(grammarProduct[x]);
                             vec.insert(vec.begin() + 1, ' ');
                             int exist = 0;
-                            for (unsigned int y = 0;
-                                 y < closureArray[i].project.size(); y++) {
+                            for (unsigned int y = 0; y < closureArray[i].project.size(); y++) {
                                 if (closureArray[i].project[y] == vec) {
                                     exist = y;
                                     break;
@@ -243,24 +257,20 @@ void getClosure() {
                                 closureArray[i].project.push_back(vec);
                             }
                             set<char> m;
-                            bool emp = true;    //判空
+                            bool emp = true; //判空
                             int t = 0;
                             while (emp) {
                                 emp = false;
-                                if (k + t + 1 == closureArray[i].project[j].size() - 1) { //情况一
-                                    for (auto it : closureArray[i].outlook[j])
+                                if (k + t + 1 == closureArray[i].project[j].size() - 1) {
+                                    //情况一
+                                    for (auto it: closureArray[i].outlook[j])
                                         m.insert(it);
-                                } else if (
-                                        terminalSymbolMap.find(
-                                                closureArray[i].project[j][k + t + 2]) !=
-                                        terminalSymbolMap.end()) { //情况二
+                                } else if (terminalSymbolMap.find(closureArray[i].project[j][k + t + 2]) != terminalSymbolMap.end()) {
+                                    //情况二
                                     m.insert(closureArray[i].project[j][k + 2 + t]);
                                 } else {
-                                    set<char> m1(
-                                            (nonTerminalSymbolMap.find(
-                                                    closureArray[i].project[j][k + 2 +
-                                                                               t]))->second);
-                                    for (auto it : m1) {
+                                    set<char> m1((nonTerminalSymbolMap.find(closureArray[i].project[j][k + 2 + t]))->second);
+                                    for (auto it: m1) {
                                         if (it == '~') {
                                             emp = true;
                                             t++;
@@ -271,7 +281,7 @@ void getClosure() {
                                 }
                             }
                             if (exist) {
-                                for (auto it : m) {
+                                for (auto it: m) {
                                     closureArray[i].outlook[exist].insert(it);
                                 }
                             } else
@@ -294,8 +304,7 @@ void getClosure() {
                     bool dif = false;
                     for (unsigned int x = 0; x < closureArray.size(); x++) {
                         // dif = false;
-                        for (unsigned int y = 0; y <
-                                                 closureArray[x].project.size(); y++) {
+                        for (unsigned int y = 0; y < closureArray[x].project.size(); y++) {
                             dif = false;
                             if (new_closure_pro == closureArray[x].project[y]) {
                                 if (closureArray[x].outlook[0].size() !=
@@ -304,7 +313,7 @@ void getClosure() {
                                     continue;
                                 }
                                 auto iter = closureArray[x].outlook[0].begin();
-                                for (auto it : new_closure_search) {
+                                for (auto it: new_closure_search) {
                                     if (it != *iter) {
                                         dif = true;
                                         break;
@@ -325,10 +334,8 @@ void getClosure() {
                     }
                     if (closureArray[i].go.count(new_closure_pro[k]) != 0 &&
                         dif) {
-                        closureArray[closureArray[i].go[new_closure_pro[k]]].project.push_back(
-                                new_closure_pro);
-                        closureArray[closureArray[i].go[new_closure_pro[k]]].outlook.push_back(
-                                new_closure_search);
+                        closureArray[closureArray[i].go[new_closure_pro[k]]].project.push_back(new_closure_pro);
+                        closureArray[closureArray[i].go[new_closure_pro[k]]].outlook.push_back(new_closure_search);
                         break;
                     }
                     if (dif) {
@@ -370,7 +377,7 @@ int getGotoTable() {
                                     break;
                                 }
                             }
-                            for (auto it : closureArray[i].outlook[j]) {
+                            for (auto it: closureArray[i].outlook[j]) {
                                 string m = to_string(i) + it;
                                 if (gotoTable.find(m) != gotoTable.end() &&
                                     gotoTable[m] != (string) "r" + to_string(id)) {
@@ -495,7 +502,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == ">=") {
         result.token = "bool";
         if ((left.token == "num" || left.token == "long") &&
@@ -509,7 +516,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "<") {
         result.token = "bool";
         if ((left.token == "num" || left.token == "long") &&
@@ -523,7 +530,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "<=") {
         result.token = "bool";
         if ((left.token == "num" || left.token == "long") &&
@@ -537,7 +544,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "&&") {
         result.token = "bool";
         if (left.token == "bool" && right.token == "bool") {
@@ -589,7 +596,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "||") {
         result.token = "bool";
         if (left.token == "bool" && right.token == "bool") {
@@ -665,7 +672,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "!=") {
         result.token = "bool";
         if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
@@ -702,7 +709,7 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
             result.name = "false";
         }
     }
-        //返回值都为bool
+    //返回值都为bool
     else if (op == "==") {
         result.token = "bool";
         if (left.token == "bool" && (right.token == "num" || right.token == "long")) {
@@ -805,7 +812,6 @@ GXATSNode GXAnalyze::doubleCalculate(GXATSNode left, GXATSNode right, string op)
     } else if (op == "-") {
         if ((left.token == "num" || left.token == "long") &&
             (right.token == "num" || right.token == "long")) {
-
             if (left.token == "num" || right.token == "num") {
                 int n = max(countDecimalPlaces(left.name), countDecimalPlaces(right.name));
                 double temp = stod(left.name) - stod(right.name);
@@ -1263,16 +1269,13 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                 }
                 GXATSNode node = array[num1];
                 if (node.token == "num") {
-                    GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
-                            node.name.c_str()));
+                    GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(node.name.c_str()));
                     paramsTempArray.push_back((long) par);
                 } else if (node.token == "long") {
-                    GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(
-                            node.name.c_str()));
+                    GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(node.name.c_str()));
                     paramsTempArray.push_back((long) par);
                 } else if (node.token == "string") {
-                    GXValue *par = new GXValue(GX_TAG_STRING,
-                                               node.name.c_str());
+                    GXValue *par = new GXValue(GX_TAG_STRING, node.name.c_str());
                     paramsTempArray.push_back((long) par);
                 } else if (node.token == "bool") {
                     if (node.name == "true") {
@@ -1283,12 +1286,10 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                         paramsTempArray.push_back((long) par);
                     }
                 } else if (node.token == "map") {
-                    GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(
-                            node.name.c_str()));
+                    GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(node.name.c_str()));
                     paramsTempArray.push_back((long) par);
                 } else if (node.token == "array") {
-                    GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(
-                            node.name.c_str()));
+                    GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(node.name.c_str()));
                     paramsTempArray.push_back((long) par);
                 } else if (node.token == "null") {
                     GXValue *par = new GXValue(GX_TAG_NULL, 1);
@@ -1308,16 +1309,13 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                     GXATSNode node = array[num1];
                     num1 = -1;
                     if (node.token == "num") {
-                        GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
-                                node.name.c_str()));
+                        GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "long") {
-                        GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(
-                                node.name.c_str()));
+                        GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "string") {
-                        GXValue *par = new GXValue(GX_TAG_STRING,
-                                                   node.name.c_str());
+                        GXValue *par = new GXValue(GX_TAG_STRING, node.name.c_str());
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "bool") {
                         if (node.name == "true") {
@@ -1328,12 +1326,10 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                             paramsTempArray.push_back((long) par);
                         }
                     } else if (node.token == "map") {
-                        GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(
-                                node.name.c_str()));
+                        GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "array") {
-                        GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(
-                                node.name.c_str()));
+                        GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(node.name.c_str()));
                         paramsTempArray.push_back((long) par);
                     } else if (node.token == "null") {
                         GXValue *par = new GXValue(GX_TAG_NULL, 1);
@@ -1379,10 +1375,8 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
                     if (fun->tag == GX_TAG_FLOAT) {
                         node.name = to_string(fun->float64);
                         if (node.name.find('.') != -1) {
-                            node.name = regex_replace(node.name, regex("0+?$"),
-                                                      ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                            node.name = regex_replace(node.name, regex("[.]$"),
-                                                      ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            node.name = regex_replace(node.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                            node.name = regex_replace(node.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                         }
                         node.token = "num";
                     } else if (fun->tag == GX_TAG_LONG) {
@@ -1467,8 +1461,7 @@ GXAnalyze::calculateCache(string cacheString, vector<GXATSNode> array, void *p_a
 /*
  * 语法分析并生成缓存表达式的过程
  */
-long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source,
-                      string expression) {
+long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *source, string expression) {
     string tree;
     if (array.size() == 1) {
         tree = "(0)";
@@ -1477,9 +1470,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
     GXAnalyze *analyze = (GXAnalyze *) p_analyze;
     string temp = "\0"; //需要分析的语句
     string sentence = s + temp;
-    string *statusStack = new string[sentence.size() + 2];    //状态栈
+    string *statusStack = new string[sentence.size() + 2]; //状态栈
     int statusSize = 0;
-    char *symbolStack = new char[sentence.size() + 2];        //符号栈
+    char *symbolStack = new char[sentence.size() + 2]; //符号栈
     int symbolSize = 0;
     GXATSNode *valueStack = new GXATSNode[sentence.size() + 2];
     int valueSize = 0;
@@ -1494,10 +1487,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
     sentence = sentence.substr(1);
     statusStack[statusSize] = "0";
     ++statusSize;
-    string new_status;                             //下一入栈的新状态
+    string new_status; //下一入栈的新状态
     while (true) {
-        string cur_status;//当前状态
-        char cur_symbol;//当前“展望”字符
+        string cur_status; //当前状态
+        char cur_symbol; //当前“展望”字符
         cur_status = statusStack[statusSize - 1];
         cur_symbol = sentence[0];
         string m = cur_status + cur_symbol;
@@ -1536,8 +1529,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             }
             mtx.unlock();
             return (long) pointer;
-        } else if (new_status[0] ==
-                   's') {
+        } else if (new_status[0] == 's') {
             statusStack[statusSize] = new_status.substr(1);
             ++statusSize;
             // 1
@@ -1674,8 +1666,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             }
             valueStep = valueStep + 1;
             sentence = sentence.substr(1);
-        } else if (new_status[0] ==
-                   'r') {
+        } else if (new_status[0] == 'r') {
             new_status = new_status.substr(1);
             int gid = atoi(new_status.c_str());
             int len = grammarProduct[gid].size() - 1;
@@ -1702,7 +1693,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                     if (iterAction != wordToSymbol.end()) {
                         action[i] = iterAction->second;
                     }
-//                    action[i] = wordToSymbol[symbolStack[symbolSize - 1]];
+                    //                    action[i] = wordToSymbol[symbolStack[symbolSize - 1]];
                     --statusSize;
                     --symbolSize;
                 }
@@ -1782,12 +1773,8 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         if (fun->tag == GX_TAG_FLOAT) {
                                             tempR.name = to_string(fun->float64);
                                             if (tempR.name.find('.') != -1) {
-                                                tempR.name = regex_replace(tempR.name,
-                                                                           regex("0+?$"),
-                                                                           ""); // 除了捕捉到的组以外，其他的东西均舍弃
-                                                tempR.name = regex_replace(tempR.name,
-                                                                           regex("[.]$"),
-                                                                           ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                                tempR.name = regex_replace(tempR.name, regex("0+?$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
+                                                tempR.name = regex_replace(tempR.name, regex("[.]$"), ""); // 除了捕捉到的组以外，其他的东西均舍弃
                                             }
                                             tempR.token = "num";
                                         } else if (fun->tag == GX_TAG_LONG) {
@@ -1834,17 +1821,13 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                         }
                                         //往vector<GXValue>逐个扔进去参数，然后通过id调用
                                         if (valueStack[i].token == "num") {
-                                            GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(
-                                                    valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_FLOAT, (float) atof(valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "long") {
-                                            GXValue *par = new GXValue(GX_TAG_LONG,
-                                                                       (int64_t) atoll(
-                                                                               valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_LONG, (int64_t) atoll(valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "string") {
-                                            GXValue *par = new GXValue(GX_TAG_STRING,
-                                                                       valueStack[i].name.c_str());
+                                            GXValue *par = new GXValue(GX_TAG_STRING, valueStack[i].name.c_str());
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "bool") {
                                             if (valueStack[i].name == "true") {
@@ -1855,12 +1838,10 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                                                 paramsTempArray.push_back((long) par);
                                             }
                                         } else if (valueStack[i].token == "map") {
-                                            GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(
-                                                    valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_MAP, (void *) atol(valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "array") {
-                                            GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(
-                                                    valueStack[i].name.c_str()));
+                                            GXValue *par = new GXValue(GX_TAG_ARRAY, (void *) atol(valueStack[i].name.c_str()));
                                             paramsTempArray.push_back((long) par);
                                         } else if (valueStack[i].token == "null") {
                                             GXValue *par = new GXValue(GX_TAG_NULL, 1);
@@ -1884,8 +1865,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             valueSize = valueSize - 2;
                             tempR = doubleCalculate(t1, t2, op);
                             tempR.count = t2.count;
-                            tree = tree + '(' + to_string(t1.count) + op + to_string(t2.count) +
-                                   ')';
+                            tree = tree + '(' + to_string(t1.count) + op + to_string(t2.count) + ')';
                             if (tempR.token == "error") {
                                 delete[] statusStack;
                                 delete[] symbolStack;
@@ -1901,8 +1881,7 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
                             delete[] symbolStack;
                             delete[] valueStack;
                             delete[] paramsStack;
-                            analyze->throwError(
-                                    "expressionError: expression has 0 value after operator, but must have 1 value");
+                            analyze->throwError("expressionError: expression has 0 value after operator, but must have 1 value");
                             return 0L;
                         }
                         t1 = valueStack[valueSize - 1];
@@ -1943,11 +1922,9 @@ long GXAnalyze::check(string s, vector<GXATSNode> array, void *p_analyze, void *
             delete[] valueStack;
             delete[] paramsStack;
             analyze->throwError(
-                    "expressionError: unexpected identifier '" + value + "' in expression '" +
-                    expression + "'");
+                "expressionError: unexpected identifier '" + value + "' in expression '" +
+                expression + "'");
             return 0L;
         }
     }
 }
-
-

@@ -15,10 +15,9 @@ using namespace std;
 
 class GXAnalyze {
 public:
-
     GXAnalyze();
 
-    ~GXAnalyze();
+    virtual ~GXAnalyze();
 
     long getValue(string expression, void *source);
 
@@ -26,22 +25,20 @@ public:
     virtual long getSourceValue(string valuePath, void *source) = 0;
 
     //获取方法 Function
-    virtual long
-    getFunctionValue(string funName, long *paramPointers, int paramsSize, string source) = 0;
+    virtual long getFunctionValue(string funName, long *paramPointers, int paramsSize, string source) = 0;
 
     virtual void throwError(string message) = 0;
 
 private:
-
     //获取两个数值计算的结果
     GXATSNode doubleCalculate(GXATSNode value1, GXATSNode value2, string op);
 
     //获取单个数值计算的结果
     GXATSNode singleCalculate(GXATSNode value1, string op);
 
-    long check(string s, vector<GXATSNode> array, void *p_analyze, void* source,string expression);
+    long check(string s, vector<GXATSNode> array, void *p_analyze, void *source, string expression);
 
-    long calculateCache(string cache,vector<GXATSNode> array,void *p_analyze, void* source);
+    long calculateCache(string cache, vector<GXATSNode> array, void *p_analyze, void *source);
 };
 
 #endif /*include _GXAnalyze__H_*/

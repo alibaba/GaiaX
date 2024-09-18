@@ -33,14 +33,8 @@ class GXAnalyzeTest {
         Assert.assertEquals(null, instance.getResult("\$\$", null))
 
         Assert.assertEquals(true, instance.getResult("size(\$title)+1>1 ? true : false ", testData))
-        Assert.assertEquals(
-            2f,
-            instance.getResult("(\$data.b > (\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData)
-        )
-        Assert.assertEquals(
-            2f,
-            instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData)
-        )
+        Assert.assertEquals(2f, instance.getResult("(\$data.b > (\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData))
+        Assert.assertEquals(2f, instance.getResult("(\$data.b>(\$data.a-2)-1) ? ((\$data.b*1)/2)/2 : 1", testData))
 
         // java => null+'gaiax' = nullgaiax
         Assert.assertEquals("test", instance.getResult("\$data.stringEmpty + 'test'", testData))
@@ -84,10 +78,7 @@ class GXAnalyzeTest {
         }
         repeat(10) {
             Assert.assertEquals(100000000001F, instance.getResult("100000000000+1.0", testData))
-            Assert.assertEquals(
-                9223372036854775802L,
-                instance.getResult("9223372036854775801 + 1", testData)
-            )
+            Assert.assertEquals(9223372036854775802L, instance.getResult("9223372036854775801 + 1", testData))
             Assert.assertEquals(10001L, instance.getResult("10000+1", testData))
             Assert.assertEquals(100001L, instance.getResult("100000+1", testData))
             Assert.assertEquals(1000001L, instance.getResult("1000000+1", testData))
@@ -99,24 +90,12 @@ class GXAnalyzeTest {
             Assert.assertEquals(1000000000001L, instance.getResult("1000000000000+1", testData))
             Assert.assertEquals(10000000000001L, instance.getResult("10000000000000+1", testData))
             Assert.assertEquals(100000000000001L, instance.getResult("100000000000000+1", testData))
-            Assert.assertEquals(
-                10000000000000001L,
-                instance.getResult("10000000000000000+1", testData)
-            )
-            Assert.assertEquals(
-                100000000000000001L,
-                instance.getResult("100000000000000000+1", testData)
-            )
-            Assert.assertEquals(
-                1000000000000000001L,
-                instance.getResult("1000000000000000000+1", testData)
-            )
+            Assert.assertEquals(10000000000000001L, instance.getResult("10000000000000000+1", testData))
+            Assert.assertEquals(100000000000000001L, instance.getResult("100000000000000000+1", testData))
+            Assert.assertEquals(1000000000000000001L, instance.getResult("1000000000000000000+1", testData))
 
             Assert.assertEquals(100000000000F, instance.getResult("100000000001-1.0", testData))
-            Assert.assertEquals(
-                9223372036854775802L,
-                instance.getResult("9223372036854775803 - 1", testData)
-            )
+            Assert.assertEquals(9223372036854775802L, instance.getResult("9223372036854775803 - 1", testData))
             Assert.assertEquals(10000L, instance.getResult("10001-1", testData))
             Assert.assertEquals(100001L, instance.getResult("100002-1", testData))
             Assert.assertEquals(1000001L, instance.getResult("1000002-1", testData))
@@ -128,18 +107,9 @@ class GXAnalyzeTest {
             Assert.assertEquals(1000000000001L, instance.getResult("1000000000002-1", testData))
             Assert.assertEquals(10000000000001L, instance.getResult("10000000000002-1", testData))
             Assert.assertEquals(100000000000001L, instance.getResult("100000000000002-1", testData))
-            Assert.assertEquals(
-                10000000000000001L,
-                instance.getResult("10000000000000002-1", testData)
-            )
-            Assert.assertEquals(
-                100000000000000001L,
-                instance.getResult("100000000000000002-1", testData)
-            )
-            Assert.assertEquals(
-                1000000000000000001L,
-                instance.getResult("1000000000000000002-1", testData)
-            )
+            Assert.assertEquals(10000000000000001L, instance.getResult("10000000000000002-1", testData))
+            Assert.assertEquals(100000000000000001L, instance.getResult("100000000000000002-1", testData))
+            Assert.assertEquals(1000000000000000001L, instance.getResult("1000000000000000002-1", testData))
             Assert.assertEquals(200000000000F, instance.getResult("100000000000 * 2.0", testData))
             Assert.assertEquals(20000L, instance.getResult("10000 * 2", testData))
             Assert.assertEquals(200000L, instance.getResult("100000 * 2", testData))
@@ -151,22 +121,10 @@ class GXAnalyzeTest {
             Assert.assertEquals(200000000000L, instance.getResult("100000000000 * 2", testData))
             Assert.assertEquals(2000000000000L, instance.getResult("1000000000000 * 2", testData))
             Assert.assertEquals(20000000000000L, instance.getResult("10000000000000 * 2", testData))
-            Assert.assertEquals(
-                200000000000000L,
-                instance.getResult("100000000000000 * 2", testData)
-            )
-            Assert.assertEquals(
-                20000000000000000L,
-                instance.getResult("10000000000000000 * 2", testData)
-            )
-            Assert.assertEquals(
-                200000000000000000L,
-                instance.getResult("100000000000000000 * 2", testData)
-            )
-            Assert.assertEquals(
-                2000000000000000000L,
-                instance.getResult("1000000000000000000 * 2", testData)
-            )
+            Assert.assertEquals(200000000000000L, instance.getResult("100000000000000 * 2", testData))
+            Assert.assertEquals(20000000000000000L, instance.getResult("10000000000000000 * 2", testData))
+            Assert.assertEquals(200000000000000000L, instance.getResult("100000000000000000 * 2", testData))
+            Assert.assertEquals(2000000000000000000L, instance.getResult("1000000000000000000 * 2", testData))
             Assert.assertEquals(62.5F, instance.getResult("125.0 / 2", testData))
             Assert.assertEquals(5000L, instance.getResult("10000 / 2", testData))
             Assert.assertEquals(50000L, instance.getResult("100000 / 2", testData))
@@ -178,31 +136,13 @@ class GXAnalyzeTest {
             Assert.assertEquals(50000000000L, instance.getResult("100000000000 / 2", testData))
             Assert.assertEquals(500000000000L, instance.getResult("1000000000000 / 2", testData))
             Assert.assertEquals(5000000000000L, instance.getResult("10000000000000 / 2", testData))
-            Assert.assertEquals(
-                50000000000000L,
-                instance.getResult("100000000000000 / 2", testData)
-            )
-            Assert.assertEquals(
-                5000000000000000L,
-                instance.getResult("10000000000000000 / 2", testData)
-            )
-            Assert.assertEquals(
-                50000000000000000L,
-                instance.getResult("100000000000000000 / 2", testData)
-            )
-            Assert.assertEquals(
-                500000000000000000L,
-                instance.getResult("1000000000000000000 / 2", testData)
-            )
+            Assert.assertEquals(50000000000000L, instance.getResult("100000000000000 / 2", testData))
+            Assert.assertEquals(5000000000000000L, instance.getResult("10000000000000000 / 2", testData))
+            Assert.assertEquals(50000000000000000L, instance.getResult("100000000000000000 / 2", testData))
+            Assert.assertEquals(500000000000000000L, instance.getResult("1000000000000000000 / 2", testData))
             Assert.assertEquals(500000.5F, instance.getResult("1000001.0 / 2", testData))
-            Assert.assertEquals(
-                500000000000.5F,
-                instance.getResult("1000000000001.0 / 2", testData)
-            )
-            Assert.assertEquals(
-                500000000000000000.5F,
-                instance.getResult("1000000000000000001.0 / 2", testData)
-            )
+            Assert.assertEquals(500000000000.5F, instance.getResult("1000000000001.0 / 2", testData))
+            Assert.assertEquals(500000000000000000.5F, instance.getResult("1000000000000000001.0 / 2", testData))
             Assert.assertEquals(30L, instance.getResult("80 % 50", testData))
             Assert.assertEquals(300L, instance.getResult("800 % 500", testData))
             Assert.assertEquals(3000L, instance.getResult("8000 % 5000", testData))
@@ -211,34 +151,13 @@ class GXAnalyzeTest {
             Assert.assertEquals(3000000L, instance.getResult("8000000 % 5000000", testData))
             Assert.assertEquals(30000000L, instance.getResult("80000000 % 50000000", testData))
             Assert.assertEquals(300000000L, instance.getResult("800000000 % 500000000", testData))
-            Assert.assertEquals(
-                3000000000L,
-                instance.getResult("8000000000 % 5000000000", testData)
-            )
-            Assert.assertEquals(
-                30000000000L,
-                instance.getResult("80000000000 % 50000000000", testData)
-            )
-            Assert.assertEquals(
-                300000000000L,
-                instance.getResult("800000000000 % 500000000000", testData)
-            )
-            Assert.assertEquals(
-                3000000000000L,
-                instance.getResult("8000000000000 % 5000000000000", testData)
-            )
-            Assert.assertEquals(
-                30000000000000L,
-                instance.getResult("80000000000000 % 50000000000000", testData)
-            )
-            Assert.assertEquals(
-                300000000000000L,
-                instance.getResult("800000000000000 % 500000000000000", testData)
-            )
-            Assert.assertEquals(
-                3000000000000000L,
-                instance.getResult("8000000000000000 % 5000000000000000", testData)
-            )
+            Assert.assertEquals(3000000000L, instance.getResult("8000000000 % 5000000000", testData))
+            Assert.assertEquals(30000000000L, instance.getResult("80000000000 % 50000000000", testData))
+            Assert.assertEquals(300000000000L, instance.getResult("800000000000 % 500000000000", testData))
+            Assert.assertEquals(3000000000000L, instance.getResult("8000000000000 % 5000000000000", testData))
+            Assert.assertEquals(30000000000000L, instance.getResult("80000000000000 % 50000000000000", testData))
+            Assert.assertEquals(300000000000000L, instance.getResult("800000000000000 % 500000000000000", testData))
+            Assert.assertEquals(3000000000000000L, instance.getResult("8000000000000000 % 5000000000000000", testData))
             Assert.assertEquals(10000L, instance.getResult("10000", testData))
             Assert.assertEquals(10f, instance.getResult("10.000", testData))
             Assert.assertEquals(100f, instance.getResult("100.00", testData))
@@ -247,10 +166,7 @@ class GXAnalyzeTest {
             Assert.assertEquals(1111L, instance.getResult("1111", testData))
             Assert.assertEquals(11110L, instance.getResult("11110", testData))
             Assert.assertEquals(20000L, instance.getResult("10000+10000", testData))
-            Assert.assertEquals(
-                26L,
-                instance.getResult("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1", testData)
-            )
+            Assert.assertEquals(26L, instance.getResult("1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1", testData))
         }
     }
 
@@ -267,10 +183,7 @@ class GXAnalyzeTest {
         }
         repeat(10) {
             Assert.assertEquals(null, instance.getResult("env('testWrong')", null))
-            Assert.assertEquals(
-                2L,
-                instance.getResult("env('testWrong') > env('testWrong') ? 1 : 2", null)
-            )
+            Assert.assertEquals(2L, instance.getResult("env('testWrong') > env('testWrong') ? 1 : 2", null))
             Assert.assertEquals(false, instance.getResult("env('isiOS')", null))
             Assert.assertEquals(true, instance.getResult("env('isAndroid')", null))
             Assert.assertEquals(4f, instance.getResult("size('1234')", testData))
@@ -336,10 +249,7 @@ class GXAnalyzeTest {
             Assert.assertEquals("1231.000", instance.getResult("'123' + 1.000", testData))
             Assert.assertEquals("1231.001", instance.getResult("'123' + 1.001", testData))
             Assert.assertEquals("1231.001000", instance.getResult("'123' + 1.001000", testData))
-            Assert.assertEquals(
-                "123.001.001000",
-                instance.getResult("'123.00' + 1.001000", testData)
-            )
+            Assert.assertEquals("123.001.001000", instance.getResult("'123.00' + 1.001000", testData))
             Assert.assertEquals("1230.000", instance.getResult("'123' + 0.000", testData))
             Assert.assertEquals("1230.001", instance.getResult("'123' + 0.001", testData))
             Assert.assertEquals("123.0001", instance.getResult("123.000 + '1'", testData))
@@ -757,10 +667,7 @@ class GXAnalyzeTest {
             }
         }
         repeat(10) {
-            Assert.assertEquals(
-                "flex",
-                instance.getResult("\$data.map ? 'flex' : 'none'", testData)
-            )
+            Assert.assertEquals("flex", instance.getResult("\$data.map ? 'flex' : 'none'", testData))
             Assert.assertEquals("none", instance.getResult("\$data.map ? 'flex' : 'none'", null))
             Assert.assertEquals(null, instance.getResult("false ? \$data : null", testData))
             Assert.assertEquals(0L, instance.getResult("false ? 1 : 0", testData))
@@ -778,6 +685,19 @@ class GXAnalyzeTest {
             Assert.assertEquals(2L, instance.getResult("\$data.true?1:2", testData))
             Assert.assertEquals(2L, instance.getResult("\$data.false?1:2", testData))
         }
+    }
+
+    @Test
+    fun ternary1() {
+        val testData = JSONObject().apply {
+            this["eight"] = 8F
+            this["title"] = "gaiax"
+            this["data"] = JSONObject().apply {
+                this["map"] = JSONObject()
+                this["array"] = JSONArray()
+            }
+        }
+        Assert.assertEquals(1L, instance.getResult("'A'?1:2", testData))
     }
 
     @Test

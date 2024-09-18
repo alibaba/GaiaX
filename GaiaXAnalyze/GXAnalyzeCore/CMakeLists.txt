@@ -27,13 +27,13 @@ add_library(${PROJECT_NAME} SHARED
         GXAnalyze.cpp
         GXATSNode.cpp
         GXWordAnalyze.cpp
-        )
+)
 
 # 链接头文件
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(${PROJECT_NAME} PUBLIC
         # 引入自有代码头文件
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        )
+        ${CMAKE_SOURCE_DIR}
+)
 
 # 链接子模块
 target_link_libraries(${PROJECT_NAME})
@@ -44,5 +44,5 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Android")
     target_link_libraries(${PROJECT_NAME}
             -landroid
             -llog
-            )
+    )
 endif ()

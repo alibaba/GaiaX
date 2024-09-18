@@ -1,0 +1,11 @@
+.idea
+cmake-build-debug
+.vscode
+CMakeFiles
+*.a
+cmake_install.cmake
+Makefile
+CMakeCache.txt
+CMakeFiles
+*.cbp
+*.dylib

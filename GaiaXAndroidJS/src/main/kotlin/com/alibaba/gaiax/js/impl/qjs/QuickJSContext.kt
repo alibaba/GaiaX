@@ -34,7 +34,7 @@ internal class QuickJSContext(
         engine.checkQuickJS()
         runtime.checkRuntime()
         jsContext = runtime.jsRuntime?.createJSContext()
-        if (Log.isLog()){
+        if (Log.isLog()) {
             Log.d("initContext() engine = $engine, runtime = $runtime, jsContext = $jsContext")
         }
     }
@@ -43,6 +43,11 @@ internal class QuickJSContext(
         engine.checkQuickJS()
         runtime.checkRuntime()
         checkContext()
+
+        if (Log.isLog()) {
+            Log.d("initModule() called with: module = $module")
+        }
+
         when (module) {
             "timer" -> initModuleTimer()
             "os" -> jsContext?.initModuleOs()
@@ -86,6 +91,9 @@ internal class QuickJSContext(
     }
 
     override fun startBootstrap() {
+        if (Log.isLog()) {
+            Log.d("startBootstrap() called")
+        }
         bootstrap?.let { bootstrap ->
             evaluateJS(bootstrap)
         }
@@ -122,11 +130,18 @@ internal class QuickJSContext(
         if (Log.isScriptLog()) {
             Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
         }
-        this.jsContext?.evaluate(script, "", GXHostContext.EVAL_TYPE_MODULE, 0)
+        this.jsContext?.evaluate(script, "index.js", GXHostContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP)
     }
 
-    override fun <T : Any> evaluateJS(script: String, clazz: Class<T>?): T? {
-        return this.jsContext?.evaluate(script, "", GXHostContext.EVAL_TYPE_GLOBAL, 0, clazz)
+    override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
+        if (Log.isScriptLog()) {
+            Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
+        }
+        val ret = this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP, clazz)
+        if (Log.isScriptLog()) {
+            Log.e("jsContext = $jsContext, evaluateJS() called with: ret=$ret")
+        }
+        return ret
     }
 
     override fun destroyContext() {

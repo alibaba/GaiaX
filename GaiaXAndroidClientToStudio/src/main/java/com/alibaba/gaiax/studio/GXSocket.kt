@@ -310,8 +310,7 @@ class GXSocket : SocketListener {
                     gxSocketListener?.onStudioAddData(templateId, templateJson)
                     lastTemplateId = templateId
                     updateTask?.let { uiHandler.removeCallbacks(it) }
-                    updateTask =
-                        Runnable { gxSocketListener?.onStudioUpdate(templateId, templateJson) }
+                    updateTask = Runnable { gxSocketListener?.onStudioUpdate(templateId, templateJson) }
                     updateTask?.let { uiHandler.postDelayed(it, 200) }
                 }
                 // 手动推送

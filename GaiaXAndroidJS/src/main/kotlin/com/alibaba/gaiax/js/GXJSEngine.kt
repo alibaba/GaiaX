@@ -286,6 +286,8 @@ class GXJSEngine {
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
     }
 
+
+
     /**
      * 为视图注册JS组件
      */

@@ -29,21 +29,21 @@ internal class GXHostContext(
 
         override fun callSync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray): Any? {
             if (Log.isLog()) {
-//                Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+                Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             return GXJSEngine.instance.moduleManager.invokeMethodSync(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
-//                Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+                Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             GXJSEngine.instance.moduleManager.invokeMethodAsync(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
-//                Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+                Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             GXJSEngine.instance.moduleManager.invokePromiseMethod(moduleId, methodId, args)
         }
@@ -121,7 +121,7 @@ internal class GXHostContext(
     }
 
     fun evaluateJS(script: String) {
-        executeTask { evaluateJSWithoutTask(script) }
+        executeTask { realContext?.evaluateJS(script) }
     }
 
     fun evaluateJSSync(script: String): JSONObject? {
@@ -129,10 +129,6 @@ internal class GXHostContext(
             return JSON.parseObject(it)
         }
         return null
-    }
-
-    fun evaluateJSWithoutTask(script: String) {
-        realContext?.evaluateJS(script)
     }
 
     fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {

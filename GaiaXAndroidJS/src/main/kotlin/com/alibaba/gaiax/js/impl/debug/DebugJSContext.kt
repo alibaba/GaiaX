@@ -11,9 +11,7 @@ import com.alibaba.gaiax.js.support.script.GXScriptBuilder
  *  @date: 2023-03-14
  *  Description:
  */
-internal class DebugJSContext(
-    private val hostContext: GXHostContext
-) : IContext {
+internal class DebugJSContext(private val hostContext: GXHostContext) : IContext {
 
     var socketBridge: DebugJSBridgeModule = DebugJSBridgeModule(hostContext, this)
 
@@ -21,6 +19,10 @@ internal class DebugJSContext(
 
     override fun initContext() {
 
+    }
+
+    override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
+        return null
     }
 
     override fun evaluateJS(script: String, argsMap: JSONObject) {
@@ -34,10 +36,6 @@ internal class DebugJSContext(
         } else {
             socketBridge.sendEvalScript(script)
         }
-    }
-
-    override fun <T : Any> evaluateJS(script: String, clazz: Class<T>?): T? {
-        TODO("Not yet implemented")
     }
 
     override fun destroyContext() {

@@ -2,9 +2,9 @@ package com.alibaba.gaiax.js.engine
 
 import android.text.TextUtils
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.support.script.ComponentLifecycle
 import com.alibaba.gaiax.js.support.script.ComponentScriptStrategy
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 
 internal class GXHostComponent private constructor(
     private val hostContext: GXHostContext,
@@ -24,12 +24,9 @@ internal class GXHostComponent private constructor(
             templateVersion: String,
             script: String
         ): GXHostComponent {
-            val checkedTemplateVersion =
-                if (TextUtils.isEmpty(templateVersion)) "-1" else templateVersion
+            val checkedTemplateVersion = if (TextUtils.isEmpty(templateVersion)) "-1" else templateVersion
             val checkedBizId = if (TextUtils.isEmpty(bizId)) "common" else bizId
-            return GXHostComponent(
-                hostContext, componentId, checkedBizId, templateId, checkedTemplateVersion, script
-            )
+            return GXHostComponent(hostContext, componentId, checkedBizId, templateId, checkedTemplateVersion, script)
         }
     }
 
@@ -53,7 +50,7 @@ internal class GXHostComponent private constructor(
             }
     }
 
-    override fun onDataInit(data: JSONObject):JSONObject? {
+    override fun onDataInit(data: JSONObject): JSONObject? {
         val script = GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_DATA_INIT, id, data)
         return hostContext.evaluateJSSync(script)
     }
@@ -106,5 +103,6 @@ internal class GXHostComponent private constructor(
         GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_LOAD_MORE, id, data)
             .apply { hostContext.evaluateJS(this) }
     }
+
 
 }

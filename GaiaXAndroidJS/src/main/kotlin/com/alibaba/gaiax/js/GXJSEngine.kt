@@ -135,7 +135,7 @@ class GXJSEngine {
             Log.d("startDefaultEngine()")
         }
         synchronized(EngineType.QuickJS) {
-            if (debugEngine == null) {
+            if (quickJSEngine == null) {
                 // 创建引擎
                 quickJSEngine = createJSEngine(EngineType.QuickJS)
 

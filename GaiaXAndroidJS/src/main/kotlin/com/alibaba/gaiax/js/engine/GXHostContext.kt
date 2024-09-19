@@ -170,16 +170,6 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
         const val MODULE_OS = "os"
         const val MODULE_GAIAX_BRIDGE = "GaiaXBridge"
 
-        /**
-         * Global code.
-         */
-        const val EVAL_TYPE_GLOBAL = 0
-
-        /**
-         * Module code.
-         */
-        const val EVAL_TYPE_MODULE = 1
-
         fun create(host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType): GXHostContext {
             return GXHostContext(host, runtime, type)
         }

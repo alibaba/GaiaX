@@ -105,7 +105,16 @@ internal class QuickJSContext(
         if (Log.isScriptLog()) {
             Log.e("evaluateJS() called with: script = $script")
         }
-        this.jsContext?.evaluate(script, "", GXHostContext.EVAL_TYPE_MODULE, 0)
+        /**
+         * type 代码类型标志：
+         * JS_EVAL_TYPE_GLOBAL：将代码作为全局代码执行（默认）。
+         * JS_EVAL_TYPE_MODULE：将代码作为模块代码执行，允许使用 import 和 export。
+         *
+         * flag 执行模式标志：
+         * JS_EVAL_FLAG_STRICT：强制以严格模式执行代码。
+         * JS_EVAL_FLAG_STRIP：移除调试信息，优化内存使用和安全性。
+         */
+        this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP)
     }
 
     override fun destroyContext() {

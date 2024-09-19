@@ -6,6 +6,9 @@ import android.os.Looper
 import android.os.Message
 import java.util.concurrent.FutureTask
 
+/**
+ * JS执行线程队列
+ */
 internal class GaiaXJSTaskQueue private constructor(val contextId: Long) {
 
     companion object {
@@ -80,6 +83,7 @@ internal class GaiaXJSTaskQueue private constructor(val contextId: Long) {
                         taskQueue?.sendMessageDelayed(newMsg, oldMsg.arg1.toLong())
                         targetFunc.invoke()
                     }
+
                     WHAT_DELAY_TASK -> {
                         val targetFunc = oldMsg.obj as (() -> Unit)
                         targetFunc.invoke()

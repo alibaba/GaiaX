@@ -2,7 +2,9 @@ package com.alibaba.gaiax.js.engine
 
 import android.text.TextUtils
 import com.alibaba.fastjson.JSONObject
-import com.alibaba.gaiax.js.support.GXScriptBuilder
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
+import com.alibaba.gaiax.js.support.script.ComponentLifecycle
+import com.alibaba.gaiax.js.support.script.ComponentScriptStrategy
 
 internal class GXHostComponent private constructor(
     private val hostContext: GXHostContext,
@@ -38,7 +40,7 @@ internal class GXHostComponent private constructor(
      * Java组件引用创建时调用
      */
     internal fun initComponent() {
-        GXScriptBuilder.buildInitComponentScript(id, bizId, templateId, templateVersion, script)
+        GXScriptBuilder.buildInitScript(ComponentScriptStrategy, bizId, templateId, templateVersion, id, script)
             .let { script ->
                 hostContext.executeTask {
                     val argsMap = JSONObject()
@@ -51,30 +53,35 @@ internal class GXHostComponent private constructor(
             }
     }
 
+    override fun onDataInit(data: JSONObject):JSONObject? {
+        val script = GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_DATA_INIT, id, data)
+        return hostContext.evaluateJSSync(script)
+    }
+
     override fun onReady() {
-        GXScriptBuilder.buildComponentReadyScript(id).apply { hostContext.evaluateJS(this) }
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_READY, id).apply { hostContext.evaluateJS(this) }
     }
 
     override fun onReuse() {
-        GXScriptBuilder.buildComponentReuseScript(id).apply { hostContext.evaluateJS(this) }
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_REUSE, id).apply { hostContext.evaluateJS(this) }
     }
 
     override fun onShow() {
-        GXScriptBuilder.buildComponentShowScript(id).apply { hostContext.evaluateJS(this) }
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_SHOW, id).apply { hostContext.evaluateJS(this) }
     }
 
     override fun onHide() {
-        GXScriptBuilder.buildComponentHideScript(id).apply { hostContext.evaluateJS(this) }
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_HIDE, id).apply { hostContext.evaluateJS(this) }
     }
 
     override fun onDestroy() {
-        GXScriptBuilder.buildComponentDestroyScript(id).apply { hostContext.evaluateJS(this) }
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_DESTROY, id).apply { hostContext.evaluateJS(this) }
     }
 
     /** Java组件销毁时调用*/
     fun destroyComponent() {
-        GXScriptBuilder.buildComponentDestroyScript(id).apply { hostContext.evaluateJS(this) }
-        GXScriptBuilder.buildDestroyComponentScript(id).apply { hostContext.evaluateJS(this) }
+        onDestroy()
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_DESTROY_COMPONENT, id).apply { hostContext.evaluateJS(this) }
     }
 
     override fun onEvent(type: String, data: JSONObject) {
@@ -96,7 +103,7 @@ internal class GXHostComponent private constructor(
     }
 
     override fun onLoadMore(data: JSONObject) {
-        GXScriptBuilder.buildComponentLoadMoreScript(id, data.toJSONString())
+        GXScriptBuilder.buildLifecycleScript(ComponentScriptStrategy, ComponentLifecycle.ON_LOAD_MORE, id, data)
             .apply { hostContext.evaluateJS(this) }
     }
 

@@ -46,6 +46,7 @@ object JSDataConvert {
         return when (result) {
             // 常规
             is JSONObject -> jsContext.createJSJsonObject(result.toJSONString())
+            is JSONArray -> jsContext.createJSJsonObject(result.toJSONString())
             is String -> jsContext.createJSString(result)
             is Int -> jsContext.createJSNumber(result)
             is Double -> jsContext.createJSNumber(result)

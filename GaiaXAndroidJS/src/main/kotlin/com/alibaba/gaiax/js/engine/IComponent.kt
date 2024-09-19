@@ -3,6 +3,10 @@ package com.alibaba.gaiax.js.engine
 import com.alibaba.fastjson.JSONObject
 
 interface IComponent {
+    /**
+     * 整个生命周期内只会回调一次，预处理数据
+     */
+    fun onDataInit(data: JSONObject): JSONObject?
 
     /**
      * 整个生命周期内只会回调一次

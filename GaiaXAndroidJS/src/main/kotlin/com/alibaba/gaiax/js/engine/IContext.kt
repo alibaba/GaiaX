@@ -8,6 +8,8 @@ internal interface IContext {
 
     fun evaluateJS(script: String, argsMap: JSONObject = JSONObject())
 
+    fun <T : Any> evaluateJS(script: String, clazz: Class<T>?): T?
+
     fun destroyContext()
 
     /**

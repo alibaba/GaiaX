@@ -1,10 +1,13 @@
 package com.alibaba.gaiax.js.engine
 
+import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.api.IGXPage
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
 import com.alibaba.gaiax.js.impl.qjs.QuickJSContext
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.GaiaXJSTaskQueue
 import com.alibaba.gaiax.js.utils.Log
 import java.util.concurrent.ConcurrentHashMap
@@ -13,7 +16,11 @@ import java.util.concurrent.ConcurrentHashMap
  * 每个Context下的Component对应一个模板。
  * 如果模板是嵌套模板，那么Context会有多个Component。
  */
-internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IRuntime, val type: GXJSEngine.EngineType) {
+internal class GXHostContext(
+    val hostRuntime: GXHostRuntime,
+    val realRuntime: IRuntime,
+    val type: GXJSEngine.EngineType
+) {
 
     /**
      * 用于从JS运行时调用Module代码的的桥接
@@ -22,21 +29,21 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
 
         override fun callSync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray): Any? {
             if (Log.isLog()) {
-                Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+//                Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             return GXJSEngine.instance.moduleManager.invokeMethodSync(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
-                Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+//                Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             GXJSEngine.instance.moduleManager.invokeMethodAsync(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
             if (Log.isLog()) {
-                Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
+//                Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
             }
             GXJSEngine.instance.moduleManager.invokePromiseMethod(moduleId, methodId, args)
         }
@@ -52,6 +59,12 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
     private val components: ConcurrentHashMap<Long, GXHostComponent> = ConcurrentHashMap()
 
     private val bizIdMap: ConcurrentHashMap<String, ConcurrentHashMap<String, Long>> = ConcurrentHashMap()
+
+    /**
+     * pages = {instanceId(PageInstanceId), PageObject}
+     */
+    private val pages: ConcurrentHashMap<Long, GXHostPage> = ConcurrentHashMap()
+
 
     fun initContext() {
         if (realContext == null) {
@@ -111,6 +124,13 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
         executeTask { evaluateJSWithoutTask(script) }
     }
 
+    fun evaluateJSSync(script: String): JSONObject? {
+        realContext?.evaluateJS(script, String::class.java)?.let {
+            return JSON.parseObject(it)
+        }
+        return null
+    }
+
     fun evaluateJSWithoutTask(script: String) {
         realContext?.evaluateJS(script)
     }
@@ -161,6 +181,38 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
         return components[instanceId]
     }
 
+    fun registerPage(
+        pageInstanceId: Long,
+        bizId: String,
+        templateId: String,
+        templateVersion: String,
+        script: String,
+        nativePage: IGXPage
+    ): Long {
+        val page = GXHostPage.create(this, bizId, pageInstanceId, templateId, templateVersion, script, nativePage);
+        pages[page.id] = page
+        page.initPage()
+        return page.id
+    }
+
+    fun unregisterPage(id: Long) {
+        pages.remove(id)?.onUnload()
+    }
+
+    fun findPage(id: Long): IGXPage? {
+        return pages[id]
+    }
+
+    fun postAnimationMessage(data: JSONObject) {
+        GXScriptBuilder.buildPostAnimationMessage(data.toJSONString())
+            .apply { evaluateJS(this) }
+    }
+
+    fun postModalMessage(data: JSONObject) {
+        GXScriptBuilder.buildPostModalMessage(data.toJSONString())
+            .apply { evaluateJS(this) }
+    }
+
     companion object {
 
         const val BOOTSTRAP_JS = "bootstrap.js"
@@ -168,7 +220,17 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
         const val MODULE_TIMER = "timer"
         const val MODULE_STD = "std"
         const val MODULE_OS = "os"
-        const val MODULE_GAIAX_BRIDGE = "GaiaXBridge"
+        const val MODULE_GAIAX_BRIDGE = "GaiaXJSBridge"
+
+        /**
+         * Global code.
+         */
+        const val EVAL_TYPE_GLOBAL = 0
+
+        /**
+         * Module code.
+         */
+        const val EVAL_TYPE_MODULE = 1
 
         fun create(host: GXHostRuntime, runtime: IRuntime, type: GXJSEngine.EngineType): GXHostContext {
             return GXHostContext(host, runtime, type)

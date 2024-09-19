@@ -2,7 +2,7 @@ package com.alibaba.gaiax.js.utils
 
 import java.lang.reflect.Method
 
-internal object SystemProp {
+ object SystemProp {
 
     private var mClassType: Class<*>? = null
     private var mSetMethod: Method? = null

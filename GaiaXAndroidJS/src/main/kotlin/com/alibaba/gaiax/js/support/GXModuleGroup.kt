@@ -2,6 +2,7 @@ package com.alibaba.gaiax.js.support
 
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.gaiax.js.GXJSEngine
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 
 internal class GXModuleGroup private constructor(val name: String) {
 

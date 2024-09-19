@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.IContext
-import com.alibaba.gaiax.js.support.GXScriptBuilder
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 
 /**
  *  @author: shisan.lms
@@ -34,6 +34,10 @@ internal class DebugJSContext(
         } else {
             socketBridge.sendEvalScript(script)
         }
+    }
+
+    override fun <T : Any> evaluateJS(script: String, clazz: Class<T>?): T? {
+        TODO("Not yet implemented")
     }
 
     override fun destroyContext() {

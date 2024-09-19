@@ -40,6 +40,11 @@ internal class QuickJSContext(
         engine.checkQuickJS()
         runtime.checkRuntime()
         checkContext()
+
+        if (Log.isLog()) {
+            Log.d("initModule() called with: module = $module")
+        }
+
         when (module) {
             "timer" -> initModuleTimer()
             "os" -> jsContext?.initModuleOs()
@@ -81,6 +86,9 @@ internal class QuickJSContext(
     }
 
     override fun startBootstrap() {
+        if (Log.isLog()) {
+            Log.d("startBootstrap() called")
+        }
         bootstrap?.let { bootstrap ->
             evaluateJS(bootstrap)
         }
@@ -115,6 +123,13 @@ internal class QuickJSContext(
          * JS_EVAL_FLAG_STRIP：移除调试信息，优化内存使用和安全性。
          */
         this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP)
+    }
+
+    override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
+        if (Log.isScriptLog()) {
+            Log.e("evaluateJS() called with: script = $script")
+        }
+        return this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP, clazz)
     }
 
     override fun destroyContext() {

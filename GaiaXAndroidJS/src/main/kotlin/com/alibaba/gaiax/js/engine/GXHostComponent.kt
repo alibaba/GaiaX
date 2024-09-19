@@ -22,12 +22,9 @@ internal class GXHostComponent private constructor(
             templateVersion: String,
             script: String
         ): GXHostComponent {
-            val checkedTemplateVersion =
-                if (TextUtils.isEmpty(templateVersion)) "-1" else templateVersion
+            val checkedTemplateVersion = if (TextUtils.isEmpty(templateVersion)) "-1" else templateVersion
             val checkedBizId = if (TextUtils.isEmpty(bizId)) "common" else bizId
-            return GXHostComponent(
-                hostContext, componentId, checkedBizId, templateId, checkedTemplateVersion, script
-            )
+            return GXHostComponent(hostContext, componentId, checkedBizId, templateId, checkedTemplateVersion, script)
         }
     }
 
@@ -100,4 +97,12 @@ internal class GXHostComponent private constructor(
             .apply { hostContext.evaluateJS(this) }
     }
 
+    override fun onDataInit(data: JSONObject): JSONObject? {
+        GXScriptBuilder.buildComponentDataInitScript(id, data.toJSONString())
+            .apply {
+                return hostContext.evaluateJS(this, String::class.java)?.let {
+                    JSONObject.parseObject(it)
+                }
+            }
+    }
 }

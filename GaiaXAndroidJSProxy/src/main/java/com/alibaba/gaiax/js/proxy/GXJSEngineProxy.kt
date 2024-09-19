@@ -317,6 +317,19 @@ class GXJSEngineProxy {
         }
     }
 
+
+    fun onDataInit(gxView: View?, data: JSONObject): JSONObject? {
+        if (Log.isLog()) {
+            Log.d("onDataInit() called with: gxView = $gxView")
+        }
+        GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
+            gxExtJSArg(gxTemplateContext)?.rootJSComponentId?.let {
+                return GXJSEngine.instance.onDataInit(it, data)
+            }
+        }
+        return null
+    }
+
     /**
      * 通知视图的JS组件注册和可用
      */
@@ -388,9 +401,7 @@ class GXJSEngineProxy {
 
         // 仅当脚本不为空时才注册
         if (script?.isNotEmpty() == true) {
-            val jsComponentId = GXJSEngine.instance.registerComponent(
-                templateBiz, templateId, templateVersion, script
-            )
+            val jsComponentId = GXJSEngine.instance.registerComponent(templateBiz, templateId, templateVersion, script)
             gxExtJSArg(gxTemplateContext)?.let {
                 if (it.rootJSComponentId == null) {
                     it.rootJSComponentId = jsComponentId

@@ -40,6 +40,8 @@ data class GXTemplateInfo(
     val js: String? = null
 ) {
 
+    var preload: Boolean = false
+
     var expVersion: String? = null
 
     var children: MutableList<GXTemplateInfo>? = null
@@ -222,6 +224,8 @@ data class GXTemplateInfo(
                 cssJson.getJSONObject(template.id)?.put(GXTemplateKey.GAIAX_LAYER_EDGE_INSETS, it)
             }
 
+            val preload = layerJson.getBooleanValue(GXTemplateKey.GAIAX_LAYER_PRELOAD)
+
             val expVersion: String? = layerJson.getString(GXTemplateKey.GAIAX_LAYER_EXP_VERSION)
 
             val layer = GXLayer.create(layerJson)
@@ -240,6 +244,7 @@ data class GXTemplateInfo(
                 this.rawLayerJson = layerJson
                 this.rawConfigJson = configJson
                 this.expVersion = expVersion
+                this.preload = preload
             }
         }
 

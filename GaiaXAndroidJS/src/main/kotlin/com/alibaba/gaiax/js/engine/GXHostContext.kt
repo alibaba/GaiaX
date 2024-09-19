@@ -108,11 +108,11 @@ internal class GXHostContext(val hostRuntime: GXHostRuntime, val realRuntime: IR
     }
 
     fun evaluateJS(script: String) {
-        executeTask { evaluateJSWithoutTask(script) }
+        executeTask { realContext?.evaluateJS(script) }
     }
 
-    fun evaluateJSWithoutTask(script: String) {
-        realContext?.evaluateJS(script)
+    fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
+        return realContext?.evaluateJS(script, clazz)
     }
 
     fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {

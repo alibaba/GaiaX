@@ -168,7 +168,11 @@ GaiaX${moduleName}Module.prototype.${methodName} = function () {
     }
 
     fun buildInitComponentScript(componentId: Long, bizId: String, templateId: String, templateVersion: String, script: String): String {
-        val newScript = script.trimIndent()
+        var newScript = script.trimIndent()
+        val indexOf = script.indexOf("//# ")
+        if (indexOf != -1) {
+            newScript = newScript.substring(0, indexOf).trimIndent()
+        }
         val extend = "{ bizId: \"${bizId}\", templateId: \"${templateId}\", instanceId: $componentId, templateVersion: $templateVersion }"
         val prefix = newScript.substring(0, newScript.length - 2).trimIndent()
         val suffix = newScript.substring(newScript.length - 2).trimIndent()
@@ -251,6 +255,17 @@ $suffix
     var instance = IMs.getComponent($componentId); 
     if (instance) { 
         instance.onLoadMore && instance.onLoadMore($msg); 
+    }
+})()
+        """.trimIndent()
+    }
+
+    fun buildComponentDataInitScript(componentId: Long, msg: String): String {
+        return """
+(function () {
+    var instance = IMs.getComponent($componentId);
+    if (instance) {
+        return instance.onDataInit && instance.onDataInit($msg);
     }
 })()
         """.trimIndent()

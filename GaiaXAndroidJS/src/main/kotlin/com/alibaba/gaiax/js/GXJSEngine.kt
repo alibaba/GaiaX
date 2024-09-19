@@ -258,6 +258,10 @@ class GXJSEngine {
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
     }
 
+    fun onDataInit(componentId: Long, data: JSONObject): JSONObject? {
+        return quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onDataInit(data)
+    }
+
     /**
      * 为视图注册JS组件
      */

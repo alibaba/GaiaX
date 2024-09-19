@@ -43,4 +43,9 @@ interface IComponent {
      * 传递LoadMore消息，需要在参数中添加才会生效
      */
     fun onLoadMore(data: JSONObject)
+
+    /**
+     * 初始化数据
+     */
+    fun onDataInit(data: JSONObject): JSONObject?
 }

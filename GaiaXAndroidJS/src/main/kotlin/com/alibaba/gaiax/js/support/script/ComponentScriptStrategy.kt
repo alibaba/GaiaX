@@ -59,7 +59,7 @@ $suffix
         return """
 (function () {
     var instance = IMs.getComponent($componentId);
-    if (instance && instance.onDataInit) { 
+    if (instance && instance.onDataInit) {
          return JSON.stringify(instance.onDataInit(${data?.toJSONString()}));
     }
 })()

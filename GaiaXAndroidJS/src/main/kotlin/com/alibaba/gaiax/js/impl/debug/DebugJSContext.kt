@@ -4,16 +4,14 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.IContext
-import com.alibaba.gaiax.js.support.GXScriptBuilder
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 
 /**
  *  @author: shisan.lms
  *  @date: 2023-03-14
  *  Description:
  */
-internal class DebugJSContext(
-    private val hostContext: GXHostContext
-) : IContext {
+internal class DebugJSContext(private val hostContext: GXHostContext) : IContext {
 
     var socketBridge: DebugJSBridgeModule = DebugJSBridgeModule(hostContext, this)
 
@@ -21,6 +19,10 @@ internal class DebugJSContext(
 
     override fun initContext() {
 
+    }
+
+    override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
+        return null
     }
 
     override fun evaluateJS(script: String, argsMap: JSONObject) {

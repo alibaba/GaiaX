@@ -9,6 +9,7 @@
 #include "java-object.h"
 #include "java-common.h"
 #include "java-module-method.h"
+#include "Log.h"
 
 static jmethodID on_interrupt_method;
 

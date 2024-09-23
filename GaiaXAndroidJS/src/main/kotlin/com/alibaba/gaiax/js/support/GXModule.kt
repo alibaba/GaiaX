@@ -5,6 +5,7 @@ import com.alibaba.gaiax.js.api.IGXModule
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
 import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
+import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
 

@@ -1,8 +1,12 @@
 package com.alibaba.gaiax.js
 
 import android.content.Context
+import android.text.TextUtils
+import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
+import com.alibaba.gaiax.js.api.IGXPage
+import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
 import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
@@ -27,7 +31,7 @@ class GXJSEngine {
         }
     }
 
-    internal enum class EngineType {
+    enum class EngineType {
         QuickJS, DebugJS
     }
 
@@ -96,7 +100,8 @@ class GXJSEngine {
             }
             if (file.startsWith(MODULE_PREFIX) && file.endsWith(MODULE_SUFFIX)) {
                 try {
-                    val bizModules = JSONObject.parseObject(assetsOpen("$GAIAX_JS_MODULES/$file").bufferedReader(Charsets.UTF_8).use { it.readText() })
+                    val bizModules = JSONObject.parseObject(
+                            assetsOpen("$GAIAX_JS_MODULES/$file").bufferedReader(Charsets.UTF_8).use { it.readText() })
                     allModules.putAll(bizModules)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -105,6 +110,9 @@ class GXJSEngine {
                     }
                 }
             }
+        }
+        if (Log.isLog()) {
+            Log.d("registerAssetsModules() called with: allModules = $allModules")
         }
         allModules.forEach {
             try {
@@ -127,7 +135,8 @@ class GXJSEngine {
 
     private fun assetsOpen(file: String) = synchronized(context.assets) { context.assets.open(file) }
 
-    private fun assetsModules(path: String): Array<out String>? = synchronized(context.assets) { context.assets.list(path) }
+    private fun assetsModules(path: String): Array<out String>? =
+            synchronized(context.assets) { context.assets.list(path) }
 
 
     fun startDefaultEngine(complete: (() -> Unit)? = null) {
@@ -225,12 +234,31 @@ class GXJSEngine {
 
     fun onNativeEvent(componentId: Long, data: JSONObject) {
         quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onNativeEvent(data)
+        if (data.getBooleanValue("isPage")) {
+            findPage(componentId, EngineType.QuickJS)?.let {
+                it.onNativeEvent(data)
+            }
+        }
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onNativeEvent(data)
+    }
+
+    fun postAnimationMessage(data: JSONObject) {
+        quickJSEngine?.runtime()?.context()?.postAnimationMessage(data)
+        debugEngine?.runtime()?.context()?.postAnimationMessage(data)
+    }
+
+    fun postModalMessage(data: JSONObject) {
+        quickJSEngine?.runtime()?.context()?.postModalMessage(data)
+        debugEngine?.runtime()?.context()?.postModalMessage(data)
     }
 
     fun onReady(componentId: Long) {
         quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onReady()
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onReady()
+    }
+
+    fun onDataInit(componentId: Long, data: JSONObject): JSONObject? {
+        return quickJSEngine?.runtime()?.context()?.getComponent(componentId)?.onDataInit(data)
     }
 
     fun onReuse(componentId: Long) {
@@ -258,6 +286,8 @@ class GXJSEngine {
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
     }
 
+
+
     /**
      * 为视图注册JS组件
      */
@@ -269,12 +299,88 @@ class GXJSEngine {
         return componentId
     }
 
+    fun generateUniqueInstanceId(): Long {
+        return IdGenerator.genLongId()
+    }
+
+    fun registerComponentWithId(
+            instanceId: Long, bizId: String, templateId: String, templateVersion: String, script: String?
+    ) {
+        if (script != null) {
+            quickJSEngine?.runtime()?.context()
+                    ?.registerComponent(instanceId, bizId, templateId, templateVersion, script)
+            debugEngine?.runtime()?.context()?.registerComponent(instanceId, bizId, templateId, templateVersion, script)
+        }
+    }
+
     /**
      * 为视图解除JS组件
      */
     fun unregisterComponent(componentId: Long) {
         quickJSEngine?.runtime()?.context()?.unregisterComponent(componentId)
         debugEngine?.runtime()?.context()?.unregisterComponent(componentId)
+    }
+
+    fun registerPage(
+            bizId: String,
+            templateId: String,
+            templateVersion: String,
+            script: String,
+            nativePage: IGXPage
+    ): Long {
+        // 页面instanceId从50000起
+        val pageId = IdGenerator.genLongId() + 50000
+        quickJSEngine?.runtime()?.context()
+                ?.registerPage(pageId, bizId, templateId, templateVersion, script, nativePage)
+        debugEngine?.runtime()?.context()?.registerPage(pageId, bizId, templateId, templateVersion, script, nativePage)
+        return pageId
+    }
+
+    fun unregisterPage(id: Long) {
+        quickJSEngine?.runtime()?.context()?.unregisterPage(id)
+        debugEngine?.runtime()?.context()?.unregisterPage(id)
+    }
+
+    fun findPage(id: Long, engineType: EngineType): IGXPage? {
+        return when (engineType) {
+            EngineType.QuickJS -> quickJSEngine?.runtime()?.context()?.findPage(id)
+            EngineType.DebugJS -> debugEngine?.runtime()?.context()?.findPage(id)
+        }
+    }
+
+    fun onPageLoad(id: Long, data: JSONObject) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onLoad(data)
+        debugEngine?.runtime()?.context()?.findPage(id)?.onLoad(data)
+    }
+
+    fun onPageUnload(id: Long) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onUnload()
+        debugEngine?.runtime()?.context()?.findPage(id)?.onUnload()
+    }
+
+    fun onPageReady(id: Long) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onReady()
+        debugEngine?.runtime()?.context()?.findPage(id)?.onReady()
+    }
+
+    fun onPageShow(id: Long) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onShow()
+        debugEngine?.runtime()?.context()?.findPage(id)?.onShow()
+    }
+
+    fun onPageHide(id: Long) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onHide()
+        debugEngine?.runtime()?.context()?.findPage(id)?.onHide()
+    }
+
+    fun onPageScroll(id: Long, data: JSONObject) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onPageScroll(data)
+        debugEngine?.runtime()?.context()?.findPage(id)?.onPageScroll(data)
+    }
+
+    fun onPageReachBottom(id: Long) {
+        quickJSEngine?.runtime()?.context()?.findPage(id)?.onReachBottom()
+        debugEngine?.runtime()?.context()?.findPage(id)?.onReachBottom()
     }
 
     interface IJsExceptionListener {

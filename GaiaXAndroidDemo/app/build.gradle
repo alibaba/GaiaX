@@ -33,10 +33,6 @@ android {
         minSdk 21
         targetSdk 33
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
-        }
     }
 
     sourceSets {
@@ -53,11 +49,22 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+            ndk {
+                abiFilters 'arm64-v8a', 'armeabi-v7a', "x86", "x86_64"
+            }
+        }
         release {
+            debuggable false
+            ndk {
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

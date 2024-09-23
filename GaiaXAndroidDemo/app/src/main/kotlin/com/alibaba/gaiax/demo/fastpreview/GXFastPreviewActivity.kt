@@ -1,6 +1,5 @@
 package com.alibaba.gaiax.demo.fastpreview
 
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -16,6 +15,7 @@ import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 import com.alibaba.gaiax.utils.GXScreenUtils
+import kotlin.math.log
 
 
 /**
@@ -26,7 +26,7 @@ import com.alibaba.gaiax.utils.GXScreenUtils
 class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewListener {
 
     companion object {
-        private const val TAG = "[GaiaX]"
+        private const val TAG = "[GaiaX][FastPreview]"
         const val GAIA_STUDIO_URL = "GAIA_STUDIO_URL"
         const val GAIA_STUDIO_MODE = "GAIA_STUDIO_MODE"
         const val GAIA_STUDIO_MODE_MULTI = "MULTI"
@@ -134,11 +134,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                     gxView = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize)
 
                     gxView?.let {
-                        // 绑定数据
-                        GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
 
-                        // 将数据加入页面中
-                        fastPreviewRoot.addView(gxView, 0)
 
                         // 获取模板信息
                         val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
@@ -151,9 +147,24 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
                                         Log.d(TAG, "exception() called with: data = $data")
                                     }
                                 }
+                            GXJSEngineProxy.instance.registerComponent(gxView)
 
-                            // 注册容器
-                            GXJSEngineProxy.instance.registerComponentAndOnReady(gxView)
+                            if (gxTemplateInfo.preload) {
+                                GXJSEngineProxy.instance.onDataInit(gxView, gxTemplateData.data)?.let {
+                                    Log.d(TAG, "create: onDataInit changed data=${it}")
+                                    gxTemplateData.data = it
+                                }
+                            }
+
+                            // 绑定数据
+                            GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
+
+                            // 将数据加入页面中
+                            fastPreviewRoot.addView(gxView, 0)
+
+                            GXJSEngineProxy.instance.onReady(gxView)
+
+                            Log.d(TAG, "create() called end")
                         }
                     }
                 }

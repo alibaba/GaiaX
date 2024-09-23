@@ -15,7 +15,8 @@ import com.alibaba.gaiax.quickjs.JSFunction
 /**
  * 从JS运行时中调用某个Module的方法时，会从这里中转到HostContext中
  */
-internal class QuickJSBridgeModule(private val hostContext: GXHostContext, private val jsContext: JSContext) : BridgeModuleListener {
+internal class QuickJSBridgeModule(private val hostContext: GXHostContext, private val jsContext: JSContext) :
+    BridgeModuleListener {
 
     override fun callSync(contextPointer: Long, argsMap: String): Long {
         if (Log.isLog()) {
@@ -65,30 +66,35 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
 
     override fun callAsync(contextPointer: Long, funPointer: Long, argsMap: String): Long {
         if (Log.isLog()) {
-            Log.e("callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap")
+            Log.e("callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", jsContext.pointer = " + jsContext.pointer + ", contextPointer = " + contextPointer)
         }
         if (jsContext.pointer == contextPointer) {
-            val target = JSONObject.parseObject(argsMap)
-            val contextId = target.getLongValue("contextId")
-            val moduleId = target.getLongValue("moduleId")
-            val methodId = target.getLongValue("methodId")
-            val args = target.getJSONArray("args")
+            try {
+                val target = JSONObject.parseObject(argsMap)
+                val contextId = target.getLongValue("contextId")
+                val moduleId = target.getLongValue("moduleId")
+                val methodId = target.getLongValue("methodId")
+                val args = target.getJSONArray("args")
 
-            args.add(object : IGXCallback {
-                override fun invoke(result: Any?) {
-                    if (Log.isLog()) {
-                        Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
+                args.add(object : IGXCallback {
+                    override fun invoke(result: Any?) {
+                        if (Log.isLog()) {
+                            Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
+                        }
+                        gxHostContext()?.executeTask {
+                            val jsFunction = JSFunction(funPointer, jsContext)
+                            jsFunction.dupValue()
+                            jsFunction.invoke(null, arrayOfJSValues(result))
+                            jsFunction.freeValue()
+                        }
                     }
-                    gxHostContext()?.executeTask {
-                        val jsFunction = JSFunction(funPointer, jsContext)
-                        jsFunction.dupValue()
-                        jsFunction.invoke(null, arrayOfJSValues(result))
-                        jsFunction.freeValue()
-                    }
+                })
+                hostContext.bridge.callAsync(contextId, moduleId, methodId, args)
+            } catch (t: Throwable) {
+                if (Log.isLog()) {
+                    Log.e("callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", fail" + t.stackTraceToString())
                 }
-            })
-
-            hostContext.bridge.callAsync(contextId, moduleId, methodId, args)
+            }
         }
         return jsContext.createJSUndefined().pointer
     }
@@ -101,7 +107,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
 
     override fun callPromise(contextPointer: Long, argsMap: String): Long {
         if (Log.isLog()) {
-            Log.e("callPromise() called with: jsContext = $contextPointer, argsMap = $argsMap")
+//            Log.e("callPromise() called with: jsContext = $contextPointer, argsMap = $argsMap")
         }
         if (jsContext.pointer == contextPointer) {
 

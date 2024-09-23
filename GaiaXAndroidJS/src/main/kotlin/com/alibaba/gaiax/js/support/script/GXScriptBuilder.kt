@@ -1,5 +1,6 @@
-package com.alibaba.gaiax.js.support
+package com.alibaba.gaiax.js.support.script
 
+import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.utils.TimeUtils
 
 /**
@@ -9,7 +10,7 @@ object GXScriptBuilder {
 
     fun buildImportScript(): String {
         return """
-import * as GaiaXBridge from "GaiaXBridge";
+import * as GaiaXJSBridge from "GaiaXJSBridge";
 
         """.trimIndent()
     }
@@ -143,7 +144,12 @@ GaiaX${moduleName}Module.prototype.${methodName} = function () {
         """.trimIndent()
     }
 
-    fun buildPromiseMethodDeclareScript(moduleName: String, methodName: String, moduleId: Long, methodId: Long): String? {
+    fun buildPromiseMethodDeclareScript(
+        moduleName: String,
+        methodName: String,
+        moduleId: Long,
+        methodId: Long
+    ): String? {
         if (moduleName.isEmpty() || methodName.isEmpty() || moduleId < 0 || methodId < 0) {
             return null
         }
@@ -167,95 +173,6 @@ GaiaX${moduleName}Module.prototype.${methodName} = function () {
         """.trimIndent()
     }
 
-    fun buildInitComponentScript(componentId: Long, bizId: String, templateId: String, templateVersion: String, script: String): String {
-        val newScript = script.trimIndent()
-        val extend = "{ bizId: \"${bizId}\", templateId: \"${templateId}\", instanceId: $componentId, templateVersion: $templateVersion }"
-        val prefix = newScript.substring(0, newScript.length - 2).trimIndent()
-        val suffix = newScript.substring(newScript.length - 2).trimIndent()
-        return """
-$prefix, $extend
-$suffix
-        """.trimIndent()
-    }
-
-    fun buildComponentReadyScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId);
-    if (instance) { 
-        instance.onShow && instance.onShow(); 
-        instance.onReady && instance.onReady(); 
-    }
-})()
-        """.trimIndent()
-    }
-
-    fun buildComponentShowScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) { 
-        instance.onShow && instance.onShow(); 
-    }    
-})()
-        """.trimIndent()
-    }
-
-    fun buildComponentHideScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) { 
-        instance.onHide && instance.onHide(); 
-    }
-})()
-        """.trimIndent()
-    }
-
-    fun buildComponentDestroyScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) { 
-        instance.onDestroy && instance.onDestroy(); 
-    }
-})()
-        """.trimIndent()
-    }
-
-    fun buildDestroyComponentScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) {
-        IMs.removeComponent($componentId);
-    }
-})()
-        """.trimIndent()
-    }
-
-    fun buildComponentReuseScript(componentId: Long): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) { 
-        instance.onReuse && instance.onReuse(); 
-    }
-})()
-        """.trimIndent()
-    }
-
-    fun buildComponentLoadMoreScript(componentId: Long, msg: String): String {
-        return """
-(function () {
-    var instance = IMs.getComponent($componentId); 
-    if (instance) { 
-        instance.onLoadMore && instance.onLoadMore($msg); 
-    }
-})()
-        """.trimIndent()
-    }
-
     fun buildPostMessage(msg: String): String {
         return """
 window.postMessage($msg)
@@ -265,6 +182,18 @@ window.postMessage($msg)
     fun buildPostNativeMessage(msg: String): String {
         return """
 window.postNativeMessage($msg)
+        """.trimIndent()
+    }
+
+    fun buildPostAnimationMessage(msg: String): String {
+        return """
+window.postAnimationMessage($msg)
+        """.trimIndent()
+    }
+
+    fun buildPostModalMessage(msg: String): String {
+        return """
+window.postModalMessage($msg)
         """.trimIndent()
     }
 
@@ -299,4 +228,31 @@ var Props = (function () {
             """.trimIndent()
     }
 
+    fun <T : ILifecycle> buildInitScript(
+        strategy: IScriptStrategy<T>,
+        bizId: String,
+        templateId: String,
+        templateVersion: String,
+        instanceId: Long,
+        script: String
+    ): String {
+        return strategy.buildInitScript(bizId, templateId, templateVersion, instanceId, script)
+    }
+
+    fun <T : ILifecycle> buildLifecycleScript(
+        strategy: IScriptStrategy<T>,
+        lifecycle: T,
+        instanceId: Long
+    ): String {
+        return buildLifecycleScript(strategy, lifecycle, instanceId, null);
+    }
+
+    fun <T : ILifecycle> buildLifecycleScript(
+        strategy: IScriptStrategy<T>,
+        lifecycle: T,
+        instanceId: Long,
+        data: JSONObject?
+    ): String {
+        return strategy.buildLifecycleScript(lifecycle, instanceId, data);
+    }
 }

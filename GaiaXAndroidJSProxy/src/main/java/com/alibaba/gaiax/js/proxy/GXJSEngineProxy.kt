@@ -183,10 +183,9 @@ class GXJSEngineProxy {
         if (Log.isLog()) {
             Log.d("startDefaultEngine() called")
         }
-        GXJSEngine.instance.startDefaultEngine {
-            if (Log.isLog()) {
-                Log.d("startDefaultEngine() called completed")
-            }
+        GXJSEngine.instance.startDefaultEngine()
+        if (Log.isLog()) {
+            Log.d("startDefaultEngine() called completed")
         }
     }
 
@@ -195,16 +194,18 @@ class GXJSEngineProxy {
             Log.d("stopDefaultEngine() called")
         }
         GXJSEngine.instance.stopDefaultEngine()
+        if (Log.isLog()) {
+            Log.d("stopDefaultEngine() called completed")
+        }
     }
 
     fun startDebugEngine() {
         if (Log.isLog()) {
             Log.d("startDebugEngine() called")
         }
-        GXJSEngine.instance.startDebugEngine {
-            if (Log.isLog()) {
-                Log.d("startDebugEngine() called completed")
-            }
+        GXJSEngine.instance.startDebugEngine()
+        if (Log.isLog()) {
+            Log.d("startDebugEngine() called completed")
         }
     }
 

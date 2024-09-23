@@ -64,8 +64,14 @@ class GXJSEngine {
      *  - 初始化内建模块
      */
     fun init(context: Context): GXJSEngine {
+        if (Log.isLog()) {
+            Log.d("init() called")
+        }
         this.context = context.applicationContext
         initModules()
+        if (Log.isLog()) {
+            Log.d("init() called end")
+        }
         return this
     }
 
@@ -139,7 +145,10 @@ class GXJSEngine {
             synchronized(context.assets) { context.assets.list(path) }
 
 
-    fun startDefaultEngine(complete: (() -> Unit)? = null) {
+    /**
+     * 启动JS引擎
+     */
+    fun startDefaultEngine() {
         if (Log.isLog()) {
             Log.d("startDefaultEngine()")
         }
@@ -149,12 +158,12 @@ class GXJSEngine {
                 quickJSEngine = createJSEngine(EngineType.QuickJS)
 
                 // 启动引擎
-                quickJSEngine?.startEngine(complete)
+                quickJSEngine?.startEngine()
             }
         }
     }
 
-    fun startDebugEngine(complete: (() -> Unit)? = null) {
+    fun startDebugEngine() {
         if (Log.isLog()) {
             Log.d("startDebugEngine()")
         }
@@ -164,7 +173,7 @@ class GXJSEngine {
                 debugEngine = createJSEngine(EngineType.DebugJS)
 
                 // 启动引擎
-                debugEngine?.startEngine(complete)
+                debugEngine?.startEngine()
             }
         }
     }

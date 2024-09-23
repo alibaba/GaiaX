@@ -60,11 +60,11 @@ internal class GXHostEngine private constructor(val engineId: Long, val type: GX
         GXJSEngine.EngineType.DebugJS -> DebugJSEngine(this)
     }
 
-    internal fun startEngine(complete: (() -> Unit)?) {
+    internal fun startEngine() {
         if (state == State.INIT_END) {
             state = State.RUNNING_START
 
-            hostRuntime?.startRuntime(complete)
+            hostRuntime?.startRuntime()
 
             state = State.RUNNING_END
         }

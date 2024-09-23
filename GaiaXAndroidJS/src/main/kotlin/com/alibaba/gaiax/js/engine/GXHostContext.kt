@@ -81,13 +81,9 @@ internal class GXHostContext(
         realContext?.initPendingJob()
     }
 
-    fun startContext(complete: (() -> Unit)? = null) {
-        // 执行初始化脚本
-        executeTask {
-            realContext?.initBootstrap()
-            realContext?.startBootstrap()
-            complete?.invoke()
-        }
+    fun startContext() {
+        realContext?.initBootstrap()
+        realContext?.startBootstrap()
     }
 
     fun executeIntervalTask(taskId: Int, interval: Long, func: () -> Unit) {
@@ -121,10 +117,16 @@ internal class GXHostContext(
     }
 
     fun evaluateJS(script: String) {
+        if (Log.isLog()) {
+            Log.e("evaluateJS() called with")
+        }
         executeTask { realContext?.evaluateJS(script) }
     }
 
     fun evaluateJSSync(script: String): JSONObject? {
+        if (Log.isLog()) {
+            Log.e("evaluateJSSync() called with")
+        }
         realContext?.evaluateJS(script, String::class.java)?.let {
             return JSON.parseObject(it)
         }

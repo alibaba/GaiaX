@@ -33,8 +33,8 @@ internal class GXHostRuntime(val hostEngine: GXHostEngine, val realEngine: IEngi
         hostContext?.initContext()
     }
 
-    fun startRuntime(complete: (() -> Unit)?) {
-        hostContext?.startContext(complete)
+    fun startRuntime() {
+        hostContext?.startContext()
     }
 
     fun destroyRuntime() {

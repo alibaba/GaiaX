@@ -1094,8 +1094,6 @@ JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_evaluate(
     if (source_code_utf != NULL && file_name_utf != NULL) {
         JSValue val = JS_Eval(ctx, source_code_utf, (size_t) source_code_length, file_name_utf, flags);
 
-        _LOGD("evaluate val.tag: %ld", val.tag);
-
         COPY_JS_VALUE(ctx, val, result);
     }
 
@@ -1107,8 +1105,6 @@ JNIEXPORT jlong JNICALL Java_com_alibaba_gaiax_quickjs_QuickJS_evaluate(
     }
 
     CHECK_NULL_RET(env, result, MSG_OOM);
-
-    _LOGD("evaluate result: %p", result);
 
     return (jlong) result;
 }

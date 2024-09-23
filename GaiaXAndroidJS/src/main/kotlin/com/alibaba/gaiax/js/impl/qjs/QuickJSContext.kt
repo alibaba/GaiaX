@@ -130,14 +130,15 @@ internal class QuickJSContext(
         if (Log.isScriptLog()) {
             Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
         }
-        this.jsContext?.evaluate(script, "index.js", GXHostContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP)
+        this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, 0)
     }
 
     override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
         if (Log.isScriptLog()) {
             Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
         }
-        val ret = this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, JSContext.EVAL_FLAG_STRIP, clazz)
+        // 执行带返回值的JS脚本，需要使用EVAL_TYPE_GLOBAL
+        val ret = this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_GLOBAL, 0, clazz)
         if (Log.isScriptLog()) {
             Log.e("jsContext = $jsContext, evaluateJS() called with: ret=$ret")
         }

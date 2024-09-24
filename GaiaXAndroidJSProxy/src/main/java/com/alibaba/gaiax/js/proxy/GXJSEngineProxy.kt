@@ -57,7 +57,7 @@ class GXJSEngineProxy {
     }
 
     companion object {
-        private const val TAG = "[GaiaX][JS]"
+        private const val TAG = "GXJSEngineProxy"
 
         val instance by lazy {
             return@lazy GXJSEngineProxy()
@@ -88,7 +88,7 @@ class GXJSEngineProxy {
         // 设置日志监听器
         GXJSEngine.instance.setLogListener(object : GXJSEngine.ILogListener {
             override fun errorLog(data: JSONObject) {
-                Log.runE { "errorLog() called with: data = $data" }
+                Log.runE(TAG) { "errorLog() called with: data = $data" }
                 GXJSEngine.instance.getSocketSender()?.let {
                     GXJSLogModule.sendJSLogMsg("error", data.toJSONString())
                 }
@@ -98,7 +98,7 @@ class GXJSEngineProxy {
         // 设置异常监听器
         GXJSEngine.instance.setJSExceptionListener(object : GXJSEngine.IJsExceptionListener {
             override fun exception(data: JSONObject) {
-                Log.runE { "exception() called with: data = $data" }
+                Log.runE(TAG) { "exception() called with: data = $data" }
                 jsExceptionListener?.exception(data)
                 GXJSEngine.instance.getSocketSender()?.let {
                     GXJSLogModule.sendJSLogMsg("error", data.toJSONString())
@@ -123,23 +123,23 @@ class GXJSEngineProxy {
         GXRegisterCenter.instance.registerExtensionItemViewLifecycleListener(object :
             GXRegisterCenter.GXIItemViewLifecycleListener {
             override fun onCreate(gxView: View?) {
-                Log.runE { "onCreate() called with: $gxView" }
+                Log.runE(TAG) { "onCreate() called with: $gxView" }
                 // 注册容器
                 instance.registerComponentAndOnReady(gxView)
             }
 
             override fun onVisible(gxView: View?) {
-                Log.runE { "onVisible() called with: $gxView" }
+                Log.runE(TAG) { "onVisible() called with: $gxView" }
                 instance.onShow(gxView)
             }
 
             override fun onInvisible(gxView: View?) {
-                Log.runE { "onInvisible() called with: $gxView" }
+                Log.runE(TAG) { "onInvisible() called with: $gxView" }
                 instance.onHide(gxView)
             }
 
             override fun onReuse(gxView: View?) {
-                Log.runE { "onReuse() called with: $gxView" }
+                Log.runE(TAG) { "onReuse() called with: $gxView" }
                 // 执行生命周期变化
                 instance.onReuse(gxView)
             }
@@ -151,7 +151,7 @@ class GXJSEngineProxy {
             }
 
             override fun onDestroy(gxView: View?) {
-                Log.runE { "onDestroy() called with: $gxView" }
+                Log.runE(TAG) { "onDestroy() called with: $gxView" }
                 instance.onDestroy(gxView)
                 instance.unregisterComponent(gxView)
             }
@@ -165,34 +165,34 @@ class GXJSEngineProxy {
     }
 
     fun startDefaultEngine() {
-        Log.runE { "startDefaultEngine() called" }
+        Log.runE(TAG) { "startDefaultEngine() called" }
         GXJSEngine.instance.startDefaultEngine()
-        Log.runE { "startDefaultEngine() called end" }
+        Log.runE(TAG) { "startDefaultEngine() called end" }
     }
 
     fun stopDefaultEngine() {
-        Log.runE { "stopDefaultEngine() called" }
+        Log.runE(TAG) { "stopDefaultEngine() called" }
         GXJSEngine.instance.stopDefaultEngine()
-        Log.runE { "stopDefaultEngine() called end" }
+        Log.runE(TAG) { "stopDefaultEngine() called end" }
     }
 
     fun startDebugEngine() {
-        Log.runE { "startDebugEngine() called" }
+        Log.runE(TAG) { "startDebugEngine() called" }
         GXJSEngine.instance.startDebugEngine()
-        Log.runE { "startDebugEngine() called end" }
+        Log.runE(TAG) { "startDebugEngine() called end" }
     }
 
     fun stopDebugEngine() {
-        Log.runE { "stopDebugEngine() called" }
+        Log.runE(TAG) { "stopDebugEngine() called" }
         GXJSEngine.instance.stopDebugEngine()
-        Log.runE { "stopDebugEngine() called end" }
+        Log.runE(TAG) { "stopDebugEngine() called end" }
     }
 
     /**
      * 通知视图的JS组件可用
      */
     fun onReady(gxView: View?) {
-        Log.runE { "onReady() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onReady() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
             gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onReady(jsComponentId)
@@ -204,7 +204,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件复用
      */
     fun onReuse(gxView: View?) {
-        Log.runE { "onReuse() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onReuse() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
             gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onReuse(jsComponentId)
@@ -216,7 +216,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件显示，如果视图是容器那么也通知其坑位JS组件显示
      */
     fun onShow(gxView: View?) {
-        Log.runE { "onShow() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onShow() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件显示
@@ -235,7 +235,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件隐藏，如果视图是容器那么也通知其坑位JS组件隐藏
      */
     fun onHide(gxView: View?) {
-        Log.runE { "onHide() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onHide() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件隐藏
@@ -254,7 +254,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件销毁，如果视图是容器那么也通知其坑位JS组件销毁
      */
     fun onDestroy(gxView: View?) {
-        Log.runE { "onDestroy() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onDestroy() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 通知JS组件销毁
@@ -270,7 +270,7 @@ class GXJSEngineProxy {
     }
 
     fun onLoadMore(gxView: View, data: JSONObject) {
-        Log.runE { "onLoadMore() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onLoadMore() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
             gxExtJSArg(gxTemplateContext)?.jsComponentIds?.forEach { jsComponentId ->
                 GXJSEngine.instance.onLoadMore(jsComponentId, data)
@@ -280,7 +280,7 @@ class GXJSEngineProxy {
 
 
     fun onDataInit(gxView: View?, data: JSONObject): JSONObject? {
-        Log.runE { "onDataInit() called with: gxView = $gxView" }
+        Log.runE(TAG) { "onDataInit() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
             gxExtJSArg(gxTemplateContext)?.rootJSComponentId?.let {
                 return GXJSEngine.instance.onDataInit(it, data)
@@ -293,7 +293,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件注册和可用
      */
     fun registerComponentAndOnReady(gxView: View?) {
-        Log.runE { "registerComponentAndOnReady() called with: gxView = $gxView" }
+        Log.runE(TAG) { "registerComponentAndOnReady() called with: gxView = $gxView" }
         gxView?.post {
             registerComponent(gxView)
             onReady(gxView)
@@ -304,7 +304,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件注册
      */
     fun registerComponent(gxView: View?) {
-        Log.runE { "registerComponent() called with: gxView = $gxView" }
+        Log.runE(TAG) { "registerComponent() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 在GaiaX中存储JS组件ID
@@ -326,7 +326,7 @@ class GXJSEngineProxy {
      * 通知视图的JS组件解除注册，如果视图是容器那么也通知其坑位JS组件解除注册
      */
     fun unregisterComponent(gxView: View?) {
-        Log.runE { "unregisterComponent() called with: gxView = $gxView" }
+        Log.runE(TAG) { "unregisterComponent() called with: gxView = $gxView" }
         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
             // 解除JS组件ID和视图的全局映射
@@ -363,7 +363,7 @@ class GXJSEngineProxy {
             }
 
         } else {
-            Log.runE { "registerTemplateTree() called with: $templateId script is null" }
+            Log.runE(TAG) { "registerTemplateTree() called with: $templateId script is null" }
         }
 
         val children = templateInfo.children

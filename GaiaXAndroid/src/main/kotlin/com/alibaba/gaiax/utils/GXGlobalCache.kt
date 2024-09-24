@@ -5,24 +5,21 @@ import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 
 class GXGlobalCache {
+
     fun putLayoutForPrepareView(
         gxTemplateContext: GXTemplateContext,
         key: GXTemplateEngine.GXTemplateItem,
         value: Layout
     ) {
         layoutForPrepareView[key.key(gxTemplateContext.size)] = value
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=putLayoutForPrepareView key=${key.hashCode()} value=$value")
-        }
+        Log.runE(TAG) { "putLayoutForPrepareView traceId=${gxTemplateContext.traceId} key=${key.hashCode()} value=$value"}
     }
 
     fun getLayoutForPrepareView(
         gxTemplateContext: GXTemplateContext,
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=getLayoutForPrepareView key=${key.hashCode()}")
-        }
+        Log.runE(TAG) { "getLayoutForPrepareView traceId=${gxTemplateContext.traceId} key=${key.hashCode()}"}
         return layoutForPrepareView[key.key(gxTemplateContext.size)]
     }
 
@@ -53,9 +50,7 @@ class GXGlobalCache {
         value: Layout
     ) {
         layoutForTemplateItem[key.key(gxTemplateContext.size)] = value
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=putLayoutForTemplateItem key=${key.key(gxTemplateContext.size)} value=${value}")
-        }
+        Log.runE(TAG) { "putLayoutForTemplateItem traceId=${gxTemplateContext.traceId} key=${key.hashCode()} value=$value"}
     }
 
     fun getLayoutForTemplateItem(
@@ -63,9 +58,7 @@ class GXGlobalCache {
         key: GXTemplateEngine.GXTemplateItem
     ): Layout? {
         val value = layoutForTemplateItem[key.key(gxTemplateContext.size)]
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=getLayoutForTemplateItem key=${key.key(gxTemplateContext.size)} value=${value}")
-        }
+        Log.runE(TAG) { "getLayoutForTemplateItem traceId=${gxTemplateContext.traceId} key=${key.hashCode()}"}
         return value
     }
 
@@ -74,6 +67,7 @@ class GXGlobalCache {
     }
 
     companion object {
+        private const val TAG = "GXGlobalCache"
         val instance by lazy {
             GXGlobalCache()
         }

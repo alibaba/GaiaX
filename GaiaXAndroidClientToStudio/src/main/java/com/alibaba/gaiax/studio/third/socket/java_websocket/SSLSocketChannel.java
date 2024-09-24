@@ -135,7 +135,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel {
             try {
                 socketChannel.close();
             } catch (IOException e) {
-                Log.e("GX.Socket", "Exception during the closing of the channel", e);
+                Log.e("GaiaXSocket", "Exception during the closing of the channel", e);
             }
         }
     }
@@ -163,7 +163,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel {
                 try {
                     result = engine.unwrap(peerNetData, peerAppData);
                 } catch (SSLException e) {
-                    Log.e("GX.Socket", "SSLExcpetion during unwrap", e);
+                    Log.e("GaiaXSocket", "SSLExcpetion during unwrap", e);
                     throw e;
                 }
                 switch (result.getStatus()) {
@@ -469,7 +469,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel {
         try {
             engine.closeInbound();
         } catch (Exception e) {
-            Log.e("GX.Socket", "This engine was forced to close inbound, without having received the proper SSL/TLS close notification message from the peer, due to end of stream.");
+            Log.e("GaiaXSocket", "This engine was forced to close inbound, without having received the proper SSL/TLS close notification message from the peer, due to end of stream.");
         }
         closeConnection();
     }

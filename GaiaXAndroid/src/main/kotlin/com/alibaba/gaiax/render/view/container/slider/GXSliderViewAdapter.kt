@@ -31,6 +31,8 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 
 /**
  * @suppress
@@ -38,7 +40,10 @@ import com.alibaba.gaiax.template.GXSliderConfig
 class GXSliderViewAdapter(
     val gxTemplateContext: GXTemplateContext, val gxNode: GXNode
 ) : PagerAdapter() {
+    companion object {
+        private const val TAG = "GXSliderViewAdapter"
 
+    }
     private var isNeedForceUpdate: Boolean = false
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
 
@@ -100,7 +105,6 @@ class GXSliderViewAdapter(
 
         itemContainer.layoutParams = itemContainerLayoutParams
 
-
         var isReuse = false
         val pageMode = templateItem.isPageMode
 
@@ -148,22 +152,12 @@ class GXSliderViewAdapter(
             }
 
             if (isReuse) {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.reuse $container $position $itemContainer")
-                    }
-                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
                 } else {
                     GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
                 }
             } else {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=instantiateItem.create $container $position $itemContainer")
-                    }
-                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
                 } else {
@@ -250,9 +244,7 @@ class GXSliderViewAdapter(
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
-        if (Log.isLog()) {
-            Log.e("destroyItem $container $position $obj")
-        }
+        Log.runE(TAG) { "destroyItem() called with: container = $container, position = $position, obj = $obj" }
         if (obj is View) {
             val itemContainer = obj as ViewGroup
 
@@ -261,9 +253,7 @@ class GXSliderViewAdapter(
             itemContainer.getChildAt(0)?.let { gxView ->
                 GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
 
-                    if (Log.isLog()) {
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=destroyItem $container $position $itemContainer")
-                    }
+                    Log.runE(TAG) { "destroyItem() called with: traceId = ${gxTemplateContext.traceId} gxView = $gxView" }
 
                     if (gxTemplateContext.templateItem.isPageMode) {
                         GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
@@ -304,5 +294,4 @@ class GXSliderViewAdapter(
     fun getItemView(position: Int): View? {
         return itemViewMap[getItemViewKey(position)]
     }
-
 }

@@ -35,7 +35,9 @@ import com.alibaba.gaiax.context.putNodeForScroll
 import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
+import com.alibaba.gaiax.utils.Log
 import com.alibaba.gaiax.utils.getStringExt
+import com.alibaba.gaiax.utils.runE
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -43,6 +45,8 @@ import kotlin.math.max
  * @suppress
  */
 object GXNodeUtils {
+
+    private const val TAG = "GXNodeUtils"
 
     internal const val ITEM_PATH = "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_PATH}"
     internal const val ITEM_CONFIG = "${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE}.${GXTemplateKey.GAIAX_DATABINDING_ITEM_TYPE_CONFIG}"
@@ -54,14 +58,7 @@ object GXNodeUtils {
     ) {
 
         // 预处理布局
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByPrepare=${gxNode.layoutByPrepare}")
-        }
-
-        // 输入参数
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData gxNode=${gxNode}")
-        }
+        Log.runE(TAG) { "computeNodeTreeByBindData traceId=${gxTemplateContext.traceId} layoutByPrepare=${gxNode.layoutByPrepare} gxNode=${gxNode}" }
 
         val stretchNode = gxNode.stretchNode.node
             ?: throw IllegalArgumentException("stretch node is null, please check!")
@@ -71,9 +68,7 @@ object GXNodeUtils {
         composeStretchNodeByBindData(gxNode, layout)
 
         // 输出计算结果
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByBindData layoutByBind=${gxNode.layoutByBind}")
-        }
+        Log.runE(TAG) { "computeNodeTreeByBindData traceId=${gxTemplateContext.traceId} layoutByBind=${gxNode.layoutByBind}" }
     }
 
     private fun composeStretchNodeByBindData(gxNode: GXNode, layout: Layout) {
@@ -95,9 +90,7 @@ object GXNodeUtils {
             ?: throw IllegalArgumentException("stretch node is null, please check!")
         val layout = stretchNode.safeComputeLayout(size)
         composeStretchNodeByPrepareView(gxNode, layout)
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=computeNodeTreeByPrepareView layout=${layout}")
-        }
+        Log.runE(TAG) { "computeNodeTreeByPrepareView traceId=${gxTemplateContext.traceId} layoutByPrepare=${gxNode.layoutByPrepare} gxNode=${gxNode}" }
     }
 
     private fun composeStretchNodeByPrepareView(gxNode: GXNode, layout: Layout) {

@@ -240,7 +240,7 @@ public class Draft_6455 extends Draft {
     public HandshakeState acceptHandshakeAsServer(ClientHandshake handshakedata) throws InvalidHandshakeException {
         int v = readVersion(handshakedata);
         if (v != 13) {
-            Log.e("GX.Socket", "acceptHandshakeAsServer - Wrong websocket version.");
+            Log.e("GaiaXSocket", "acceptHandshakeAsServer - Wrong websocket version.");
             return HandshakeState.NOT_MATCHED;
         }
         HandshakeState extensionState = HandshakeState.NOT_MATCHED;
@@ -249,7 +249,7 @@ public class Draft_6455 extends Draft {
             if (knownExtension.acceptProvidedExtensionAsServer(requestedExtension)) {
                 extension = knownExtension;
                 extensionState = HandshakeState.MATCHED;
-                Log.e("GX.Socket", "acceptHandshakeAsServer - Matching extension found: {}");
+                Log.e("GaiaXSocket", "acceptHandshakeAsServer - Matching extension found: {}");
                 break;
             }
         }
@@ -257,7 +257,7 @@ public class Draft_6455 extends Draft {
         if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
             return HandshakeState.MATCHED;
         }
-        Log.e("GX.Socket", "acceptHandshakeAsServer - No matching extension or protocol found.");
+        Log.e("GaiaXSocket", "acceptHandshakeAsServer - No matching extension or protocol found.");
         return HandshakeState.NOT_MATCHED;
     }
 
@@ -271,7 +271,7 @@ public class Draft_6455 extends Draft {
         for (IProtocol knownProtocol : knownProtocols) {
             if (knownProtocol.acceptProvidedProtocol(requestedProtocol)) {
                 protocol = knownProtocol;
-                Log.e("GX.Socket", "acceptHandshake - Matching protocol found: {}");
+                Log.e("GaiaXSocket", "acceptHandshake - Matching protocol found: {}");
                 return HandshakeState.MATCHED;
             }
         }
@@ -281,11 +281,11 @@ public class Draft_6455 extends Draft {
     @Override
     public HandshakeState acceptHandshakeAsClient(ClientHandshake request, ServerHandshake response) throws InvalidHandshakeException {
         if (!basicAccept(response)) {
-            Log.e("GX.Socket", "acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
+            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
             return HandshakeState.NOT_MATCHED;
         }
         if (!request.hasFieldValue(SEC_WEB_SOCKET_KEY) || !response.hasFieldValue(SEC_WEB_SOCKET_ACCEPT)) {
-            Log.e("GX.Socket", "acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
+            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
             return HandshakeState.NOT_MATCHED;
         }
 
@@ -294,7 +294,7 @@ public class Draft_6455 extends Draft {
         seckeyChallenge = generateFinalKey(seckeyChallenge);
 
         if (!seckeyChallenge.equals(seckeyAnswer)) {
-            Log.e("GX.Socket", "acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
+            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
             return HandshakeState.NOT_MATCHED;
         }
         HandshakeState extensionState = HandshakeState.NOT_MATCHED;
@@ -303,7 +303,7 @@ public class Draft_6455 extends Draft {
             if (knownExtension.acceptProvidedExtensionAsClient(requestedExtension)) {
                 extension = knownExtension;
                 extensionState = HandshakeState.MATCHED;
-                Log.e("GX.Socket", "acceptHandshakeAsClient - Matching extension found: {}");
+                Log.e("GaiaXSocket", "acceptHandshakeAsClient - Matching extension found: {}");
                 break;
             }
         }
@@ -311,7 +311,7 @@ public class Draft_6455 extends Draft {
         if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
             return HandshakeState.MATCHED;
         }
-        Log.e("GX.Socket", "acceptHandshakeAsClient - No matching extension or protocol found.");
+        Log.e("GaiaXSocket", "acceptHandshakeAsClient - No matching extension or protocol found.");
         return HandshakeState.NOT_MATCHED;
     }
 
@@ -547,7 +547,7 @@ public class Draft_6455 extends Draft {
         int payloadlength = oldPayloadlength,
                 realpacketsize = oldRealpacketsize;
         if (optcode == Opcode.PING || optcode == Opcode.PONG || optcode == Opcode.CLOSING) {
-            Log.e("GX.Socket", "Invalid frame: more than 125 octets");
+            Log.e("GaiaXSocket", "Invalid frame: more than 125 octets");
             throw new InvalidFrameException("more than 125 octets");
         }
         if (payloadlength == 126) {
@@ -579,15 +579,15 @@ public class Draft_6455 extends Draft {
      */
     private void translateSingleFrameCheckLengthLimit(long length) throws LimitExceededException {
         if (length > Integer.MAX_VALUE) {
-            Log.e("GX.Socket", "Limit exedeed: Payloadsize is to big...");
+            Log.e("GaiaX.Socket", "Limit exedeed: Payloadsize is to big...");
             throw new LimitExceededException("Payloadsize is to big...");
         }
         if (length > maxFrameSize) {
-            Log.e("GX.Socket", "Payload limit reached. Allowed: {} Current: {}");
+            Log.e("GaiaX.Socket", "Payload limit reached. Allowed: {} Current: {}");
             throw new LimitExceededException("Payload limit reached.", maxFrameSize);
         }
         if (length < 0) {
-            Log.e("GX.Socket", "Limit underflow: Payloadsize is to little...");
+            Log.e("GaiaX.Socket", "Limit underflow: Payloadsize is to little...");
             throw new LimitExceededException("Payloadsize is to little...");
         }
     }
@@ -601,7 +601,7 @@ public class Draft_6455 extends Draft {
      */
     private void translateSingleFrameCheckPacketSize(int maxpacketsize, int realpacketsize) throws IncompleteException {
         if (maxpacketsize < realpacketsize) {
-            Log.e("GX.Socket", "Incomplete frame: maxpacketsize < realpacketsize");
+            Log.e("GaiaX.Socket", "Incomplete frame: maxpacketsize < realpacketsize");
             throw new IncompleteException(realpacketsize);
         }
     }
@@ -810,14 +810,14 @@ public class Draft_6455 extends Draft {
         } else if (!frame.isFin() || curop == Opcode.CONTINUOUS) {
             processFrameContinuousAndNonFin(webSocketImpl, frame, curop);
         } else if (currentContinuousFrame != null) {
-            Log.e("GX.Socket", "Protocol error: Continuous frame sequence not completed.");
+            Log.e("GaiaX.Socket", "Protocol error: Continuous frame sequence not completed.");
             throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "Continuous frame sequence not completed.");
         } else if (curop == Opcode.TEXT) {
             processFrameText(webSocketImpl, frame);
         } else if (curop == Opcode.BINARY) {
             processFrameBinary(webSocketImpl, frame);
         } else {
-            Log.e("GX.Socket", "non control or continious frame expected");
+            Log.e("GaiaX.Socket", "non control or continious frame expected");
             throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "non control or continious frame expected");
         }
     }
@@ -836,12 +836,12 @@ public class Draft_6455 extends Draft {
         } else if (frame.isFin()) {
             processFrameIsFin(webSocketImpl, frame);
         } else if (currentContinuousFrame == null) {
-            Log.e("GX.Socket", "Protocol error: Continuous frame sequence was not started.");
+            Log.e("GaiaX.Socket", "Protocol error: Continuous frame sequence was not started.");
             throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "Continuous frame sequence was not started.");
         }
         //Check if the whole payload is valid utf8, when the opcode indicates a text
         if (curop == Opcode.TEXT && !Charsetfunctions.isValidUTF8(frame.getPayloadData())) {
-            Log.e("GX.Socket", "Protocol error: Payload is not UTF8");
+            Log.e("GaiaX.Socket", "Protocol error: Payload is not UTF8");
             throw new InvalidDataException(CloseFrame.NO_UTF8);
         }
         //Checking if the current continuous frame contains a correct payload with the other frames combined
@@ -871,7 +871,7 @@ public class Draft_6455 extends Draft {
      * @param e             the runtime exception
      */
     private void logRuntimeException(WebSocketImpl webSocketImpl, RuntimeException e) {
-        Log.e("GX.Socket", "Runtime exception during onWebsocketMessage", e);
+        Log.e("GaiaX.Socket", "Runtime exception during onWebsocketMessage", e);
         webSocketImpl.getWebSocketListener().onWebsocketError(webSocketImpl, e);
     }
 
@@ -898,7 +898,7 @@ public class Draft_6455 extends Draft {
      */
     private void processFrameIsFin(WebSocketImpl webSocketImpl, Framedata frame) throws InvalidDataException {
         if (currentContinuousFrame == null) {
-            Log.e("GX.Socket", "Protocol error: Previous continuous frame sequence not completed.");
+            Log.e("GaiaX.Socket", "Protocol error: Previous continuous frame sequence not completed.");
             throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "Continuous frame sequence was not started.");
         }
         addToBufferList(frame.getPayloadData());
@@ -932,7 +932,7 @@ public class Draft_6455 extends Draft {
      */
     private void processFrameIsNotFin(Framedata frame) throws InvalidDataException {
         if (currentContinuousFrame != null) {
-            Log.e("GX.Socket", "Protocol error: Previous continuous frame sequence not completed.");
+            Log.e("GaiaX.Socket", "Protocol error: Previous continuous frame sequence not completed.");
             throw new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "Previous continuous frame sequence not completed.");
         }
         currentContinuousFrame = frame;
@@ -995,7 +995,7 @@ public class Draft_6455 extends Draft {
         long totalSize = getByteBufferListSize();
         if (totalSize > maxFrameSize) {
             clearBufferList();
-            Log.e("GX.Socket", "Payload limit reached. Allowed: {} Current: {}");
+            Log.e("GaiaX.Socket", "Payload limit reached. Allowed: {} Current: {}");
             throw new LimitExceededException(maxFrameSize);
         }
     }

@@ -15,9 +15,13 @@ import com.alibaba.gaiax.js.proxy.runE
 @Keep
 class GXJSEventModule : GXJSBaseModule() {
 
+    companion object {
+        private const val TAG = "GXJSEventModule"
+    }
+
     @GXPromiseMethod
     fun addEventListener(data: JSONObject, promise: IGXPromise) {
-        Log.runE { "addEventListener() called with: data = $data" }
+        Log.runE(TAG) { "addEventListener() called with: data = $data" }
         // https://yuque.antfin-inc.com/ronghui.zrh/bpnuxl/vc6n4g
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
@@ -37,7 +41,7 @@ class GXJSEventModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun removeEventListener(data: JSONObject, promise: IGXPromise) {
-        Log.runE { "removeEventListener() called with: data = $data" }
+        Log.runE(TAG) { "removeEventListener() called with: data = $data" }
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
         val componentId = data.getLong("instanceId")

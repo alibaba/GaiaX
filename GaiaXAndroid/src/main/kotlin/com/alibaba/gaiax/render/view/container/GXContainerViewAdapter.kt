@@ -79,10 +79,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
 
     private fun createGXViewHolder(viewType: Int, parent: ViewGroup): GXViewHolder {
 
-        if (Log.isLog()) {
-            Log.e("createGXViewHolder $viewType $parent")
-        }
-
         // 准备构建坑位容器的参数
         val templateItem = viewTypeMap[viewType]
             ?: throw IllegalArgumentException("GXTemplateItem not exist, viewType = $viewType, viewTypeMap = $viewTypeMap")
@@ -161,10 +157,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
     }
 
     private fun bindGXViewHolder(holder: GXViewHolder) {
-
-        if (Log.isLog()) {
-            Log.e("bindGXViewHolder $holder ${holder.itemView} ")
-        }
 
         val templateItem = holder.templateItem ?: throw IllegalArgumentException("templateItem is null")
 
@@ -249,22 +241,12 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
             }
 
             if (isReuse) {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=createGXViewHolder.reuse $holder ${holder.itemView} $gxView")
-                    }
-                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
                 } else {
                     GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
                 }
             } else {
-                if (Log.isLog()) {
-                    GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=createGXViewHolder.create $holder ${holder.itemView} $gxView")
-                    }
-                }
                 if (pageMode) {
                     GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
                 } else {
@@ -472,9 +454,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
         if (view is ViewGroup) {
             view.getChildAt(0)?.let { gxView ->
                 GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                    if (Log.isLog()) {
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewAttachedToWindow $holder ${holder.itemView} $gxView")
-                    }
                     if (gxTemplateContext.isAppear == true) {
                         GXTemplateEngine.instance.onAppear(gxView)
                         if (gxTemplateContext.templateItem.isPageMode) {
@@ -494,9 +473,6 @@ class GXContainerViewAdapter(val gxTemplateContext: GXTemplateContext, private v
         if (view is ViewGroup) {
             view.getChildAt(0)?.let { gxView ->
                 GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                    if (Log.isLog()) {
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=onViewDetachedFromWindow $holder ${holder.itemView} $gxView")
-                    }
                     if (gxTemplateContext.isAppear == false) {
                         GXTemplateEngine.instance.onDisappear(gxView)
                         if (gxTemplateContext.templateItem.isPageMode) {

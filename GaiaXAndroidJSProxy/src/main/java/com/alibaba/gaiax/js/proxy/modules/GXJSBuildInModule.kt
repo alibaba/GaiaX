@@ -11,12 +11,16 @@ import com.alibaba.gaiax.js.proxy.runE
 
 internal class GXJSBuildInModule : GXJSBaseModule() {
 
+    companion object {
+        private const val TAG = "GXJSBuildInModule"
+    }
+
     override val name: String
         get() = "BuildIn"
 
     @GXAsyncMethod
     fun setData(data: JSONObject, params: JSONObject, callback: IGXCallback) {
-        Log.runE { "setData() called with: params = $params, callback = $callback" }
+        Log.runE(TAG) { "setData() called with: params = $params, callback = $callback" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
@@ -28,7 +32,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
 
     @GXSyncMethod
     fun getData(params: JSONObject): JSONObject {
-        Log.runE { "getData() called with: params = $params" }
+        Log.runE(TAG) { "getData() called with: params = $params" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
@@ -39,7 +43,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
 
     @GXSyncMethod
     fun getComponentIndex(params: JSONObject): Int {
-        Log.runE { "getComponentIndex() called with: params = $params" }
+        Log.runE(TAG) { "getComponentIndex() called with: params = $params" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {

@@ -63,16 +63,17 @@ import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 
 /**
  * @suppress
  */
 object GXNodeTreeUpdate {
+    private const val TAG = "GXNodeTreeUpdate"
 
     fun buildNodeLayout(gxTemplateContext: GXTemplateContext) {
-        if (Log.isLog()) {
-            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=buildNodeLayout")
-        }
+        Log.runE(TAG) { "buildNodeLayout traceId=${gxTemplateContext.traceId}" }
 
         val rootNode = gxTemplateContext.rootNode
             ?: throw IllegalArgumentException("RootNode is null(buildNodeLayout)")
@@ -109,6 +110,7 @@ object GXNodeTreeUpdate {
     }
 
     object Layout {
+        private const val TAG = "Layout"
 
         internal fun updateNodeTreeLayout(
             gxTemplateContext: GXTemplateContext,
@@ -116,9 +118,7 @@ object GXNodeTreeUpdate {
             templateData: JSONObject,
             size: Size<Float?>
         ) {
-            if (Log.isLog()) {
-                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayout")
-            }
+            Log.runE(TAG) { "updateNodeTreeLayout traceId=${gxTemplateContext.traceId}" }
 
             // 更新布局
             updateNodeTreeLayout(gxTemplateContext, gxNode, templateData)
@@ -132,9 +132,7 @@ object GXNodeTreeUpdate {
         internal fun updateNodeTreeLayoutByDirtyText(gxTemplateContext: GXTemplateContext, rootNode: GXNode, size: Size<Float?>) {
             if (gxTemplateContext.dirtyTexts?.isNotEmpty() == true) {
 
-                if (Log.isLog()) {
-                    Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateNodeTreeLayoutByDirtyText")
-                }
+                Log.runE(TAG) { "updateNodeTreeLayoutByDirtyText traceId=${gxTemplateContext.traceId}" }
 
                 var isTextDirty = false
                 gxTemplateContext.dirtyTexts?.forEach {
@@ -331,9 +329,7 @@ object GXNodeTreeUpdate {
                         isDirty = true
                     }
 
-                    if (Log.isLog()) {
-                        Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=updateContainerLayout containerSize=${containerSize}")
-                    }
+                    Log.runE(TAG) { "updateContainerLayout traceId=${gxTemplateContext.traceId} containerSize=${containerSize}" }
                 }
 
             } else if (gxNode.isGridType()) {

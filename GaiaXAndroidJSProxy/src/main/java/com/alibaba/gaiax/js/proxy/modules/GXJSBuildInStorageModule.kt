@@ -10,12 +10,14 @@ import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.proxy.utils.GXJSPreferenceUtil
 
 class GXJSBuildInStorageModule : GXJSBaseModule() {
-    override val name: String
-        get() = "BuildIn"
 
     companion object {
+        private const val TAG = "GXJSBuildInStorageModule"
         private const val GAIAX_JS_STORAGE = "GAIAX_JS_STORAGE"
     }
+
+    override val name: String
+        get() = "BuildIn"
 
     @GXPromiseMethod
     fun getStorage(key: String, promise: IGXPromise) {
@@ -27,7 +29,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
                 val data = target["data"]
                 val type = target.getString("type")
                 val value = JSDataConvert.getDataValueByType(type, data)
-                Log.runE { "getStorage() called with: key = $key, targetStr = $targetStr, value = $value" }
+                Log.runE(TAG) { "getStorage() called with: key = $key, targetStr = $targetStr, value = $value" }
                 promise.resolve().invoke(value)
             } catch (e: Exception) {
                 promise.reject().invoke(e.message)
@@ -47,7 +49,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
                 this["type"] = type
                 this["data"] = value
             }
-            Log.runE { "setStorage() called with: key = $key, type = $type, target = $value" }
+            Log.runE(TAG) { "setStorage() called with: key = $key, type = $type, target = $value" }
             prefs.putString(key, target.toString())
             promise.resolve().invoke()
         } catch (e: Exception) {
@@ -57,7 +59,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun removeStorage(key: String, promise: IGXPromise) {
-        Log.runE { "removeStorage() called with: key = $key" }
+        Log.runE(TAG) { "removeStorage() called with: key = $key" }
         val prefs = GXJSPreferenceUtil.createSharePreference(GAIAX_JS_STORAGE)
         if (prefs.contains(key)) {
             try {

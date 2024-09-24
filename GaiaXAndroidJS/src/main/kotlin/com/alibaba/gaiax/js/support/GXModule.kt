@@ -12,6 +12,10 @@ import com.alibaba.gaiax.js.utils.runE
 
 internal class GXModule(nativeModule: IGXModule) {
 
+    companion object {
+        private const val TAG = "GXModule"
+    }
+
     val id: Long
         get() = module.id
 
@@ -20,8 +24,7 @@ internal class GXModule(nativeModule: IGXModule) {
 
     private var isInit: Boolean = false
 
-    private val moduleInfo =
-        GXModuleInfo(nativeModule.name, nativeModule.id, nativeModule.javaClass.simpleName)
+    private val moduleInfo = GXModuleInfo(nativeModule.name, nativeModule.id, nativeModule.javaClass.simpleName)
 
     internal val module = nativeModule
 
@@ -80,12 +83,12 @@ internal class GXModule(nativeModule: IGXModule) {
     }
 
     fun invokeMethodSync(methodId: Long, args: JSONArray): Any? {
-        Log.runE { "invokeMethodSync() called with: methodId = $methodId args = $args" }
+        Log.runE(TAG) { "invokeMethodSync() called with: methodId = $methodId args = $args" }
         try {
             return syncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.runE { "invokeMethodSync() called with: exception message = ${e.message}" }
+            Log.runE(TAG) { "invokeMethodSync() called with: exception message = ${e.message}" }
         }
         return null
     }
@@ -95,7 +98,7 @@ internal class GXModule(nativeModule: IGXModule) {
             asyncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.runE { "invokeMethodAsync() called with: exception message = ${e.message}" }
+            Log.runE(TAG) { "invokeMethodAsync() called with: exception message = ${e.message}" }
         }
     }
 
@@ -104,7 +107,7 @@ internal class GXModule(nativeModule: IGXModule) {
             promiseMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.runE { "invokePromiseMethod() called with: exception message = ${e.message}" }
+            Log.runE(TAG) { "invokePromiseMethod() called with: exception message = ${e.message}" }
         }
     }
 

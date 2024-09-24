@@ -30,6 +30,10 @@ import com.bumptech.glide.request.target.Target
 @Keep
 class GXAdapterImageView(context: Context) : GXImageView(context) {
 
+    companion object {
+        private const val TAG = "GXAdapterImageView"
+    }
+
     private var lastUrl: String? = null
 
     private val requestListener = object : RequestListener<Drawable> {
@@ -57,10 +61,10 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
 
         // 如果要加载的URI和缓存一致，那么跳过这次逻辑处理
         if (lastUrl == uri) {
-            Log.runE { "bindNetUri() called with: skip $uri" }
+            Log.runE(TAG) { "bindNetUri() called with: skip $uri" }
             return
         } else {
-            Log.runE { "bindNetUri() called with: data = $data, uri = $uri, placeholder = $placeholder" }
+            Log.runE(TAG) { "bindNetUri() called with: data = $data, uri = $uri, placeholder = $placeholder" }
         }
 
         // 占位图仅对网络图生效

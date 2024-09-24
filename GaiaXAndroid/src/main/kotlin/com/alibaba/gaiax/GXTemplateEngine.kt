@@ -220,6 +220,7 @@ class GXTemplateEngine {
      */
     class GXScroll {
         companion object {
+
             const val TYPE_ON_SCROLL_STATE_CHANGED = "onScrollStateChanged"
             const val TYPE_ON_SCROLLED = "onScrolled"
         }
@@ -506,7 +507,7 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode? = null
     ) {
-        Log.runE { "GXTemplateEngine.prepareView" }
+        Log.runE(TAG) { "prepareView" }
         try {
             if (GXGlobalCache.instance.isExistForPrepareView(gxMeasureSize, gxTemplateItem)) {
                 return
@@ -551,7 +552,7 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxExtendParams: GXExtendParams? = null
     ): View? {
-        Log.runE { "GXTemplateEngine.createView" }
+        Log.runE(TAG) { "createView" }
         return try {
             prepareView(gxTemplateItem, gxMeasureSize)
 
@@ -582,7 +583,7 @@ class GXTemplateEngine {
      * @throws IllegalArgumentException
      */
     fun bindData(gxView: View?, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
-        Log.runE { "GXTemplateEngine.bindData" }
+        Log.runE(TAG) { "bindData" }
         try {
             if (gxView == null) {
                 throw IllegalArgumentException("view is null")
@@ -601,7 +602,7 @@ class GXTemplateEngine {
     }
 
     fun resetView(gxView: View) {
-        Log.runE { "GXTemplateEngine.resetView" }
+        Log.runE(TAG) { "resetView" }
         try {
             GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
                 render.resetViewDataOnlyViewTree(gxTemplateContext)
@@ -627,7 +628,7 @@ class GXTemplateEngine {
         val gxRootNode = gxTemplateContext.rootNode
         if (gxRootNode != null) {
 
-            Log.runE { "GXTemplateEngine.recomputeWhenMeasureSizeChanged traceId=${gxTemplateContext.traceId}" }
+            Log.runE(TAG) { "recomputeWhenMeasureSizeChanged traceId=${gxTemplateContext.traceId}" }
 
             val size = Size(gxTemplateContext.size.width, gxTemplateContext.size.height)
             GXNodeUtils.computeNodeTreeByPrepareView(gxTemplateContext, gxRootNode, size)
@@ -647,7 +648,7 @@ class GXTemplateEngine {
         gxMeasureSize: GXMeasureSize,
         gxExtendParams: GXExtendParams? = null
     ): GXTemplateContext? {
-        Log.runE { "GXTemplateEngine.createViewOnlyNodeTree" }
+        Log.runE(TAG) { "createViewOnlyNodeTree" }
         return try {
             if (GXPropUtils.isTrace() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Trace.beginSection("GX createViewOnlyNodeTree")
@@ -698,7 +699,7 @@ class GXTemplateEngine {
      * @hide
      */
     fun createViewOnlyViewTree(gxTemplateContext: GXTemplateContext): View? {
-        Log.runE { "GXTemplateEngine.createViewOnlyViewTree" }
+        Log.runE(TAG) { "createViewOnlyViewTree" }
         return try {
             if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX createViewOnlyViewTree")
@@ -727,7 +728,7 @@ class GXTemplateEngine {
      * @hide
      */
     fun bindDataOnlyNodeTree(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
-        Log.runE { "GXTemplateEngine.bindDataOnlyNodeTree" }
+        Log.runE(TAG) { "bindDataOnlyNodeTree" }
         try {
             if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX bindDataOnlyNodeTree")
@@ -750,12 +751,12 @@ class GXTemplateEngine {
             ?: throw IllegalArgumentException("Not found templateContext from targetView")
 
         if (gxTemplateContext.isReuseRootNode) {
-            Log.runE { "GXTemplateEngine.internalBindDataOnlyNodeTree reuse root node, skip bindDataOnlyNodeTree traceId=${gxTemplateContext.traceId}" }
+            Log.runE(TAG) { "internalBindDataOnlyNodeTree reuse root node, skip bindDataOnlyNodeTree traceId=${gxTemplateContext.traceId}" }
             gxTemplateContext.isReuseRootNode = false
             return
         }
 
-        Log.runE { "GXTemplateEngine.internalBindDataOnlyNodeTree traceId=${gxTemplateContext.traceId} gxMeasureSize=${gxTemplateContext.size} gxTemplateItem=${gxTemplateContext.templateItem} gxMeasureSize=${gxMeasureSize} " }
+        Log.runE(TAG) { "internalBindDataOnlyNodeTree traceId=${gxTemplateContext.traceId} gxMeasureSize=${gxTemplateContext.size} gxTemplateItem=${gxTemplateContext.templateItem} gxMeasureSize=${gxMeasureSize} " }
 
         gxTemplateContext.templateData = gxTemplateData
 
@@ -763,7 +764,7 @@ class GXTemplateEngine {
             val oldMeasureSize = gxTemplateContext.size
             gxTemplateContext.size = gxMeasureSize
 
-            Log.runE { "GXTemplateEngine.internalBindDataOnlyNodeTree traceId=${gxTemplateContext.traceId} gxMeasureSize update ${gxTemplateContext.size}" }
+            Log.runE(TAG) { "internalBindDataOnlyNodeTree traceId=${gxTemplateContext.traceId} gxMeasureSize update ${gxTemplateContext.size}" }
 
             // 判断是否size发生了变化
             gxTemplateContext.isMeasureSizeChanged = oldMeasureSize.width != gxMeasureSize.width || oldMeasureSize.height != gxMeasureSize.height
@@ -785,7 +786,7 @@ class GXTemplateEngine {
      * @hide
      */
     fun bindDataOnlyViewTree(view: View, gxTemplateData: GXTemplateData, gxMeasureSize: GXMeasureSize? = null) {
-        Log.runE { "GXTemplateEngine.bindDataOnlyViewTree" }
+        Log.runE(TAG) { "bindDataOnlyViewTree" }
         try {
             if (GXPropUtils.isTrace()) {
                 Trace.beginSection("GX bindDataOnlyViewTree")
@@ -809,7 +810,7 @@ class GXTemplateEngine {
 
         if (gxMeasureSize != null) {
             gxTemplateContext.size = gxMeasureSize
-            Log.runE { "GXTemplateEngine.internalBindDataOnlyViewTree traceId=${gxTemplateContext.traceId} gxMeasureSize=${gxTemplateContext.size} gxTemplateItem=${gxTemplateContext.templateItem} gxMeasureSize=${gxMeasureSize} " }
+            Log.runE(TAG) { "internalBindDataOnlyViewTree traceId=${gxTemplateContext.traceId} gxMeasureSize=${gxTemplateContext.size} gxTemplateItem=${gxTemplateContext.templateItem} gxMeasureSize=${gxMeasureSize} " }
         }
 
         gxTemplateContext.templateData = gxTemplateData
@@ -856,7 +857,7 @@ class GXTemplateEngine {
      * 通知视图可见，如果视图是容器，那么也通知其坑位视图可见
      */
     fun onAppear(targetView: View?) {
-        Log.runE { "GXTemplateEngine.onAppear" }
+        Log.runE(TAG) { "onAppear" }
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = true
             gxTemplateContext.manualExposure()
@@ -868,7 +869,7 @@ class GXTemplateEngine {
      * 通知视图不可见，如果视图是容器，那么也通知其坑位视图不可见
      */
     fun onDisappear(targetView: View?) {
-        Log.runE { "GXTemplateEngine.onDisappear" }
+        Log.runE(TAG) { "onDisappear" }
         GXTemplateContext.getContext(targetView)?.let { gxTemplateContext ->
             gxTemplateContext.isAppear = false
             GXContainerUtils.notifyContainerAndItemsOnDisappear(gxTemplateContext)
@@ -911,7 +912,7 @@ class GXTemplateEngine {
     }
 
     companion object {
-
+        private const val TAG = "GXTemplateEngine"
         val instance by lazy {
             GXTemplateEngine()
         }

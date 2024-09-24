@@ -20,7 +20,7 @@ object Log {
 
     private const val LOG_MAX_LENGTH = 4000
 
-    const val TAG = "GX.Adapter"
+    const val TAG = "GaiaX.Adapter"
 
     fun d(tag: String, msg: String) {
         log(DEBUG, tag, msg)

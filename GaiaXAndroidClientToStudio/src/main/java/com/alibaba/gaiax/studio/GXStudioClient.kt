@@ -251,7 +251,7 @@ class GXStudioClient {
     }
 
     companion object {
-        const val TAG = "GX.Studio"
+        const val TAG = "GaiaX.Studio"
 
         const val PREVIEW_AUTO = "auto"
         const val PREVIEW_MANUAL = "manual"

@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 internal class GXJSRenderProxy {
 
     companion object {
+        private const val TAG = "GXJSRenderProxy"
         val instance by lazy {
             return@lazy GXJSRenderProxy()
         }
@@ -41,7 +42,7 @@ internal class GXJSRenderProxy {
                     GXTemplateEngine.instance.bindData(gxView, it)
                 }
             } else {
-                Log.runE { "setData() called gxView is null, $componentId $templateId" }
+                Log.runE(TAG) { "setData() called gxView is null, $componentId $templateId" }
             }
             callback.invoke()
         }

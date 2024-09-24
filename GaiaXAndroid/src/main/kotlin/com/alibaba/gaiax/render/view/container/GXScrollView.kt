@@ -44,31 +44,18 @@ open class GXScrollView : GXContainer, GXIRelease {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        if (Log.isLog()) {
-            Log.e("onAttachedToWindow GXScrollView $this")
-        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (Log.isLog()) {
-            Log.e("onDetachedFromWindow GXScrollView $this")
-        }
     }
 
     override fun release() {
-        if (Log.isLog()) {
-            Log.e("release GXScrollView $this")
-        }
         if (this.layoutManager is LinearLayoutManager) {
             val layoutManager = this.layoutManager as LinearLayoutManager
             for (i in 0..layoutManager.itemCount) {
                 ((this.findViewHolderForLayoutPosition(i) as? GXViewHolder)?.itemView as? ViewGroup)?.getChildAt(0)?.let { gxView ->
                     GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                        if (Log.isLog()) {
-                            Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=GXScrollView.release GXScrollView=$this gxView=$gxView")
-                        }
-
                         if (gxTemplateContext.templateItem.isPageMode) {
                             GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
                         } else {

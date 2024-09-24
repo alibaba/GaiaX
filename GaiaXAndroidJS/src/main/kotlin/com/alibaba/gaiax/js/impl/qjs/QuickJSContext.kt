@@ -22,6 +22,7 @@ internal class QuickJSContext(
 ) : IContext {
 
     companion object {
+        private const val TAG = "QuickJSContext"
         fun create(host: GXHostContext, engine: IEngine, runtime: IRuntime): QuickJSContext {
             return QuickJSContext(host, engine as QuickJSEngine, runtime as QuickJSRuntime)
         }
@@ -35,7 +36,7 @@ internal class QuickJSContext(
         engine.checkQuickJS()
         runtime.checkRuntime()
         jsContext = runtime.jsRuntime?.createJSContext()
-        Log.runE { "initContext() engine = $engine, runtime = $runtime, jsContext = $jsContext" }
+        Log.runE(TAG) { "initContext() engine = $engine, runtime = $runtime, jsContext = $jsContext" }
     }
 
     override fun initModule(module: String) {
@@ -43,7 +44,7 @@ internal class QuickJSContext(
         runtime.checkRuntime()
         checkContext()
 
-        Log.runE { "initModule() called with: module = $module" }
+        Log.runE(TAG) { "initModule() called with: module = $module" }
 
         when (module) {
             "timer" -> initModuleTimer()
@@ -86,7 +87,7 @@ internal class QuickJSContext(
     }
 
     override fun startBootstrap() {
-        Log.runE { "startBootstrap() called" }
+        Log.runE(TAG) { "startBootstrap() called" }
         bootstrap?.let { bootstrap ->
             evaluateJS(bootstrap)
         }
@@ -108,15 +109,15 @@ internal class QuickJSContext(
     }
 
     override fun evaluateJS(script: String, argsMap: JSONObject) {
-        Log.runE { "evaluateJS() called with: script = $script" }
+        Log.runE(TAG) { "evaluateJS() called with: script = $script" }
         this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, 0)
     }
 
     override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
-        Log.runE { "evaluateJS() called with: script = $script" }
+        Log.runE(TAG) { "evaluateJS() called with: script = $script" }
         // 执行带返回值的JS脚本，需要使用EVAL_TYPE_GLOBAL
         val ret = this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_GLOBAL, 0, clazz)
-        Log.runE { "evaluateJS() called with: ret = $ret" }
+        Log.runE(TAG) { "evaluateJS() called with: ret = $ret" }
         return ret
     }
 

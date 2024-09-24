@@ -20,12 +20,18 @@ import android.view.View
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.GXNode
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 
 /**
  * @suppress
  */
 open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
     GXViewTreeMerger<View>(context, rootNode) {
+
+    companion object {
+        private const val TAG = "GXViewTreeUpdate"
+    }
 
     override fun getChildLayout(childNode: GXNode): Layout {
         return childNode.layoutByBind
@@ -40,9 +46,7 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
     override fun withRootView(context: GXTemplateContext, node: GXNode, layout: Layout): View? {
         return node.view?.also {
 
-            if (Log.isLog()) {
-                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=withRootView $layout")
-            }
+            Log.runE(TAG) { "withRootView traceId=${gxTemplateContext.traceId} layout=$layout" }
 
             GXViewLayoutParamsUtils.updateLayoutParams(it, layout, 0F, 0F)
         }
@@ -70,9 +74,7 @@ open class GXViewTreeUpdate(context: GXTemplateContext, rootNode: GXNode) :
                 }
             }
 
-            if (Log.isLog()) {
-                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=withChildView $childLayout targetView = $targetView")
-            }
+            Log.runE(TAG) { "withChildView traceId=${gxTemplateContext.traceId} childLayout=$childLayout targetView=$targetView" }
 
             GXViewLayoutParamsUtils.updateLayoutParams(targetView, childLayout, mergeX, mergeY)
         }

@@ -15,12 +15,16 @@ import com.alibaba.gaiax.js.proxy.runE
 @Keep
 class GXJSNativeEventModule : GXJSBaseModule() {
 
+    companion object {
+        private const val TAG = "GXJSNativeEventModule"
+    }
+
     override val name: String
         get() = "NativeEvent"
 
     @GXPromiseMethod
     fun addNativeEventListener(data: JSONObject, promise: IGXPromise) {
-        Log.runE { "addNativeEventListener() called with: data = $data" }
+        Log.runE(TAG) { "addNativeEventListener() called with: data = $data" }
         val isSuccess = GXJSRenderProxy.instance.registerNativeMessage(data)
         if (isSuccess) {
             promise.resolve().invoke()
@@ -31,7 +35,7 @@ class GXJSNativeEventModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun removeNativeEventListener(data: JSONObject, promise: IGXPromise) {
-        Log.runE { "removeNativeEventListener() called with: data = $data" }
+        Log.runE(TAG) { "removeNativeEventListener() called with: data = $data" }
         val isSuccess = GXJSRenderProxy.instance.unregisterNativeMessage(data)
         if (isSuccess) {
             promise.resolve().invoke()

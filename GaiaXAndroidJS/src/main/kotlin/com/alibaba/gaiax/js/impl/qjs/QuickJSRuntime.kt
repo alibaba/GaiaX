@@ -13,6 +13,8 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
     IRuntime {
 
     companion object {
+        private const val TAG = "QuickJSRuntime"
+
         fun create(runtime: GXHostRuntime, engine: IEngine): QuickJSRuntime {
             return QuickJSRuntime(runtime, (engine as QuickJSEngine))
         }
@@ -36,7 +38,7 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
         // 设置Promise方法的异常兜底回调
         jsRuntime?.setPromiseRejectionHandler { message ->
 
-            Log.runE { "setPromiseRejectionHandler() called with: message = $message" }
+            Log.runE(TAG) { "setPromiseRejectionHandler() called with: message = $message" }
 
             GXJSEngine.instance.logListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
@@ -50,7 +52,7 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
 
         // 设置JS运行时是否需要中断
         jsRuntime?.setInterruptHandler {
-            Log.runE { "setInterruptHandler() called with:" }
+            Log.runE(TAG) { "setInterruptHandler() called with:" }
             false
         }
     }

@@ -112,12 +112,12 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
         synchronized (syncConnectionLost) {
             this.connectionLostTimeout = connectionLostTimeout;
             if (this.connectionLostTimeout <= 0) {
-                Log.e("GX.Socket", "Connection lost timer stopped");
+                Log.e("GaiaXSocket", "Connection lost timer stopped");
                 cancelConnectionLostTimer();
                 return;
             }
             if (this.websocketRunning) {
-                Log.e("GX.Socket", "Connection lost timer restarted");
+                Log.e("GaiaXSocket", "Connection lost timer restarted");
                 //Reset all the pings
                 try {
                     ArrayList<WebSocket> connections = new ArrayList<WebSocket>(getConnections());
@@ -129,7 +129,7 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e("GX.Socket", "Exception during connection lost restart", e);
+                    Log.e("GaiaXSocket", "Exception during connection lost restart", e);
                 }
                 restartConnectionLostTimer();
             }
@@ -145,7 +145,7 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
         synchronized (syncConnectionLost) {
             if (connectionLostTimer != null || connectionLostTimerTask != null) {
                 this.websocketRunning = false;
-                Log.e("GX.Socket", "Connection lost timer stopped");
+                Log.e("GaiaXSocket", "Connection lost timer stopped");
                 cancelConnectionLostTimer();
             }
         }
@@ -159,10 +159,10 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
     protected void startConnectionLostTimer() {
         synchronized (syncConnectionLost) {
             if (this.connectionLostTimeout <= 0) {
-                Log.e("GX.Socket", "Connection lost timer deactivated");
+                Log.e("GaiaXSocket", "Connection lost timer deactivated");
                 return;
             }
-            Log.e("GX.Socket", "Connection lost timer started");
+            Log.e("GaiaXSocket", "Connection lost timer started");
             this.websocketRunning = true;
             restartConnectionLostTimer();
         }
@@ -214,13 +214,13 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
         }
         WebSocketImpl webSocketImpl = (WebSocketImpl) webSocket;
         if (webSocketImpl.getLastPong() < current) {
-            Log.e("GX.Socket", "Closing connection due to no pong received: {}");
+            Log.e("GaiaXSocket", "Closing connection due to no pong received: {}");
             webSocketImpl.closeConnection(CloseFrame.ABNORMAL_CLOSE, "The connection was closed because the other endpoint did not respond with a pong in time. For more information check: https://github.com/TooTallNate/Java-WebSocket/wiki/Lost-connection-detection");
         } else {
             if (webSocketImpl.isOpen()) {
                 webSocketImpl.sendPing();
             } else {
-                Log.e("GX.Socket", "Trying to ping a non open connection: {}");
+                Log.e("GaiaXSocket", "Trying to ping a non open connection: {}");
             }
         }
     }

@@ -19,12 +19,17 @@ import com.alibaba.gaiax.js.utils.GXJSUiExecutor
  *  Description:
  */
 class GXJSBuildInTipsModule : GXJSBaseModule() {
+
+    companion object {
+        private const val TAG = "GXJSBuildInTipsModule"
+    }
+
     override val name: String
         get() = "BuildIn"
 
     @GXAsyncMethod
     fun showToast(data: JSONObject, callback: IGXCallback) {
-        Log.runE { "showToast() called with: data = $data, callback = $callback" }
+        Log.runE(TAG) { "showToast() called with: data = $data, callback = $callback" }
         try {
             val title = data.getString("title") ?: ""
             val duration = data.getInteger("duration") ?: 3
@@ -45,7 +50,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
 
     @GXAsyncMethod
     fun showAlert(data: JSONObject, callback: IGXCallback) {
-        Log.runE { "showAlert() called with: data = $data, callback = $callback" }
+        Log.runE(TAG) { "showAlert() called with: data = $data, callback = $callback" }
         try {
             val title = data.getString("title") ?: ""
             val message = data.getString("message") ?: ""

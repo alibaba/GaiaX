@@ -22,6 +22,8 @@ import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 
 /**
  * @suppress
@@ -269,9 +271,7 @@ data class GXStyle(
             val key: String = it.key
             val value = it.value
             if (value == null) {
-                if (Log.isLog()) {
-                    Log.e("GXStyle.updateByExtend @forEach, key=$key, value=$value")
-                }
+                Log.runE(TAG) { "updateByExtend @forEach, key=$key, value=$value" }
                 return@forEach
             }
             when (key) {
@@ -455,6 +455,8 @@ data class GXStyle(
 
     companion object {
 
+        private const val TAG = "GXStyle"
+
         fun create(css: JSONObject): GXStyle {
             if (css.isEmpty()) {
                 return GXStyle()
@@ -471,9 +473,7 @@ data class GXStyle(
                 val key: String = it.key
                 val value = it.value
                 if (value == null) {
-                    if (Log.isLog()) {
-                        Log.e("GXFlexBox.create @forEach, key=$key, value=$value")
-                    }
+                    Log.runE(TAG) { "create @forEach, key=$key, value=$value" }
                     return@forEach
                 }
                 when (key) {

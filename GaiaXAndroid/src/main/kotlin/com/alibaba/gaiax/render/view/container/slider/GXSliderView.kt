@@ -130,10 +130,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
         }
 
         addView(viewPager, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
-
-        if (Log.isLog()) {
-            Log.e("GXSliderView initViewPager this=${this} viewPager=${viewPager}")
-        }
     }
 
     private fun initIndicator() {
@@ -239,10 +235,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                 timer = Timer()
                 timerTask = object : TimerTask() {
                     override fun run() {
-                        if (Log.isLog()) {
-                            Log.e("GXSliderView timerTask this=${this@GXSliderView} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
-                        }
-
                         viewPager?.currentItem?.let { currentItem ->
                             viewPager?.adapter?.count?.let { count ->
                                 viewPager?.post {
@@ -258,17 +250,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                 timer?.schedule(timerTask, it, it)
             }
         }
-
-        if (Log.isLog()) {
-            Log.e("GXSliderView startTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
-        }
     }
 
     private fun stopTimer() {
-        if (Log.isLog()) {
-            Log.e("GXSliderView stopTimer this=${this} viewPager=${viewPager} timer=${timer} timerTask=${timerTask}")
-        }
-
         timer?.cancel()
         timerTask?.cancel()
         timer = null
@@ -328,10 +312,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun release() {
-        if (Log.isLog()) {
-            Log.e("GXSliderView release this=${this@GXSliderView} viewPager=${viewPager}")
-        }
-
         indicatorView = null
         stopTimer()
 
@@ -347,10 +327,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
                 adapter.getItemView(it.currentItem)?.let { itemView ->
                     (itemView as? ViewGroup)?.getChildAt(0)?.let { gxView ->
                         GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-                            if (Log.isLog()) {
-                                Log.e(gxTemplateContext.tag, "traceId=${gxTemplateContext.traceId} tag=GXSliderView.release GXSliderView=$this gxView=$gxView")
-                            }
-
                             if (gxTemplateContext.templateItem.isPageMode) {
                                 GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
                             } else {
@@ -365,9 +341,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     }
 
     override fun onVisibleChanged(visible: Boolean) {
-        if (Log.isLog()) {
-            Log.e("GXSliderView onVisibleChanged this=${this@GXSliderView} viewPager=${viewPager} visible=${visible} isAttached=${isAttached}")
-        }
         if (!isAttached) {
             return
         }
@@ -381,9 +354,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     override fun onAttachedToWindow() {
         isAttached = true
         super.onAttachedToWindow()
-        if (Log.isLog()) {
-            Log.e("GXSliderView onAttachedToWindow this=${this@GXSliderView} viewPager=${viewPager}")
-        }
 
         // 只有第一个SliderView可以自动滚动，用于解决多频道轮播图同时滚动的问题
         if (SHOWN_VIEW_COUNT <= 0) {
@@ -396,8 +366,5 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
     override fun onDetachedFromWindow() {
         isAttached = false
         super.onDetachedFromWindow()
-        if (Log.isLog()) {
-            Log.e("GXSliderView onDetachedFromWindow this=${this@GXSliderView} viewPager=${viewPager}")
-        }
     }
 }

@@ -11,9 +11,13 @@ import com.alibaba.gaiax.js.proxy.runE
 @Keep
 class GXJSNativeTargetModule : GXJSBaseModule() {
 
+    companion object {
+        private const val TAG = "GXJSNativeTargetModule"
+    }
+
     @GXSyncMethod
     fun getElementByData(data: JSONObject): JSONObject {
-        Log.runE { "getElementByData() called with: data = $data" }
+        Log.runE(TAG) { "getElementByData() called with: data = $data" }
         //  {"instanceId":19,"targetId":"phone-demand","templateId":"phone-demand"}
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
@@ -22,7 +26,7 @@ class GXJSNativeTargetModule : GXJSBaseModule() {
         val delegate = GXJSRenderProxy.instance
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
-            Log.runE { "getElementByData() called with: result = $result" }
+            Log.runE(TAG) { "getElementByData() called with: result = $result" }
             result["targetId"] = targetId
             result
         } else {

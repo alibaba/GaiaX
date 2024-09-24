@@ -20,6 +20,8 @@ class GXJSEngine {
 
     companion object {
 
+        private const val TAG = "GXJSEngine"
+
         private const val GAIAX_JS_MODULES = "gaiax_js_modules"
         private const val MODULE_PREFIX = "module_"
         private const val MODULE_SUFFIX = ".json"
@@ -62,10 +64,10 @@ class GXJSEngine {
      *  - 初始化内建模块
      */
     fun init(context: Context): GXJSEngine {
-        Log.runE { "init() called" }
+        Log.runE(TAG) { "init() called" }
         this.context = context.applicationContext
         initModules()
-        Log.runE { "init() called end" }
+        Log.runE(TAG) { "init() called end" }
         return this
     }
 
@@ -84,7 +86,7 @@ class GXJSEngine {
             registerAssetsModules()
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.runE { "initModules() called with: e = $e"  }
+            Log.runE(TAG) { "initModules() called with: e = $e"  }
         }
     }
 
@@ -93,7 +95,7 @@ class GXJSEngine {
         val allModules = JSONObject()
         val assetsModules = assetsModules(GAIAX_JS_MODULES)
         assetsModules?.forEach { file ->
-            Log.runE { "registerAssetsModules() called with: file = $file" }
+            Log.runE(TAG) { "registerAssetsModules() called with: file = $file" }
             if (file.startsWith(MODULE_PREFIX) && file.endsWith(MODULE_SUFFIX)) {
                 try {
                     val bizModules = JSONObject.parseObject(
@@ -101,17 +103,17 @@ class GXJSEngine {
                     allModules.putAll(bizModules)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.runE { "registerAssetsModules() called with: e = $e" }
+                    Log.runE(TAG) { "registerAssetsModules() called with: e = $e" }
                 }
             }
         }
-        Log.runE { "registerAssetsModules() called with: allModules = $allModules" }
+        Log.runE(TAG) { "registerAssetsModules() called with: allModules = $allModules" }
         allModules.forEach {
             try {
                 Class.forName(it.value.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.runE { "registerAssetsModules() called with: e = $e" }
+                Log.runE(TAG) { "registerAssetsModules() called with: e = $e" }
                 null
             }?.let { clazz ->
                 if (clazz.superclass == GXJSBaseModule::class.java) {
@@ -132,7 +134,7 @@ class GXJSEngine {
      * 启动JS引擎
      */
     fun startDefaultEngine() {
-        Log.runE { "startDefaultEngine() called" }
+        Log.runE(TAG) { "startDefaultEngine() called" }
         synchronized(EngineType.QuickJS) {
             if (quickJSEngine == null) {
                 // 创建引擎
@@ -145,7 +147,7 @@ class GXJSEngine {
     }
 
     fun startDebugEngine() {
-        Log.runE { "startDebugEngine() called" }
+        Log.runE(TAG) { "startDebugEngine() called" }
         synchronized(EngineType.DebugJS) {
             if (debugEngine == null) {
                 // 创建引擎
@@ -158,7 +160,7 @@ class GXJSEngine {
     }
 
     fun stopDefaultEngine() {
-        Log.runE { "stopDefaultEngine() called" }
+        Log.runE(TAG) { "stopDefaultEngine() called" }
         synchronized(EngineType.QuickJS) {
             if (quickJSEngine != null) {
                 quickJSEngine?.destroyEngine()
@@ -168,7 +170,7 @@ class GXJSEngine {
     }
 
     fun stopDebugEngine() {
-        Log.runE { "stopDebugEngine() called" }
+        Log.runE(TAG) { "stopDebugEngine() called" }
         synchronized(EngineType.DebugJS) {
             if (debugEngine != null) {
                 debugEngine?.destroyEngine()
@@ -188,7 +190,7 @@ class GXJSEngine {
      * 注册自定义模块
      */
     fun registerModule(moduleClazz: Class<out GXJSBaseModule>): GXJSEngine {
-        Log.runE { "registerModule() called with: moduleClazz = $moduleClazz" }
+        Log.runE(TAG) { "registerModule() called with: moduleClazz = $moduleClazz" }
         moduleManager.registerModule(moduleClazz)
         return this
     }

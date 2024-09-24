@@ -14,6 +14,8 @@ class GXJSLogModule : GXJSBaseModule() {
 
     companion object {
 
+        private const val TAG = "GXJSLogModule"
+
         private fun getLogMsg(argData: String): String = try {
             JSONObject.parseObject(argData).getString("data") ?: ""
         } catch (e: Exception) {
@@ -31,13 +33,13 @@ class GXJSLogModule : GXJSBaseModule() {
                     params["data"] = msg
                     data["params"] = params
 
-                    Log.runE { "sendJSLogMsg() called with: $data" }
+                    Log.runE(TAG) { "sendJSLogMsg() called with: $data" }
 
                     it.onSendMsg(data)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.runE { "sendJSLogMsg() called with: ${e.message}" }
+                Log.runE(TAG) { "sendJSLogMsg() called with: ${e.message}" }
             }
         }
     }
@@ -46,28 +48,28 @@ class GXJSLogModule : GXJSBaseModule() {
     fun log(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("log", msg)
-        Log.runE { "log() called with: msg = $msg" }
+        Log.runE(TAG) { "log() called with: msg = $msg" }
     }
 
     @GXSyncMethod
     fun info(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("info", msg)
-        Log.runE { "info() called with: msg = $msg" }
+        Log.runE(TAG) { "info() called with: msg = $msg" }
     }
 
     @GXSyncMethod
     fun warn(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("warn", msg)
-        Log.runE { "warn() called with: msg = $msg" }
+        Log.runE(TAG) { "warn() called with: msg = $msg" }
     }
 
     @GXSyncMethod
     fun error(data: String) {
         val msg = getLogMsg(data)
         sendJSLogMsg("error", msg)
-        Log.runE { "error() called with: msg = $msg" }
+        Log.runE(TAG) { "error() called with: msg = $msg" }
     }
 
     override val name: String

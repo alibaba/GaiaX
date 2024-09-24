@@ -57,28 +57,10 @@ fun SystemProp.defaultLog(): Boolean {
     return this["debug.com.alibaba.gaiax.adapter.log", "0"] == "1" || this["debug.com.alibaba.gaiax.all.log", "0"] == "1"
 }
 
-fun SystemProp.defaultLogFlag(): Int {
-    return if (defaultLog()) Log.FLAG_OPEN else 0
-}
-
-inline fun Log.runE(tag: String = "", flags: Int = 0, block: () -> String) {
-    runIf(ERROR, flags or SystemProp.defaultLogFlag(), tag, block)
-}
-
-inline fun Log.runD(tag: String = "", flags: Int = 0, block: () -> String) {
-    runIf(DEBUG, flags or SystemProp.defaultLogFlag(), tag, block)
-}
-
-inline fun Log.runV(tag: String = "", flags: Int = 0, block: () -> String) {
-    runIf(VERBOSE, flags or SystemProp.defaultLogFlag(), tag, block)
-}
-
-inline fun Log.runI(tag: String = "", flags: Int = 0, block: () -> String) {
-    runIf(INFO, flags or SystemProp.defaultLogFlag(), tag, block)
-}
-
-inline fun Log.runW(tag: String = "", flags: Int = 0, block: () -> String) {
-    runIf(WARN, flags or SystemProp.defaultLogFlag(), tag, block)
+inline fun Log.runE(tag: String = "", block: () -> String) {
+    if (SystemProp.defaultLog()) {
+        runIf(ERROR, FLAG_OPEN, tag, block)
+    }
 }
 
 object SystemProp {

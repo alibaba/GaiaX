@@ -427,6 +427,6 @@ class GXSocket : SocketListener {
 
     companion object {
         const val TAG = "GaiaX.Socket"
-        private const val SOCKET_KEY = "GaiaXSocket"
+        private const val SOCKET_KEY = "GaiaX.Socket"
     }
 }

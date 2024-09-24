@@ -240,7 +240,7 @@ public class Draft_6455 extends Draft {
     public HandshakeState acceptHandshakeAsServer(ClientHandshake handshakedata) throws InvalidHandshakeException {
         int v = readVersion(handshakedata);
         if (v != 13) {
-            Log.e("GaiaXSocket", "acceptHandshakeAsServer - Wrong websocket version.");
+            Log.e("GaiaX.Socket", "acceptHandshakeAsServer - Wrong websocket version.");
             return HandshakeState.NOT_MATCHED;
         }
         HandshakeState extensionState = HandshakeState.NOT_MATCHED;
@@ -249,7 +249,7 @@ public class Draft_6455 extends Draft {
             if (knownExtension.acceptProvidedExtensionAsServer(requestedExtension)) {
                 extension = knownExtension;
                 extensionState = HandshakeState.MATCHED;
-                Log.e("GaiaXSocket", "acceptHandshakeAsServer - Matching extension found: {}");
+                Log.e("GaiaX.Socket", "acceptHandshakeAsServer - Matching extension found: {}");
                 break;
             }
         }
@@ -257,7 +257,7 @@ public class Draft_6455 extends Draft {
         if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
             return HandshakeState.MATCHED;
         }
-        Log.e("GaiaXSocket", "acceptHandshakeAsServer - No matching extension or protocol found.");
+        Log.e("GaiaX.Socket", "acceptHandshakeAsServer - No matching extension or protocol found.");
         return HandshakeState.NOT_MATCHED;
     }
 
@@ -271,7 +271,7 @@ public class Draft_6455 extends Draft {
         for (IProtocol knownProtocol : knownProtocols) {
             if (knownProtocol.acceptProvidedProtocol(requestedProtocol)) {
                 protocol = knownProtocol;
-                Log.e("GaiaXSocket", "acceptHandshake - Matching protocol found: {}");
+                Log.e("GaiaX.Socket", "acceptHandshake - Matching protocol found: {}");
                 return HandshakeState.MATCHED;
             }
         }
@@ -281,11 +281,11 @@ public class Draft_6455 extends Draft {
     @Override
     public HandshakeState acceptHandshakeAsClient(ClientHandshake request, ServerHandshake response) throws InvalidHandshakeException {
         if (!basicAccept(response)) {
-            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
+            Log.e("GaiaX.Socket", "acceptHandshakeAsClient - Missing/wrong upgrade or connection in handshake.");
             return HandshakeState.NOT_MATCHED;
         }
         if (!request.hasFieldValue(SEC_WEB_SOCKET_KEY) || !response.hasFieldValue(SEC_WEB_SOCKET_ACCEPT)) {
-            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
+            Log.e("GaiaX.Socket", "acceptHandshakeAsClient - Missing Sec-WebSocket-Key or Sec-WebSocket-Accept");
             return HandshakeState.NOT_MATCHED;
         }
 
@@ -294,7 +294,7 @@ public class Draft_6455 extends Draft {
         seckeyChallenge = generateFinalKey(seckeyChallenge);
 
         if (!seckeyChallenge.equals(seckeyAnswer)) {
-            Log.e("GaiaXSocket", "acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
+            Log.e("GaiaX.Socket", "acceptHandshakeAsClient - Wrong key for Sec-WebSocket-Key.");
             return HandshakeState.NOT_MATCHED;
         }
         HandshakeState extensionState = HandshakeState.NOT_MATCHED;
@@ -303,7 +303,7 @@ public class Draft_6455 extends Draft {
             if (knownExtension.acceptProvidedExtensionAsClient(requestedExtension)) {
                 extension = knownExtension;
                 extensionState = HandshakeState.MATCHED;
-                Log.e("GaiaXSocket", "acceptHandshakeAsClient - Matching extension found: {}");
+                Log.e("GaiaX.Socket", "acceptHandshakeAsClient - Matching extension found: {}");
                 break;
             }
         }
@@ -311,7 +311,7 @@ public class Draft_6455 extends Draft {
         if (protocolState == HandshakeState.MATCHED && extensionState == HandshakeState.MATCHED) {
             return HandshakeState.MATCHED;
         }
-        Log.e("GaiaXSocket", "acceptHandshakeAsClient - No matching extension or protocol found.");
+        Log.e("GaiaX.Socket", "acceptHandshakeAsClient - No matching extension or protocol found.");
         return HandshakeState.NOT_MATCHED;
     }
 
@@ -547,7 +547,7 @@ public class Draft_6455 extends Draft {
         int payloadlength = oldPayloadlength,
                 realpacketsize = oldRealpacketsize;
         if (optcode == Opcode.PING || optcode == Opcode.PONG || optcode == Opcode.CLOSING) {
-            Log.e("GaiaXSocket", "Invalid frame: more than 125 octets");
+            Log.e("GaiaX.Socket", "Invalid frame: more than 125 octets");
             throw new InvalidFrameException("more than 125 octets");
         }
         if (payloadlength == 126) {

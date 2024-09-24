@@ -56,12 +56,12 @@ object Log {
 /**
  * adb shell setprop debug.com.alibaba.gaiax.log 1
  */
-fun SystemProp.defaultLog(): Boolean {
-    return this["debug.com.alibaba.gaiax.sdk.log", "0"] == "1" || this["debug.com.alibaba.gaiax.all.log", "0"] == "1"
+val defaultLog by lazy {
+    SystemProp["debug.com.alibaba.gaiax.sdk.log", "0"] == "1" || SystemProp["debug.com.alibaba.gaiax.all.log", "0"] == "1"
 }
 
 inline fun Log.runE(tag: String = "", block: () -> String) {
-    if (SystemProp.defaultLog()) {
+    if (defaultLog) {
         runIf(ERROR, FLAG_OPEN, tag, block)
     }
 }

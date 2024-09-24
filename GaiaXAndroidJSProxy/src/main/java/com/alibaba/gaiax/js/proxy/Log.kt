@@ -1,7 +1,5 @@
 package com.alibaba.gaiax.js.proxy
 
-import com.alibaba.gaiax.js.utils.Log
-import com.alibaba.gaiax.js.utils.defaultLog
 import java.lang.reflect.Method
 
 
@@ -55,12 +53,12 @@ object Log {
     }
 }
 
-fun SystemProp.defaultLog(): Boolean {
-    return this["debug.com.alibaba.gaiax.js.proxy.log", "0"] == "1" || this["debug.com.alibaba.gaiax.all.log", "0"] == "1"
+val defaultLog by lazy {
+    SystemProp["debug.com.alibaba.gaiax.js.proxy.log", "0"] == "1" || SystemProp["debug.com.alibaba.gaiax.all.log", "0"] == "1"
 }
 
 inline fun Log.runE(tag: String = "", block: () -> String) {
-    if (SystemProp.defaultLog()) {
+    if (defaultLog) {
         runIf(ERROR, FLAG_OPEN, tag, block)
     }
 }

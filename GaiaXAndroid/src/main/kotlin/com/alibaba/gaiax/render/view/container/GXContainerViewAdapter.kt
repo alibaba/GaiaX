@@ -35,7 +35,6 @@ import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.template.GXTemplateKey.GAIAX_CONTAINER_FOOTER
 import com.alibaba.gaiax.utils.GXExceptionHelper
-import com.alibaba.gaiax.utils.Log
 import com.alibaba.gaiax.utils.getStringExt
 
 /**

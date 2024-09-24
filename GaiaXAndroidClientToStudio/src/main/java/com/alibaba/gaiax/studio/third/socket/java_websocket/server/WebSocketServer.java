@@ -543,7 +543,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
             try {
                 selector.close();
             } catch (IOException e) {
-                Log.e("[GaiaX]", "IOException during selector.close", e);
+                Log.e("GX.Socket", "IOException during selector.close", e);
                 onError(null, e);
             }
         }
@@ -551,7 +551,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
             try {
                 server.close();
             } catch (IOException e) {
-                Log.e("[GaiaX]", "IOException during server.close", e);
+                Log.e("GX.Socket", "IOException during server.close", e);
                 onError(null, e);
             }
         }
@@ -604,13 +604,13 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
                 } catch (IOException e) {
                     // there is nothing that must be done here
                 }
-                Log.e("[GaiaX]", "Connection closed because of exception", ex);
+                Log.e("GX.Socket", "Connection closed because of exception", ex);
             }
         }
     }
 
     private void handleFatal(WebSocket conn, Exception e) {
-        Log.e("[GaiaX]", "Shutdown due to fatal error", e);
+        Log.e("GX.Socket", "Shutdown due to fatal error", e);
         onError(conn, e);
         //Shutting down WebSocketWorkers, see #222
         if (decoders != null) {
@@ -624,11 +624,11 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
         try {
             stop();
         } catch (IOException e1) {
-            Log.e("[GaiaX]", "Error during shutdown", e1);
+            Log.e("GX.Socket", "Error during shutdown", e1);
             onError(null, e1);
         } catch (InterruptedException e1) {
             Thread.currentThread().interrupt();
-            Log.e("[GaiaX]", "Interrupt during stop", e);
+            Log.e("GX.Socket", "Interrupt during stop", e);
             onError(null, e1);
         }
     }
@@ -684,7 +684,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
                 removed = this.connections.remove(ws);
             } else {
                 //Don't throw an assert error if the ws is not in the list. e.g. when the other endpoint did not send any handshake. see #512
-                Log.e("[GaiaX]", "Removing connection which is not in the connections collection! Possible no handshake recieved! {}");
+                Log.e("GX.Socket", "Removing connection which is not in the connections collection! Possible no handshake recieved! {}");
             }
         }
         if (isclosed.get() && connections.isEmpty()) {
@@ -978,7 +978,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
             setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
                 @Override
                 public void uncaughtException(Thread t, Throwable e) {
-                    Log.e("[GaiaX]", "Uncaught exception in thread {}: {}");
+                    Log.e("GX.Socket", "Uncaught exception in thread {}: {}");
                 }
             });
         }
@@ -1017,7 +1017,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
             try {
                 ws.decode(buf);
             } catch (Exception e) {
-                Log.e("[GaiaX]", "Error while reading from remote connection", e);
+                Log.e("GX.Socket", "Error while reading from remote connection", e);
             } finally {
                 pushBuffer(buf);
             }

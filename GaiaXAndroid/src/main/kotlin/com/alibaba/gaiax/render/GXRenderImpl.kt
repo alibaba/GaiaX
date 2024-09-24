@@ -26,7 +26,6 @@ import com.alibaba.gaiax.render.view.GXIRootView
 import com.alibaba.gaiax.render.view.GXViewTreeCreator
 import com.alibaba.gaiax.render.view.GXViewTreeUpdate
 import com.alibaba.gaiax.utils.GXGlobalCache
-import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress

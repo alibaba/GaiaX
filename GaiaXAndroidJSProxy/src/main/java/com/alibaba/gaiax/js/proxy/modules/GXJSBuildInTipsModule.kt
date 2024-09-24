@@ -8,8 +8,9 @@ import com.alibaba.gaiax.js.proxy.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
+import com.alibaba.gaiax.js.proxy.Log
+import com.alibaba.gaiax.js.proxy.runE
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
-import com.alibaba.gaiax.js.utils.Log
 
 
 /**
@@ -23,9 +24,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
 
     @GXAsyncMethod
     fun showToast(data: JSONObject, callback: IGXCallback) {
-        if (Log.isLog()) {
-            Log.d("showToast() called with: data = $data, callback = $callback")
-        }
+        Log.runE { "showToast() called with: data = $data, callback = $callback" }
         try {
             val title = data.getString("title") ?: ""
             val duration = data.getInteger("duration") ?: 3
@@ -46,9 +45,7 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
 
     @GXAsyncMethod
     fun showAlert(data: JSONObject, callback: IGXCallback) {
-        if (Log.isLog()) {
-            Log.d("showAlert() called with: data = $data, callback = $callback")
-        }
+        Log.runE { "showAlert() called with: data = $data, callback = $callback" }
         try {
             val title = data.getString("title") ?: ""
             val message = data.getString("message") ?: ""
@@ -77,6 +74,4 @@ class GXJSBuildInTipsModule : GXJSBaseModule() {
             e.printStackTrace()
         }
     }
-
-
 }

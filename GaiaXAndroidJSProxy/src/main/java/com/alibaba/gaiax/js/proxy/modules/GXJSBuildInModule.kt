@@ -6,7 +6,8 @@ import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.annotation.GXAsyncMethod
 import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
-import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.proxy.Log
+import com.alibaba.gaiax.js.proxy.runE
 
 internal class GXJSBuildInModule : GXJSBaseModule() {
 
@@ -15,9 +16,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
 
     @GXAsyncMethod
     fun setData(data: JSONObject, params: JSONObject, callback: IGXCallback) {
-        if (Log.isLog()) {
-            Log.d("setData() called with: params = $params, callback = $callback")
-        }
+        Log.runE { "setData() called with: params = $params, callback = $callback" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
@@ -29,9 +28,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
 
     @GXSyncMethod
     fun getData(params: JSONObject): JSONObject {
-        if (Log.isLog()) {
-            Log.d("getData() called with: params = $params")
-        }
+        Log.runE { "getData() called with: params = $params" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {
@@ -42,9 +39,7 @@ internal class GXJSBuildInModule : GXJSBaseModule() {
 
     @GXSyncMethod
     fun getComponentIndex(params: JSONObject): Int {
-        if (Log.isLog()) {
-            Log.d("getComponentIndex() called with: params = $params")
-        }
+        Log.runE { "getComponentIndex() called with: params = $params" }
         val templateId = params.getString("templateId")
         val componentId = params.getLong("instanceId")
         if (templateId != null && componentId != null) {

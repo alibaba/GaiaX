@@ -40,10 +40,6 @@ fun JSON.getAnyExt(valuePath: String): Any? {
                 if (it.size > arrayIndex) {
                     return it[arrayIndex]
                 } else {
-                    Log.e(
-                        "[GaiaX]",
-                        "getAnyExt IndexOutOfBounds: XPath: $valuePath Index: ${arrayIndex}, Size: ${it.size}"
-                    )
                     return null
                 }
             }

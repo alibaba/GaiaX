@@ -11,6 +11,7 @@ import com.alibaba.gaiax.js.impl.qjs.module.QuickJSTimer
 import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.utils.runE
 import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
 
@@ -34,9 +35,7 @@ internal class QuickJSContext(
         engine.checkQuickJS()
         runtime.checkRuntime()
         jsContext = runtime.jsRuntime?.createJSContext()
-        if (Log.isLog()) {
-            Log.d("initContext() engine = $engine, runtime = $runtime, jsContext = $jsContext")
-        }
+        Log.runE { "initContext() engine = $engine, runtime = $runtime, jsContext = $jsContext" }
     }
 
     override fun initModule(module: String) {
@@ -44,9 +43,7 @@ internal class QuickJSContext(
         runtime.checkRuntime()
         checkContext()
 
-        if (Log.isLog()) {
-            Log.d("initModule() called with: module = $module")
-        }
+        Log.runE { "initModule() called with: module = $module" }
 
         when (module) {
             "timer" -> initModuleTimer()
@@ -69,9 +66,7 @@ internal class QuickJSContext(
             sb.append(GXScriptBuilder.buildImportScript())
             sb.append(GXScriptBuilder.buildGlobalContext(contextId, 0))
             sb.append(GXScriptBuilder.buildExtendAndAssignScript())
-            sb.append(
-                GXJSEngine.instance.context.resources.assets.open(GXHostContext.BOOTSTRAP_JS)
-                    .bufferedReader(Charsets.UTF_8).use { it.readText() })
+            sb.append(GXJSEngine.instance.context.resources.assets.open(GXHostContext.BOOTSTRAP_JS).bufferedReader(Charsets.UTF_8).use { it.readText() })
             sb.append(GXJSEngine.instance.moduleManager.buildModulesScript(GXJSEngine.EngineType.QuickJS))
             sb.append(GXScriptBuilder.buildStyle())
             bootstrap = sb.toString()
@@ -91,9 +86,7 @@ internal class QuickJSContext(
     }
 
     override fun startBootstrap() {
-        if (Log.isLog()) {
-            Log.d("startBootstrap() called")
-        }
+        Log.runE { "startBootstrap() called" }
         bootstrap?.let { bootstrap ->
             evaluateJS(bootstrap)
         }
@@ -101,22 +94,10 @@ internal class QuickJSContext(
 
     private fun initModuleTimer() {
         jsContext?.let { context ->
-            context.globalObject.setProperty(
-                "setTimeout",
-                context.createJSFunction(QuickJSTimer.createSetTimeoutFunc())
-            )
-            context.globalObject.setProperty(
-                "clearTimeout",
-                context.createJSFunction(QuickJSTimer.createClearTimeoutFunc())
-            )
-            context.globalObject.setProperty(
-                "setInterval",
-                context.createJSFunction(QuickJSTimer.createSetIntervalFunc())
-            )
-            context.globalObject.setProperty(
-                "clearInterval",
-                context.createJSFunction(QuickJSTimer.createClearIntervalFunc())
-            )
+            context.globalObject.setProperty("setTimeout", context.createJSFunction(QuickJSTimer.createSetTimeoutFunc()))
+            context.globalObject.setProperty("clearTimeout", context.createJSFunction(QuickJSTimer.createClearTimeoutFunc()))
+            context.globalObject.setProperty("setInterval", context.createJSFunction(QuickJSTimer.createSetIntervalFunc()))
+            context.globalObject.setProperty("clearInterval", context.createJSFunction(QuickJSTimer.createClearIntervalFunc()))
         }
     }
 
@@ -127,21 +108,15 @@ internal class QuickJSContext(
     }
 
     override fun evaluateJS(script: String, argsMap: JSONObject) {
-        if (Log.isScriptLog()) {
-            Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
-        }
+        Log.runE { "evaluateJS() called with: script = $script" }
         this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_MODULE, 0)
     }
 
     override fun <T> evaluateJS(script: String, clazz: Class<T>?): T? {
-        if (Log.isScriptLog()) {
-            Log.e("jsContext = $jsContext, evaluateJS() called with: script = $script")
-        }
+        Log.runE { "evaluateJS() called with: script = $script" }
         // 执行带返回值的JS脚本，需要使用EVAL_TYPE_GLOBAL
         val ret = this.jsContext?.evaluate(script, "index.js", JSContext.EVAL_TYPE_GLOBAL, 0, clazz)
-        if (Log.isScriptLog()) {
-            Log.e("jsContext = $jsContext, evaluateJS() called with: ret=$ret")
-        }
+        Log.runE { "evaluateJS() called with: ret = $ret" }
         return ret
     }
 

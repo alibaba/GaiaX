@@ -1,4 +1,4 @@
-package com.alibaba.gaiax.utils
+package com.alibaba.gaiax.adapter
 
 import java.lang.reflect.Method
 
@@ -20,7 +20,7 @@ object Log {
 
     private const val LOG_MAX_LENGTH = 4000
 
-    const val TAG = "GX"
+    const val TAG = "GX.Adapter"
 
     fun d(tag: String, msg: String) {
         log(DEBUG, tag, msg)
@@ -53,11 +53,8 @@ object Log {
     }
 }
 
-/**
- * adb shell setprop debug.com.alibaba.gaiax.log 1
- */
 fun SystemProp.defaultLog(): Boolean {
-    return this["debug.com.alibaba.gaiax.log", "0"] == "1" || this["debug.com.alibaba.gaiax.all.log", "0"] == "1"
+    return this["debug.com.alibaba.gaiax.adapter.log", "0"] == "1" || this["debug.com.alibaba.gaiax.all.log", "0"] == "1"
 }
 
 fun SystemProp.defaultLogFlag(): Int {

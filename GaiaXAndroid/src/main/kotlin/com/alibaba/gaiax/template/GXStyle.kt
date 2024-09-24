@@ -22,7 +22,6 @@ import android.view.View
 import app.visly.stretch.Rect
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress

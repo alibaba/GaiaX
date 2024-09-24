@@ -1,12 +1,9 @@
 package com.alibaba.gaiax.js
 
 import android.content.Context
-import android.text.TextUtils
-import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPage
-import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.engine.GXHostEngine
 import com.alibaba.gaiax.js.impl.debug.DebugJSContext
 import com.alibaba.gaiax.js.impl.debug.ISocketBridgeListener
@@ -14,6 +11,7 @@ import com.alibaba.gaiax.js.support.GXModuleManager
 import com.alibaba.gaiax.js.support.IModuleManager
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.utils.runE
 
 /**
  * JS引擎类，负责JS引擎的启动、关闭，自定义模块的注册等逻辑
@@ -64,14 +62,10 @@ class GXJSEngine {
      *  - 初始化内建模块
      */
     fun init(context: Context): GXJSEngine {
-        if (Log.isLog()) {
-            Log.d("init() called")
-        }
+        Log.runE { "init() called" }
         this.context = context.applicationContext
         initModules()
-        if (Log.isLog()) {
-            Log.d("init() called end")
-        }
+        Log.runE { "init() called end" }
         return this
     }
 
@@ -90,9 +84,7 @@ class GXJSEngine {
             registerAssetsModules()
         } catch (e: Exception) {
             e.printStackTrace()
-            if (Log.isLog()) {
-                Log.d("initModules() called with: e = $e")
-            }
+            Log.runE { "initModules() called with: e = $e"  }
         }
     }
 
@@ -101,9 +93,7 @@ class GXJSEngine {
         val allModules = JSONObject()
         val assetsModules = assetsModules(GAIAX_JS_MODULES)
         assetsModules?.forEach { file ->
-            if (Log.isLog()) {
-                Log.d("registerAssetsModules() called with: file = $file")
-            }
+            Log.runE { "registerAssetsModules() called with: file = $file" }
             if (file.startsWith(MODULE_PREFIX) && file.endsWith(MODULE_SUFFIX)) {
                 try {
                     val bizModules = JSONObject.parseObject(
@@ -111,23 +101,17 @@ class GXJSEngine {
                     allModules.putAll(bizModules)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    if (Log.isLog()) {
-                        Log.d("registerAssetsModules() called with: e = $e")
-                    }
+                    Log.runE { "registerAssetsModules() called with: e = $e" }
                 }
             }
         }
-        if (Log.isLog()) {
-            Log.d("registerAssetsModules() called with: allModules = $allModules")
-        }
+        Log.runE { "registerAssetsModules() called with: allModules = $allModules" }
         allModules.forEach {
             try {
                 Class.forName(it.value.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
-                if (Log.isLog()) {
-                    Log.d("registerAssetsModules() called with: e = $e")
-                }
+                Log.runE { "registerAssetsModules() called with: e = $e" }
                 null
             }?.let { clazz ->
                 if (clazz.superclass == GXJSBaseModule::class.java) {
@@ -141,17 +125,14 @@ class GXJSEngine {
 
     private fun assetsOpen(file: String) = synchronized(context.assets) { context.assets.open(file) }
 
-    private fun assetsModules(path: String): Array<out String>? =
-            synchronized(context.assets) { context.assets.list(path) }
+    private fun assetsModules(path: String): Array<out String>? = synchronized(context.assets) { context.assets.list(path) }
 
 
     /**
      * 启动JS引擎
      */
     fun startDefaultEngine() {
-        if (Log.isLog()) {
-            Log.d("startDefaultEngine()")
-        }
+        Log.runE { "startDefaultEngine() called" }
         synchronized(EngineType.QuickJS) {
             if (quickJSEngine == null) {
                 // 创建引擎
@@ -164,9 +145,7 @@ class GXJSEngine {
     }
 
     fun startDebugEngine() {
-        if (Log.isLog()) {
-            Log.d("startDebugEngine()")
-        }
+        Log.runE { "startDebugEngine() called" }
         synchronized(EngineType.DebugJS) {
             if (debugEngine == null) {
                 // 创建引擎
@@ -179,9 +158,7 @@ class GXJSEngine {
     }
 
     fun stopDefaultEngine() {
-        if (Log.isLog()) {
-            Log.d("stopDefaultEngine()")
-        }
+        Log.runE { "stopDefaultEngine() called" }
         synchronized(EngineType.QuickJS) {
             if (quickJSEngine != null) {
                 quickJSEngine?.destroyEngine()
@@ -191,9 +168,7 @@ class GXJSEngine {
     }
 
     fun stopDebugEngine() {
-        if (Log.isLog()) {
-            Log.d("stopDebugEngine()")
-        }
+        Log.runE { "stopDebugEngine() called" }
         synchronized(EngineType.DebugJS) {
             if (debugEngine != null) {
                 debugEngine?.destroyEngine()
@@ -213,9 +188,7 @@ class GXJSEngine {
      * 注册自定义模块
      */
     fun registerModule(moduleClazz: Class<out GXJSBaseModule>): GXJSEngine {
-        if (Log.isLog()) {
-            Log.d("registerModule() called with: moduleClazz = $moduleClazz")
-        }
+        Log.runE { "registerModule() called with: moduleClazz = $moduleClazz" }
         moduleManager.registerModule(moduleClazz)
         return this
     }

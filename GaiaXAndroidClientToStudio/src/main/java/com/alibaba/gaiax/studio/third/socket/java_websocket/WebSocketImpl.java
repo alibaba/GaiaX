@@ -268,7 +268,7 @@ public class WebSocketImpl implements WebSocket {
                                 socketBuffer.reset();
                                 Handshakedata tmphandshake = d.translateHandshake(socketBuffer);
                                 if (!(tmphandshake instanceof ClientHandshake)) {
-                                    Log.e("[GaiaX]", "Closing due to wrong handshake");
+                                    Log.e("GX.Socket", "Closing due to wrong handshake");
                                     closeConnectionDueToWrongHandshake(new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "wrong http function"));
                                     return false;
                                 }
@@ -280,11 +280,11 @@ public class WebSocketImpl implements WebSocket {
                                     try {
                                         response = wsl.onWebsocketHandshakeReceivedAsServer(this, d, handshake);
                                     } catch (InvalidDataException e) {
-                                        Log.e("[GaiaX]", "Closing due to wrong handshake. Possible handshake rejection", e);
+                                        Log.e("GX.Socket", "Closing due to wrong handshake. Possible handshake rejection", e);
                                         closeConnectionDueToWrongHandshake(e);
                                         return false;
                                     } catch (RuntimeException e) {
-                                        Log.e("[GaiaX]", "Closing due to internal server error", e);
+                                        Log.e("GX.Socket", "Closing due to internal server error", e);
                                         wsl.onWebsocketError(this, e);
                                         closeConnectionDueToInternalServerError(e);
                                         return false;
@@ -299,7 +299,7 @@ public class WebSocketImpl implements WebSocket {
                             }
                         }
                         if (draft == null) {
-                            Log.e("[GaiaX]", "Closing due to protocol error: no draft matches");
+                            Log.e("GX.Socket", "Closing due to protocol error: no draft matches");
                             closeConnectionDueToWrongHandshake(new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "no draft matches"));
                         }
                         return false;
@@ -307,7 +307,7 @@ public class WebSocketImpl implements WebSocket {
                         // special case for multiple step handshakes
                         Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
                         if (!(tmphandshake instanceof ClientHandshake)) {
-                            Log.e("[GaiaX]", "Closing due to protocol error: wrong http function");
+                            Log.e("GX.Socket", "Closing due to protocol error: wrong http function");
                             flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
                             return false;
                         }
@@ -318,7 +318,7 @@ public class WebSocketImpl implements WebSocket {
                             open(handshake);
                             return true;
                         } else {
-                            Log.e("[GaiaX]", "Closing due to protocol error: the handshake did finally not match");
+                            Log.e("GX.Socket", "Closing due to protocol error: the handshake did finally not match");
                             close(CloseFrame.PROTOCOL_ERROR, "the handshake did finally not match");
                         }
                         return false;
@@ -327,7 +327,7 @@ public class WebSocketImpl implements WebSocket {
                     draft.setParseMode(role);
                     Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
                     if (!(tmphandshake instanceof ServerHandshake)) {
-                        Log.e("[GaiaX]", "Closing due to protocol error: wrong http function");
+                        Log.e("GX.Socket", "Closing due to protocol error: wrong http function");
                         flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
                         return false;
                     }
@@ -337,11 +337,11 @@ public class WebSocketImpl implements WebSocket {
                         try {
                             wsl.onWebsocketHandshakeReceivedAsClient(this, handshakerequest, handshake);
                         } catch (InvalidDataException e) {
-                            Log.e("[GaiaX]", "Closing due to invalid data exception. Possible handshake rejection", e);
+                            Log.e("GX.Socket", "Closing due to invalid data exception. Possible handshake rejection", e);
                             flushAndClose(e.getCloseCode(), e.getMessage(), false);
                             return false;
                         } catch (RuntimeException e) {
-                            Log.e("[GaiaX]", "Closing since client was never connected", e);
+                            Log.e("GX.Socket", "Closing since client was never connected", e);
                             wsl.onWebsocketError(this, e);
                             flushAndClose(CloseFrame.NEVER_CONNECTED, e.getMessage(), false);
                             return false;
@@ -349,12 +349,12 @@ public class WebSocketImpl implements WebSocket {
                         open(handshake);
                         return true;
                     } else {
-                        Log.e("[GaiaX]", "Closing due to protocol error: draft {} refuses handshake");
+                        Log.e("GX.Socket", "Closing due to protocol error: draft {} refuses handshake");
                         close(CloseFrame.PROTOCOL_ERROR, "draft " + draft + " refuses handshake");
                     }
                 }
             } catch (InvalidHandshakeException e) {
-                Log.e("[GaiaX]", "Closing due to invalid handshake", e);
+                Log.e("GX.Socket", "Closing due to invalid handshake", e);
                 close(e);
             }
         } catch (IncompleteHandshakeException e) {
@@ -387,12 +387,12 @@ public class WebSocketImpl implements WebSocket {
             }
         } catch (LimitExceededException e) {
             if (e.getLimit() == Integer.MAX_VALUE) {
-                Log.e("[GaiaX]", "Closing due to invalid size of frame", e);
+                Log.e("GX.Socket", "Closing due to invalid size of frame", e);
                 wsl.onWebsocketError(this, e);
             }
             close(e);
         } catch (InvalidDataException e) {
-            Log.e("[GaiaX]", "Closing due to invalid data in frame", e);
+            Log.e("GX.Socket", "Closing due to invalid data in frame", e);
             wsl.onWebsocketError(this, e);
             close(e);
         }
@@ -463,7 +463,7 @@ public class WebSocketImpl implements WebSocket {
                             sendFrame(closeFrame);
                         }
                     } catch (InvalidDataException e) {
-                        Log.e("[GaiaX]", "generated frame is invalid", e);
+                        Log.e("GX.Socket", "generated frame is invalid", e);
                         wsl.onWebsocketError(this, e);
                         flushAndClose(CloseFrame.ABNORMAL_CLOSE, "generated frame is invalid", false);
                     }
@@ -518,9 +518,9 @@ public class WebSocketImpl implements WebSocket {
                 channel.close();
             } catch (IOException e) {
                 if (e.getMessage().equals("Broken pipe")) {
-                    Log.e("[GaiaX]", "Caught IOException: Broken pipe during closeConnection()", e);
+                    Log.e("GX.Socket", "Caught IOException: Broken pipe during closeConnection()", e);
                 } else {
-                    Log.e("[GaiaX]", "Exception during channel.close()", e);
+                    Log.e("GX.Socket", "Exception during channel.close()", e);
                     wsl.onWebsocketError(this, e);
                 }
             }
@@ -566,7 +566,7 @@ public class WebSocketImpl implements WebSocket {
         try {
             wsl.onWebsocketClosing(this, code, message, remote);
         } catch (RuntimeException e) {
-            Log.e("[GaiaX]", "Exception in onWebsocketClosing", e);
+            Log.e("GX.Socket", "Exception in onWebsocketClosing", e);
             wsl.onWebsocketError(this, e);
         }
         if (draft != null)
@@ -685,7 +685,7 @@ public class WebSocketImpl implements WebSocket {
             // Stop if the client code throws an exception
             throw new InvalidHandshakeException("Handshake data rejected by client.");
         } catch (RuntimeException e) {
-            Log.e("[GaiaX]", "Exception in startHandshake", e);
+            Log.e("GX.Socket", "Exception in startHandshake", e);
             wsl.onWebsocketError(this, e);
             throw new InvalidHandshakeException("rejected because of " + e);
         }
@@ -713,7 +713,7 @@ public class WebSocketImpl implements WebSocket {
     }
 
     private void open(Handshakedata d) {
-        Log.e("[GaiaX]", "open using draft: {}");
+        Log.e("GX.Socket", "open using draft: {}");
         readyState = ReadyState.OPEN;
         try {
             wsl.onWebsocketOpen(this, d);

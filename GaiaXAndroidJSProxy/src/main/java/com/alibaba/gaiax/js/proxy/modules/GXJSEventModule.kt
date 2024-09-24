@@ -6,7 +6,8 @@ import com.alibaba.gaiax.js.proxy.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
-import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.proxy.Log
+import com.alibaba.gaiax.js.proxy.runE
 
 /**
  * 实现从JS中为Native视图添加事件
@@ -16,9 +17,7 @@ class GXJSEventModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun addEventListener(data: JSONObject, promise: IGXPromise) {
-        if (Log.isLog()) {
-            Log.d("addEventListener() called with: data = $data")
-        }
+        Log.runE { "addEventListener() called with: data = $data" }
         // https://yuque.antfin-inc.com/ronghui.zrh/bpnuxl/vc6n4g
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
@@ -38,10 +37,7 @@ class GXJSEventModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun removeEventListener(data: JSONObject, promise: IGXPromise) {
-        if (Log.isLog()) {
-            Log.d("removeEventListener() called with: data = $data")
-        }
-
+        Log.runE { "removeEventListener() called with: data = $data" }
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
         val componentId = data.getLong("instanceId")

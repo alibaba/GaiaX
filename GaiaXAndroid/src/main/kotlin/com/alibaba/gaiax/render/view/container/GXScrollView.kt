@@ -25,7 +25,6 @@ import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.view.GXIRelease
-import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress

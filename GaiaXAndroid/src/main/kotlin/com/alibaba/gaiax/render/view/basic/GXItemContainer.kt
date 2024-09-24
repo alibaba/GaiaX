@@ -4,9 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.annotation.Keep
-import com.alibaba.gaiax.GXRegisterCenter
-import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.utils.Log
 
 @Keep
 open class GXItemContainer : LinearLayout {

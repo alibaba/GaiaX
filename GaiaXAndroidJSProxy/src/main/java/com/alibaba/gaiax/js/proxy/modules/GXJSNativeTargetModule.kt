@@ -5,16 +5,15 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.proxy.GXJSRenderProxy
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
-import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.proxy.Log
+import com.alibaba.gaiax.js.proxy.runE
 
 @Keep
 class GXJSNativeTargetModule : GXJSBaseModule() {
 
     @GXSyncMethod
     fun getElementByData(data: JSONObject): JSONObject {
-        if (Log.isLog()) {
-            Log.d("getElementByData() called with: data = $data")
-        }
+        Log.runE { "getElementByData() called with: data = $data" }
         //  {"instanceId":19,"targetId":"phone-demand","templateId":"phone-demand"}
         val targetId = data.getString("targetId")
         val templateId = data.getString("templateId")
@@ -23,9 +22,7 @@ class GXJSNativeTargetModule : GXJSBaseModule() {
         val delegate = GXJSRenderProxy.instance
         return if (delegate != null) {
             val result = delegate.getNodeInfo(targetId, templateId, instanceId)
-            if (Log.isLog()) {
-                Log.d("getElementByData() called with: result = $result")
-            }
+            Log.runE { "getElementByData() called with: result = $result" }
             result["targetId"] = targetId
             result
         } else {

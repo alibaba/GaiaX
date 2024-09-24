@@ -2,7 +2,6 @@ package com.alibaba.gaiax.context
 
 import app.visly.stretch.Layout
 import com.alibaba.gaiax.render.node.GXNode
-import com.alibaba.gaiax.utils.Log
 
 fun GXTemplateContext.initLayoutForScroll() {
     if (scrollItemLayoutCache == null) {

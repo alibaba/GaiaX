@@ -3,8 +3,11 @@ package com.alibaba.gaiax.js.impl.qjs.module
 import androidx.annotation.Keep
 import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.utils.IdGenerator
-import com.alibaba.gaiax.js.utils.Log
-import com.alibaba.gaiax.quickjs.*
+import com.alibaba.gaiax.quickjs.JSContext
+import com.alibaba.gaiax.quickjs.JSFunction
+import com.alibaba.gaiax.quickjs.JSFunctionCallback
+import com.alibaba.gaiax.quickjs.JSInt
+import com.alibaba.gaiax.quickjs.JSValue
 
 
 @Keep
@@ -23,9 +26,6 @@ internal object QuickJSTimer {
             if (contextIdProperty is JSInt) {
                 val contextId = contextIdProperty.cast(JSInt::class.java).long
                 val taskId = IdGenerator.genIntId()
-                if (Log.isLog()) {
-                    Log.e("createTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
-                }
                 gxHostContext()?.executeDelayTask(taskId, delay) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }
@@ -47,9 +47,6 @@ internal object QuickJSTimer {
             val contextIdProperty = jsContext.globalObject.getProperty("__CONTEXT_ID__")
             if (contextIdProperty is JSInt) {
                 val contextId = contextIdProperty.cast(JSInt::class.java).long
-                if (Log.isLog()) {
-                    Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
-                }
                 gxHostContext()?.remoteDelayTask(taskId)
             }
             return jsContext.createJSUndefined()
@@ -65,9 +62,6 @@ internal object QuickJSTimer {
             val contextIdProperty = jsContext.globalObject.getProperty("__CONTEXT_ID__")
             if (contextIdProperty is JSInt) {
                 val contextId = contextIdProperty.cast(JSInt::class.java).long
-                if (Log.isLog()) {
-                    Log.e("createClearTimeoutFunc() called with: contextId = $contextId, taskId = $taskId")
-                }
                 gxHostContext()?.remoteIntervalTask(taskId)
             }
             return jsContext.createJSUndefined()
@@ -86,9 +80,6 @@ internal object QuickJSTimer {
             if (contextIdProperty is JSInt) {
                 val contextId = contextIdProperty.cast(JSInt::class.java).long
                 val taskId = IdGenerator.genIntId()
-                if (Log.isLog()) {
-                    Log.e("createSetIntervalFunc() called with: contextId = $contextId, taskId = $taskId ")
-                }
                 gxHostContext()?.executeIntervalTask(taskId, interval) {
                     func.invoke(jsContext.createJSUndefined(), arrayOf())
                 }

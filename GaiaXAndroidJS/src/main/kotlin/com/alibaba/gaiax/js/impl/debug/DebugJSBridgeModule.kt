@@ -7,7 +7,6 @@ import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.engine.GXHostContext
-import com.alibaba.gaiax.js.utils.Log
 
 /**
  * 从JS运行时中调用某个Module的方法时，会从这里中转到HostContext中
@@ -52,16 +51,12 @@ internal class DebugJSBridgeModule(private val hostContext: GXHostContext, priva
         val args = params["args"] as JSONArray
         args.add(object : IGXCallback {
             override fun invoke(result: Any?) {
-                if (Log.isLog()) {
-                    Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
-                    val script = if (result != null && !TextUtils.isEmpty(result.toString())) {
-                        "Bridge.invokeCallback(${callBackId}, $result)"
-                    } else {
-                        "Bridge.invokeCallback(${callBackId})"
-                    }
-                    this@DebugJSBridgeModule.sendWorkerMethodResult(WebsocketJSMethodName.CallAsync, socketId, script)
+                val script = if (result != null && !TextUtils.isEmpty(result.toString())) {
+                    "Bridge.invokeCallback(${callBackId}, $result)"
+                } else {
+                    "Bridge.invokeCallback(${callBackId})"
                 }
-
+                this@DebugJSBridgeModule.sendWorkerMethodResult(WebsocketJSMethodName.CallAsync, socketId, script)
             }
         })
         hostContext.bridge.callAsync(conTextId.toLong(), moduleId.toLong(), methodId.toLong(), args)
@@ -178,9 +173,6 @@ internal class DebugJSBridgeModule(private val hostContext: GXHostContext, priva
     }
 
     private fun sendMsg(message: JSONObject) {
-        if (Log.isLog()) {
-            Log.d("sendMsg() called $message")
-        }
         GXJSEngine.instance.socketSender?.onSendMsg(message)
     }
 }

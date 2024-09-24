@@ -35,7 +35,6 @@ import com.alibaba.gaiax.context.putNodeForScroll
 import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
-import com.alibaba.gaiax.utils.Log
 import com.alibaba.gaiax.utils.getStringExt
 import kotlin.math.ceil
 import kotlin.math.max

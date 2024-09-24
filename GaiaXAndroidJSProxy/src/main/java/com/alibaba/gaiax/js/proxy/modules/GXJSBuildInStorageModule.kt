@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.js.api.GXJSBaseModule
 import com.alibaba.gaiax.js.api.IGXPromise
 import com.alibaba.gaiax.js.api.annotation.GXPromiseMethod
+import com.alibaba.gaiax.js.proxy.Log
+import com.alibaba.gaiax.js.proxy.runE
 import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.proxy.utils.GXJSPreferenceUtil
-import com.alibaba.gaiax.js.utils.Log
 
 class GXJSBuildInStorageModule : GXJSBaseModule() {
     override val name: String
@@ -26,9 +27,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
                 val data = target["data"]
                 val type = target.getString("type")
                 val value = JSDataConvert.getDataValueByType(type, data)
-                if (Log.isLog()) {
-                    Log.d("getStorage() called with: key = $key, targetStr = $targetStr, value = $value")
-                }
+                Log.runE { "getStorage() called with: key = $key, targetStr = $targetStr, value = $value" }
                 promise.resolve().invoke(value)
             } catch (e: Exception) {
                 promise.reject().invoke(e.message)
@@ -48,9 +47,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
                 this["type"] = type
                 this["data"] = value
             }
-            if (Log.isLog()) {
-                Log.d("setStorage() called with: key = $key, type = $type, target = $value")
-            }
+            Log.runE { "setStorage() called with: key = $key, type = $type, target = $value" }
             prefs.putString(key, target.toString())
             promise.resolve().invoke()
         } catch (e: Exception) {
@@ -60,9 +57,7 @@ class GXJSBuildInStorageModule : GXJSBaseModule() {
 
     @GXPromiseMethod
     fun removeStorage(key: String, promise: IGXPromise) {
-        if (Log.isLog()) {
-            Log.d("removeStorage() called with: key = $key")
-        }
+        Log.runE { "removeStorage() called with: key = $key" }
         val prefs = GXJSPreferenceUtil.createSharePreference(GAIAX_JS_STORAGE)
         if (prefs.contains(key)) {
             try {

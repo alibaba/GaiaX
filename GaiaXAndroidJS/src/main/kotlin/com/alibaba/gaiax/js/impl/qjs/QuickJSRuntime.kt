@@ -6,6 +6,7 @@ import com.alibaba.gaiax.js.engine.GXHostRuntime
 import com.alibaba.gaiax.js.engine.IEngine
 import com.alibaba.gaiax.js.engine.IRuntime
 import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.utils.runE
 import com.alibaba.gaiax.quickjs.JSRuntime
 
 internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, val engine: QuickJSEngine) :
@@ -35,9 +36,7 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
         // 设置Promise方法的异常兜底回调
         jsRuntime?.setPromiseRejectionHandler { message ->
 
-            if (Log.isLog()) {
-                Log.e("setPromiseRejectionHandler() called with: message = $message")
-            }
+            Log.runE { "setPromiseRejectionHandler() called with: message = $message" }
 
             GXJSEngine.instance.logListener?.errorLog(JSONObject().apply {
                 this["data"] = JSONObject().apply {
@@ -51,9 +50,7 @@ internal class QuickJSRuntime private constructor(val runtime: GXHostRuntime, va
 
         // 设置JS运行时是否需要中断
         jsRuntime?.setInterruptHandler {
-            if (Log.isLog()) {
-                Log.e("setInterruptHandler() called with:")
-            }
+            Log.runE { "setInterruptHandler() called with:" }
             false
         }
     }

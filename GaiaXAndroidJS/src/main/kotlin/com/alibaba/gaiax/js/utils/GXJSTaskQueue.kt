@@ -67,9 +67,6 @@ internal class GaiaXJSTaskQueue private constructor(val contextId: Long) {
         val taskQueueName = "GaiaXJSQueue-$contextId"
         taskThread = HandlerThread(taskQueueName)
         taskThread!!.start()
-        if (Log.isLog()) {
-            Log.d("initTaskQueue() called taskQueueName = $taskQueueName")
-        }
         taskQueue = object : Handler(taskThread!!.looper) {
             override fun handleMessage(oldMsg: Message) {
                 super.handleMessage(oldMsg)

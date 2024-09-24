@@ -8,6 +8,7 @@ import com.alibaba.gaiax.js.api.annotation.GXSyncMethod
 import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.IdGenerator
 import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.utils.runE
 
 internal class GXModule(nativeModule: IGXModule) {
 
@@ -79,16 +80,12 @@ internal class GXModule(nativeModule: IGXModule) {
     }
 
     fun invokeMethodSync(methodId: Long, args: JSONArray): Any? {
-        if (Log.isLog()) {
-            Log.d("invokeMethodSync() called with: methodId = $methodId args = $args")
-        }
+        Log.runE { "invokeMethodSync() called with: methodId = $methodId args = $args" }
         try {
             return syncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            if (Log.isLog()) {
-                Log.d("invokeMethodSync() called with: exception message = ${e.message}")
-            }
+            Log.runE { "invokeMethodSync() called with: exception message = ${e.message}" }
         }
         return null
     }
@@ -98,9 +95,7 @@ internal class GXModule(nativeModule: IGXModule) {
             asyncMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            if (Log.isLog()) {
-                Log.d("invokeMethodAsync() called with: exception message = ${e.message}")
-            }
+            Log.runE { "invokeMethodAsync() called with: exception message = ${e.message}" }
         }
     }
 
@@ -109,9 +104,7 @@ internal class GXModule(nativeModule: IGXModule) {
             promiseMethods[methodId]?.invoke(module, args)
         } catch (e: Exception) {
             e.printStackTrace()
-            if (Log.isLog()) {
-                Log.d("invokePromiseMethod() called with: exception message = ${e.message}")
-            }
+            Log.runE { "invokePromiseMethod() called with: exception message = ${e.message}" }
         }
     }
 

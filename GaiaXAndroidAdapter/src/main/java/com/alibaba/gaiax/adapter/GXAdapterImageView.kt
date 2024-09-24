@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.Keep
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.render.view.basic.GXImageView
-import com.alibaba.gaiax.utils.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -58,14 +57,10 @@ class GXAdapterImageView(context: Context) : GXImageView(context) {
 
         // 如果要加载的URI和缓存一致，那么跳过这次逻辑处理
         if (lastUrl == uri) {
-            if (Log.isLog()) {
-                Log.e("bindNetUri() called with: skip $uri")
-            }
+            Log.runE { "bindNetUri() called with: skip $uri" }
             return
         } else {
-            if (Log.isLog()) {
-                Log.e("bindNetUri() called with: data = $data, uri = $uri, placeholder = $placeholder")
-            }
+            Log.runE { "bindNetUri() called with: data = $data, uri = $uri, placeholder = $placeholder" }
         }
 
         // 占位图仅对网络图生效

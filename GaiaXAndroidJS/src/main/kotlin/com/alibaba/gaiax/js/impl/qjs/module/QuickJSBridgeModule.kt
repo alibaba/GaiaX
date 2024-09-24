@@ -8,6 +8,7 @@ import com.alibaba.gaiax.js.engine.GXHostContext
 import com.alibaba.gaiax.js.support.JSDataConvert
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
 import com.alibaba.gaiax.js.utils.Log
+import com.alibaba.gaiax.js.utils.runE
 import com.alibaba.gaiax.quickjs.BridgeModuleListener
 import com.alibaba.gaiax.quickjs.JSContext
 import com.alibaba.gaiax.quickjs.JSFunction
@@ -15,13 +16,10 @@ import com.alibaba.gaiax.quickjs.JSFunction
 /**
  * 从JS运行时中调用某个Module的方法时，会从这里中转到HostContext中
  */
-internal class QuickJSBridgeModule(private val hostContext: GXHostContext, private val jsContext: JSContext) :
-    BridgeModuleListener {
+internal class QuickJSBridgeModule(private val hostContext: GXHostContext, private val jsContext: JSContext) : BridgeModuleListener {
 
     override fun callSync(contextPointer: Long, argsMap: String): Long {
-        if (Log.isLog()) {
-            Log.e("callSync() called with: jsContext = $contextPointer, argsMap = $argsMap")
-        }
+        Log.runE { "callSync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", jsContext.pointer = " + jsContext.pointer + ", contextPointer = " + contextPointer }
         if (jsContext.pointer == contextPointer) {
             val target = JSONObject.parseObject(argsMap)
 
@@ -29,7 +27,6 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
             val moduleId = target.getLongValue("moduleId")
             val methodId = target.getLongValue("methodId")
             val args = target.getJSONArray("args")
-
 
             // 处理异常 当args.data.stack存在时，说明是JS异常
             // {"moduleId":5,"methodId":22,"timestamp":788306541,"args":[{"data":{"templateId":"test","templateVersion":-1,"bizId":"fastpreview","message":"'data' is not defined","stack":"    at onReady ()\n    at call (native)\n    at <anonymous> ()\n    at <anonymous> (:5)\n    at <anonymous> (:7)\n"}}],"contextId":9}
@@ -47,9 +44,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    if (Log.isLog()) {
-                        Log.e("callSync() called with: e = $e")
-                    }
+                    Log.runE { "callSync() called with: e = $e" }
                     return jsContext.createJSUndefined().pointer
                 }
             }
@@ -65,9 +60,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
     }
 
     override fun callAsync(contextPointer: Long, funPointer: Long, argsMap: String): Long {
-        if (Log.isLog()) {
-            Log.e("callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", jsContext.pointer = " + jsContext.pointer + ", contextPointer = " + contextPointer)
-        }
+        Log.runE { "callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", jsContext.pointer = " + jsContext.pointer + ", contextPointer = " + contextPointer }
         if (jsContext.pointer == contextPointer) {
             try {
                 val target = JSONObject.parseObject(argsMap)
@@ -78,9 +71,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
 
                 args.add(object : IGXCallback {
                     override fun invoke(result: Any?) {
-                        if (Log.isLog()) {
-                            Log.e("callAsync() called with: IGaiaXAsyncCallback result = $result")
-                        }
+                        Log.runE { "callAsync() called with: IGaiaXAsyncCallback result = $result" }
                         gxHostContext()?.executeTask {
                             val jsFunction = JSFunction(funPointer, jsContext)
                             jsFunction.dupValue()
@@ -91,9 +82,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
                 })
                 hostContext.bridge.callAsync(contextId, moduleId, methodId, args)
             } catch (t: Throwable) {
-                if (Log.isLog()) {
-                    Log.e("callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", fail" + t.stackTraceToString())
-                }
+                Log.runE { "callAsync() called with: jsContext = $contextPointer, argsMap = $argsMap" + ", fail" + t.stackTraceToString() }
             }
         }
         return jsContext.createJSUndefined().pointer
@@ -106,9 +95,7 @@ internal class QuickJSBridgeModule(private val hostContext: GXHostContext, priva
     }
 
     override fun callPromise(contextPointer: Long, argsMap: String): Long {
-        if (Log.isLog()) {
-//            Log.e("callPromise() called with: jsContext = $contextPointer, argsMap = $argsMap")
-        }
+        Log.runE { "callPromise() called with: jsContext = $contextPointer, argsMap = $argsMap" }
         if (jsContext.pointer == contextPointer) {
 
             val target = JSONObject.parseObject(argsMap)

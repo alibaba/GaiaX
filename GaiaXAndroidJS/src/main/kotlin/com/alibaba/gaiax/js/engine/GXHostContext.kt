@@ -9,7 +9,6 @@ import com.alibaba.gaiax.js.impl.debug.DebugJSContext
 import com.alibaba.gaiax.js.impl.qjs.QuickJSContext
 import com.alibaba.gaiax.js.support.script.GXScriptBuilder
 import com.alibaba.gaiax.js.utils.GaiaXJSTaskQueue
-import com.alibaba.gaiax.js.utils.Log
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -28,23 +27,14 @@ internal class GXHostContext(
     internal val bridge = object : ICallBridgeListener {
 
         override fun callSync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray): Any? {
-            if (Log.isLog()) {
-                Log.d("callSync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
-            }
             return GXJSEngine.instance.moduleManager.invokeMethodSync(moduleId, methodId, args)
         }
 
         override fun callAsync(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
-            if (Log.isLog()) {
-                Log.d("callAsync() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
-            }
             GXJSEngine.instance.moduleManager.invokeMethodAsync(moduleId, methodId, args)
         }
 
         override fun callPromise(contextId: Long, moduleId: Long, methodId: Long, args: JSONArray) {
-            if (Log.isLog()) {
-                Log.d("callPromise() called with: contextId = $contextId, moduleId = $moduleId, methodId = $methodId, args = $args")
-            }
             GXJSEngine.instance.moduleManager.invokePromiseMethod(moduleId, methodId, args)
         }
     }
@@ -117,16 +107,10 @@ internal class GXHostContext(
     }
 
     fun evaluateJS(script: String) {
-        if (Log.isLog()) {
-            Log.e("evaluateJS() called with")
-        }
         executeTask { realContext?.evaluateJS(script) }
     }
 
     fun evaluateJSSync(script: String): JSONObject? {
-        if (Log.isLog()) {
-            Log.e("evaluateJSSync() called with")
-        }
         realContext?.evaluateJS(script, String::class.java)?.let {
             return JSON.parseObject(it)
         }

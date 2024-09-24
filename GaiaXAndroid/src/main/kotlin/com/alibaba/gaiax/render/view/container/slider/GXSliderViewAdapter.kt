@@ -31,7 +31,6 @@ import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
-import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress

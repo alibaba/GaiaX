@@ -41,7 +41,6 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
-import com.alibaba.gaiax.utils.Log
 import java.util.Timer
 import java.util.TimerTask
 

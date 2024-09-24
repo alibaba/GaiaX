@@ -63,7 +63,6 @@ import com.alibaba.gaiax.template.animation.GXLottieAnimation
 import com.alibaba.gaiax.template.animation.GXPropAnimationSet
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXTemplateUtils
-import com.alibaba.gaiax.utils.Log
 
 /**
  * @suppress

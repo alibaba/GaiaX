@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.js.api.IGXCallback
 import com.alibaba.gaiax.js.utils.GXJSUiExecutor
-import com.alibaba.gaiax.js.utils.Log
 import com.alibaba.gaiax.render.node.GXNode
 import com.alibaba.gaiax.template.GXTemplateKey
 import java.util.concurrent.ConcurrentHashMap
@@ -42,9 +41,7 @@ internal class GXJSRenderProxy {
                     GXTemplateEngine.instance.bindData(gxView, it)
                 }
             } else {
-                if (Log.isLog()) {
-                    Log.d("setData() called gxView is null, $componentId $templateId")
-                }
+                Log.runE { "setData() called gxView is null, $componentId $templateId" }
             }
             callback.invoke()
         }

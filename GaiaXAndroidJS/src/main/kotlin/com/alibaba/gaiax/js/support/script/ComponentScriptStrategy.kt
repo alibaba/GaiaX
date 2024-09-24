@@ -1,8 +1,6 @@
 package com.alibaba.gaiax.js.support.script
 
 import com.alibaba.fastjson.JSONObject
-import java.util.regex.Pattern
-import java.util.regex.Matcher
 
 
 object ComponentScriptStrategy : IScriptStrategy<ComponentLifecycle> {
@@ -55,12 +53,28 @@ $suffix
         }
     }
 
+    /**
+     * //index.js
+     * onDataInit: function (options) {
+     *     //options.data指向将要绑定的数据，修改后，同步返回
+     *     let data = options.data;
+     *     data["backgroundColor"] = "#FF0000";
+     *     return data;
+     * }
+     *
+     * options:
+     * 参数名	类型	默认值	说明
+     * data	object	-	模板将要绑定的数据
+     */
     private fun buildComponentDataInitScript(componentId: Long, data: JSONObject?): String {
+        val options = JSONObject().apply {
+            this["data"] = data ?: JSONObject()
+        }
         return """
 (function () {
     var instance = IMs.getComponent($componentId);
     if (instance && instance.onDataInit) {
-         return JSON.stringify(instance.onDataInit(${data?.toJSONString()}));
+         return JSON.stringify(instance.onDataInit(${options.toJSONString()}));
     }
 })()
         """.trimIndent()

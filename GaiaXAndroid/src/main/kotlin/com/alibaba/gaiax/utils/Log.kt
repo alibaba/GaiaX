@@ -25,15 +25,22 @@ object Log {
     /**
      * 不可删除、不可修改
      */
-    fun d(tag: String?, msg: String) {
-        log(DEBUG, tag ?: TAG, msg)
+    fun d(tag: String, msg: String) {
+        log(DEBUG, tag, msg)
     }
 
     /**
      * 不可删除、不可修改
      */
-    fun e(tag: String?, msg: String) {
-        log(ERROR, tag ?: TAG, msg)
+    fun d(msg: String) {
+        log(DEBUG, TAG, msg)
+    }
+
+    /**
+     * 不可删除、不可修改
+     */
+    fun e(tag: String, msg: String) {
+        log(ERROR, tag, msg)
     }
 
     fun log(type: Int, tag: String, msg: String) {

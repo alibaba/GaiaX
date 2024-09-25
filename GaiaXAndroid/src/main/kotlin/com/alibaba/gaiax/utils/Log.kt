@@ -22,12 +22,18 @@ object Log {
 
     const val TAG = "GaiaX.SDK"
 
-    fun d(tag: String, msg: String) {
-        log(DEBUG, tag, msg)
+    /**
+     * 不可删除、不可修改
+     */
+    fun d(tag: String?, msg: String) {
+        log(DEBUG, tag ?: TAG, msg)
     }
 
-    fun e(tag: String, msg: String) {
-        log(ERROR, tag, msg)
+    /**
+     * 不可删除、不可修改
+     */
+    fun e(tag: String?, msg: String) {
+        log(ERROR, tag ?: TAG, msg)
     }
 
     fun log(type: Int, tag: String, msg: String) {
@@ -50,6 +56,13 @@ object Log {
         if (flags and FLAG_OPEN != 0) {
             log(type, if (tag.isEmpty()) TAG else "${TAG}.${tag}", block())
         }
+    }
+
+    /**
+     * 不可删除、不可修改
+     */
+    fun isLog(): Boolean {
+        return defaultLog
     }
 }
 

@@ -174,7 +174,9 @@ class GXSocket : SocketListener {
                 socketMethod
             )
             // TODO: 关闭方式
-            "close" -> {}
+            "close" -> {
+                onDisconnect()
+            }
 
         }
 

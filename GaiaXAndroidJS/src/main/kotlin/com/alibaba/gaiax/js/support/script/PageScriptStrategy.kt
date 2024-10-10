@@ -21,7 +21,7 @@ object PageScriptStrategy : IScriptStrategy<PageLifecycle> {
         $prefix, $extend
         $suffix
     """.trimIndent()
-        return "(function() { $innerScript })()"
+        return "(function() {\n $innerScript \n})()"
     }
 
 
@@ -29,10 +29,10 @@ object PageScriptStrategy : IScriptStrategy<PageLifecycle> {
      * 获取"Component{}"
      */
     private fun parsePageStr(script: String): String {
-        val indexOfStart = script.indexOf("//# sourceMappingURL=")
+        val indexOfStart = script.lastIndexOf("//# sourceMappingURL=")
         if (indexOfStart != -1) {
-            val PageStr = script.substring(0, indexOfStart).trimIndent()
-            return PageStr
+            val pageStr = script.substring(0, indexOfStart).trimIndent()
+            return pageStr
         } else {
             return script
         }

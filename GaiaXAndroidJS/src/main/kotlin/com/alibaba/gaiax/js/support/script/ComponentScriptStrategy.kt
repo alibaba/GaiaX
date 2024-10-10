@@ -22,14 +22,14 @@ object ComponentScriptStrategy : IScriptStrategy<ComponentLifecycle> {
         $prefix, $extend
         $suffix
     """.trimIndent()
-        return "(function() { $innerScript })()"
+        return "(function() {\n $innerScript \n})()"
     }
 
     /**
      * 获取"Component{}"
      */
     private fun parseComponentStr(script: String): String {
-        val indexOfStart = script.indexOf("//# sourceMappingURL=")
+        val indexOfStart = script.lastIndexOf("//# sourceMappingURL=")
         if (indexOfStart != -1) {
             val componentStr = script.substring(0, indexOfStart).trimIndent()
             return componentStr

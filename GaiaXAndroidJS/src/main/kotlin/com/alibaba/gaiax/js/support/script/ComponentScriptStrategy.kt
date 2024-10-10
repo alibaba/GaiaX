@@ -18,10 +18,11 @@ object ComponentScriptStrategy : IScriptStrategy<ComponentLifecycle> {
         val prefix = newScript.substring(0, componentStr.length - 2).trimIndent()
         // 实际是取");"
         val suffix = newScript.substring(componentStr.length - 2).trimIndent()
-        return """
-$prefix, $extend
-$suffix
-        """.trimIndent()
+        val innerScript = """
+        $prefix, $extend
+        $suffix
+    """.trimIndent()
+        return "(function() { $innerScript })()"
     }
 
     /**

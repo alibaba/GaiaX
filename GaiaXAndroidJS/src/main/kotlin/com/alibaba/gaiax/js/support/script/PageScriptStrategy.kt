@@ -17,10 +17,11 @@ object PageScriptStrategy : IScriptStrategy<PageLifecycle> {
             "{ bizId: \"${bizId}\", templateId: \"${templateId}\", instanceId: $instanceId, templateVersion: $templateVersion }"
         val prefix = newScript.substring(0, parsePageStr.length - 2).trimIndent()
         val suffix = newScript.substring(parsePageStr.length - 2).trimIndent()
-        return """
-$prefix, $extend
-$suffix
-        """.trimIndent()
+        val innerScript = """
+        $prefix, $extend
+        $suffix
+    """.trimIndent()
+        return "(function() { $innerScript })()"
     }
 
 

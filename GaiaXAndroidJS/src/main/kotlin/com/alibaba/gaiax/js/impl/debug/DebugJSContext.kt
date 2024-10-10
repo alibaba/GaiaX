@@ -49,6 +49,7 @@ internal class DebugJSContext(private val hostContext: GXHostContext) : IContext
             val sb = StringBuilder()
             sb.append(GXScriptBuilder.buildGlobalContext(hostContext.hostRuntime.hostEngine.engineId, 10))
             sb.append("__globalThis.__DEV__ = true; \r\n")
+            sb.append("__globalThis.__HMR__ = true; \r\n")
             sb.append("/**bridge.ts**/\r\n")
             sb.append("/**bootstrap.ts**/\r\n")
             sb.append(GXJSEngine.instance.moduleManager.buildModulesScript(GXJSEngine.EngineType.DebugJS))

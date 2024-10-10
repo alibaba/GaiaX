@@ -66,6 +66,7 @@ internal class QuickJSContext(
             val sb = StringBuilder()
             sb.append(GXScriptBuilder.buildImportScript())
             sb.append(GXScriptBuilder.buildGlobalContext(contextId, 0))
+            sb.append("__globalThis.__HMR__ = true; \r\n")
             sb.append(GXScriptBuilder.buildExtendAndAssignScript())
             sb.append(GXJSEngine.instance.context.resources.assets.open(GXHostContext.BOOTSTRAP_JS).bufferedReader(Charsets.UTF_8).use { it.readText() })
             sb.append(GXJSEngine.instance.moduleManager.buildModulesScript(GXJSEngine.EngineType.QuickJS))

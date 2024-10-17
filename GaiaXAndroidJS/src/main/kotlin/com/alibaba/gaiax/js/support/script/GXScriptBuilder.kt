@@ -20,6 +20,7 @@ import * as GaiaXJSBridge from "GaiaXJSBridge";
 var __globalThis = globalThis; 
 __globalThis.__CONTEXT_ID__ = ${contextId};
 __globalThis.__ENGINE_TYPE__ = ${engineType};
+__globalThis.__HMR__ = true;
 
         """.trimIndent()
     }

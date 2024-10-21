@@ -39,11 +39,9 @@ import com.alibaba.gaiax.utils.runE
 /**
  * @suppress
  */
-class GXSliderViewAdapter(
-    val gxTemplateContext: GXTemplateContext, val gxNode: GXNode
-) : PagerAdapter() {
+class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode) : PagerAdapter() {
     companion object {
-        private const val TAG = "GXSliderViewAdapter"
+        private const val TAG = "GXSliderAdapter"
     }
 
     private var isNeedForceUpdate: Boolean = false

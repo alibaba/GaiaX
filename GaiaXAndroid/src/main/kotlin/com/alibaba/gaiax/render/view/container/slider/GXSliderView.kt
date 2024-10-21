@@ -33,6 +33,7 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
+import com.alibaba.gaiax.render.node.GXTemplateNode
 import com.alibaba.gaiax.render.view.GXIContainer
 import com.alibaba.gaiax.render.view.GXIRelease
 import com.alibaba.gaiax.render.view.GXIRootView
@@ -41,6 +42,9 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
+import com.alibaba.gaiax.template.GXTemplateKey
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 import java.util.Timer
 import java.util.TimerTask
 
@@ -52,6 +56,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
     companion object {
         private var SHOWN_VIEW_COUNT: Int = 0
+
+        private const val TAG = "GXSliderView"
     }
 
     enum class IndicatorPosition(val value: String) {
@@ -82,6 +88,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         initView()
     }
 
+    private var isDefaultSelected: Boolean = false
     private var isAttached: Boolean = false
     private var gxTemplateContext: GXTemplateContext? = null
     private var config: GXSliderConfig? = null
@@ -106,6 +113,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
             override fun onPageSelected(position: Int) {
                 val index = position % pageSize
+
+                Log.runE(TAG) { "onPageSelected position=$position index=$index" }
+
                 // 回调事件
                 val gxScroll = GXTemplateEngine.GXScroll().apply {
                     this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
@@ -114,9 +124,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
                 }
                 gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
 
-                if (config?.hasIndicator == true) {
-                    indicatorView?.updateSelectedIndex(index)
-                }
+                setIndicatorIndex(index)
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -210,20 +218,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     }
 
     override fun onBindData(data: JSONObject?) {
-        viewPager?.adapter?.notifyDataSetChanged()
-        updateView()
     }
 
-    private fun updateView() {
-        config?.selectedIndex?.let {
-            viewPager?.adapter?.count?.let { count ->
-                if (it in 0 until count) {
-                    viewPager?.setCurrentItem(it, false)
-                    indicatorView?.updateSelectedIndex(it)
-                }
-            }
-        }
-    }
 
     fun setPageSize(size: Int) {
         pageSize = size
@@ -231,32 +227,34 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     }
 
     private fun startTimer() {
+
         // FIX
         stopTimer()
-
-        config?.scrollTimeInterval?.let {
-            if (it > 0) {
-                timer = Timer()
-                timerTask = object : TimerTask() {
-                    override fun run() {
-                        viewPager?.currentItem?.let { currentItem ->
-                            viewPager?.adapter?.count?.let { count ->
-                                viewPager?.post {
-                                    viewPager?.setCurrentItem(
-                                        (currentItem + 1) % count,
-                                        true
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-                timer?.schedule(timerTask, it, it)
-            }
-        }
+//
+//        val scrollTimeInterval = config?.scrollTimeInterval ?: return
+//
+//        if (scrollTimeInterval <= 0) {
+//            return
+//        }
+//
+//        Log.runE(TAG) { "startTimer" }
+//
+//        timer = Timer()
+//        timerTask = object : TimerTask() {
+//            override fun run() {
+//                val currentItem = viewPager?.currentItem ?: return
+//                viewPager?.post {
+//                    val selectedIndex = (currentItem + 1)
+//                    Log.runE(TAG) { "schedule selectedIndex=$selectedIndex" }
+//                    setSliderIndex(selectedIndex, true)
+//                }
+//            }
+//        }
+//        timer?.schedule(timerTask, scrollTimeInterval, scrollTimeInterval)
     }
 
     private fun stopTimer() {
+        Log.runE(TAG) { "stopTimer" }
         timer?.cancel()
         timerTask?.cancel()
         timer = null
@@ -370,5 +368,52 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     override fun onDetachedFromWindow() {
         isAttached = false
         super.onDetachedFromWindow()
+    }
+
+    fun onNewBinData(gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        viewPager?.adapter?.notifyDataSetChanged()
+        processIndex(gxTemplateNode, templateData)
+    }
+
+    private fun processIndex(gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        if (!isDefaultSelected) {
+            isDefaultSelected = true
+            config?.selectedIndex?.takeIf { it >= 0 }?.let { selectedIndex ->
+                Log.runE(TAG) { "processIndex selectedIndex=$selectedIndex" }
+                setSliderIndex(selectedIndex, false)
+                setIndicatorIndex(selectedIndex)
+            }
+        } else {
+            val extend = gxTemplateNode.getExtend(templateData)
+            val holdingOffset = extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
+            if (holdingOffset) {
+                extend?.getInteger(GXTemplateKey.GAIAX_SCROLL_INDEX)?.takeIf { it >= 0 }?.let { scrollIndex ->
+                    val smooth = extend.getBooleanValue(GXTemplateKey.GAIAX_SCROLL_ANIMATED)
+                    Log.runE(TAG) { "processIndex holdingOffset smooth=$smooth scrollIndex=$scrollIndex" }
+                    setSliderIndex(scrollIndex, smooth)
+                }
+            }
+        }
+    }
+
+    private fun setIndicatorIndex(targetIndex: Int) {
+        Log.runE(TAG) { "setIndicatorIndex targetIndex=$targetIndex pageSize=$pageSize" }
+        if (config?.hasIndicator == true) {
+            indicatorView?.updateSelectedIndex(targetIndex)
+        }
+    }
+
+    private fun setSliderIndex(scrollIndex: Int, smooth: Boolean) {
+        val currentIndex = this.getCurrentIndex()
+        val targetIndex = scrollIndex % pageSize
+        Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize smooth=$smooth" }
+        viewPager?.post {
+            viewPager?.setCurrentItem(targetIndex, smooth)
+            setIndicatorIndex(targetIndex)
+        }
+    }
+
+    private fun getCurrentIndex(): Int {
+        return viewPager?.currentItem ?: 0
     }
 }

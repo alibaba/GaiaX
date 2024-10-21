@@ -270,8 +270,6 @@ class GXJSEngine {
         debugEngine?.runtime()?.context()?.getComponent(componentId)?.onLoadMore(data)
     }
 
-
-
     /**
      * 为视图注册JS组件
      */
@@ -287,12 +285,9 @@ class GXJSEngine {
         return IdGenerator.genLongId()
     }
 
-    fun registerComponentWithId(
-            instanceId: Long, bizId: String, templateId: String, templateVersion: String, script: String?
-    ) {
+    fun registerComponentWithId(instanceId: Long, bizId: String, templateId: String, templateVersion: String, script: String?) {
         if (script != null) {
-            quickJSEngine?.runtime()?.context()
-                    ?.registerComponent(instanceId, bizId, templateId, templateVersion, script)
+            quickJSEngine?.runtime()?.context()?.registerComponent(instanceId, bizId, templateId, templateVersion, script)
             debugEngine?.runtime()?.context()?.registerComponent(instanceId, bizId, templateId, templateVersion, script)
         }
     }
@@ -314,8 +309,7 @@ class GXJSEngine {
     ): Long {
         // 页面instanceId从50000起
         val pageId = IdGenerator.genLongId() + 50000
-        quickJSEngine?.runtime()?.context()
-                ?.registerPage(pageId, bizId, templateId, templateVersion, script, nativePage)
+        quickJSEngine?.runtime()?.context()?.registerPage(pageId, bizId, templateId, templateVersion, script, nativePage)
         debugEngine?.runtime()?.context()?.registerPage(pageId, bizId, templateId, templateVersion, script, nativePage)
         return pageId
     }

@@ -230,27 +230,27 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
         // FIX
         stopTimer()
-//
-//        val scrollTimeInterval = config?.scrollTimeInterval ?: return
-//
-//        if (scrollTimeInterval <= 0) {
-//            return
-//        }
-//
-//        Log.runE(TAG) { "startTimer" }
-//
-//        timer = Timer()
-//        timerTask = object : TimerTask() {
-//            override fun run() {
-//                val currentItem = viewPager?.currentItem ?: return
-//                viewPager?.post {
-//                    val selectedIndex = (currentItem + 1)
-//                    Log.runE(TAG) { "schedule selectedIndex=$selectedIndex" }
-//                    setSliderIndex(selectedIndex, true)
-//                }
-//            }
-//        }
-//        timer?.schedule(timerTask, scrollTimeInterval, scrollTimeInterval)
+
+        val scrollTimeInterval = config?.scrollTimeInterval ?: return
+
+        if (scrollTimeInterval <= 0) {
+            return
+        }
+
+        Log.runE(TAG) { "startTimer" }
+
+        timer = Timer()
+        timerTask = object : TimerTask() {
+            override fun run() {
+                val currentItem = viewPager?.currentItem ?: return
+                viewPager?.post {
+                    val selectedIndex = (currentItem + 1)
+                    Log.runE(TAG) { "schedule selectedIndex=$selectedIndex" }
+                    setSliderIndex(selectedIndex, true)
+                }
+            }
+        }
+        timer?.schedule(timerTask, scrollTimeInterval, scrollTimeInterval)
     }
 
     private fun stopTimer() {

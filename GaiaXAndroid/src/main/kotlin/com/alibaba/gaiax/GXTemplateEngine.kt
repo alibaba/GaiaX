@@ -223,6 +223,7 @@ class GXTemplateEngine {
 
             const val TYPE_ON_SCROLL_STATE_CHANGED = "onScrollStateChanged"
             const val TYPE_ON_SCROLLED = "onScrolled"
+            const val TYPE_ON_PAGE_SELECTED = "onPageSelected"
         }
 
         var type: String = ""
@@ -246,6 +247,11 @@ class GXTemplateEngine {
          * Scroll state
          */
         var state: Int = 0
+
+        /**
+         * Scroll Index
+         */
+        var position: Int = 0
     }
 
     /**

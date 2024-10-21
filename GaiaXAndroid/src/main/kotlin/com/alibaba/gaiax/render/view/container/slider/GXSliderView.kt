@@ -105,8 +105,17 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             }
 
             override fun onPageSelected(position: Int) {
+                val index = position % pageSize
+                // 回调事件
+                val gxScroll = GXTemplateEngine.GXScroll().apply {
+                    this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
+                    this.view = viewPager
+                    this.position = index
+                }
+                gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
+
                 if (config?.hasIndicator == true) {
-                    indicatorView?.updateSelectedIndex(position % pageSize)
+                    indicatorView?.updateSelectedIndex(index)
                 }
             }
 
@@ -202,6 +211,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
     override fun onBindData(data: JSONObject?) {
         viewPager?.adapter?.notifyDataSetChanged()
+        updateView()
     }
 
     private fun updateView() {

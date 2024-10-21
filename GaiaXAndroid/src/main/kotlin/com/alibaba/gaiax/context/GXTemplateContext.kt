@@ -235,5 +235,11 @@ class GXTemplateContext private constructor(
                 targetView.setTemplateContext(null)
             }
         }
+
+        fun setContext(targetView: View?, gxTemplateContext: GXTemplateContext) {
+            if (targetView is GXIRootView) {
+                targetView.setTemplateContext(gxTemplateContext)
+            }
+        }
     }
 }

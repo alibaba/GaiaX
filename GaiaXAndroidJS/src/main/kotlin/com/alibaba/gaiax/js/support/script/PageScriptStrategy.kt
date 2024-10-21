@@ -17,10 +17,11 @@ object PageScriptStrategy : IScriptStrategy<PageLifecycle> {
             "{ bizId: \"${bizId}\", templateId: \"${templateId}\", instanceId: $instanceId, templateVersion: $templateVersion }"
         val prefix = newScript.substring(0, parsePageStr.length - 2).trimIndent()
         val suffix = newScript.substring(parsePageStr.length - 2).trimIndent()
-        return """
-$prefix, $extend
-$suffix
-        """.trimIndent()
+        val innerScript = """
+        $prefix, $extend
+        $suffix
+    """.trimIndent()
+        return "(function() {\n $innerScript \n})()"
     }
 
 
@@ -28,10 +29,10 @@ $suffix
      * 获取"Component{}"
      */
     private fun parsePageStr(script: String): String {
-        val indexOfStart = script.indexOf("//# sourceMappingURL=")
+        val indexOfStart = script.lastIndexOf("//# sourceMappingURL=")
         if (indexOfStart != -1) {
-            val PageStr = script.substring(0, indexOfStart).trimIndent()
-            return PageStr
+            val pageStr = script.substring(0, indexOfStart).trimIndent()
+            return pageStr
         } else {
             return script
         }

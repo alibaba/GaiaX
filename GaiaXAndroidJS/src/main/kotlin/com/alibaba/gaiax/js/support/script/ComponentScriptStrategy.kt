@@ -18,17 +18,18 @@ object ComponentScriptStrategy : IScriptStrategy<ComponentLifecycle> {
         val prefix = newScript.substring(0, componentStr.length - 2).trimIndent()
         // 实际是取");"
         val suffix = newScript.substring(componentStr.length - 2).trimIndent()
-        return """
-$prefix, $extend
-$suffix
-        """.trimIndent()
+        val innerScript = """
+        $prefix, $extend
+        $suffix
+    """.trimIndent()
+        return "(function() {\n $innerScript \n})()"
     }
 
     /**
      * 获取"Component{}"
      */
     private fun parseComponentStr(script: String): String {
-        val indexOfStart = script.indexOf("//# sourceMappingURL=")
+        val indexOfStart = script.lastIndexOf("//# sourceMappingURL=")
         if (indexOfStart != -1) {
             val componentStr = script.substring(0, indexOfStart).trimIndent()
             return componentStr

@@ -48,8 +48,7 @@ import java.util.TimerTask
  * @suppress
  */
 @Keep
-class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
-    GXIRoundCorner, GXIRelease, GXIViewVisibleChange {
+class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GXIRoundCorner, GXIRelease, GXIViewVisibleChange {
 
     companion object {
         private var SHOWN_VIEW_COUNT: Int = 0
@@ -101,13 +100,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView,
 
     private fun initViewPager() {
         viewPager = GXViewPager(context)
-        viewPager?.addOnPageChangeListener(object :
-            ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             }
 
             override fun onPageSelected(position: Int) {

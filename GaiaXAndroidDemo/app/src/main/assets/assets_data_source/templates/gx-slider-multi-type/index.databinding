@@ -1,0 +1,22 @@
+{
+    "data":{
+        "gx-slider-multi-type":{
+            "value":"$nodes",
+            "extend": {
+                "slider-scroll-time-interval": 3000,
+                "slider-infinity-scroll": true,
+                "slider-has-indicator": true,
+                "slider-selected-index": 1,
+                "slider-indicator-selected-color": "'#FFFFFF'",
+                "slider-indicator-unselected-color": "'#BBBBBB'",
+                "item-type":{
+                    "path":"$type",
+                    "config":{
+                        "type1":"'gx-slider-multi-type-item1'",
+                        "type2":"'gx-slider-multi-type-item2'"
+                    }
+                }
+            }
+        }
+    }
+}

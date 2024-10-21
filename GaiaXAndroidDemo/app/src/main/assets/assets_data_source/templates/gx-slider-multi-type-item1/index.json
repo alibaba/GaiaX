@@ -1,0 +1,14 @@
+{
+  "id": "gx-slider-multi-type-item1",
+  "type": "gaia-template",
+  "layers": [
+    {
+      "id": "image",
+      "type": "image"
+    },
+    {
+      "id": "title",
+      "type": "text"
+    }
+  ]
+}

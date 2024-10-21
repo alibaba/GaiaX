@@ -32,6 +32,8 @@ import com.alibaba.gaiax.render.node.GXNodeUtils
 import com.alibaba.gaiax.render.view.basic.GXItemContainer
 import com.alibaba.gaiax.template.GXSliderConfig
 import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.getStringExt
+import com.alibaba.gaiax.utils.getStringExtCanNull
 import com.alibaba.gaiax.utils.runE
 
 /**
@@ -44,6 +46,7 @@ class GXSliderViewAdapter(
         private const val TAG = "GXSliderViewAdapter"
 
     }
+
     private var isNeedForceUpdate: Boolean = false
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
 
@@ -63,11 +66,9 @@ class GXSliderViewAdapter(
     }
 
     private fun getItemContainerSize(containerSize: Layout?): ViewPager.LayoutParams {
-        val itemContainerWidth =
-            containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        val itemContainerWidth = containerSize?.width?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
-        val itemContainerHeight =
-            containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
+        val itemContainerHeight = containerSize?.height?.toInt() ?: FrameLayout.LayoutParams.WRAP_CONTENT
 
         return ViewPager.LayoutParams().apply {
             this.width = itemContainerWidth
@@ -76,28 +77,22 @@ class GXSliderViewAdapter(
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val itemPosition = if (data.size > 0) {
-            position % data.size
-        } else {
-            position
-        }
 
-        val templateItem = getTemplateItem()
-            ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
+        val itemPosition = calculateItemPosition(position)
+
+        Log.runE(TAG) { "instantiateItem() called with: position = $position, itemPosition = $itemPosition" }
 
         val itemData = data.getJSONObject(itemPosition) ?: JSONObject()
+
+        val templateItem = getTemplateItem(itemPosition, itemData) ?: throw IllegalArgumentException("GXTemplateItem not exist, gxNode = $gxNode")
 
         val visualNestTemplateNode = gxNode.childTemplateItems?.firstOrNull()?.second
 
         val itemViewPort = GXNodeUtils.computeSliderItemViewPort(gxTemplateContext, gxNode)
 
-        val itemMeasureSize = GXTemplateEngine.GXMeasureSize(
-            itemViewPort.width, itemViewPort.height
-        )
+        val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
 
-        val itemContainerSize = GXNodeUtils.computeSliderItemContainerSize(
-            gxTemplateContext, gxNode, itemViewPort, itemData, itemPosition
-        )
+        val itemContainerSize = GXNodeUtils.computeSliderItemContainerSize(gxTemplateContext, gxNode, itemViewPort, itemData, itemPosition)
 
         val itemContainerLayoutParams = getItemContainerSize(itemContainerSize)
 
@@ -135,8 +130,7 @@ class GXSliderViewAdapter(
 
                 GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
-                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem,
-                    itemMeasureSize,
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem, itemMeasureSize,
                     GXTemplateEngine.GXExtendParams().apply {
                         this.gxItemPosition = itemPosition
                         this.gxItemData = itemData
@@ -243,18 +237,19 @@ class GXSliderViewAdapter(
         return itemContainer
     }
 
+    private fun calculateItemPosition(position: Int) = if (data.size > 0) {
+        position % data.size
+    } else {
+        position
+    }
+
     override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
         Log.runE(TAG) { "destroyItem() called with: container = $container, position = $position, obj = $obj" }
         if (obj is View) {
             val itemContainer = obj as ViewGroup
-
             container.removeView(itemContainer)
-
             itemContainer.getChildAt(0)?.let { gxView ->
                 GXTemplateContext.getContext(gxView)?.let { gxTemplateContext ->
-
-                    Log.runE(TAG) { "destroyItem() called with: traceId = ${gxTemplateContext.traceId} gxView = $gxView" }
-
                     if (gxTemplateContext.templateItem.isPageMode) {
                         GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onDestroy(gxView)
                     } else {
@@ -283,8 +278,23 @@ class GXSliderViewAdapter(
         this.config = config
     }
 
-    private fun getTemplateItem(): GXTemplateEngine.GXTemplateItem? {
-        return gxNode.childTemplateItems?.firstOrNull()?.first
+    private fun getTemplateItem(itemPosition: Int, itemData: JSONObject): GXTemplateEngine.GXTemplateItem? {
+
+        gxNode.childTemplateItems?.size?.takeIf { it > 1 }?.let {
+            gxNode.templateNode.resetDataCache()
+            gxNode.templateNode.getExtend(itemData)?.let { typeData ->
+                val itemConfig = "${GXNodeUtils.ITEM_CONFIG}.${typeData.getStringExt(GXNodeUtils.ITEM_PATH)}"
+                typeData.getStringExtCanNull(itemConfig)?.let { templateId ->
+                    val gxTemplateItem = gxNode.childTemplateItems?.firstOrNull { it.first.templateId == templateId }?.first
+                    Log.runE(TAG) { "getTemplateItem() called with: itemPosition = $itemPosition gxTemplateItem=$gxTemplateItem" }
+                    return gxTemplateItem
+                }
+            }
+        }
+
+        val gxTemplateItem = gxNode.childTemplateItems?.firstOrNull()?.first
+        Log.runE(TAG) { "getTemplateItem() called with: itemPosition = $itemPosition gxTemplateItem=$gxTemplateItem" }
+        return gxTemplateItem
     }
 
     private fun getItemViewKey(position: Int): String {

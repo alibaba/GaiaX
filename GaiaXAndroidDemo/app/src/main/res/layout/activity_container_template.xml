@@ -85,5 +85,11 @@
             android:id="@+id/template_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/template_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </ScrollView>

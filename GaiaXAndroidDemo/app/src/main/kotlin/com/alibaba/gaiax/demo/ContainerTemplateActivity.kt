@@ -20,6 +20,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
         renderTemplate4(this)
         renderTemplate5(this)
         renderTemplate6(this)
+        renderTemplate7(this)
     }
 
     var render1View: View? = null
@@ -28,6 +29,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
     var render4View: View? = null
     var render5View: View? = null
     var render6View: View? = null
+    var render7View: View? = null
 
     override fun onDestroy() {
         GXTemplateEngine.instance.destroyView(render1View)
@@ -36,6 +38,7 @@ class ContainerTemplateActivity : AppCompatActivity() {
         GXTemplateEngine.instance.destroyView(render4View)
         GXTemplateEngine.instance.destroyView(render5View)
         GXTemplateEngine.instance.destroyView(render6View)
+        GXTemplateEngine.instance.destroyView(render7View)
         super.onDestroy()
     }
 
@@ -194,5 +197,28 @@ class ContainerTemplateActivity : AppCompatActivity() {
 
         // 插入模板View
         findViewById<LinearLayoutCompat>(R.id.template_6).addView(view, 0)
+    }
+
+    private fun renderTemplate7(activity: ContainerTemplateActivity) {
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
+
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(activity, "assets_data_source/templates", "gx-slider-multi-type")
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), 100F.dpToPx())
+
+        // 模板数据
+        val templateData = GXTemplateEngine.GXTemplateData(AssetsUtils.parseAssets(activity, "assets_data_source/data/gx-slider-multi-type-data.json"))
+
+        // 创建模板View
+        val view = GXTemplateEngine.instance.createView(params, size)!!
+        render7View = view
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_7).addView(view, 0)
     }
 }

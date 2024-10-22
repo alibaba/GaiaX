@@ -112,19 +112,19 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             }
 
             override fun onPageSelected(position: Int) {
-                val index = position % pageSize
+                val targetIndex = calculateTargetIndex(position)
 
-                Log.runE(TAG) { "onPageSelected position=$position index=$index" }
+                Log.runE(TAG) { "onPageSelected position=$position targetIndex=$targetIndex" }
 
                 // 回调事件
                 val gxScroll = GXTemplateEngine.GXScroll().apply {
                     this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
                     this.view = viewPager
-                    this.position = index
+                    this.position = targetIndex
                 }
                 gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
 
-                setIndicatorIndex(index)
+                setIndicatorIndex(targetIndex)
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -381,7 +381,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             config?.selectedIndex?.takeIf { it >= 0 }?.let { selectedIndex ->
                 Log.runE(TAG) { "processIndex selectedIndex=$selectedIndex" }
                 setSliderIndex(selectedIndex, false)
-                setIndicatorIndex(selectedIndex)
+                val targetIndex = calculateTargetIndex(selectedIndex)
+                setIndicatorIndex(targetIndex)
             }
         } else {
             val extend = gxTemplateNode.getExtend(templateData)
@@ -405,13 +406,17 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
     private fun setSliderIndex(scrollIndex: Int, smooth: Boolean) {
         val currentIndex = this.getCurrentIndex()
-        val targetIndex = scrollIndex % pageSize
+        val targetIndex = calculateTargetIndex(scrollIndex)
         Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize smooth=$smooth" }
         viewPager?.post {
             // TODO：如果跨多个索引移动，会导致明显卡顿
             viewPager?.setCurrentItem(targetIndex, true)
             setIndicatorIndex(targetIndex)
         }
+    }
+
+    private fun calculateTargetIndex(index: Int): Int {
+        return index % (pageSize - 1)
     }
 
     private fun getCurrentIndex(): Int {

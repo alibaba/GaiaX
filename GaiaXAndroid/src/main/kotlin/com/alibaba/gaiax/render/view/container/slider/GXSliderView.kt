@@ -408,7 +408,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         val targetIndex = scrollIndex % pageSize
         Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize smooth=$smooth" }
         viewPager?.post {
-            viewPager?.setCurrentItem(targetIndex, smooth)
+            // TODO：如果跨多个索引移动，会导致明显卡顿
+            viewPager?.setCurrentItem(targetIndex, true)
             setIndicatorIndex(targetIndex)
         }
     }

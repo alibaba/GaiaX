@@ -4,6 +4,7 @@
   "sub-type": "slider",
   "slider-scroll-time-interval": 6000,
   "slider-has-indicator": true,
+  "slider-selected-index": 3,
   "slider-infinity-scroll": true,
   "slider-indicator-selected-color": "#FFFFFF",
   "slider-indicator-unselected-color": "#BBBBBB",

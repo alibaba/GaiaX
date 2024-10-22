@@ -23,10 +23,10 @@ class ContainerTemplateActivity : AppCompatActivity() {
 //        renderTemplate1(this)
 //        renderTemplate2(this)
 //        renderTemplate3(this)
-//        renderTemplate4(this)
+        renderTemplate4(this)
 //        renderTemplate5(this)
 //        renderTemplate6(this)
-        renderTemplate7(this)
+//        renderTemplate7(this)
     }
 
     var render1View: View? = null

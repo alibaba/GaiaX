@@ -1,9 +1,9 @@
 {
-  "edge-insets": "{0,18,0,18}",
+  "edge-insets": "{0,0,0,0}",
   "id": "gx-content-uper-grid",
-  "item-spacing": 9,
-  "row-spacing": 9,
-  "column": 3,
+  "item-spacing": 12,
+  "row-spacing": 12,
+  "column": 2,
   "sub-type": "grid",
   "type": "gaia-template",
   "layers": [

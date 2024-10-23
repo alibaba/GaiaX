@@ -10,7 +10,7 @@
   "slider-indicator-unselected-color": "#BBBBBB",
   "slider-indicator-margin": "{10,10,10,10}",
   "slider-indicator-position": "bottom-center",
-  "slider-indicator-class-android": "com.alibaba.gaiax.demo.custom.CustomSliderIndicatorView",
+  "slider-indicator-class-android": "com.alibaba.gaiax.render.view.container.slider.GXYKSliderIndicatorView",
   "layers": [
     {
       "id": "gx-slider-item",

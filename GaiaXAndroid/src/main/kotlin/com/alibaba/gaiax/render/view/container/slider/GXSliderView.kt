@@ -410,13 +410,13 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize smooth=$smooth" }
         viewPager?.post {
             // TODO：如果跨多个索引移动，会导致明显卡顿
-            viewPager?.setCurrentItem(targetIndex, true)
+            viewPager?.setCurrentItem(scrollIndex, smooth)
             setIndicatorIndex(targetIndex)
         }
     }
 
     private fun calculateTargetIndex(index: Int): Int {
-        return index % (pageSize - 1)
+        return index % pageSize
     }
 
     private fun getCurrentIndex(): Int {

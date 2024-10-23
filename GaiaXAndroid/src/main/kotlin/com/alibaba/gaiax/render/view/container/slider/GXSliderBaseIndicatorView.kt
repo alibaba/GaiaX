@@ -43,4 +43,6 @@ abstract class GXSliderBaseIndicatorView : View {
      * 设置指示器颜色
      */
     abstract fun setIndicatorColor(selectedColor: Int?, unselectedColor: Int?)
+
+    abstract fun scrollUpdate(currentPosition: Int, xOffset: Int)
 }

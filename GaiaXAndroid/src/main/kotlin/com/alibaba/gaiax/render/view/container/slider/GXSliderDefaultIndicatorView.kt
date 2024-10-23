@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
+
 /**
  * @suppress
  */
@@ -63,10 +64,9 @@ class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(
-            ((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH + (indicatorCount - 1) * INDICATOR_SPACING).toInt(),
-            INDICATOR_HEIGHT.toInt()
-        )
+        val measuredWidth = ((indicatorCount - 1) * INDICATOR_NORMAL_WIDTH + INDICATOR_SELECTED_WIDTH + (indicatorCount - 1) * INDICATOR_SPACING).toInt()
+        val measuredHeight = INDICATOR_HEIGHT.toInt()
+        setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun setIndicatorCount(count: Int) {
@@ -83,6 +83,9 @@ class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
     override fun setIndicatorColor(selectedColor: Int?, unselectedColor: Int?) {
         this.selectedColor = selectedColor
         this.unselectedColor = unselectedColor
+    }
+
+    override fun scrollUpdate(currentPosition: Int, xOffset: Int) {
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -103,4 +106,6 @@ class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
             }
         }
     }
+
+
 }

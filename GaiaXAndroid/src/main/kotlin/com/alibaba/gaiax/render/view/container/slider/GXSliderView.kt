@@ -119,7 +119,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
                 // 回调事件
                 val gxScroll = GXTemplateEngine.GXScroll().apply {
                     this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
-                    this.view = viewPager
+                    this.view = this@GXSliderView
                     this.position = targetIndex
                 }
                 gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)

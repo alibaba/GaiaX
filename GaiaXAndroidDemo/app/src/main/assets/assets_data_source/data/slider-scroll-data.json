@@ -1,10 +1,11 @@
 {
   "extend": {
-    "holding-offset": "true",
-    "scroll-animated": "true",
-    "scroll-index": 0
   },
   "nodes": [
+    {
+      "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF",
+      "title": "标题0"
+    },
     {
       "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF",
       "title": "标题1"
@@ -12,10 +13,6 @@
     {
       "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF",
       "title": "标题2"
-    },
-    {
-      "img": "https://t7.baidu.com/it/u=1297102096,3476971300&fm=193&f=GIF",
-      "title": "标题3"
     }
   ]
 }

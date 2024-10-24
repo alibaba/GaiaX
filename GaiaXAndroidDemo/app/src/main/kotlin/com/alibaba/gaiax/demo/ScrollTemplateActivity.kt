@@ -236,7 +236,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
 
             findViewById<AppCompatEditText>(R.id.et_scroll_index).text.toString().toIntOrNull()?.let {
                 val extend = templateData.data.getJSONObject("extend")
-                extend["scroll-index"] = it
+                extend["slider-selected-index"] = it
                 GXTemplateEngine.instance.bindData(view, templateData)
             }
         }

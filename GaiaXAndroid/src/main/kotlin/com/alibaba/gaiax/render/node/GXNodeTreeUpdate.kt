@@ -19,7 +19,6 @@ package com.alibaba.gaiax.render.node
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import app.visly.stretch.Dimension
 import app.visly.stretch.Display
 import app.visly.stretch.PositionType
@@ -1224,7 +1223,7 @@ object GXNodeTreeUpdate {
         adapter.setData(containerTemplateData)
         container.setPageSize(containerTemplateData.size)
 
-        container.onNewBinData(gxTemplateNode, templateData)
+        container.onBindData(templateData)
     }
 
     private fun bindProgress(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {

@@ -86,8 +86,8 @@ class GXYKSliderIndicatorView : GXSliderBaseIndicatorView {
     }
 
     override fun setIndicatorColor(selectedColor: Int?, unselectedColor: Int?) {
-        this.selectedColor = 0xffffffff.toInt()
-        this.unselectedColor = 0x99ffffff.toInt()
+        this.selectedColor = selectedColor ?: 0xffffffff.toInt()
+        this.unselectedColor = unselectedColor ?: 0x99ffffff.toInt()
     }
 
     override fun onDraw(canvas: Canvas?) {

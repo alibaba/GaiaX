@@ -112,19 +112,16 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             }
 
             override fun onPageSelected(position: Int) {
-                val targetIndex = calculateTargetIndex(position)
-
-                Log.runE(TAG) { "onPageSelected position=$position targetIndex=$targetIndex" }
-
                 // 回调事件
                 val gxScroll = GXTemplateEngine.GXScroll().apply {
                     this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
                     this.view = this@GXSliderView
-                    this.position = targetIndex
+                    this.position = position
                 }
                 gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
 
-                setIndicatorIndex(targetIndex)
+                Log.runE(TAG) { "onPageSelected position=$position" }
+                setIndicatorIndex(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -381,8 +378,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             config?.selectedIndex?.takeIf { it >= 0 }?.let { selectedIndex ->
                 Log.runE(TAG) { "processIndex selectedIndex=$selectedIndex" }
                 setSliderIndex(selectedIndex, false)
-                val targetIndex = calculateTargetIndex(selectedIndex)
-                setIndicatorIndex(targetIndex)
+                setIndicatorIndex(selectedIndex)
             }
         } else {
             val extend = gxTemplateNode.getExtend(templateData)
@@ -397,8 +393,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         }
     }
 
-    private fun setIndicatorIndex(targetIndex: Int) {
-        Log.runE(TAG) { "setIndicatorIndex targetIndex=$targetIndex pageSize=$pageSize" }
+    private fun setIndicatorIndex(scrollIndex: Int) {
+       val targetIndex=  calculateTargetIndex(scrollIndex)
+        Log.runE(TAG) { "setIndicatorIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize" }
         if (config?.hasIndicator == true) {
             indicatorView?.updateSelectedIndex(targetIndex)
         }
@@ -406,12 +403,11 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
     private fun setSliderIndex(scrollIndex: Int, smooth: Boolean) {
         val currentIndex = this.getCurrentIndex()
-        val targetIndex = calculateTargetIndex(scrollIndex)
-        Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize smooth=$smooth" }
+        Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex  pageSize=$pageSize smooth=$smooth" }
         viewPager?.post {
             // TODO：如果跨多个索引移动，会导致明显卡顿
             viewPager?.setCurrentItem(scrollIndex, smooth)
-            setIndicatorIndex(targetIndex)
+            setIndicatorIndex(scrollIndex)
         }
     }
 

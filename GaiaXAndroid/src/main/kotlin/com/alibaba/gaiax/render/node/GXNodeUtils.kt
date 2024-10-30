@@ -749,9 +749,9 @@ object GXNodeUtils {
             }
 
             else -> {
-                gxTemplateContext.size.width?.let {
-                    return Size(it, null)
-                }
+                val containerWidth = gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
+                ?: throw IllegalArgumentException("Want to computeItemViewPort, but containerWith is null")
+                return Size(containerWidth, null)
             }
         }
         return Size(null, null)

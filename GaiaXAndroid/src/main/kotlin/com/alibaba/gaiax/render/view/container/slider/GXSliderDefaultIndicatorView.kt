@@ -20,12 +20,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import androidx.annotation.Keep
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
 
 
 /**
  * @suppress
  */
+@Keep
 class GXSliderDefaultIndicatorView : GXSliderBaseIndicatorView {
 
     companion object {

@@ -126,50 +126,41 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         fastPreviewRoot.removeAllViews()
 
         Log.d(TAG, "create() called")
-        gxTemplateData?.let { gxTemplateData ->
-            gxTemplateItem?.let { gxTemplateItem ->
-                gxMeasureSize?.let { gxMeasureSize ->
 
-                    // 创建视图
-                    gxView = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize)
+        // 创建视图
+        gxView = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
 
-                    gxView?.let {
+        // 获取模板信息
+        val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem!!)
+        if (gxTemplateInfo.isJsExist) {
 
-
-                        // 获取模板信息
-                        val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
-                        if (gxTemplateInfo.isJsExist) {
-
-                            // 设置JS异常监听
-                            GXJSEngineProxy.instance.jsExceptionListener =
-                                object : GXJSEngine.IJsExceptionListener {
-                                    override fun exception(data: JSONObject) {
-                                        Log.d(TAG, "exception() called with: data = $data")
-                                    }
-                                }
-                            GXJSEngineProxy.instance.registerComponent(gxView)
-
-                            if (gxTemplateInfo.preload) {
-                                GXJSEngineProxy.instance.onDataInit(gxView, gxTemplateData.data)?.let {
-                                    Log.d(TAG, "create: onDataInit changed data=${it}")
-                                    gxTemplateData.data = it
-                                }
-                            }
-
-                            // 绑定数据
-                            GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
-
-                            // 将数据加入页面中
-                            fastPreviewRoot.addView(gxView, 0)
-
-                            GXJSEngineProxy.instance.onReady(gxView)
-
-                            Log.d(TAG, "create() called end")
-                        }
+            // 设置JS异常监听
+            GXJSEngineProxy.instance.jsExceptionListener =
+                object : GXJSEngine.IJsExceptionListener {
+                    override fun exception(data: JSONObject) {
+                        Log.d(TAG, "exception() called with: data = $data")
                     }
+                }
+            GXJSEngineProxy.instance.registerComponent(gxView)
+
+            if (gxTemplateInfo.preload) {
+                GXJSEngineProxy.instance.onDataInit(gxView, gxTemplateData!!.data)?.let {
+                    Log.d(TAG, "create: onDataInit changed data=${it}")
+                    gxTemplateData!!.data = it
                 }
             }
         }
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(gxView, gxTemplateData!!)
+
+        // 将数据加入页面中
+        fastPreviewRoot.addView(gxView, 0)
+
+        GXJSEngineProxy.instance.onReady(gxView)
+
+        Log.d(TAG, "create() called end")
+
     }
 
     var gxTemplateItem: GXTemplateEngine.GXTemplateItem? = null

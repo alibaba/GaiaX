@@ -229,7 +229,15 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
                 viewPager?.post {
                     val selectedIndex = (currentItem + 1)
                     Log.runE(TAG) { "schedule selectedIndex=$selectedIndex" }
-                    setSliderIndex(selectedIndex, true)
+                    if (config?.infinityScroll == false) {
+                        if (selectedIndex >= pageSize) {
+                            return@post
+                        } else {
+                            setSliderIndex(selectedIndex, true)
+                        }
+                    } else {
+                        setSliderIndex(selectedIndex, true)
+                    }
                 }
             }
         }
@@ -354,7 +362,6 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     }
 
     override fun onBindData(data: JSONObject?) {
-        viewPager?.adapter?.notifyDataSetChanged()
         processIndex()
     }
 

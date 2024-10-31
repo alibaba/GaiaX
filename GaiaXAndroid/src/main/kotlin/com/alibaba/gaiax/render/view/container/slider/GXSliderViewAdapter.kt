@@ -44,7 +44,6 @@ class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: 
         private const val TAG = "GXSliderAdapter"
     }
 
-    private var isNeedForceUpdate: Boolean = false
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
 
     private var config: GXSliderConfig? = null
@@ -260,16 +259,12 @@ class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: 
     }
 
     fun setData(data: JSONArray) {
-        isNeedForceUpdate = gxTemplateContext.isMeasureSizeChanged
         this.data = data
         notifyDataSetChanged()
     }
 
     override fun getItemPosition(`object`: Any): Int {
-        if (isNeedForceUpdate) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(`object`)
+        return POSITION_NONE
     }
 
     fun setConfig(config: GXSliderConfig?) {

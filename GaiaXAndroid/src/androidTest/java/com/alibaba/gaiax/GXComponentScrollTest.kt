@@ -987,10 +987,7 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(
-            0,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
-        )
+        Assert.assertEquals(0, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
 
         GXRegisterCenter.instance.extensionScroll = null
     }
@@ -1053,10 +1050,7 @@ class GXComponentScrollTest : GXBaseTest() {
         val rootView = GXTemplateEngine.instance.createView(templateItem, size)
         GXTemplateEngine.instance.bindData(rootView, templateData)
 
-        Assert.assertEquals(
-            3,
-            ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition")
-        )
+        Assert.assertEquals(3, ((rootView as RecyclerView).layoutManager as LinearLayoutManager).getFieldInt("mPendingScrollPosition"))
 
         GXTemplateEngine.instance.bindData(rootView,
             GXTemplateEngine.GXTemplateData(JSONObject().apply {

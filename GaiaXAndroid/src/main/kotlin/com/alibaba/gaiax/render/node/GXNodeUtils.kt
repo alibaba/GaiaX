@@ -413,6 +413,10 @@ object GXNodeUtils {
         val itemVisualTemplateNode = itemTemplatePair.second
 
         return computeGridContainerSize(gxTemplateContext, gxNode, gxContainerData) { gxGridConfig: GXGridConfig, lines: Int ->
+            if (lines == 0) {
+                return@computeGridContainerSize 0F
+            }
+
             if (gxGridConfig.column == 1) {
 
                 var height = 0F
@@ -820,11 +824,17 @@ object GXNodeUtils {
         if (gxGridConfig.isVertical) {
 
             // 获取行数
-            val lines = max(1, ceil((gxContainerData.size * 1.0F / gxGridConfig.column(gxTemplateContext)).toDouble()).toInt())
+            val lines = if (gxContainerData.size != 0) {
+                max(1, ceil((gxContainerData.size * 1.0F / gxGridConfig.column(gxTemplateContext)).toDouble()).toInt())
+            } else {
+                0
+            }
 
             var containerHeight = computeGridVerticalHeight(gxGridConfig, lines)
 
-            containerHeight += gxGridConfig.rowSpacing * (lines - 1)
+            if (lines != 0) {
+                containerHeight += gxGridConfig.rowSpacing * (lines - 1)
+            }
 
             // 处理padding
             val padding = gxNode.getPaddingRect()

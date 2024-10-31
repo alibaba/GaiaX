@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.fastjson.JSONObject
+import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.demo.R
 import com.alibaba.gaiax.demo.source.GXFastPreviewSource
@@ -14,6 +15,7 @@ import com.alibaba.gaiax.js.GXJSEngine
 import com.alibaba.gaiax.js.proxy.GXJSEngineProxy
 import com.alibaba.gaiax.studio.GXStudioClient
 import com.alibaba.gaiax.template.GXSize.Companion.dpToPx
+import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXScreenUtils
 import kotlin.math.log
 
@@ -126,6 +128,19 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         fastPreviewRoot.removeAllViews()
 
         Log.d(TAG, "create() called")
+
+        GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
+            GXRegisterCenter.GXIExtensionDynamicProperty {
+
+            override fun convert(params: GXRegisterCenter.GXIExtensionDynamicProperty.GXParams): Any? {
+                if (params.propertyName == GXTemplateKey.GAIAX_CUSTOM_PROPERTY_GRID_COMPUTE_CONTAINER_HEIGHT) {
+                    if (params.value == false) {
+                        return true
+                    }
+                }
+                return null
+            }
+        })
 
         // 创建视图
         gxView = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)

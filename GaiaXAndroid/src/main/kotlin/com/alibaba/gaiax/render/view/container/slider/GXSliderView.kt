@@ -369,7 +369,7 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         config?.selectedIndex?.takeIf { it >= 0 }?.let { selectedIndex ->
             Log.runE(TAG) { "processIndex selectedIndex=$selectedIndex" }
             setSliderIndex(selectedIndex, false)
-            onScrollEvent(0)
+            onScrollEvent(selectedIndex)
         }
     }
 

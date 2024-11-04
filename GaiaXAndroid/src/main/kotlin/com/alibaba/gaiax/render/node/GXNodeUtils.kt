@@ -24,14 +24,8 @@ import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
-import com.alibaba.gaiax.context.getLayoutForScroll
 import com.alibaba.gaiax.context.getMaxHeightLayoutForScroll
 import com.alibaba.gaiax.context.getMinHeightLayoutForScroll
-import com.alibaba.gaiax.context.initLayoutForScroll
-import com.alibaba.gaiax.context.initNodeForScroll
-import com.alibaba.gaiax.context.isExistForScroll
-import com.alibaba.gaiax.context.putLayoutForScroll
-import com.alibaba.gaiax.context.putNodeForScroll
 import com.alibaba.gaiax.template.GXGridConfig
 import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXGlobalCache
@@ -140,7 +134,10 @@ object GXNodeUtils {
 
             // Improve: 如果之前计算过，并且内容高度都一样，那么直接使用缓存计算。在横滑容器数据量较大的情况下，会节省一些时间。
             if (GXGlobalCache.instance.isExistForTemplateItem(gxTemplateContext.size, itemTemplateItem)) {
-                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(gxTemplateContext, itemTemplateItem)
+                val itemLayout = GXGlobalCache.instance.getLayoutForTemplateItem(
+                    gxTemplateContext,
+                    itemTemplateItem
+                )
                 return computeScrollContainerSize(gxNode, itemLayout, gxContainerData)
             }
 
@@ -216,7 +213,6 @@ object GXNodeUtils {
         }
 
         val itemTemplatePair = templateItems.firstOrNull() ?: return null
-        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
         val itemViewPort: Size<Float?> = computeGridItemViewPort(gxTemplateContext, gxNode)
         val itemTemplateItem = itemTemplatePair.first
@@ -225,27 +221,18 @@ object GXNodeUtils {
         val assumptionItemsSameHeight = gxNode.templateNode.getExtend()?.getBoolean(GXTemplateKey.GAIAX_GRID_EXTEND_ITEM_SAME_HEIGHT) ?: true
 
         if (assumptionItemsSameHeight) {
-            if (gxTemplateContext.gridItemLayoutCache == null) {
-                gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                    gxTemplateContext,
-                    itemViewPort,
-                    itemTemplateItem,
-                    itemVisualTemplateNode,
-                    itemData,
-                    itemCacheKey
-                )
+            gxTemplateContext.gridItemLayoutCache?.get(itemTemplateItem.key())?.let {
+                return it
             }
-            return gxTemplateContext.gridItemLayoutCache
+            computeGridItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)?.let {
+                gxTemplateContext.gridItemLayoutCache?.put(itemTemplateItem.key(), it)
+                return it
+            }
         } else {
-            return computeGridItemLayout(
-                gxTemplateContext,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
-            )
+            return computeGridItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)
         }
+
+        return null
     }
 
     private fun computeScrollItemContainerSize(
@@ -288,7 +275,7 @@ object GXNodeUtils {
                 itemCacheKey
             )
 
-            return gxTemplateContext.getLayoutForScroll(itemCacheKey)
+            return gxTemplateContext.scrollItemLayoutCache?.get(itemCacheKey)
         }
         // case 2
         else {
@@ -297,7 +284,7 @@ object GXNodeUtils {
 
             computeScrollItemLayoutForMultiItemType(gxTemplateContext, gxNode, templateItems, itemData, itemViewPort, itemCacheKey)
 
-            return gxTemplateContext.getLayoutForScroll(itemCacheKey)
+            return gxTemplateContext.scrollItemLayoutCache?.get(itemCacheKey)
         }
     }
 
@@ -316,22 +303,16 @@ object GXNodeUtils {
         }
 
         val itemTemplatePair = templateItems.firstOrNull() ?: return null
-        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        if (gxTemplateContext.sliderItemLayoutCache == null) {
-            gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                gxTemplateContext,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
-            )
+        if (gxTemplateContext.sliderItemLayoutCache?.get(itemTemplateItem.key()) == null) {
+            computeSliderItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)?.let {
+                gxTemplateContext.sliderItemLayoutCache?.put(itemTemplateItem.key(), it)
+            }
         }
 
-        return gxTemplateContext.sliderItemLayoutCache
+        return gxTemplateContext.sliderItemLayoutCache?.get(itemTemplateItem.key())
     }
 
     private fun computeScrollItemLayoutForMultiItemType(
@@ -347,22 +328,21 @@ object GXNodeUtils {
         if (typeData != null) {
             val itemConfig = "${ITEM_CONFIG}.${typeData.getStringExt(ITEM_PATH)}"
             val templateId = typeData.getStringExt(itemConfig)
-            templateItems.firstOrNull { it.first.templateId == templateId }
-                ?.let { itemTemplatePair ->
+            templateItems.firstOrNull { it.first.templateId == templateId }?.let { itemTemplatePair ->
 
-                    // 2. 计算坑位实际宽高结果
-                    val itemTemplateItem = itemTemplatePair.first
-                    val itemVisualTemplateNode = itemTemplatePair.second
+                // 2. 计算坑位实际宽高结果
+                val itemTemplateItem = itemTemplatePair.first
+                val itemVisualTemplateNode = itemTemplatePair.second
 
-                    computeScrollItemLayoutToCache(
-                        gxTemplateContext,
-                        itemData,
-                        itemViewPort,
-                        itemTemplateItem,
-                        itemVisualTemplateNode,
-                        itemCacheKey
-                    )
-                }
+                computeScrollItemLayoutToCache(
+                    gxTemplateContext,
+                    itemData,
+                    itemViewPort,
+                    itemTemplateItem,
+                    itemVisualTemplateNode,
+                    itemCacheKey
+                )
+            }
         }
     }
 
@@ -374,9 +354,7 @@ object GXNodeUtils {
         itemVisualTemplateNode: GXTemplateNode,
         itemCacheKey: String
     ) {
-        gxTemplateContext.initLayoutForScroll()
-
-        if (!gxTemplateContext.isExistForScroll(itemCacheKey)) {
+        if (gxTemplateContext.scrollItemLayoutCache?.containsKey(itemCacheKey) != true) {
             computeScrollItemLayout(
                 gxTemplateContext,
                 itemViewPort,
@@ -385,7 +363,7 @@ object GXNodeUtils {
                 gxItemData,
                 itemCacheKey
             )?.let { itemLayout ->
-                gxTemplateContext.putLayoutForScroll(itemCacheKey, itemLayout)
+                gxTemplateContext.scrollItemLayoutCache?.put(itemCacheKey, itemLayout)
             }
         }
     }
@@ -405,8 +383,6 @@ object GXNodeUtils {
 
         val itemTemplatePair = templateItems.firstOrNull() ?: return null
         val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
-        val itemPosition = 0
-        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
         val itemViewPort: Size<Float?> = computeGridItemViewPort(gxTemplateContext, gxNode)
         val itemTemplateItem = itemTemplatePair.first
@@ -428,18 +404,13 @@ object GXNodeUtils {
 
                     // 计算一个缓存，然后乘以行数
 
-                    if (gxTemplateContext.gridItemLayoutCache == null) {
-                        gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                            gxTemplateContext,
-                            itemViewPort,
-                            itemTemplateItem,
-                            itemVisualTemplateNode,
-                            itemData,
-                            itemCacheKey
-                        )
+                    if (gxTemplateContext.gridItemLayoutCache?.get(itemTemplateItem.key()) == null) {
+                        computeGridItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)?.let {
+                            gxTemplateContext.gridItemLayoutCache?.put(itemTemplateItem.key(), it)
+                        }
                     }
 
-                    gxTemplateContext.gridItemLayoutCache?.let {
+                    gxTemplateContext.gridItemLayoutCache?.get(itemTemplateItem.key())?.let {
                         height = it.height * lines
                     }
                 } else {
@@ -448,16 +419,8 @@ object GXNodeUtils {
 
                     gxContainerData.forEachIndexed { itemPosition, value ->
                         val childItemData = value as JSONObject
-                        val childItemCacheKey = "${itemPosition}-${childItemData.hashCode()}"
 
-                        computeGridItemLayout(
-                            gxTemplateContext,
-                            itemViewPort,
-                            itemTemplateItem,
-                            itemVisualTemplateNode,
-                            childItemData,
-                            childItemCacheKey
-                        )?.let {
+                        computeGridItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, childItemData)?.let {
                             height += it.height
                         }
                     }
@@ -466,22 +429,20 @@ object GXNodeUtils {
                 return@computeGridContainerSize height
             } else {
 
+                var height = 0F
+
                 // 对于非1列的情况，计算一个缓存，然后乘以行数
-
-                if (gxTemplateContext.gridItemLayoutCache == null) {
-                    gxTemplateContext.gridItemLayoutCache = computeGridItemLayout(
-                        gxTemplateContext,
-                        itemViewPort,
-                        itemTemplateItem,
-                        itemVisualTemplateNode,
-                        itemData,
-                        itemCacheKey
-                    )
+                if (gxTemplateContext.gridItemLayoutCache?.get(itemTemplateItem.key()) == null) {
+                    computeGridItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)?.let {
+                        gxTemplateContext.gridItemLayoutCache?.put(itemTemplateItem.key(), it)
+                    }
                 }
 
-                gxTemplateContext.gridItemLayoutCache?.let {
-                    return@computeGridContainerSize it.height * lines
+                gxTemplateContext.gridItemLayoutCache?.get(itemTemplateItem.key())?.let {
+                    height = it.height * lines
                 }
+
+                return@computeGridContainerSize height
             }
 
             // no reach
@@ -503,25 +464,18 @@ object GXNodeUtils {
 
         val itemTemplatePair = templateItems.firstOrNull() ?: return null
         val itemData = gxContainerData.firstOrNull() as? JSONObject ?: JSONObject()
-        val itemPosition = 0
-        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
 
         val itemViewPort: Size<Float?> = computeSliderItemViewPort(gxTemplateContext, gxNode)
         val itemTemplateItem = itemTemplatePair.first
         val itemVisualTemplateNode = itemTemplatePair.second
 
-        if (gxTemplateContext.sliderItemLayoutCache == null) {
-            gxTemplateContext.sliderItemLayoutCache = computeSliderItemLayout(
-                gxTemplateContext,
-                itemViewPort,
-                itemTemplateItem,
-                itemVisualTemplateNode,
-                itemData,
-                itemCacheKey
-            )
+        if (gxTemplateContext.sliderItemLayoutCache?.get(itemTemplateItem.key()) == null) {
+            computeSliderItemLayout(gxTemplateContext, itemViewPort, itemTemplateItem, itemVisualTemplateNode, itemData)?.let {
+                gxTemplateContext.sliderItemLayoutCache?.put(itemTemplateItem.key(), it)
+            }
         }
 
-        return computeSliderContainerSize(gxTemplateContext.sliderItemLayoutCache)
+        return computeSliderContainerSize(gxTemplateContext.sliderItemLayoutCache?.get(itemTemplateItem.key()))
     }
 
     fun computeScrollAndGridFooterItemContainerSize(
@@ -532,7 +486,6 @@ object GXNodeUtils {
         itemData: JSONObject,
         itemPosition: Int
     ): Layout? {
-        val itemCacheKey = "${itemPosition}-${itemData.hashCode()}"
         val itemMeasureSize = GXTemplateEngine.GXMeasureSize(itemViewPort.width, itemViewPort.height)
         val itemTemplateData = GXTemplateEngine.GXTemplateData(itemData)
         return computeItemLayoutByCreateAndBindNode(
@@ -549,8 +502,7 @@ object GXNodeUtils {
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
-        gxItemData: JSONObject,
-        itemCacheKey: String
+        gxItemData: JSONObject
     ): Layout? {
         val gxMeasureSize = GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
@@ -580,8 +532,7 @@ object GXNodeUtils {
             gxTemplateData,
             gxItemVisualTemplateNode,
         )?.apply {
-            gxTemplateContext.initNodeForScroll()
-            gxTemplateContext.putNodeForScroll(itemCacheKey, this)
+            gxTemplateContext.scrollNodeCache?.put(itemCacheKey, this)
         }?.layoutByBind
     }
 
@@ -590,8 +541,7 @@ object GXNodeUtils {
         gxItemViewPort: Size<Float?>,
         gxItemTemplateItem: GXTemplateEngine.GXTemplateItem,
         gxItemVisualTemplateNode: GXTemplateNode?,
-        gxItemData: JSONObject,
-        itemCacheKey: String
+        gxItemData: JSONObject
     ): Layout? {
         val gxMeasureSize = GXTemplateEngine.GXMeasureSize(gxItemViewPort.width, gxItemViewPort.height)
         val gxTemplateData = GXTemplateEngine.GXTemplateData(gxItemData)
@@ -637,12 +587,9 @@ object GXNodeUtils {
         // 2. 对于Grid容器，其坑位的宽度是由GridConfig和Grid容器自己的宽度计算后决定的
         // 其坑位的高度，可以不计算
         else if (gxNode.isGridType()) {
-            val containerWidth =
-                gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width
-                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
+            val containerWidth = gxNode.layoutByBind?.width ?: gxNode.layoutByPrepare?.width ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but containerWith is null")
 
-            val gxGridConfig = gxNode.templateNode.layer.gridConfig
-                ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but gxGridConfig is null")
+            val gxGridConfig = gxNode.templateNode.layer.gridConfig ?: throw IllegalArgumentException("Want to computeFooterItemViewPort, but gxGridConfig is null")
 
             val padding = gxNode.getPaddingRect()
 

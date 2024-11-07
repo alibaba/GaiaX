@@ -129,6 +129,14 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
 
         Log.d(TAG, "create() called")
 
+        val gxTemplateItem = gxTemplateItem
+        val gxMeasureSize = gxMeasureSize
+        val gxTemplateData = gxTemplateData
+
+        if (gxTemplateItem == null || gxMeasureSize == null || gxTemplateData == null) {
+            return
+        }
+
         GXRegisterCenter.instance.registerExtensionDynamicProperty(object :
             GXRegisterCenter.GXIExtensionDynamicProperty {
 
@@ -143,10 +151,11 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         })
 
         // 创建视图
-        gxView = GXTemplateEngine.instance.createView(gxTemplateItem!!, gxMeasureSize!!)
+        val gxView = GXTemplateEngine.instance.createView(gxTemplateItem, gxMeasureSize) ?: return
+        this.gxView = gxView
 
         // 获取模板信息
-        val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem!!)
+        val gxTemplateInfo = GXTemplateEngine.instance.getGXTemplateInfo(gxTemplateItem)
         if (gxTemplateInfo.isJsExist) {
 
             // 设置JS异常监听
@@ -159,7 +168,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
             GXJSEngineProxy.instance.registerComponent(gxView)
 
             if (gxTemplateInfo.preload) {
-                GXJSEngineProxy.instance.onDataInit(gxView, gxTemplateData!!.data)?.let {
+                GXJSEngineProxy.instance.onDataInit(gxView, gxTemplateData.data)?.let {
                     Log.d(TAG, "create: onDataInit changed data=${it}")
                     gxTemplateData!!.data = it
                 }
@@ -167,7 +176,7 @@ class GXFastPreviewActivity : AppCompatActivity(), GXStudioClient.IFastPreviewLi
         }
 
         // 绑定数据
-        GXTemplateEngine.instance.bindData(gxView, gxTemplateData!!)
+        GXTemplateEngine.instance.bindData(gxView, gxTemplateData)
 
         // 将数据加入页面中
         fastPreviewRoot.addView(gxView, 0)

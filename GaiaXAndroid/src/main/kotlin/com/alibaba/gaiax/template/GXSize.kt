@@ -64,11 +64,7 @@ sealed class GXSize {
         private fun convertPx(value: String) = value.replacePxToEmpty().toFloat().dpToPx()
 
         fun Float.dpToPx(): Float {
-            return (TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                this,
-                Resources.getSystem().displayMetrics
-            )).roundToInt().toFloat()
+            return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)).roundToInt().toFloat()
         }
 
         fun Float.ptToPx(): Float {

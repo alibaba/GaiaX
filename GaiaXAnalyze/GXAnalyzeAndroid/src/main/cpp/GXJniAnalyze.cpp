@@ -337,6 +337,12 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_alibaba_gaiax_analyze_GXAnalyze_00024Companion_releaseGXValue(JNIEnv *env, jobject thiz,
                                                                        jlong value) {
+    GXValue *val = (GXValue *) value;
+    if (val->tag == GX_TAG_ARRAY || val->tag == GX_TAG_MAP) {
+        if (val->ptr != NULL) {
+            env->DeleteWeakGlobalRef((jweak) val->ptr);
+        }
+    }
     releaseGXValue(value);
 }
 extern "C"

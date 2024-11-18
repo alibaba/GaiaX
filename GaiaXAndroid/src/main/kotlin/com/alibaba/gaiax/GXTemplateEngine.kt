@@ -499,7 +499,7 @@ class GXTemplateEngine {
         GXRenderImpl()
     }
 
-    internal fun createTemplateContext(
+    fun createTemplateContext(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode?

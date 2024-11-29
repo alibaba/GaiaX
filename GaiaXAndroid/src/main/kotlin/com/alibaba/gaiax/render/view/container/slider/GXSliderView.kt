@@ -402,6 +402,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     }
 
     private fun calculateTargetIndex(index: Int): Int {
+        if (pageSize == 0) {
+            return 0
+        }
         return index % pageSize
     }
 

@@ -61,6 +61,12 @@ object GXNodeUtils {
 
         composeStretchNodeByBindData(gxNode, layout)
 
+        GXGlobalCache.instance.putLayoutForTemplateItem(
+            gxTemplateContext,
+            gxTemplateContext.templateItem,
+            layout
+        )
+
         // 输出计算结果
         Log.runE(TAG) { "computeNodeTreeByBindData traceId=${gxTemplateContext.traceId} layoutByBind=${gxNode.layoutByBind}" }
     }

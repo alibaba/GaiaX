@@ -6,12 +6,12 @@
 //  Copyright © 2024 zhangjc. All rights reserved.
 //
 
-#import "GaiaPagerLayout.h"
+#import "GXPagerLayout.h"
 
-typedef NS_ENUM(NSUInteger, GaiaLayoutItemDirection) {
-    GaiaLayoutItemDirectionLeft,
-    GaiaLayoutItemDirectionCenter,
-    GaiaLayoutItemDirectionRight,
+typedef NS_ENUM(NSUInteger, GXLayoutItemDirection) {
+    GXLayoutItemDirectionLeft,
+    GXLayoutItemDirectionCenter,
+    GXLayoutItemDirectionRight,
 };
 
 @interface GXPagerLayoutConfig ()
@@ -140,13 +140,13 @@ typedef NS_ENUM(NSUInteger, GaiaLayoutItemDirection) {
     return _layout.itemSpacing;
 }
 
-- (GaiaLayoutItemDirection)directionWithCenterX:(CGFloat)centerX {
-    GaiaLayoutItemDirection direction = GaiaLayoutItemDirectionRight;
+- (GXLayoutItemDirection)directionWithCenterX:(CGFloat)centerX {
+    GXLayoutItemDirection direction = GXLayoutItemDirectionRight;
     CGFloat contentCenterX = self.collectionView.contentOffset.x + CGRectGetWidth(self.collectionView.frame) / 2;
     if (ABS(centerX - contentCenterX) < 0.5) {
-        direction = GaiaLayoutItemDirectionCenter;
+        direction = GXLayoutItemDirectionCenter;
     }else if (centerX - contentCenterX < 0) {
-        direction = GaiaLayoutItemDirectionLeft;
+        direction = GXLayoutItemDirectionLeft;
     }
     return direction;
 }
@@ -232,13 +232,13 @@ typedef NS_ENUM(NSUInteger, GaiaLayoutItemDirection) {
 - (void)applyLinearTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes scale:(CGFloat)scale alpha:(CGFloat)alpha {
     CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
     if (_layout.adjustSpacingWhenScroling) {
-        GaiaLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
+        GXLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
         CGFloat translate = 0;
         switch (direction) {
-            case GaiaLayoutItemDirectionLeft:
+            case GXLayoutItemDirectionLeft:
                 translate = 1.15 * attributes.size.width * (1 - scale) / 2;
                 break;
-            case GaiaLayoutItemDirectionRight:
+            case GXLayoutItemDirectionRight:
                 translate = -1.15 * attributes.size.width * (1 - scale) / 2;
                 break;
             default:
@@ -268,15 +268,15 @@ typedef NS_ENUM(NSUInteger, GaiaLayoutItemDirection) {
 }
 
 - (void)applyCoverflowTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes angle:(CGFloat)angle alpha:(CGFloat)alpha {
-    GaiaLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
+    GXLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
     CATransform3D transform3D = CATransform3DIdentity;
     transform3D.m34 = -0.002;
     CGFloat translate = 0;
     switch (direction) {
-        case GaiaLayoutItemDirectionLeft:
+        case GXLayoutItemDirectionLeft:
             translate = (1 - cos(angle * 1.2 * M_PI)) * attributes.size.width;
             break;
-        case GaiaLayoutItemDirectionRight:
+        case GXLayoutItemDirectionRight:
             translate = -(1 - cos(angle * 1.2 * M_PI)) * attributes.size.width;
             angle = -angle;
             break;

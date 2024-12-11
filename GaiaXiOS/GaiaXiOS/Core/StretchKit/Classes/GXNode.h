@@ -175,10 +175,11 @@ typedef NS_ENUM(NSUInteger, GXBindType) {
 
 @end
 
+
 @interface GXNode(JS)
 
 //原始数据
-@property (nonatomic, strong) GXTemplateData *orignalData;
+@property (nonatomic, weak) GXTemplateData *orignalData;
 //jsComponent
 @property(nonatomic, strong) GaiaXJSComponent *jsComponent;
 

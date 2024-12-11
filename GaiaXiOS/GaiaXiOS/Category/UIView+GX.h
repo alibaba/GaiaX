@@ -127,5 +127,21 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
+@interface UIView (GXLayout)
+
+@property (nonatomic) CGFloat gx_left;        ///< Shortcut for frame.origin.x.
+@property (nonatomic) CGFloat gx_top;         ///< Shortcut for frame.origin.y
+@property (nonatomic) CGFloat gx_right;       ///< Shortcut for frame.origin.x + frame.size.width
+@property (nonatomic) CGFloat gx_bottom;      ///< Shortcut for frame.origin.y + frame.size.height
+@property (nonatomic) CGFloat gx_width;       ///< Shortcut for frame.size.width.
+@property (nonatomic) CGFloat gx_height;      ///< Shortcut for frame.size.height.
+@property (nonatomic) CGFloat gx_centerX;     ///< Shortcut for center.x
+@property (nonatomic) CGFloat gx_centerY;     ///< Shortcut for center.y
+@property (nonatomic) CGPoint gx_origin;      ///< Shortcut for frame.origin.
+@property (nonatomic) CGSize  gx_size;        ///< Shortcut for frame.size.
+
+@end
+
+
 
 NS_ASSUME_NONNULL_END

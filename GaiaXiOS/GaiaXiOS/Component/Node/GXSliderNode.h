@@ -22,13 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GXSliderNode : GXBaseNode
 
-//内边距
-@property (nonatomic) UIEdgeInsets contentInset;
-//坑位间距
-@property (nonatomic, assign) CGFloat itemSpacing;
-//滚动方法
-@property (nonatomic) UICollectionViewScrollDirection scrollDirection;
-
 @end
 
 NS_ASSUME_NONNULL_END

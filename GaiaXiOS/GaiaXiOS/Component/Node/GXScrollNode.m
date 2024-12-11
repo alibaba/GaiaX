@@ -47,7 +47,7 @@
 //横向模式下坑位位置
 @property (nonatomic, strong) NSString *gravity;
 //坑位Size数组
-@property (nonatomic, strong) NSMutableArray *sizeValues;
+@property (nonatomic, strong) NSArray *sizeValues;
 //坑位的复用标识
 @property (nonatomic, strong) NSMutableArray *identifiers;
 //子坑位的subItems
@@ -311,6 +311,8 @@
 
 //计算itemSize
 - (void)calculateItemSize:(NSDictionary *)extend{
+    NSMutableArray *tmpSizeValues = [NSMutableArray array];
+    
     CGFloat measureWidth = NAN;
     CGFloat measureHeight = NAN;
     if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
@@ -323,7 +325,6 @@
     //计算itemSize
     _containerHeight = 0.f;
     CGSize itemSize = CGSizeZero;
-    [self.sizeValues removeAllObjects];
     for (int i = 0; i < self.items.count; i++) {
         //获取坑位类型
         NSString *identifier = [self identifierWithIndex:i];
@@ -350,9 +351,10 @@
             _containerHeight = itemHeight;
         }
         //添加到数组中
-        [self.sizeValues gx_addObject:[NSValue valueWithCGSize:itemSize]];
+        [tmpSizeValues gx_addObject:[NSValue valueWithCGSize:itemSize]];
     }
-    
+
+    self.sizeValues = tmpSizeValues;
 }
 
 
@@ -416,7 +418,7 @@
     
     //数据绑定
     GXTemplateData *data = [self.items objectAtIndex:index];
-    [TheGXTemplateEngine bindData:data   onView:rootView];
+    [TheGXTemplateEngine bindData:data onView:rootView];
     
     return cell;
 }
@@ -586,13 +588,6 @@
         _items = [NSMutableArray array];
     }
     return _items;
-}
-
-- (NSMutableArray *)sizeValues{
-    if (!_sizeValues) {
-        _sizeValues = [NSMutableArray array];
-    }
-    return _sizeValues;
 }
 
 - (NSMutableArray *)identifiers{

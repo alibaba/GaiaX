@@ -2,11 +2,12 @@ package com.alibaba.gaiax.render.view.blur
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Build
-import android.renderscript.*
-import androidx.annotation.RequiresApi
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RSRuntimeException
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 class GXBlurImpl {
 
     private var renderScript: RenderScript? = null
@@ -15,27 +16,36 @@ class GXBlurImpl {
     private var blurOutput: Allocation? = null
 
     fun prepare(context: Context?, buffer: Bitmap?, radius: Float): Boolean {
-        if (renderScript == null) {
-            try {
-                renderScript = RenderScript.create(context)
-                blurScript = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
-            } catch (e: RSRuntimeException) {
-                // In release mode, just ignore
-                release()
+        try {
+            if (context == null || buffer == null || radius <= 0) {
                 return false
             }
+            if (renderScript == null) {
+                try {
+                    renderScript = RenderScript.create(context)
+                    blurScript = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
+                } catch (e: RSRuntimeException) {
+                    // In release mode, just ignore
+                    release()
+                    return false
+                }
+            }
+            blurScript?.setRadius(radius)
+            blurInput = Allocation.createFromBitmap(
+                renderScript,
+                buffer,
+                Allocation.MipmapControl.MIPMAP_NONE,
+                Allocation.USAGE_SCRIPT
+            )
+            blurInput?.let {
+                blurOutput = Allocation.createTyped(renderScript, it.type)
+            }
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            release()
+            return false
         }
-        blurScript?.setRadius(radius)
-        blurInput = Allocation.createFromBitmap(
-            renderScript,
-            buffer,
-            Allocation.MipmapControl.MIPMAP_NONE,
-            Allocation.USAGE_SCRIPT
-        )
-        blurInput?.let {
-            blurOutput = Allocation.createTyped(renderScript, it.type)
-        }
-        return true
     }
 
     fun release() {

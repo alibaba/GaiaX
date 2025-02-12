@@ -49,20 +49,28 @@ class GXBlurImpl {
     }
 
     fun release() {
-        blurInput?.destroy()
-        blurInput = null
-        blurOutput?.destroy()
-        blurOutput = null
-        blurScript?.destroy()
-        blurScript = null
-        renderScript?.destroy()
-        renderScript = null
+        try {
+            blurInput?.destroy()
+            blurInput = null
+            blurOutput?.destroy()
+            blurOutput = null
+            blurScript?.destroy()
+            blurScript = null
+            renderScript?.destroy()
+            renderScript = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun blur(input: Bitmap?, output: Bitmap?) {
-        blurInput?.copyFrom(input)
-        blurScript?.setInput(blurInput)
-        blurScript?.forEach(blurOutput)
-        blurOutput?.copyTo(output)
+        try {
+            blurInput?.copyFrom(input)
+            blurScript?.setInput(blurInput)
+            blurScript?.forEach(blurOutput)
+            blurOutput?.copyTo(output)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

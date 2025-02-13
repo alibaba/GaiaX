@@ -39,14 +39,11 @@ import com.alibaba.gaiax.utils.runE
 /**
  * @suppress
  */
-class GXSliderViewAdapter(
-    val gxTemplateContext: GXTemplateContext, val gxNode: GXNode
-) : PagerAdapter() {
+class GXSliderViewAdapter(val gxTemplateContext: GXTemplateContext, val gxNode: GXNode) : PagerAdapter() {
     companion object {
-        private const val TAG = "GXSliderViewAdapter"
+        private const val TAG = "GXSliderAdapter"
     }
 
-    private var isNeedForceUpdate: Boolean = false
     private val itemViewMap: MutableMap<String, View?> = mutableMapOf()
 
     private var config: GXSliderConfig? = null
@@ -102,111 +99,131 @@ class GXSliderViewAdapter(
         var isReuse = false
         val pageMode = templateItem.isPageMode
 
-        // 获取坑位View
-        val gxView = if (itemContainer.childCount != 0) {
-            isReuse = true
-            itemContainer.getChildAt(0)
-        } else {
-            isReuse = false
+        // 如果有扩展的容器绑定，那么使用扩展的容器绑定
+        // 并且不是page模式
+        val processContainerItemBind = GXRegisterCenter.instance.extensionContainerItemBind
+        if (processContainerItemBind != null && !pageMode) {
 
-            GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
-
-            val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem, itemMeasureSize,
+            //
+            processContainerItemBind.bindViewHolder(gxTemplateContext.templateData?.tag,
+                itemContainer,
+                itemMeasureSize,
+                templateItem,
                 GXTemplateEngine.GXExtendParams().apply {
                     this.gxItemPosition = itemPosition
                     this.gxItemData = itemData
                     this.gxHostTemplateContext = gxTemplateContext
                     this.gxVisualTemplateNode = visualNestTemplateNode
                 })
-                ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
-
-            val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
-
-            itemContainer.addView(itemView)
-            itemView
-        }
-
-        if (isReuse) {
-            if (pageMode) {
-                GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
-            } else {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
-            }
         } else {
-            if (pageMode) {
-                GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
+
+            // 获取坑位View
+            val gxView = if (itemContainer.childCount != 0) {
+                isReuse = true
+                itemContainer.getChildAt(0)
             } else {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
-            }
-        }
+                isReuse = false
 
-        // 为坑位View绑定数据
-        val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
-            this.eventListener = object : GXTemplateEngine.GXIEventListener {
-                override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
-                    super.onGestureEvent(gxGesture)
-                    gxGesture.index = itemPosition
-                    gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
-                }
+                GXTemplateEngine.instance.prepareView(templateItem, itemMeasureSize)
 
-                override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
-                    super.onScrollEvent(gxScroll)
-                    gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
-                }
+                val templateContext = GXTemplateEngine.instance.createViewOnlyNodeTree(templateItem,
+                    itemMeasureSize,
+                    GXTemplateEngine.GXExtendParams().apply {
+                        this.gxItemPosition = itemPosition
+                        this.gxItemData = itemData
+                        this.gxHostTemplateContext = gxTemplateContext
+                        this.gxVisualTemplateNode = visualNestTemplateNode
+                    })
+                    ?: throw IllegalArgumentException("Create GXTemplateContext fail, please check")
 
-                override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
-                    super.onAnimationEvent(gxAnimation)
-                    gxTemplateContext.templateData?.eventListener?.onAnimationEvent(gxAnimation)
-                }
+                val itemView = GXTemplateEngine.instance.createViewOnlyViewTree(templateContext)
+
+                itemContainer.addView(itemView)
+                itemView
             }
 
-            this.trackListener = object : GXTemplateEngine.GXITrackListener {
-                override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                    gxTrack.index = itemPosition
-                    gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+            if (isReuse) {
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onReuse(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onReuse(gxView)
                 }
-
-                override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                    gxTrack.index = itemPosition
-                    gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
-                        gxTrack
-                    )
-                }
-
-                override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
-                    gxTrack.index = itemPosition
-                    gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
-                        gxTrack
-                    )
-                }
-            }
-
-            this.dataListener = object : GXTemplateEngine.GXIDataListener {
-                override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
-                    return gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
-                }
-            }
-        }
-
-        if (gxView != null) {
-
-            if (pageMode) {
-                GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
             } else {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onCreate(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onCreate(gxView)
+                }
             }
 
-            GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, itemMeasureSize)
+            // 为坑位View绑定数据
+            val gxTemplateData = GXTemplateEngine.GXTemplateData(itemData).apply {
+                this.eventListener = object : GXTemplateEngine.GXIEventListener {
+                    override fun onGestureEvent(gxGesture: GXTemplateEngine.GXGesture) {
+                        super.onGestureEvent(gxGesture)
+                        gxGesture.index = itemPosition
+                        gxTemplateContext.templateData?.eventListener?.onGestureEvent(gxGesture)
+                    }
 
-            GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, itemMeasureSize)
+                    override fun onScrollEvent(gxScroll: GXTemplateEngine.GXScroll) {
+                        super.onScrollEvent(gxScroll)
+                        gxTemplateContext.templateData?.eventListener?.onScrollEvent(gxScroll)
+                    }
 
-            // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
-            itemContainer.layoutParams.width = gxView.layoutParams.width
+                    override fun onAnimationEvent(gxAnimation: GXTemplateEngine.GXAnimation) {
+                        super.onAnimationEvent(gxAnimation)
+                        gxTemplateContext.templateData?.eventListener?.onAnimationEvent(gxAnimation)
+                    }
+                }
 
-            if (pageMode) {
-                GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStarted(gxView)
-            } else {
-                GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStarted(gxView)
+                this.trackListener = object : GXTemplateEngine.GXITrackListener {
+                    override fun onTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onTrackEvent(gxTrack)
+                    }
+
+                    override fun onManualClickTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualClickTrackEvent(
+                            gxTrack
+                        )
+                    }
+
+                    override fun onManualExposureTrackEvent(gxTrack: GXTemplateEngine.GXTrack) {
+                        gxTrack.index = itemPosition
+                        gxTemplateContext.templateData?.trackListener?.onManualExposureTrackEvent(
+                            gxTrack
+                        )
+                    }
+                }
+
+                this.dataListener = object : GXTemplateEngine.GXIDataListener {
+                    override fun onTextProcess(gxTextData: GXTemplateEngine.GXTextData): CharSequence? {
+                        return gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
+                    }
+                }
+            }
+
+            if (gxView != null) {
+
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStart(gxView, gxTemplateData)
+                }
+
+                GXTemplateEngine.instance.bindDataOnlyNodeTree(gxView, gxTemplateData, itemMeasureSize)
+
+                GXTemplateEngine.instance.bindDataOnlyViewTree(gxView, gxTemplateData, itemMeasureSize)
+
+                // FIX: 重置容器的宽度，防止预计算和实际的宽度不相符
+                itemContainer.layoutParams.width = gxView.layoutParams.width
+
+                if (pageMode) {
+                    GXRegisterCenter.instance.gxPageItemViewLifecycleListener?.onStarted(gxView)
+                } else {
+                    GXRegisterCenter.instance.gxItemViewLifecycleListener?.onStarted(gxView)
+                }
             }
         }
 
@@ -242,16 +259,12 @@ class GXSliderViewAdapter(
     }
 
     fun setData(data: JSONArray) {
-        isNeedForceUpdate = gxTemplateContext.isMeasureSizeChanged
         this.data = data
         notifyDataSetChanged()
     }
 
     override fun getItemPosition(`object`: Any): Int {
-        if (isNeedForceUpdate) {
-            return POSITION_NONE
-        }
-        return super.getItemPosition(`object`)
+        return POSITION_NONE
     }
 
     fun setConfig(config: GXSliderConfig?) {

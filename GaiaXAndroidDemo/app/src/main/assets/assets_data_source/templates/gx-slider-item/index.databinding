@@ -1,7 +1,7 @@
 {
     "data":{
         "image":{
-            "value":"$image"
+            "value":"$img"
         },
         "title":{
             "value":"$title"

@@ -32,6 +32,7 @@ import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.render.node.text.GXDirtyText
 import com.alibaba.gaiax.render.node.text.GXFitContentUtils
 import com.alibaba.gaiax.render.node.text.GXHighLightUtil
+import com.alibaba.gaiax.render.utils.GXGravitySmoothScroller
 import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.basic.GXIImageView
 import com.alibaba.gaiax.render.view.basic.GXProgressView
@@ -1005,275 +1006,327 @@ object GXNodeTreeUpdate {
             gxTemplateContext.bindDataCount++
         }
 
-        private fun bindScrollAndGrid(
-            gxTemplateContext: GXTemplateContext,
-            view: View,
-            gxNode: GXNode,
-            gxTemplateNode: GXTemplateNode,
-            templateData: JSONObject
-        ) {
+    }
 
-            // 容器数据源
-            var containerTemplateData = gxTemplateNode.getDataValue(templateData) as? JSONArray
-            if (containerTemplateData == null) {
-                if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventContainerDataSourceThrowException == true) {
-                    containerTemplateData = JSONArray()
-                } else {
-                    throw IllegalArgumentException("Scroll or Grid must be have a array data source")
+    private fun bindIconFont(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        val nodeData = gxTemplateNode.getData(templateData)
+        view.onBindData(nodeData)
+    }
+
+    private fun bindImage(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        val nodeData = gxTemplateNode.getData(templateData)
+        view.onBindData(nodeData)
+    }
+
+    private fun bindView(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        val nodeData = gxTemplateNode.getData(templateData)
+        view.onBindData(nodeData)
+    }
+
+    private fun bindRichText(
+        gxTemplateContext: GXTemplateContext,
+        view: GXIViewBindData,
+        css: GXCss?,
+        layer: GXLayer,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
+        val nodeData = gxTemplateNode.getData(templateData)
+
+        val valueData = nodeData?.get(GXTemplateKey.GAIAX_VALUE)
+
+        // 优先处理高亮逻辑
+        if (valueData is String) {
+            val result: CharSequence? = GXHighLightUtil.getHighLightContent(
+                view as View, gxTemplateNode, templateData, valueData
+            )
+            if (result != null) {
+                val data = JSONObject().apply {
+                    this.putAll(nodeData)
                 }
-            }
-
-            val extendData = gxTemplateNode.getExtend(templateData)
-
-            val container = view as GXContainer
-
-            gxTemplateContext.initContainers()
-            gxTemplateContext.containers?.add(container)
-
-            val adapter: GXContainerViewAdapter?
-            if (container.adapter != null) {
-                adapter = container.adapter as GXContainerViewAdapter
-            } else {
-                adapter = GXContainerViewAdapter(gxTemplateContext, container)
-                container.adapter = adapter
-            }
-
-            adapter.gxNode = gxNode
-
-            GXRegisterCenter.instance.extensionScroll?.scrollIndex(gxTemplateContext, container, extendData)
-
-            // forbid item animator
-            container.itemAnimator = null
-
-            adapter.setContainerData(containerTemplateData)
-            adapter.initFooter()
-            if (adapter.hasFooter()) {
-                container.setSpanSizeLookup()
+                data[GXTemplateKey.GAIAX_VALUE] = result
+                view.onBindData(data)
+                return
             }
         }
 
-        private fun bindIconFont(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
-            val nodeData = gxTemplateNode.getData(templateData)
-            view.onBindData(nodeData)
-        }
-
-        private fun bindImage(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
-            val nodeData = gxTemplateNode.getData(templateData)
-            view.onBindData(nodeData)
-        }
-
-        private fun bindView(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
-            val nodeData = gxTemplateNode.getData(templateData)
-            view.onBindData(nodeData)
-        }
-
-        private fun bindRichText(
-            gxTemplateContext: GXTemplateContext,
-            view: GXIViewBindData,
-            css: GXCss?,
-            layer: GXLayer,
-            gxTemplateNode: GXTemplateNode,
-            templateData: JSONObject
-        ) {
-            val nodeData = gxTemplateNode.getData(templateData)
-
-            val valueData = nodeData?.get(GXTemplateKey.GAIAX_VALUE)
-
-            // 优先处理高亮逻辑
-            if (valueData is String) {
-                val result: CharSequence? = GXHighLightUtil.getHighLightContent(
-                    view as View, gxTemplateNode, templateData, valueData
-                )
-                if (result != null) {
-                    val data = JSONObject().apply {
-                        this.putAll(nodeData)
-                    }
-                    data[GXTemplateKey.GAIAX_VALUE] = result
-                    view.onBindData(data)
-                    return
+        // 处理数据逻辑
+        if (gxTemplateContext.templateData?.dataListener != null) {
+            val gxTextData = GXTemplateEngine.GXTextData().apply {
+                this.text = valueData as? CharSequence
+                this.view = view as View
+                this.nodeId = layer.id
+                this.templateItem = gxTemplateContext.templateItem
+                this.nodeCss = css
+                this.nodeData = nodeData
+                this.index = gxTemplateContext.indexPosition
+                this.extendData = gxTemplateNode.getExtend(templateData)
+            }
+            val result = gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
+            if (result != null) {
+                val data = JSONObject().apply {
+                    nodeData?.let { this.putAll(it) }
                 }
+                data[GXTemplateKey.GAIAX_VALUE] = result
+                view.onBindData(data)
+            }
+            return
+        }
+
+        view.onBindData(nodeData)
+    }
+
+    private fun bindText(
+        gxTemplateContext: GXTemplateContext,
+        view: GXIViewBindData,
+        css: GXCss?,
+        layer: GXLayer,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
+
+        val nodeData = gxTemplateNode.getData(templateData)
+
+        if (gxTemplateContext.templateData?.dataListener != null) {
+
+            val gxTextData = GXTemplateEngine.GXTextData().apply {
+                this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
+                this.view = view as View
+                this.nodeId = layer.id
+                this.templateItem = gxTemplateContext.templateItem
+                this.nodeCss = css
+                this.nodeData = nodeData
+                this.index = gxTemplateContext.indexPosition
+                this.extendData = gxTemplateNode.getExtend(templateData)
             }
 
-            // 处理数据逻辑
-            if (gxTemplateContext.templateData?.dataListener != null) {
-                val gxTextData = GXTemplateEngine.GXTextData().apply {
-                    this.text = valueData as? CharSequence
-                    this.view = view as View
-                    this.nodeId = layer.id
-                    this.templateItem = gxTemplateContext.templateItem
-                    this.nodeCss = css
-                    this.nodeData = nodeData
-                    this.index = gxTemplateContext.indexPosition
-                    this.extendData = gxTemplateNode.getExtend(templateData)
-                }
-                val result = gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
-                if (result != null) {
+            gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
+                ?.let { result ->
                     val data = JSONObject().apply {
                         nodeData?.let { this.putAll(it) }
                     }
                     data[GXTemplateKey.GAIAX_VALUE] = result
                     view.onBindData(data)
+                    return
                 }
-                return
-            }
-
-            view.onBindData(nodeData)
         }
 
-        private fun bindText(
-            gxTemplateContext: GXTemplateContext,
-            view: GXIViewBindData,
-            css: GXCss?,
-            layer: GXLayer,
-            gxTemplateNode: GXTemplateNode,
-            templateData: JSONObject
-        ) {
+        view.onBindData(nodeData)
+    }
 
-            val nodeData = gxTemplateNode.getData(templateData)
+    private fun bindCustom(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        val data = gxTemplateNode.getData(templateData)
+        view.onBindData(data)
+    }
 
-            if (gxTemplateContext.templateData?.dataListener != null) {
+    private fun bindCommonViewCss(gxView: View, gxCss: GXCss, gxNode: GXNode) {
 
-                val gxTextData = GXTemplateEngine.GXTextData().apply {
-                    this.text = nodeData?.get(GXTemplateKey.GAIAX_VALUE)?.toString()
-                    this.view = view as View
-                    this.nodeId = layer.id
-                    this.templateItem = gxTemplateContext.templateItem
-                    this.nodeCss = css
-                    this.nodeData = nodeData
-                    this.index = gxTemplateContext.indexPosition
-                    this.extendData = gxTemplateNode.getExtend(templateData)
-                }
+        gxView.setDisplay(gxCss.style.display)
 
-                gxTemplateContext.templateData?.dataListener?.onTextProcess(gxTextData)
-                    ?.let { result ->
-                        val data = JSONObject().apply {
-                            nodeData?.let { this.putAll(it) }
-                        }
-                        data[GXTemplateKey.GAIAX_VALUE] = result
-                        view.onBindData(data)
-                        return
-                    }
-            }
+        if (!gxNode.isCustomViewType()) {
 
-            view.onBindData(nodeData)
+            gxView.setHidden(gxCss.style.display, gxCss.style.hidden)
+
+            gxView.setOpacity(gxCss.style.opacity)
+
+            gxView.setOverflow(gxCss.style.overflow)
+
+            gxView.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
+
+            gxView.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
+
         }
+    }
 
-        private fun bindCustom(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
-            val data = gxTemplateNode.getData(templateData)
-            view.onBindData(data)
-        }
-
-        private fun bindCommonViewCss(gxView: View, gxCss: GXCss, gxNode: GXNode) {
-
-            gxView.setDisplay(gxCss.style.display)
-
-            if (!gxNode.isCustomViewType()) {
-
-                gxView.setHidden(gxCss.style.display, gxCss.style.hidden)
-
-                gxView.setOpacity(gxCss.style.opacity)
-
-                gxView.setOverflow(gxCss.style.overflow)
-
-                gxView.setBackgroundColorAndBackgroundImageWithRadius(gxCss.style)
-
-                gxView.setRoundCornerRadiusAndRoundCornerBorder(gxCss.style)
-
+    private fun bindContainerViewCss(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
+        if (gxNode.isContainerType()) {
+            if (gxNode.isGridType()) {
+                bindGridContainerCSS(gxTemplateContext, view, gxNode)
+            } else if (gxNode.isScrollType()) {
+                bindScrollContainerCSS(view, gxNode)
             }
         }
+    }
 
-        private fun bindContainerViewCss(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
-            if (gxNode.isContainerType()) {
-                if (gxNode.isGridType()) {
-                    bindGridContainerCSS(gxTemplateContext, view, gxNode)
-                } else if (gxNode.isScrollType()) {
-                    bindScrollContainerCSS(view, gxNode)
-                }
-            }
+    private fun bindGridContainerCSS(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
+        gxNode.templateNode.layer.gridConfig?.let {
+            view.setGridContainerDirection(
+                gxTemplateContext, it, gxNode.layoutByBind
+            )
+            view.setGridContainerItemSpacingAndRowSpacing(
+                gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
+            )
         }
+    }
 
-        private fun bindGridContainerCSS(gxTemplateContext: GXTemplateContext, view: View, gxNode: GXNode) {
-            gxNode.templateNode.layer.gridConfig?.let {
-                view.setGridContainerDirection(
-                    gxTemplateContext, it, gxNode.layoutByBind
-                )
-                view.setGridContainerItemSpacingAndRowSpacing(
-                    gxNode.getPaddingRect(), it.itemSpacing, it.rowSpacing
-                )
-            }
-        }
+    private fun bindScrollContainerCSS(view: View, gxNode: GXNode) {
+        gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
 
-        private fun bindScrollContainerCSS(view: View, gxNode: GXNode) {
-            gxNode.templateNode.layer.scrollConfig?.let { scrollConfig ->
+            view.setScrollContainerDirection(scrollConfig.direction, gxNode.layoutByBind)
 
-                view.setScrollContainerDirection(scrollConfig.direction, gxNode.layoutByBind)
-
-                val padding = gxNode.getPaddingRect()
-                val lineSpacing = scrollConfig.itemSpacing
-                if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
-                    // 设置边距
-                    if (padding.top == 0 && padding.bottom == 0) {
-                        view.setHorizontalScrollContainerLineSpacing(padding.left, padding.right, lineSpacing)
-                    } else {
-                        if (lineSpacing != 0) {
-                            view.setHorizontalScrollContainerLineSpacing(lineSpacing)
-                        }
-                        view.setScrollContainerPadding(padding)
-                    }
+            val padding = gxNode.getPaddingRect()
+            val lineSpacing = scrollConfig.itemSpacing
+            if (scrollConfig.direction == LinearLayoutManager.HORIZONTAL) {
+                // 设置边距
+                if (padding.top == 0 && padding.bottom == 0) {
+                    view.setHorizontalScrollContainerLineSpacing(padding.left, padding.right, lineSpacing)
                 } else {
                     if (lineSpacing != 0) {
-                        view.setVerticalScrollContainerLineSpacing(lineSpacing)
+                        view.setHorizontalScrollContainerLineSpacing(lineSpacing)
                     }
                     view.setScrollContainerPadding(padding)
                 }
-            }
-        }
-
-        private fun bindSlider(
-            gxTemplateContext: GXTemplateContext,
-            view: View,
-            gxNode: GXNode,
-            gxTemplateNode: GXTemplateNode,
-            templateData: JSONObject
-        ) {
-
-            // 容器数据源
-            var containerTemplateData = gxTemplateNode.getDataValue(templateData) as? JSONArray
-            if (containerTemplateData == null) {
-                if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventContainerDataSourceThrowException == true) {
-                    containerTemplateData = JSONArray()
-                } else {
-                    throw IllegalArgumentException("Slider or Grid must be have a array data source")
-                }
-            }
-
-            val container = view as GXSliderView
-
-            gxTemplateContext.initContainers()
-            gxTemplateContext.containers?.add(container)
-
-            container.setTemplateContext(gxTemplateContext)
-
-            val adapter: GXSliderViewAdapter?
-            if (container.viewPager?.adapter != null) {
-                adapter = container.viewPager?.adapter as GXSliderViewAdapter
             } else {
-                adapter = GXSliderViewAdapter(gxTemplateContext, gxNode)
-                container.viewPager?.adapter = adapter
+                if (lineSpacing != 0) {
+                    view.setVerticalScrollContainerLineSpacing(lineSpacing)
+                }
+                view.setScrollContainerPadding(padding)
             }
-            adapter.setConfig(gxNode.templateNode.layer.sliderConfig)
-            container.setConfig(gxNode.templateNode.layer.sliderConfig)
+        }
+    }
 
-            adapter.setData(containerTemplateData)
-            container.setPageSize(containerTemplateData.size)
+    private fun bindSlider(
+        gxTemplateContext: GXTemplateContext,
+        view: View,
+        gxNode: GXNode,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
 
-            container.onBindData(templateData)
+        // 容器数据源
+        var containerTemplateData = gxTemplateNode.getDataValue(templateData) as? JSONArray
+        if (containerTemplateData == null) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventContainerDataSourceThrowException == true) {
+                containerTemplateData = JSONArray()
+            } else {
+                throw IllegalArgumentException("Slider or Grid must be have a array data source")
+            }
         }
 
-        private fun bindProgress(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
-            val progressView = view as? GXProgressView
-            progressView?.setConfig(gxTemplateNode.layer.progressConfig)
-            progressView?.onBindData(gxTemplateNode.getData(templateData))
+        val container = view as GXSliderView
+
+        gxTemplateContext.initContainers()
+        gxTemplateContext.containers?.add(container)
+
+        container.setTemplateContext(gxTemplateContext)
+
+        val adapter: GXSliderViewAdapter?
+        if (container.viewPager?.adapter != null) {
+            adapter = container.viewPager?.adapter as GXSliderViewAdapter
+        } else {
+            adapter = GXSliderViewAdapter(gxTemplateContext, gxNode)
+            container.viewPager?.adapter = adapter
+        }
+        adapter.setConfig(gxNode.templateNode.layer.sliderConfig)
+        container.setConfig(gxNode.templateNode.layer.sliderConfig)
+
+        adapter.setData(containerTemplateData)
+        container.setPageSize(containerTemplateData.size)
+
+        container.onBindData(templateData)
+    }
+
+    private fun bindProgress(view: GXIViewBindData, gxTemplateNode: GXTemplateNode, templateData: JSONObject) {
+        val progressView = view as? GXProgressView
+        progressView?.setConfig(gxTemplateNode.layer.progressConfig)
+        progressView?.onBindData(gxTemplateNode.getData(templateData))
+    }
+
+
+    private fun bindScrollAndGrid(
+        gxTemplateContext: GXTemplateContext,
+        view: View,
+        gxNode: GXNode,
+        gxTemplateNode: GXTemplateNode,
+        templateData: JSONObject
+    ) {
+
+        // 容器数据源
+        var containerTemplateData = gxTemplateNode.getDataValue(templateData) as? JSONArray
+        if (containerTemplateData == null) {
+            if (GXRegisterCenter.instance.extensionCompatibilityConfig?.isPreventContainerDataSourceThrowException == true) {
+                containerTemplateData = JSONArray()
+            } else {
+                throw IllegalArgumentException("Scroll or Grid must be have a array data source")
+            }
+        }
+
+        val extendData = gxTemplateNode.getExtend(templateData)
+
+        val container = view as GXContainer
+
+        gxTemplateContext.initContainers()
+        gxTemplateContext.containers?.add(container)
+
+        val adapter: GXContainerViewAdapter?
+        if (container.adapter != null) {
+            adapter = container.adapter as GXContainerViewAdapter
+        } else {
+            adapter = GXContainerViewAdapter(gxTemplateContext, container)
+            container.adapter = adapter
+        }
+
+        adapter.gxNode = gxNode
+
+        // forbid item animator
+        container.itemAnimator = null
+
+        adapter.setContainerData(containerTemplateData)
+
+        scrollIndexForScroll(gxTemplateContext, container, extendData)
+
+        adapter.initFooter()
+        if (adapter.hasFooter()) {
+            container.setSpanSizeLookup()
+        }
+    }
+
+    /**
+     * 处理滚动事件
+     *
+     *
+     */
+    private fun scrollIndexForScroll(gxTemplateContext: GXTemplateContext, container: GXContainer, extend: JSONObject?) {
+        Log.runE(TAG) { "scrollIndexForScroll gxTemplateContext=${gxTemplateContext.traceId} container=${container}" }
+
+        val recyclerView = container as RecyclerView
+
+        // holding offset
+        val holdingOffset = extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
+        if (holdingOffset) {
+            val scrollIndex = extend?.getInteger(GXTemplateKey.GAIAX_SCROLL_INDEX) ?: -1
+            if (scrollIndex != -1) {
+                val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_POSITION)
+                if (scrollGravity != null) {
+                    // 默认是平滑滚动的
+                    val scroller = when (scrollGravity) {
+                        "left" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_LEFT)
+                        "right" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_RIGHT)
+                        "center" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_CENTER)
+                        else -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_ANY)
+                    }
+                    scroller.targetPosition = scrollIndex
+                    recyclerView.layoutManager?.startSmoothScroll(scroller)
+                } else {
+                    val smooth = extend?.getBooleanValue(GXTemplateKey.GAIAX_SCROLL_ANIMATED) ?: false
+                    if (smooth) {
+                        recyclerView.smoothScrollToPosition(scrollIndex)
+                    } else {
+                        recyclerView.scrollToPosition(scrollIndex)
+                    }
+                }
+            } else {
+                // no process
+            }
+            return
+        }
+
+        // scroll item to position
+        gxTemplateContext.templateData?.scrollIndex?.let {
+            if (it != -1) {
+                recyclerView.scrollToPosition(it)
+            }
+            return
         }
     }
 }

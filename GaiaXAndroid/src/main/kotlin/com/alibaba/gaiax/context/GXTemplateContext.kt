@@ -112,13 +112,21 @@ class GXTemplateContext private constructor(
      * key is itemCacheKey ${itemPosition}-${itemData.hashCode()}.
      * value is item layout.
      */
-    var scrollItemLayoutCache: MutableMap<Any, Layout>? = null
+    val scrollItemLayoutCache: MutableMap<String, Layout>? by lazy {
+        mutableMapOf()
+    }
 
-    var sliderItemLayoutCache: Layout? = null
+    val sliderItemLayoutCache: MutableMap<String, Layout>? by lazy {
+        mutableMapOf()
+    }
 
-    var gridItemLayoutCache: Layout? = null
+    val gridItemLayoutCache: MutableMap<String, Layout>? by lazy {
+        mutableMapOf()
+    }
 
-    var scrollNodeCache: MutableMap<Any, GXNode>? = null
+    val scrollNodeCache: MutableMap<String, GXNode>? by lazy {
+        mutableMapOf()
+    }
 
     /**
      * Is dirty
@@ -149,8 +157,7 @@ class GXTemplateContext private constructor(
 
     fun release() {
         flags = 0
-        sliderItemLayoutCache = null
-        gridItemLayoutCache = null
+        sliderItemLayoutCache?.clear()
         scrollItemLayoutCache?.clear()
         containers?.clear()
         isDirty = false

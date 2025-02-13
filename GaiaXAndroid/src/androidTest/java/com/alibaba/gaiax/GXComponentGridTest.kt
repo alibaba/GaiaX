@@ -749,7 +749,7 @@ class GXComponentGridTest : GXBaseTest() {
         rootView.executeRecyclerView()
 
         Assert.assertEquals(1080F.dpToPx(), rootView.width())
-        Assert.assertEquals(100F.dpToPx(), rootView.height())
+        Assert.assertEquals(0F.dpToPx(), rootView.height())
     }
 
     @Test

@@ -1,0 +1,21 @@
+{
+  "id": "gx-slider-scroll-index",
+  "type": "gaia-template",
+  "sub-type": "slider",
+  "slider-scroll-time-interval": 3000,
+  "slider-has-indicator": true,
+  "slider-selected-index": 0,
+  "slider-infinity-scroll": false,
+  "slider-indicator-selected-color": "#FF00FF",
+  "slider-indicator-unselected-color": "#00FF00",
+  "slider-indicator-margin": "{10,10,10,10}",
+  "slider-indicator-position": "bottom-center",
+  "slider-indicator-class-android": "com.alibaba.gaiax.render.view.container.slider.GXYKSliderIndicatorView",
+  "layers": [
+    {
+      "id": "gx-slider-item",
+      "type": "gaia-template",
+      "sub-type": "custom"
+    }
+  ]
+}

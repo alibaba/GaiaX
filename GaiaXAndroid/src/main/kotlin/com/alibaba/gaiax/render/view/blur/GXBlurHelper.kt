@@ -1,6 +1,12 @@
 package com.alibaba.gaiax.render.view.blur
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.Rect
 import android.os.Build
 import android.view.View
 import android.view.ViewTreeObserver
@@ -99,7 +105,11 @@ class GXBlurHelper(private val host: GXView) {
                 }
             }
 
-            blurImpl.prepare(host.context, bitmapToBlur, radius)
+            // fix crash
+            if (!blurImpl.prepare(host.context, bitmapToBlur, radius)) {
+                innerRelease()
+                return false
+            }
         }
 
         host.gxTemplateContext?.let {

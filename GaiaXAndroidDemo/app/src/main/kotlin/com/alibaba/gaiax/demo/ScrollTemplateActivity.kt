@@ -8,17 +8,12 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSONArray
-import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.GXRegisterCenter
 import com.alibaba.gaiax.GXTemplateEngine
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.demo.utils.AssetsUtils
-import com.alibaba.gaiax.render.utils.GXGravitySmoothScroller
-import com.alibaba.gaiax.render.view.container.GXContainer
 import com.alibaba.gaiax.render.view.container.GXContainerViewAdapter
-import com.alibaba.gaiax.template.GXTemplateKey
 import com.alibaba.gaiax.utils.GXScreenUtils
 import com.alibaba.gaiax.utils.getStringExtCanNull
 
@@ -118,58 +113,6 @@ class ScrollTemplateActivity : AppCompatActivity() {
         private const val TAG = "[GaiaX][Demo]"
     }
 
-    class GXExtensionScroll : GXRegisterCenter.GXIExtensionScroll {
-
-        override fun scrollIndex(
-            gxTemplateContext: GXTemplateContext,
-            container: GXContainer,
-            extend: JSONObject?
-        ) {
-            Log.d(TAG, "scrollIndex() called with: extend = $extend")
-
-            val recyclerView = container as RecyclerView
-
-            // holding offset
-            val holdingOffset = extend?.getBooleanValue(GXTemplateKey.GAIAX_DATABINDING_HOLDING_OFFSET) ?: false
-            if (holdingOffset) {
-                val scrollIndex = extend?.getInteger(GXTemplateKey.GAIAX_SCROLL_INDEX) ?: -1
-                if (scrollIndex != -1) {
-                    val scrollGravity = extend?.getString(GXTemplateKey.GAIAX_SCROLL_POSITION)
-                    if (scrollGravity != null) {
-                        // 默认是平滑滚动的
-                        val scroller = when (scrollGravity) {
-                            "left" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_LEFT)
-                            "right" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_RIGHT)
-                            "center" -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_CENTER)
-                            else -> GXGravitySmoothScroller(recyclerView.context, GXGravitySmoothScroller.ALIGN_ANY)
-                        }
-                        scroller.targetPosition = scrollIndex
-                        recyclerView.layoutManager?.startSmoothScroll(scroller)
-                    } else {
-                        val smooth = extend?.getBooleanValue(GXTemplateKey.GAIAX_SCROLL_ANIMATED) ?: false
-                        if (smooth) {
-                            recyclerView.smoothScrollToPosition(scrollIndex)
-                        } else {
-                            recyclerView.scrollToPosition(scrollIndex)
-                        }
-                    }
-                } else {
-                    // no process
-                }
-                return
-            }
-
-            // scroll item to position
-            gxTemplateContext.templateData?.scrollIndex?.let {
-                if (it != -1) {
-                    recyclerView.scrollToPosition(it)
-                }
-                return
-            }
-        }
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scroll_template)
@@ -202,11 +145,12 @@ class ScrollTemplateActivity : AppCompatActivity() {
             }
 
         })
-        GXRegisterCenter.instance.registerExtensionScroll(GXExtensionScroll())
-        renderTemplate1(this)
+//        renderTemplate1(this)
+        renderTemplate2(this)
     }
 
-    var templateView: View? = null
+    var templateView1: View? = null
+    var templateView2: View? = null
 
     private fun renderTemplate1(activity: ScrollTemplateActivity) {
         // 初始化
@@ -228,7 +172,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
         // 创建模板View
         val view = GXTemplateEngine.instance.createView(params, size)!!
 
-        templateView = view
+        templateView1 = view
 
         templateData.eventListener = object : GXTemplateEngine.GXIEventListener {
 
@@ -240,7 +184,7 @@ class ScrollTemplateActivity : AppCompatActivity() {
                         val extend = templateData.data.getJSONObject("extend")
                         extend["scroll-index"] = it
                         extend["holding-offset"] = true
-                        extend["scroll-position"] = "center"
+                        extend["scroll-position"] = "left"
                         GXTemplateEngine.instance.bindData(view, templateData)
                     }
                 }
@@ -261,13 +205,46 @@ class ScrollTemplateActivity : AppCompatActivity() {
                 GXTemplateEngine.instance.bindData(view, templateData)
             }
         }
+    }
+
+    private fun renderTemplate2(activity: ScrollTemplateActivity) {
+        // 初始化
+        GXTemplateEngine.instance.init(activity)
 
 
+        // 模板参数
+        val params = GXTemplateEngine.GXTemplateItem(activity, "assets_data_source/templates", "gx-slider-scroll-index")
+
+        // 模板绘制尺寸
+        val size = GXTemplateEngine.GXMeasureSize(GXScreenUtils.getScreenWidthPx(this), null)
+
+        // 模板数据
+        val data = AssetsUtils.parseAssets(activity, "assets_data_source/data/slider-scroll-data.json")
+        val templateData = GXTemplateEngine.GXTemplateData(data)
+
+        // 创建模板View
+        val view = GXTemplateEngine.instance.createView(params, size)!!
+
+        templateView2 = view
+
+        // 绑定数据
+        GXTemplateEngine.instance.bindData(view, templateData)
+
+        // 插入模板View
+        findViewById<LinearLayoutCompat>(R.id.template_2).addView(view, 0)
+        findViewById<AppCompatButton>(R.id.btn_scroll_index).setOnClickListener {
+
+            findViewById<AppCompatEditText>(R.id.et_scroll_index).text.toString().toIntOrNull()?.let {
+                val extend = templateData.data.getJSONObject("extend")
+                extend["slider-selected-index"] = it
+                GXTemplateEngine.instance.bindData(view, templateData)
+            }
+        }
     }
 
     override fun onDestroy() {
-        GXTemplateEngine.instance.destroyView(templateView)
+        GXTemplateEngine.instance.destroyView(templateView1)
+        GXTemplateEngine.instance.destroyView(templateView2)
         super.onDestroy()
     }
-
 }

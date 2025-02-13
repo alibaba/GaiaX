@@ -26,8 +26,6 @@ import app.visly.stretch.Size
 import com.alibaba.fastjson.JSONObject
 import com.alibaba.gaiax.context.GXTemplateContext
 import com.alibaba.gaiax.context.clearLayout
-import com.alibaba.gaiax.context.isExistNodeForScroll
-import com.alibaba.gaiax.context.obtainNodeForScroll
 import com.alibaba.gaiax.data.GXDataImpl
 import com.alibaba.gaiax.data.assets.GXAssetsBinaryWithoutSuffixTemplate
 import com.alibaba.gaiax.data.assets.GXAssetsTemplate
@@ -484,6 +482,10 @@ class GXTemplateEngine {
         fun key(size: GXMeasureSize): String {
             return "${bizId}-${templateId}-${size.width}"
         }
+
+        fun key(): String {
+            return "${bizId}-${templateId}"
+        }
     }
 
     internal lateinit var context: Context
@@ -497,7 +499,7 @@ class GXTemplateEngine {
         GXRenderImpl()
     }
 
-    internal fun createTemplateContext(
+    fun createTemplateContext(
         gxTemplateItem: GXTemplateItem,
         gxMeasureSize: GXMeasureSize,
         gxVisualTemplateNode: GXTemplateNode?
@@ -689,8 +691,8 @@ class GXTemplateEngine {
         val gxHostTemplateContext = gxExtendParams?.gxHostTemplateContext
         if (gxHostTemplateContext != null) {
             val itemCacheKey = "${gxExtendParams.gxItemPosition}-${gxExtendParams.gxItemData.hashCode()}"
-            if (gxHostTemplateContext.isExistNodeForScroll(itemCacheKey)) {
-                gxTemplateContext.rootNode = gxHostTemplateContext.obtainNodeForScroll(itemCacheKey)
+            if (gxHostTemplateContext.scrollNodeCache?.containsKey(itemCacheKey) == true) {
+                gxTemplateContext.rootNode = gxHostTemplateContext.scrollNodeCache?.remove(itemCacheKey)
                 gxTemplateContext.isReuseRootNode = true
                 return gxTemplateContext
             }

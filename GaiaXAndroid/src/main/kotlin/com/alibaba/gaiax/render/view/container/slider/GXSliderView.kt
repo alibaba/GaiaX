@@ -41,6 +41,8 @@ import com.alibaba.gaiax.render.view.GXIViewBindData
 import com.alibaba.gaiax.render.view.GXIViewVisibleChange
 import com.alibaba.gaiax.render.view.drawable.GXRoundCornerBorderGradientDrawable
 import com.alibaba.gaiax.template.GXSliderConfig
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 import java.util.Timer
 import java.util.TimerTask
 
@@ -52,6 +54,8 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
 
     companion object {
         private var SHOWN_VIEW_COUNT: Int = 0
+
+        private const val TAG = "GXSliderView"
     }
 
     enum class IndicatorPosition(val value: String) {
@@ -105,18 +109,9 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
             }
 
             override fun onPageSelected(position: Int) {
-                val index = position % pageSize
-                // 回调事件
-                val gxScroll = GXTemplateEngine.GXScroll().apply {
-                    this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
-                    this.view = viewPager
-                    this.position = index
-                }
-                gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
-
-                if (config?.hasIndicator == true) {
-                    indicatorView?.updateSelectedIndex(index)
-                }
+                Log.runE(TAG) { "onPageSelected position=$position" }
+                onScrollEvent(position)
+                setIndicatorIndex(position)
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -209,54 +204,48 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
         }
     }
 
-    override fun onBindData(data: JSONObject?) {
-        viewPager?.adapter?.notifyDataSetChanged()
-        updateView()
-    }
-
-    private fun updateView() {
-        config?.selectedIndex?.let {
-            viewPager?.adapter?.count?.let { count ->
-                if (it in 0 until count) {
-                    viewPager?.setCurrentItem(it, false)
-                    indicatorView?.updateSelectedIndex(it)
-                }
-            }
-        }
-    }
-
     fun setPageSize(size: Int) {
         pageSize = size
         indicatorView?.setIndicatorCount(size)
     }
 
     private fun startTimer() {
+
         // FIX
         stopTimer()
 
-        config?.scrollTimeInterval?.let {
-            if (it > 0) {
-                timer = Timer()
-                timerTask = object : TimerTask() {
-                    override fun run() {
-                        viewPager?.currentItem?.let { currentItem ->
-                            viewPager?.adapter?.count?.let { count ->
-                                viewPager?.post {
-                                    viewPager?.setCurrentItem(
-                                        (currentItem + 1) % count,
-                                        true
-                                    )
-                                }
-                            }
+        val scrollTimeInterval = config?.scrollTimeInterval ?: return
+
+        if (scrollTimeInterval <= 0) {
+            return
+        }
+
+        Log.runE(TAG) { "startTimer" }
+
+        timer = Timer()
+        timerTask = object : TimerTask() {
+            override fun run() {
+                val currentItem = viewPager?.currentItem ?: return
+                viewPager?.post {
+                    val selectedIndex = (currentItem + 1)
+                    Log.runE(TAG) { "schedule selectedIndex=$selectedIndex" }
+                    if (config?.infinityScroll == false) {
+                        if (selectedIndex >= pageSize) {
+                            return@post
+                        } else {
+                            setSliderIndex(selectedIndex, true)
                         }
+                    } else {
+                        setSliderIndex(selectedIndex, true)
                     }
                 }
-                timer?.schedule(timerTask, it, it)
             }
         }
+        timer?.schedule(timerTask, scrollTimeInterval, scrollTimeInterval)
     }
 
     private fun stopTimer() {
+        Log.runE(TAG) { "stopTimer" }
         timer?.cancel()
         timerTask?.cancel()
         timer = null
@@ -370,5 +359,56 @@ class GXSliderView : FrameLayout, GXIContainer, GXIViewBindData, GXIRootView, GX
     override fun onDetachedFromWindow() {
         isAttached = false
         super.onDetachedFromWindow()
+    }
+
+    override fun onBindData(data: JSONObject?) {
+        processIndex()
+    }
+
+    private fun processIndex() {
+        config?.selectedIndex?.takeIf { it >= 0 }?.let { selectedIndex ->
+            Log.runE(TAG) { "processIndex selectedIndex=$selectedIndex" }
+            setSliderIndex(selectedIndex, false)
+            onScrollEvent(selectedIndex)
+        }
+    }
+
+    private fun onScrollEvent(position: Int): Unit? {
+        // 回调事件
+        val gxScroll = GXTemplateEngine.GXScroll().apply {
+            this.type = GXTemplateEngine.GXScroll.TYPE_ON_PAGE_SELECTED
+            this.view = this@GXSliderView
+            this.position = position
+        }
+        return gxTemplateContext?.templateData?.eventListener?.onScrollEvent(gxScroll)
+    }
+
+    private fun setIndicatorIndex(scrollIndex: Int) {
+        val targetIndex = calculateTargetIndex(scrollIndex)
+        Log.runE(TAG) { "setIndicatorIndex scrollIndex=$scrollIndex targetIndex=$targetIndex pageSize=$pageSize" }
+        if (config?.hasIndicator == true) {
+            indicatorView?.updateSelectedIndex(targetIndex)
+        }
+    }
+
+    private fun setSliderIndex(scrollIndex: Int, smooth: Boolean) {
+        val currentIndex = this.getCurrentIndex()
+        Log.runE(TAG) { "setSliderIndex currentIndex=$currentIndex scrollIndex=$scrollIndex  pageSize=$pageSize smooth=$smooth" }
+        viewPager?.post {
+            // TODO：如果跨多个索引移动，会导致明显卡顿
+            viewPager?.setCurrentItem(scrollIndex, smooth)
+            setIndicatorIndex(scrollIndex)
+        }
+    }
+
+    private fun calculateTargetIndex(index: Int): Int {
+        if (pageSize == 0) {
+            return 0
+        }
+        return index % pageSize
+    }
+
+    private fun getCurrentIndex(): Int {
+        return viewPager?.currentItem ?: 0
     }
 }

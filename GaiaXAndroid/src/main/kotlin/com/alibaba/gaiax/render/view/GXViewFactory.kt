@@ -61,8 +61,14 @@ object GXViewFactory {
     }
 
     private fun <T : View> newInstance(clazz: String?, context: Context) = if (clazz != null) {
-        val c = Class.forName(clazz).getConstructor(Context::class.java)
-        c.newInstance(context) as T
+        try {
+            val c = Class.forName(clazz).getConstructor(Context::class.java)
+            c.newInstance(context) as T
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // 如果没有找到自定义View，则返回默认的View
+            GXView(context) as T
+        }
     } else {
         GXView(context)
     }

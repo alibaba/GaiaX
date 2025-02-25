@@ -58,7 +58,7 @@ internal class GXHostPage private constructor(
                     argsMap["bizId"] = bizId
                     argsMap["templateId"] = templateId
                     argsMap["templateVersion"] = templateVersion
-                    hostContext.evaluateJSWithoutTask(script, argsMap)
+                    hostContext.evaluateJSWithoutTask(script, bizId, templateId, argsMap)
                 }
             }
     }
@@ -176,6 +176,6 @@ internal class GXHostPage private constructor(
 
     override fun onNativeEvent(data: JSONObject) {
         GXScriptBuilder.buildPostNativeMessage(data.toJSONString())
-                .apply { hostContext.evaluateJS(this) }
+            .apply { hostContext.evaluateJS(this) }
     }
 }

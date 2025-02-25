@@ -107,25 +107,67 @@ internal class GXHostContext(
     }
 
     fun evaluateJS(script: String) {
-        executeTask { realContext?.evaluateJS(script) }
+        executeTask {
+            try {
+                realContext?.evaluateJS(script)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                GXJSEngine.instance.jsExceptionListener?.exception(JSONObject().apply {
+                    put("bizId", "")
+                    put("templateId", "")
+                    put("error", e.message)
+                })
+            }
+        }
     }
 
-    fun evaluateJSSync(script: String): JSONObject? {
-        realContext?.evaluateJS(script, String::class.java)?.let {
-            return JSON.parseObject(it)
+    fun evaluateJS(script: String, bizId: String, templateId: String) {
+        executeTask {
+            try {
+                realContext?.evaluateJS(script)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                GXJSEngine.instance.jsExceptionListener?.exception(JSONObject().apply {
+                    put("bizId", bizId)
+                    put("templateId", templateId)
+                    put("error", e.message)
+                })
+            }
+        }
+    }
+
+    fun evaluateJSSync(script: String, bizId: String, templateId: String): JSONObject? {
+        try {
+            realContext?.evaluateJS(script, String::class.java)?.let {
+                return JSON.parseObject(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            GXJSEngine.instance.jsExceptionListener?.exception(JSONObject().apply {
+                put("bizId", bizId)
+                put("templateId", templateId)
+                put("error", e.message)
+            })
         }
         return null
     }
 
-    fun evaluateJSWithoutTask(script: String, argsMap: JSONObject) {
-        realContext?.evaluateJS(script, argsMap)
+    fun evaluateJSWithoutTask(script: String, bizId: String, templateId: String, argsMap: JSONObject) {
+        try {
+            realContext?.evaluateJS(script, argsMap)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            GXJSEngine.instance.jsExceptionListener?.exception(JSONObject().apply {
+                put("bizId", bizId)
+                put("templateId", templateId)
+                put("error", e.message)
+            })
+        }
     }
 
     private fun createContext(): IContext {
         return when (type) {
-            GXJSEngine.EngineType.QuickJS -> QuickJSContext.create(
-                this, hostRuntime.realEngine, realRuntime
-            )
+            GXJSEngine.EngineType.QuickJS -> QuickJSContext.create(this, hostRuntime.realEngine, realRuntime)
 
             GXJSEngine.EngineType.DebugJS -> DebugJSContext(this)
         }

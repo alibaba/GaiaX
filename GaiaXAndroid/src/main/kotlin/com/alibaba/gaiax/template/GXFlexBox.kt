@@ -789,8 +789,8 @@ data class GXFlexBox(
     private var _margin: Rect<GXSize?>? = null
     val margin: Rect<GXSize?>?
         get() {
-            val forExtend = positionForExtend
-            val forTemplate = positionForTemplate
+            val forExtend = marginForExtend
+            val forTemplate = marginForTemplate
             return if (forExtend != null || forTemplate != null) {
                 if (_margin == null) {
                     _margin = Rect(

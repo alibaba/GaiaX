@@ -137,8 +137,10 @@ data class GXFlexBox(
         extendCssData.forEach {
             val key: String = it.key
             val value = it.value
+
+            Log.runE(TAG) { "updateByExtend @forEach, templateId=${context.templateItem.templateId} key=$key, value=$value" }
+
             if (value == null) {
-                Log.runE(TAG) { "updateByExtend @forEach, key=$key, value=$value" }
                 return@forEach
             }
             when (key) {
@@ -148,8 +150,7 @@ data class GXFlexBox(
                 }
 
                 GXTemplateKey.FLEXBOX_POSITION_TYPE -> {
-                    flexBox.positionTypeForExtend =
-                        GXFlexBoxConvert.positionType(value.toString())
+                    flexBox.positionTypeForExtend = GXFlexBoxConvert.positionType(value.toString())
                     context.flagExtendFlexbox()
                 }
 
@@ -159,8 +160,7 @@ data class GXFlexBox(
                 }
 
                 GXTemplateKey.FLEXBOX_FLEX_DIRECTION -> {
-                    flexBox.flexDirectionForExtend =
-                        GXFlexBoxConvert.flexDirection(value.toString())
+                    flexBox.flexDirectionForExtend = GXFlexBoxConvert.flexDirection(value.toString())
                     context.flagExtendFlexbox()
                 }
 
@@ -180,43 +180,40 @@ data class GXFlexBox(
                 }
 
                 GXTemplateKey.FLEXBOX_ALIGN_SELF -> {
-                    flexBox.alignSelfForExtend =
-                        GXFlexBoxConvert.alignSelf(value.toString())
+                    flexBox.alignSelfForExtend = GXFlexBoxConvert.alignSelf(value.toString())
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_ALIGN_CONTENT -> {
-                    flexBox.alignContentForExtend =
-                        GXFlexBoxConvert.alignContent(value.toString())
+                    flexBox.alignContentForExtend = GXFlexBoxConvert.alignContent(value.toString())
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_JUSTIFY_CONTENT -> {
-                    flexBox.justifyContentForExtend =
-                        GXFlexBoxConvert.justifyContent(value.toString())
+                    flexBox.justifyContentForExtend = GXFlexBoxConvert.justifyContent(value.toString())
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_POSITION_LEFT, GXTemplateKey.FLEXBOX_POSITION_RIGHT, GXTemplateKey.FLEXBOX_POSITION_TOP, GXTemplateKey.FLEXBOX_POSITION_BOTTOM -> if (flexBox.positionType == PositionType.Absolute && flexBox.positionForExtend == null) {
-                    positionForFinal = null
+                    flexBox.positionForFinal = null
                     flexBox.positionForExtend = GXFlexBoxConvert.position2(extendCssData)
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_MARGIN, GXTemplateKey.FLEXBOX_MARGIN_LEFT, GXTemplateKey.FLEXBOX_MARGIN_RIGHT, GXTemplateKey.FLEXBOX_MARGIN_TOP, GXTemplateKey.FLEXBOX_MARGIN_BOTTOM -> if (flexBox.marginForExtend == null) {
-                    marginForFinal = null
+                    flexBox.marginForFinal = null
                     flexBox.marginForExtend = GXFlexBoxConvert.margin(extendCssData)
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_PADDING, GXTemplateKey.FLEXBOX_PADDING_LEFT, GXTemplateKey.FLEXBOX_PADDING_RIGHT, GXTemplateKey.FLEXBOX_PADDING_TOP, GXTemplateKey.FLEXBOX_PADDING_BOTTOM -> if (flexBox.paddingForExtend == null) {
-                    paddingForFinal = null
+                    flexBox.paddingForFinal = null
                     flexBox.paddingForExtend = GXFlexBoxConvert.padding(extendCssData)
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_BORDER, GXTemplateKey.FLEXBOX_BORDER_LEFT, GXTemplateKey.FLEXBOX_BORDER_RIGHT, GXTemplateKey.FLEXBOX_BORDER_TOP, GXTemplateKey.FLEXBOX_BORDER_BOTTOM -> if (flexBox.borderForExtend == null) {
-                    borderForFinal = null
+                    flexBox.borderForFinal = null
                     flexBox.borderForExtend = GXFlexBoxConvert.border(extendCssData)
                     context.flagExtendFlexbox()
                 }
@@ -227,19 +224,19 @@ data class GXFlexBox(
                 }
 
                 GXTemplateKey.FLEXBOX_SIZE_WIDTH, GXTemplateKey.FLEXBOX_SIZE_HEIGHT -> if (flexBox.sizeForExtend == null) {
-                    sizeForFinal = null
+                    flexBox.sizeForFinal = null
                     flexBox.sizeForExtend = GXFlexBoxConvert.size2(extendCssData)
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_MIN_WIDTH, GXTemplateKey.FLEXBOX_MIN_HEIGHT -> if (flexBox.minSizeForExtend == null) {
-                    minSizeForFinal = null
+                    flexBox.minSizeForFinal = null
                     flexBox.minSizeForExtend = GXFlexBoxConvert.minSize2(extendCssData)
                     context.flagExtendFlexbox()
                 }
 
                 GXTemplateKey.FLEXBOX_MAX_WIDTH, GXTemplateKey.FLEXBOX_MAX_HEIGHT -> if (flexBox.maxSizeForExtend == null) {
-                    maxSizeForFinal = null
+                    flexBox.maxSizeForFinal = null
                     flexBox.maxSizeForExtend = GXFlexBoxConvert.maxSize2(extendCssData)
                     context.flagExtendFlexbox()
                 }
@@ -674,13 +671,14 @@ data class GXFlexBox(
         get() {
             val forExtend = sizeForExtend
             val forTemplate = sizeForTemplate
+
+            Log.runE(TAG) { "sizeForDimension @get, sizeForFinal=$sizeForFinal forExtend=$forExtend, forTemplate=$forTemplate" }
+
             return if (forExtend != null || forTemplate != null) {
                 if (sizeForFinal == null) {
                     sizeForFinal = Size(
-                        forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension
-                        ?: Dimension.Auto,
-                        forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension
-                        ?: Dimension.Auto
+                        forExtend?.width?.valueDimension ?: forTemplate?.width?.valueDimension ?: Dimension.Auto,
+                        forExtend?.height?.valueDimension ?: forTemplate?.height?.valueDimension ?: Dimension.Auto
                     )
                     sizeForFinal
                 } else {

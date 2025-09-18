@@ -349,6 +349,7 @@ class GXStyleConvert {
     fun display(target: String): Int? = when (target) {
         "none" -> View.GONE
         "flex" -> View.VISIBLE
+        "absolute" -> View.VISIBLE
         else -> null
     }
 

@@ -81,7 +81,7 @@ abstract class GXViewTreeMerger<T>(val gxTemplateContext: GXTemplateContext, val
                     // No track
                     && childTemplateNode.trackBinding == null
 
-            if (isCanBeMergedNode) {
+            if (isCanBeMergedNode && false) {
                 // This hierarchy needs to be merged
                 val nextMerges = mutableListOf<Layout>().apply {
                     this.addAll(parentMerges)

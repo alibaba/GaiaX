@@ -20,7 +20,7 @@ import GXStyleHelper from '../creator/GXStyleHelper';
 import GXContext from '../utils/GXContext';
 import GXUtils from '../utils/GXUtils';
 import GXViewNode from './GXViewNode';
-import { Display } from 'gxstretch';
+import { Display, DimPoints } from 'gxstretch';
 
 export default class GXTextNode extends GXViewNode {
   text: string | null = null;
@@ -291,11 +291,11 @@ export default class GXTextNode extends GXViewNode {
     options.lineHeight = this.lineHeight;
     // 行数不为1时候，保持宽度，高度自适应
     if (this.maxLines != 1) {
-        options.constraintWidth = limitWidth;
+      options.constraintWidth = limitWidth;
     }
 
     // size测量
-    const textSize : SizeOptions = MeasureText.measureTextSize(options)
+    const textSize: SizeOptions = MeasureText.measureTextSize(options)
     const tmpHeight = GXUtils.convertToNumber(textSize.height) ?? 0.0;
     const tmpWidth = GXUtils.convertToNumber(textSize.width) ?? 0.0;
 
@@ -310,5 +310,4 @@ export default class GXTextNode extends GXViewNode {
 
     return [width, height];
   }
-
 }

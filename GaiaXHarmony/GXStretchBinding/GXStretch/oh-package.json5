@@ -1,11 +1,13 @@
 {
   "name": "gxstretch",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
   "main": "Index.ets",
-  "author": "",
-  "license": "Apache-2.0",
+  "description": "Please describe the basic information.",
   "dependencies": {
     "libgxstretch.so": "file:./src/main/cpp/types/libgxstretch"
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.24",
+    "@ohos/hamock": "1.0.0"
   }
 }

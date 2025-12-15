@@ -37,7 +37,6 @@ export default class GXNode extends Node {
   y: number = 0;
   width: number = 0;
   height: number = 0;
-
   // 埋点响应
   trackEvent?: GXTrack;
   // 事件响应
@@ -81,7 +80,7 @@ export default class GXNode extends Node {
     for (let index = 0; index < this.children.length; index++) {
       const childNode: GXNode = this.children[index] as GXNode;
       // let childLayout: Layout = layout.children[index];
-      let childLayout: Layout = (index < layout.children.length) ? layout.children[index] : null;
+      let childLayout: Layout | null = (index < layout.children.length) ? layout.children[index] : null;
       if (childNode && childLayout != null) {
         childNode.applyLayout(childLayout);
       }

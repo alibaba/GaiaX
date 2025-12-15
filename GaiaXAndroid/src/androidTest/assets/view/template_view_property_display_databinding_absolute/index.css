@@ -1,0 +1,18 @@
+#template_view_property_display_databinding_absolute {
+  width: 100%;
+  height: 100px;
+  background-color: primaryBackground;
+  justify-content: center;
+  align-items: center;
+}
+#empty_view0 {
+  flex-grow:1;
+  height: 100px;
+  background-color: #e4e4e4;
+}
+#empty_view {
+  display: none;
+  width: 100px;
+  height: 100px;
+  background-color: #e4e4e4;
+}

@@ -309,21 +309,30 @@
 //更新layout属性到node节点上
 - (void)applyLayout:(GXLayout *)layout{
     if (layout) {
-        //支持高度0.5设置
+        //支持宽度度0.x设置
+        CGFloat width = layout.width;
+        if ((width == 0 || width == 1) &&
+            self.style.styleModel.size.width.dimen_value < 1 &&
+            self.style.styleModel.size.width.dimen_type == DIM_TYPE_POINTS) {
+            width = self.style.styleModel.size.width.dimen_value;
+        }
+        
+        // 支持高度0.x设置
         CGFloat height = layout.height;
-        if (self.style.styleModel.size.height.dimen_value == 0.5 &&
+        if ((height == 0 || height == 1) &&
+            self.style.styleModel.size.height.dimen_value < 1 &&
             self.style.styleModel.size.height.dimen_type == DIM_TYPE_POINTS) {
-            height = 0.5;
+            height = self.style.styleModel.size.height.dimen_value;
         }
         
         if (TheGXTemplateEngine.isNeedFlat && self.parent.isFlat) {
             //如果有父节点 || 父节点被拍平
             CGFloat x = layout.x + self.parent.frame.origin.x;
             CGFloat y = layout.y + self.parent.frame.origin.y;
-            self.frame = CGRectMake(x, y, layout.width, height);
+            self.frame = CGRectMake(x, y, width, height);
         } else {
             //非拍平的情况
-            self.frame = CGRectMake(layout.x, layout.y, layout.width, height);
+            self.frame = CGRectMake(layout.x, layout.y, width, height);
         }
         
         //获取子node

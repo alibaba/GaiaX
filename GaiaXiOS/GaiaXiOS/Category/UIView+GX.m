@@ -385,3 +385,140 @@ static const void *kGXEffectViewKey = &kGXEffectViewKey;
 
 @end
 
+
+#pragma mark - GaiaXTools
+
+@implementation UIView (GaiaXTools)
+
+- (UIViewController *)gx_viewController{
+    for (UIView *view = self; view; view = view.superview) {
+        UIResponder *nextResponder = [view nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController *)nextResponder;
+        }
+    }
+    return nil;
+}
+
+- (void)gx_removeAllSubviews{
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
+- (UIImage *)gx_snapshotImage{
+//    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
+//    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    
+    UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+    format.opaque = self.opaque;
+    CGSize size = self.bounds.size;
+    UIGraphicsImageRenderer *render = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+    UIImage *image = [render imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [self.layer renderInContext:rendererContext.CGContext];
+    }];
+    return image;
+}
+
+@end
+
+
+@implementation UIView (GXLayout)
+
+- (CGFloat)gx_left {
+    return self.frame.origin.x;
+}
+
+- (void)setGx_left:(CGFloat)x {
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_top {
+    return self.frame.origin.y;
+}
+
+- (void)setGx_top:(CGFloat)y {
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_right {
+    return self.frame.origin.x + self.frame.size.width;
+}
+
+- (void)setGx_right:(CGFloat)right {
+    CGRect frame = self.frame;
+    frame.origin.x = right - frame.size.width;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_bottom {
+    return self.frame.origin.y + self.frame.size.height;
+}
+
+- (void)setGx_bottom:(CGFloat)bottom {
+    CGRect frame = self.frame;
+    frame.origin.y = bottom - frame.size.height;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_width {
+    return self.frame.size.width;
+}
+
+- (void)setGx_width:(CGFloat)width {
+    CGRect frame = self.frame;
+    frame.size.width = width;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_height {
+    return self.frame.size.height;
+}
+
+- (void)setGx_height:(CGFloat)height {
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+}
+
+- (CGFloat)gx_centerX {
+    return self.center.x;
+}
+
+- (void)setGx_centerX:(CGFloat)centerX {
+    self.center = CGPointMake(centerX, self.center.y);
+}
+
+- (CGFloat)gx_centerY {
+    return self.center.y;
+}
+
+- (void)setGx_centerY:(CGFloat)centerY {
+    self.center = CGPointMake(self.center.x, centerY);
+}
+
+- (CGPoint)gx_origin {
+    return self.frame.origin;
+}
+
+- (void)setGx_origin:(CGPoint)origin {
+    CGRect frame = self.frame;
+    frame.origin = origin;
+    self.frame = frame;
+}
+
+- (CGSize)gx_size {
+    return self.frame.size;
+}
+
+- (void)setGx_size:(CGSize)size {
+    CGRect frame = self.frame;
+    frame.size = size;
+    self.frame = frame;
+}
+
+@end

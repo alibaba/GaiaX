@@ -10,6 +10,14 @@
 		2CECF30401B7B1202EFE178B /* libPods-GaiaXiOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26E99510FB4BAB41B3A64E70 /* libPods-GaiaXiOSTests.a */; };
 		8A962CCA282A9DD100335552 /* GXSliderNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A962CC8282A9DD100335552 /* GXSliderNode.h */; };
 		8A962CCB282A9DD100335552 /* GXSliderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A962CC9282A9DD100335552 /* GXSliderNode.m */; };
+		8D10145C2D096BEC0034A175 /* GXPagerLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1014542D096BEC0034A175 /* GXPagerLayout.m */; };
+		8D10145D2D096BEC0034A175 /* GXSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1014552D096BEC0034A175 /* GXSliderView.m */; };
+		8D10145E2D096BEC0034A175 /* GXPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1014562D096BEC0034A175 /* GXPageControl.m */; };
+		8D10145F2D096BEC0034A175 /* GXPagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1014572D096BEC0034A175 /* GXPagerView.m */; };
+		8D1014602D096BEC0034A175 /* GXPagerLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1014582D096BEC0034A175 /* GXPagerLayout.h */; };
+		8D1014612D096BEC0034A175 /* GXSliderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1014592D096BEC0034A175 /* GXSliderView.h */; };
+		8D1014622D096BEC0034A175 /* GXPageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D10145A2D096BEC0034A175 /* GXPageControl.h */; };
+		8D1014632D096BEC0034A175 /* GXPagerView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D10145B2D096BEC0034A175 /* GXPagerView.h */; };
 		8D1CBCE727560A5F00EC2B4D /* GXBizHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1CBCE527560A5F00EC2B4D /* GXBizHelper.h */; };
 		8D1CBCE827560A5F00EC2B4D /* GXBizHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1CBCE627560A5F00EC2B4D /* GXBizHelper.m */; };
 		8D1CBCED275770F700EC2B4D /* GXEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D1CBCEB275770F700EC2B4D /* GXEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -210,6 +218,14 @@
 		8A962CC8282A9DD100335552 /* GXSliderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXSliderNode.h; sourceTree = "<group>"; };
 		8A962CC9282A9DD100335552 /* GXSliderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXSliderNode.m; sourceTree = "<group>"; };
 		8CF100DA07FB9596328219B4 /* Pods-GaiaXiOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GaiaXiOSTests.debug.xcconfig"; path = "Target Support Files/Pods-GaiaXiOSTests/Pods-GaiaXiOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8D1014542D096BEC0034A175 /* GXPagerLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXPagerLayout.m; sourceTree = "<group>"; };
+		8D1014552D096BEC0034A175 /* GXSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXSliderView.m; sourceTree = "<group>"; };
+		8D1014562D096BEC0034A175 /* GXPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXPageControl.m; sourceTree = "<group>"; };
+		8D1014572D096BEC0034A175 /* GXPagerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXPagerView.m; sourceTree = "<group>"; };
+		8D1014582D096BEC0034A175 /* GXPagerLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXPagerLayout.h; sourceTree = "<group>"; };
+		8D1014592D096BEC0034A175 /* GXSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXSliderView.h; sourceTree = "<group>"; };
+		8D10145A2D096BEC0034A175 /* GXPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXPageControl.h; sourceTree = "<group>"; };
+		8D10145B2D096BEC0034A175 /* GXPagerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXPagerView.h; sourceTree = "<group>"; };
 		8D1CBCE527560A5F00EC2B4D /* GXBizHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXBizHelper.h; sourceTree = "<group>"; };
 		8D1CBCE627560A5F00EC2B4D /* GXBizHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GXBizHelper.m; sourceTree = "<group>"; };
 		8D1CBCEB275770F700EC2B4D /* GXEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GXEvent.h; sourceTree = "<group>"; };
@@ -419,6 +435,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8D1014532D096BEC0034A175 /* Slider */ = {
+			isa = PBXGroup;
+			children = (
+				8D10145A2D096BEC0034A175 /* GXPageControl.h */,
+				8D1014562D096BEC0034A175 /* GXPageControl.m */,
+				8D1014582D096BEC0034A175 /* GXPagerLayout.h */,
+				8D1014542D096BEC0034A175 /* GXPagerLayout.m */,
+				8D10145B2D096BEC0034A175 /* GXPagerView.h */,
+				8D1014572D096BEC0034A175 /* GXPagerView.m */,
+				8D1014592D096BEC0034A175 /* GXSliderView.h */,
+				8D1014552D096BEC0034A175 /* GXSliderView.m */,
+			);
+			path = Slider;
+			sourceTree = "<group>";
+		};
 		8D1CBD1C2758AA4500EC2B4D /* GaiaXiOSTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -785,8 +816,6 @@
 		8DFEC2D427351928001F3B74 /* Node */ = {
 			isa = PBXGroup;
 			children = (
-				8A962CC8282A9DD100335552 /* GXSliderNode.h */,
-				8A962CC9282A9DD100335552 /* GXSliderNode.m */,
 				8DFEC2EC27351BB6001F3B74 /* GXBaseNode.h */,
 				8DFEC2ED27351BB6001F3B74 /* GXBaseNode.m */,
 				8D9FC9CA273A21F600912EE6 /* GXViewNode.h */,
@@ -801,6 +830,8 @@
 				8D9FC9DF273A224900912EE6 /* GXIconFontNode.m */,
 				8D9FC9D2273A221A00912EE6 /* GXGridNode.h */,
 				8D9FC9D3273A221A00912EE6 /* GXGridNode.m */,
+				8A962CC8282A9DD100335552 /* GXSliderNode.h */,
+				8A962CC9282A9DD100335552 /* GXSliderNode.m */,
 				8D9FC9D6273A222B00912EE6 /* GXScrollNode.h */,
 				8D9FC9D7273A222B00912EE6 /* GXScrollNode.m */,
 				8D9FC9DA273A223A00912EE6 /* GXCustomNode.h */,
@@ -845,6 +876,7 @@
 		8DFEC2E327351990001F3B74 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				8D1014532D096BEC0034A175 /* Slider */,
 				8DFEC2E827351A03001F3B74 /* GXScrollView.h */,
 				8DFEC2E927351A03001F3B74 /* GXScrollView.m */,
 				8DFF84E6273D183F0014C0DA /* GXRootView.h */,
@@ -950,12 +982,14 @@
 				8DFEC25F2734DC08001F3B74 /* GXCommonDef.h in Headers */,
 				8DFEC2612734DC19001F3B74 /* GXFunctionDef.h in Headers */,
 				8DFEC2542734DB27001F3B74 /* GXUtils.h in Headers */,
+				8D1014612D096BEC0034A175 /* GXSliderView.h in Headers */,
 				8DFEC2742734DDC8001F3B74 /* NSArray+GX.h in Headers */,
 				8DFEC2702734DDBE001F3B74 /* NSDictionary+GX.h in Headers */,
 				8DE5E3A32745FD9400C9FA02 /* GXExpression.h in Headers */,
 				8DE5E3862743A3F800C9FA02 /* GXRegisterCenter.h in Headers */,
 				8DE14A18288E338100FCF226 /* GXProgressNode.h in Headers */,
 				8A962CCA282A9DD100335552 /* GXSliderNode.h in Headers */,
+				8D1014602D096BEC0034A175 /* GXPagerLayout.h in Headers */,
 				8DB521692759C7C900EB8126 /* GXTrack.h in Headers */,
 				8D1CBCED275770F700EC2B4D /* GXEvent.h in Headers */,
 				8DB521652759C6A300EB8126 /* GXData.h in Headers */,
@@ -980,6 +1014,7 @@
 				8DE5E3962744DAA200C9FA02 /* GXUIHelper.h in Headers */,
 				8DE5E38227439BE900C9FA02 /* GXTemplateLoader.h in Headers */,
 				8DFEC2BF27350BBA001F3B74 /* libstretch.h in Headers */,
+				8D1014632D096BEC0034A175 /* GXPagerView.h in Headers */,
 				8DFEC2E6273519EE001F3B74 /* GXGridView.h in Headers */,
 				8DFF84E8273D183F0014C0DA /* GXRootView.h in Headers */,
 				8D9FC9E8273A227800912EE6 /* GXRootViewNode.h in Headers */,
@@ -995,6 +1030,7 @@
 				8DFEC2CA27350E26001F3B74 /* GXStretch.h in Headers */,
 				8D9FC9DC273A223A00912EE6 /* GXCustomNode.h in Headers */,
 				8DE5E3772743820A00C9FA02 /* GXTemplateParser.h in Headers */,
+				8D1014622D096BEC0034A175 /* GXPageControl.h in Headers */,
 				8DB60A1927F4764E0038BE13 /* GXValue.h in Headers */,
 				8DE14A1C288E339300FCF226 /* GXProgressView.h in Headers */,
 				8D9FC9CC273A21F600912EE6 /* GXViewNode.h in Headers */,
@@ -1242,6 +1278,7 @@
 				BD42E33529A4A4B200F3404E /* GXEventManager.m in Sources */,
 				8DFEC2652734DC56001F3B74 /* GXCssItem.m in Sources */,
 				8DFF84E9273D183F0014C0DA /* GXRootView.m in Sources */,
+				8D10145F2D096BEC0034A175 /* GXPagerView.m in Sources */,
 				8DFEC2712734DDBE001F3B74 /* NSDictionary+GX.m in Sources */,
 				8D9FC9E5273A225A00912EE6 /* GXRichTextNode.m in Sources */,
 				8DFF84F1273E60A80014C0DA /* GXTemplateManager.m in Sources */,
@@ -1263,6 +1300,7 @@
 				BD42E32F29A4A49F00F3404E /* GXJSDelegateImplManager.m in Sources */,
 				8DE5E38F2744B20200C9FA02 /* GXNodeHelper.m in Sources */,
 				8DE14A19288E338100FCF226 /* GXProgressNode.m in Sources */,
+				8D10145E2D096BEC0034A175 /* GXPageControl.m in Sources */,
 				8DE5E3A82746794300C9FA02 /* GXImageNode.m in Sources */,
 				8DE5E3B52747AF9600C9FA02 /* GXRichText.m in Sources */,
 				8D1D6300274F360600B94B1E /* GXDataManager.m in Sources */,
@@ -1278,6 +1316,7 @@
 				8DEEFED5276880F4008C73A5 /* GXCacheCenter.m in Sources */,
 				8DB5216A2759C7C900EB8126 /* GXTrack.m in Sources */,
 				8D1CBCEE275770F700EC2B4D /* GXEvent.m in Sources */,
+				8D10145C2D096BEC0034A175 /* GXPagerLayout.m in Sources */,
 				8DB521662759C6A300EB8126 /* GXData.m in Sources */,
 				8DCE3367283E451D00A42EF8 /* GXTemplateSource.m in Sources */,
 				8DFEC3042735319A001F3B74 /* GXBizContext.m in Sources */,
@@ -1295,6 +1334,7 @@
 				8DFEC2CB27350E26001F3B74 /* GXStretch.m in Sources */,
 				8DE5E37F27438A4E00C9FA02 /* GXTemplatePathHelper.m in Sources */,
 				8D9FC9E1273A224900912EE6 /* GXIconFontNode.m in Sources */,
+				8D10145D2D096BEC0034A175 /* GXSliderView.m in Sources */,
 				8DFEC2C327350E01001F3B74 /* GXLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

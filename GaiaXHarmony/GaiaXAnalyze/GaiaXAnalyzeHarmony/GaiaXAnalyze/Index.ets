@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 import {
-  gxInjectGetSourceValue,
-  gxInjectGetFunctionValue,
-  gxAnalyzeGetValue
+  gxInjectGetSourceValue, gxInjectGetFunctionValue, gxAnalyzeGetValue
 } from 'libGXAnalyze.so';
 
 import {
-  getSourceValue,
-  JSGXValue,
-  getFunctionValue,
+  getSourceValue, JSGXValue, getFunctionValue,
 } from './src/main/ets/helper/transfrom'
 
 function init() {
-  gxInjectGetSourceValue((valuePath:string,source:object) => {
-    let result:JSGXValue = getSourceValue(valuePath,source)
+  gxInjectGetSourceValue((valuePath: string, source: object) => {
+    let result: JSGXValue = getSourceValue(valuePath, source)
     return result
   });
-  gxInjectGetFunctionValue((funcName:string,paramPointers:Array<object>,paramsSize:number) => {
-    let result:JSGXValue = getFunctionValue(funcName,paramPointers,paramsSize)
+  gxInjectGetFunctionValue((funcName: string, paramPointers: Array<object>, paramsSize: number) => {
+    let result: JSGXValue = getFunctionValue(funcName, paramPointers, paramsSize)
     return result
   });
 }
@@ -47,15 +43,13 @@ let configAnalyzeIfNeeded = (() => {
   };
 })();
 
-function analyzeGetValue(valuePath:string,source:object): object|number|string|boolean{
+function analyzeGetValue(valuePath: string, source: object): object | number | string | boolean {
   if (valuePath === '$$') {
     return source
   }
-  return gxAnalyzeGetValue(valuePath,source)
+  return gxAnalyzeGetValue(valuePath, source)
 }
 
-export  {
-  configAnalyzeIfNeeded,
-  JSGXValue,
-  analyzeGetValue
+export {
+  configAnalyzeIfNeeded, JSGXValue, analyzeGetValue
 }

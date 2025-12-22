@@ -1,0 +1,2 @@
+playwright==1.48.0
+html2text==2020.1.16

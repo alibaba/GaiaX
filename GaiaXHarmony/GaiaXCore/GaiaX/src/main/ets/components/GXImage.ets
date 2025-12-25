@@ -114,6 +114,11 @@ export function buildImage(node: GXImageNode) {
     .borderColor(node.borderColor)
     .borderRadius(node.borderRadius)
     .backgroundColor(node.backgroundColor)
+    .backgroundImage(node.backgroundImage)
+    .linearGradient({
+      direction: node.linearGradientDirection,
+      colors: node.linearGradientColors
+    })
     .onClick(() => { // 执行事件
       console.log("Column click");
       node.handleEvent(node.clickEvent);
@@ -134,14 +139,16 @@ export function buildImage(node: GXImageNode) {
       .borderColor(node.borderColor)
       .borderRadius(node.borderRadius)
       .backgroundColor(node.backgroundColor)
+      .backgroundImage(node.backgroundImage)
+      .linearGradient({
+        direction: node.linearGradientDirection,
+        colors: node.linearGradientColors
+      })
       .onComplete(() => {
-        console.log('load image complete');
       })
       .onError(() => {
-        console.log('load image fail');
       })
       .onClick(() => { // 执行事件
-        console.log("Column click");
         node.handleEvent(node.clickEvent);
       })
       .onTouchIntercept(() => { // 调用onTouchIntercept修改该组件的HitTestMode属性

@@ -37,6 +37,7 @@ export default class GXNode extends Node {
   y: number = 0;
   width: number = 0;
   height: number = 0;
+  limitWidth: number = -1;
 
   // 埋点响应
   trackEvent?: GXTrack;
@@ -71,19 +72,22 @@ export default class GXNode extends Node {
   }
 
   // 递归绑定布局
-  applyLayout(layout: Layout) {
+  applyLayout(layout: Layout, isSpecialUpdate: boolean) {
     // 当前节点布局，暂时不做节点拍平逻辑
     this.x = layout.x;
     this.y = layout.y;
+    if (isSpecialUpdate) {
+      this.limitWidth = layout.width;
+    }
     this.width = layout.width;
     this.height = layout.height;
     // 递归子节点
     for (let index = 0; index < this.children.length; index++) {
       const childNode: GXNode = this.children[index] as GXNode;
       // let childLayout: Layout = layout.children[index];
-      let childLayout: Layout = (index < layout.children.length) ? layout.children[index] : null;
+      let childLayout: Layout | null = (index < layout.children.length) ? layout.children[index] : null;
       if (childNode && childLayout != null) {
-        childNode.applyLayout(childLayout);
+        childNode.applyLayout(childLayout, isSpecialUpdate);
       }
     }
   }

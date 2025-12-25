@@ -17,6 +17,7 @@
 import GXStyleHelper from '../creator/GXStyleHelper';
 import { GXRecord } from '../common/GXCommon';
 import GXNode from '../creator/GXNode';
+import GXUtils from '../utils/GXUtils';
 
 export default class GXBaseNode extends GXNode {
   // 透明度
@@ -29,14 +30,17 @@ export default class GXBaseNode extends GXNode {
   // 背景色，默认透明
   backgroundColor = 'Transparent';
   // 圆角，默认无圆角
-  borderRadius: string | null = null;
+  borderRadius: Length | BorderRadiuses | null = null;
   // 毛玻璃效果
   backdropFilter: string | null = null;
   // 渐变
   backgroundImage: string | null = null;
   // 阴影
   boxShadow: ShadowOptions | null = null;
-
+  // linearGradient 背景参数
+  linearGradientDirection: GradientDirection | null = null;
+  // linearGradient 背景参数
+  linearGradientColors: Array<[ResourceColor, number]> | null = null;
 
   // 更新布局 & 样式信息
   handleExtend(dataInfo: GXRecord) {
@@ -109,19 +113,27 @@ export default class GXBaseNode extends GXNode {
     // border-color
     const borderColor = styleInfo['border-color'] as string;
     if (borderColor) {
-      this.borderColor = borderColor;
+      this.borderColor = GXUtils.parseColor(borderColor) ?? "Transparent";
     }
 
     // background-color
     const backgroundColor = styleInfo['background-color'] as string;
     if (backgroundColor != null) {
-      this.backgroundColor = backgroundColor;
+      this.backgroundColor = GXUtils.parseColor(backgroundColor) ?? "Transparent";
     }
 
     // background-image
     const backgroundImage = styleInfo['background-image'] as string;
-    if (backgroundImage != null) {
-      this.backgroundImage = backgroundImage;
+    if (!!backgroundImage && backgroundImage != null) {
+      if (backgroundImage.startsWith("linear")) {
+        let colors = this.getLinearGradient(backgroundImage);
+        this.linearGradientDirection = this.getDirection(colors);
+        this.linearGradientColors = this.getColors(colors);
+      } else {
+        this.backgroundImage = GXUtils.parseColor(backgroundImage) ?? "Transparent";
+        // backgroundImage 不支持颜色设置。也覆盖到 backgroundColor 上
+        this.backgroundColor = this.backgroundImage;
+      }
     }
 
     // background-filter
@@ -151,14 +163,19 @@ export default class GXBaseNode extends GXNode {
       const tr = GXStyleHelper.convertSimpleValue(topRight, 0);
       const br = GXStyleHelper.convertSimpleValue(bottomRight, 0);
       const bl = GXStyleHelper.convertSimpleValue(bottomLeft, 0);
-      this.borderRadius = `${tf} ${tr} ${br} ${bl}`
+      this.borderRadius = {
+        topLeft: tf,
+        topRight: tr,
+        bottomLeft: bl,
+        bottomRight: br
+      }
     }
     // border-radius
     if (isFullBorderRadius) {
       const borderRadius = styleInfo['border-radius'] as string;
       if (borderRadius != null) {
         let value = GXStyleHelper.convertSimpleValue(borderRadius, 0);
-        this.borderRadius = `${value}}`;
+        this.borderRadius = `${value}`;
       }
     }
   }
@@ -177,5 +194,96 @@ export default class GXBaseNode extends GXNode {
         this.boxShadow = shadowInfo;
       }
     }
+  }
+
+  private getDirection(colors: Array<string>): GradientDirection {
+    if (colors.length > 0) {
+      const linear = colors[0];
+      switch (linear) {
+        case "to right":
+        case "toright":
+          return GradientDirection.Right;
+        case "to left":
+        case "toleft":
+          return GradientDirection.Left;
+        case "to top":
+        case "totop":
+          return GradientDirection.Top;
+        case "to bottom":
+        case "tobottom":
+          return GradientDirection.Bottom;
+        case "to top left":
+        case "totopleft":
+          return GradientDirection.LeftTop;
+        case "to top right":
+        case "totopright":
+          return GradientDirection.RightTop;
+        case "to bottom left":
+        case "tobottomleft":
+          return GradientDirection.LeftBottom;
+        case "to bottom right":
+        case "tobottomright":
+          return GradientDirection.RightBottom;
+      }
+    }
+    return GradientDirection.Bottom
+  }
+
+  private getColors(colors: Array<string>): Array<[ResourceColor, number]> | null {
+    let result: Array<[ResourceColor, number]> = [];
+    colors.forEach((color, index) => {
+      if (!color.startsWith("to") && !color.includes("deg")) {
+        result.push([GXUtils.parseColor(color) ?? "Transparent", index / (colors.length - 1)]);
+      }
+    })
+
+    return result;
+  }
+
+  /**
+   * 解析
+   * linear-gradient(to top, #FE2C5500, #FE2C5557, #FE2C5557, #FE2C5500)
+   * linear-gradient(to top, rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx))
+   * 将括号内数据变为数组返回，数组首个元素魏颜色渐变方向，后续内容为颜色色值。
+   */
+  private getLinearGradient(linear: string): Array<string> {
+    let result = Array<string>()
+    try {
+      let substring = linear.substring(linear.indexOf("(") + 1, linear.lastIndexOf(")"))
+      if (substring.includes("rgba")) {
+        // linear-gradient(to top, rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx), rgba(xx,xx,xx,xx))
+        substring.split("rgba").forEach((item, index) => {
+          let content = item.trim()
+          if (content.endsWith(",")) {
+            content = content.substring(0, content.length - 1)
+          }
+          if (index > 0) {
+            result.push("rgba" + content)
+          } else {
+            result.push(content)
+          }
+        })
+      } else if (substring.includes("rgb")) {
+        // linear-gradient(to top, rgb(xx,xx,xx), rgb(xx,xx,xx), rgb(xx,xx,xx), rgb(xx,xx,xx))
+        substring.split("rgb").forEach((item, index) => {
+          let content = item.trim()
+          if (content.endsWith(",")) {
+            content = content.substring(0, content.length - 1)
+          }
+          if (index > 0) {
+            result.push("rgb" + content)
+          } else {
+            result.push(content)
+          }
+        })
+      } else {
+        // linear-gradient(to top, #FE2C5500, #FE2C5557, #FE2C5557, #FE2C5500)
+        substring.split(",").forEach((item) => {
+          result.push(item.trim())
+        })
+      }
+    } catch (error) {
+    }
+    return result
   }
 }

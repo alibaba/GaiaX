@@ -43,7 +43,7 @@ export default class GXTemplateLRUCache {
     if (value != undefined) {
       this.cache.delete(key); // 删除键，因为Map会保留键的插入顺序
       this.cache.set(key, value); // 重新设置键，将其移动到最近使用的位置
-      return null
+      return value
     }
     return null
   }

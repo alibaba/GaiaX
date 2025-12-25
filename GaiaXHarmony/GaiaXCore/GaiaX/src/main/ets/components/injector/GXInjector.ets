@@ -15,8 +15,11 @@
  */
 
 enum InjectType {
-  image = 0
+  image = 0,
+  customView = 1
 }
+
+export declare type GXInjectorBuilderParams = GXImageBuilderParams | GXCustomViewBuilderParams;
 
 export class GXImageBuilderParams {
   url: ResourceStr | null = null
@@ -42,26 +45,56 @@ export class GXImageBuilderParams {
   }
 }
 
+export class GXCustomViewBuilderParams {
+  data: ESObject | null = null;
+  className: string = "";
+
+  constructor(data: ESObject | null, className: string) {
+    this.data = data;
+    this.className = className;
+  }
+}
+
 export class GXInjector {
   static instance = new GXInjector();
   // 注册图片组件Map
-  injectorMap: Record<number, WrappedBuilder<[GXImageBuilderParams]>> = {};
+  injectorMap: Record<number, WrappedBuilder<[GXInjectorBuilderParams]>> = {};
 
    /**
     * 注册Image
     * @param builder
     */
-  registerImage( builder: WrappedBuilder<[GXImageBuilderParams]>) {
+  registerImage( builder: WrappedBuilder<[GXInjectorBuilderParams]>) {
     this.injectorMap[InjectType.image] = builder
   }
+
+  /**
+   * 注册自定义view
+   * @param builder
+   */
+  registerCustomView(builder: WrappedBuilder<[GXInjectorBuilderParams]>) {
+    this.injectorMap[InjectType.customView] = builder
+  }
+
 
   /**
    * 获取注册的Image
    * @returns Image
    */
-  injectedImage():WrappedBuilder<[GXImageBuilderParams]> | null {
+  injectedImage(): WrappedBuilder<[GXImageBuilderParams]> | null {
     if (this.injectorMap[InjectType.image]) {
       return this.injectorMap[InjectType.image]
+    } else {
+      return null
+    }
+  }
+
+  /**
+   * 获取注册的 自定义View
+   */
+  injectedCustomView(): WrappedBuilder<[GXCustomViewBuilderParams]> | null {
+    if (this.injectorMap[InjectType.customView]) {
+      return this.injectorMap[InjectType.customView]
     } else {
       return null
     }

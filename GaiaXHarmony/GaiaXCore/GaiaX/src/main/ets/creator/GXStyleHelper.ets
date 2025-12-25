@@ -59,23 +59,35 @@ export default class GXStyleHelper {
     let flag = false;
 
     // margin
-    const marginTop = styleInfo['margin-top'] as string;
-    const marginLeft = styleInfo['margin-left'] as string;
-    const marginBottom = styleInfo['margin-bottom'] as string;
-    const marginRight = styleInfo['margin-right'] as string;
-    if (marginTop != null || marginLeft != null || marginBottom != null || marginRight != null) {
+    const margin = styleInfo['margin'] as string;
+    if (margin) {
       flag = true;
-      GXStyleHelper.convertMargin(style, marginTop, marginLeft, marginBottom, marginRight);
+      GXStyleHelper.convertPadding(style, margin, margin, margin, margin);
+    } else {
+      const marginTop = styleInfo['margin-top'] as string;
+      const marginLeft = styleInfo['margin-left'] as string;
+      const marginBottom = styleInfo['margin-bottom'] as string;
+      const marginRight = styleInfo['margin-right'] as string;
+      if (marginTop != null || marginLeft != null || marginBottom != null || marginRight != null) {
+        flag = true;
+        GXStyleHelper.convertMargin(style, marginTop, marginLeft, marginBottom, marginRight);
+      }
     }
 
     // padding
-    const paddingTop = styleInfo['padding-top'] as string;
-    const paddingLeft = styleInfo['padding-left'] as string;
-    const paddingBottom = styleInfo['padding-bottom'] as string;
-    const paddingRight = styleInfo['padding-right'] as string;
-    if (paddingTop != null || paddingLeft != null || paddingBottom != null || paddingRight != null) {
+    const padding = styleInfo['padding'] as string;
+    if (padding) {
       flag = true;
-      GXStyleHelper.convertPadding(style, paddingTop, paddingLeft, paddingBottom, paddingRight);
+      GXStyleHelper.convertPadding(style, padding, padding, padding, padding);
+    } else {
+      const paddingTop = styleInfo['padding-top'] as string;
+      const paddingLeft = styleInfo['padding-left'] as string;
+      const paddingBottom = styleInfo['padding-bottom'] as string;
+      const paddingRight = styleInfo['padding-right'] as string;
+      if (paddingTop != null || paddingLeft != null || paddingBottom != null || paddingRight != null) {
+        flag = true;
+        GXStyleHelper.convertPadding(style, paddingTop, paddingLeft, paddingBottom, paddingRight);
+      }
     }
 
     // width | height
@@ -509,7 +521,7 @@ export default class GXStyleHelper {
         const tmpValue = value.substring(0, value.length - 2);
         const number = GXUtils.convertToNumber(tmpValue) ?? 0;
         return number;
-      } else if (value.endsWith('px')) {
+      } else if (value.endsWith('pt')) {
         // 计算 pt = px * ratio
         const ratio = 1.0;
         const tmpValue = value.substring(0, value.length - 2);
@@ -577,6 +589,50 @@ export default class GXStyleHelper {
     } else {
       // 默认逻辑处理
       return isAuto ? new DimAuto() : new DimPoints(0);
+    }
+  }
+
+  /**
+   * 将系统 graphics 使用的weight枚举，替换为ts层weight
+   * 0:100
+   * 1:200
+   * 2:300
+   * ...
+   * @param value
+   * @returns
+   */
+  static convertSystemWeight(value: number | string): number {
+    if (value === 0 || value === "0") {
+      return 100;
+    }
+    if (value === 1 || value === "1") {
+      return 200;
+    }
+    if (value === 2 || value === "2") {
+      return 300;
+    }
+    if (value === 3 || value === "3") {
+      return 400;
+    }
+    if (value === 4 || value === "4") {
+      return 500;
+    }
+    if (value === 5 || value === "5") {
+      return 600;
+    }
+    if (value === 6 || value === "6") {
+      return 700;
+    }
+    if (value === 7 || value === "7") {
+      return 800;
+    }
+    if (value === 8 || value === "8") {
+      return 900;
+    }
+    if (typeof value === "number") {
+      return value;
+    } else {
+      return Number(value).valueOf();
     }
   }
 }

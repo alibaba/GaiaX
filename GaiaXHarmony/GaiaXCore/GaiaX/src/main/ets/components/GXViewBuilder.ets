@@ -33,6 +33,9 @@ import GXSliderView from './GXSilderView'
 import GXGridView from './GXGridView'
 import GXTemplateContext from '../context/GXTemplateContext'
 import { GXNodeType } from '../common/GXCommon'
+import { buildCustomView } from './GXCustomView'
+import GXCustomViewNode from '../node/GXCustomViewNode'
+import { Display } from 'gxstretch'
 
 @Builder
 export function buildGaiaXView(gxContext: GXTemplateContext, node: GXNode) {
@@ -63,7 +66,10 @@ export function createTemplateViewByNode(gxContext: GXTemplateContext, node: GXN
 
 @Builder
 export function createSubViewByNode(gxContext: GXTemplateContext, node: GXNode) {
-  if (node.isTemplateType) {
+  if (node.style?.display != Display.Flex) {
+    // 不可见节点，直接终止递归
+    Column()
+  } else if (node.isTemplateType) {
     // template
     createTemplateViewByNode(gxContext, node)
 
@@ -87,7 +93,10 @@ export function createSubViewByNode(gxContext: GXTemplateContext, node: GXNode) 
     // GXRichText({ node: (node as GXRichTextNode) })
     buildRichText((node as GXRichTextNode))
 
-  } else {
+  } else if (node.nodeType() == GXNodeType.custom) {
+    // 用户自定义view
+    buildCustomView((node as GXCustomViewNode))
+  }  else {
     // default - view
     // GXView({ gxContext: gxContext, node: (node as GXViewNode) })
     buildView((node as GXViewNode), gxContext)

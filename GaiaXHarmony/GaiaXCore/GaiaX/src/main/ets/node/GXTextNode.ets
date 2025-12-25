@@ -20,7 +20,7 @@ import GXStyleHelper from '../creator/GXStyleHelper';
 import GXContext from '../utils/GXContext';
 import GXUtils from '../utils/GXUtils';
 import GXViewNode from './GXViewNode';
-import { Display } from 'gxstretch';
+import { DimPoints, Display } from 'gxstretch';
 
 export default class GXTextNode extends GXViewNode {
   text: string | null = null;
@@ -117,7 +117,7 @@ export default class GXTextNode extends GXViewNode {
     if (style != null) {
       // fit-content && 处于展示中
       if (style.fitContent && style.display == Display.Flex) {
-        const limitWidth = this.width;
+        const limitWidth = this.limitWidth;
         const result = this.measureTextSize(limitWidth);
         let size = style.size;
         // 宽
@@ -181,7 +181,7 @@ export default class GXTextNode extends GXViewNode {
     // color
     const color = styleInfo['color'] as string;
     if (color != null) {
-      this.textColor = color;
+      this.textColor = GXUtils.parseColor(color) ?? 'black';
     }
 
     // 对齐方式
@@ -301,8 +301,8 @@ export default class GXTextNode extends GXViewNode {
 
     // 处理限制条件
     const scale = GXContext.shared().screenScale ?? 1.0;
-    const height = tmpHeight / scale;
-    let width = tmpWidth / scale;
+    const height = Math.ceil(tmpHeight / scale);
+    let width = Math.ceil(tmpWidth / scale);
     // 最大宽度限制
     if (this.maxLines == 1 && limitWidth != 0) {
       width = Math.min(width, limitWidth);

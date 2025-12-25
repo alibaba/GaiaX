@@ -105,10 +105,10 @@ export default class GXRenderManager {
    * 计算和绑定布局
    * @param node
    */
-  static computeAndApplyLayout(node: GXNode) {
+  static computeAndApplyLayout(node: GXNode, isSpecialUpdate: boolean = false) {
     const layout = GXRenderManager.computeLayout(node);
     if (layout != null) {
-      node.applyLayout(layout);
+      node.applyLayout(layout, isSpecialUpdate);
     }
   }
 

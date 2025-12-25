@@ -142,4 +142,54 @@ export default class GXUtils {
     const numLittleEndian = view.getUint16(0, true); // true 表示小端序
     return numLittleEndian
   }
+
+  static parseColor(color: string): string | null {
+    let res: string | null = color;
+    if (!!color && color.includes("%")) {
+      let list = color.split(" ")
+      if (list.length == 2) {
+        color = list[0]
+      }
+    }
+    res = GXUtils.parseHexColor(color);
+    if (res != null) {
+      return res;
+    }
+    res = GXUtils.parseRGBAColor(color);
+    if (res != null) {
+      return res;
+    }
+    return res;
+  }
+
+  /**
+   * rgb(xx, xx, xx, xx)
+   * rgba(22, 24, 35, 0.5) 格式颜色处理
+   * @param color
+   * @returns
+   */
+  private static parseRGBAColor(color: string): string | null {
+    if (!!color && color.startsWith("rgb")) {
+      return color;
+    }
+    return null;
+  }
+
+  /**
+   * #xxxxxxxx 颜色处理
+   * argb 转 rgba
+   * @param color
+   * @returns
+   */
+  private static parseHexColor(color: string): string | null {
+    if (!!color && color.startsWith("#")) {
+      if (color.length == 9) {
+        let argb = `#${color.substring(7, color.length)}${color.substring(1, color.length - 2)}`;
+        return argb;
+      } else {
+        return color;
+      }
+    }
+    return null;
+  }
 }

@@ -96,7 +96,6 @@ export default struct GXGridView {
     .padding(this.node.contentInset)
     // .enableScrollInteraction(false) // scrollEnable
     .onScrollIndex((first: number) => {
-      console.info(first.toString())
     })
   }
 }

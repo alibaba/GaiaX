@@ -116,12 +116,10 @@ export default struct GXScrollView {
     .edgeEffect(EdgeEffect.Spring) // 滑动到边缘无效果
     .cachedCount(3) //cachedCount表示屏幕外List/Grid预加载item的个数
     .onDidScroll((xOffset: number, yOffset: number) => {
-      console.info(xOffset + ' ' + yOffset)
     })
     .alignListItem(this.node.gravity)
     .scrollBar(BarState.Off)
     .onScrollStop(() => {
-      console.info('Scroll Stop')
     })
   }
 }

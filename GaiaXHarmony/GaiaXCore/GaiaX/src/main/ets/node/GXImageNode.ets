@@ -62,12 +62,51 @@ export default class GXImageNode extends GXViewNode {
   // 获取mode
   getImageMode(mode: string): void {
     // 图片的模式
-    if (mode == 'cover') {
-      this.fitMode = ImageFit.Cover;
-    } else if (mode == 'contain') {
-      this.fitMode = ImageFit.Contain;
-    } else {
-      this.fitMode = ImageFit.Fill;
+    switch (mode) {
+      case 'cover':
+        this.fitMode = ImageFit.Cover;
+        break;
+      case 'contain':
+        this.fitMode = ImageFit.Contain;
+        break;
+      case 'scaleToFill':
+        this.fitMode = ImageFit.Fill;
+        break;
+      case 'aspectFit':
+        this.fitMode = ImageFit.Contain;
+        break;
+      case 'aspectFill':
+        this.fitMode = ImageFit.Cover;
+        break;
+      case 'left':
+        this.fitMode = ImageFit.START;
+        break;
+      case 'right':
+        this.fitMode = ImageFit.END;
+        break;
+      case 'center':
+        this.fitMode = ImageFit.CENTER;
+        break;
+      case 'top':
+        this.fitMode = ImageFit.TOP;
+        break;
+      case 'bottom':
+        this.fitMode = ImageFit.BOTTOM;
+        break;
+      case 'top left':
+        this.fitMode = ImageFit.TOP_START;
+        break;
+      case 'top right':
+        this.fitMode = ImageFit.TOP_END;
+        break;
+      case 'bottom left':
+        this.fitMode = ImageFit.BOTTOM_START;
+        break;
+      case 'bottom right':
+        this.fitMode = ImageFit.BOTTOM_END;
+        break;
+      default:
+        this.fitMode = ImageFit.Fill;
     }
   }
 }

@@ -84,6 +84,10 @@ export function buildText(node: GXTextNode) {
     .borderRadius(node.borderRadius)
     .backgroundColor(node.backgroundColor)
     .backgroundImage(node.backgroundImage)
+    .linearGradient({
+      direction: node.linearGradientDirection,
+      colors: node.linearGradientColors
+    })
     .textOverflow({ overflow: node.textOverflow })
     .decoration({
       type: node.textDecoration,

@@ -19,7 +19,7 @@ import GXRawFileTemplateSource from './source/GXRawFileTemplateSource';
 import GXRegisterCenter from './GXRegisterCenter';
 import { configAnalyzeIfNeeded } from 'GaiaXAnalyze';
 import { Stretch } from 'gxstretch';
-import { GXInjector,GXImageBuilderParams } from './components/injector/GXInjector';
+import { GXInjector, GXInjectorBuilderParams } from './components/injector/GXInjector';
 
 export default class GXTemplateEngine {
   static instance = new GXTemplateEngine();
@@ -38,8 +38,12 @@ export default class GXTemplateEngine {
     }
   }
 
-  registerImage(imageBuilder:WrappedBuilder<[GXImageBuilderParams]>) {
+  registerImage(imageBuilder: WrappedBuilder<[GXInjectorBuilderParams]>) {
     GXInjector.instance.registerImage(imageBuilder)
+  }
+
+  registerCustomView(customViewBuilder: WrappedBuilder<[GXInjectorBuilderParams]>) {
+    GXInjector.instance.registerCustomView(customViewBuilder)
   }
 }
 

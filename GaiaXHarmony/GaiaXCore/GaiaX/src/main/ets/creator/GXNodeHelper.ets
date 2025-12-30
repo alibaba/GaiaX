@@ -26,6 +26,7 @@ import GXTextNode from '../node/GXTextNode';
 import GXViewNode from '../node/GXViewNode';
 import { Style } from 'gxstretch';
 import GXNode from './GXNode';
+import GXCustomViewNode from '../node/GXCustomViewNode';
 
 export default class GXNodeHelper {
   /**
@@ -161,6 +162,9 @@ export default class GXNodeHelper {
         break;
       case GXNodeType.richtext:
         node = new GXRichTextNode(style);
+        break;
+      case GXNodeType.custom:
+        node = new GXCustomViewNode(style);
         break;
       default:
         node = new GXViewNode(style);

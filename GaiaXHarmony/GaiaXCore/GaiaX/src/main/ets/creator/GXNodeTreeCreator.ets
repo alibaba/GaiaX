@@ -18,11 +18,12 @@ import GXTemplateManager from '../template/GXTemplateManager';
 import GXTemplateContext from '../context/GXTemplateContext';
 import GXTemplateInfo from '../template/GXTemplateInfo';
 import GXTemplateItem from '../context/GXTemplateItem';
-import { GXRecord } from '../common/GXCommon';
+import { GXNodeType, GXRecord } from '../common/GXCommon';
 import GXStyleHelper from './GXStyleHelper';
 import GXNodeHelper from './GXNodeHelper';
 import { JSON } from '@kit.ArkTS';
 import GXNode from './GXNode';
+import GXCustomViewNode from '../node/GXCustomViewNode';
 
 export default class GXNodeTreeCreator {
   /**
@@ -186,6 +187,11 @@ export default class GXNodeTreeCreator {
           }
           if (animation) {
             node.extension.animation = animation[nodeId] as GXRecord;
+          }
+          // 自定义 View 注入className
+          // 使用iOS一样的key，防止被gxStudio导出时抹除
+          if (nodeType == GXNodeType.custom) {
+            (node as GXCustomViewNode).className = layer['view-class-ios'] as string;
           }
 
           // 其他属性

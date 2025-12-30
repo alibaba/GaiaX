@@ -77,8 +77,11 @@ export function buildRootView(node: GXRootNode, context: GXTemplateContext) {
   .borderColor(node.borderColor)
   .backgroundColor(node.backgroundColor)
   .backgroundImage(node.backgroundImage)
+  .linearGradient({
+    direction: node.linearGradientDirection,
+    colors: node.linearGradientColors
+  })
   .onClick(() => { // 执行事件
-    console.log("Column click");
     node.handleEvent(node.clickEvent);
   })
   .onTouchIntercept(() => { // 调用onTouchIntercept修改该组件的HitTestMode属性

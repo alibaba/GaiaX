@@ -80,8 +80,11 @@ open class GXView : AbsoluteLayout, GXIViewBindData, GXIRootView, GXIRoundCorner
             val tr = radius[2]
             val bl = radius[4]
             val br = radius[6]
+            if (tl <= 0 && tr <= 0 && bl <= 0 && br <= 0) {
+                return
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (tl == tr && tr == bl && bl == br && tl > 0) {
+                if (tl == tr && tr == bl && bl == br) {
                     path = null
                     this.clipToOutline = true
                     this.outlineProvider = object : ViewOutlineProvider() {

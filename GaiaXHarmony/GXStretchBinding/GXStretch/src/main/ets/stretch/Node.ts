@@ -6,7 +6,10 @@ import hilog from '@ohos.hilog';
 
 export class Node {
   ptr?: number | null = null;
+  // 经过处理后的样式，可能在复用过程中被改写。
   style?: Style | null = null;
+  // 保存css中的样式
+  cssStyle?: Style | null = null;
   // 父节点
   parent: Node | null = null;
   children: Node[];
@@ -16,6 +19,7 @@ export class Node {
   }
 
   constructor(style: Style, children: Node[] = []) {
+    this.cssStyle = style.clone();
     if (!style.isInit) {
       style.init()
     }

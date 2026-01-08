@@ -81,6 +81,16 @@ export class Size<T> {
     this.width = width
     this.height = height
   }
+
+  clone(): Size<T> {
+    let size;
+    if (this.width instanceof Dim && this.height instanceof Dim) {
+      size = new Size(this.width.clone(), this.height.clone())
+    } else {
+      size = new Size(this.width, this.height)
+    }
+    return size
+  }
 }
 
 export class Rect<T> {
@@ -95,6 +105,17 @@ export class Rect<T> {
     this.top = top
     this.bottom = bottom
   }
+
+
+  clone(): Rect<T> {
+    let size;
+    if (this.start instanceof Dim && this.end instanceof Dim && this.top instanceof Dim && this.bottom instanceof Dim) {
+      size = new Rect(this.start.clone(), this.end.clone(), this.top.clone(), this.bottom.clone())
+    } else {
+      size = new Rect(this.start, this.end, this.top, this.bottom)
+    }
+    return size
+  }
 }
 
 export class Dim {
@@ -104,6 +125,11 @@ export class Dim {
   constructor(type: number, value: number) {
     this.type = type
     this.value = value
+  }
+
+  clone(): Dim {
+    let dim = new Dim(this.type, this.value)
+    return dim
   }
 }
 
@@ -151,8 +177,8 @@ export class Style {
   margin: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined);
   padding: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined);
   border: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined);
-  flexGrow: number = 0.0;
-  flexShrink: number = 1.0;
+  flexGrow: number = 0;
+  flexShrink: number = 0;
   flexBasis: Dim = Auto;
   size: Size<Dim> = new Size(Auto, Auto);
   minSize: Size<Dim> = new Size(Auto, Auto);
@@ -174,8 +200,8 @@ export class Style {
     margin: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined),
     padding: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined),
     border: Rect<Dim> = new Rect(Undefined, Undefined, Undefined, Undefined),
-    flexGrow: number = 0.0,
-    flexShrink: number = 1.0,
+    flexGrow: number = 0,
+    flexShrink: number = 0,
     flexBasis: Dim = Auto,
     size: Size<Dim> = new Size(Auto, Auto),
     minSize: Size<Dim> = new Size(Auto, Auto),
@@ -292,5 +318,31 @@ export class Style {
       this.ptr = null;
       this.isInit = false;
     }
+  }
+
+  clone(): Style {
+    let style = new Style();
+    style.display =  this.display
+    style.positionType = this.positionType;
+    style.direction = this.direction;
+    style.flexDirection = this.flexDirection;
+    style.flexWrap = this.flexWrap;
+    style.overflow = this.overflow;
+    style.alignItems = this.alignItems;
+    style.alignSelf = this.alignSelf;
+    style.alignContent = this.alignContent;
+    style.justifyContent = this.justifyContent;
+    style.position = this.position.clone();
+    style.margin = this.margin.clone();
+    style.padding = this.padding.clone();
+    style.border = this.border.clone();
+    style.flexGrow = this.flexGrow;
+    style.flexShrink = this.flexShrink;
+    style.flexBasis = this.flexBasis;
+    style.size = this.size.clone();
+    style.minSize = this.minSize.clone();
+    style.maxSize = this.maxSize.clone();
+    style.aspectRatio = this.aspectRatio;
+    return style;
   }
 }

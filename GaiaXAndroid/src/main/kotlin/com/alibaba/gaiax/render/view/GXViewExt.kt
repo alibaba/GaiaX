@@ -148,11 +148,13 @@ fun View.setOverflow(overflow: Boolean?) {
     if (view is ViewGroup) {
         if (!targetOverflow) {
             view.clipChildren = false
+            view.clipToPadding = false
             view.post {
 
                 // 给父节点设置属性
                 val viewGroup = view.parent as? ViewGroup
                 viewGroup?.clipChildren = targetOverflow
+                viewGroup?.clipToPadding = targetOverflow
 
                 // 特殊处理，如果是根节点，并且节点中包含阴影，那么需要递归父层级才能保证阴影设定成功
                 if (view is GXIRootView && isContainShadowLayout(view)) {
@@ -161,6 +163,7 @@ fun View.setOverflow(overflow: Boolean?) {
             }
         } else {
             view.clipChildren = targetOverflow
+            view.clipToPadding = targetOverflow
         }
     }
 }
@@ -169,6 +172,7 @@ private fun overflowOnParents(v: View, overflow: Boolean) {
     val viewParent = v.parent ?: return
     if (viewParent is ViewGroup) {
         viewParent.clipChildren = overflow
+        viewParent.clipToPadding = overflow
     }
     if (viewParent is View && viewParent !is RecyclerView) {
         overflowOnParents(viewParent as View, overflow)

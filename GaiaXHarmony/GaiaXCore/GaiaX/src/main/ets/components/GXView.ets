@@ -90,12 +90,15 @@ export function buildView(node: GXViewNode, context: GXTemplateContext) {
   .borderRadius(node.borderRadius)
   .backgroundColor(node.backgroundColor)
   .backgroundImage(node.backgroundImage)
+  .linearGradient({
+    direction: node.linearGradientDirection,
+    colors: node.linearGradientColors
+  })
   .clip(node.clip) // 子视图超出父视图进行裁剪
   // .backdropBlur(3) // 毛玻璃效果
   // .clip(new Circle({ width: '280px', height: '280px' }))
   // .mask(new Circle({ width: '280px', height: '280px' }).fill(Color.Gray))
   .onClick(() => { // 执行事件
-    console.log("Column click");
     node.handleEvent(node.clickEvent);
   })
   .onTouchIntercept(() => { // 调用onTouchIntercept修改该组件的HitTestMode属性

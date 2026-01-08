@@ -74,7 +74,6 @@ export function buildRichText(node: GXRichTextNode){
   .width(node.width)
   .height(node.height)
   .onClick(() => { // 执行事件
-    console.log("Column click");
     node.handleEvent(node.clickEvent);
   })
   .onTouchIntercept(() => { // 调用onTouchIntercept修改该组件的HitTestMode属性

@@ -1,0 +1,9 @@
+{
+    "data": {
+        "empty_view": {
+            "extend": {
+                "display": "$display ? 'absolute' : 'none'"
+            }
+        }
+    }
+}

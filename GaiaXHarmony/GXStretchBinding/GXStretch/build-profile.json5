@@ -1,16 +1,16 @@
 {
   "apiType": "stageMode",
   "buildOption": {
+    "resOptions": {
+      "copyCodeResource": {
+        "enable": false
+      }
+    },
     "externalNativeOptions": {
       "path": "./src/main/cpp/CMakeLists.txt",
       "arguments": "",
       "cppFlags": "",
-      // https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/build-with-ndk-ide-0000001774280454
-      "abiFilters": [
-        "arm64-v8a",
-        "x86_64"
-      ]
-    },
+    }
   },
   "buildOptionSet": [
     {
@@ -18,14 +18,11 @@
       "arkOptions": {
         "obfuscation": {
           "ruleOptions": {
-            "enable": true,
+            "enable": false,
             "files": [
               "./obfuscation-rules.txt"
             ]
-          },
-          "consumerFiles": [
-            "./consumer-rules.txt"
-          ]
+          }
         }
       },
       "nativeLib": {
@@ -41,7 +38,7 @@
       "name": "default"
     },
     {
-      "name": "ohosTest"
+      "name": "ohosTest",
     }
   ]
 }

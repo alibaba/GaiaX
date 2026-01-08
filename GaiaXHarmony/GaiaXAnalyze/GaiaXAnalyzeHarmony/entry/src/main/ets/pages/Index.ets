@@ -15,13 +15,13 @@
  */
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Value, getTestExpressionList } from './testMock/testCase'
-import { configAnalyzeIfNeeded, analyzeGetValue, JSGXValue} from 'gaiaxanalyze'
+import { configAnalyzeIfNeeded, analyzeGetValue, JSGXValue } from 'gaiaxanalyze'
 
 @Entry
 @Component
 struct Index {
   @State message: string = '表达式结果';
-  @State expressionList:Array<Value> = getTestExpressionList();
+  @State expressionList: Array<Value> = getTestExpressionList();
 
   aboutToAppear(): void {
     configAnalyzeIfNeeded()
@@ -32,8 +32,18 @@ struct Index {
       Column() {
         Text(this.message)
           .fontColor('#ff0000')
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .margin({ left: 8, right: 8, top: 4, bottom: 4 })
+          .padding({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
+          .margin({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
           .width('90%')
           .borderWidth(1)
           .borderColor('#000000')
@@ -42,10 +52,20 @@ struct Index {
           .onClick(() => {
 
           })
-        ForEach(this.expressionList,(item:Value)=> {
+        ForEach(this.expressionList, (item: Value) => {
           Text(item.expression)
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-            .margin({ left: 8, right: 8, top: 4, bottom: 4 })
+            .padding({
+              left: 8,
+              right: 8,
+              top: 4,
+              bottom: 4
+            })
+            .margin({
+              left: 8,
+              right: 8,
+              top: 4,
+              bottom: 4
+            })
             .width('90%')
             .borderWidth(1)
             .borderColor('#000000')
@@ -54,7 +74,7 @@ struct Index {
             .fontWeight(FontWeight.Bold)
             .onClick(() => {
 
-              let result = analyzeGetValue(item.expression,item.source as object)
+              let result = analyzeGetValue(item.expression, item.source as object)
               if (Array.isArray(result)) {
                 let resultIsArray = result as Array<object>
                 this.message = `结果: 获取到了数组,数组长度${resultIsArray.length}`

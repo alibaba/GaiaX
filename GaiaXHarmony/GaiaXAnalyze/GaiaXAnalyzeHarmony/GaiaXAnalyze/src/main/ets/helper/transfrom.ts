@@ -24,14 +24,14 @@ enum JSGXValueType {
 }
 
 export class JSGXValue {
-  objectValue:object
-  numberValue:number
-  boolValue:boolean
-  stringValue:string
-  arrayValue:Array<any>
-  valueType:string = JSGXValueType.nil
+  objectValue: object
+  numberValue: number
+  boolValue: boolean
+  stringValue: string
+  arrayValue: Array<any>
+  valueType: string = JSGXValueType.nil
 
-  constructor(value:any, type:JSGXValueType) {
+  constructor(value: any, type: JSGXValueType) {
     this.valueType = type
     switch (type) {
       case JSGXValueType.object:
@@ -54,11 +54,11 @@ export class JSGXValue {
   }
 }
 
-export function getSourceValue(valuePath:string,source:object):JSGXValue {
+export function getSourceValue(valuePath: string, source: object): JSGXValue {
   if (valuePath === '$$') {
-    return new JSGXValue(source,JSGXValueType.object)
+    return new JSGXValue(source, JSGXValueType.object)
   }
-  let nilValue = new JSGXValue('',JSGXValueType.nil)
+  let nilValue = new JSGXValue('', JSGXValueType.nil)
   // 使用正则表达式将路径拆分成键数组，以点和方括号为分隔符
   const keys = valuePath.replace(/\[(\d+)\]/g, '.$1').split('.');
   let result = source;
@@ -86,50 +86,50 @@ export function getSourceValue(valuePath:string,source:object):JSGXValue {
     }
   }
   let typeStr = typeof result
-  if(Array.isArray(result)) {
+  if (Array.isArray(result)) {
     // JS中的数组即object，此次通过isArray判断是否是数组
-    return new JSGXValue(result,JSGXValueType.array);
+    return new JSGXValue(result, JSGXValueType.array);
   }
   switch (typeof result) {
     case JSGXValueType.object:
-      return new JSGXValue(result,JSGXValueType.object);
+      return new JSGXValue(result, JSGXValueType.object);
     case JSGXValueType.boolean:
-      return new JSGXValue(result,JSGXValueType.boolean);
+      return new JSGXValue(result, JSGXValueType.boolean);
     case JSGXValueType.number:
-      return new JSGXValue(result,JSGXValueType.number);
+      return new JSGXValue(result, JSGXValueType.number);
     case JSGXValueType.string:
-      return new JSGXValue(result,JSGXValueType.string);
+      return new JSGXValue(result, JSGXValueType.string);
     default:
       break;
   }
   return nilValue
 }
 
-export function getFunctionValue(funcName:string,paramPointers:Array<any>,paramsSize:number):JSGXValue {
+export function getFunctionValue(funcName: string, paramPointers: Array<any>, paramsSize: number): JSGXValue {
   if (funcName == "size") {
     return callFunctionForSize(paramPointers)
   }
-  return new JSGXValue(0,JSGXValueType.number);
+  return new JSGXValue(0, JSGXValueType.number);
 }
 
-function callFunctionForSize(paramPointers:Array<any>):JSGXValue {
+function callFunctionForSize(paramPointers: Array<any>): JSGXValue {
   if (paramPointers.length > 0) {
     let element = paramPointers[0]
-    if(Array.isArray(element)) {
+    if (Array.isArray(element)) {
       let elementIsArray = element as Array<any>
-      return new JSGXValue(elementIsArray.length,JSGXValueType.number);
+      return new JSGXValue(elementIsArray.length, JSGXValueType.number);
     }
     switch (typeof element) {
       case JSGXValueType.object:
         const propNames = Object.getOwnPropertyNames(element);
         const propertyCount = propNames.length;
-        return new JSGXValue(propertyCount,JSGXValueType.number);
+        return new JSGXValue(propertyCount, JSGXValueType.number);
       case JSGXValueType.string:
         let elementIsString = element as String
-        return new JSGXValue(elementIsString.length,JSGXValueType.number);
+        return new JSGXValue(elementIsString.length, JSGXValueType.number);
       default:
         break;
     }
-    return new JSGXValue(0,JSGXValueType.number);
+    return new JSGXValue(0, JSGXValueType.number);
   }
 }

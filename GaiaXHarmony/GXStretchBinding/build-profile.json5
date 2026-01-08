@@ -1,33 +1,22 @@
 {
   "app": {
     "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "./config/default_GXStretchBinding_QwWNjRoKVtd8_ss4KhEyibwHAG7S2uXfd_5ZvTritfk=.cer",
-          "storePassword": "0000001B2FD14C75D8208B949F31FDAE4C9F7EF055A8D6426C56482E12FE7392DA83CB347577BE2E7E4C9A",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B06FEFC0FEDCE002CAF05A680114176B711FD70791DF6FE74DBF94D1817D620D5A321B0A1F1D773",
-          "profile": "./config/default_GXStretchBinding_QwWNjRoKVtd8_ss4KhEyibwHAG7S2uXfd_5ZvTritfk=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "./config/default_GXStretchBinding_QwWNjRoKVtd8_ss4KhEyibwHAG7S2uXfd_5ZvTritfk=.p12"
-        }
-      }
     ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.0(12)",
-        // 5.0.3.200 需要打开下hvigor本地配置
-//        "compileSdkVersion": "5.0.0(12)",
-        "runtimeOS": "HarmonyOS"
+        "targetSdkVersion": "6.0.1(21)",
+        "compatibleSdkVersion": "6.0.1(21)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "nativeCompiler": "BiSheng"
+        }
       }
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"

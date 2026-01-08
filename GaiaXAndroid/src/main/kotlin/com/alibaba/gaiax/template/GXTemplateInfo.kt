@@ -23,6 +23,8 @@ import com.alibaba.gaiax.template.animation.GXAnimationBinding
 import com.alibaba.gaiax.template.factory.GXDataBindingFactory
 import com.alibaba.gaiax.template.factory.GXExpressionFactory
 import com.alibaba.gaiax.template.utils.GXCssFileParserUtils
+import com.alibaba.gaiax.utils.Log
+import com.alibaba.gaiax.utils.runE
 import com.alibaba.gaiax.utils.safeParseToJson
 
 /**
@@ -159,6 +161,8 @@ data class GXTemplateInfo(
 
     companion object {
 
+        private const val TAG = "GXTemplateInfo"
+
         fun parseCss(value: String): JSONObject {
             return GXCssFileParserUtils.instance.parseToJson(value)
         }
@@ -178,6 +182,12 @@ data class GXTemplateInfo(
         }
 
         private fun createTemplate(template: GXTemplate): GXTemplateInfo {
+
+            Log.runE(TAG) { "createTemplate biz=${template.biz} id=${template.id} " }
+            Log.runE(TAG) { "createTemplate layer=${template.layer}" }
+            Log.runE(TAG) { "createTemplate css=${template.css}" }
+            Log.runE(TAG) { "createTemplate dataBind=${template.dataBind}" }
+            Log.runE(TAG) { "createTemplate js=${template.js}" }
 
             // Hierarchical data
             val layerJson = template.layer.safeParseToJson()

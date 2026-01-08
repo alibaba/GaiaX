@@ -1,27 +1,13 @@
 {
   "app": {
     "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "./config/default_GaiaXCore_uIFpzhwv91cB6T-gSG68s68Iytfcf8RttoLrYTL-RQU=.cer",
-          "storePassword": "0000001A72672A81442DCDC47B30D1273903D2E0613544B3E067C782BEB90A52665AD979CB0871974DEC",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001A2766AF733308046E9ED4D0CF9B47D062ABC12AEB68854BC2D6A21222BDF6C6521450527FEABA",
-          "profile": "./config/default_GaiaXCore_uIFpzhwv91cB6T-gSG68s68Iytfcf8RttoLrYTL-RQU=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "./config/default_GaiaXCore_uIFpzhwv91cB6T-gSG68s68Iytfcf8RttoLrYTL-RQU=.p12"
-        }
-      }
     ],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.0(12)",
-        // 5.0.3.200 需要打开下compileSdkVersion配置
-//        "compileSdkVersion": "5.0.0(12)",
+        "targetSdkVersion": "6.0.1(21)",
+        "compatibleSdkVersion": "6.0.1(21)",
         "runtimeOS": "HarmonyOS"
       }
     ],
